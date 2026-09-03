@@ -1,22 +1,5 @@
-local G = getgenv().DeadEye or {}
-getgenv().DeadEye = G
-
-G.UI = G.UI or {}
-G.State = G.State or {}
-G.Functions = G.Functions or {}
-G.Cleanup = G.Cleanup or {}
-
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
-
-local player = Players.LocalPlayer
-
--- =========================================================
--- GUI
--- =========================================================
-
-local hui = gethui()
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "MyWindowGui"
@@ -168,335 +151,134 @@ othPage.BackgroundTransparency = 1
 othPage.Visible = false
 othPage.Parent = content
 
--- =========================================================
--- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
--- =========================================================
-
 mainButton.MouseButton1Click:Connect(function()
-
     mainPage.Visible = true
     visPage.Visible = false
     othPage.Visible = false
-
     mainButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     visButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-    othButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-
 end)
 
 visButton.MouseButton1Click:Connect(function()
-
     mainPage.Visible = false
     visPage.Visible = true
     othPage.Visible = false
-
     mainButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
     visButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    othButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-
 end)
 
 othButton.MouseButton1Click:Connect(function()
-
     mainPage.Visible = false
     visPage.Visible = false
     othPage.Visible = true
+    mainButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    othButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+end)
 
-    mainButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-    visButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-    othButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+local minimized = false
 
+minimizeButton.MouseButton1Click:Connect(function()
+    minimized = not minimized
+
+    if minimized then
+        -- Скрываем содержимое
+        sidebar.Visible = false
+        content.Visible = false
+
+        -- Уменьшаем окно до высоты заголовка
+        frame.Size = UDim2.new(0.2, 0, 0, 18)
+
+        -- Можно поменять символ кнопки
+        minimizeButton.Text = "+"
+    else
+        -- Возвращаем содержимое
+        sidebar.Visible = true
+        content.Visible = true
+
+        -- Возвращаем исходный размер
+        frame.Size = UDim2.new(0.2, 0, 0.4, 0)
+
+        minimizeButton.Text = "_"
+    end
 end)
 
 -- =========================================================
--- ОБЩИЙ TOGGLE
+-- ВСПОМОГАТЕЛЬНОЕ СОЗДАНИЕ TOGGLE
 -- =========================================================
 
-G.Functions.createToggle = function(parent, y)
-
+local function createToggle(parent, y)
     local button = Instance.new("TextButton")
-
-    button.Size =
-        UDim2.new(
-            0,
-            40,
-            0,
-            18
-        )
-
-    button.Position =
-        UDim2.new(
-            1,
-            -50,
-            0,
-            y
-        )
-
-    button.BackgroundColor3 =
-        Color3.fromRGB(
-            70,
-            70,
-            70
-        )
-
+    button.Size = UDim2.new(0, 40, 0, 18)
+    button.Position = UDim2.new(1, -50, 0, y)
+    button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     button.BorderSizePixel = 0
     button.Text = ""
     button.AutoButtonColor = false
     button.Parent = parent
 
     local knob = Instance.new("Frame")
-
-    knob.Size =
-        UDim2.new(
-            0,
-            14,
-            0,
-            14
-        )
-
-    knob.Position =
-        UDim2.new(
-            0,
-            2,
-            0.5,
-            -7
-        )
-
-    knob.BackgroundColor3 =
-        Color3.fromRGB(
-            200,
-            200,
-            200
-        )
-
+    knob.Size = UDim2.new(0, 14, 0, 14)
+    knob.Position = UDim2.new(0, 2, 0.5, -7)
+    knob.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
     knob.BorderSizePixel = 0
     knob.Parent = button
 
-    local corner =
-        Instance.new("UICorner")
-
-    corner.CornerRadius =
-        UDim.new(
-            1,
-            0
-        )
-
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = button
 
-    local knobCorner =
-        Instance.new("UICorner")
-
-    knobCorner.CornerRadius =
-        UDim.new(
-            1,
-            0
-        )
-
+    local knobCorner = Instance.new("UICorner")
+    knobCorner.CornerRadius = UDim.new(1, 0)
     knobCorner.Parent = knob
 
     return button, knob
-
 end
 
-G.Functions.setToggleVisual = function(button, knob, enabled)
-
+setToggleVisual = function(button, knob, enabled)
     if enabled then
-
-        knob.Position =
-            UDim2.new(
-                1,
-                -16,
-                0.5,
-                -7
-            )
-
-        button.BackgroundColor3 =
-            Color3.fromRGB(
-                60,
-                180,
-                90
-            )
-
+        knob.Position = UDim2.new(1, -16, 0.5, -7)
+        button.BackgroundColor3 = Color3.fromRGB(60, 180, 90)
     else
-
-        knob.Position =
-            UDim2.new(
-                0,
-                2,
-                0.5,
-                -7
-            )
-
-        button.BackgroundColor3 =
-            Color3.fromRGB(
-                70,
-                70,
-                70
-            )
-
+        knob.Position = UDim2.new(0, 2, 0.5, -7)
+        button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     end
-
 end
+local Main = require(script.Parent.main)
+local Vis = require(script.Parent.vis)
 
--- =========================================================
--- ПЕРЕТАСКИВАНИЕ ОКНА
--- =========================================================
+Main.mount({ mainPage = mainPage, createToggle = createToggle, setToggleVisual = setToggleVisual })
+Vis.mount({ visPage = visPage, createToggle = createToggle, setToggleVisual = setToggleVisual })
 
-local drag = false
-local dragStart
-local startPos
+local renderConnection = RunService.RenderStepped:Connect(function()
+    Vis.render()
+end)
 
+local inputConnection = UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+    if Main.assignHotkey(input.KeyCode) or Vis.assignHotkey(input.KeyCode) then return end
+    if Main.handleKey(input.KeyCode) or Vis.handleKey(input.KeyCode) then return end
+end)
+
+local drag, dragStart, startPos = false, nil, nil
 title.InputBegan:Connect(function(input)
-
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-
-        drag = true
-        dragStart = input.Position
-        startPos = frame.Position
-
+        drag, dragStart, startPos = true, input.Position, frame.Position
     end
-
 end)
-
 title.InputEnded:Connect(function(input)
-
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-
-        drag = false
-
-    end
-
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then drag = false end
 end)
-
 UserInputService.InputChanged:Connect(function(input)
-
-    if drag
-        and input.UserInputType == Enum.UserInputType.MouseMovement
-    then
-
-        local delta =
-            input.Position - dragStart
-
-        frame.Position = UDim2.new(
-
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-
-        )
-
+    if drag and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
-
 end)
-
--- =========================================================
--- СВОРАЧИВАНИЕ ОКНА
--- =========================================================
-
-local minimized = false
-
-minimizeButton.MouseButton1Click:Connect(function()
-
-    minimized = not minimized
-
-    if minimized then
-
-        sidebar.Visible = false
-        content.Visible = false
-
-        frame.Size =
-            UDim2.new(0.2, 0, 0, 18)
-
-        minimizeButton.Text = "+"
-
-    else
-
-        sidebar.Visible = true
-        content.Visible = true
-
-        frame.Size =
-            UDim2.new(0.2, 0, 0.4, 0)
-
-        minimizeButton.Text = "_"
-
-    end
-
-end)
-
--- =========================================================
--- ЗАКРЫТИЕ
--- =========================================================
 
 closeButton.MouseButton1Click:Connect(function()
-    for name, cleanupFunction in pairs(G.Cleanup) do
-        if type(cleanupFunction) == "function" then
-            local success, err = pcall(cleanupFunction)
-
-            if not success then
-                warn("[Home] Ошибка очистки " .. tostring(name) .. ": " .. tostring(err))
-            end
-        end
-    end
-
-    table.clear(G.Cleanup)
-
+    Main.destroy()
+    Vis.destroy()
+    if renderConnection then renderConnection:Disconnect() end
+    if inputConnection then inputConnection:Disconnect() end
     screenGui:Destroy()
 end)
-
--- =========================================================
--- ПЕРЕДАЁМ GUI ДРУГИМ СКРИПТАМ
--- =========================================================
-
-G.UI.ScreenGui = screenGui
-G.UI.Frame = frame
-
-G.UI.Title = title
-G.UI.CloseButton = closeButton
-G.UI.MinimizeButton = minimizeButton
-
-G.UI.Sidebar = sidebar
-G.UI.Content = content
-
-G.UI.MainButton = mainButton
-G.UI.VisButton = visButton
-G.UI.OthButton = othButton
-
-G.UI.MainPage = mainPage
-G.UI.VisPage = visPage
-G.UI.OthPage = othPage
-
-print("[Home] GUI создан")
-
--- =========================================================
--- ЗАГРУЗКА РАЗДЕЛОВ
--- =========================================================
-
-local BASE = "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
-
-local function loadFile(name)
-
-    local success, result = pcall(function()
-
-        local code = game:HttpGet(BASE .. name)
-
-        local func, err = loadstring(code)
-
-        assert(func, err)
-
-        return func()
-
-    end)
-
-    if success then
-        print("[Home] " .. name .. " запущен")
-    else
-        warn("[Home] Ошибка в " .. name .. ": " .. tostring(result))
-    end
-
-end
-
-loadFile("main.lua")
-loadFile("vis.lua")
-loadFile("oth.lua")
