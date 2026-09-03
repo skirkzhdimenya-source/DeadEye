@@ -245,7 +245,7 @@ setToggleVisual = function(button, knob, enabled)
 end
 -- GitHub raw directory that contains home.lua, main.lua, vis.lua and oth.lua.
 -- Replace this once with the URL of your repository/branch.
-local BASE_URL = "https://raw.githubusercontent.com/USERNAME/REPOSITORY/main/"
+local BASE_URL = "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/refs/heads/main/home.lua"
 
 local function loadRemoteModule(name)
     local ok, source = pcall(function()
