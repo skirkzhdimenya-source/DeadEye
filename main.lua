@@ -411,8 +411,6 @@ do
     -- MONITORING
     -- =====================================================
 
-    local parryMonitorConnection
-
     parryMonitorConnection =
         RunService.Heartbeat:Connect(
             function()
