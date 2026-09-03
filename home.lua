@@ -208,6 +208,136 @@ othButton.MouseButton1Click:Connect(function()
 end)
 
 -- =========================================================
+-- ОБЩИЙ TOGGLE
+-- =========================================================
+
+G.Functions.createToggle = function(parent, y)
+
+    local button = Instance.new("TextButton")
+
+    button.Size =
+        UDim2.new(
+            0,
+            40,
+            0,
+            18
+        )
+
+    button.Position =
+        UDim2.new(
+            1,
+            -50,
+            0,
+            y
+        )
+
+    button.BackgroundColor3 =
+        Color3.fromRGB(
+            70,
+            70,
+            70
+        )
+
+    button.BorderSizePixel = 0
+    button.Text = ""
+    button.AutoButtonColor = false
+    button.Parent = parent
+
+    local knob = Instance.new("Frame")
+
+    knob.Size =
+        UDim2.new(
+            0,
+            14,
+            0,
+            14
+        )
+
+    knob.Position =
+        UDim2.new(
+            0,
+            2,
+            0.5,
+            -7
+        )
+
+    knob.BackgroundColor3 =
+        Color3.fromRGB(
+            200,
+            200,
+            200
+        )
+
+    knob.BorderSizePixel = 0
+    knob.Parent = button
+
+    local corner =
+        Instance.new("UICorner")
+
+    corner.CornerRadius =
+        UDim.new(
+            1,
+            0
+        )
+
+    corner.Parent = button
+
+    local knobCorner =
+        Instance.new("UICorner")
+
+    knobCorner.CornerRadius =
+        UDim.new(
+            1,
+            0
+        )
+
+    knobCorner.Parent = knob
+
+    return button, knob
+
+end
+
+G.Functions.setToggleVisual = function(button, knob, enabled)
+
+    if enabled then
+
+        knob.Position =
+            UDim2.new(
+                1,
+                -16,
+                0.5,
+                -7
+            )
+
+        button.BackgroundColor3 =
+            Color3.fromRGB(
+                60,
+                180,
+                90
+            )
+
+    else
+
+        knob.Position =
+            UDim2.new(
+                0,
+                2,
+                0.5,
+                -7
+            )
+
+        button.BackgroundColor3 =
+            Color3.fromRGB(
+                70,
+                70,
+                70
+            )
+
+    end
+
+end
+
+-- =========================================================
 -- ПЕРЕТАСКИВАНИЕ ОКНА
 -- =========================================================
 
