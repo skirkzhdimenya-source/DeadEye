@@ -143,3 +143,56 @@ local function destroyCircle()
     parts = {}
 
 end
+
+-- =========================================================
+-- CIRCLE GUI
+-- =========================================================
+
+local createToggle = G.Functions.createToggle
+local setToggleVisual = G.Functions.setToggleVisual
+
+local circleLabel = Instance.new("TextLabel")
+
+circleLabel.Name = "CircleLabel"
+circleLabel.Size = UDim2.new(0, 80, 0, 25)
+circleLabel.Position = UDim2.new(0, 10, 0, 5)
+circleLabel.BackgroundTransparency = 1
+circleLabel.Text = "circle"
+circleLabel.TextColor3 = Color3.fromRGB(242, 242, 242)
+circleLabel.TextSize = 12
+circleLabel.Font = Enum.Font.SourceSans
+circleLabel.TextXAlignment = Enum.TextXAlignment.Left
+circleLabel.TextYAlignment = Enum.TextYAlignment.Center
+circleLabel.Parent = mainPage
+
+local circleToggle, circleKnob =
+    createToggle(mainPage, 11)
+
+setToggleVisual(
+    circleToggle,
+    circleKnob,
+    false
+)
+
+circleToggle.MouseButton1Click:Connect(function()
+
+    circleEnabled =
+        not circleEnabled
+
+    if circleEnabled then
+
+        createCircle()
+
+    else
+
+        destroyCircle()
+
+    end
+
+    setToggleVisual(
+        circleToggle,
+        circleKnob,
+        circleEnabled
+    )
+
+end)
