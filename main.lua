@@ -2,14 +2,24 @@ local G = getgenv().DeadEye
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
-local root = (player.Character or player.CharacterAdded:Wait()):WaitForChild("HumanoidRootPart")
+local root =
+    (player.Character or player.CharacterAdded:Wait())
+        :WaitForChild("HumanoidRootPart")
 
 local mainPage = G.UI.MainPage
 
 print("[Main] запущен")
 print("[Main] MainPage найден:", mainPage ~= nil)
+
+-- =========================================================
+-- ОБЩИЕ GUI ФУНКЦИИ
+-- =========================================================
+
+local createToggle = G.Functions.createToggle
+local setToggleVisual = G.Functions.setToggleVisual
 
 -- =========================================================
 -- CIRCLE
@@ -32,7 +42,6 @@ local function createCircle()
     end
 
     folder = Instance.new("Folder")
-
     folder.Name = "CircleZone"
     folder.Parent = workspace
 
@@ -145,19 +154,16 @@ local function destroyCircle()
 end
 
 G.Cleanup.Circle = function()
+
     circleEnabled = false
 
-    if destroyCircle then
-        destroyCircle()
-    end
+    destroyCircle()
+
 end
 
 -- =========================================================
 -- CIRCLE GUI
 -- =========================================================
-
-local createToggle = G.Functions.createToggle
-local setToggleVisual = G.Functions.setToggleVisual
 
 local circleLabel = Instance.new("TextLabel")
 
@@ -182,40 +188,49 @@ setToggleVisual(
     false
 )
 
-circleToggle.MouseButton1Click:Connect(function()
+circleToggle.MouseButton1Click:Connect(
+    function()
 
-    circleEnabled =
-        not circleEnabled
+        circleEnabled =
+            not circleEnabled
 
-    if circleEnabled then
+        if circleEnabled then
 
-        createCircle()
+            createCircle()
 
-    else
+        else
 
-        destroyCircle()
+            destroyCircle()
+
+        end
+
+        setToggleVisual(
+            circleToggle,
+            circleKnob,
+            circleEnabled
+        )
 
     end
+)
 
-    setToggleVisual(
-        circleToggle,
-        circleKnob,
-        circleEnabled
-    )
-
-end)
+-- =========================================================
+-- PARRY
+-- =========================================================
 
 do
 
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local ReplicatedStorage =
+        game:GetService("ReplicatedStorage")
 
     local parryEnabled = false
-    local parryMonitorConnection = nil
+    local parryHotkey = Enum.KeyCode.Z
 
+    local parryMonitorConnection = nil
     local parryCharacterAddedConnection = nil
     local parryCharacterRemovingConnection = nil
     local parryChildAddedConnection = nil
     local parryChildRemovedConnection = nil
+    local parryInputConnection = nil
 
     local parryLoopRunning = true
 
@@ -505,75 +520,79 @@ do
     -- =====================================================
 
     local function setupLocalParryCharacter(
-    character
-)
+        character
+    )
 
-    setupParry(character)
+        setupParry(character)
 
-    if parryChildAddedConnection then
-        parryChildAddedConnection:Disconnect()
-        parryChildAddedConnection = nil
-    end
+        if parryChildAddedConnection then
 
-    if parryChildRemovedConnection then
-        parryChildRemovedConnection:Disconnect()
-        parryChildRemovedConnection = nil
-    end
+            parryChildAddedConnection:Disconnect()
+            parryChildAddedConnection = nil
 
-    parryChildAddedConnection =
-        character.ChildAdded:Connect(
-            function(child)
+        end
 
-                if child:IsA("Tool")
-                    and child.Name ==
-                        "Parrying Dagger"
-                then
+        if parryChildRemovedConnection then
 
-                    setupParry(character)
+            parryChildRemovedConnection:Disconnect()
+            parryChildRemovedConnection = nil
 
-                end
+        end
 
-            end
-        )
+        parryChildAddedConnection =
+            character.ChildAdded:Connect(
+                function(child)
 
-    parryChildRemovedConnection =
-        character.ChildRemoved:Connect(
-            function(child)
+                    if child:IsA("Tool")
+                        and child.Name ==
+                            "Parrying Dagger"
+                    then
 
-                if child == currentTool
-                    or child.Name ==
-                        "Parrying Dagger"
-                then
+                        setupParry(character)
 
-                    currentTool = nil
-                    parryController = nil
-
-                    task.defer(
-                        function()
-
-                            if not parryLoopRunning then
-                                return
-                            end
-
-                            if character
-                                and character.Parent
-                            then
-
-                                setupParry(
-                                    character
-                                )
-
-                            end
-
-                        end
-                    )
+                    end
 
                 end
+            )
 
-            end
-        )
+        parryChildRemovedConnection =
+            character.ChildRemoved:Connect(
+                function(child)
 
-end
+                    if child == currentTool
+                        or child.Name ==
+                            "Parrying Dagger"
+                    then
+
+                        currentTool = nil
+                        parryController = nil
+
+                        task.defer(
+                            function()
+
+                                if not parryLoopRunning then
+                                    return
+                                end
+
+                                if character
+                                    and character.Parent
+                                then
+
+                                    setupParry(
+                                        character
+                                    )
+
+                                end
+
+                            end
+                        )
+
+                    end
+
+                end
+            )
+
+    end
 
     -- =====================================================
     -- INITIAL CHARACTER
@@ -591,174 +610,350 @@ end
     -- CHARACTER ADDED
     -- =====================================================
 
-parryCharacterAddedConnection =
-    player.CharacterAdded:Connect(
-        function(character)
+    parryCharacterAddedConnection =
+        player.CharacterAdded:Connect(
+            function(character)
 
-            task.defer(
-                function()
+                task.defer(
+                    function()
 
-                    if not character.Parent then
-                        return
+                        if not parryLoopRunning then
+                            return
+                        end
+
+                        if not character.Parent then
+                            return
+                        end
+
+                        character:WaitForChild(
+                            "Humanoid",
+                            10
+                        )
+
+                        character:WaitForChild(
+                            "HumanoidRootPart",
+                            10
+                        )
+
+                        if not parryLoopRunning then
+                            return
+                        end
+
+                        setupLocalParryCharacter(
+                            character
+                        )
+
                     end
+                )
 
-                    character:WaitForChild(
-                        "Humanoid",
-                        10
-                    )
-
-                    character:WaitForChild(
-                        "HumanoidRootPart",
-                        10
-                    )
-
-                    setupLocalParryCharacter(
-                        character
-                    )
-
-                end
-            )
-
-        end
-    )
+            end
+        )
 
     -- =====================================================
     -- CHARACTER REMOVING
     -- =====================================================
 
-    player.CharacterRemoving:Connect(
-        function(character)
+    parryCharacterRemovingConnection =
+        player.CharacterRemoving:Connect(
+            function(character)
 
-            currentTool = nil
-            parryController = nil
+                currentTool = nil
+                parryController = nil
 
-        end
-    )
+            end
+        )
 
     -- =====================================================
     -- PERIODIC TOOL CHECK
     -- =====================================================
 
     task.spawn(
-    function()
+        function()
 
-        while parryLoopRunning do
+            while parryLoopRunning do
 
-            task.wait(2)
+                task.wait(2)
 
-            if not parryLoopRunning then
-                break
-            end
+                if not parryLoopRunning then
+                    break
+                end
 
-            local currentCharacter =
-                player.Character
+                local currentCharacter =
+                    player.Character
 
-            local tool =
-                currentCharacter
-                    and currentCharacter:FindFirstChild(
-                        "Parrying Dagger"
-                    )
+                local tool =
+                    currentCharacter
+                        and currentCharacter:FindFirstChild(
+                            "Parrying Dagger"
+                        )
 
-            if tool ~= currentTool then
+                if tool ~= currentTool then
 
-                if tool then
+                    if tool then
 
-                    setupParry(
-                        currentCharacter
-                    )
+                        setupParry(
+                            currentCharacter
+                        )
 
-                else
+                    else
 
-                    currentTool = nil
-                    parryController = nil
+                        currentTool = nil
+                        parryController = nil
+
+                    end
 
                 end
 
             end
 
         end
+    )
 
-    end
-)
+    -- =====================================================
+    -- PARRY GUI
+    -- =====================================================
 
--- =========================================================
--- PARRY GUI
--- =========================================================
+    local parryLabel =
+        Instance.new("TextLabel")
 
-local parryLabel = Instance.new("TextLabel")
+    parryLabel.Name =
+        "ParryLabel"
 
-parryLabel.Name = "ParryLabel"
-parryLabel.Size = UDim2.new(0, 80, 0, 25)
-parryLabel.Position = UDim2.new(0, 10, 0, 36)
-parryLabel.BackgroundTransparency = 1
-parryLabel.Text = "parry"
-parryLabel.TextColor3 = Color3.fromRGB(242, 242, 242)
-parryLabel.TextSize = 12
-parryLabel.Font = Enum.Font.SourceSans
-parryLabel.TextXAlignment = Enum.TextXAlignment.Left
-parryLabel.TextYAlignment = Enum.TextYAlignment.Center
-parryLabel.Parent = mainPage
+    parryLabel.Size =
+        UDim2.new(0, 110, 0, 25)
 
-local parryToggle, parryKnob =
-    createToggle(mainPage, 42)
+    parryLabel.Position =
+        UDim2.new(0, 10, 0, 36)
 
-setToggleVisual(
-    parryToggle,
-    parryKnob,
-    false
-)
+    parryLabel.BackgroundTransparency = 1
 
-local function setParryEnabled(enabled)
+    parryLabel.Text =
+        "Parry"
 
-    parryEnabled = enabled
+    parryLabel.TextColor3 =
+        Color3.fromRGB(
+            242,
+            242,
+            242
+        )
+
+    parryLabel.TextSize = 12
+    parryLabel.Font =
+        Enum.Font.SourceSans
+
+    parryLabel.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    parryLabel.TextYAlignment =
+        Enum.TextYAlignment.Center
+
+    parryLabel.Parent =
+        mainPage
+
+    local parryKeyButton =
+        Instance.new("TextButton")
+
+    parryKeyButton.Name =
+        "ParryKeyButton"
+
+    parryKeyButton.Size =
+        UDim2.new(0, 32, 0, 18)
+
+    parryKeyButton.Position =
+        UDim2.new(1, -88, 0, 42)
+
+    parryKeyButton.BackgroundColor3 =
+        Color3.fromRGB(
+            55,
+            55,
+            55
+        )
+
+    parryKeyButton.TextColor3 =
+        Color3.fromRGB(
+            200,
+            200,
+            200
+        )
+
+    parryKeyButton.Text =
+        parryHotkey.Name
+
+    parryKeyButton.TextSize = 10
+
+    parryKeyButton.Font =
+        Enum.Font.SourceSans
+
+    parryKeyButton.BorderSizePixel = 0
+    parryKeyButton.AutoButtonColor = false
+    parryKeyButton.Parent = mainPage
+
+    local parryKeyCorner =
+        Instance.new("UICorner")
+
+    parryKeyCorner.CornerRadius =
+        UDim.new(0, 3)
+
+    parryKeyCorner.Parent =
+        parryKeyButton
+
+    local parryToggle, parryKnob =
+        createToggle(
+            mainPage,
+            42
+        )
 
     setToggleVisual(
         parryToggle,
         parryKnob,
-        enabled
+        false
     )
 
-end
+    -- =====================================================
+    -- PARRY TOGGLE
+    -- =====================================================
 
-parryToggle.MouseButton1Click:Connect(function()
+    local function setParryEnabled(enabled)
 
-    setParryEnabled(
-        not parryEnabled
+        parryEnabled = enabled
+
+        setToggleVisual(
+            parryToggle,
+            parryKnob,
+            enabled
+        )
+
+    end
+
+    parryToggle.MouseButton1Click:Connect(
+        function()
+
+            setParryEnabled(
+                not parryEnabled
+            )
+
+        end
     )
 
-end)
-    
-G.Cleanup.Parry = function()
+    -- =====================================================
+    -- PARRY HOTKEY CHANGE
+    -- =====================================================
 
-    parryEnabled = false
-    parryLoopRunning = false
+    local waitingForParryHotkey = false
 
-    if parryMonitorConnection then
-        parryMonitorConnection:Disconnect()
-        parryMonitorConnection = nil
+    parryKeyButton.MouseButton1Click:Connect(
+        function()
+
+            waitingForParryHotkey = true
+            parryKeyButton.Text = "..."
+
+        end
+    )
+
+    parryInputConnection =
+        UserInputService.InputBegan:Connect(
+            function(input)
+
+                if input.UserInputType ~=
+                    Enum.UserInputType.Keyboard
+                then
+                    return
+                end
+
+                if waitingForParryHotkey then
+
+                    if input.KeyCode ==
+                        Enum.KeyCode.Escape
+                    then
+
+                        waitingForParryHotkey = false
+                        parryKeyButton.Text =
+                            parryHotkey.Name
+
+                        return
+
+                    end
+
+                    parryHotkey =
+                        input.KeyCode
+
+                    parryKeyButton.Text =
+                        parryHotkey.Name
+
+                    waitingForParryHotkey = false
+
+                    return
+
+                end
+
+                if input.KeyCode ==
+                    parryHotkey
+                then
+
+                    setParryEnabled(
+                        not parryEnabled
+                    )
+
+                end
+
+            end
+        )
+
+    -- =====================================================
+    -- PARRY CLEANUP
+    -- =====================================================
+
+    G.Cleanup.Parry = function()
+
+        parryEnabled = false
+        parryLoopRunning = false
+        waitingForParryHotkey = false
+
+        if parryMonitorConnection then
+
+            parryMonitorConnection:Disconnect()
+            parryMonitorConnection = nil
+
+        end
+
+        if parryCharacterAddedConnection then
+
+            parryCharacterAddedConnection:Disconnect()
+            parryCharacterAddedConnection = nil
+
+        end
+
+        if parryCharacterRemovingConnection then
+
+            parryCharacterRemovingConnection:Disconnect()
+            parryCharacterRemovingConnection = nil
+
+        end
+
+        if parryChildAddedConnection then
+
+            parryChildAddedConnection:Disconnect()
+            parryChildAddedConnection = nil
+
+        end
+
+        if parryChildRemovedConnection then
+
+            parryChildRemovedConnection:Disconnect()
+            parryChildRemovedConnection = nil
+
+        end
+
+        if parryInputConnection then
+
+            parryInputConnection:Disconnect()
+            parryInputConnection = nil
+
+        end
+
+        parryController = nil
+        currentTool = nil
+
     end
-
-    if parryCharacterAddedConnection then
-        parryCharacterAddedConnection:Disconnect()
-        parryCharacterAddedConnection = nil
-    end
-
-    if parryCharacterRemovingConnection then
-        parryCharacterRemovingConnection:Disconnect()
-        parryCharacterRemovingConnection = nil
-    end
-
-    if parryChildAddedConnection then
-        parryChildAddedConnection:Disconnect()
-        parryChildAddedConnection = nil
-    end
-
-    if parryChildRemovedConnection then
-        parryChildRemovedConnection:Disconnect()
-        parryChildRemovedConnection = nil
-    end
-
-    parryController = nil
-    currentTool = nil
 
 end
