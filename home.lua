@@ -1,3 +1,10 @@
+if getgenv().DeadEyeLoaded then
+    warn("[DeadEye] home.lua уже запущен")
+    return
+end
+
+getgenv().DeadEyeLoaded = true
+
 print("home работает")
 
 local BASE = "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
