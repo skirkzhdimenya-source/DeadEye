@@ -15,7 +15,7 @@ local function loadFile(name)
     end
 end
 
-loadFile("home.lua")
+loadFile("main.lua")
 loadFile("vis.lua")
 loadFile("oth.lua")
 
