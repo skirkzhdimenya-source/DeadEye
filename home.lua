@@ -1,5 +1,5 @@
 print("home работает")
-local BASE = "https://github.com/skirkzhdimenya-source/DeadEye/tree/main"
+local BASE = "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
 
 local function loadFile(name)
     local success, result = pcall(function()
