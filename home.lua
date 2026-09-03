@@ -208,6 +208,103 @@ othButton.MouseButton1Click:Connect(function()
 end)
 
 -- =========================================================
+-- ПЕРЕТАСКИВАНИЕ ОКНА
+-- =========================================================
+
+local drag = false
+local dragStart
+local startPos
+
+title.InputBegan:Connect(function(input)
+
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+        drag = true
+        dragStart = input.Position
+        startPos = frame.Position
+
+    end
+
+end)
+
+title.InputEnded:Connect(function(input)
+
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+        drag = false
+
+    end
+
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+
+    if drag
+        and input.UserInputType == Enum.UserInputType.MouseMovement
+    then
+
+        local delta =
+            input.Position - dragStart
+
+        frame.Position = UDim2.new(
+
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+
+        )
+
+    end
+
+end)
+
+-- =========================================================
+-- СВОРАЧИВАНИЕ ОКНА
+-- =========================================================
+
+local minimized = false
+
+minimizeButton.MouseButton1Click:Connect(function()
+
+    minimized = not minimized
+
+    if minimized then
+
+        sidebar.Visible = false
+        content.Visible = false
+
+        frame.Size =
+            UDim2.new(0.2, 0, 0, 18)
+
+        minimizeButton.Text = "+"
+
+    else
+
+        sidebar.Visible = true
+        content.Visible = true
+
+        frame.Size =
+            UDim2.new(0.2, 0, 0.4, 0)
+
+        minimizeButton.Text = "_"
+
+    end
+
+end)
+
+-- =========================================================
+-- ЗАКРЫТИЕ
+-- =========================================================
+
+closeButton.MouseButton1Click:Connect(function()
+
+    screenGui:Destroy()
+
+end)
+
+-- =========================================================
 -- ПЕРЕДАЁМ GUI ДРУГИМ СКРИПТАМ
 -- =========================================================
 
@@ -230,3 +327,35 @@ G.UI.VisPage = visPage
 G.UI.OthPage = othPage
 
 print("[Home] GUI создан")
+
+-- =========================================================
+-- ЗАГРУЗКА РАЗДЕЛОВ
+-- =========================================================
+
+local BASE = "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
+
+local function loadFile(name)
+
+    local success, result = pcall(function()
+
+        local code = game:HttpGet(BASE .. name)
+
+        local func, err = loadstring(code)
+
+        assert(func, err)
+
+        return func()
+
+    end)
+
+    if success then
+        print("[Home] " .. name .. " запущен")
+    else
+        warn("[Home] Ошибка в " .. name .. ": " .. tostring(result))
+    end
+
+end
+
+loadFile("main.lua")
+loadFile("vis.lua")
+loadFile("oth.lua")
