@@ -1,1 +1,3 @@
-print("main работает")
+local G = getgenv().DeadEye
+
+print("[main] G найден:", G ~= nil)
