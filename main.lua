@@ -144,6 +144,14 @@ local function destroyCircle()
 
 end
 
+G.Cleanup.Circle = function()
+    circleEnabled = false
+
+    if destroyCircle then
+        destroyCircle()
+    end
+end
+
 -- =========================================================
 -- CIRCLE GUI
 -- =========================================================
