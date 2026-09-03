@@ -3,8 +3,16 @@ local UserInputService = game:GetService("UserInputService")
 
 local hui = gethui()
 
+local GUI_NAME = "MyWindowGui"
+
+local oldGui = hui:FindFirstChild(GUI_NAME)
+
+if oldGui then
+    oldGui:Destroy()
+end
+
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "MyWindowGui"
+screenGui.Name = GUI_NAME
 screenGui.ResetOnSpawn = false
 screenGui.Parent = hui
 
@@ -30,9 +38,9 @@ title.TextYAlignment = Enum.TextYAlignment.Center
 title.BorderSizePixel = 0
 title.Parent = frame
 
-local padding = Instance.new("UIPadding")
-padding.PaddingLeft = UDim.new(0, 10)
-padding.Parent = title
+local titlePadding = Instance.new("UIPadding")
+titlePadding.PaddingLeft = UDim.new(0, 10)
+titlePadding.Parent = title
 
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
@@ -163,24 +171,6 @@ othButton.MouseButton1Click:Connect(function()
     setPage("oth")
 end)
 
-local minimized = false
-
-minimizeButton.MouseButton1Click:Connect(function()
-    minimized = not minimized
-
-    if minimized then
-        sidebar.Visible = false
-        content.Visible = false
-        frame.Size = UDim2.new(0.2, 0, 0, 18)
-        minimizeButton.Text = "+"
-    else
-        sidebar.Visible = true
-        content.Visible = true
-        frame.Size = UDim2.new(0.2, 0, 0.4, 0)
-        minimizeButton.Text = "_"
-    end
-end)
-
 local function createToggle(parent, y)
     local button = Instance.new("TextButton")
 
@@ -217,59 +207,29 @@ local function setToggleVisual(button, knob, enabled)
     end
 
     if enabled then
-        knob.Position =
-            UDim2.new(1, -16, 0.5, -7)
-
-        button.BackgroundColor3 =
-            Color3.fromRGB(60, 180, 90)
+        knob.Position = UDim2.new(1, -16, 0.5, -7)
+        button.BackgroundColor3 = Color3.fromRGB(60, 180, 90)
     else
-        knob.Position =
-            UDim2.new(0, 2, 0.5, -7)
-
-        button.BackgroundColor3 =
-            Color3.fromRGB(70, 70, 70)
+        knob.Position = UDim2.new(0, 2, 0.5, -7)
+        button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     end
-end
-
-local environment =
-    (getgenv and getgenv())
-    or _G
-
-environment.DeadEye =
-    environment.DeadEye
-    or {}
-
-local DeadEye = environment.DeadEye
-
-DeadEye.BaseUrl =
-    DeadEye.BaseUrl
-    or "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
-
-local function normalizeUrl(url)
-    if url:sub(-1) ~= "/" then
-        return url .. "/"
-    end
-
-    return url
 end
 
 local BASE_URL =
-    normalizeUrl(
-        DeadEye.BaseUrl
-    )
+    "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
 
-local function getSource(url)
+local function requestSource(name)
     local response = request({
-        Url = url,
+        Url = BASE_URL .. name .. ".lua",
         Method = "GET"
     })
 
     if not response.Success then
         error(
-            "HTTP "
+            "Failed to load "
+                .. name
+                .. ".lua: HTTP "
                 .. tostring(response.StatusCode)
-                .. ": "
-                .. url
         )
     end
 
@@ -277,12 +237,7 @@ local function getSource(url)
 end
 
 local function loadModule(name)
-    local source =
-        getSource(
-            BASE_URL
-                .. name
-                .. ".lua"
-        )
+    local source = requestSource(name)
 
     local chunk, err =
         loadstring(
@@ -292,23 +247,33 @@ local function loadModule(name)
 
     if not chunk then
         error(
-            "Compile error in "
+            "Failed to compile "
                 .. name
-                .. ".lua: "
+                .. ".lua:\n"
                 .. tostring(err)
         )
     end
 
-    local module = chunk()
+    local ok, result =
+        pcall(chunk)
 
-    if type(module) ~= "table" then
+    if not ok then
+        error(
+            "Failed to execute "
+                .. name
+                .. ".lua:\n"
+                .. tostring(result)
+        )
+    end
+
+    if type(result) ~= "table" then
         error(
             name
                 .. ".lua must return a table"
         )
     end
 
-    return module
+    return result
 end
 
 local Main = loadModule("main")
@@ -342,93 +307,145 @@ local renderConnection =
         end
     end)
 
+local waitingModule = nil
+
+local function handleInput(input)
+    if input.UserInputType
+        ~= Enum.UserInputType.Keyboard
+    then
+        return
+    end
+
+    local key = input.KeyCode
+
+    if Main.assignHotkey
+        and Main.assignHotkey(key)
+    then
+        return
+    end
+
+    if Vis.assignHotkey
+        and Vis.assignHotkey(key)
+    then
+        return
+    end
+
+    if Main.handleKey
+        and Main.handleKey(key)
+    then
+        return
+    end
+
+    if Vis.handleKey
+        and Vis.handleKey(key)
+    then
+        return
+    end
+end
+
 local inputConnection =
     UserInputService.InputBegan:Connect(
-        function(input)
-            if input.UserInputType
-                ~= Enum.UserInputType.Keyboard
-            then
-                return
-            end
+        handleInput
+    )
 
-            if Main.assignHotkey
-                and Main.assignHotkey(input.KeyCode)
-            then
-                return
-            end
+local minimized = false
 
-            if Vis.assignHotkey
-                and Vis.assignHotkey(input.KeyCode)
-            then
-                return
-            end
+local minimizeConnection =
+    minimizeButton.MouseButton1Click:Connect(
+        function()
+            minimized = not minimized
 
-            if Main.handleKey
-                and Main.handleKey(input.KeyCode)
-            then
-                return
-            end
-
-            if Vis.handleKey
-                and Vis.handleKey(input.KeyCode)
-            then
-                return
+            if minimized then
+                sidebar.Visible = false
+                content.Visible = false
+                frame.Size =
+                    UDim2.new(
+                        0.2,
+                        0,
+                        0,
+                        18
+                    )
+                minimizeButton.Text = "+"
+            else
+                sidebar.Visible = true
+                content.Visible = true
+                frame.Size =
+                    UDim2.new(
+                        0.2,
+                        0,
+                        0.4,
+                        0
+                    )
+                minimizeButton.Text = "_"
             end
         end
     )
 
-local drag = false
-local dragStart
-local startPos
+local dragging = false
+local dragStart = nil
+local startPosition = nil
 
-title.InputBegan:Connect(function(input)
-    if input.UserInputType
-        == Enum.UserInputType.MouseButton1
-    then
-        drag = true
-        dragStart = input.Position
-        startPos = frame.Position
-    end
-end)
+local dragBegan =
+    title.InputBegan:Connect(function(input)
+        if input.UserInputType
+            == Enum.UserInputType.MouseButton1
+        then
+            dragging = true
+            dragStart = input.Position
+            startPosition = frame.Position
+        end
+    end)
 
-title.InputEnded:Connect(function(input)
-    if input.UserInputType
-        == Enum.UserInputType.MouseButton1
-    then
-        drag = false
-    end
-end)
+local dragEnded =
+    title.InputEnded:Connect(function(input)
+        if input.UserInputType
+            == Enum.UserInputType.MouseButton1
+        then
+            dragging = false
+        end
+    end)
 
-UserInputService.InputChanged:Connect(function(input)
-    if drag
-        and input.UserInputType
-        == Enum.UserInputType.MouseMovement
-    then
-        local delta =
-            input.Position - dragStart
+local dragChanged =
+    UserInputService.InputChanged:Connect(
+        function(input)
+            if dragging
+                and input.UserInputType
+                == Enum.UserInputType.MouseMovement
+            then
+                local delta =
+                    input.Position - dragStart
 
-        frame.Position =
-            UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
+                frame.Position =
+                    UDim2.new(
+                        startPosition.X.Scale,
+                        startPosition.X.Offset + delta.X,
 
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
-    end
-end)
+                        startPosition.Y.Scale,
+                        startPosition.Y.Offset + delta.Y
+                    )
+            end
+        end
+    )
+
+local destroyed = false
 
 closeButton.MouseButton1Click:Connect(function()
+    if destroyed then
+        return
+    end
+
+    destroyed = true
+
     if Main.destroy then
-        Main.destroy()
+        pcall(Main.destroy)
     end
 
     if Vis.destroy then
-        Vis.destroy()
+        pcall(Vis.destroy)
     end
 
     if Oth.destroy then
-        Oth.destroy()
+        pcall(Oth.destroy)
     end
 
     if renderConnection then
@@ -441,5 +458,27 @@ closeButton.MouseButton1Click:Connect(function()
         inputConnection = nil
     end
 
-    screenGui:Destroy()
+    if minimizeConnection then
+        minimizeConnection:Disconnect()
+        minimizeConnection = nil
+    end
+
+    if dragBegan then
+        dragBegan:Disconnect()
+        dragBegan = nil
+    end
+
+    if dragEnded then
+        dragEnded:Disconnect()
+        dragEnded = nil
+    end
+
+    if dragChanged then
+        dragChanged:Disconnect()
+        dragChanged = nil
+    end
+
+    if screenGui then
+        screenGui:Destroy()
+    end
 end)
