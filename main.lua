@@ -1,471 +1,533 @@
--- Main-tab gameplay features module.
+local Main = {}
+
+-- =========================================================
+-- SERVICES
+-- =========================================================
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local player = Players.LocalPlayer
-local root = (player.Character or player.CharacterAdded:Wait()):WaitForChild("HumanoidRootPart")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local parryEnabled = false
+local player = Players.LocalPlayer
+
+-- =========================================================
+-- UI REFERENCES
+-- =========================================================
+
+local mainPage = nil
+local createToggle = nil
+local setToggleVisual = nil
+
+local parryToggle = nil
+local parryKnob = nil
+local parryKeyButton = nil
+
+-- =========================================================
+-- STATES
+-- =========================================================
+
 local circleEnabled = false
+local parryEnabled = false
 local autoSkillCheckEnabled = false
 local kingScourgeEnabled = false
-local kingScourgeToggle, kingScourgeKnob
-local autoSkillCheckConnection
-local setKingScourgeEnabled, setAutoSkillCheckEnabled
-local createCircle, destroyCircle
-local setToggleVisual
 
-local parryToggle, parryKnob, parryKeyButton
 local parryHotkey = Enum.KeyCode.Z
-local waitingForHotkey = false
+local waitingForParryHotkey = false
+
+-- =========================================================
+-- CONNECTIONS
+-- =========================================================
+
+local connections = {}
+
+local function addConnection(connection)
+    if connection then
+        table.insert(connections, connection)
+    end
+
+    return connection
+end
+
+local function disconnectConnection(connection)
+    if connection then
+        pcall(function()
+            connection:Disconnect()
+        end)
+    end
+end
+
+local function disconnectAll()
+    for _, connection in ipairs(connections) do
+        disconnectConnection(connection)
+    end
+
+    table.clear(connections)
+end
 
 -- =========================================================
 -- CIRCLE
 -- =========================================================
 
-do
+local circleRadius = 7.7
+local circleLineThickness = 0.2
+local circleSegments = 128
 
-    local radius = 7.7
-    local lineThickness = 0.2
-    local segments = 128
+local circleFolder = nil
+local circleParts = {}
+local circleConnection = nil
 
-    local folder = nil
-    local parts = {}
-    local circleConnection = nil
+local localRoot = nil
+local characterAddedConnection = nil
 
-    function createCircle()
+local function updateLocalRoot(character)
+    if not character then
+        localRoot = nil
+        return
+    end
 
-        if folder then
-            return
-        end
+    localRoot =
+        character:FindFirstChild("HumanoidRootPart")
+        or character:WaitForChild("HumanoidRootPart", 10)
+end
 
-        folder = Instance.new("Folder")
+updateLocalRoot(player.Character)
 
-        folder.Name =
-            "CircleZone"
+characterAddedConnection =
+    addConnection(
+        player.CharacterAdded:Connect(function(character)
+            updateLocalRoot(character)
+        end)
+    )
 
-        folder.Parent =
-            workspace
+local function createCircle()
 
-        parts = {}
+    if circleFolder then
+        return
+    end
 
-        local segmentLength =
-            (
-                2
-                * math.pi
-                * radius
-                / segments
-            )
-            + 0.2
+    circleFolder = Instance.new("Folder")
+    circleFolder.Name = "CircleZone"
+    circleFolder.Parent = Workspace
 
-        for i = 1, segments do
+    table.clear(circleParts)
 
-            local part =
-                Instance.new("Part")
+    local segmentLength =
+        (
+            2
+            * math.pi
+            * circleRadius
+            / circleSegments
+        ) + 0.2
 
-            part.Size =
-                Vector3.new(
-                    lineThickness,
-                    0.15,
-                    segmentLength
-                )
+    for i = 1, circleSegments do
 
-            part.Material =
-                Enum.Material.Neon
+        local part = Instance.new("Part")
 
-            part.Transparency = 0.3
-
-            part.CanCollide = false
-            part.CanTouch = false
-            part.CanQuery = false
-
-            part.Anchored = true
-            part.Parent = folder
-
-            table.insert(
-                parts,
-                part
+        part.Size =
+            Vector3.new(
+                circleLineThickness,
+                0.15,
+                segmentLength
             )
 
-        end
+        part.Material = Enum.Material.Neon
+        part.Transparency = 0.3
 
-        circleConnection =
-            RunService.RenderStepped:Connect(
-                function()
+        part.CanCollide = false
+        part.CanTouch = false
+        part.CanQuery = false
 
-                    if not root
-                        or not root.Parent
-                    then
-                        return
-                    end
+        part.Anchored = true
+        part.Parent = circleFolder
 
-                    for i, part
-                        in ipairs(parts)
-                    do
+        table.insert(circleParts, part)
+    end
 
-                        local angle =
-                            (
-                                i / segments
-                            )
-                            * math.pi
-                            * 2
+    circleConnection =
+        addConnection(
+            RunService.RenderStepped:Connect(function()
 
-                        local position =
-                            root.Position
-                            +
-                            Vector3.new(
-                                math.cos(angle)
-                                    * radius,
-
-                                -3,
-
-                                math.sin(angle)
-                                    * radius
-                            )
-
-                        part.Position =
-                            position
-
-                        part.CFrame =
-                            CFrame.new(
-                                position
-                            )
-                            *
-                            CFrame.Angles(
-                                0,
-                                -angle,
-                                0
-                            )
-
-                    end
-
+                if not localRoot
+                    or not localRoot.Parent
+                then
+                    return
                 end
-            )
 
+                for i, part in ipairs(circleParts) do
+
+                    local angle =
+                        (
+                            i
+                            / circleSegments
+                        )
+                        * math.pi
+                        * 2
+
+                    local position =
+                        localRoot.Position
+                        + Vector3.new(
+                            math.cos(angle)
+                                * circleRadius,
+
+                            -3,
+
+                            math.sin(angle)
+                                * circleRadius
+                        )
+
+                    part.Position = position
+
+                    part.CFrame =
+                        CFrame.new(position)
+                        * CFrame.Angles(
+                            0,
+                            -angle,
+                            0
+                        )
+                end
+
+            end)
+        )
+end
+
+local function destroyCircle()
+
+    if circleConnection then
+        disconnectConnection(circleConnection)
+        circleConnection = nil
     end
 
-    function destroyCircle()
-
-        if circleConnection then
-
-            circleConnection:Disconnect()
-            circleConnection = nil
-
+    for _, part in ipairs(circleParts) do
+        if part then
+            pcall(function()
+                part:Destroy()
+            end)
         end
-
-        if folder then
-
-            folder:Destroy()
-            folder = nil
-
-        end
-
-        parts = {}
-
     end
 
+    table.clear(circleParts)
+
+    if circleFolder then
+        pcall(function()
+            circleFolder:Destroy()
+        end)
+
+        circleFolder = nil
+    end
 end
 
 -- =========================================================
 -- PARRY
 -- =========================================================
 
-do
+local PARRY_ANIMATIONS = {
 
-    local ReplicatedStorage =
-        game:GetService("ReplicatedStorage")
+    ["rbxassetid://122812055447896"] = true,
+    ["rbxassetid://135002183282873"] = true,
+    ["rbxassetid://105374834496520"] = true,
+    ["rbxassetid://110355011987939"] = true,
+    ["rbxassetid://117042998468241"] = true,
+    ["rbxassetid://129784271201071"] = true,
+    ["rbxassetid://113255068724446"] = true,
+    ["rbxassetid://118907603246885"] = true,
+    ["rbxassetid://115244153053858"] = true,
+    ["rbxassetid://111229698330816"] = true,
+    ["rbxassetid://138720291317243"] = true,
 
-    local PARRY_ANIMATIONS = {
+}
 
-        ["rbxassetid://122812055447896"] = true,
-        ["rbxassetid://135002183282873"] = true,
-        ["rbxassetid://105374834496520"] = true,
-        ["rbxassetid://110355011987939"] = true,
-        ["rbxassetid://117042998468241"] = true,
-        ["rbxassetid://129784271201071"] = true,
-        ["rbxassetid://113255068724446"] = true,
-        ["rbxassetid://118907603246885"] = true,
-        ["rbxassetid://115244153053858"] = true,
-        ["rbxassetid://111229698330816"] = true,
-        ["rbxassetid://138720291317243"] = true,
+local PARRY_RADIUS = 7.7
 
-    }
+local ParryClient =
+    require(
+        ReplicatedStorage.Modules.Items.ParryClient
+    )
 
-    local PARRY_RADIUS = 7.7
+local emoteHandler =
+    ReplicatedStorage
+        :WaitForChild("Remotes")
+        :WaitForChild("EmoteHandler")
 
-    local ParryClient =
-        require(
-            ReplicatedStorage.Modules.Items.ParryClient
-        )
+local parryController = nil
+local currentTool = nil
 
-    local emoteHandler =
-        ReplicatedStorage
-            :WaitForChild("Remotes")
-            :WaitForChild("EmoteHandler")
+local parryMonitorConnection = nil
 
-    local parryController = nil
-    local currentTool = nil
+local localParryConnections = {}
 
-    -- =====================================================
-    -- SETUP PARRY
-    -- =====================================================
+local function disconnectLocalParryConnections()
 
-    local function setupParry(character)
+    for _, connection in ipairs(localParryConnections) do
 
-        parryController = nil
-        currentTool = nil
-
-        if not character then
-            return
-        end
-
-        local tool =
-            character:FindFirstChild(
-                "Parrying Dagger"
-            )
-
-        if not tool then
-            return
-        end
-
-        currentTool = tool
-
-        parryController =
-            ParryClient.new({
-
-                tool = tool,
-
-                animationId =
-                    "109133187196613",
-
-                lockDuration = 0.8,
-
-                debug = false
-
-            })
+        disconnectConnection(connection)
 
     end
 
-    -- =====================================================
-    -- RANGE CHECK
-    -- =====================================================
+    table.clear(localParryConnections)
+end
 
-    local function isInParryRange(
+local function setupParry(character)
+
+    parryController = nil
+    currentTool = nil
+
+    if not character then
+        return
+    end
+
+    local tool =
+        character:FindFirstChild(
+            "Parrying Dagger"
+        )
+
+    if not tool then
+        return
+    end
+
+    currentTool = tool
+
+    local ok, controller =
+        pcall(
+            function()
+
+                return ParryClient.new({
+
+                    tool = tool,
+
+                    animationId =
+                        "109133187196613",
+
+                    lockDuration = 0.8,
+
+                    debug = false
+
+                })
+
+            end
+        )
+
+    if ok then
+        parryController = controller
+    end
+
+end
+
+local function isInParryRange(attackerCharacter)
+
+    local myCharacter =
+        player.Character
+
+    if not myCharacter then
+        return false
+    end
+
+    local myRoot =
+        myCharacter:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    local attackerRoot =
         attackerCharacter
-    )
-
-        local myCharacter =
-            player.Character
-
-        if not myCharacter then
-            return false
-        end
-
-        local myRoot =
-            myCharacter:FindFirstChild(
+            and attackerCharacter:FindFirstChild(
                 "HumanoidRootPart"
             )
 
-        local attackerRoot =
-            attackerCharacter
-                and attackerCharacter:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-
-        if not myRoot
-            or not attackerRoot
-        then
-            return false
-        end
-
-        return (
-            myRoot.Position
-            -
-            attackerRoot.Position
-        ).Magnitude <= PARRY_RADIUS
-
+    if not myRoot
+        or not attackerRoot
+    then
+        return false
     end
 
-    -- =====================================================
-    -- PERFORM PARRY
-    -- =====================================================
+    return (
+        myRoot.Position
+        - attackerRoot.Position
+    ).Magnitude <= PARRY_RADIUS
+end
 
-    local function performParry(
-        attackerCharacter
-    )
+local function performParry(attackerCharacter)
 
-        if not parryEnabled then
-            return
-        end
+    if not parryEnabled then
+        return
+    end
 
-        if not isInParryRange(
-            attackerCharacter
-        ) then
-            return
-        end
+    if not isInParryRange(attackerCharacter) then
+        return
+    end
 
-        if not parryController then
-            return
-        end
+    if not parryController then
+        return
+    end
 
-        if not parryController:CanUse() then
-            return
-        end
-
-        parryController:Parry()
-
-        emoteHandler:FireServer(
-            "StopEmote"
+    local canUseOk, canUse =
+        pcall(
+            function()
+                return parryController:CanUse()
+            end
         )
 
+    if not canUseOk
+        or not canUse
+    then
+        return
     end
 
-    -- =====================================================
-    -- CHECK PARRY ANIMATION
-    -- =====================================================
+    pcall(function()
+        parryController:Parry()
+    end)
 
-    local function isPlayingParryAnimation(
-        attackerCharacter
-    )
+    pcall(function()
+        emoteHandler:FireServer("StopEmote")
+    end)
+end
 
-        local humanoid =
-            attackerCharacter:FindFirstChildOfClass(
-                "Humanoid"
-            )
+local function isPlayingParryAnimation(
+    attackerCharacter
+)
 
-        if not humanoid then
-            return false
-        end
+    local humanoid =
+        attackerCharacter:FindFirstChildOfClass(
+            "Humanoid"
+        )
 
-        local animator =
-            humanoid:FindFirstChildOfClass(
-                "Animator"
-            )
+    if not humanoid then
+        return false
+    end
 
-        if not animator then
-            return false
-        end
+    local animator =
+        humanoid:FindFirstChildOfClass(
+            "Animator"
+        )
 
-        for _, track
-            in ipairs(
-                animator:GetPlayingAnimationTracks()
-            )
-        do
+    if not animator then
+        return false
+    end
 
-            if track.Animation then
+    for _, track in ipairs(
+        animator:GetPlayingAnimationTracks()
+    ) do
 
-                local animationId =
-                    track.Animation.AnimationId
+        if track.Animation then
 
-                if PARRY_ANIMATIONS[
-                    animationId
-                ]
-                then
-                    return true
-                end
+            local animationId =
+                track.Animation.AnimationId
 
+            if PARRY_ANIMATIONS[animationId] then
+                return true
             end
 
         end
-
-        return false
-
     end
 
-    -- =====================================================
-    -- MONITORING
-    -- =====================================================
+    return false
+end
 
-    local parryMonitorConnection
+local function startParryMonitor()
+
+    if parryMonitorConnection then
+        return
+    end
 
     parryMonitorConnection =
-        RunService.Heartbeat:Connect(
-            function()
+        addConnection(
+            RunService.Heartbeat:Connect(
+                function()
 
-                if not parryEnabled then
-                    return
-                end
+                    if not parryEnabled then
+                        return
+                    end
 
-                if not parryController then
-                    return
-                end
+                    if not parryController then
+                        return
+                    end
 
-                local myCharacter =
-                    player.Character
+                    local myCharacter =
+                        player.Character
 
-                local myRoot =
-                    myCharacter
-                        and myCharacter:FindFirstChild(
-                            "HumanoidRootPart"
-                        )
+                    local myRoot =
+                        myCharacter
+                            and myCharacter:FindFirstChild(
+                                "HumanoidRootPart"
+                            )
 
-                if not myRoot then
-                    return
-                end
+                    if not myRoot then
+                        return
+                    end
 
-                for _, otherPlayer
-                    in ipairs(
+                    for _, otherPlayer in ipairs(
                         Players:GetPlayers()
-                    )
-                do
+                    ) do
 
-                    if otherPlayer ~= player then
+                        if otherPlayer ~= player then
 
-                        local attackerCharacter =
-                            otherPlayer.Character
+                            local attackerCharacter =
+                                otherPlayer.Character
 
-                        if attackerCharacter then
+                            if attackerCharacter then
 
-                            local attackerRoot =
-                                attackerCharacter:FindFirstChild(
-                                    "HumanoidRootPart"
-                                )
-
-                            if attackerRoot then
-
-                                local distance =
-                                    (
-                                        myRoot.Position
-                                        -
-                                        attackerRoot.Position
-                                    ).Magnitude
-
-                                if distance <= PARRY_RADIUS then
-
-                                    if isPlayingParryAnimation(
-                                        attackerCharacter
+                                local attackerRoot =
+                                    attackerCharacter:FindFirstChild(
+                                        "HumanoidRootPart"
                                     )
-                                    then
 
-                                        performParry(
+                                if attackerRoot then
+
+                                    local distance =
+                                        (
+                                            myRoot.Position
+                                            - attackerRoot.Position
+                                        ).Magnitude
+
+                                    if distance <= PARRY_RADIUS then
+
+                                        if isPlayingParryAnimation(
                                             attackerCharacter
-                                        )
+                                        ) then
 
-                                        break
+                                            performParry(
+                                                attackerCharacter
+                                            )
 
+                                            break
+                                        end
                                     end
-
                                 end
-
                             end
-
                         end
-
                     end
 
                 end
+            )
+        )
+end
 
-            end
+local function stopParryMonitor()
+
+    if parryMonitorConnection then
+
+        disconnectConnection(
+            parryMonitorConnection
         )
 
-    -- =====================================================
-    -- SETUP LOCAL CHARACTER
-    -- =====================================================
+        parryMonitorConnection = nil
+    end
+end
 
-    local function setupLocalParryCharacter(
-        character
-    )
+local function setupLocalParryCharacter(
+    character
+)
 
-        setupParry(character)
+    disconnectLocalParryConnections()
+
+    setupParry(character)
+
+    if not character then
+        return
+    end
+
+    table.insert(
+        localParryConnections,
 
         character.ChildAdded:Connect(
             function(child)
@@ -481,6 +543,10 @@ do
 
             end
         )
+    )
+
+    table.insert(
+        localParryConnections,
 
         character.ChildRemoved:Connect(
             function(child)
@@ -493,32 +559,27 @@ do
                     currentTool = nil
                     parryController = nil
 
-                    task.defer(
-                        function()
+                    task.defer(function()
 
-                            if character
-                                and character.Parent
-                            then
+                        if character
+                            and character.Parent
+                        then
 
-                                setupParry(
-                                    character
-                                )
-
-                            end
-
+                            setupParry(
+                                character
+                            )
                         end
-                    )
+
+                    end)
 
                 end
 
             end
         )
+    )
+end
 
-    end
-
-    -- =====================================================
-    -- INITIAL CHARACTER
-    -- =====================================================
+local function setupInitialParry()
 
     if player.Character then
 
@@ -527,479 +588,505 @@ do
         )
 
     end
+end
 
-    -- =====================================================
-    -- CHARACTER ADDED
-    -- =====================================================
+setupInitialParry()
 
+addConnection(
     player.CharacterAdded:Connect(
         function(character)
 
-            task.defer(
-                function()
+            task.defer(function()
 
-                    if not character.Parent then
-                        return
-                    end
-
-                    character:WaitForChild(
-                        "Humanoid",
-                        10
-                    )
-
-                    character:WaitForChild(
-                        "HumanoidRootPart",
-                        10
-                    )
-
-                    setupLocalParryCharacter(
-                        character
-                    )
-
+                if not character.Parent then
+                    return
                 end
-            )
+
+                character:WaitForChild(
+                    "Humanoid",
+                    10
+                )
+
+                character:WaitForChild(
+                    "HumanoidRootPart",
+                    10
+                )
+
+                setupLocalParryCharacter(
+                    character
+                )
+
+            end)
 
         end
     )
+)
 
-    -- =====================================================
-    -- CHARACTER REMOVING
-    -- =====================================================
-
+addConnection(
     player.CharacterRemoving:Connect(
         function(character)
 
             currentTool = nil
             parryController = nil
 
+            disconnectLocalParryConnections()
+
         end
     )
+)
 
-    -- =====================================================
-    -- PERIODIC TOOL CHECK
-    -- =====================================================
+task.spawn(function()
 
-    task.spawn(
-        function()
+    while true do
 
-            while true do
+        task.wait(2)
 
-                task.wait(2)
+        local currentCharacter =
+            player.Character
 
-                local currentCharacter =
-                    player.Character
+        local tool =
+            currentCharacter
+                and currentCharacter:FindFirstChild(
+                    "Parrying Dagger"
+                )
 
-                local tool =
+        if tool ~= currentTool then
+
+            if tool then
+
+                setupParry(
                     currentCharacter
-                        and currentCharacter:FindFirstChild(
-                            "Parrying Dagger"
-                        )
+                )
 
-                if tool ~= currentTool then
+            else
 
-                    if tool then
-
-                        setupParry(
-                            currentCharacter
-                        )
-
-                    end
-
-                end
+                currentTool = nil
+                parryController = nil
 
             end
-
         end
-    )
+    end
+end)
 
-end
+startParryMonitor()
 
 -- =========================================================
 -- AUTO SKILL CHECK
 -- =========================================================
 
-do
+local skillCheckPlayerGui =
+    player:WaitForChild("PlayerGui")
 
-    local skillCheckPlayerGui = player:WaitForChild("PlayerGui")
-    local skillCheckScript = nil
+local skillCheckScript = nil
 
-    local Check = nil
-    local Line = nil
-    local Goal = nil
+local Check = nil
+local Line = nil
+local Goal = nil
 
-    local lastCheck = nil
-    local lastLine = nil
-    local lastGoal = nil
+local lastCheck = nil
+local lastLine = nil
+local lastGoal = nil
 
-    local wasInSuccess = false
-    local handleSkillCheck = nil
+local wasInSuccess = false
 
-    local CollectionService = game:GetService("CollectionService")
+local handleSkillCheck = nil
+local endScourgeMode = nil
+local v_u_9 = nil
 
-    local endScourgeMode = nil
-    local v_u_9 = nil
+local kingScourgeInputFunction = nil
+local kingScourgeWasInSuccess = false
+local kingScourgeConnection = nil
 
-    local kingScourgeInputFunction = nil
-    local kingScourgeWasInSuccess = false
-    local kingScourgeConnection = nil
+local CollectionService =
+    game:GetService("CollectionService")
 
+-- =========================================================
+-- FIND SKILLCHECK
+-- =========================================================
 
-    -- =========================================================
-    -- ПОИСК SKILLCHECK
-    -- =========================================================
+local function updateSkillCheckReferences()
 
-    local function updateSkillCheckReferences()
+    local newScript = nil
 
-        local newScript = nil
+    local character = player.Character
 
-        local character = player.Character
+    if character then
 
-        if character then
-            newScript = character:FindFirstChild("Skillcheck-gen")
-        end
-
-        if newScript ~= skillCheckScript then
-
-            skillCheckScript = newScript
-
-            Check = nil
-            Line = nil
-            Goal = nil
-
-            handleSkillCheck = nil
-            endScourgeMode = nil
-            kingScourgeInputFunction = nil
-
-            lastCheck = nil
-            lastLine = nil
-            lastGoal = nil
-
-            wasInSuccess = false
-            kingScourgeWasInSuccess = false
-
-        end
-
-        if not skillCheckScript then
-
-            Check = nil
-            Line = nil
-            Goal = nil
-
-            return false
-
-        end
-
-        local skillCheckGui =
-            skillCheckPlayerGui:FindFirstChild("SkillCheckPromptGui")
-
-        if not skillCheckGui then
-            return false
-        end
-
-        local newCheck =
-            skillCheckGui:FindFirstChild("Check")
-
-        if not newCheck then
-            return false
-        end
-
-        local newLine =
-            newCheck:FindFirstChild("Line")
-
-        local newGoal =
-            newCheck:FindFirstChild("Goal")
-
-        if not newLine or not newGoal then
-            return false
-        end
-
-        local changed =
-            Check ~= newCheck
-            or Line ~= newLine
-            or Goal ~= newGoal
-
-        Check = newCheck
-        Line = newLine
-        Goal = newGoal
-
-        if changed then
-
-            lastCheck = Check
-            lastLine = Line
-            lastGoal = Goal
-
-            handleSkillCheck = nil
-            endScourgeMode = nil
-            kingScourgeInputFunction = nil
-
-            wasInSuccess = false
-            kingScourgeWasInSuccess = false
-
-        end
-
-        return changed
-
-    end
-
-
-    -- =========================================================
-    -- ПОИСК endScourgeMode
-    -- =========================================================
-
-    local function findEndScourgeMode()
-
-        local callbacks = filtergc("function", {
-            Upvalues = {
-                Line,
-                Goal
-            }
-        })
-
-        for _, callback in callbacks do
-
-            local ok, upvalues =
-                pcall(debug.getupvalues, callback)
-
-            if ok then
-
-                for _, value in upvalues do
-
-                    if type(value) == "function" then
-
-                        local ok2, uv =
-                            pcall(debug.getupvalues, value)
-
-                        if ok2
-                            and uv[4] == player
-                            and uv[5] == CollectionService
-                            and uv[8] == Check
-                            and uv[9] == Line
-                            and uv[10] == Goal
-                        then
-                            return value
-                        end
-
-                    end
-
-                end
-
-            end
-
-        end
-
-        return nil
-
-    end
-
-
-    -- =========================================================
-    -- v_u_9
-    -- =========================================================
-
-    local function updateVU9()
-
-        if not endScourgeMode then
-            endScourgeMode = findEndScourgeMode()
-        end
-
-        if not endScourgeMode then
-
-            v_u_9 = nil
-
-            return nil
-
-        end
-
-        local ok, value =
-            pcall(
-                debug.getupvalue,
-                endScourgeMode,
-                1
+        newScript =
+            character:FindFirstChild(
+                "Skillcheck-gen"
             )
 
-        if ok then
+    end
 
-            v_u_9 = value
+    if newScript ~= skillCheckScript then
 
-            return value
+        skillCheckScript = newScript
 
-        end
+        Check = nil
+        Line = nil
+        Goal = nil
 
+        handleSkillCheck = nil
         endScourgeMode = nil
-        v_u_9 = nil
-
-        return nil
-
-    end
-
-
-    -- =========================================================
-    -- ПОИСК InputBegan CALLBACK
-    -- =========================================================
-
-    local function findKingScourgeInputFunction()
-
-        local callbacks = filtergc("function", {
-            Upvalues = {
-                Line,
-                Goal
-            }
-        })
-
-        for _, callback in ipairs(callbacks) do
-
-            local ok, upvalues =
-                pcall(debug.getupvalues, callback)
-
-            if ok then
-
-                local constantsOk, constants =
-                    pcall(debug.getconstants, callback)
-
-                if constantsOk then
-
-                    local hasSpace = false
-                    local hasSuccess = false
-                    local hasFireServer = false
-                    local has1305 = false
-
-                    for _, constant in ipairs(constants) do
-
-                        if constant == "Space" then
-
-                            hasSpace = true
-
-                        elseif constant == "success" then
-
-                            hasSuccess = true
-
-                        elseif constant == "FireServer" then
-
-                            hasFireServer = true
-
-                        elseif constant == 130.5 then
-
-                            has1305 = true
-
-                        end
-
-                    end
-
-                    if upvalues[3] == Line
-                        and upvalues[4] == Goal
-                        and type(upvalues[5]) == "number"
-                        and type(upvalues[6]) == "function"
-                        and hasSpace
-                        and hasSuccess
-                        and hasFireServer
-                        and has1305
-                    then
-
-                        return callback
-
-                    end
-
-                end
-
-            end
-
-        end
-
-        return nil
-
-    end
-
-
-    -- =========================================================
-    -- v_u_9 KING SCOURGE
-    -- =========================================================
-
-    local function getKingScourgeVU9()
-
-        if not kingScourgeInputFunction then
-            return nil
-        end
-
-        local ok, value =
-            pcall(
-                debug.getupvalue,
-                kingScourgeInputFunction,
-                2
-            )
-
-        if ok then
-            return value
-        end
-
-        -- Старый callback больше недоступен
         kingScourgeInputFunction = nil
 
+        lastCheck = nil
+        lastLine = nil
+        lastGoal = nil
+
+        wasInSuccess = false
+        kingScourgeWasInSuccess = false
+    end
+
+    if not skillCheckScript then
+
+        Check = nil
+        Line = nil
+        Goal = nil
+
+        return false
+    end
+
+    local skillCheckGui =
+        skillCheckPlayerGui:FindFirstChild(
+            "SkillCheckPromptGui"
+        )
+
+    if not skillCheckGui then
+        return false
+    end
+
+    local newCheck =
+        skillCheckGui:FindFirstChild(
+            "Check"
+        )
+
+    if not newCheck then
+        return false
+    end
+
+    local newLine =
+        newCheck:FindFirstChild(
+            "Line"
+        )
+
+    local newGoal =
+        newCheck:FindFirstChild(
+            "Goal"
+        )
+
+    if not newLine
+        or not newGoal
+    then
+        return false
+    end
+
+    local changed =
+        Check ~= newCheck
+        or Line ~= newLine
+        or Goal ~= newGoal
+
+    Check = newCheck
+    Line = newLine
+    Goal = newGoal
+
+    if changed then
+
+        lastCheck = Check
+        lastLine = Line
+        lastGoal = Goal
+
+        handleSkillCheck = nil
+        endScourgeMode = nil
+        kingScourgeInputFunction = nil
+
+        wasInSuccess = false
+        kingScourgeWasInSuccess = false
+    end
+
+    return changed
+end
+
+-- =========================================================
+-- FIND endScourgeMode
+-- =========================================================
+
+local function findEndScourgeMode()
+
+    if not Line
+        or not Goal
+    then
         return nil
+    end
+
+    local callbacks =
+        filtergc(
+            "function",
+            {
+                Upvalues = {
+                    Line,
+                    Goal
+                }
+            }
+        )
+
+    for _, callback in callbacks do
+
+        local ok, upvalues =
+            pcall(
+                debug.getupvalues,
+                callback
+            )
+
+        if ok then
+
+            for _, value in upvalues do
+
+                if type(value) == "function" then
+
+                    local ok2, uv =
+                        pcall(
+                            debug.getupvalues,
+                            value
+                        )
+
+                    if ok2
+                        and uv[4] == player
+                        and uv[5] == CollectionService
+                        and uv[8] == Check
+                        and uv[9] == Line
+                        and uv[10] == Goal
+                    then
+
+                        return value
+                    end
+                end
+            end
+        end
+    end
+
+    return nil
+end
+
+-- =========================================================
+-- v_u_9
+-- =========================================================
+
+local function updateVU9()
+
+    if not endScourgeMode then
+
+        endScourgeMode =
+            findEndScourgeMode()
 
     end
 
+    if not endScourgeMode then
 
-    -- =========================================================
-    -- SUCCESS
-    -- =========================================================
+        v_u_9 = nil
+        return nil
+    end
 
-    local function kingScourgeSuccess()
+    local ok, value =
+        pcall(
+            debug.getupvalue,
+            endScourgeMode,
+            1
+        )
 
-        if not kingScourgeInputFunction then
-            return
+    if ok then
+
+        v_u_9 = value
+        return value
+    end
+
+    endScourgeMode = nil
+    v_u_9 = nil
+
+    return nil
+end
+
+-- =========================================================
+-- FIND KING SCOURGE INPUT FUNCTION
+-- =========================================================
+
+local function findKingScourgeInputFunction()
+
+    if not Line
+        or not Goal
+    then
+        return nil
+    end
+
+    local callbacks =
+        filtergc(
+            "function",
+            {
+                Upvalues = {
+                    Line,
+                    Goal
+                }
+            }
+        )
+
+    for _, callback in ipairs(callbacks) do
+
+        local ok, upvalues =
+            pcall(
+                debug.getupvalues,
+                callback
+            )
+
+        if ok then
+
+            local constantsOk, constants =
+                pcall(
+                    debug.getconstants,
+                    callback
+                )
+
+            if constantsOk then
+
+                local hasSpace = false
+                local hasSuccess = false
+                local hasFireServer = false
+                local has1305 = false
+
+                for _, constant in ipairs(constants) do
+
+                    if constant == "Space" then
+
+                        hasSpace = true
+
+                    elseif constant == "success" then
+
+                        hasSuccess = true
+
+                    elseif constant == "FireServer" then
+
+                        hasFireServer = true
+
+                    elseif constant == 130.5 then
+
+                        has1305 = true
+
+                    end
+                end
+
+                if upvalues[3] == Line
+                    and upvalues[4] == Goal
+                    and type(upvalues[5]) == "number"
+                    and type(upvalues[6]) == "function"
+                    and hasSpace
+                    and hasSuccess
+                    and hasFireServer
+                    and has1305
+                then
+
+                    return callback
+                end
+            end
         end
+    end
 
-        local ok
+    return nil
+end
 
-        local current10 =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                5
-            )
+-- =========================================================
+-- KING SCOURGE v_u_9
+-- =========================================================
 
-        local endScourgeMode =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                6
-            )
+local function getKingScourgeVU9()
 
-        local current14 =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                7
-            )
+    if not kingScourgeInputFunction then
+        return nil
+    end
 
-        local startScourgeSpin =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                8
-            )
+    local ok, value =
+        pcall(
+            debug.getupvalue,
+            kingScourgeInputFunction,
+            2
+        )
 
-        local KingScourgeHit =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                9
-            )
+    if ok then
+        return value
+    end
 
-        local v_u_13 =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                10
-            )
+    kingScourgeInputFunction = nil
 
-        local Great =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                11
-            )
+    return nil
+end
 
-        local currentGoal =
-            debug.getupvalue(
-                kingScourgeInputFunction,
-                4
-            )
+-- =========================================================
+-- KING SCOURGE SUCCESS
+-- =========================================================
 
-        ok = pcall(function()
+local function kingScourgeSuccess()
+
+    if not kingScourgeInputFunction then
+        return
+    end
+
+    local ok =
+        pcall(function()
+
+            local current10 =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    5
+                )
+
+            local endScourgeModeFn =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    6
+                )
+
+            local current14 =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    7
+                )
+
+            local startScourgeSpin =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    8
+                )
+
+            local KingScourgeHit =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    9
+                )
+
+            local v_u_13 =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    10
+                )
+
+            local Great =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    11
+                )
+
+            local currentGoal =
+                debug.getupvalue(
+                    kingScourgeInputFunction,
+                    4
+                )
+
+            if type(current10) ~= "number"
+                or type(endScourgeModeFn) ~= "function"
+                or not currentGoal
+                or not Line
+            then
+                error("Invalid KingScourge upvalues")
+            end
 
             KingScourgeHit:FireServer(
                 v_u_13,
@@ -1008,7 +1095,8 @@ do
 
             Great:Play()
 
-            current10 = current10 - 1
+            current10 =
+                current10 - 1
 
             debug.setupvalue(
                 kingScourgeInputFunction,
@@ -1018,13 +1106,16 @@ do
 
             if current10 <= 0 then
 
-                endScourgeMode()
+                endScourgeModeFn()
 
             else
 
                 currentGoal.Rotation =
                     Line.Rotation
-                    + math.random(135, 225)
+                    + math.random(
+                        135,
+                        225
+                    )
                     - 130.5
 
                 if current14 then
@@ -1036,43 +1127,39 @@ do
                         7,
                         nil
                     )
-
                 end
 
                 startScourgeSpin()
-
             end
-
         end)
 
-        if not ok then
-            kingScourgeInputFunction = nil
-        end
+    if not ok then
+        kingScourgeInputFunction = nil
+    end
+end
 
+-- =========================================================
+-- START KING SCOURGE
+-- =========================================================
+
+local function startKingScourge()
+
+    if kingScourgeConnection then
+        return
     end
 
+    kingScourgeWasInSuccess = false
 
-    -- =========================================================
-    -- START / STOP KING SCOURGE
-    -- =========================================================
-
-    local function startKingScourge()
-
-        if kingScourgeConnection then
-            return
-        end
-
-        kingScourgeWasInSuccess = false
-
-        kingScourgeConnection =
-            RunService.Heartbeat:Connect(function()
+    kingScourgeConnection =
+        RunService.Heartbeat:Connect(
+            function()
 
                 if not kingScourgeEnabled then
 
-                    kingScourgeWasInSuccess = false
+                    kingScourgeWasInSuccess =
+                        false
 
                     return
-
                 end
 
                 local skillCheckChanged =
@@ -1080,78 +1167,75 @@ do
 
                 if not Check then
 
-                    kingScourgeWasInSuccess = false
+                    kingScourgeWasInSuccess =
+                        false
 
                     return
-
                 end
 
                 if skillCheckChanged then
 
-                    kingScourgeInputFunction = nil
-                    kingScourgeWasInSuccess = false
+                    kingScourgeInputFunction =
+                        nil
 
+                    kingScourgeWasInSuccess =
+                        false
                 end
-
-                -- ПОСТОЯННЫЙ ПОИСК InputBegan
 
                 if not kingScourgeInputFunction then
 
                     kingScourgeInputFunction =
                         findKingScourgeInputFunction()
-
                 end
 
                 if not kingScourgeInputFunction then
 
-                    kingScourgeWasInSuccess = false
+                    kingScourgeWasInSuccess =
+                        false
 
                     return
-
                 end
 
                 if not Check.Visible then
 
-                    kingScourgeWasInSuccess = false
+                    kingScourgeWasInSuccess =
+                        false
 
                     return
-
                 end
 
-                -- Актуальное значение v_u_9
-
-                local v_u_9 =
+                local currentVU9 =
                     getKingScourgeVU9()
-
-                -- Если старый callback пропал во время проверки,
-                -- сбрасываем его, и на следующем Heartbeat найдём заново
 
                 if not kingScourgeInputFunction then
 
-                    kingScourgeWasInSuccess = false
+                    kingScourgeWasInSuccess =
+                        false
 
                     return
-
                 end
 
-                -- KingScourge работает только когда v_u_9 == true
+                if currentVU9 ~= true then
 
-                if v_u_9 ~= true then
-
-                    kingScourgeWasInSuccess = false
+                    kingScourgeWasInSuccess =
+                        false
 
                     return
-
                 end
 
-                local rotation = Line.Rotation
-                local goalRotation = Goal.Rotation
+                local rotation =
+                    Line.Rotation
+
+                local goalRotation =
+                    Goal.Rotation
 
                 local successStart =
-                    102 + goalRotation
+                    102
+                    + goalRotation
 
                 local successEnd =
-                    116 + goalRotation
+                    116
+                    + goalRotation
 
                 local inSuccess =
                     rotation >= successStart
@@ -1162,444 +1246,875 @@ do
                 then
 
                     kingScourgeSuccess()
-
                 end
 
-                kingScourgeWasInSuccess = inSuccess
+                kingScourgeWasInSuccess =
+                    inSuccess
+            end
+        )
+end
 
-            end)
+local function stopKingScourge()
 
+    kingScourgeWasInSuccess = false
+    kingScourgeInputFunction = nil
+
+    if kingScourgeConnection then
+
+        disconnectConnection(
+            kingScourgeConnection
+        )
+
+        kingScourgeConnection = nil
+    end
+end
+
+local function setKingScourgeEnabled(
+    enabled
+)
+
+    kingScourgeEnabled = enabled
+
+    if enabled then
+
+        startKingScourge()
+
+    else
+
+        stopKingScourge()
     end
 
-
-    local function stopKingScourge()
-
-        kingScourgeWasInSuccess = false
-        kingScourgeInputFunction = nil
-
-        if kingScourgeConnection then
-
-            kingScourgeConnection:Disconnect()
-            kingScourgeConnection = nil
-
-        end
-
-    end
-
-
-    -- =========================================================
-    -- ВКЛЮЧЕНИЕ KING SCOURGE
-    -- =========================================================
-
-    function setKingScourgeEnabled(enabled)
-
-        kingScourgeEnabled = enabled
-
-        if enabled then
-
-            startKingScourge()
-
-        else
-
-            stopKingScourge()
-
-        end
+    if kingScourgeToggle
+        and kingScourgeKnob
+    then
 
         setToggleVisual(
             kingScourgeToggle,
             kingScourgeKnob,
             enabled
         )
+    end
+end
 
+-- =========================================================
+-- FIND handleSkillCheck
+-- =========================================================
+
+local function findHandleSkillCheck()
+
+    if not Line
+        or not Goal
+    then
+        return nil
     end
 
-
-    -- =========================================================
-    -- ПОИСК handleSkillCheck
-    -- =========================================================
-
-    local function findHandleSkillCheck()
-
-        local callbacks = filtergc("function", {
-            Upvalues = {
-                Line,
-                Goal
+    local callbacks =
+        filtergc(
+            "function",
+            {
+                Upvalues = {
+                    Line,
+                    Goal
+                }
             }
-        })
+        )
 
-        for _, callback in callbacks do
+    for _, callback in callbacks do
 
-            local ok, upvalues =
-                pcall(debug.getupvalues, callback)
+        local ok, upvalues =
+            pcall(
+                debug.getupvalues,
+                callback
+            )
 
-            if ok then
+        if ok then
 
-                for _, value in upvalues do
+            for _, value in upvalues do
 
-                    if type(value) == "function" then
+                if type(value) == "function" then
 
-                        local constantsOk, constants =
-                            pcall(debug.getconstants, value)
+                    local constantsOk, constants =
+                        pcall(
+                            debug.getconstants,
+                            value
+                        )
 
-                        if constantsOk then
+                    if constantsOk then
 
-                            local hasSuccess = false
+                        local hasSuccess = false
 
-                            for _, constant in constants do
+                        for _, constant in constants do
 
-                                if constant == "success" then
+                            if constant == "success" then
 
-                                    hasSuccess = true
-
-                                    break
-
-                                end
-
+                                hasSuccess = true
+                                break
                             end
-
-                            if hasSuccess then
-                                return value
-                            end
-
                         end
 
+                        if hasSuccess then
+                            return value
+                        end
                     end
-
                 end
-
             end
-
         end
-
-        return nil
-
     end
 
+    return nil
+end
 
-    -- =========================================================
-    -- MONITORING AUTO SKILL CHECK
-    -- =========================================================
+-- =========================================================
+-- AUTO SKILL CHECK CONNECTION
+-- =========================================================
+
+local autoSkillCheckConnection = nil
+
+local function startAutoSkillCheck()
+
+    if autoSkillCheckConnection then
+        return
+    end
 
     autoSkillCheckConnection =
-        RunService.Heartbeat:Connect(function()
+        RunService.Heartbeat:Connect(
+            function()
 
-            if not autoSkillCheckEnabled then
+                if not autoSkillCheckEnabled then
 
-                wasInSuccess = false
+                    wasInSuccess = false
 
-                return
-
-            end
-
-            local skillCheckChanged =
-                updateSkillCheckReferences()
-
-            if not Check then
-
-                wasInSuccess = false
-
-                return
-
-            end
-
-            if skillCheckChanged then
-
-                handleSkillCheck = nil
-                endScourgeMode = nil
-                wasInSuccess = false
-
-            end
-
-            local currentVU9 =
-                updateVU9()
-
-            if currentVU9 == true then
-
-                wasInSuccess = false
-
-                return
-
-            end
-
-            if not handleSkillCheck then
-
-                handleSkillCheck =
-                    findHandleSkillCheck()
-
-            end
-
-            if not handleSkillCheck then
-
-                wasInSuccess = false
-
-                return
-
-            end
-
-            if not Check.Visible then
-
-                wasInSuccess = false
-
-                return
-
-            end
-
-            local rotation = Line.Rotation
-            local goalRotation = Goal.Rotation
-
-            local successStart =
-                102 + goalRotation
-
-            local successEnd =
-                116 + goalRotation
-
-            local inSuccess =
-                rotation >= successStart
-                and rotation <= successEnd
-
-            if inSuccess and not wasInSuccess then
-
-                local ok =
-                    pcall(
-                        handleSkillCheck,
-                        "success"
-                    )
-
-                if not ok then
-                    handleSkillCheck = nil
+                    return
                 end
 
+                local skillCheckChanged =
+                    updateSkillCheckReferences()
+
+                if not Check then
+
+                    wasInSuccess = false
+
+                    return
+                end
+
+                if skillCheckChanged then
+
+                    handleSkillCheck = nil
+                    endScourgeMode = nil
+                    wasInSuccess = false
+                end
+
+                local currentVU9 =
+                    updateVU9()
+
+                if currentVU9 == true then
+
+                    wasInSuccess = false
+
+                    return
+                end
+
+                if not handleSkillCheck then
+
+                    handleSkillCheck =
+                        findHandleSkillCheck()
+                end
+
+                if not handleSkillCheck then
+
+                    wasInSuccess = false
+
+                    return
+                end
+
+                if not Check.Visible then
+
+                    wasInSuccess = false
+
+                    return
+                end
+
+                local rotation =
+                    Line.Rotation
+
+                local goalRotation =
+                    Goal.Rotation
+
+                local successStart =
+                    102
+                    + goalRotation
+
+                local successEnd =
+                    116
+                    + goalRotation
+
+                local inSuccess =
+                    rotation >= successStart
+                    and rotation <= successEnd
+
+                if inSuccess
+                    and not wasInSuccess
+                then
+
+                    local ok =
+                        pcall(
+                            handleSkillCheck,
+                            "success"
+                        )
+
+                    if not ok then
+
+                        handleSkillCheck =
+                            nil
+                    end
+                end
+
+                wasInSuccess =
+                    inSuccess
             end
+        )
+end
 
-            wasInSuccess = inSuccess
+startAutoSkillCheck()
 
-        end)
+local function setAutoSkillCheckEnabled(
+    enabled
+)
 
+    autoSkillCheckEnabled = enabled
 
-    -- =========================================================
-    -- ВКЛЮЧЕНИЕ / ВЫКЛЮЧЕНИЕ AUTO SKILL CHECK
-    -- =========================================================
+    if not enabled then
 
-    function setAutoSkillCheckEnabled(enabled)
+        wasInSuccess = false
+        handleSkillCheck = nil
 
-        autoSkillCheckEnabled = enabled
+    else
 
-        if not enabled then
+        updateSkillCheckReferences()
 
-            wasInSuccess = false
-            handleSkillCheck = nil
+        if Check
+            and Line
+            and Goal
+        then
+
+            handleSkillCheck =
+                findHandleSkillCheck()
 
         else
 
-            updateSkillCheckReferences()
-
-            if Check and Line and Goal then
-
-                handleSkillCheck =
-                    findHandleSkillCheck()
-
-            else
-
-                handleSkillCheck = nil
-
-            end
-
+            handleSkillCheck = nil
         end
-
     end
-
 end
-local Main = {}
+
+-- =========================================================
+-- GUI REFERENCES
+-- =========================================================
+
+local kingScourgeToggle = nil
+local kingScourgeKnob = nil
+
+local autoSkillCheckToggle = nil
+local autoSkillCheckKnob = nil
+
+-- =========================================================
+-- MAIN MOUNT
+-- =========================================================
 
 function Main.mount(ui)
-    local mainPage = ui.mainPage
-    local createToggle = ui.createToggle
-    setToggleVisual = ui.setToggleVisual
 
--- =========================================================
--- CIRCLE
--- =========================================================
+    if not ui then
+        error("Main.mount: ui is required")
+    end
 
-do
-    local circleLabel = Instance.new("TextLabel")
-    circleLabel.Name = "CircleLabel"
-    circleLabel.Size = UDim2.new(0, 80, 0, 25)
-    circleLabel.Position = UDim2.new(0, 10, 0, 5)
+    mainPage =
+        assert(
+            ui.mainPage,
+            "Main.mount: mainPage is missing"
+        )
+
+    createToggle =
+        assert(
+            ui.createToggle,
+            "Main.mount: createToggle is missing"
+        )
+
+    setToggleVisual =
+        assert(
+            ui.setToggleVisual,
+            "Main.mount: setToggleVisual is missing"
+        )
+
+    -- =====================================================
+    -- CIRCLE GUI
+    -- =====================================================
+
+    local circleLabel =
+        Instance.new("TextLabel")
+
+    circleLabel.Name =
+        "CircleLabel"
+
+    circleLabel.Size =
+        UDim2.new(
+            0,
+            80,
+            0,
+            25
+        )
+
+    circleLabel.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            5
+        )
+
     circleLabel.BackgroundTransparency = 1
     circleLabel.Text = "circle"
-    circleLabel.TextColor3 = Color3.fromRGB(242, 242, 242)
+
+    circleLabel.TextColor3 =
+        Color3.fromRGB(
+            242,
+            242,
+            242
+        )
+
     circleLabel.TextSize = 12
-    circleLabel.Font = Enum.Font.SourceSans
-    circleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    circleLabel.TextYAlignment = Enum.TextYAlignment.Center
+    circleLabel.Font =
+        Enum.Font.SourceSans
+
+    circleLabel.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    circleLabel.TextYAlignment =
+        Enum.TextYAlignment.Center
+
     circleLabel.Parent = mainPage
 
-    local toggle, knob = createToggle(mainPage, 11)
+    local circleToggle, circleKnob =
+        createToggle(
+            mainPage,
+            11
+        )
 
-    toggle.MouseButton1Click:Connect(function()
-        circleEnabled = not circleEnabled
+    setToggleVisual(
+        circleToggle,
+        circleKnob,
+        circleEnabled
+    )
 
-        if circleEnabled then
-            createCircle()
-        else
-            destroyCircle()
-        end
+    addConnection(
+        circleToggle.MouseButton1Click:Connect(
+            function()
 
-        setToggleVisual(toggle, knob, circleEnabled)
-    end)
+                circleEnabled =
+                    not circleEnabled
 
-    -- =========================================================
-    -- PARRY
-    -- =========================================================
+                if circleEnabled then
+                    createCircle()
+                else
+                    destroyCircle()
+                end
 
-    local parryLabel = Instance.new("TextLabel")
-    parryLabel.Name = "ParryLabel"
-    parryLabel.Size = UDim2.new(0, 110, 0, 25)
-    parryLabel.Position = UDim2.new(0, 10, 0, 36)
+                setToggleVisual(
+                    circleToggle,
+                    circleKnob,
+                    circleEnabled
+                )
+
+            end
+        )
+    )
+
+    -- =====================================================
+    -- PARRY GUI
+    -- =====================================================
+
+    local parryLabel =
+        Instance.new("TextLabel")
+
+    parryLabel.Name =
+        "ParryLabel"
+
+    parryLabel.Size =
+        UDim2.new(
+            0,
+            110,
+            0,
+            25
+        )
+
+    parryLabel.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            36
+        )
+
     parryLabel.BackgroundTransparency = 1
     parryLabel.Text = "Parry"
-    parryLabel.TextColor3 = Color3.fromRGB(242, 242, 242)
+
+    parryLabel.TextColor3 =
+        Color3.fromRGB(
+            242,
+            242,
+            242
+        )
+
     parryLabel.TextSize = 12
-    parryLabel.Font = Enum.Font.SourceSans
-    parryLabel.TextXAlignment = Enum.TextXAlignment.Left
-    parryLabel.TextYAlignment = Enum.TextYAlignment.Center
+    parryLabel.Font =
+        Enum.Font.SourceSans
+
+    parryLabel.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    parryLabel.TextYAlignment =
+        Enum.TextYAlignment.Center
+
     parryLabel.Parent = mainPage
 
-    parryKeyButton = Instance.new("TextButton")
-    parryKeyButton.Name = "ParryKeyButton"
-    parryKeyButton.Size = UDim2.new(0, 32, 0, 18)
-    parryKeyButton.Position = UDim2.new(1, -88, 0, 42)
-    parryKeyButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-    parryKeyButton.TextColor3 = Color3.fromRGB(200, 200, 200)
-    parryKeyButton.Text = parryHotkey.Name
+    parryKeyButton =
+        Instance.new("TextButton")
+
+    parryKeyButton.Name =
+        "ParryKeyButton"
+
+    parryKeyButton.Size =
+        UDim2.new(
+            0,
+            32,
+            0,
+            18
+        )
+
+    parryKeyButton.Position =
+        UDim2.new(
+            1,
+            -88,
+            0,
+            42
+        )
+
+    parryKeyButton.BackgroundColor3 =
+        Color3.fromRGB(
+            55,
+            55,
+            55
+        )
+
+    parryKeyButton.TextColor3 =
+        Color3.fromRGB(
+            200,
+            200,
+            200
+        )
+
+    parryKeyButton.Text =
+        parryHotkey.Name
+
     parryKeyButton.TextSize = 10
-    parryKeyButton.Font = Enum.Font.SourceSans
+    parryKeyButton.Font =
+        Enum.Font.SourceSans
+
     parryKeyButton.BorderSizePixel = 0
     parryKeyButton.AutoButtonColor = false
     parryKeyButton.Parent = mainPage
 
-    local parryKeyCorner = Instance.new("UICorner")
-    parryKeyCorner.CornerRadius = UDim.new(0, 3)
-    parryKeyCorner.Parent = parryKeyButton
+    local parryKeyCorner =
+        Instance.new("UICorner")
 
-    parryToggle, parryKnob = createToggle(mainPage, 42)
+    parryKeyCorner.CornerRadius =
+        UDim.new(
+            0,
+            3
+        )
 
-    setToggleVisual(parryToggle, parryKnob, false)
+    parryKeyCorner.Parent =
+        parryKeyButton
 
-    -- =========================================================
-    -- AUTO SKILL CHECK 
-    -- =========================================================
+    parryToggle,
+    parryKnob =
+        createToggle(
+            mainPage,
+            42
+        )
 
-    local autoSkillCheckLabel = Instance.new("TextLabel")
+    setToggleVisual(
+        parryToggle,
+        parryKnob,
+        parryEnabled
+    )
 
-    autoSkillCheckLabel.Name = "AutoSkillCheckLabel"
-    autoSkillCheckLabel.Size = UDim2.new(0, 110, 0, 25)
-    autoSkillCheckLabel.Position = UDim2.new(0, 10, 0, 67)
+    -- ВАЖНО:
+    -- обработчик находится внутри mount,
+    -- после создания parryToggle.
+
+    addConnection(
+        parryToggle.MouseButton1Click:Connect(
+            function()
+
+                parryEnabled =
+                    not parryEnabled
+
+                setToggleVisual(
+                    parryToggle,
+                    parryKnob,
+                    parryEnabled
+                )
+
+            end
+        )
+    )
+
+    addConnection(
+        parryKeyButton.MouseButton1Click:Connect(
+            function()
+
+                waitingForParryHotkey = true
+                parryKeyButton.Text = "..."
+
+            end
+        )
+    )
+
+    -- =====================================================
+    -- AUTO SKILL CHECK GUI
+    -- =====================================================
+
+    local autoSkillCheckLabel =
+        Instance.new("TextLabel")
+
+    autoSkillCheckLabel.Name =
+        "AutoSkillCheckLabel"
+
+    autoSkillCheckLabel.Size =
+        UDim2.new(
+            0,
+            110,
+            0,
+            25
+        )
+
+    autoSkillCheckLabel.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            67
+        )
+
     autoSkillCheckLabel.BackgroundTransparency = 1
-    autoSkillCheckLabel.Text = "Auto Skill Check"
-    autoSkillCheckLabel.TextColor3 = Color3.fromRGB(242, 242, 242)
-    autoSkillCheckLabel.TextSize = 12
-    autoSkillCheckLabel.Font = Enum.Font.SourceSans
-    autoSkillCheckLabel.TextXAlignment = Enum.TextXAlignment.Left
-    autoSkillCheckLabel.TextYAlignment = Enum.TextYAlignment.Center
-    autoSkillCheckLabel.Parent = mainPage
 
-    local autoSkillCheckToggle, autoSkillCheckKnob =
-        createToggle(mainPage, 73)
+    autoSkillCheckLabel.Text =
+        "Auto Skill Check"
+
+    autoSkillCheckLabel.TextColor3 =
+        Color3.fromRGB(
+            242,
+            242,
+            242
+        )
+
+    autoSkillCheckLabel.TextSize = 12
+    autoSkillCheckLabel.Font =
+        Enum.Font.SourceSans
+
+    autoSkillCheckLabel.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    autoSkillCheckLabel.TextYAlignment =
+        Enum.TextYAlignment.Center
+
+    autoSkillCheckLabel.Parent =
+        mainPage
+
+    autoSkillCheckToggle,
+    autoSkillCheckKnob =
+        createToggle(
+            mainPage,
+            73
+        )
 
     setToggleVisual(
         autoSkillCheckToggle,
         autoSkillCheckKnob,
-        false
+        autoSkillCheckEnabled
     )
 
-    autoSkillCheckToggle.MouseButton1Click:Connect(function()
-        setAutoSkillCheckEnabled(not autoSkillCheckEnabled)
+    addConnection(
+        autoSkillCheckToggle.MouseButton1Click:Connect(
+            function()
 
-        setToggleVisual(
-            autoSkillCheckToggle,
-            autoSkillCheckKnob,
-            autoSkillCheckEnabled
+                setAutoSkillCheckEnabled(
+                    not autoSkillCheckEnabled
+                )
+
+                setToggleVisual(
+                    autoSkillCheckToggle,
+                    autoSkillCheckKnob,
+                    autoSkillCheckEnabled
+                )
+
+            end
         )
-    end)
+    )
 
-    -- =========================================================
+    -- =====================================================
     -- KINGSCOURGE GUI
-    -- =========================================================
+    -- =====================================================
 
-    local kingScourgeLabel = Instance.new("TextLabel")
+    local kingScourgeLabel =
+        Instance.new("TextLabel")
 
-    kingScourgeLabel.Name = "KingScourgeLabel"
-    kingScourgeLabel.Size = UDim2.new(0, 110, 0, 25)
-    kingScourgeLabel.Position = UDim2.new(0, 10, 0, 98)
+    kingScourgeLabel.Name =
+        "KingScourgeLabel"
+
+    kingScourgeLabel.Size =
+        UDim2.new(
+            0,
+            110,
+            0,
+            25
+        )
+
+    kingScourgeLabel.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            98
+        )
+
     kingScourgeLabel.BackgroundTransparency = 1
     kingScourgeLabel.Text = "KingScourge"
-    kingScourgeLabel.TextColor3 = Color3.fromRGB(242, 242, 242)
-    kingScourgeLabel.TextSize = 12
-    kingScourgeLabel.Font = Enum.Font.SourceSans
-    kingScourgeLabel.TextXAlignment = Enum.TextXAlignment.Left
-    kingScourgeLabel.TextYAlignment = Enum.TextYAlignment.Center
-    kingScourgeLabel.Parent = mainPage
 
-    kingScourgeToggle, kingScourgeKnob =
-        createToggle(mainPage, 104)
+    kingScourgeLabel.TextColor3 =
+        Color3.fromRGB(
+            242,
+            242,
+            242
+        )
+
+    kingScourgeLabel.TextSize = 12
+    kingScourgeLabel.Font =
+        Enum.Font.SourceSans
+
+    kingScourgeLabel.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    kingScourgeLabel.TextYAlignment =
+        Enum.TextYAlignment.Center
+
+    kingScourgeLabel.Parent =
+        mainPage
+
+    kingScourgeToggle,
+    kingScourgeKnob =
+        createToggle(
+            mainPage,
+            104
+        )
 
     setToggleVisual(
         kingScourgeToggle,
         kingScourgeKnob,
-        false
+        kingScourgeEnabled
     )
 
-    kingScourgeToggle.MouseButton1Click:Connect(function()
-        setKingScourgeEnabled(
-            not kingScourgeEnabled
+    addConnection(
+        kingScourgeToggle.MouseButton1Click:Connect(
+            function()
+
+                setKingScourgeEnabled(
+                    not kingScourgeEnabled
+                )
+
+            end
         )
-    end)
-end
+    )
+
 end
 
-parryToggle.MouseButton1Click:Connect(function()
-    Main.toggleParry()
-end)
-parryKeyButton.MouseButton1Click:Connect(function()
-    Main.beginHotkey()
-end)
-
-function Main.setParryEnabled(enabled)
-    parryEnabled = enabled
-    setToggleVisual(parryToggle, parryKnob, enabled)
-end
-
-function Main.toggleParry()
-    Main.setParryEnabled(not parryEnabled)
-end
-
-function Main.handleKey(key)
-    if key == parryHotkey then Main.toggleParry(); return true end
-    return false
-end
+-- =========================================================
+-- HOTKEY API
+-- =========================================================
 
 function Main.beginHotkey()
-    waitingForHotkey = true
+
+    if not parryKeyButton then
+        return
+    end
+
+    waitingForParryHotkey = true
     parryKeyButton.Text = "..."
 end
 
 function Main.assignHotkey(key)
-    if not waitingForHotkey then return false end
-    if key ~= Enum.KeyCode.Escape then parryHotkey = key end
-    parryKeyButton.Text = parryHotkey.Name
-    waitingForHotkey = nil
+
+    if not waitingForParryHotkey then
+        return false
+    end
+
+    if key == Enum.KeyCode.Escape then
+
+        waitingForParryHotkey = false
+
+        if parryKeyButton then
+            parryKeyButton.Text =
+                parryHotkey.Name
+        end
+
+        return true
+    end
+
+    parryHotkey = key
+    waitingForParryHotkey = false
+
+    if parryKeyButton then
+        parryKeyButton.Text =
+            parryHotkey.Name
+    end
+
     return true
 end
 
+function Main.handleKey(key)
+
+    if waitingForParryHotkey then
+        return false
+    end
+
+    if key == parryHotkey then
+
+        parryEnabled =
+            not parryEnabled
+
+        if parryToggle
+            and parryKnob
+        then
+
+            setToggleVisual(
+                parryToggle,
+                parryKnob,
+                parryEnabled
+            )
+        end
+
+        return true
+    end
+
+    return false
+end
+
+-- =========================================================
+-- PUBLIC STATE FUNCTIONS
+-- =========================================================
+
+function Main.setParryEnabled(enabled)
+
+    parryEnabled = enabled
+
+    if parryToggle
+        and parryKnob
+    then
+
+        setToggleVisual(
+            parryToggle,
+            parryKnob,
+            enabled
+        )
+    end
+end
+
+function Main.toggleParry()
+
+    Main.setParryEnabled(
+        not parryEnabled
+    )
+end
+
+function Main.setCircleEnabled(enabled)
+
+    circleEnabled = enabled
+
+    if enabled then
+        createCircle()
+    else
+        destroyCircle()
+    end
+end
+
+function Main.setAutoSkillCheckEnabled(enabled)
+
+    setAutoSkillCheckEnabled(enabled)
+
+    if autoSkillCheckToggle
+        and autoSkillCheckKnob
+    then
+
+        setToggleVisual(
+            autoSkillCheckToggle,
+            autoSkillCheckKnob,
+            enabled
+        )
+    end
+end
+
+function Main.setKingScourgeEnabled(enabled)
+
+    setKingScourgeEnabled(enabled)
+end
+
+-- =========================================================
+-- DESTROY
+-- =========================================================
+
 function Main.destroy()
-    setAutoSkillCheckEnabled(false)
-    setKingScourgeEnabled(false)
+
+    waitingForParryHotkey = false
+
+    parryEnabled = false
+    circleEnabled = false
+    autoSkillCheckEnabled = false
+    kingScourgeEnabled = false
+
     destroyCircle()
+
+    stopParryMonitor()
+    stopKingScourge()
+
     if autoSkillCheckConnection then
-        autoSkillCheckConnection:Disconnect()
+
+        disconnectConnection(
+            autoSkillCheckConnection
+        )
+
         autoSkillCheckConnection = nil
     end
+
+    disconnectLocalParryConnections()
+
+    parryController = nil
+    currentTool = nil
+
+    disconnectAll()
+
+    parryToggle = nil
+    parryKnob = nil
+    parryKeyButton = nil
+
+    autoSkillCheckToggle = nil
+    autoSkillCheckKnob = nil
+
+    kingScourgeToggle = nil
+    kingScourgeKnob = nil
+
+    mainPage = nil
+    createToggle = nil
+    setToggleVisual = nil
 end
 
 return Main
