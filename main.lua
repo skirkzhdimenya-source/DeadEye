@@ -251,18 +251,12 @@ do
     }
 
     local PARRY_RADIUS = 7.7
-
-    print("[Parry] 1")
     
     local ParryModule =
         ReplicatedStorage.Modules.Items.ParryClient
     
-    print("[Parry] 2", ParryModule:GetFullName())
-    
     local ParryClient =
         require(ParryModule)
-    
-    print("[Parry] 3")
 
     local emoteHandler =
         ReplicatedStorage
