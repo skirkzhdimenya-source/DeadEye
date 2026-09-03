@@ -1,4 +1,5 @@
 print("home работает")
+
 local BASE = "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
 
 local function loadFile(name)
@@ -19,4 +20,4 @@ loadFile("main.lua")
 loadFile("vis.lua")
 loadFile("oth.lua")
 
-print("[Loader] Все скрипты загружены!")
+print("[Loader] Все разделы загружены!")
