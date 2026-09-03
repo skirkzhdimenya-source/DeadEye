@@ -243,15 +243,50 @@ setToggleVisual = function(button, knob, enabled)
         button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     end
 end
--- GitHub raw directory that contains home.lua, main.lua, vis.lua and oth.lua.
--- Replace this once with the URL of your repository/branch.
-local BASE_URL = "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/refs/heads/main/home.lua"
+-- Shared client-side configuration. Set this once before starting home.lua:
+-- getgenv().TrajectoryConfig = {
+--     BaseUrl = "https://raw.githubusercontent.com/USER/REPOSITORY/main/"
+-- }
+local environment = (getgenv and getgenv()) or _G
+environment.TrajectoryConfig = environment.TrajectoryConfig or {}
+local config = environment.TrajectoryConfig
+
+-- You can also put the raw folder URL here instead of setting it before launch.
+config.BaseUrl = config.BaseUrl or ""
+
+local function normalizeBaseUrl(url)
+    if type(url) ~= "string" or url == "" then
+        error("Set getgenv().TrajectoryConfig.BaseUrl to your GitHub raw folder URL before running home.lua")
+    end
+    return url:sub(-1) == "/" and url or (url .. "/")
+end
+
+local BASE_URL = normalizeBaseUrl(config.BaseUrl)
+
+local function httpGet(url)
+    if type(game.HttpGet) == "function" then
+        local ok, body = pcall(function()
+            return game:HttpGet(url)
+        end)
+        if ok then
+            return body
+        end
+    end
+
+    local requestFn = (syn and syn.request) or http_request or (getgenv and getgenv().request) or _G.request
+    if type(requestFn) == "function" then
+        local response = requestFn({ Url = url, Method = "GET" })
+        if not response.Success then
+            error("HTTP " .. tostring(response.StatusCode) .. " while loading " .. url)
+        end
+        return response.Body
+    end
+
+    error("No supported HTTP function was found: game:HttpGet, syn.request, http_request, or request")
+end
 
 local function loadRemoteModule(name)
-    local ok, source = pcall(function()
-        return game:HttpGet(BASE_URL .. name .. ".lua")
-    end)
-
+    local ok, source = pcall(httpGet, BASE_URL .. name .. ".lua")
     if not ok then
         error("Could not download " .. name .. ".lua: " .. tostring(source))
     end
