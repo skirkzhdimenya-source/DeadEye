@@ -1,14 +1,12 @@
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
+local hui = gethui()
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "MyWindowGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = hui
-
--- =========================================================
--- ОКНО
--- =========================================================
 
 local frame = Instance.new("Frame")
 frame.Name = "WindowFrame"
@@ -16,18 +14,12 @@ frame.Size = UDim2.new(0.2, 0, 0.4, 0)
 frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0)
 frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
-
--- =========================================================
--- ЗАГОЛОВОК
--- =========================================================
 
 local title = Instance.new("TextLabel")
 title.Name = "Title"
 title.Size = UDim2.new(1, 0, 0, 18)
-title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
 title.TextColor3 = Color3.fromRGB(242, 242, 242)
 title.Text = "trajectory"
@@ -35,17 +27,12 @@ title.TextSize = 12
 title.Font = Enum.Font.SourceSansBold
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.TextYAlignment = Enum.TextYAlignment.Center
-title.BackgroundTransparency = 0
 title.BorderSizePixel = 0
 title.Parent = frame
 
 local padding = Instance.new("UIPadding")
 padding.PaddingLeft = UDim.new(0, 10)
 padding.Parent = title
-
--- =========================================================
--- КНОПКА X
--- =========================================================
 
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
@@ -59,10 +46,6 @@ closeButton.Font = Enum.Font.SourceSansBold
 closeButton.BorderSizePixel = 0
 closeButton.Parent = frame
 
--- =========================================================
--- КНОПКА _
--- =========================================================
-
 local minimizeButton = Instance.new("TextButton")
 minimizeButton.Name = "MinimizeButton"
 minimizeButton.Size = UDim2.new(0, 12, 0, 12)
@@ -74,10 +57,6 @@ minimizeButton.TextSize = 8
 minimizeButton.Font = Enum.Font.SourceSansBold
 minimizeButton.BorderSizePixel = 0
 minimizeButton.Parent = frame
-
--- =========================================================
--- SIDEBAR / КОНТЕНТ
--- =========================================================
 
 local sidebar = Instance.new("Frame")
 sidebar.Name = "Sidebar"
@@ -151,28 +130,37 @@ othPage.BackgroundTransparency = 1
 othPage.Visible = false
 othPage.Parent = content
 
+local function setPage(page)
+    mainPage.Visible = page == "main"
+    visPage.Visible = page == "vis"
+    othPage.Visible = page == "oth"
+
+    mainButton.BackgroundColor3 =
+        page == "main"
+        and Color3.fromRGB(50, 50, 50)
+        or Color3.fromRGB(32, 32, 32)
+
+    visButton.BackgroundColor3 =
+        page == "vis"
+        and Color3.fromRGB(50, 50, 50)
+        or Color3.fromRGB(32, 32, 32)
+
+    othButton.BackgroundColor3 =
+        page == "oth"
+        and Color3.fromRGB(50, 50, 50)
+        or Color3.fromRGB(32, 32, 32)
+end
+
 mainButton.MouseButton1Click:Connect(function()
-    mainPage.Visible = true
-    visPage.Visible = false
-    othPage.Visible = false
-    mainButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    visButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    setPage("main")
 end)
 
 visButton.MouseButton1Click:Connect(function()
-    mainPage.Visible = false
-    visPage.Visible = true
-    othPage.Visible = false
-    mainButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-    visButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    setPage("vis")
 end)
 
 othButton.MouseButton1Click:Connect(function()
-    mainPage.Visible = false
-    visPage.Visible = false
-    othPage.Visible = true
-    mainButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    othButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    setPage("oth")
 end)
 
 local minimized = false
@@ -181,33 +169,21 @@ minimizeButton.MouseButton1Click:Connect(function()
     minimized = not minimized
 
     if minimized then
-        -- Скрываем содержимое
         sidebar.Visible = false
         content.Visible = false
-
-        -- Уменьшаем окно до высоты заголовка
         frame.Size = UDim2.new(0.2, 0, 0, 18)
-
-        -- Можно поменять символ кнопки
         minimizeButton.Text = "+"
     else
-        -- Возвращаем содержимое
         sidebar.Visible = true
         content.Visible = true
-
-        -- Возвращаем исходный размер
         frame.Size = UDim2.new(0.2, 0, 0.4, 0)
-
         minimizeButton.Text = "_"
     end
 end)
 
--- =========================================================
--- ВСПОМОГАТЕЛЬНОЕ СОЗДАНИЕ TOGGLE
--- =========================================================
-
 local function createToggle(parent, y)
     local button = Instance.new("TextButton")
+
     button.Size = UDim2.new(0, 40, 0, 18)
     button.Position = UDim2.new(1, -50, 0, y)
     button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
@@ -217,6 +193,7 @@ local function createToggle(parent, y)
     button.Parent = parent
 
     local knob = Instance.new("Frame")
+
     knob.Size = UDim2.new(0, 14, 0, 14)
     knob.Position = UDim2.new(0, 2, 0.5, -7)
     knob.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
@@ -234,111 +211,235 @@ local function createToggle(parent, y)
     return button, knob
 end
 
-setToggleVisual = function(button, knob, enabled)
+local function setToggleVisual(button, knob, enabled)
+    if not button or not knob then
+        return
+    end
+
     if enabled then
-        knob.Position = UDim2.new(1, -16, 0.5, -7)
-        button.BackgroundColor3 = Color3.fromRGB(60, 180, 90)
+        knob.Position =
+            UDim2.new(1, -16, 0.5, -7)
+
+        button.BackgroundColor3 =
+            Color3.fromRGB(60, 180, 90)
     else
-        knob.Position = UDim2.new(0, 2, 0.5, -7)
-        button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        knob.Position =
+            UDim2.new(0, 2, 0.5, -7)
+
+        button.BackgroundColor3 =
+            Color3.fromRGB(70, 70, 70)
     end
 end
--- Shared client-side configuration. Set this once before starting home.lua:
--- getgenv().TrajectoryConfig = {
---     BaseUrl = "https://raw.githubusercontent.com/USER/REPOSITORY/main/"
--- }
-local environment = (getgenv and getgenv()) or _G
-environment.TrajectoryConfig = environment.TrajectoryConfig or {}
-local config = environment.TrajectoryConfig
 
--- You can also put the raw folder URL here instead of setting it before launch.
-config.BaseUrl = config.BaseUrl or ""
+local environment =
+    (getgenv and getgenv())
+    or _G
 
-local function normalizeBaseUrl(url)
-    if type(url) ~= "string" or url == "" then
-        error("Set getgenv().TrajectoryConfig.BaseUrl to your GitHub raw folder URL before running home.lua")
+environment.DeadEye =
+    environment.DeadEye
+    or {}
+
+local DeadEye = environment.DeadEye
+
+DeadEye.BaseUrl =
+    DeadEye.BaseUrl
+    or "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/"
+
+local function normalizeUrl(url)
+    if url:sub(-1) ~= "/" then
+        return url .. "/"
     end
-    return url:sub(-1) == "/" and url or (url .. "/")
+
+    return url
 end
 
-local BASE_URL = normalizeBaseUrl(config.BaseUrl)
+local BASE_URL =
+    normalizeUrl(
+        DeadEye.BaseUrl
+    )
 
-local function httpGet(url)
-    if type(game.HttpGet) == "function" then
-        local ok, body = pcall(function()
-            return game:HttpGet(url)
-        end)
-        if ok then
-            return body
-        end
+local function getSource(url)
+    local response = request({
+        Url = url,
+        Method = "GET"
+    })
+
+    if not response.Success then
+        error(
+            "HTTP "
+                .. tostring(response.StatusCode)
+                .. ": "
+                .. url
+        )
     end
 
-    local requestFn = (syn and syn.request) or http_request or (getgenv and getgenv().request) or _G.request
-    if type(requestFn) == "function" then
-        local response = requestFn({ Url = url, Method = "GET" })
-        if not response.Success then
-            error("HTTP " .. tostring(response.StatusCode) .. " while loading " .. url)
-        end
-        return response.Body
-    end
-
-    error("No supported HTTP function was found: game:HttpGet, syn.request, http_request, or request")
+    return response.Body
 end
 
-local function loadRemoteModule(name)
-    local ok, source = pcall(httpGet, BASE_URL .. name .. ".lua")
-    if not ok then
-        error("Could not download " .. name .. ".lua: " .. tostring(source))
-    end
+local function loadModule(name)
+    local source =
+        getSource(
+            BASE_URL
+                .. name
+                .. ".lua"
+        )
 
-    local chunk, compileError = loadstring(source, "=" .. name .. ".lua")
+    local chunk, err =
+        loadstring(
+            source,
+            "=" .. name .. ".lua"
+        )
+
     if not chunk then
-        error("Could not compile " .. name .. ".lua: " .. tostring(compileError))
+        error(
+            "Compile error in "
+                .. name
+                .. ".lua: "
+                .. tostring(err)
+        )
     end
 
     local module = chunk()
+
     if type(module) ~= "table" then
-        error(name .. ".lua must return a table")
+        error(
+            name
+                .. ".lua must return a table"
+        )
     end
+
     return module
 end
 
-local Main = loadRemoteModule("main")
-local Vis = loadRemoteModule("vis")
+local Main = loadModule("main")
+local Vis = loadModule("vis")
+local Oth = loadModule("oth")
 
-Main.mount({ mainPage = mainPage, createToggle = createToggle, setToggleVisual = setToggleVisual })
-Vis.mount({ visPage = visPage, createToggle = createToggle, setToggleVisual = setToggleVisual })
+Main.mount({
+    mainPage = mainPage,
+    createToggle = createToggle,
+    setToggleVisual = setToggleVisual
+})
 
-local renderConnection = RunService.RenderStepped:Connect(function()
-    Vis.render()
-end)
+Vis.mount({
+    visPage = visPage,
+    createToggle = createToggle,
+    setToggleVisual = setToggleVisual
+})
 
-local inputConnection = UserInputService.InputBegan:Connect(function(input)
-    if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
-    if Main.assignHotkey(input.KeyCode) or Vis.assignHotkey(input.KeyCode) then return end
-    if Main.handleKey(input.KeyCode) or Vis.handleKey(input.KeyCode) then return end
-end)
+if Oth.mount then
+    Oth.mount({
+        othPage = othPage,
+        createToggle = createToggle,
+        setToggleVisual = setToggleVisual
+    })
+end
 
-local drag, dragStart, startPos = false, nil, nil
+local renderConnection =
+    RunService.RenderStepped:Connect(function()
+        if Vis.render then
+            Vis.render()
+        end
+    end)
+
+local inputConnection =
+    UserInputService.InputBegan:Connect(
+        function(input)
+            if input.UserInputType
+                ~= Enum.UserInputType.Keyboard
+            then
+                return
+            end
+
+            if Main.assignHotkey
+                and Main.assignHotkey(input.KeyCode)
+            then
+                return
+            end
+
+            if Vis.assignHotkey
+                and Vis.assignHotkey(input.KeyCode)
+            then
+                return
+            end
+
+            if Main.handleKey
+                and Main.handleKey(input.KeyCode)
+            then
+                return
+            end
+
+            if Vis.handleKey
+                and Vis.handleKey(input.KeyCode)
+            then
+                return
+            end
+        end
+    )
+
+local drag = false
+local dragStart
+local startPos
+
 title.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        drag, dragStart, startPos = true, input.Position, frame.Position
+    if input.UserInputType
+        == Enum.UserInputType.MouseButton1
+    then
+        drag = true
+        dragStart = input.Position
+        startPos = frame.Position
     end
 end)
+
 title.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then drag = false end
+    if input.UserInputType
+        == Enum.UserInputType.MouseButton1
+    then
+        drag = false
+    end
 end)
+
 UserInputService.InputChanged:Connect(function(input)
-    if drag and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    if drag
+        and input.UserInputType
+        == Enum.UserInputType.MouseMovement
+    then
+        local delta =
+            input.Position - dragStart
+
+        frame.Position =
+            UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
     end
 end)
 
 closeButton.MouseButton1Click:Connect(function()
-    Main.destroy()
-    Vis.destroy()
-    if renderConnection then renderConnection:Disconnect() end
-    if inputConnection then inputConnection:Disconnect() end
+    if Main.destroy then
+        Main.destroy()
+    end
+
+    if Vis.destroy then
+        Vis.destroy()
+    end
+
+    if Oth.destroy then
+        Oth.destroy()
+    end
+
+    if renderConnection then
+        renderConnection:Disconnect()
+        renderConnection = nil
+    end
+
+    if inputConnection then
+        inputConnection:Disconnect()
+        inputConnection = nil
+    end
+
     screenGui:Destroy()
 end)
