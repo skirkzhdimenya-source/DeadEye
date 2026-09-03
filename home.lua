@@ -243,8 +243,33 @@ setToggleVisual = function(button, knob, enabled)
         button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     end
 end
-local Main = require(script.Parent.main)
-local Vis = require(script.Parent.vis)
+-- GitHub raw directory that contains home.lua, main.lua, vis.lua and oth.lua.
+-- Replace this once with the URL of your repository/branch.
+local BASE_URL = "https://raw.githubusercontent.com/USERNAME/REPOSITORY/main/"
+
+local function loadRemoteModule(name)
+    local ok, source = pcall(function()
+        return game:HttpGet(BASE_URL .. name .. ".lua")
+    end)
+
+    if not ok then
+        error("Could not download " .. name .. ".lua: " .. tostring(source))
+    end
+
+    local chunk, compileError = loadstring(source, "=" .. name .. ".lua")
+    if not chunk then
+        error("Could not compile " .. name .. ".lua: " .. tostring(compileError))
+    end
+
+    local module = chunk()
+    if type(module) ~= "table" then
+        error(name .. ".lua must return a table")
+    end
+    return module
+end
+
+local Main = loadRemoteModule("main")
+local Vis = loadRemoteModule("vis")
 
 Main.mount({ mainPage = mainPage, createToggle = createToggle, setToggleVisual = setToggleVisual })
 Vis.mount({ visPage = visPage, createToggle = createToggle, setToggleVisual = setToggleVisual })
