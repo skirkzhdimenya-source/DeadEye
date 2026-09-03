@@ -208,7 +208,16 @@ end)
 do
 
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+    local parryEnabled = false
     local parryMonitorConnection = nil
+
+    local parryCharacterAddedConnection = nil
+    local parryCharacterRemovingConnection = nil
+    local parryChildAddedConnection = nil
+    local parryChildRemovedConnection = nil
+
+    local parryLoopRunning = true
 
     local PARRY_ANIMATIONS = {
 
@@ -496,11 +505,22 @@ do
     -- =====================================================
 
     local function setupLocalParryCharacter(
-        character
-    )
+    character
+)
 
-        setupParry(character)
+    setupParry(character)
 
+    if parryChildAddedConnection then
+        parryChildAddedConnection:Disconnect()
+        parryChildAddedConnection = nil
+    end
+
+    if parryChildRemovedConnection then
+        parryChildRemovedConnection:Disconnect()
+        parryChildRemovedConnection = nil
+    end
+
+    parryChildAddedConnection =
         character.ChildAdded:Connect(
             function(child)
 
@@ -516,6 +536,7 @@ do
             end
         )
 
+    parryChildRemovedConnection =
         character.ChildRemoved:Connect(
             function(child)
 
@@ -529,6 +550,10 @@ do
 
                     task.defer(
                         function()
+
+                            if not parryLoopRunning then
+                                return
+                            end
 
                             if character
                                 and character.Parent
@@ -548,7 +573,7 @@ do
             end
         )
 
-    end
+end
 
     -- =====================================================
     -- INITIAL CHARACTER
@@ -566,6 +591,7 @@ do
     -- CHARACTER ADDED
     -- =====================================================
 
+parryCharacterAddedConnection =
     player.CharacterAdded:Connect(
         function(character)
 
@@ -614,48 +640,125 @@ do
     -- =====================================================
 
     task.spawn(
-        function()
+    function()
 
-            while true do
+        while parryLoopRunning do
 
-                task.wait(2)
+            task.wait(2)
 
-                local currentCharacter =
-                    player.Character
+            if not parryLoopRunning then
+                break
+            end
 
-                local tool =
-                    currentCharacter
-                        and currentCharacter:FindFirstChild(
-                            "Parrying Dagger"
-                        )
+            local currentCharacter =
+                player.Character
 
-                if tool ~= currentTool then
+            local tool =
+                currentCharacter
+                    and currentCharacter:FindFirstChild(
+                        "Parrying Dagger"
+                    )
 
-                    if tool then
+            if tool ~= currentTool then
 
-                        setupParry(
-                            currentCharacter
-                        )
+                if tool then
 
-                    end
+                    setupParry(
+                        currentCharacter
+                    )
+
+                else
+
+                    currentTool = nil
+                    parryController = nil
 
                 end
 
             end
 
         end
+
+    end
+)
+
+-- =========================================================
+-- PARRY GUI
+-- =========================================================
+
+local parryLabel = Instance.new("TextLabel")
+
+parryLabel.Name = "ParryLabel"
+parryLabel.Size = UDim2.new(0, 80, 0, 25)
+parryLabel.Position = UDim2.new(0, 10, 0, 36)
+parryLabel.BackgroundTransparency = 1
+parryLabel.Text = "parry"
+parryLabel.TextColor3 = Color3.fromRGB(242, 242, 242)
+parryLabel.TextSize = 12
+parryLabel.Font = Enum.Font.SourceSans
+parryLabel.TextXAlignment = Enum.TextXAlignment.Left
+parryLabel.TextYAlignment = Enum.TextYAlignment.Center
+parryLabel.Parent = mainPage
+
+local parryToggle, parryKnob =
+    createToggle(mainPage, 42)
+
+setToggleVisual(
+    parryToggle,
+    parryKnob,
+    false
+)
+
+local function setParryEnabled(enabled)
+
+    parryEnabled = enabled
+
+    setToggleVisual(
+        parryToggle,
+        parryKnob,
+        enabled
     )
 
+end
+
+parryToggle.MouseButton1Click:Connect(function()
+
+    setParryEnabled(
+        not parryEnabled
+    )
+
+end)
+    
 G.Cleanup.Parry = function()
+
     parryEnabled = false
+    parryLoopRunning = false
 
     if parryMonitorConnection then
         parryMonitorConnection:Disconnect()
         parryMonitorConnection = nil
     end
 
+    if parryCharacterAddedConnection then
+        parryCharacterAddedConnection:Disconnect()
+        parryCharacterAddedConnection = nil
+    end
+
+    if parryCharacterRemovingConnection then
+        parryCharacterRemovingConnection:Disconnect()
+        parryCharacterRemovingConnection = nil
+    end
+
+    if parryChildAddedConnection then
+        parryChildAddedConnection:Disconnect()
+        parryChildAddedConnection = nil
+    end
+
+    if parryChildRemovedConnection then
+        parryChildRemovedConnection:Disconnect()
+        parryChildRemovedConnection = nil
+    end
+
     parryController = nil
     currentTool = nil
-end
 
 end
