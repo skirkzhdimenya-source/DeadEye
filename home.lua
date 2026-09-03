@@ -4,6 +4,7 @@ getgenv().DeadEye = G
 G.UI = G.UI or {}
 G.State = G.State or {}
 G.Functions = G.Functions or {}
+G.Cleanup = G.Cleanup or {}
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -429,9 +430,19 @@ end)
 -- =========================================================
 
 closeButton.MouseButton1Click:Connect(function()
+    for name, cleanupFunction in pairs(G.Cleanup) do
+        if type(cleanupFunction) == "function" then
+            local success, err = pcall(cleanupFunction)
+
+            if not success then
+                warn("[Home] Ошибка очистки " .. tostring(name) .. ": " .. tostring(err))
+            end
+        end
+    end
+
+    table.clear(G.Cleanup)
 
     screenGui:Destroy()
-
 end)
 
 -- =========================================================
