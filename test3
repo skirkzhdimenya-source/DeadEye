@@ -82,10 +82,10 @@ local CONFIG = {
 
     -- 75 degrees / second.
     -- Smaller = slower.
-    CameraTurnSpeed = math.rad(150),
+    CameraTurnSpeed = math.rad(900),
 
     -- Exponential smoothing.
-    CameraSmoothness = 4,
+    CameraSmoothness = 12,
 
     -- Never apply roll.
     CameraRoll = 0, -- forced upright
@@ -401,7 +401,10 @@ local function SetCameraYaw(targetYaw)
             * CONFIG.Tick
         )
 
-    delta = delta * smooth
+    -- Не режем поворот вторым жёстким ограничением:
+    -- сначала ограничивается максимальная скорость,
+    -- затем только слегка сглаживаем результат.
+    delta = delta * math.max(smooth, 0.35)
 
     local newYaw =
         currentYaw + delta
