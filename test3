@@ -1302,23 +1302,16 @@ local function GetBestAirAction(
 
         if wall then
 
-            local clearanceResult
-
-            clearanceResult =
-                table.pack(
-                    GetClearance(
-                        root,
-                        direction,
-                        math.clamp(
-                            nextSpeed * 0.45,
-                            4,
-                            12
-                        )
+            local clearance, hit =
+                GetClearance(
+                    root,
+                    direction,
+                    math.clamp(
+                        nextSpeed * 0.45,
+                        4,
+                        12
                     )
                 )
-
-            clearance = clearanceResult[1]
-            hit = clearanceResult[2]
         end
 
         local score =
@@ -1626,8 +1619,7 @@ local function GetBestGroundDirection(
                 base
             )
 
-        local clearance,
-        hit =
+        local clearance, hit =
             GetClearance(
                 root,
                 direction,
@@ -1856,8 +1848,7 @@ local function GetWallEscapeDirection(
         candidates
     ) do
 
-        local clearance,
-        hit =
+        local clearance, hit =
             GetClearance(
                 root,
                 candidate,
@@ -1933,14 +1924,52 @@ local function GetPredictionAirAction(
     local velocityDirection =
         flatVelocity.Unit
 
-    local strafeAngle
+    local wishSpeed =
+        PHYSICS.AirStrafeAcceleration
 
-    if side > 0 then
+    local accelSpeed =
+        PHYSICS.AirStrafeAcceleration
+        * dt
+        * PHYSICS.AirStrafeAcceleration
+
+    local cosine =
+        (
+            wishSpeed
+            - accelSpeed
+        )
+        / flatVelocity.Magnitude
+
+    cosine =
+        math.clamp(
+            cosine,
+            -1,
+            1
+        )
+
+    local optimalAngle =
+        math.acos(cosine)
+
+    local straightness =
+        math.clamp(
+            CONFIG.StrafeStraightness,
+            0,
+            1
+        )
+
+    local strafeAngle =
+        math.pi / 2
+        + (
+            optimalAngle
+            - math.pi / 2
+        )
+        * (
+            1
+            - straightness
+        )
+
+    if side < 0 then
         strafeAngle =
-            math.rad(90)
-    else
-        strafeAngle =
-            math.rad(-90)
+            -strafeAngle
     end
 
     local wishDirection =
