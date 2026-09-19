@@ -1,1 +1,2729 @@
+--//============================================================//
+--// DEAD EYE - AUTO MAX STRAFE / BHOP CONTROLLER
+--//
+--// Z       = ON / OFF
+--// GUI X   = FULL STOP
+--//
+--// External stop:
+--// getgenv().StrafeControllerStop = true
+--//
+--// No keypress()/keyrelease().
+--// Uses VirtualInputManager for W/A/D/Space.
+--//
+--// Camera:
+--//   - smooth horizontal rotation
+--//   - no roll
+--//   - uses game's CameraService when available
+--//
+--// Movement:
+--//   - W on ground
+--//   - A/D in air
+--//   - automatic jumps
+--//   - maximum-speed air strafe
+--//   - Blockcast wall avoidance
+--//   - terrain / drop / step checks
+--//   - 100 stud visual prediction
+--//============================================================//
 
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local LocalPlayer = Players.LocalPlayer
+
+local ENV = (getgenv and getgenv()) or _G
+
+--==============================================================--
+-- CLEAN OLD INSTANCE
+--==============================================================--
+
+if ENV.__DeadEyeStrafeControllerCleanup then
+    pcall(ENV.__DeadEyeStrafeControllerCleanup)
+end
+
+ENV.StrafeControllerStop = false
+ENV.StrafeControllerEnabled = true
+
+--==============================================================--
+-- PHYSICS FROM test2
+--==============================================================--
+
+local PHYSICS = {
+    Scale = 90,
+
+    SprintAcceleration = 1,
+    SprintCap = 2,
+
+    RunAccel = 1,
+    Friction = 5,
+    RunDeaccel = 700,
+
+    AirStrafeAcceleration = 182,
+    AirAcceleration = 1,
+
+    Speed = 1500,
+
+    JumpHeight = 3,
+    JumpSpeedMultiplier = 1.45,
+}
+
+--==============================================================--
+-- CONFIG
+--==============================================================--
+
+local CONFIG = {
+    Tick = 1 / 60,
+
+    --==========================================================--
+    -- CAMERA
+    --==========================================================--
+
+    -- 75 degrees / second.
+    -- Smaller = slower.
+    CameraTurnSpeed = math.rad(75),
+
+    -- Exponential smoothing.
+    CameraSmoothness = 5,
+
+    -- Never apply roll.
+    CameraRoll = 0,
+
+    --==========================================================--
+    -- WALL
+    --==========================================================--
+
+    WallLookAheadMin = 4.5,
+    WallLookAheadMax = 12,
+
+    WallCriticalDistance = 2.25,
+
+    WallWidthMultiplier = 1.12,
+    WallHeightMultiplier = 0.92,
+    WallDepthMultiplier = 1.12,
+
+    -- Additional angle probes around velocity.
+    WallAngles = {
+        -75,
+        -60,
+        -45,
+        -30,
+        -15,
+        0,
+        15,
+        30,
+        45,
+        60,
+        75,
+        90,
+        -90,
+    },
+
+    --==========================================================--
+    -- TERRAIN
+    --==========================================================--
+
+    GroundLookAhead = 4.5,
+    GroundLookAheadFar = 10,
+
+    MaxDrop = 3.0,
+    MaxStep = 1.15,
+
+    --==========================================================--
+    -- JUMP
+    --==========================================================--
+
+    AutoBhop = true,
+    JumpCooldown = 0.16,
+    JumpHoldTime = 0.07,
+
+    --==========================================================--
+    -- PATH
+    --==========================================================--
+
+    DrawPath = true,
+    PathDistance = 100,
+    PathPointSpacing = 0.75,
+
+    --==========================================================--
+    -- GUI
+    --==========================================================--
+
+    StartEnabled = true,
+}
+
+--==============================================================--
+-- STATE
+--==============================================================--
+
+local cleanupDone = false
+
+local currentSide = 1
+local lastJump = 0
+local lastTick = 0
+local lastPathUpdate = 0
+
+local keys = {
+    W = false,
+    A = false,
+    D = false,
+    Space = false,
+}
+
+--==============================================================--
+-- KEY INPUT
+--==============================================================--
+
+local VirtualInputManager = nil
+
+pcall(function()
+    VirtualInputManager = game:GetService("VirtualInputManager")
+end)
+
+local KEY_W = Enum.KeyCode.W
+local KEY_A = Enum.KeyCode.A
+local KEY_D = Enum.KeyCode.D
+local KEY_SPACE = Enum.KeyCode.Space
+
+local function SendKey(keyCode, pressed)
+    if not VirtualInputManager then
+        return false
+    end
+
+    return pcall(function()
+        VirtualInputManager:SendKeyEvent(
+            pressed,
+            keyCode,
+            false,
+            game
+        )
+    end)
+end
+
+local function SetKey(name, keyCode, value)
+    if keys[name] == value then
+        return
+    end
+
+    keys[name] = value
+    SendKey(keyCode, value)
+end
+
+local function ReleaseStrafe()
+    SetKey("A", KEY_A, false)
+    SetKey("D", KEY_D, false)
+end
+
+local function ApplyStrafe()
+    if currentSide > 0 then
+        SetKey("D", KEY_D, true)
+        SetKey("A", KEY_A, false)
+    else
+        SetKey("A", KEY_A, true)
+        SetKey("D", KEY_D, false)
+    end
+end
+
+local function ReleaseAllKeys()
+    SetKey("W", KEY_W, false)
+    ReleaseStrafe()
+    SetKey("Space", KEY_SPACE, false)
+end
+
+--==============================================================--
+-- JUMP
+--==============================================================--
+
+local function DoJump()
+    if cleanupDone then
+        return
+    end
+
+    local now = os.clock()
+
+    if now - lastJump < CONFIG.JumpCooldown then
+        return
+    end
+
+    lastJump = now
+
+    local character = LocalPlayer.Character
+    if not character then
+        return
+    end
+
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then
+        return
+    end
+
+    -- Roblox state as a second path.
+    pcall(function()
+        humanoid.Jump = true
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end)
+
+    -- Game input path.
+    SetKey("Space", KEY_SPACE, true)
+
+    task.delay(CONFIG.JumpHoldTime, function()
+        if cleanupDone then
+            return
+        end
+
+        SetKey("Space", KEY_SPACE, false)
+    end)
+end
+
+--==============================================================--
+-- VECTOR HELPERS
+--==============================================================--
+
+local function Flat(v)
+    return Vector3.new(v.X, 0, v.Z)
+end
+
+local function SafeUnit(v, fallback)
+    if v.Magnitude > 0.00001 then
+        return v.Unit
+    end
+
+    return fallback
+end
+
+local function RotateY(v, radians)
+    local c = math.cos(radians)
+    local s = math.sin(radians)
+
+    return Vector3.new(
+        v.X * c - v.Z * s,
+        0,
+        v.X * s + v.Z * c
+    )
+end
+
+local function YawFromDirection(v)
+    v = SafeUnit(
+        Flat(v),
+        Vector3.new(0, 0, -1)
+    )
+
+    return math.atan2(
+        -v.X,
+        -v.Z
+    )
+end
+
+local function DirectionFromYaw(yaw)
+    return Vector3.new(
+        -math.sin(yaw),
+        0,
+        -math.cos(yaw)
+    )
+end
+
+local function RightFromYaw(yaw)
+    return Vector3.new(
+        math.cos(yaw),
+        0,
+        -math.sin(yaw)
+    )
+end
+
+local function AngleDifference(a, b)
+    return math.atan2(
+        math.sin(b - a),
+        math.cos(b - a)
+    )
+end
+
+--==============================================================--
+-- CAMERA SERVICE
+--==============================================================--
+
+local CameraService = nil
+
+pcall(function()
+    local services = ReplicatedStorage:WaitForChild("Services")
+    local client = services:WaitForChild("Client")
+    CameraService = require(
+        client:WaitForChild("CameraService")
+    )
+end)
+
+local function GetCameraYaw()
+    local camera = workspace.CurrentCamera
+
+    if not camera then
+        return 0
+    end
+
+    return YawFromDirection(
+        camera.CFrame.LookVector
+    )
+end
+
+local function SetCameraYaw(targetYaw)
+    local camera = workspace.CurrentCamera
+
+    if not camera then
+        return
+    end
+
+    local currentCFrame = camera.CFrame
+
+    local pitch = select(
+        1,
+        currentCFrame:ToOrientation()
+    )
+
+    local currentYaw = GetCameraYaw()
+
+    local delta = AngleDifference(
+        currentYaw,
+        targetYaw
+    )
+
+    local maxStep =
+        CONFIG.CameraTurnSpeed
+        * CONFIG.Tick
+
+    delta = math.clamp(
+        delta,
+        -maxStep,
+        maxStep
+    )
+
+    local smooth =
+        1 - math.exp(
+            -CONFIG.CameraSmoothness
+            * CONFIG.Tick
+        )
+
+    delta = delta * smooth
+
+    local newYaw =
+        currentYaw + delta
+
+    -- IMPORTANT:
+    -- pitch stays as-is
+    -- yaw changes
+    -- roll is ALWAYS zero
+    local newCFrame =
+        CFrame.new(
+            currentCFrame.Position
+        )
+        * CFrame.Angles(
+            pitch,
+            newYaw,
+            CONFIG.CameraRoll
+        )
+
+    if CameraService then
+        local ok = pcall(function()
+            CameraService:SetCFrame(
+                newCFrame
+            )
+        end)
+
+        if ok then
+            return
+        end
+    end
+
+    pcall(function()
+        camera.CFrame = newCFrame
+    end)
+end
+
+--==============================================================--
+-- RAYCAST
+--==============================================================--
+
+local RayParams = RaycastParams.new()
+
+RayParams.FilterType =
+    Enum.RaycastFilterType.Exclude
+
+RayParams.IgnoreWater = true
+RayParams.RespectCanCollide = true
+
+local function UpdateRayFilter()
+    local list = {}
+
+    local character =
+        LocalPlayer.Character
+
+    if character then
+        table.insert(
+            list,
+            character
+        )
+    end
+
+    -- Do not treat other player models as walls.
+    local playersFolder =
+        workspace:FindFirstChild("Players")
+
+    if playersFolder then
+        table.insert(
+            list,
+            playersFolder
+        )
+    end
+
+    local effects =
+        workspace:FindFirstChild("Effects")
+
+    if effects then
+        table.insert(
+            list,
+            effects
+        )
+    end
+
+    local map =
+        workspace:FindFirstChild("Map")
+
+    if map then
+
+        local ignore =
+            map:FindFirstChild("Ignore")
+
+        if ignore then
+            table.insert(
+                list,
+                ignore
+            )
+        end
+
+        local invis =
+            map:FindFirstChild("InvisParts")
+
+        if invis then
+            table.insert(
+                list,
+                invis
+            )
+        end
+    end
+
+    RayParams.FilterDescendantsInstances =
+        list
+
+    -- Match the character's collision group.
+    if character then
+
+        local root =
+            character:FindFirstChild(
+                "HumanoidRootPart"
+            )
+
+        if root then
+
+            pcall(function()
+                RayParams.CollisionGroup =
+                    root.CollisionGroup
+            end)
+
+        end
+    end
+end
+
+UpdateRayFilter()
+
+--==============================================================--
+-- GROUND
+--==============================================================--
+
+local function GroundAt(position)
+    return workspace:Raycast(
+        position
+        + Vector3.new(0, 6, 0),
+
+        Vector3.new(0, -20, 0),
+
+        RayParams
+    )
+end
+
+local function IsWalkable(normal)
+    if not normal then
+        return false
+    end
+
+    return normal:Dot(
+        Vector3.new(0, 1, 0)
+    ) > 0.65
+end
+
+local function GetGroundInfo(position)
+    local result =
+        GroundAt(position)
+
+    if not result then
+        return nil
+    end
+
+    return {
+        Position = result.Position,
+        Normal = result.Normal,
+        Instance = result.Instance,
+    }
+end
+
+local function IsGrounded(
+    root,
+    humanoid
+)
+
+    local state =
+        humanoid:GetState()
+
+    if state ==
+        Enum.HumanoidStateType.Running
+        or state ==
+        Enum.HumanoidStateType.RunningNoPhysics
+        or state ==
+        Enum.HumanoidStateType.Landed
+    then
+        return true
+    end
+
+    local ground =
+        GetGroundInfo(
+            root.Position
+        )
+
+    if not ground then
+        return false
+    end
+
+    local distance =
+        root.Position.Y
+        - ground.Position.Y
+
+    return
+        distance <= 3.2
+        and IsWalkable(
+            ground.Normal
+        )
+end
+
+--==============================================================--
+-- WALL BLOCKCAST
+--==============================================================--
+
+local function WallBlockcast(
+    root,
+    direction,
+    distance
+)
+
+    direction =
+        SafeUnit(
+            Flat(direction),
+            Vector3.new(0, 0, -1)
+        )
+
+    local size =
+        root.Size
+
+    local castSize =
+        Vector3.new(
+            math.max(
+                0.1,
+                size.X
+                * CONFIG.WallWidthMultiplier
+            ),
+
+            math.max(
+                0.1,
+                size.Y
+                * CONFIG.WallHeightMultiplier
+            ),
+
+            math.max(
+                0.1,
+                size.Z
+                * CONFIG.WallDepthMultiplier
+            )
+        )
+
+    local result =
+        workspace:Blockcast(
+            root.CFrame,
+            castSize,
+            direction * distance,
+            RayParams
+        )
+
+    if
+        result
+        and result.Instance
+        and result.Instance.CanCollide
+    then
+        return result
+    end
+
+    return nil
+end
+
+--==============================================================--
+-- MULTI ANGLE WALL SCAN
+--==============================================================--
+
+local function FindWallAround(
+    root,
+    direction
+)
+
+    direction =
+        SafeUnit(
+            Flat(direction),
+            Vector3.new(0, 0, -1)
+        )
+
+    local baseDistance =
+        math.clamp(
+            root.AssemblyLinearVelocity.Magnitude
+            * 0.45,
+            CONFIG.WallLookAheadMin,
+            CONFIG.WallLookAheadMax
+        )
+
+    local bestHit = nil
+
+    -- Direct path first.
+    local direct =
+        WallBlockcast(
+            root,
+            direction,
+            baseDistance
+        )
+
+    if direct then
+        bestHit = direct
+    end
+
+    -- Then look around the direction.
+    for _, degrees in ipairs(
+        CONFIG.WallAngles
+    ) do
+
+        if degrees ~= 0 then
+
+            local candidateDirection =
+                RotateY(
+                    direction,
+                    math.rad(degrees)
+                )
+
+            local hit =
+                WallBlockcast(
+                    root,
+                    candidateDirection,
+                    baseDistance
+                )
+
+            if hit then
+
+                if
+                    not bestHit
+                    or hit.Distance
+                    < bestHit.Distance
+                then
+
+                    -- Keep the closest collision
+                    -- as the actual threat.
+                    if degrees == 0 then
+                        bestHit = hit
+                    end
+
+                end
+            end
+        end
+    end
+
+    return bestHit
+end
+
+--==============================================================--
+-- DIRECT WALL THREAT
+--==============================================================--
+
+local function GetWallThreat(
+    root,
+    direction
+)
+
+    local speed =
+        Flat(
+            root.AssemblyLinearVelocity
+        ).Magnitude
+
+    local distance =
+        math.clamp(
+            speed * 0.5,
+            CONFIG.WallLookAheadMin,
+            CONFIG.WallLookAheadMax
+        )
+
+    return WallBlockcast(
+        root,
+        direction,
+        distance
+    )
+end
+
+--==============================================================--
+-- CLEARANCE
+--==============================================================--
+
+local function GetClearance(
+    root,
+    direction,
+    distance
+)
+
+    local hit =
+        WallBlockcast(
+            root,
+            direction,
+            distance
+        )
+
+    if not hit then
+        return distance, nil
+    end
+
+    return hit.Distance, hit
+end
+
+--==============================================================--
+-- EXACT ACCELERATE
+--==============================================================--
+
+local function Accelerate(
+    velocity,
+    wishDir,
+    wishSpeed,
+    acceleration,
+    dt
+)
+
+    local addSpeed =
+        wishSpeed
+        - velocity:Dot(
+            wishDir
+        )
+
+    if addSpeed <= 0 then
+        return velocity
+    end
+
+    local accelSpeed =
+        acceleration
+        * dt
+        * wishSpeed
+
+    if addSpeed > accelSpeed then
+        addSpeed =
+            accelSpeed
+    end
+
+    return velocity
+        + wishDir
+        * addSpeed
+end
+
+--==============================================================--
+-- BEST AIR STRAFE
+--==============================================================--
+--
+-- The objective is ONLY maximum horizontal speed.
+--
+-- No "stay straight" restriction exists.
+--
+-- The game does:
+--   wishSpeed = min(182, ...)
+--   acceleration = 182
+--
+-- The optimal wish direction is around perpendicular
+-- to the current velocity.
+--
+--==============================================================--
+
+local function GetBestAirAction(
+    root,
+    velocity
+)
+
+    local flatVelocity =
+        Flat(velocity)
+
+    if flatVelocity.Magnitude
+        < 0.001
+    then
+
+        return {
+            Side = currentSide,
+            WishDir =
+                Vector3.new(
+                    1,
+                    0,
+                    0
+                ),
+            Score = 0,
+        }
+    end
+
+    local velocityDirection =
+        flatVelocity.Unit
+
+    local wall =
+        GetWallThreat(
+            root,
+            velocityDirection
+        )
+
+    local candidates = {}
+
+    local function AddCandidate(
+        direction,
+        side
+    )
+
+        direction =
+            SafeUnit(
+                Flat(direction),
+                velocityDirection
+            )
+
+        local predicted =
+            Accelerate(
+                flatVelocity,
+                direction,
+                PHYSICS.AirStrafeAcceleration,
+                PHYSICS.AirStrafeAcceleration,
+                CONFIG.Tick
+            )
+
+        local nextSpeed =
+            predicted.Magnitude
+
+        local clearance,
+        hit =
+            GetClearance(
+                root,
+                direction,
+                math.clamp(
+                    nextSpeed
+                    * 0.45,
+                    4,
+                    12
+                )
+            )
+
+        local score =
+            nextSpeed
+
+        -- Strongly punish an actual collision.
+        if hit then
+
+            if clearance
+                <= CONFIG.WallCriticalDistance
+            then
+
+                score =
+                    score
+                    - 100000
+
+            else
+
+                score =
+                    score
+                    - 5000
+
+            end
+
+        else
+
+            score =
+                score
+                + clearance * 2
+
+        end
+
+        -- If a wall is already threatening us,
+        -- directions away from its normal are preferred.
+        if wall then
+
+            local normal =
+                Flat(
+                    wall.Normal
+                )
+
+            if normal.Magnitude > 0.001 then
+
+                normal =
+                    normal.Unit
+
+                local away =
+                    direction:Dot(
+                        normal
+                    )
+
+                score =
+                    score
+                    + math.max(
+                        away,
+                        0
+                    )
+                    * 50
+            end
+        end
+
+        table.insert(
+            candidates,
+            {
+                Side = side,
+                WishDir = direction,
+                Velocity = predicted,
+                Score = score,
+                Clearance = clearance,
+                Hit = hit,
+            }
+        )
+    end
+
+    -- Main optimal directions.
+    AddCandidate(
+        RotateY(
+            velocityDirection,
+            math.rad(90)
+        ),
+        1
+    )
+
+    AddCandidate(
+        RotateY(
+            velocityDirection,
+            math.rad(-90)
+        ),
+        -1
+    )
+
+    -- Additional angles for wall avoidance.
+    local angles = {
+        60,
+        -60,
+        70,
+        -70,
+        80,
+        -80,
+        100,
+        -100,
+        110,
+        -110,
+        45,
+        -45,
+        30,
+        -30,
+    }
+
+    for _, angle in ipairs(
+        angles
+    ) do
+
+        local side
+
+        if angle > 0 then
+            side = 1
+        else
+            side = -1
+        end
+
+        AddCandidate(
+            RotateY(
+                velocityDirection,
+                math.rad(angle)
+            ),
+            side
+        )
+
+    end
+
+    local best = nil
+
+    for _, candidate in ipairs(
+        candidates
+    ) do
+
+        if
+            not best
+            or candidate.Score
+            > best.Score
+        then
+
+            best =
+                candidate
+
+        end
+    end
+
+    if not best then
+        return nil
+    end
+
+    -- Convert desired WORLD wishDir into camera yaw.
+    local cameraYaw
+
+    if best.Side > 0 then
+
+        -- D:
+        -- camera RightVector = wishDir
+        cameraYaw =
+            math.atan2(
+                -best.WishDir.Z,
+                best.WishDir.X
+            )
+
+    else
+
+        -- A:
+        -- camera RightVector = -wishDir
+        cameraYaw =
+            math.atan2(
+                best.WishDir.Z,
+                -best.WishDir.X
+            )
+
+    end
+
+    best.CameraYaw =
+        cameraYaw
+
+    return best
+end
+
+--==============================================================--
+-- GROUND DIRECTION
+--==============================================================--
+
+local function GetBestGroundDirection(
+    root,
+    velocity,
+    cameraForward
+)
+
+    local base =
+        SafeUnit(
+            Flat(velocity),
+            cameraForward
+        )
+
+    local candidates = {}
+
+    local function Add(
+        direction
+    )
+
+        direction =
+            SafeUnit(
+                Flat(direction),
+                base
+            )
+
+        local clearance,
+        hit =
+            GetClearance(
+                root,
+                direction,
+                9
+            )
+
+        local forwardScore =
+            direction:Dot(base)
+
+        local score =
+            forwardScore
+            * 100
+            + clearance * 3
+
+        if hit then
+            score =
+                score
+                - 10000
+        else
+            score =
+                score
+                + 100
+        end
+
+        table.insert(
+            candidates,
+            {
+                Direction = direction,
+                Score = score,
+                Clearance = clearance,
+                Hit = hit,
+            }
+        )
+    end
+
+    Add(base)
+    Add(RotateY(base, math.rad(15)))
+    Add(RotateY(base, math.rad(-15)))
+    Add(RotateY(base, math.rad(30)))
+    Add(RotateY(base, math.rad(-30)))
+    Add(RotateY(base, math.rad(45)))
+    Add(RotateY(base, math.rad(-45)))
+    Add(RotateY(base, math.rad(65)))
+    Add(RotateY(base, math.rad(-65)))
+
+    local best = candidates[1]
+
+    for _, candidate in ipairs(
+        candidates
+    ) do
+
+        if candidate.Score
+            > best.Score
+        then
+
+            best =
+                candidate
+
+        end
+    end
+
+    return best
+end
+
+--==============================================================--
+-- TERRAIN JUMP
+--==============================================================--
+
+local function TerrainNeedsJump(
+    root,
+    direction
+)
+
+    direction =
+        SafeUnit(
+            Flat(direction),
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+        )
+
+    local current =
+        GetGroundInfo(
+            root.Position
+        )
+
+    if not current then
+        return false
+    end
+
+    local near =
+        GetGroundInfo(
+            root.Position
+            + direction
+            * CONFIG.GroundLookAhead
+        )
+
+    local far =
+        GetGroundInfo(
+            root.Position
+            + direction
+            * CONFIG.GroundLookAheadFar
+        )
+
+    -- No floor ahead.
+    if not near then
+        return true
+    end
+
+    -- Drop ahead.
+    local drop =
+        current.Position.Y
+        - near.Position.Y
+
+    if drop >
+        CONFIG.MaxDrop
+    then
+        return true
+    end
+
+    -- Step / ledge ahead.
+    local rise =
+        near.Position.Y
+        - current.Position.Y
+
+    if rise >
+        CONFIG.MaxStep
+    then
+        return true
+    end
+
+    -- Far obstacle.
+    if far then
+
+        local farRise =
+            far.Position.Y
+            - current.Position.Y
+
+        if farRise >
+            CONFIG.MaxStep
+        then
+            return true
+        end
+
+    end
+
+    return false
+end
+
+--==============================================================--
+-- WALL ESCAPE
+--==============================================================--
+
+local function GetWallEscapeDirection(
+    root,
+    velocity
+)
+
+    local direction =
+        SafeUnit(
+            Flat(velocity),
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+        )
+
+    local wall =
+        GetWallThreat(
+            root,
+            direction
+        )
+
+    if not wall then
+        return nil
+    end
+
+    local normal =
+        Flat(
+            wall.Normal
+        )
+
+    if normal.Magnitude
+        < 0.001
+    then
+        return nil
+    end
+
+    normal =
+        normal.Unit
+
+    local tangent =
+        Vector3.new(
+            -normal.Z,
+            0,
+            normal.X
+        )
+
+    local candidates = {
+        tangent,
+        -tangent,
+        normal,
+        SafeUnit(
+            tangent + normal,
+            normal
+        ),
+        SafeUnit(
+            -tangent + normal,
+            normal
+        ),
+    }
+
+    local best = nil
+
+    for _, candidate in ipairs(
+        candidates
+    ) do
+
+        local clearance,
+        hit =
+            GetClearance(
+                root,
+                candidate,
+                8
+            )
+
+        local forwardAmount =
+            candidate:Dot(
+                direction
+            )
+
+        local score =
+            clearance * 5
+            + forwardAmount * 20
+
+        if hit then
+            score =
+                score
+                - 10000
+        else
+            score =
+                score
+                + 100
+        end
+
+        if
+            not best
+            or score > best.Score
+        then
+
+            best = {
+                Direction = candidate,
+                Score = score,
+                Clearance = clearance,
+            }
+
+        end
+    end
+
+    if best then
+        return best.Direction
+    end
+
+    return nil
+end
+
+--==============================================================--
+-- PATH PREDICTION
+--==============================================================--
+
+local function PredictPath()
+
+    local character =
+        LocalPlayer.Character
+
+    if not character then
+        return {}
+    end
+
+    local root =
+        character:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    local humanoid =
+        character:FindFirstChildOfClass(
+            "Humanoid"
+        )
+
+    if not root
+        or not humanoid
+    then
+        return {}
+    end
+
+    local position =
+        root.Position
+
+    local velocity =
+        Flat(
+            root.AssemblyLinearVelocity
+        )
+
+    local internalVelocity =
+        velocity
+        * PHYSICS.Scale
+
+    if internalVelocity.Magnitude
+        < 10
+    then
+
+        local camera =
+            workspace.CurrentCamera
+
+        internalVelocity =
+            SafeUnit(
+                Flat(
+                    camera.CFrame.LookVector
+                ),
+                Vector3.new(
+                    0,
+                    0,
+                    -1
+                )
+            )
+            * PHYSICS.Speed
+
+    end
+
+    local gravity =
+        workspace.Gravity
+
+    local vertical =
+        math.sqrt(
+            2
+            * gravity
+            * PHYSICS.JumpHeight
+        )
+
+    local points = {
+        position
+    }
+
+    local travelled = 0
+
+    local nextPoint =
+        CONFIG.PathPointSpacing
+
+    local side =
+        currentSide
+
+    for step = 1, 12000 do
+
+        if ENV.StrafeControllerStop then
+            return points
+        end
+
+        --======================================================--
+        -- AIR STRAFE
+        --======================================================--
+
+        local action =
+            GetBestAirAction(
+                root,
+                internalVelocity
+                / PHYSICS.Scale
+            )
+
+        if action then
+            side =
+                action.Side
+
+            internalVelocity =
+                action.Velocity
+        end
+
+        --======================================================--
+        -- GRAVITY
+        --======================================================--
+
+        vertical =
+            vertical
+            - gravity
+            * CONFIG.Tick
+
+        --======================================================--
+        -- REAL VELOCITY
+        --======================================================--
+
+        local horizontal =
+            internalVelocity
+            / PHYSICS.Scale
+
+        local frameVelocity =
+            horizontal
+            + Vector3.new(
+                0,
+                vertical,
+                0
+            )
+
+        local newPosition =
+            position
+            + frameVelocity
+            * CONFIG.Tick
+
+        --======================================================--
+        -- WALL COLLISION
+        --======================================================--
+
+        local movement =
+            Flat(
+                newPosition
+                - position
+            )
+
+        if movement.Magnitude > 0 then
+
+            local wall =
+                WallBlockcast(
+                    root,
+                    movement.Unit,
+                    movement.Magnitude + 1
+                )
+
+            if wall then
+
+                local normal =
+                    Flat(
+                        wall.Normal
+                    )
+
+                if normal.Magnitude
+                    > 0.001
+                then
+
+                    normal =
+                        normal.Unit
+
+                    local tangent =
+                        Vector3.new(
+                            -normal.Z,
+                            0,
+                            normal.X
+                        )
+
+                    local leftClear =
+                        GetClearance(
+                            root,
+                            tangent,
+                            8
+                        )
+
+                    local rightClear =
+                        GetClearance(
+                            root,
+                            -tangent,
+                            8
+                        )
+
+                    local escape
+
+                    if leftClear
+                        > rightClear
+                    then
+
+                        escape =
+                            tangent
+
+                    else
+
+                        escape =
+                            -tangent
+
+                    end
+
+                    internalVelocity =
+                        Accelerate(
+                            internalVelocity,
+                            escape,
+                            PHYSICS.AirStrafeAcceleration,
+                            PHYSICS.AirStrafeAcceleration,
+                            CONFIG.Tick
+                        )
+
+                    horizontal =
+                        internalVelocity
+                        / PHYSICS.Scale
+
+                    frameVelocity =
+                        horizontal
+                        + Vector3.new(
+                            0,
+                            vertical,
+                            0
+                        )
+
+                    newPosition =
+                        position
+                        + frameVelocity
+                        * CONFIG.Tick
+
+                end
+            end
+        end
+
+        --======================================================--
+        -- TERRAIN
+        --======================================================--
+
+        local ground =
+            GroundAt(
+                newPosition
+            )
+
+        if
+            ground
+            and IsWalkable(
+                ground.Normal
+            )
+        then
+
+            local floorY =
+                ground.Position.Y
+                + 2
+
+            if newPosition.Y
+                <= floorY
+            then
+
+                newPosition =
+                    Vector3.new(
+                        newPosition.X,
+                        floorY,
+                        newPosition.Z
+                    )
+
+                internalVelocity =
+                    ApplyFriction(
+                        internalVelocity,
+                        CONFIG.Tick,
+                        1
+                    )
+
+                vertical =
+                    math.sqrt(
+                        2
+                        * gravity
+                        * PHYSICS.JumpHeight
+                    )
+
+                side =
+                    -side
+
+            end
+        end
+
+        --======================================================--
+        -- DISTANCE
+        --======================================================--
+
+        local delta =
+            Flat(
+                newPosition
+                - position
+            )
+
+        local stepDistance =
+            delta.Magnitude
+
+        local oldDistance =
+            travelled
+
+        travelled =
+            travelled
+            + stepDistance
+
+        --======================================================--
+        -- POINTS
+        --======================================================--
+
+        if stepDistance > 0 then
+
+            while
+                nextPoint <= travelled
+                and nextPoint
+                    <= CONFIG.PathDistance
+            do
+
+                local alpha =
+                    (
+                        nextPoint
+                        - oldDistance
+                    )
+                    / stepDistance
+
+                alpha =
+                    math.clamp(
+                        alpha,
+                        0,
+                        1
+                    )
+
+                table.insert(
+                    points,
+                    position:Lerp(
+                        newPosition,
+                        alpha
+                    )
+                )
+
+                nextPoint =
+                    nextPoint
+                    + CONFIG.PathPointSpacing
+            end
+        end
+
+        position =
+            newPosition
+
+        if travelled
+            >= CONFIG.PathDistance
+        then
+            break
+        end
+    end
+
+    return points
+end
+
+--==============================================================--
+-- DRAWING
+--==============================================================--
+
+local Lines = {}
+
+for i = 1, 180 do
+
+    local line =
+        Drawing.new("Line")
+
+    line.Visible = false
+    line.Thickness = 1
+    line.Transparency = 0.55
+    line.Color =
+        Color3.fromRGB(
+            205,
+            205,
+            205
+        )
+    line.ZIndex = 1
+
+    Lines[i] =
+        line
+end
+
+local function ClearLines()
+
+    for _, line in ipairs(
+        Lines
+    ) do
+
+        line.Visible = false
+
+    end
+end
+
+local function DrawPath(
+    points
+)
+
+    ClearLines()
+
+    if not CONFIG.DrawPath then
+        return
+    end
+
+    if #points < 2 then
+        return
+    end
+
+    local camera =
+        workspace.CurrentCamera
+
+    if not camera then
+        return
+    end
+
+    local index = 1
+
+    for i = 1, #points - 1 do
+
+        if index > #Lines then
+            break
+        end
+
+        local screen1 =
+            camera:WorldToViewportPoint(
+                points[i]
+            )
+
+        local screen2 =
+            camera:WorldToViewportPoint(
+                points[i + 1]
+            )
+
+        local line =
+            Lines[index]
+
+        line.From =
+            Vector2.new(
+                screen1.X,
+                screen1.Y
+            )
+
+        line.To =
+            Vector2.new(
+                screen2.X,
+                screen2.Y
+            )
+
+        line.Visible = true
+
+        index =
+            index + 1
+    end
+end
+
+--==============================================================--
+-- GUI
+--==============================================================--
+
+local GuiParent
+
+if gethui then
+    GuiParent =
+        gethui()
+else
+    GuiParent =
+        CoreGui
+end
+
+local ScreenGui =
+    Instance.new("ScreenGui")
+
+ScreenGui.Name =
+    "DeadEyeAutoStrafe"
+
+ScreenGui.ResetOnSpawn =
+    false
+
+ScreenGui.ZIndexBehavior =
+    Enum.ZIndexBehavior.Sibling
+
+ScreenGui.Parent =
+    GuiParent
+
+local Main =
+    Instance.new("Frame")
+
+Main.Size =
+    UDim2.fromOffset(
+        260,
+        130
+    )
+
+Main.Position =
+    UDim2.new(
+        0,
+        30,
+        0,
+        250
+    )
+
+Main.BackgroundColor3 =
+    Color3.fromRGB(
+        24,
+        24,
+        24
+    )
+
+Main.BorderSizePixel =
+    0
+
+Main.Parent =
+    ScreenGui
+
+local Corner =
+    Instance.new("UICorner")
+
+Corner.CornerRadius =
+    UDim.new(
+        0,
+        8
+    )
+
+Corner.Parent =
+    Main
+
+local Stroke =
+    Instance.new("UIStroke")
+
+Stroke.Thickness =
+    1
+
+Stroke.Transparency =
+    0.35
+
+Stroke.Parent =
+    Main
+
+local Header =
+    Instance.new("Frame")
+
+Header.Size =
+    UDim2.new(
+        1,
+        0,
+        0,
+        30
+    )
+
+Header.BackgroundTransparency =
+    1
+
+Header.Active =
+    true
+
+Header.Parent =
+    Main
+
+local Title =
+    Instance.new("TextLabel")
+
+Title.Size =
+    UDim2.new(
+        1,
+        -45,
+        1,
+        0
+    )
+
+Title.Position =
+    UDim2.fromOffset(
+        10,
+        0
+    )
+
+Title.BackgroundTransparency =
+    1
+
+Title.Text =
+    "DeadEye Auto Strafe"
+
+Title.TextColor3 =
+    Color3.fromRGB(
+        235,
+        235,
+        235
+    )
+
+Title.Font =
+    Enum.Font.GothamSemibold
+
+Title.TextSize =
+    14
+
+Title.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+Title.Parent =
+    Header
+
+local Close =
+    Instance.new("TextButton")
+
+Close.Size =
+    UDim2.fromOffset(
+        28,
+        28
+    )
+
+Close.Position =
+    UDim2.new(
+        1,
+        -31,
+        0,
+        1
+    )
+
+Close.BackgroundTransparency =
+    1
+
+Close.Text =
+    "×"
+
+Close.TextColor3 =
+    Color3.fromRGB(
+        220,
+        220,
+        220
+    )
+
+Close.Font =
+    Enum.Font.GothamBold
+
+Close.TextSize =
+    20
+
+Close.Parent =
+    Header
+
+local Toggle =
+    Instance.new("TextButton")
+
+Toggle.Size =
+    UDim2.new(
+        1,
+        -20,
+        0,
+        38
+    )
+
+Toggle.Position =
+    UDim2.fromOffset(
+        10,
+        40
+    )
+
+Toggle.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        75,
+        45
+    )
+
+Toggle.BorderSizePixel =
+    0
+
+Toggle.Font =
+    Enum.Font.GothamMedium
+
+Toggle.TextSize =
+    13
+
+Toggle.TextColor3 =
+    Color3.fromRGB(
+        235,
+        235,
+        235
+    )
+
+Toggle.Parent =
+    Main
+
+local ToggleCorner =
+    Instance.new("UICorner")
+
+ToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+ToggleCorner.Parent =
+    Toggle
+
+local Status =
+    Instance.new("TextLabel")
+
+Status.Size =
+    UDim2.new(
+        1,
+        -20,
+        0,
+        38
+    )
+
+Status.Position =
+    UDim2.fromOffset(
+        10,
+        84
+    )
+
+Status.BackgroundTransparency =
+    1
+
+Status.Font =
+    Enum.Font.Gotham
+
+Status.TextSize =
+    10
+
+Status.TextColor3 =
+    Color3.fromRGB(
+        170,
+        170,
+        170
+    )
+
+Status.TextWrapped =
+    true
+
+Status.Text =
+    "Z — toggle\nW + A/D + Space | smooth camera | blockcast"
+
+Status.Parent =
+    Main
+
+--==============================================================--
+-- GUI DRAG
+--==============================================================--
+
+local dragging =
+    false
+
+local dragStart =
+    nil
+
+local startPos =
+    nil
+
+Header.InputBegan:Connect(
+    function(input)
+
+        if input.UserInputType
+            ~= Enum.UserInputType.MouseButton1
+        then
+            return
+        end
+
+        dragging =
+            true
+
+        dragStart =
+            input.Position
+
+        startPos =
+            Main.Position
+
+        input.Changed:Connect(
+            function()
+
+                if input.UserInputState
+                    == Enum.UserInputState.End
+                then
+
+                    dragging =
+                        false
+
+                end
+
+            end
+        )
+    end
+)
+
+UserInputService.InputChanged:Connect(
+    function(input)
+
+        if not dragging then
+            return
+        end
+
+        if input.UserInputType
+            ~= Enum.UserInputType.MouseMovement
+        then
+            return
+        end
+
+        local delta =
+            input.Position
+            - dragStart
+
+        Main.Position =
+            UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset
+                + delta.X,
+
+                startPos.Y.Scale,
+                startPos.Y.Offset
+                + delta.Y
+            )
+    end
+)
+
+--==============================================================--
+-- GUI STATE
+--==============================================================--
+
+local function UpdateGUI()
+
+    if ENV.StrafeControllerEnabled then
+
+        Toggle.Text =
+            "ВКЛЮЧЕНО"
+
+        Toggle.BackgroundColor3 =
+            Color3.fromRGB(
+                45,
+                75,
+                45
+            )
+
+    else
+
+        Toggle.Text =
+            "ВЫКЛЮЧЕНО"
+
+        Toggle.BackgroundColor3 =
+            Color3.fromRGB(
+                55,
+                40,
+                40
+            )
+
+    end
+end
+
+local function SetEnabled(
+    value
+)
+
+    ENV.StrafeControllerEnabled =
+        value
+
+    if value then
+        UpdateRayFilter()
+    else
+        ReleaseAllKeys()
+        ClearLines()
+    end
+
+    UpdateGUI()
+end
+
+Toggle.MouseButton1Click:Connect(
+    function()
+
+        SetEnabled(
+            not ENV.StrafeControllerEnabled
+        )
+
+    end
+)
+
+--==============================================================--
+-- HOTKEY
+--==============================================================--
+
+local InputConnection
+
+InputConnection =
+    UserInputService.InputBegan:Connect(
+        function(
+            input,
+            gameProcessed
+        )
+
+            if gameProcessed then
+                return
+            end
+
+            if input.KeyCode
+                == Enum.KeyCode.Z
+            then
+
+                SetEnabled(
+                    not ENV.StrafeControllerEnabled
+                )
+
+            end
+        end
+    )
+
+--==============================================================--
+-- MAIN CONTROL
+--==============================================================--
+
+local function ControllerUpdate()
+
+    if ENV.StrafeControllerStop then
+        Cleanup()
+        return
+    end
+
+    if not ENV.StrafeControllerEnabled then
+        return
+    end
+
+    local now =
+        os.clock()
+
+    if now - lastTick
+        < CONFIG.Tick
+    then
+        return
+    end
+
+    lastTick =
+        now
+
+    local character =
+        LocalPlayer.Character
+
+    if not character then
+        ReleaseAllKeys()
+        return
+    end
+
+    local humanoid =
+        character:FindFirstChildOfClass(
+            "Humanoid"
+        )
+
+    local root =
+        character:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not humanoid
+        or not root
+    then
+
+        ReleaseAllKeys()
+
+        return
+    end
+
+    UpdateRayFilter()
+
+    --==========================================================--
+    -- VELOCITY
+    --==========================================================--
+
+    local velocity =
+        Flat(
+            root.AssemblyLinearVelocity
+        )
+
+    local speed =
+        velocity.Magnitude
+
+    local camera =
+        workspace.CurrentCamera
+
+    if not camera then
+        return
+    end
+
+    local cameraForward =
+        SafeUnit(
+            Flat(
+                camera.CFrame.LookVector
+            ),
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+        )
+
+    local movementDirection
+
+    if speed > 0.5 then
+        movementDirection =
+            velocity.Unit
+    else
+        movementDirection =
+            cameraForward
+    end
+
+    --==========================================================--
+    -- GROUNDED
+    --==========================================================--
+
+    local grounded =
+        IsGrounded(
+            root,
+            humanoid
+        )
+
+    --==========================================================--
+    -- GROUND
+    --==========================================================--
+
+    if grounded then
+
+        -- forward movement
+        SetKey(
+            "W",
+            KEY_W,
+            true
+        )
+
+        ReleaseStrafe()
+
+        --======================================================--
+        -- TERRAIN / WALL
+        --======================================================--
+
+        local groundAction =
+            GetBestGroundDirection(
+                root,
+                velocity,
+                cameraForward
+            )
+
+        local targetDirection =
+            groundAction.Direction
+
+        local wallEscape =
+            GetWallEscapeDirection(
+                root,
+                velocity
+            )
+
+        if wallEscape then
+            targetDirection =
+                wallEscape
+        end
+
+        --======================================================--
+        -- CAMERA
+        --======================================================--
+
+        SetCameraYaw(
+            YawFromDirection(
+                targetDirection
+            )
+        )
+
+        --======================================================--
+        -- JUMP CONDITIONS
+        --======================================================--
+
+        local terrainJump =
+            TerrainNeedsJump(
+                root,
+                targetDirection
+            )
+
+        local wall =
+            GetWallThreat(
+                root,
+                targetDirection
+            )
+
+        if CONFIG.AutoBhop then
+
+            DoJump()
+
+        elseif terrainJump
+            or wall
+        then
+
+            DoJump()
+
+        end
+
+    else
+
+        --======================================================--
+        -- AIR
+        --======================================================--
+
+        -- Keep W held.
+        -- The game's Air code removes its forward component.
+        SetKey(
+            "W",
+            KEY_W,
+            true
+        )
+
+        --======================================================--
+        -- CHOOSE AIR ACTION
+        --======================================================--
+
+        local action =
+            GetBestAirAction(
+                root,
+                velocity
+            )
+
+        if action then
+
+            currentSide =
+                action.Side
+
+            --==================================================--
+            -- WALL OVERRIDE
+            --==================================================--
+
+            local escape =
+                GetWallEscapeDirection(
+                    root,
+                    velocity
+                )
+
+            if escape then
+
+                -- Try to keep the chosen A/D side,
+                -- but point its camera toward the escape.
+                local escapeAction =
+                    {
+                        WishDir = escape,
+                        Side =
+                            currentSide,
+                    }
+
+                if currentSide > 0 then
+
+                    escapeAction.CameraYaw =
+                        math.atan2(
+                            -escape.Z,
+                            escape.X
+                        )
+
+                else
+
+                    escapeAction.CameraYaw =
+                        math.atan2(
+                            escape.Z,
+                            -escape.X
+                        )
+
+                end
+
+                SetCameraYaw(
+                    escapeAction.CameraYaw
+                )
+
+            else
+
+                SetCameraYaw(
+                    action.CameraYaw
+                )
+
+            end
+
+            ApplyStrafe()
+
+        else
+
+            ApplyStrafe()
+
+        end
+
+    end
+
+    --==========================================================--
+    -- LANDING
+    --==========================================================--
+
+    if grounded
+        and not wasGrounded
+    then
+
+        currentSide =
+            -currentSide
+
+        if CONFIG.AutoBhop then
+            DoJump()
+        end
+
+    end
+
+    wasGrounded =
+        grounded
+
+    --==========================================================--
+    -- PATH
+    --==========================================================--
+
+    if CONFIG.DrawPath then
+
+        if now - lastPathUpdate
+            >= 0.05
+        then
+
+            lastPathUpdate =
+                now
+
+            local points =
+                PredictPath()
+
+            DrawPath(
+                points
+            )
+
+        end
+
+    else
+
+        ClearLines()
+
+    end
+
+end
+
+--==============================================================--
+-- CLEANUP
+--==============================================================--
+
+local function CleanupInternal()
+
+    if cleanupDone then
+        return
+    end
+
+    cleanupDone =
+        true
+
+    ENV.StrafeControllerStop =
+        true
+
+    ENV.StrafeControllerEnabled =
+        false
+
+    ReleaseAllKeys()
+
+    ClearLines()
+
+    pcall(function()
+        RunService:UnbindFromRenderStep(
+            "DeadEyeAutoStrafe"
+        )
+    end)
+
+    if InputConnection then
+        InputConnection:Disconnect()
+        InputConnection = nil
+    end
+
+    for _, line in ipairs(
+        Lines
+    ) do
+
+        pcall(function()
+            line:Remove()
+        end)
+
+    end
+
+    Lines = {}
+
+    if ScreenGui then
+        ScreenGui:Destroy()
+    end
+
+    ENV.__DeadEyeStrafeControllerCleanup =
+        nil
+
+end
+
+Cleanup = CleanupInternal
+
+ENV.__DeadEyeStrafeControllerCleanup =
+    CleanupInternal
+
+Close.MouseButton1Click:Connect(
+    CleanupInternal
+)
+
+--==============================================================--
+-- START
+--==============================================================--
+
+SetEnabled(
+    CONFIG.StartEnabled
+)
+
+RunService:BindToRenderStep(
+    "DeadEyeAutoStrafe",
+    Enum.RenderPriority.Camera.Value + 1,
+    function()
+
+        if cleanupDone then
+            return
+        end
+
+        ControllerUpdate()
+
+    end
+)
