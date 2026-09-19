@@ -1363,11 +1363,52 @@ local function GetBestAirAction(
         )
     end
 
-    -- Always test the two mathematically optimal strafe sides.
+    -- Exact one-frame optimum for this game's Accelerate().
+    --
+    -- Accelerate uses:
+    --   addSpeed = wishSpeed - velocity:Dot(wishDir)
+    --   accelSpeed = acceleration * dt * wishSpeed
+    --
+    -- Here acceleration == wishSpeed == 182.
+    -- Because accelSpeed is larger than wishSpeed at 60 Hz,
+    -- the speed-maximizing angle is normally a little past 90°
+    -- rather than exactly perpendicular.
+    local wishSpeed =
+        PHYSICS.AirStrafeAcceleration
+
+    local accelSpeed =
+        PHYSICS.AirStrafeAcceleration
+        * CONFIG.Tick
+        * PHYSICS.AirStrafeAcceleration
+
+    local cosine
+
+    if internalVelocity.Magnitude > 0.001 then
+        cosine =
+            (
+                wishSpeed
+                - accelSpeed
+            )
+            / internalVelocity.Magnitude
+    else
+        cosine = 0
+    end
+
+    cosine =
+        math.clamp(
+            cosine,
+            -1,
+            1
+        )
+
+    local optimalAngle =
+        math.acos(cosine)
+
+    -- Test both A/D sides using the exact optimum.
     AddCandidate(
         RotateY(
             velocityDirection,
-            math.rad(90)
+            optimalAngle
         ),
         1
     )
@@ -1375,45 +1416,56 @@ local function GetBestAirAction(
     AddCandidate(
         RotateY(
             velocityDirection,
-            math.rad(-90)
+            -optimalAngle
         ),
         -1
     )
 
-    -- Only spend extra Blockcasts when a wall is actually
-    -- threatening the current velocity.
+    -- Only spend extra collision queries when a wall is actually
+    -- threatening the current velocity. Around the optimum we test
+    -- a few nearby angles to find a safe route without sacrificing
+    -- the normal max-speed behaviour in open space.
     if wall then
 
-        local angles = {
-            75,
-            -75,
-            60,
-            -60,
-            45,
-            -45,
-            30,
+        local angleOffsets = {
             -30,
+            -20,
+            -10,
+            10,
+            20,
+            30,
         }
 
-        for _, angle in ipairs(
-            angles
+        for _, offset in ipairs(
+            angleOffsets
         ) do
 
-            local side
+            local angle =
+                optimalAngle
+                + math.rad(
+                    offset
+                )
 
-            if angle > 0 then
-                side = 1
-            else
-                side = -1
+            if angle > 0
+                and angle < math.pi
+            then
+
+                AddCandidate(
+                    RotateY(
+                        velocityDirection,
+                        angle
+                    ),
+                    1
+                )
+
+                AddCandidate(
+                    RotateY(
+                        velocityDirection,
+                        -angle
+                    ),
+                    -1
+                )
             end
-
-            AddCandidate(
-                RotateY(
-                    velocityDirection,
-                    math.rad(angle)
-                ),
-                side
-            )
         end
     end
 
@@ -3320,7 +3372,7 @@ SetEnabled(
 
 RunService:BindToRenderStep(
     "DeadEyeAutoStrafe",
-    Enum.RenderPriority.Camera.Value + 1,
+    Enum.RenderPriority.Input.Value + 1,
     function()
 
         if cleanupDone then
