@@ -996,21 +996,26 @@ local function GetBestAirAction(
             )
 
         local fallbackSide = currentSide
-        if fallbackSide ~= 1 and fallbackSide ~= -1 then
+        if fallbackSide ~= 1
+            and fallbackSide ~= -1
+        then
             fallbackSide = 1
         end
 
         local fallbackCameraYaw
+
         if fallbackSide > 0 then
-            fallbackCameraYaw = math.atan2(
-                -fallbackWishDir.Z,
-                fallbackWishDir.X
-            )
+            fallbackCameraYaw =
+                math.atan2(
+                    -fallbackWishDir.Z,
+                    fallbackWishDir.X
+                )
         else
-            fallbackCameraYaw = math.atan2(
-                fallbackWishDir.Z,
-                -fallbackWishDir.X
-            )
+            fallbackCameraYaw =
+                math.atan2(
+                    fallbackWishDir.Z,
+                    -fallbackWishDir.X
+                )
         end
 
         return {
@@ -1018,6 +1023,7 @@ local function GetBestAirAction(
             WishDir = fallbackWishDir,
             Score = 0,
             CameraYaw = fallbackCameraYaw,
+            Wall = nil,
         }
     end
 
@@ -1025,12 +1031,14 @@ local function GetBestAirAction(
         flatVelocity.Unit
 
     -- The game's movement code works in internal velocity
-    -- units and the BaseMover converts them by /90.
-    -- root.AssemblyLinearVelocity is already real studs/sec.
+    -- units and BaseMover converts them by /90.
     local internalVelocity =
         flatVelocity
         * PHYSICS.Scale
 
+    -- One cheap collision check first.
+    -- Open space is by far the common case, so do not run
+    -- ten extra Blockcasts just to prove that there is no wall.
     local wall =
         GetWallThreat(
             root,
@@ -1066,51 +1074,49 @@ local function GetBestAirAction(
         local nextSpeed =
             predicted.Magnitude
 
-        local clearance,
-        hit =
-            GetClearance(
+        local clearance =
+            CONFIG.WallLookAheadMax
+
+        local hit = nil
+
+        if wall then
+
+            clearance,
+            hit = GetClearance(
                 root,
                 direction,
                 math.clamp(
-                    nextSpeed
-                    * 0.45,
+                    nextSpeed * 0.45,
                     4,
                     12
                 )
             )
+        end
 
         local score =
             nextSpeed
 
-        -- Strongly punish an actual collision.
         if hit then
 
             if clearance
                 <= CONFIG.WallCriticalDistance
             then
-
                 score =
                     score
                     - 100000
-
             else
-
                 score =
                     score
                     - 5000
-
             end
 
-        else
+        elseif wall then
 
             score =
                 score
                 + clearance * 2
-
         end
 
-        -- If a wall is already threatening us,
-        -- directions away from its normal are preferred.
         if wall then
 
             local normal =
@@ -1151,7 +1157,7 @@ local function GetBestAirAction(
         )
     end
 
-    -- Main optimal directions.
+    -- Always test the two mathematically optimal strafe sides.
     AddCandidate(
         RotateY(
             velocityDirection,
@@ -1168,38 +1174,41 @@ local function GetBestAirAction(
         -1
     )
 
-    -- Additional angles for wall avoidance.
-    local angles = {
-        75,
-        -75,
-        60,
-        -60,
-        45,
-        -45,
-        30,
-        -30,
-    }
+    -- Only spend extra Blockcasts when a wall is actually
+    -- threatening the current velocity.
+    if wall then
 
-    for _, angle in ipairs(
-        angles
-    ) do
+        local angles = {
+            75,
+            -75,
+            60,
+            -60,
+            45,
+            -45,
+            30,
+            -30,
+        }
 
-        local side
+        for _, angle in ipairs(
+            angles
+        ) do
 
-        if angle > 0 then
-            side = 1
-        else
-            side = -1
+            local side
+
+            if angle > 0 then
+                side = 1
+            else
+                side = -1
+            end
+
+            AddCandidate(
+                RotateY(
+                    velocityDirection,
+                    math.rad(angle)
+                ),
+                side
+            )
         end
-
-        AddCandidate(
-            RotateY(
-                velocityDirection,
-                math.rad(angle)
-            ),
-            side
-        )
-
     end
 
     local best = nil
@@ -1220,9 +1229,6 @@ local function GetBestAirAction(
                 - best.Score
             ) < 0.0001
 
-        -- When both sides are equally good, keep the current
-        -- side. Landing flips currentSide, so A/D naturally
-        -- alternate instead of always selecting the first candidate.
         local betterTieBreak =
             sameScore
             and candidate.Side
@@ -1233,10 +1239,8 @@ local function GetBestAirAction(
         if betterScore
             or betterTieBreak
         then
-
             best =
                 candidate
-
         end
     end
 
@@ -1244,13 +1248,10 @@ local function GetBestAirAction(
         return nil
     end
 
-    -- Convert desired WORLD wishDir into camera yaw.
     local cameraYaw
 
     if best.Side > 0 then
 
-        -- D:
-        -- camera RightVector = wishDir
         cameraYaw =
             math.atan2(
                 -best.WishDir.Z,
@@ -1259,8 +1260,6 @@ local function GetBestAirAction(
 
     else
 
-        -- A:
-        -- camera RightVector = -wishDir
         cameraYaw =
             math.atan2(
                 best.WishDir.Z,
@@ -1271,6 +1270,9 @@ local function GetBestAirAction(
 
     best.CameraYaw =
         cameraYaw
+
+    best.Wall =
+        wall
 
     return best
 end
@@ -1290,6 +1292,24 @@ local function GetBestGroundDirection(
             Flat(velocity),
             cameraForward
         )
+
+    -- In open space, going straight is always the best ground
+    -- choice. Check the direct route first and only scan angles
+    -- when a wall is actually present.
+    local directWall =
+        GetWallThreat(
+            root,
+            base
+        )
+
+    if not directWall then
+        return {
+            Direction = base,
+            Score = 103,
+            Clearance = CONFIG.WallLookAheadMax,
+            Hit = nil,
+        }
+    end
 
     local candidates = {}
 
@@ -1350,7 +1370,8 @@ local function GetBestGroundDirection(
     Add(RotateY(base, math.rad(65)))
     Add(RotateY(base, math.rad(-65)))
 
-    local best = candidates[1]
+    local best =
+        candidates[1]
 
     for _, candidate in ipairs(
         candidates
