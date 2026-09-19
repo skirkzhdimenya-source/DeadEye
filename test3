@@ -332,6 +332,10 @@ local function RightFromYaw(yaw)
 end
 
 local function AngleDifference(a, b)
+    if type(a) ~= "number" or type(b) ~= "number" then
+        return 0
+    end
+
     return math.atan2(
         math.sin(b - a),
         math.cos(b - a)
@@ -368,6 +372,10 @@ local function SetCameraYaw(targetYaw)
     local camera = workspace.CurrentCamera
 
     if not camera then
+        return
+    end
+
+    if type(targetYaw) ~= "number" then
         return
     end
 
@@ -870,15 +878,36 @@ local function GetBestAirAction(
         < 0.001
     then
 
+        local fallbackWishDir =
+            Vector3.new(
+                1,
+                0,
+                0
+            )
+
+        local fallbackSide = currentSide
+        if fallbackSide ~= 1 and fallbackSide ~= -1 then
+            fallbackSide = 1
+        end
+
+        local fallbackCameraYaw
+        if fallbackSide > 0 then
+            fallbackCameraYaw = math.atan2(
+                -fallbackWishDir.Z,
+                fallbackWishDir.X
+            )
+        else
+            fallbackCameraYaw = math.atan2(
+                fallbackWishDir.Z,
+                -fallbackWishDir.X
+            )
+        end
+
         return {
-            Side = currentSide,
-            WishDir =
-                Vector3.new(
-                    1,
-                    0,
-                    0
-                ),
+            Side = fallbackSide,
+            WishDir = fallbackWishDir,
             Score = 0,
+            CameraYaw = fallbackCameraYaw,
         }
     end
 
