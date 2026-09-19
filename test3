@@ -813,6 +813,81 @@ local function GetClearance(
 end
 
 --==============================================================--
+-- FRICTION
+--==============================================================--
+--
+-- Predictor-side equivalent of the game's friction step.
+-- The game calls Helpers:ApplyFriction() from Run/Air.
+-- test3 did not have a local implementation, so PredictPath()
+-- was crashing as soon as its simulated state touched the ground.
+--
+-- multiplier:
+--   1.0 = normal ground/air friction
+--   smaller values = reduced friction (used by Slide in game)
+--
+--==============================================================--
+
+local function ApplyFriction(
+    velocity,
+    dt,
+    multiplier
+)
+
+    multiplier =
+        tonumber(multiplier)
+        or 1
+
+    if multiplier < 0 then
+        multiplier = 0
+    end
+
+    local flatVelocity =
+        Flat(velocity)
+
+    local speed =
+        flatVelocity.Magnitude
+
+    if speed < 0.00001 then
+        return velocity
+    end
+
+    local controlSpeed =
+        math.max(
+            speed,
+            PHYSICS.RunDeaccel
+        )
+
+    local drop =
+        controlSpeed
+        * PHYSICS.Friction
+        * dt
+        * multiplier
+
+    local newSpeed =
+        math.max(
+            speed - drop,
+            0
+        )
+
+    if newSpeed <= 0 then
+        return Vector3.new(
+            0,
+            velocity.Y,
+            0
+        )
+    end
+
+    local scale =
+        newSpeed / speed
+
+    return Vector3.new(
+        flatVelocity.X * scale,
+        velocity.Y,
+        flatVelocity.Z * scale
+    )
+end
+
+--==============================================================--
 -- EXACT ACCELERATE
 --==============================================================--
 
