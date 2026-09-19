@@ -1483,7 +1483,8 @@ end
 
 local function GetWallEscapeDirection(
     root,
-    velocity
+    velocity,
+    existingWall
 )
 
     local direction =
@@ -1497,10 +1498,15 @@ local function GetWallEscapeDirection(
         )
 
     local wall =
-        GetWallThreat(
-            root,
-            direction
-        )
+        existingWall
+
+    if wall == nil then
+        wall =
+            GetWallThreat(
+                root,
+                direction
+            )
+    end
 
     if not wall then
         return nil
@@ -2779,11 +2785,16 @@ local function ControllerUpdate()
         local targetDirection =
             groundAction.Direction
 
-        local wallEscape =
-            GetWallEscapeDirection(
-                root,
-                velocity
-            )
+        local wallEscape = nil
+
+        if groundAction.Hit then
+            wallEscape =
+                GetWallEscapeDirection(
+                    root,
+                    velocity,
+                    groundAction.Hit
+                )
+        end
 
         if wallEscape then
             targetDirection =
@@ -2810,11 +2821,15 @@ local function ControllerUpdate()
                 targetDirection
             )
 
-        local wall =
-            GetWallThreat(
-                root,
-                targetDirection
-            )
+        local wall = nil
+
+        if not CONFIG.AutoBhop then
+            wall =
+                GetWallThreat(
+                    root,
+                    targetDirection
+                )
+        end
 
         if CONFIG.AutoBhop then
 
@@ -2861,11 +2876,16 @@ local function ControllerUpdate()
             -- WALL OVERRIDE
             --==================================================--
 
-            local escape =
-                GetWallEscapeDirection(
-                    root,
-                    velocity
-                )
+            local escape = nil
+
+            if action.Wall then
+                escape =
+                    GetWallEscapeDirection(
+                        root,
+                        velocity,
+                        action.Wall
+                    )
+            end
 
             if escape then
 
