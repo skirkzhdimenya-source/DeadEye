@@ -146,6 +146,13 @@ local CONFIG = {
     PathDistance = 100,
     PathPointSpacing = 0.75,
 
+    -- Predictor is visual only, so it does not need full 60 Hz physics.
+    PathUpdateInterval = 0.12,
+    PredictionTick = 1 / 30,
+    PredictionMaxSteps = 900,
+    PredictionCollisionEvery = 3,
+    PredictionGroundEvery = 3,
+
     --==========================================================--
     -- GUI
     --==========================================================--
@@ -160,9 +167,14 @@ local CONFIG = {
 local cleanupDone = false
 
 local currentSide = 1
+local wasGrounded = false
+
 local lastJump = 0
 local lastTick = 0
 local lastPathUpdate = 0
+
+local CachedFilterCharacter = nil
+local CachedFilterRoot = nil
 
 local keys = {
     W = false,
@@ -460,11 +472,24 @@ RayParams.FilterType =
 RayParams.IgnoreWater = true
 RayParams.RespectCanCollide = true
 
-local function UpdateRayFilter()
+local function UpdateRayFilter(force)
     local list = {}
 
     local character =
         LocalPlayer.Character
+
+    local root =
+        character
+        and character:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not force
+        and character == CachedFilterCharacter
+        and root == CachedFilterRoot
+    then
+        return
+    end
 
     if character then
         table.insert(
@@ -524,22 +549,17 @@ local function UpdateRayFilter()
         list
 
     -- Match the character's collision group.
-    if character then
+    if root then
 
-        local root =
-            character:FindFirstChild(
-                "HumanoidRootPart"
-            )
+        pcall(function()
+            RayParams.CollisionGroup =
+                root.CollisionGroup
+        end)
 
-        if root then
-
-            pcall(function()
-                RayParams.CollisionGroup =
-                    root.CollisionGroup
-            end)
-
-        end
     end
+
+    CachedFilterCharacter = character
+    CachedFilterRoot = root
 end
 
 UpdateRayFilter()
@@ -626,8 +646,9 @@ end
 -- WALL BLOCKCAST
 --==============================================================--
 
-local function WallBlockcast(
+local function WallBlockcastAt(
     root,
+    castCFrame,
     direction,
     distance
 )
@@ -664,7 +685,7 @@ local function WallBlockcast(
 
     local result =
         workspace:Blockcast(
-            root.CFrame,
+            castCFrame,
             castSize,
             direction * distance,
             RayParams
@@ -679,6 +700,19 @@ local function WallBlockcast(
     end
 
     return nil
+end
+
+local function WallBlockcast(
+    root,
+    direction,
+    distance
+)
+    return WallBlockcastAt(
+        root,
+        root.CFrame,
+        direction,
+        distance
+    )
 end
 
 --==============================================================--
@@ -747,10 +781,8 @@ local function FindWallAround(
                 then
 
                     -- Keep the closest collision
-                    -- as the actual threat.
-                    if degrees == 0 then
-                        bestHit = hit
-                    end
+                    -- from any scanned angle.
+                    bestHit = hit
 
                 end
             end
@@ -795,12 +827,15 @@ end
 local function GetClearance(
     root,
     direction,
-    distance
+    distance,
+    castCFrame
 )
 
     local hit =
-        WallBlockcast(
+        WallBlockcastAt(
             root,
+            castCFrame
+            or root.CFrame,
             direction,
             distance
         )
@@ -1124,16 +1159,10 @@ local function GetBestAirAction(
 
     -- Additional angles for wall avoidance.
     local angles = {
+        75,
+        -75,
         60,
         -60,
-        70,
-        -70,
-        80,
-        -80,
-        100,
-        -100,
-        110,
-        -110,
         45,
         -45,
         30,
@@ -1518,6 +1547,60 @@ end
 -- PATH PREDICTION
 --==============================================================--
 
+local function GetPredictionAirAction(
+    internalVelocity,
+    side,
+    dt
+)
+
+    local flatVelocity =
+        Flat(
+            internalVelocity
+        )
+
+    if flatVelocity.Magnitude
+        < 0.001
+    then
+        return internalVelocity,
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+    end
+
+    local velocityDirection =
+        flatVelocity.Unit
+
+    local strafeAngle
+
+    if side > 0 then
+        strafeAngle =
+            math.rad(90)
+    else
+        strafeAngle =
+            math.rad(-90)
+    end
+
+    local wishDirection =
+        RotateY(
+            velocityDirection,
+            strafeAngle
+        )
+
+    local predicted =
+        Accelerate(
+            internalVelocity,
+            wishDirection,
+            PHYSICS.AirStrafeAcceleration,
+            PHYSICS.AirStrafeAcceleration,
+            dt
+        )
+
+    return predicted,
+        wishDirection
+end
+
 local function PredictPath()
 
     local character =
@@ -1543,6 +1626,13 @@ local function PredictPath()
         return {}
     end
 
+    local camera =
+        workspace.CurrentCamera
+
+    if not camera then
+        return {}
+    end
+
     local position =
         root.Position
 
@@ -1558,9 +1648,6 @@ local function PredictPath()
     if internalVelocity.Magnitude
         < 10
     then
-
-        local camera =
-            workspace.CurrentCamera
 
         internalVelocity =
             SafeUnit(
@@ -1599,43 +1686,42 @@ local function PredictPath()
     local side =
         currentSide
 
-    for step = 1, 12000 do
+    -- Preserve the real root's orientation while moving the
+    -- prediction's collision volume to its simulated position.
+    local rootOrientation =
+        CFrame.fromMatrix(
+            Vector3.new(),
+            root.CFrame.RightVector,
+            root.CFrame.UpVector,
+            -root.CFrame.LookVector
+        )
+
+    for step = 1,
+        CONFIG.PredictionMaxSteps
+    do
 
         if ENV.StrafeControllerStop then
             return points
         end
 
-        --======================================================--
-        -- AIR STRAFE
-        --======================================================--
+        local predictionDt =
+            CONFIG.PredictionTick
 
-        local action =
-            GetBestAirAction(
-                root,
-                internalVelocity
-                / PHYSICS.Scale
+        local nextVelocity,
+        wishDirection =
+            GetPredictionAirAction(
+                internalVelocity,
+                side,
+                predictionDt
             )
 
-        if action then
-            side =
-                action.Side
-
-            internalVelocity =
-                action.Velocity
-        end
-
-        --======================================================--
-        -- GRAVITY
-        --======================================================--
+        internalVelocity =
+            nextVelocity
 
         vertical =
             vertical
             - gravity
-            * CONFIG.Tick
-
-        --======================================================--
-        -- REAL VELOCITY
-        --======================================================--
+            * predictionDt
 
         local horizontal =
             internalVelocity
@@ -1652,162 +1738,155 @@ local function PredictPath()
         local newPosition =
             position
             + frameVelocity
-            * CONFIG.Tick
+            * predictionDt
 
-        --======================================================--
-        -- WALL COLLISION
-        --======================================================--
+        -- World collision checks are deliberately throttled.
+        -- The old version performed many Blockcasts for every
+        -- simulated frame and was the main FPS killer.
+        if step
+            % CONFIG.PredictionCollisionEvery
+            == 0
+        then
 
-        local movement =
-            Flat(
-                newPosition
-                - position
-            )
-
-        if movement.Magnitude > 0 then
-
-            local wall =
-                WallBlockcast(
-                    root,
-                    movement.Unit,
-                    movement.Magnitude + 1
+            local movement =
+                Flat(
+                    newPosition
+                    - position
                 )
 
-            if wall then
+            if movement.Magnitude > 0 then
 
-                local normal =
-                    Flat(
-                        wall.Normal
+                local castCFrame =
+                    CFrame.new(
+                        position
+                    )
+                    * rootOrientation
+
+                local wall =
+                    WallBlockcastAt(
+                        root,
+                        castCFrame,
+                        movement.Unit,
+                        movement.Magnitude
+                        + 1
                     )
 
-                if normal.Magnitude
-                    > 0.001
-                then
+                if wall then
 
-                    normal =
-                        normal.Unit
-
-                    local tangent =
-                        Vector3.new(
-                            -normal.Z,
-                            0,
-                            normal.X
+                    local normal =
+                        Flat(
+                            wall.Normal
                         )
 
-                    local leftClear =
-                        GetClearance(
-                            root,
-                            tangent,
-                            8
-                        )
-
-                    local rightClear =
-                        GetClearance(
-                            root,
-                            -tangent,
-                            8
-                        )
-
-                    local escape
-
-                    if leftClear
-                        > rightClear
+                    if normal.Magnitude
+                        > 0.001
                     then
 
-                        escape =
-                            tangent
+                        normal =
+                            normal.Unit
 
-                    else
+                        local tangent =
+                            Vector3.new(
+                                -normal.Z,
+                                0,
+                                normal.X
+                            )
 
-                        escape =
-                            -tangent
+                        local leftClear =
+                            GetClearance(
+                                root,
+                                tangent,
+                                8,
+                                castCFrame
+                            )
 
+                        local rightClear =
+                            GetClearance(
+                                root,
+                                -tangent,
+                                8,
+                                castCFrame
+                            )
+
+                        local escape
+
+                        if leftClear
+                            > rightClear
+                        then
+                            escape = tangent
+                        else
+                            escape = -tangent
+                        end
+
+                        internalVelocity =
+                            Accelerate(
+                                internalVelocity,
+                                escape,
+                                PHYSICS.AirStrafeAcceleration,
+                                PHYSICS.AirStrafeAcceleration,
+                                predictionDt
+                            )
+
+                        wishDirection =
+                            escape
                     end
-
-                    internalVelocity =
-                        Accelerate(
-                            internalVelocity,
-                            escape,
-                            PHYSICS.AirStrafeAcceleration,
-                            PHYSICS.AirStrafeAcceleration,
-                            CONFIG.Tick
-                        )
-
-                    horizontal =
-                        internalVelocity
-                        / PHYSICS.Scale
-
-                    frameVelocity =
-                        horizontal
-                        + Vector3.new(
-                            0,
-                            vertical,
-                            0
-                        )
-
-                    newPosition =
-                        position
-                        + frameVelocity
-                        * CONFIG.Tick
-
                 end
             end
         end
 
-        --======================================================--
-        -- TERRAIN
-        --======================================================--
-
-        local ground =
-            GroundAt(
-                newPosition
-            )
-
-        if
-            ground
-            and IsWalkable(
-                ground.Normal
-            )
+        -- Terrain is also sampled less often. Between samples
+        -- the prediction is simply integrated forward.
+        if step
+            % CONFIG.PredictionGroundEvery
+            == 0
         then
 
-            local floorY =
-                ground.Position.Y
-                + 2
+            local ground =
+                GroundAt(
+                    newPosition
+                )
 
-            if newPosition.Y
-                <= floorY
+            if
+                ground
+                and IsWalkable(
+                    ground.Normal
+                )
             then
 
-                newPosition =
-                    Vector3.new(
-                        newPosition.X,
-                        floorY,
-                        newPosition.Z
-                    )
+                local floorY =
+                    ground.Position.Y
+                    + 2
 
-                internalVelocity =
-                    ApplyFriction(
-                        internalVelocity,
-                        CONFIG.Tick,
-                        1
-                    )
+                if newPosition.Y
+                    <= floorY
+                then
 
-                vertical =
-                    math.sqrt(
-                        2
-                        * gravity
-                        * PHYSICS.JumpHeight
-                    )
+                    newPosition =
+                        Vector3.new(
+                            newPosition.X,
+                            floorY,
+                            newPosition.Z
+                        )
 
-                side =
-                    -side
+                    internalVelocity =
+                        ApplyFriction(
+                            internalVelocity,
+                            predictionDt,
+                            1
+                        )
 
+                    vertical =
+                        math.sqrt(
+                            2
+                            * gravity
+                            * PHYSICS.JumpHeight
+                        )
+
+                    side =
+                        -side
+                end
             end
         end
-
-        --======================================================--
-        -- DISTANCE
-        --======================================================--
 
         local delta =
             Flat(
@@ -1824,10 +1903,6 @@ local function PredictPath()
         travelled =
             travelled
             + stepDistance
-
-        --======================================================--
-        -- POINTS
-        --======================================================--
 
         if stepDistance > 0 then
 
@@ -2376,7 +2451,7 @@ local function SetEnabled(
         value
 
     if value then
-        UpdateRayFilter()
+        UpdateRayFilter(true)
     else
         ReleaseAllKeys()
         ClearLines()
@@ -2398,6 +2473,19 @@ Toggle.MouseButton1Click:Connect(
 --==============================================================--
 -- HOTKEY
 --==============================================================--
+
+local CharacterConnection
+
+CharacterConnection =
+    LocalPlayer.CharacterAdded:Connect(
+        function()
+            task.defer(function()
+                if not cleanupDone then
+                    UpdateRayFilter(true)
+                end
+            end)
+        end
+    )
 
 local InputConnection
 
@@ -2478,7 +2566,9 @@ local function ControllerUpdate()
         return
     end
 
-    UpdateRayFilter()
+    -- Raycast filter is cached and refreshed on character changes.
+    -- Rebuilding FilterDescendantsInstances every frame was needless
+    -- overhead.
 
     --==========================================================--
     -- VELOCITY
@@ -2726,7 +2816,7 @@ local function ControllerUpdate()
     if CONFIG.DrawPath then
 
         if now - lastPathUpdate
-            >= 0.05
+            >= CONFIG.PathUpdateInterval
         then
 
             lastPathUpdate =
@@ -2781,6 +2871,11 @@ local function CleanupInternal()
     if InputConnection then
         InputConnection:Disconnect()
         InputConnection = nil
+    end
+
+    if CharacterConnection then
+        CharacterConnection:Disconnect()
+        CharacterConnection = nil
     end
 
     for _, line in ipairs(
