@@ -1024,6 +1024,13 @@ local function GetBestAirAction(
     local velocityDirection =
         flatVelocity.Unit
 
+    -- The game's movement code works in internal velocity
+    -- units and the BaseMover converts them by /90.
+    -- root.AssemblyLinearVelocity is already real studs/sec.
+    local internalVelocity =
+        flatVelocity
+        * PHYSICS.Scale
+
     local wall =
         GetWallThreat(
             root,
@@ -1043,14 +1050,18 @@ local function GetBestAirAction(
                 velocityDirection
             )
 
-        local predicted =
+        local predictedInternal =
             Accelerate(
-                flatVelocity,
+                internalVelocity,
                 direction,
                 PHYSICS.AirStrafeAcceleration,
                 PHYSICS.AirStrafeAcceleration,
                 CONFIG.Tick
             )
+
+        local predicted =
+            predictedInternal
+            / PHYSICS.Scale
 
         local nextSpeed =
             predicted.Magnitude
@@ -1197,10 +1208,30 @@ local function GetBestAirAction(
         candidates
     ) do
 
-        if
+        local betterScore =
             not best
             or candidate.Score
             > best.Score
+
+        local sameScore =
+            best
+            and math.abs(
+                candidate.Score
+                - best.Score
+            ) < 0.0001
+
+        -- When both sides are equally good, keep the current
+        -- side. Landing flips currentSide, so A/D naturally
+        -- alternate instead of always selecting the first candidate.
+        local betterTieBreak =
+            sameScore
+            and candidate.Side
+                == currentSide
+            and best.Side
+                ~= currentSide
+
+        if betterScore
+            or betterTieBreak
         then
 
             best =
