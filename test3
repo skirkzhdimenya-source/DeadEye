@@ -80,7 +80,7 @@ local CONFIG = {
     -- CAMERA
     --==========================================================--
 
-    -- 75 degrees / second.
+    -- Maximum camera turn speed.
     -- Smaller = slower.
     CameraTurnSpeed = math.rad(1500),
 
@@ -148,10 +148,10 @@ local CONFIG = {
 
     -- Predictor is visual only, so it does not need full 60 Hz physics.
     PathUpdateInterval = 0.12,
-    PredictionTick = 1 / 30,
+    PredictionTick = 1 / 60,
     PredictionMaxSteps = 900,
-    PredictionCollisionEvery = 3,
-    PredictionGroundEvery = 3,
+    PredictionCollisionEvery = 4,
+    PredictionGroundEvery = 4,
 
     --==========================================================--
     -- GUI
@@ -1676,6 +1676,12 @@ local function PredictPath()
         velocity
         * PHYSICS.Scale
 
+    local startsGrounded =
+        IsGrounded(
+            root,
+            humanoid
+        )
+
     if internalVelocity.Magnitude
         < 10
     then
@@ -1695,15 +1701,74 @@ local function PredictPath()
 
     end
 
+    -- Reproduce the horizontal jump-speed adjustment from test2.
+    -- The game stores velocity in internal units and applies
+    -- JumpSpeedMultiplier only when the current speed is below
+    -- the view-aligned sprint cap.
+    if startsGrounded
+        and internalVelocity.Magnitude > 0.001
+    then
+
+        local velocityDirection =
+            internalVelocity.Unit
+
+        local lookDirection =
+            SafeUnit(
+                Flat(
+                    root.CFrame.LookVector
+                ),
+                velocityDirection
+            )
+
+        local alignment =
+            math.clamp(
+                lookDirection:Dot(
+                    velocityDirection
+                ),
+                -1,
+                1
+            )
+
+        local jumpSpeedLimit =
+            PHYSICS.Speed
+            * PHYSICS.SprintCap
+            * PHYSICS.JumpSpeedMultiplier
+            * alignment
+            * alignment
+
+        local boostedSpeed =
+            math.min(
+                internalVelocity.Magnitude
+                * PHYSICS.JumpSpeedMultiplier,
+                jumpSpeedLimit
+            )
+
+        if boostedSpeed
+            > internalVelocity.Magnitude
+        then
+
+            internalVelocity =
+                velocityDirection
+                * boostedSpeed
+        end
+    end
+
     local gravity =
         workspace.Gravity
 
-    local vertical =
-        math.sqrt(
-            2
-            * gravity
-            * PHYSICS.JumpHeight
-        )
+    local vertical
+
+    if startsGrounded then
+        vertical =
+            math.sqrt(
+                2
+                * gravity
+                * PHYSICS.JumpHeight
+            )
+    else
+        vertical =
+            root.AssemblyLinearVelocity.Y
+    end
 
     local points = {
         position
@@ -2509,11 +2574,23 @@ local CharacterConnection
 
 CharacterConnection =
     LocalPlayer.CharacterAdded:Connect(
-        function()
+        function(character)
             task.defer(function()
-                if not cleanupDone then
-                    UpdateRayFilter(true)
+                if cleanupDone then
+                    return
                 end
+
+                character:WaitForChild(
+                    "HumanoidRootPart",
+                    5
+                )
+
+                if cleanupDone then
+                    return
+                end
+
+                UpdateRayFilter(true)
+                wasGrounded = false
             end)
         end
     )
