@@ -82,22 +82,22 @@ local CONFIG = {
 
     -- 75 degrees / second.
     -- Smaller = slower.
-    CameraTurnSpeed = math.rad(75),
+    CameraTurnSpeed = math.rad(150),
 
     -- Exponential smoothing.
-    CameraSmoothness = 5,
+    CameraSmoothness = 4,
 
     -- Never apply roll.
-    CameraRoll = 0,
+    CameraRoll = 0, -- forced upright
 
     --==========================================================--
     -- WALL
     --==========================================================--
 
-    WallLookAheadMin = 4.5,
-    WallLookAheadMax = 12,
+    WallLookAheadMin = 3.5,
+    WallLookAheadMax = 9,
 
-    WallCriticalDistance = 2.25,
+    WallCriticalDistance = 1.75,
 
     WallWidthMultiplier = 1.12,
     WallHeightMultiplier = 0.92,
