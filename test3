@@ -2468,6 +2468,9 @@ local dragStart =
 local startPos =
     nil
 
+local DragConnection
+local DragEndConnection
+
 Header.InputBegan:Connect(
     function(input)
 
@@ -2485,53 +2488,52 @@ Header.InputBegan:Connect(
 
         startPos =
             Main.Position
+    end
+)
 
-        input.Changed:Connect(
-            function()
+DragConnection =
+    UserInputService.InputChanged:Connect(
+        function(input)
 
-                if input.UserInputState
-                    == Enum.UserInputState.End
-                then
-
-                    dragging =
-                        false
-
-                end
-
+            if not dragging then
+                return
             end
-        )
-    end
-)
 
-UserInputService.InputChanged:Connect(
-    function(input)
+            if input.UserInputType
+                ~= Enum.UserInputType.MouseMovement
+            then
+                return
+            end
 
-        if not dragging then
-            return
+            local delta =
+                input.Position
+                - dragStart
+
+            Main.Position =
+                UDim2.new(
+                    startPos.X.Scale,
+                    startPos.X.Offset
+                    + delta.X,
+
+                    startPos.Y.Scale,
+                    startPos.Y.Offset
+                    + delta.Y
+                )
         end
+    )
 
-        if input.UserInputType
-            ~= Enum.UserInputType.MouseMovement
-        then
-            return
+DragEndConnection =
+    UserInputService.InputEnded:Connect(
+        function(input)
+
+            if input.UserInputType
+                == Enum.UserInputType.MouseButton1
+            then
+                dragging =
+                    false
+            end
         end
-
-        local delta =
-            input.Position
-            - dragStart
-
-        Main.Position =
-            UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset
-                + delta.X,
-
-                startPos.Y.Scale,
-                startPos.Y.Offset
-                + delta.Y
-            )
-    end
-)
+    )
 
 --==============================================================--
 -- GUI STATE
@@ -2694,6 +2696,7 @@ local function ControllerUpdate()
 
     if not humanoid
         or not root
+        or humanoid.Health <= 0
     then
 
         ReleaseAllKeys()
@@ -3025,6 +3028,16 @@ local function CleanupInternal()
     if CharacterConnection then
         CharacterConnection:Disconnect()
         CharacterConnection = nil
+    end
+
+    if DragConnection then
+        DragConnection:Disconnect()
+        DragConnection = nil
+    end
+
+    if DragEndConnection then
+        DragEndConnection:Disconnect()
+        DragEndConnection = nil
     end
 
     for _, line in ipairs(
