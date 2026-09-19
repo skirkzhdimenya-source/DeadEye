@@ -108,6 +108,10 @@ local CONFIG = {
     WallTorsoBandHeight = 0.80,
     WallTorsoOffsetY = 0.20,
 
+    -- 0 = exact max-speed strafe angle.
+    -- 1 = exactly perpendicular (straighter path).
+    StrafeStraightness = 0.65,
+
     -- Additional angle probes around velocity.
     WallAngles = {
         -75,
@@ -1298,16 +1302,23 @@ local function GetBestAirAction(
 
         if wall then
 
-            clearance,
-            hit = GetClearance(
-                root,
-                direction,
-                math.clamp(
-                    nextSpeed * 0.45,
-                    4,
-                    12
+            local clearanceResult
+
+            clearanceResult =
+                table.pack(
+                    GetClearance(
+                        root,
+                        direction,
+                        math.clamp(
+                            nextSpeed * 0.45,
+                            4,
+                            12
+                        )
+                    )
                 )
-            )
+
+            clearance = clearanceResult[1]
+            hit = clearanceResult[2]
         end
 
         local score =
@@ -1415,11 +1426,34 @@ local function GetBestAirAction(
     local optimalAngle =
         math.acos(cosine)
 
-    -- Test both A/D sides using the exact optimum.
+    -- Keep most of the speed-maximizing angle, but bias it toward
+    -- 90 degrees so the flight path is less curved.
+    local straightness =
+        math.clamp(
+            CONFIG.StrafeStraightness,
+            0,
+            1
+        )
+
+    local perpendicular =
+        math.pi / 2
+
+    local strafeAngle =
+        perpendicular
+        + (
+            optimalAngle
+            - perpendicular
+        )
+        * (
+            1
+            - straightness
+        )
+
+    -- Test both A/D sides using the slightly straightened optimum.
     AddCandidate(
         RotateY(
             velocityDirection,
-            optimalAngle
+            strafeAngle
         ),
         1
     )
@@ -1427,7 +1461,7 @@ local function GetBestAirAction(
     AddCandidate(
         RotateY(
             velocityDirection,
-            -optimalAngle
+            -strafeAngle
         ),
         -1
     )
@@ -1452,7 +1486,7 @@ local function GetBestAirAction(
         ) do
 
             local angle =
-                optimalAngle
+                strafeAngle
                 + math.rad(
                     offset
                 )
