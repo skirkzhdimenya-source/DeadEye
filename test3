@@ -464,36 +464,56 @@ local function InstallGameInputHooks()
         end)
     end
 
-    ControlModule.GetMoveVector =
-        function(self, ...)
+    local ok =
+        pcall(function()
 
-            if cleanupDone
-                or not ENV.StrafeControllerEnabled
-            then
-                return OriginalControlGetMoveVector(
-                    self,
-                    ...
-                )
-            end
+            ControlModule.GetMoveVector =
+                function(self, ...)
 
-            return ForcedMoveDirection
-        end
+                    if cleanupDone
+                        or not ENV.StrafeControllerEnabled
+                    then
+                        return OriginalControlGetMoveVector(
+                            self,
+                            ...
+                        )
+                    end
 
-    CameraService.GetCFrame =
-        function(self, ...)
+                    return ForcedMoveDirection
+                end
 
-            if cleanupDone
-                or not ENV.StrafeControllerEnabled
-                or not ControlledCameraCFrame
-            then
-                return OriginalCameraGetCFrame(
-                    self,
-                    ...
-                )
-            end
+            CameraService.GetCFrame =
+                function(self, ...)
 
-            return ControlledCameraCFrame
-        end
+                    if cleanupDone
+                        or not ENV.StrafeControllerEnabled
+                        or not ControlledCameraCFrame
+                    then
+                        return OriginalCameraGetCFrame(
+                            self,
+                            ...
+                        )
+                    end
+
+                    return ControlledCameraCFrame
+                end
+
+        end)
+
+    if not ok then
+
+        ControlModule.GetMoveVector =
+            OriginalControlGetMoveVector
+
+        CameraService.GetCFrame =
+            OriginalCameraGetCFrame
+
+        OriginalControlGetMoveVector = nil
+        OriginalCameraGetCFrame = nil
+        ControlledCameraCFrame = nil
+
+        return
+    end
 
     GameHooksInstalled = true
 end
@@ -3048,25 +3068,7 @@ local function ControllerUpdate()
         -- AIR
         --======================================================--
 
-        -- Air movement is intentionally pure A/D.
-        -- test2 detects this as the special AirStrafe branch
-        -- only when MoveDirection.Z == 0 and X ~= 0.
-        if currentSide > 0 then
-            ForcedMoveDirection =
-                Vector3.new(
-                    1,
-                    0,
-                    0
-                )
-        else
-            ForcedMoveDirection =
-                Vector3.new(
-                    -1,
-                    0,
-                    0
-                )
-        end
-
+        -- The game's Air branch requires pure lateral input.
         SetKey(
             "W",
             KEY_W,
@@ -3087,6 +3089,22 @@ local function ControllerUpdate()
 
             currentSide =
                 action.Side
+
+            if currentSide > 0 then
+                ForcedMoveDirection =
+                    Vector3.new(
+                        1,
+                        0,
+                        0
+                    )
+            else
+                ForcedMoveDirection =
+                    Vector3.new(
+                        -1,
+                        0,
+                        0
+                    )
+            end
 
             --==================================================--
             -- WALL OVERRIDE
