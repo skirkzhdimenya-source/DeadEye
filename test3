@@ -103,6 +103,11 @@ local CONFIG = {
     WallHeightMultiplier = 0.92,
     WallDepthMultiplier = 1.12,
 
+    -- Only this vertical band is considered a wall.
+    -- Low obstacles below the torso are ignored.
+    WallTorsoBandHeight = 0.80,
+    WallTorsoOffsetY = 0.20,
+
     -- Additional angle probes around velocity.
     WallAngles = {
         -75,
@@ -868,6 +873,16 @@ local function WallBlockcastAt(
     local size =
         root.Size
 
+    -- Wall detection is intentionally limited to the torso band.
+    -- A low ledge / curb that does not reach this band is ignored.
+    local torsoCFrame =
+        castCFrame
+        * CFrame.new(
+            0,
+            CONFIG.WallTorsoOffsetY,
+            0
+        )
+
     local castSize =
         Vector3.new(
             math.max(
@@ -876,11 +891,7 @@ local function WallBlockcastAt(
                 * CONFIG.WallWidthMultiplier
             ),
 
-            math.max(
-                0.1,
-                size.Y
-                * CONFIG.WallHeightMultiplier
-            ),
+            CONFIG.WallTorsoBandHeight,
 
             math.max(
                 0.1,
@@ -891,7 +902,7 @@ local function WallBlockcastAt(
 
     local result =
         workspace:Blockcast(
-            castCFrame,
+            torsoCFrame,
             castSize,
             direction * distance,
             RayParams
