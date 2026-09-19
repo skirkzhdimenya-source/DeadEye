@@ -359,29 +359,204 @@ end
 --==============================================================--
 
 local CameraService = nil
+local ControlModule = nil
+
+local OriginalCameraGetCFrame = nil
+local OriginalControlGetMoveVector = nil
+
+local GameHooksInstalled = false
+
+local ForcedMoveDirection =
+    Vector3.new(
+        0,
+        0,
+        -1
+    )
+
+local ControlledCameraCFrame = nil
 
 pcall(function()
-    local services = ReplicatedStorage:WaitForChild("Services")
-    local client = services:WaitForChild("Client")
-    CameraService = require(
-        client:WaitForChild("CameraService")
-    )
+    local services =
+        ReplicatedStorage:WaitForChild(
+            "Services"
+        )
+
+    local client =
+        services:WaitForChild(
+            "Client"
+        )
+
+    CameraService =
+        require(
+            client:WaitForChild(
+                "CameraService"
+            )
+        )
 end)
 
-local function GetCameraYaw()
-    local camera = workspace.CurrentCamera
+pcall(function()
+    local playerScripts =
+        LocalPlayer:WaitForChild(
+            "PlayerScripts"
+        )
 
-    if not camera then
-        return 0
+    local playerModule =
+        playerScripts:WaitForChild(
+            "PlayerModule"
+        )
+
+    ControlModule =
+        require(
+            playerModule:WaitForChild(
+                "ControlModule"
+            )
+        )
+end)
+
+local function InstallGameInputHooks()
+
+    if GameHooksInstalled then
+        return
+    end
+
+    if not ControlModule
+        or type(
+            ControlModule.GetMoveVector
+        ) ~= "function"
+    then
+        return
+    end
+
+    if not CameraService
+        or type(
+            CameraService.GetCFrame
+        ) ~= "function"
+    then
+        return
+    end
+
+    OriginalControlGetMoveVector =
+        ControlModule.GetMoveVector
+
+    OriginalCameraGetCFrame =
+        CameraService.GetCFrame
+
+    local camera =
+        workspace.CurrentCamera
+
+    if camera then
+
+        ControlledCameraCFrame =
+            camera.CFrame
+
+        pcall(function()
+            local original =
+                OriginalCameraGetCFrame(
+                    CameraService
+                )
+
+            if typeof(original)
+                == "CFrame"
+            then
+                ControlledCameraCFrame =
+                    original
+            end
+        end)
+    end
+
+    ControlModule.GetMoveVector =
+        function(self, ...)
+
+            if cleanupDone
+                or not ENV.StrafeControllerEnabled
+            then
+                return OriginalControlGetMoveVector(
+                    self,
+                    ...
+                )
+            end
+
+            return ForcedMoveDirection
+        end
+
+    CameraService.GetCFrame =
+        function(self, ...)
+
+            if cleanupDone
+                or not ENV.StrafeControllerEnabled
+                or not ControlledCameraCFrame
+            then
+                return OriginalCameraGetCFrame(
+                    self,
+                    ...
+                )
+            end
+
+            return ControlledCameraCFrame
+        end
+
+    GameHooksInstalled = true
+end
+
+local function RestoreGameInputHooks()
+
+    if not GameHooksInstalled then
+        return
+    end
+
+    if ControlModule
+        and OriginalControlGetMoveVector
+    then
+
+        pcall(function()
+            ControlModule.GetMoveVector =
+                OriginalControlGetMoveVector
+        end)
+
+    end
+
+    if CameraService
+        and OriginalCameraGetCFrame
+    then
+
+        pcall(function()
+            CameraService.GetCFrame =
+                OriginalCameraGetCFrame
+        end)
+
+    end
+
+    GameHooksInstalled = false
+    OriginalControlGetMoveVector = nil
+    OriginalCameraGetCFrame = nil
+    ControlledCameraCFrame = nil
+end
+
+local function GetCameraYaw()
+    local currentCFrame =
+        ControlledCameraCFrame
+
+    if not currentCFrame then
+
+        local camera =
+            workspace.CurrentCamera
+
+        if not camera then
+            return 0
+        end
+
+        currentCFrame =
+            camera.CFrame
     end
 
     return YawFromDirection(
-        camera.CFrame.LookVector
+        currentCFrame.LookVector
     )
 end
 
 local function SetCameraYaw(targetYaw)
-    local camera = workspace.CurrentCamera
+    local camera =
+        workspace.CurrentCamera
 
     if not camera then
         return
@@ -391,14 +566,22 @@ local function SetCameraYaw(targetYaw)
         return
     end
 
-    local currentCFrame = camera.CFrame
+    local currentCFrame =
+        ControlledCameraCFrame
 
-    local pitch = select(
-        1,
-        currentCFrame:ToOrientation()
-    )
+    if not currentCFrame then
+        currentCFrame =
+            camera.CFrame
+    end
 
-    local currentYaw = GetCameraYaw()
+    local pitch =
+        select(
+            1,
+            currentCFrame:ToOrientation()
+        )
+
+    local currentYaw =
+        GetCameraYaw()
 
     local delta = AngleDifference(
         currentYaw,
@@ -435,13 +618,16 @@ local function SetCameraYaw(targetYaw)
     -- roll is ALWAYS zero
     local newCFrame =
         CFrame.new(
-            currentCFrame.Position
+            camera.CFrame.Position
         )
         * CFrame.Angles(
             pitch,
             newYaw,
             CONFIG.CameraRoll
         )
+
+    ControlledCameraCFrame =
+        newCFrame
 
     if CameraService then
         local ok = pcall(function()
@@ -2576,8 +2762,10 @@ local function SetEnabled(
         value
 
     if value then
+        InstallGameInputHooks()
         UpdateRayFilter(true)
     else
+        RestoreGameInputHooks()
         ReleaseAllKeys()
         ClearLines()
     end
@@ -2765,11 +2953,19 @@ local function ControllerUpdate()
 
     if grounded then
 
-        -- forward movement
+        -- Ground movement is supplied directly to the
+        -- game's ControlModule as W.
+        ForcedMoveDirection =
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+
         SetKey(
             "W",
             KEY_W,
-            true
+            false
         )
 
         ReleaseStrafe()
@@ -2852,12 +3048,29 @@ local function ControllerUpdate()
         -- AIR
         --======================================================--
 
-        -- Keep W held.
-        -- The game's Air code removes its forward component.
+        -- Air movement is intentionally pure A/D.
+        -- test2 detects this as the special AirStrafe branch
+        -- only when MoveDirection.Z == 0 and X ~= 0.
+        if currentSide > 0 then
+            ForcedMoveDirection =
+                Vector3.new(
+                    1,
+                    0,
+                    0
+                )
+        else
+            ForcedMoveDirection =
+                Vector3.new(
+                    -1,
+                    0,
+                    0
+                )
+        end
+
         SetKey(
             "W",
             KEY_W,
-            true
+            false
         )
 
         --======================================================--
@@ -3012,6 +3225,13 @@ local function CleanupInternal()
 
     ReleaseAllKeys()
 
+    ForcedMoveDirection =
+        Vector3.new(
+            0,
+            0,
+            0
+        )
+
     ClearLines()
 
     pcall(function()
@@ -3055,6 +3275,8 @@ local function CleanupInternal()
     if ScreenGui then
         ScreenGui:Destroy()
     end
+
+    RestoreGameInputHooks()
 
     ENV.__DeadEyeStrafeControllerCleanup =
         nil
