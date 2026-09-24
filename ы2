@@ -4882,15 +4882,6 @@ function others.applyDescription(
             "Применено"
     end
 
-    task.delay(
-        0.2,
-        function()
-            pcall(function()
-                others.refresh()
-            end)
-        end
-    )
-
     return true
 
 end
@@ -5494,10 +5485,12 @@ function others.row(
             function(enterPressed)
 
                 if enterPressed then
-                    others.applyField(
+                    if others.applyField(
                         slot,
                         box.Text
-                    )
+                    ) then
+                        others.saveConfig()
+                    end
                 end
 
             end
