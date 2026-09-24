@@ -1754,7 +1754,7 @@ for slotIndex = 1, SLOT_COUNT do
     slotLabel.Size =
         UDim2.new(
             0,
-            52,
+            76,
             1,
             0
         )
@@ -1762,7 +1762,7 @@ for slotIndex = 1, SLOT_COUNT do
     slotLabel.Position =
         UDim2.new(
             0,
-            5,
+            6,
             0,
             0
         )
@@ -1809,7 +1809,7 @@ for slotIndex = 1, SLOT_COUNT do
     originalButton.Position =
         UDim2.new(
             0,
-            60,
+            84,
             0.5,
             -16
         )
@@ -1880,7 +1880,7 @@ for slotIndex = 1, SLOT_COUNT do
     arrow.Position =
         UDim2.new(
             0,
-            172,
+            194,
             0.5,
             -16
         )
@@ -1915,7 +1915,7 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.Size =
         UDim2.new(
             0,
-            108,
+            110,
             0,
             32
         )
@@ -1923,7 +1923,7 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.Position =
         UDim2.new(
             0,
-            194,
+            216,
             0.5,
             -16
         )
@@ -2782,9 +2782,17 @@ local function setMainMinimized(state)
         Main.Size =
             UDim2.new(
                 0,
-                380,
+                245,
                 0,
                 40
+            )
+
+        MainTitle.Size =
+            UDim2.new(
+                0,
+                155,
+                0,
+                36
             )
 
         Status.Visible = false
@@ -2805,6 +2813,14 @@ local function setMainMinimized(state)
                 380,
                 0,
                 320
+            )
+
+        MainTitle.Size =
+            UDim2.new(
+                1,
+                -105,
+                0,
+                36
             )
 
         Status.Visible = true
