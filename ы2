@@ -7128,6 +7128,266 @@ function others.applyBodyPart(
 
 end
 
+--// =========================================================
+--// APPLY ALL OTHERS
+--// Applies every current field in one HumanoidDescription call.
+--// =========================================================
+
+function others.applyAll()
+
+    local description =
+        others.getDescription()
+
+    if not description then
+        return false
+    end
+
+    local groups = {
+        others.ACCESSORY_SLOTS,
+        others.CLOTHING_SLOTS,
+        others.BODY_SLOTS
+    }
+
+    local changed = 0
+
+    for _, group in ipairs(
+        groups
+    ) do
+
+        for _, slot in ipairs(
+            group
+        ) do
+
+            local box =
+                others.fieldBoxes[
+                    slot.property
+                ]
+
+            if box then
+
+                local value
+
+                if slot.multi then
+
+                    value =
+                        tostring(
+                            box.Text
+                            or ""
+                        )
+
+                    value =
+                        string.gsub(
+                            value,
+                            "%s+",
+                            ""
+                        )
+
+                    value =
+                        string.gsub(
+                            value,
+                            "[^%d,]",
+                            ""
+                        )
+
+                    value =
+                        string.gsub(
+                            value,
+                            ",+",
+                            ","
+                        )
+
+                    value =
+                        string.gsub(
+                            value,
+                            "^,",
+                            ""
+                        )
+
+                    value =
+                        string.gsub(
+                            value,
+                            ",$",
+                            ""
+                        )
+
+                else
+
+                    value =
+                        tonumber(
+                            string.match(
+                                tostring(
+                                    box.Text
+                                    or ""
+                                ),
+                                "%d+"
+                            )
+                        )
+                        or 0
+
+                end
+
+                local ok =
+                    pcall(function()
+
+                        description[
+                            slot.property
+                        ] =
+                            value
+
+                    end)
+
+                if ok then
+                    changed += 1
+                end
+
+            end
+
+        end
+
+    end
+
+    if changed == 0 then
+        return false
+    end
+
+    return others.applyDescription(
+        description
+    )
+
+end
+
+others.applyAllRow =
+    Instance.new("Frame")
+
+others.applyAllRow.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        42
+    )
+
+others.applyAllRow.BackgroundColor3 =
+    Color3.fromRGB(
+        48,
+        48,
+        48
+    )
+
+others.applyAllRow.BorderSizePixel =
+    0
+
+others.applyAllRow.LayoutOrder =
+    0
+
+others.applyAllRow.Parent =
+    others.page
+
+others.applyAllCorner =
+    Instance.new("UICorner")
+
+others.applyAllCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+others.applyAllCorner.Parent =
+    others.applyAllRow
+
+others.applyAllButton =
+    Instance.new("TextButton")
+
+others.applyAllButton.Size =
+    UDim2.new(
+        1,
+        -12,
+        0,
+        30
+    )
+
+others.applyAllButton.Position =
+    UDim2.new(
+        0,
+        6,
+        0.5,
+        -15
+    )
+
+others.applyAllButton.BackgroundColor3 =
+    Color3.fromRGB(
+        65,
+        65,
+        65
+    )
+
+others.applyAllButton.BorderSizePixel =
+    0
+
+others.applyAllButton.Text =
+    "APPLY ALL"
+
+others.applyAllButton.TextSize =
+    10
+
+others.applyAllButton.Font =
+    Enum.Font.GothamBold
+
+others.applyAllButton.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+others.applyAllButton.Parent =
+    others.applyAllRow
+
+others.applyAllButtonCorner =
+    Instance.new("UICorner")
+
+others.applyAllButtonCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+others.applyAllButtonCorner.Parent =
+    others.applyAllButton
+
+addUnusualConnection(
+    others.applyAllButton.MouseButton1Click:Connect(
+        function()
+
+            if others.applyAll() then
+
+                others.saveConfig()
+
+                others.applyAllButton.Text =
+                    "APPLIED"
+
+                task.delay(
+                    0.8,
+                    function()
+
+                        pcall(function()
+
+                            if others.applyAllButton.Parent then
+                                others.applyAllButton.Text =
+                                    "APPLY ALL"
+                            end
+
+                        end)
+
+                    end
+                )
+
+            end
+
+        end
+    )
+)
+
 others.header(
     "QUICK BODY",
     1
