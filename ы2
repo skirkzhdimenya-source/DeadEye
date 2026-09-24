@@ -369,6 +369,7 @@ function portrait.remove(source)
 
     pcall(function()
         if source.Parent then
+            source.Visible = state.visible
             source.ImageTransparency = state.transparency
 
             if source:IsA("ImageButton") then
@@ -397,7 +398,7 @@ function portrait.apply(source)
     local state = portrait.state[source]
 
     if state and state.viewport and state.viewport.Parent then
-        state.viewport.Visible = source.Visible
+        state.viewport.Visible = state.visible and portrait.visible(source)
         state.viewport.Size = source.Size
         state.viewport.Position = source.Position
         state.viewport.AnchorPoint = source.AnchorPoint
@@ -416,13 +417,15 @@ function portrait.apply(source)
         transparency = source.ImageTransparency,
         hover = source:IsA("ImageButton") and source.HoverImage or "",
         pressed = source:IsA("ImageButton") and source.PressedImage or "",
-        disabled = source:IsA("ImageButton") and source.DisabledImage or ""
+        disabled = source:IsA("ImageButton") and source.DisabledImage or "",
+        visible = source.Visible
     }
 
     state.viewport = viewport
     portrait.state[source] = state
 
     viewport.Parent = source.Parent
+    source.Visible = false
     source.ImageTransparency = 1
 
     if source:IsA("ImageButton") then
@@ -463,7 +466,7 @@ function portrait.watch(source)
             local state = portrait.state[source]
 
             if state and state.viewport then
-                state.viewport.Visible = source.Visible
+                state.viewport.Visible = state.visible and portrait.visible(source)
             end
         end)
     )
