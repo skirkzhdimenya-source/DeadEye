@@ -1263,9 +1263,9 @@ Main =
 Main.Size =
     UDim2.new(
         0,
-        350,
+        380,
         0,
-        300
+        320
     )
 
 Main.Position =
@@ -1379,7 +1379,7 @@ Minimize.Size =
 Minimize.Position =
     UDim2.new(
         1,
-        -68,
+        -65,
         0,
         6
     )
@@ -1419,6 +1419,18 @@ Minimize.TextColor3 =
 Minimize.Parent =
     Main
 
+local MinimizeCorner =
+    Instance.new("UICorner")
+
+MinimizeCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+MinimizeCorner.Parent =
+    Minimize
+
 --// =========================================================
 --// CLOSE
 --// =========================================================
@@ -1437,7 +1449,7 @@ Close.Size =
 Close.Position =
     UDim2.new(
         1,
-        -33,
+        -32,
         0,
         6
     )
@@ -1511,22 +1523,6 @@ Status.TextXAlignment =
 
 Status.Parent =
     Main
-
---// =========================================================
---// MINIMIZE BUTTON
---// =========================================================
-
-addConnection(
-    Minimize.MouseButton1Click:Connect(
-        function()
-
-            setMainMinimized(
-                not mainMinimized
-            )
-
-        end
-    )
-)
 
 --// =========================================================
 --// TOGGLE
@@ -1607,7 +1603,7 @@ SlotsScroll.Size =
         1,
         -16,
         1,
-        -98
+        -76
     )
 
 SlotsScroll.Position =
@@ -1805,7 +1801,7 @@ for slotIndex = 1, SLOT_COUNT do
     originalButton.Size =
         UDim2.new(
             0,
-            98,
+            108,
             0,
             32
         )
@@ -1884,7 +1880,7 @@ for slotIndex = 1, SLOT_COUNT do
     arrow.Position =
         UDim2.new(
             0,
-            162,
+            172,
             0.5,
             -16
         )
@@ -1919,7 +1915,7 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.Size =
         UDim2.new(
             0,
-            98,
+            108,
             0,
             32
         )
@@ -1927,7 +1923,7 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.Position =
         UDim2.new(
             0,
-            184,
+            194,
             0.5,
             -16
         )
@@ -1994,17 +1990,17 @@ Picker =
 Picker.Size =
     UDim2.new(
         0,
-        320,
+        335,
         0,
-        340
+        350
     )
 
 Picker.Position =
     UDim2.new(
         0.5,
-        -160,
+        -167,
         0.5,
-        -170
+        -175
     )
 
 Picker.BackgroundColor3 =
@@ -2328,7 +2324,7 @@ local PickerGrid =
 PickerGrid.CellSize =
     UDim2.new(
         0,
-        91,
+        96,
         0,
         32
     )
@@ -2786,7 +2782,7 @@ local function setMainMinimized(state)
         Main.Size =
             UDim2.new(
                 0,
-                350,
+                380,
                 0,
                 40
             )
@@ -2806,9 +2802,9 @@ local function setMainMinimized(state)
         Main.Size =
             UDim2.new(
                 0,
-                350,
+                380,
                 0,
-                300
+                320
             )
 
         Status.Visible = true
@@ -2820,6 +2816,20 @@ local function setMainMinimized(state)
     end
 
 end
+
+--// =========================================================
+--// MINIMIZE BUTTON CONNECTION
+--// =========================================================
+
+addConnection(
+    Minimize.MouseButton1Click:Connect(
+        function()
+            setMainMinimized(
+                not mainMinimized
+            )
+        end
+    )
+)
 
 --// =========================================================
 --// GUI UPDATE
