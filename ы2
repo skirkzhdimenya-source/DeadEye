@@ -43,6 +43,12 @@ if genv.UNUSUAL_SWAPPER_CLEANUP then
     end)
 end
 
+if genv.DEADEYE_PORTRAIT_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_PORTRAIT_CLEANUP()
+    end)
+end
+
 if genv.EMOTE_SWAPPER_CLEANUP then
     pcall(function()
         genv.EMOTE_SWAPPER_CLEANUP()
@@ -51,6 +57,7 @@ end
 
 genv.DEADEYE_MAIN_RUNNING = true
 genv.EMOTE_SWAPPER_RUNNING = true
+genv.DEADEYE_PORTRAIT_RUNNING = true
 
 --// =========================================================
 --// SERVICES
@@ -235,6 +242,1108 @@ local function saveSavedConfig()
 end
 
 loadSavedConfig()
+
+--// =========================================================
+--// LOCAL PORTRAIT OVERRIDE
+--//
+--// Подменяет только AvatarHeadShot текущего игрока
+--// локальным ViewportFrame из workspace.Rigs.<LocalPlayer.Name>.
+--//
+--// Поддерживает:
+--//   • DeathFeed
+--//   • custom tabs
+--//   • ImageLabel / ImageButton
+--//   • динамическое появление UI
+--//   • изменение Image после создания
+--//   • обновление после изменения локального скина
+--//
+--// Важное:
+--//   оригинальный GUI-объект НЕ уничтожается.
+--//   Мы только делаем его изображение прозрачным
+--//   и кладём поверх него локальный ViewportFrame.
+--// =========================================================
+
+local portraitState = {}
+local portraitConnections = {}
+local portraitRigSignature = ""
+local portraitRefreshQueued = false
+
+local function getPortraitRig()
+
+    local rigs = workspace:FindFirstChild(
+        "Rigs"
+    )
+
+    if rigs then
+
+        local rig = rigs:FindFirstChild(
+            LocalPlayer.Name
+        )
+
+        if rig
+            and rig:IsA("Model")
+        then
+
+            return rig
+
+        end
+
+    end
+
+    local character =
+        LocalPlayer.Character
+
+    if character
+        and character:IsA("Model")
+    then
+
+        return character
+
+    end
+
+    return nil
+
+end
+
+local function getPortraitIdFromImage(
+    image
+)
+
+    if type(image) ~= "string"
+        or image == ""
+    then
+
+        return nil
+
+    end
+
+    local lower =
+        string.lower(image)
+
+    if not string.find(
+        lower,
+        "avatarheadshot",
+        1,
+        true
+    ) then
+
+        return nil
+
+    end
+
+    local id =
+        string.match(
+            lower,
+            "id=(%d+)"
+        )
+
+    return id
+
+end
+
+local function isOwnAvatarHeadShot(
+    image
+)
+
+    local id =
+        getPortraitIdFromImage(
+            image
+        )
+
+    if not id then
+        return false
+    end
+
+    return id ==
+        tostring(
+            LocalPlayer.UserId
+        )
+
+end
+
+local function copyGuiDecoration(
+    source,
+    target
+)
+
+    for _, child in ipairs(
+        source:GetChildren()
+    ) do
+
+        if child:IsA("UICorner")
+            or child:IsA("UIStroke")
+        then
+
+            local clone =
+                child:Clone()
+
+            clone.Parent =
+                target
+
+        end
+
+    end
+
+end
+
+local function cleanViewportRig(
+    rig
+)
+
+    for _, obj in ipairs(
+        rig:GetDescendants()
+    ) do
+
+        if obj:IsA("Script")
+            or obj:IsA("LocalScript")
+            or obj:IsA("ModuleScript")
+        then
+
+            pcall(function()
+                obj:Destroy()
+            end)
+
+        elseif obj:IsA("ParticleEmitter")
+            or obj:IsA("Trail")
+            or obj:IsA("Beam")
+            or obj:IsA("Smoke")
+            or obj:IsA("Fire")
+            or obj:IsA("Sparkles")
+            or obj:IsA("PointLight")
+            or obj:IsA("SpotLight")
+            or obj:IsA("SurfaceLight")
+        then
+
+            pcall(function()
+                obj.Enabled = false
+            end)
+
+        elseif obj:IsA("BasePart") then
+
+            obj.Anchored =
+                true
+
+            obj.CanCollide =
+                false
+
+            obj.CanTouch =
+                false
+
+            obj.CanQuery =
+                false
+
+        end
+
+    end
+
+end
+
+local function makePortraitViewport(
+    source
+)
+
+    if not source
+        or not source.Parent
+    then
+
+        return nil
+
+    end
+
+    local viewport =
+        Instance.new(
+            "ViewportFrame"
+        )
+
+    viewport.Name =
+        "DeadEyePortraitViewport"
+
+    viewport.BackgroundTransparency =
+        1
+
+    viewport.BorderSizePixel =
+        0
+
+    viewport.Size =
+        source.Size
+
+    viewport.Position =
+        source.Position
+
+    viewport.AnchorPoint =
+        source.AnchorPoint
+
+    viewport.Rotation =
+        source.Rotation
+
+    viewport.LayoutOrder =
+        source.LayoutOrder
+
+    viewport.ZIndex =
+        source.ZIndex + 1
+
+    viewport.Visible =
+        source.Visible
+
+    viewport.ClipsDescendants =
+        source.ClipsDescendants
+
+    pcall(function()
+        viewport.AutomaticSize =
+            source.AutomaticSize
+    end)
+
+    pcall(function()
+        viewport.SizeConstraint =
+            source.SizeConstraint
+    end)
+
+    copyGuiDecoration(
+        source,
+        viewport
+    )
+
+    local camera =
+        Instance.new(
+            "Camera"
+        )
+
+    camera.Name =
+        "DeadEyePortraitCamera"
+
+    camera.FieldOfView =
+        18
+
+    camera.Parent =
+        viewport
+
+    viewport.CurrentCamera =
+        camera
+
+    local world =
+        Instance.new(
+            "WorldModel"
+        )
+
+    world.Name =
+        "DeadEyePortraitWorld"
+
+    world.Parent =
+        viewport
+
+    local sourceRig =
+        getPortraitRig()
+
+    if not sourceRig then
+
+        viewport:Destroy()
+
+        return nil
+
+    end
+
+    local clone
+
+    local success =
+        pcall(function()
+
+            clone =
+                sourceRig:Clone()
+
+        end)
+
+    if not success
+        or not clone
+    then
+
+        viewport:Destroy()
+
+        return nil
+
+    end
+
+    clone.Name =
+        "DeadEyePortraitRig"
+
+    cleanViewportRig(
+        clone
+    )
+
+    clone.Parent =
+        world
+
+    local head =
+        clone:FindFirstChild(
+            "Head",
+            true
+        )
+
+    local root =
+        clone:FindFirstChild(
+            "HumanoidRootPart",
+            true
+        )
+
+    if not head
+        or not head:IsA("BasePart")
+    then
+
+        viewport:Destroy()
+
+        return nil
+
+    end
+
+    local headLook =
+        head.CFrame.LookVector
+
+    local headUp =
+        head.CFrame.UpVector
+
+    local headPosition =
+        head.Position
+
+    local pivot =
+        clone:GetPivot()
+
+    pcall(function()
+
+        clone:PivotTo(
+            pivot + (-headPosition)
+        )
+
+    end)
+
+    local target =
+        Vector3.new(
+            0,
+            math.max(
+                0.15,
+                head.Size.Y * 0.10
+            ),
+            0
+        )
+
+    local distance =
+        math.max(
+            2.8,
+            head.Size.Y * 4.2
+        )
+
+    if root
+        and root:IsA("BasePart")
+    then
+
+        local rootDistance =
+            (root.Position - head.Position).Magnitude
+
+        distance =
+            math.max(
+                distance,
+                rootDistance * 1.05
+            )
+
+    end
+
+    local cameraPosition =
+        target
+        + headLook * distance
+
+    local successCamera =
+        pcall(function()
+
+            camera.CFrame =
+                CFrame.lookAt(
+                    cameraPosition,
+                    target,
+                    headUp
+                )
+
+        end)
+
+    if not successCamera then
+
+        camera.CFrame =
+            CFrame.new(
+                0,
+                0,
+                distance
+            )
+
+    end
+
+    return viewport
+
+end
+
+local function removePortraitOverride(
+    source
+)
+
+    local state =
+        portraitState[source]
+
+    if not state then
+        return
+    end
+
+    if state.viewport then
+
+        pcall(function()
+            state.viewport:Destroy()
+        end)
+
+        state.viewport =
+            nil
+
+    end
+
+    pcall(function()
+
+        if source.Parent then
+
+            source.ImageTransparency =
+                state.imageTransparency
+
+            if state.isImageButton then
+
+                source.HoverImage =
+                    state.hoverImage
+
+                source.PressedImage =
+                    state.pressedImage
+
+                source.DisabledImage =
+                    state.disabledImage
+
+            end
+
+        end
+
+    end)
+
+    portraitState[source] =
+        nil
+
+end
+
+local function applyPortraitOverride(
+    source
+)
+
+    if not source
+        or not source.Parent
+    then
+
+        return
+
+    end
+
+    local image =
+        source.Image
+
+    if not isOwnAvatarHeadShot(
+        image
+    ) then
+
+        removePortraitOverride(
+            source
+        )
+
+        return
+
+    end
+
+    local state =
+        portraitState[source]
+
+    if state
+        and state.viewport
+        and state.viewport.Parent
+    then
+
+        state.viewport.Visible =
+            source.Visible
+
+        state.viewport.Size =
+            source.Size
+
+        state.viewport.Position =
+            source.Position
+
+        state.viewport.AnchorPoint =
+            source.AnchorPoint
+
+        state.viewport.Rotation =
+            source.Rotation
+
+        state.viewport.ZIndex =
+            source.ZIndex + 1
+
+        return
+
+    end
+
+    local viewport =
+        makePortraitViewport(
+            source
+        )
+
+    if not viewport then
+        return
+    end
+
+    if not state then
+
+        state = {
+            imageTransparency =
+                source.ImageTransparency,
+            isImageButton =
+                source:IsA(
+                    "ImageButton"
+                ),
+            hoverImage =
+                nil,
+            pressedImage =
+                nil,
+            disabledImage =
+                nil,
+            viewport =
+                viewport
+        }
+
+        if state.isImageButton then
+
+            state.hoverImage =
+                source.HoverImage
+
+            state.pressedImage =
+                source.PressedImage
+
+            state.disabledImage =
+                source.DisabledImage
+
+        end
+
+        portraitState[source] =
+            state
+
+    else
+
+        state.viewport =
+            viewport
+
+    end
+
+    viewport.Parent =
+        source.Parent
+
+    source.ImageTransparency =
+        1
+
+    if source:IsA("ImageButton") then
+
+        source.HoverImage =
+            ""
+
+        source.PressedImage =
+            ""
+
+        source.DisabledImage =
+            ""
+
+    end
+
+end
+
+local function queuePortraitRefresh()
+
+    if portraitRefreshQueued then
+        return
+    end
+
+    portraitRefreshQueued =
+        true
+
+    task.defer(function()
+
+        portraitRefreshQueued =
+            false
+
+        if not genv.DEADEYE_PORTRAIT_RUNNING then
+            return
+        end
+
+        for source, state in pairs(
+            portraitState
+        ) do
+
+            if not source
+                or not source.Parent
+            then
+
+                portraitState[source] =
+                    nil
+
+            else
+
+                pcall(function()
+                    if state.viewport then
+                        state.viewport:Destroy()
+                    end
+                end)
+
+                state.viewport =
+                    nil
+
+            end
+
+        end
+
+        for _, obj in ipairs(
+            LocalPlayer.PlayerGui:GetDescendants()
+        ) do
+
+            if obj:IsA("ImageLabel")
+                or obj:IsA("ImageButton")
+            then
+
+                if isOwnAvatarHeadShot(
+                    obj.Image
+                ) then
+
+                    applyPortraitOverride(
+                        obj
+                    )
+
+                end
+
+            end
+
+        end
+
+    end)
+
+end
+
+local function connectPortraitSource(
+    source
+)
+
+    if not (
+        source:IsA("ImageLabel")
+        or source:IsA("ImageButton")
+    ) then
+
+        return
+
+    end
+
+    if source:GetAttribute(
+        "DeadEyePortraitWatched"
+    ) then
+
+        return
+
+    end
+
+    pcall(function()
+        source:SetAttribute(
+            "DeadEyePortraitWatched",
+            true
+        )
+    end)
+
+    table.insert(
+        portraitConnections,
+        source:GetPropertyChangedSignal(
+            "Image"
+        ):Connect(
+            function()
+
+                if not genv.DEADEYE_PORTRAIT_RUNNING then
+                    return
+                end
+
+                applyPortraitOverride(
+                    source
+                )
+
+            end
+        )
+    )
+
+    if source:IsA("ImageButton") then
+
+        table.insert(
+            portraitConnections,
+            source:GetPropertyChangedSignal(
+                "HoverImage"
+            ):Connect(
+                function()
+
+                    if not genv.DEADEYE_PORTRAIT_RUNNING then
+                        return
+                    end
+
+                    if isOwnAvatarHeadShot(
+                        source.Image
+                    ) then
+
+                        source.HoverImage =
+                            ""
+
+                    end
+
+                end
+            )
+        )
+
+        table.insert(
+            portraitConnections,
+            source:GetPropertyChangedSignal(
+                "PressedImage"
+            ):Connect(
+                function()
+
+                    if not genv.DEADEYE_PORTRAIT_RUNNING then
+                        return
+                    end
+
+                    if isOwnAvatarHeadShot(
+                        source.Image
+                    ) then
+
+                        source.PressedImage =
+                            ""
+
+                    end
+
+                end
+            )
+        )
+
+        table.insert(
+            portraitConnections,
+            source:GetPropertyChangedSignal(
+                "DisabledImage"
+            ):Connect(
+                function()
+
+                    if not genv.DEADEYE_PORTRAIT_RUNNING then
+                        return
+                    end
+
+                    if isOwnAvatarHeadShot(
+                        source.Image
+                    ) then
+
+                        source.DisabledImage =
+                            ""
+
+                    end
+
+                end
+            )
+        )
+
+    end
+
+    applyPortraitOverride(
+        source
+    )
+
+end
+
+local function getPortraitRigSignature()
+
+    local rig =
+        getPortraitRig()
+
+    if not rig then
+        return ""
+    end
+
+    local values = {}
+
+    for _, obj in ipairs(
+        rig:GetDescendants()
+    ) do
+
+        if obj:IsA("Shirt") then
+
+            table.insert(
+                values,
+                "SHIRT:"
+                .. tostring(
+                    obj.ShirtTemplate
+                )
+            )
+
+        elseif obj:IsA("Pants") then
+
+            table.insert(
+                values,
+                "PANTS:"
+                .. tostring(
+                    obj.PantsTemplate
+                )
+            )
+
+        elseif obj:IsA("BodyColors") then
+
+            table.insert(
+                values,
+                "BODYCOLORS:"
+                .. tostring(
+                    obj.HeadColor3
+                )
+                .. ":"
+                .. tostring(
+                    obj.LeftArmColor3
+                )
+                .. ":"
+                .. tostring(
+                    obj.RightArmColor3
+                )
+                .. ":"
+                .. tostring(
+                    obj.LeftLegColor3
+                )
+                .. ":"
+                .. tostring(
+                    obj.RightLegColor3
+                )
+                .. ":"
+                .. tostring(
+                    obj.TorsoColor3
+                )
+            )
+
+        elseif obj:IsA("MeshPart") then
+
+            table.insert(
+                values,
+                "MESH:"
+                .. obj:GetFullName()
+                .. ":"
+                .. tostring(
+                    obj.MeshId
+                )
+                .. ":"
+                .. tostring(
+                    obj.TextureID
+                )
+            )
+
+        elseif obj:IsA("SpecialMesh") then
+
+            table.insert(
+                values,
+                "SPECIALMESH:"
+                .. obj:GetFullName()
+                .. ":"
+                .. tostring(
+                    obj.MeshId
+                )
+                .. ":"
+                .. tostring(
+                    obj.TextureId
+                )
+            )
+
+        elseif obj:IsA("Accessory") then
+
+            table.insert(
+                values,
+                "ACCESSORY:"
+                .. obj:GetFullName()
+            )
+
+        elseif obj:IsA("LayeredClothing") then
+
+            table.insert(
+                values,
+                "LAYERED:"
+                .. obj:GetFullName()
+            )
+
+        end
+
+    end
+
+    table.sort(
+        values
+    )
+
+    return table.concat(
+        values,
+        "|"
+    )
+
+end
+
+local function refreshPortraits()
+
+    if not genv.DEADEYE_PORTRAIT_RUNNING then
+        return
+    end
+
+    for source, state in pairs(
+        portraitState
+    ) do
+
+        if source.Parent
+            and state
+            and state.viewport
+            and state.viewport.Parent
+        then
+
+            pcall(function()
+                state.viewport:Destroy()
+            end)
+
+            state.viewport =
+                nil
+
+        end
+
+    end
+
+    for _, obj in ipairs(
+        LocalPlayer.PlayerGui:GetDescendants()
+    ) do
+
+        if obj:IsA("ImageLabel")
+            or obj:IsA("ImageButton")
+        then
+
+            if isOwnAvatarHeadShot(
+                obj.Image
+            ) then
+
+                applyPortraitOverride(
+                    obj
+                )
+
+            end
+
+        end
+
+    end
+
+end
+
+local function startPortraitOverride()
+
+    if not genv.DEADEYE_PORTRAIT_RUNNING then
+        return
+    end
+
+    local playerGui =
+        LocalPlayer:WaitForChild(
+            "PlayerGui"
+        )
+
+    for _, obj in ipairs(
+        playerGui:GetDescendants()
+    ) do
+
+        connectPortraitSource(
+            obj
+        )
+
+    end
+
+    table.insert(
+        portraitConnections,
+        playerGui.DescendantAdded:Connect(
+            function(obj)
+
+                if not genv.DEADEYE_PORTRAIT_RUNNING then
+                    return
+                end
+
+                connectPortraitSource(
+                    obj
+                )
+
+            end
+        )
+    )
+
+    table.insert(
+        portraitConnections,
+        RunService.Heartbeat:Connect(
+            function()
+
+                if not genv.DEADEYE_PORTRAIT_RUNNING then
+                    return
+                end
+
+                local newSignature =
+                    getPortraitRigSignature()
+
+                if newSignature ~=
+                    portraitRigSignature
+                then
+
+                    portraitRigSignature =
+                        newSignature
+
+                    queuePortraitRefresh()
+
+                end
+
+            end
+        )
+    )
+
+    portraitRigSignature =
+        getPortraitRigSignature()
+
+end
+
+local function cleanupPortraitOverride()
+
+    genv.DEADEYE_PORTRAIT_RUNNING =
+        false
+
+    for _, connection in ipairs(
+        portraitConnections
+    ) do
+
+        pcall(function()
+            connection:Disconnect()
+        end)
+
+    end
+
+    table.clear(
+        portraitConnections
+    )
+
+    for source, _ in pairs(
+        portraitState
+    ) do
+
+        removePortraitOverride(
+            source
+        )
+
+    end
+
+    table.clear(
+        portraitState
+    )
+
+    portraitRigSignature =
+        ""
+
+end
+
+genv.DEADEYE_PORTRAIT_CLEANUP =
+    cleanupPortraitOverride
 
 --// =========================================================
 --// SLOTS
@@ -9909,6 +11018,14 @@ local function cleanup()
 
     end)
 
+    pcall(function()
+
+        if genv.DEADEYE_PORTRAIT_CLEANUP then
+            genv.DEADEYE_PORTRAIT_CLEANUP()
+        end
+
+    end)
+
     cleaned = true
 
     genv.EMOTE_SWAPPER_RUNNING =
@@ -9998,4 +11115,6 @@ updateGUI()
 pcall(function()
     setCategory("Emotes")
 end)
+
+startPortraitOverride()
 
