@@ -84,7 +84,8 @@ local CONFIG_FILE = "DeadEye_Config.json"
 local savedConfig = {
     version = 1,
     emotes = {},
-    unusual = {}
+    unusual = {},
+    others = {}
 }
 
 local function loadSavedConfig()
@@ -152,6 +153,11 @@ local function loadSavedConfig()
     if type(decoded.unusual) == "table" then
         savedConfig.unusual =
             decoded.unusual
+    end
+
+    if type(decoded.others) == "table" then
+        savedConfig.others =
+            decoded.others
     end
 
     savedConfig.version =
@@ -4144,6 +4150,12 @@ local function rebuildUnusualPicker()
 
                         saveSavedConfig()
 
+                        unusualPicker.Visible =
+                            false
+
+                        unusualPickerSide =
+                            nil
+
                         closeUnusualPicker()
 
                         if unusualEnabled then
@@ -4373,6 +4385,139 @@ end
 --// =========================================================
 
 local others = {}
+
+function others.saveConfig()
+
+    savedConfig.others =
+        savedConfig.others
+        or {}
+
+    for _, slot in ipairs(
+        others.ACCESSORY_SLOTS or {}
+    ) do
+
+        local box =
+            others.fieldBoxes[
+                slot.property
+            ]
+
+        if box then
+            savedConfig.others[
+                slot.property
+            ] =
+                tostring(
+                    box.Text
+                    or ""
+                )
+        end
+
+    end
+
+    for _, slot in ipairs(
+        others.CLOTHING_SLOTS or {}
+    ) do
+
+        local box =
+            others.fieldBoxes[
+                slot.property
+            ]
+
+        if box then
+            savedConfig.others[
+                slot.property
+            ] =
+                tostring(
+                    box.Text
+                    or ""
+                )
+        end
+
+    end
+
+    for _, slot in ipairs(
+        others.BODY_SLOTS or {}
+    ) do
+
+        local box =
+            others.fieldBoxes[
+                slot.property
+            ]
+
+        if box then
+            savedConfig.others[
+                slot.property
+            ] =
+                tostring(
+                    box.Text
+                    or ""
+                )
+        end
+
+    end
+
+    savedConfig.others._Headless =
+        tostring(
+            savedConfig.others._Headless
+            or ""
+        )
+
+    savedConfig.others._Korblox =
+        tostring(
+            savedConfig.others._Korblox
+            or ""
+        )
+
+    pcall(function()
+        saveSavedConfig()
+    end)
+
+end
+
+function others.loadConfig()
+
+    local saved =
+        savedConfig.others
+
+    if type(saved) ~= "table" then
+        return
+    end
+
+    for _, group in ipairs({
+        others.ACCESSORY_SLOTS,
+        others.CLOTHING_SLOTS,
+        others.BODY_SLOTS
+    }) do
+
+        for _, slot in ipairs(
+            group
+        ) do
+
+            local box =
+                others.fieldBoxes[
+                    slot.property
+                ]
+
+            local value =
+                saved[
+                    slot.property
+                ]
+
+            if box
+                and value ~= nil
+            then
+
+                box.Text =
+                    tostring(
+                        value
+                    )
+
+            end
+
+        end
+
+    end
+
+end
 
 others.HEADLESS_ID = 134082579
 others.KORBLOX_ID = 139607718
@@ -5317,6 +5462,8 @@ function others.row(
                     box.Text
                 ) then
 
+                    others.saveConfig()
+
                     apply.Text =
                         "OK"
 
@@ -5517,6 +5664,20 @@ function others.quickRow(
                     property,
                     assetId
                 ) then
+
+                    if property == "Head" then
+                        savedConfig.others._Headless =
+                            tostring(
+                                assetId
+                            )
+                    elseif property == "RightLeg" then
+                        savedConfig.others._Korblox =
+                            tostring(
+                                assetId
+                            )
+                    end
+
+                    saveSavedConfig()
 
                     apply.Text =
                         "OK"
@@ -5939,7 +6100,14 @@ addUnusualConnection(
 addUnusualConnection(
     others.clearButton.MouseButton1Click:Connect(
         function()
-            others.clearAccessories()
+            if others.clearAccessories() then
+                task.delay(
+                    0.3,
+                    function()
+                        others.saveConfig()
+                    end
+                )
+            end
         end
     )
 )
@@ -5963,6 +6131,7 @@ task.defer(
 
         pcall(function()
             others.scan()
+            others.loadConfig()
         end)
 
     end
