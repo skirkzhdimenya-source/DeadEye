@@ -1987,6 +1987,64 @@ local function unusualAttachmentHasFX(
     end
     return false
 end
+
+local function unusualAttachmentHasMesh(
+    attachment
+)
+    for _, descendant in ipairs(
+        attachment:GetDescendants()
+    ) do
+        if descendant:IsA("MeshPart")
+            or descendant:IsA("SpecialMesh")
+            or descendant:IsA("UnionOperation")
+        then
+            return true
+        end
+    end
+    return false
+end
+
+local function getUnusualAttachmentSignature(
+    attachment
+)
+    local values = {}
+
+    for _, descendant in ipairs(
+        attachment:GetDescendants()
+    ) do
+        if descendant:IsA("MeshPart") then
+            table.insert(
+                values,
+                "M:"
+                .. descendant.Name
+                .. ":"
+                .. tostring(descendant.MeshId)
+                .. ":"
+                .. tostring(descendant.TextureID)
+            )
+        elseif descendant:IsA("SpecialMesh") then
+            table.insert(
+                values,
+                "S:"
+                .. descendant.Name
+                .. ":"
+                .. tostring(descendant.MeshId)
+                .. ":"
+                .. tostring(descendant.TextureId)
+            )
+        elseif descendant:IsA("UnionOperation") then
+            table.insert(
+                values,
+                "U:"
+                .. descendant.Name
+            )
+        end
+    end
+
+    table.sort(values)
+
+    return table.concat(values, "|")
+end
 --// =========================================================
 --// TAG OUR FX
 --// =========================================================
@@ -2580,10 +2638,24 @@ local function buildOriginalUnusualSignature(
                     table.insert(
                         objects,
                         {
+                            Kind = "FX",
                             Class =
                                 object.ClassName,
                             Name =
                                 object.Name
+                        }
+                    )
+                elseif object:IsA("Attachment")
+                    and unusualAttachmentHasMesh(object)
+                then
+                    table.insert(
+                        objects,
+                        {
+                            Kind = "Attachment",
+                            Class = "Attachment",
+                            Name = object.Name,
+                            MeshSignature =
+                                getUnusualAttachmentSignature(object)
                         }
                     )
                 end
@@ -2643,25 +2715,31 @@ local function removeOriginalUnusualFX(
             for _, existing in ipairs(
                 targetPart:GetDescendants()
             ) do
-                if isUnusualFX(
-                    existing
-                ) then
-                    for _, info in ipairs(
-                        objects
-                    ) do
-                        if
-                            existing.ClassName
-                                == info.Class
-                            and existing.Name
-                                == info.Name
-                        then
-                            pcall(function()
-                                existing:Destroy()
-                            end)
-                            removed +=
-                                1
-                            break
-                        end
+                for _, info in ipairs(
+                    objects
+                ) do
+                    local match = false
+
+                    if info.Kind == "FX" then
+                        match =
+                            isUnusualFX(existing)
+                            and existing.ClassName == info.Class
+                            and existing.Name == info.Name
+                    elseif info.Kind == "Attachment" then
+                        match =
+                            existing:IsA("Attachment")
+                            and existing.Name == info.Name
+                            and getUnusualAttachmentSignature(existing)
+                                == info.MeshSignature
+                    end
+
+                    if match then
+                        pcall(function()
+                            existing:Destroy()
+                        end)
+
+                        removed += 1
+                        break
                     end
                 end
             end
@@ -3164,7 +3242,7 @@ unusualOriginalButton.BorderSizePixel =
     0
 unusualOriginalButton.Text =
     unusualSlot.originalName
-    or "НИЧЕГО"
+    or "Выбрать"
 unusualOriginalButton.TextSize =
     11
 unusualOriginalButton.Font =
@@ -3586,11 +3664,11 @@ local function rebuildUnusualPicker()
                     if unusualPickerSide == "Original" then
                         unusualSlot.originalId = nil
                         unusualSlot.originalName = nil
-                        unusualOriginalButton.Text = "НИЧЕГО"
+                        unusualOriginalButton.Text = "Выбрать"
                     elseif unusualPickerSide == "Replace" then
                         unusualSlot.replaceId = nil
                         unusualSlot.replaceName = nil
-                        unusualReplaceButton.Text = "НИЧЕГО"
+                        unusualReplaceButton.Text = "Выбрать"
                     else
                         return
                     end
@@ -7411,13 +7489,13 @@ local function rebuildPicker()
                     slot.originalName = nil
                     slotOriginalButtons[
                         activePickerSlot
-                    ].Text = "НИЧЕГО"
+                    ].Text = "Выбрать"
                 else
                     slot.replaceId = nil
                     slot.replaceName = nil
                     slotReplaceButtons[
                         activePickerSlot
-                    ].Text = "НИЧЕГО"
+                    ].Text = "Выбрать"
                 end
 
                 savedConfig.emotes[
