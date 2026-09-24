@@ -6342,7 +6342,7 @@ local function cleanupUnusual()
     end
 
     pcall(function()
-        others.restoreOthers()
+        others.restore(false)
     end)
 
     unusualEnabled =
