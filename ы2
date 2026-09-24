@@ -3164,7 +3164,7 @@ unusualOriginalButton.BorderSizePixel =
     0
 unusualOriginalButton.Text =
     unusualSlot.originalName
-    or "Выбрать"
+    or "НИЧЕГО"
 unusualOriginalButton.TextSize =
     11
 unusualOriginalButton.Font =
@@ -3248,7 +3248,7 @@ unusualReplaceButton.BorderSizePixel =
     0
 unusualReplaceButton.Text =
     unusualSlot.replaceName
-    or "Выбрать"
+    or "НИЧЕГО"
 unusualReplaceButton.TextSize =
     11
 unusualReplaceButton.Font =
