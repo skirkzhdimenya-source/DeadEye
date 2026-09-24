@@ -89,7 +89,8 @@ local savedConfig = {
     others = {},
     main = {
         jumpDelay = 0.01,
-        hotkey = "Z"
+        hotkey = "Z",
+        hideUIHotkey = "H"
     }
 }
 
@@ -169,6 +170,10 @@ local function loadSavedConfig()
         savedConfig.main =
             decoded.main
     end
+
+    savedConfig.main.hideUIHotkey =
+        savedConfig.main.hideUIHotkey
+        or "H"
 
     savedConfig.version =
         tonumber(decoded.version)
@@ -5017,7 +5022,9 @@ local mainJump = {
     enabled = false,
     jumpDelay = 0.01,
     hotkeyName = "Z",
+    hideUIHotkeyName = "H",
     lastJump = 0,
+    capturing = nil,
     character = nil,
     humanoid = nil,
     root = nil,
@@ -5045,11 +5052,25 @@ mainJump.hotkeyName =
         or "Z"
     ):upper()
 
+mainJump.hideUIHotkeyName =
+    tostring(
+        savedConfig.main
+        and savedConfig.main.hideUIHotkey
+        or "H"
+    ):upper()
+
 if not Enum.KeyCode[mainJump.hotkeyName]
     or Enum.KeyCode[mainJump.hotkeyName]
         == Enum.KeyCode.Unknown
 then
     mainJump.hotkeyName = "Z"
+end
+
+if not Enum.KeyCode[mainJump.hideUIHotkeyName]
+    or Enum.KeyCode[mainJump.hideUIHotkeyName]
+        == Enum.KeyCode.Unknown
+then
+    mainJump.hideUIHotkeyName = "H"
 end
 
 local function mainConnect(connection)
@@ -5075,7 +5096,9 @@ end
 function mainJump.saveConfig()
     savedConfig.main = {
         jumpDelay = mainJump.jumpDelay,
-        hotkey = mainJump.hotkeyName
+        hotkey = mainJump.hotkeyName,
+        hideUIHotkey =
+            mainJump.hideUIHotkeyName
     }
 
     pcall(function()
@@ -5177,6 +5200,48 @@ function mainJump.setHotkey(value)
         name
 
     mainJump.saveConfig()
+    mainJump.capturing = nil
+end
+
+function mainJump.setHideUIHotkey(value)
+    local name =
+        tostring(
+            value or ""
+        ):gsub(
+            "%s+",
+            ""
+        ):upper()
+
+    local key =
+        Enum.KeyCode[name]
+
+    if not key
+        or key == Enum.KeyCode.Unknown
+    then
+        return
+    end
+
+    mainJump.hideUIHotkeyName =
+        name
+
+    mainJump.hideUIHotkeyBox.Text =
+        name
+
+    mainJump.saveConfig()
+    mainJump.capturing = nil
+end
+
+function mainJump.startCapture(kind)
+    mainJump.capturing =
+        kind
+
+    if kind == "jump" then
+        mainJump.hotkeyBox.Text =
+            "PRESS KEY..."
+    else
+        mainJump.hideUIHotkeyBox.Text =
+            "PRESS KEY..."
+    end
 end
 
 function mainJump.destroySensors()
@@ -5831,23 +5896,11 @@ hotkeyCorner.CornerRadius =
 hotkeyCorner.Parent =
     mainJump.hotkeyBox
 
-local hotkeySet =
-    delaySet:Clone()
-
-hotkeySet.Parent =
-    hotkeyRow
-
-local oldSetPosition =
-    hotkeySet.Position
-
-hotkeySet.Position =
-    oldSetPosition
-
 mainConnect(
-    hotkeySet.MouseButton1Click:Connect(
+    mainJump.hotkeyBox.Focused:Connect(
         function()
-            mainJump.setHotkey(
-                mainJump.hotkeyBox.Text
+            mainJump.startCapture(
+                "jump"
             )
         end
     )
@@ -5855,11 +5908,73 @@ mainConnect(
 
 mainConnect(
     mainJump.hotkeyBox.FocusLost:Connect(
-        function(enterPressed)
-            if enterPressed then
-                mainJump.setHotkey(
-                    mainJump.hotkeyBox.Text
-                )
+        function()
+            if mainJump.capturing
+                == "jump"
+            then
+                mainJump.hotkeyBox.Text =
+                    mainJump.hotkeyName
+                mainJump.capturing = nil
+            end
+        end
+    )
+)
+
+local hideRow =
+    mainRow(
+        "HIDE UI",
+        4
+    )
+
+local hideLabel =
+    autoLabel:Clone()
+
+hideLabel.Text =
+    "HIDE UI"
+
+hideLabel.Parent =
+    hideRow
+
+mainJump.hideUIHotkeyBox =
+    mainJump.delayBox:Clone()
+
+mainJump.hideUIHotkeyBox.Text =
+    mainJump.hideUIHotkeyName
+
+mainJump.hideUIHotkeyBox.Parent =
+    hideRow
+
+local hideCorner =
+    Instance.new("UICorner")
+
+hideCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+hideCorner.Parent =
+    mainJump.hideUIHotkeyBox
+
+mainConnect(
+    mainJump.hideUIHotkeyBox.Focused:Connect(
+        function()
+            mainJump.startCapture(
+                "hide"
+            )
+        end
+    )
+)
+
+mainConnect(
+    mainJump.hideUIHotkeyBox.FocusLost:Connect(
+        function()
+            if mainJump.capturing
+                == "hide"
+            then
+                mainJump.hideUIHotkeyBox.Text =
+                    mainJump.hideUIHotkeyName
+                mainJump.capturing = nil
             end
         end
     )
@@ -5868,6 +5983,28 @@ mainConnect(
 mainConnect(
     UserInputService.InputBegan:Connect(
         function(input)
+            if mainJump.capturing then
+                if input.KeyCode
+                    == Enum.KeyCode.Unknown
+                then
+                    return
+                end
+
+                if mainJump.capturing
+                    == "jump"
+                then
+                    mainJump.setHotkey(
+                        input.KeyCode.Name
+                    )
+                else
+                    mainJump.setHideUIHotkey(
+                        input.KeyCode.Name
+                    )
+                end
+
+                return
+            end
+
             if input.KeyCode
                 == Enum.KeyCode[
                     mainJump.hotkeyName
@@ -5876,6 +6013,15 @@ mainConnect(
                 mainJump.setEnabled(
                     not mainJump.enabled
                 )
+            end
+
+            if input.KeyCode
+                == Enum.KeyCode[
+                    mainJump.hideUIHotkeyName
+                ]
+            then
+                ScreenGui.Enabled =
+                    not ScreenGui.Enabled
             end
         end
     )
@@ -9135,8 +9281,7 @@ local function cleanup()
 
     genv.EMOTE_SWAPPER_CLEANUP =
         nil
-
-    end
+end
 
 genv.EMOTE_SWAPPER_CLEANUP =
     cleanup
