@@ -4372,95 +4372,38 @@ end
 --// R6 AVATAR SCANNER / EDITOR
 --// =========================================================
 
-others.OTHERS_HEADLESS_ID = 134082579
-others.OTHERS_KORBLOX_ID = 139607718
+local others = {}
 
-others.OTHERS_ACCESSORY_SLOTS = {
-    {
-        label = "Hats",
-        property = "HatAccessory",
-        multi = true
-    },
-    {
-        label = "Hair",
-        property = "HairAccessory",
-        multi = true
-    },
-    {
-        label = "Face Accessory",
-        property = "FaceAccessory",
-        multi = true
-    },
-    {
-        label = "Neck",
-        property = "NeckAccessory",
-        multi = true
-    },
-    {
-        label = "Shoulder",
-        property = "ShouldersAccessory",
-        multi = true
-    },
-    {
-        label = "Front",
-        property = "FrontAccessory",
-        multi = true
-    },
-    {
-        label = "Back",
-        property = "BackAccessory",
-        multi = true
-    },
-    {
-        label = "Waist",
-        property = "WaistAccessory",
-        multi = true
-    }
+others.HEADLESS_ID = 134082579
+others.KORBLOX_ID = 139607718
+
+others.ACCESSORY_SLOTS = {
+    {label = "Hats", property = "HatAccessory", multi = true},
+    {label = "Hair", property = "HairAccessory", multi = true},
+    {label = "Face Accessory", property = "FaceAccessory", multi = true},
+    {label = "Neck", property = "NeckAccessory", multi = true},
+    {label = "Shoulder", property = "ShouldersAccessory", multi = true},
+    {label = "Front", property = "FrontAccessory", multi = true},
+    {label = "Back", property = "BackAccessory", multi = true},
+    {label = "Waist", property = "WaistAccessory", multi = true}
 }
 
-others.OTHERS_CLOTHING_SLOTS = {
-    {
-        label = "Shirt",
-        property = "Shirt"
-    },
-    {
-        label = "Pants",
-        property = "Pants"
-    },
-    {
-        label = "T-Shirt",
-        property = "GraphicTShirt"
-    }
+others.CLOTHING_SLOTS = {
+    {label = "Shirt", property = "Shirt"},
+    {label = "Pants", property = "Pants"},
+    {label = "T-Shirt", property = "GraphicTShirt"}
 }
 
-others.OTHERS_BODY_SLOTS = {
-    {
-        label = "Head",
-        property = "Head"
-    },
-    {
-        label = "Torso",
-        property = "Torso"
-    },
-    {
-        label = "Left Arm",
-        property = "LeftArm"
-    },
-    {
-        label = "Right Arm",
-        property = "RightArm"
-    },
-    {
-        label = "Left Leg",
-        property = "LeftLeg"
-    },
-    {
-        label = "Right Leg",
-        property = "RightLeg"
-    }
+others.BODY_SLOTS = {
+    {label = "Head", property = "Head"},
+    {label = "Torso", property = "Torso"},
+    {label = "Left Arm", property = "LeftArm"},
+    {label = "Right Arm", property = "RightArm"},
+    {label = "Left Leg", property = "LeftLeg"},
+    {label = "Right Leg", property = "RightLeg"}
 }
 
-others.OTHERS_CLEAR_ACCESSORY_PROPERTIES = {
+others.ACCESSORY_PROPERTIES = {
     "HatAccessory",
     "HairAccessory",
     "FaceAccessory",
@@ -4471,122 +4414,92 @@ others.OTHERS_CLEAR_ACCESSORY_PROPERTIES = {
     "WaistAccessory"
 }
 
-function others.getOthersHumanoids()
+others.page = nil
+others.status = nil
+others.originalDescription = nil
+others.targetHumanoid = nil
+others.fieldBoxes = {}
+
+function others.getHumanoids()
 
     local result = {}
     local seen = {}
 
-    local function addHumanoid(
-        humanoid
-    )
+    local function add(h)
 
-        if humanoid
-            and humanoid:IsA("Humanoid")
-            and not seen[humanoid]
+        if h
+            and h:IsA("Humanoid")
+            and not seen[h]
         then
 
-            seen[humanoid] =
-                true
-
-            table.insert(
-                result,
-                humanoid
-            )
+            seen[h] = true
+            table.insert(result, h)
 
         end
 
     end
 
-    local visualRig =
+    local rig =
         getUnusualVisualRig()
 
-    if visualRig then
-
-        addHumanoid(
-            visualRig:FindFirstChildOfClass(
+    if rig then
+        add(
+            rig:FindFirstChildOfClass(
                 "Humanoid"
             )
         )
-
     end
 
     local character =
         getUnusualPlayerCharacter()
 
     if character then
-
-        addHumanoid(
+        add(
             character:FindFirstChildOfClass(
                 "Humanoid"
             )
         )
-
     end
 
     return result
 
 end
 
-function others.getOthersHumanoid()
+function others.getHumanoid()
 
-    local humanoids =
-        others.getOthersHumanoids()
-
-    return humanoids[1]
+    return others.getHumanoids()[1]
 
 end
 
-function others.rememberOthersOriginal(
-    humanoid
-)
+function others.ensureSnapshot()
 
     if others.originalDescription then
-
         return true
-
     end
 
-    humanoid =
-        humanoid
-        or others.getOthersHumanoid()
+    local humanoid =
+        others.getHumanoid()
 
     if not humanoid then
         return false
     end
 
-    local success, description =
+    local ok, description =
         pcall(function()
             return humanoid:GetAppliedDescription()
         end)
 
-    if not success
-        or not description
-    then
-
-        warn(
-            "[Others] GetAppliedDescription error:",
-            description
-        )
-
+    if not ok or not description then
         return false
-
     end
 
-    local cloneSuccess, clone =
+    local cloneOk, clone =
         pcall(function()
             return description:Clone()
         end)
 
-    if not cloneSuccess
-        or not clone
-    then
-
-        warn(
-            "[Others] Failed to clone initial HumanoidDescription"
-        )
-
+    if not cloneOk or not clone then
         return false
-
     end
 
     others.targetHumanoid =
@@ -4599,78 +4512,20 @@ function others.rememberOthersOriginal(
 
 end
 
-function others.normalizeOthersAccessoryText(
-    value
-)
-
-    value =
-        tostring(value or "")
-
-    value =
-        string.gsub(
-            value,
-            "%s+",
-            ""
-        )
-
-    value =
-        string.gsub(
-            value,
-            "[^%d,]",
-            ""
-        )
-
-    value =
-        string.gsub(
-            value,
-            ",+",
-            ","
-        )
-
-    value =
-        string.gsub(
-            value,
-            "^,",
-            ""
-        )
-
-    value =
-        string.gsub(
-            value,
-            ",$",
-            ""
-        )
-
-    return value
-
-end
-
-function others.normalizeOthersNumberText(
-    value
-)
-
-    local number =
-        string.match(
-            tostring(value or ""),
-            "%d+"
-        )
-
-    return number or ""
-
-end
-
-function others.getOthersCurrentDescription()
+function others.isR6()
 
     local humanoid =
-        others.getOthersHumanoid()
+        others.getHumanoid()
 
-    if not humanoid then
-        return nil
-    end
+    return humanoid
+        and humanoid.RigType
+            == Enum.HumanoidRigType.R6
 
-    if humanoid.RigType
-        ~= Enum.HumanoidRigType.R6
-    then
+end
+
+function others.getDescription()
+
+    if not others.isR6() then
 
         if others.status then
             others.status.Text =
@@ -4681,62 +4536,56 @@ function others.getOthersCurrentDescription()
 
     end
 
-    if not others.rememberOthersOriginal(
-        humanoid
-    ) then
+    if not others.ensureSnapshot() then
         return nil
     end
 
-    local success, description =
+    local humanoid =
+        others.getHumanoid()
+
+    if not humanoid then
+        return nil
+    end
+
+    local ok, description =
         pcall(function()
             return humanoid:GetAppliedDescription()
         end)
 
-    if not success
-        or not description
-    then
-
-        if others.status then
-            others.status.Text =
-                "Не удалось получить AvatarDescription"
-        end
-
-        return nil
-
+    if ok and description then
+        return description
     end
 
-    return description
+    return nil
 
 end
 
-function others.getOthersPropertyText(
+function others.propertyText(
     description,
     slot
 )
 
-    local success, value =
+    local ok, value =
         pcall(function()
+
             return description[
                 slot.property
             ]
+
         end)
 
-    if not success
-        or value == nil
-    then
+    if not ok or value == nil then
         return ""
     end
 
     if slot.multi then
-        return tostring(value)
+        return tostring(value or "")
     end
 
     local number =
         tonumber(value)
 
-    if not number
-        or number == 0
-    then
+    if not number or number == 0 then
         return ""
     end
 
@@ -4744,76 +4593,39 @@ function others.getOthersPropertyText(
 
 end
 
-function others.refreshOthersFields()
+function others.refresh()
 
-    local description
+    local description =
+        others.getDescription()
 
-    local humanoid =
-        others.getOthersHumanoid()
-
-    if not humanoid then
+    if not description then
         return
     end
 
-    local success =
-        pcall(function()
+    local groups = {
+        others.ACCESSORY_SLOTS,
+        others.CLOTHING_SLOTS,
+        others.BODY_SLOTS
+    }
 
-            description =
-                humanoid:GetAppliedDescription()
+    for _, group in ipairs(groups) do
 
-        end)
+        for _, slot in ipairs(group) do
 
-    if not success
-        or not description
-    then
-        return
-    end
+            local box =
+                others.fieldBoxes[
+                    slot.property
+                ]
 
-    local allSlots = {}
+            if box then
 
-    for _, slot in ipairs(
-        others.OTHERS_ACCESSORY_SLOTS
-    ) do
-        table.insert(
-            allSlots,
-            slot
-        )
-    end
+                box.Text =
+                    others.propertyText(
+                        description,
+                        slot
+                    )
 
-    for _, slot in ipairs(
-        others.OTHERS_CLOTHING_SLOTS
-    ) do
-        table.insert(
-            allSlots,
-            slot
-        )
-    end
-
-    for _, slot in ipairs(
-        others.OTHERS_BODY_SLOTS
-    ) do
-        table.insert(
-            allSlots,
-            slot
-        )
-    end
-
-    for _, slot in ipairs(
-        allSlots
-    ) do
-
-        local box =
-            others.fieldBoxes[
-                slot.property
-            ]
-
-        if box then
-
-            box.Text =
-                others.getOthersPropertyText(
-                    description,
-                    slot
-                )
+            end
 
         end
 
@@ -4821,131 +4633,93 @@ function others.refreshOthersFields()
 
 end
 
-function others.applyOthersDescription(
+function others.applyDescription(
     description
 )
 
-    local humanoids =
-        others.getOthersHumanoids()
-
-    if #humanoids == 0 then
+    if not others.isR6() then
 
         if others.status then
             others.status.Text =
-                "Humanoid не найден"
+                "Только R6"
         end
 
         return false
 
     end
 
-    local appliedCount = 0
+    local applied = 0
     local lastError
 
     for _, humanoid in ipairs(
-        humanoids
+        others.getHumanoids()
     ) do
 
-        if humanoid.RigType
-            == Enum.HumanoidRigType.R6
-        then
+        local ok, err =
+            pcall(function()
 
-            --// Reset is important here:
-            --// it forces the whole visual state to match
-            --// the supplied description.
-            local ok, err =
+                humanoid:ApplyDescriptionResetAsync(
+                    description
+                )
+
+            end)
+
+        if not ok then
+
+            lastError =
+                err
+
+            local legacyOk, legacyErr =
                 pcall(function()
 
-                    humanoid:ApplyDescriptionResetAsync(
+                    humanoid:ApplyDescriptionReset(
                         description
                     )
 
                 end)
 
-            if not ok then
-
-                lastError =
-                    err
-
-                local legacyOk, legacyErr =
-                    pcall(function()
-
-                        humanoid:ApplyDescriptionReset(
-                            description
-                        )
-
-                    end)
-
-                if legacyOk then
-
-                    ok =
-                        true
-
-                else
-
-                    lastError =
-                        legacyErr
-
-                    local asyncOk, asyncErr =
-                        pcall(function()
-
-                            humanoid:ApplyDescriptionAsync(
-                                description
-                            )
-
-                        end)
-
-                    if asyncOk then
-
-                        ok =
-                            true
-
-                    else
-
-                        lastError =
-                            asyncErr
-
-                        local oldOk, oldErr =
-                            pcall(function()
-
-                                humanoid:ApplyDescription(
-                                    description
-                                )
-
-                            end)
-
-                        if oldOk then
-
-                            ok =
-                                true
-
-                        else
-
-                            lastError =
-                                oldErr
-
-                        end
-
-                    end
-
-                end
-
+            if legacyOk then
+                ok = true
+            else
+                lastError = legacyErr
             end
 
+        end
+
+        if ok then
+            applied += 1
+        end
+
+    end
+
+    if applied == 0 then
+
+        --// Last compatibility fallback.
+        for _, humanoid in ipairs(
+            others.getHumanoids()
+        ) do
+
+            local ok =
+                pcall(function()
+
+                    humanoid:ApplyDescriptionAsync(
+                        description
+                    )
+
+                end)
+
             if ok then
-
-                appliedCount += 1
-
+                applied += 1
             end
 
         end
 
     end
 
-    if appliedCount == 0 then
+    if applied == 0 then
 
         warn(
-            "[Others] ApplyDescription error:",
+            "[Others] Apply failed:",
             lastError
         )
 
@@ -4964,13 +4738,11 @@ function others.applyOthersDescription(
     end
 
     task.delay(
-        0.25,
+        0.2,
         function()
-
             pcall(function()
-                others.refreshOthersFields()
+                others.refresh()
             end)
-
         end
     )
 
@@ -4978,73 +4750,13 @@ function others.applyOthersDescription(
 
 end
 
---// =========================================================
---// QUICK BODY APPLY
---// =========================================================
-
-function others.applyOthersBodyPart(
-    property,
-    assetId
-)
-
-    local description
-
-    local humanoid =
-        others.getOthersHumanoid()
-
-    if not humanoid then
-        return false
-    end
-
-    if not others.rememberOthersOriginal(
-        humanoid
-    ) then
-        return false
-    end
-
-    local success
-
-    success =
-        pcall(function()
-
-            description =
-                humanoid:GetAppliedDescription()
-
-        end)
-
-    if not success
-        or not description
-    then
-
-        return false
-
-    end
-
-    local setSuccess =
-        pcall(function()
-
-            description[property] =
-                assetId
-
-        end)
-
-    if not setSuccess then
-        return false
-    end
-
-    return others.applyOthersDescription(
-        description
-    )
-
-end
-
-function others.applyOthersField(
+function others.applyField(
     slot,
     textValue
 )
 
     local description =
-        others.getOthersCurrentDescription()
+        others.getDescription()
 
     if not description then
         return false
@@ -5055,166 +4767,127 @@ function others.applyOthersField(
     if slot.multi then
 
         value =
-            others.normalizeOthersAccessoryText(
-                textValue
+            tostring(
+                textValue or ""
+            )
+
+        value =
+            string.gsub(
+                value,
+                "%s+",
+                ""
+            )
+
+        value =
+            string.gsub(
+                value,
+                "[^%d,]",
+                ""
+            )
+
+        value =
+            string.gsub(
+                value,
+                ",+",
+                ","
+            )
+
+        value =
+            string.gsub(
+                value,
+                "^,",
+                ""
+            )
+
+        value =
+            string.gsub(
+                value,
+                ",$",
+                ""
             )
 
     else
 
         value =
             tonumber(
-                others.normalizeOthersNumberText(
-                    textValue
+                string.match(
+                    tostring(textValue or ""),
+                    "%d+"
                 )
             )
             or 0
 
     end
 
-    local success, err =
+    local ok =
         pcall(function()
 
             description[
                 slot.property
-            ] =
-                value
+            ] = value
 
         end)
 
-    if not success then
-
-        warn(
-            "[Others] Failed to set",
-            slot.property,
-            err
-        )
-
-        if others.status then
-            others.status.Text =
-                "Не удалось изменить " ..
-                slot.label
-        end
-
+    if not ok then
         return false
-
     end
 
-    return others.applyOthersDescription(
+    return others.applyDescription(
         description
     )
 
 end
 
-function others.scanOthers()
+function others.scan()
 
     local description =
-        others.getOthersCurrentDescription()
+        others.getDescription()
 
     if not description then
         return false
     end
 
-    local allSlots = {}
-
-    for _, slot in ipairs(
-        others.OTHERS_ACCESSORY_SLOTS
-    ) do
-
-        table.insert(
-            allSlots,
-            slot
-        )
-
-    end
-
-    for _, slot in ipairs(
-        others.OTHERS_CLOTHING_SLOTS
-    ) do
-
-        table.insert(
-            allSlots,
-            slot
-        )
-
-    end
-
-    for _, slot in ipairs(
-        others.OTHERS_BODY_SLOTS
-    ) do
-
-        table.insert(
-            allSlots,
-            slot
-        )
-
-    end
-
-    for _, slot in ipairs(
-        allSlots
-    ) do
-
-        local box =
-            others.fieldBoxes[
-                slot.property
-            ]
-
-        if box then
-
-            box.Text =
-                others.getOthersPropertyText(
-                    description,
-                    slot
-                )
-
-        end
-
-    end
+    others.refresh()
 
     if others.status then
-
         others.status.Text =
             "Сканировано • R6"
-
     end
 
     return true
 
 end
 
-function others.clearOthersAccessories()
+function others.clearAccessories()
 
     local description =
-        others.getOthersCurrentDescription()
+        others.getDescription()
 
     if not description then
         return false
     end
 
     for _, property in ipairs(
-        others.OTHERS_CLEAR_ACCESSORY_PROPERTIES
+        others.ACCESSORY_PROPERTIES
     ) do
 
         pcall(function()
-
-            description[property] =
-                ""
-
+            description[property] = ""
         end)
 
     end
 
-    --// Face is not 2D clothing and is therefore removed.
     pcall(function()
         description.Face = 0
     end)
 
-    return others.applyOthersDescription(
+    return others.applyDescription(
         description
     )
 
 end
 
-function others.restoreOthers(
+function others.restore(
     keepSnapshot
 )
 
@@ -5222,25 +4895,22 @@ function others.restoreOthers(
         return false
     end
 
-    local description =
-        others.originalDescription
-
-    local applied =
-        others.applyOthersDescription(
-            description
+    local result =
+        others.applyDescription(
+            others.originalDescription
         )
 
     if not keepSnapshot then
 
-        others.targetHumanoid =
+        others.originalDescription =
             nil
 
-        others.originalDescription =
+        others.targetHumanoid =
             nil
 
     end
 
-    return applied
+    return result
 
 end
 
@@ -5313,7 +4983,9 @@ others.pageCorner.CornerRadius =
     )
 
 others.pageCorner.Parent =
-    others.padding =
+    others.page
+
+others.padding =
     Instance.new("UIPadding")
 
 others.padding.PaddingTop =
@@ -5341,6 +5013,7 @@ others.padding.PaddingRight =
     )
 
 others.padding.Parent =
+    others.page
 
 others.layout =
     Instance.new("UIListLayout")
@@ -5355,10 +5028,11 @@ others.layout.SortOrder =
     Enum.SortOrder.LayoutOrder
 
 others.layout.Parent =
+    others.page
 
-function others.makeOthersHeader(
+function others.header(
     textValue,
-    others.order
+    orderValue
 )
 
     local header =
@@ -5395,17 +5069,16 @@ function others.makeOthersHeader(
         Enum.TextXAlignment.Left
 
     header.LayoutOrder =
-        others.order
+        orderValue
 
     header.Parent =
-
-    return header
+        others.page
 
 end
 
-function others.makeOthersRow(
+function others.row(
     slot,
-    others.order
+    orderValue
 )
 
     local row =
@@ -5434,9 +5107,10 @@ function others.makeOthersRow(
         0
 
     row.LayoutOrder =
-        others.order
+        orderValue
 
     row.Parent =
+        others.page
 
     local corner =
         Instance.new("UICorner")
@@ -5526,12 +5200,9 @@ function others.makeOthersRow(
     box.ClearTextOnFocus =
         false
 
-    box.Text =
-        ""
-
     box.PlaceholderText =
         slot.multi
-        and "ID или ID,ID,ID"
+        and "ID или ID,ID"
         or "Пусто"
 
     box.TextSize =
@@ -5637,16 +5308,11 @@ function others.makeOthersRow(
     ] =
         box
 
-    others.fieldButtons[
-        slot.property
-    ] =
-        apply
-
     addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
 
-                if others.applyOthersField(
+                if others.applyField(
                     slot,
                     box.Text
                 ) then
@@ -5681,32 +5347,23 @@ function others.makeOthersRow(
             function(enterPressed)
 
                 if enterPressed then
-
-                    others.applyOthersField(
+                    others.applyField(
                         slot,
                         box.Text
                     )
-
                 end
 
             end
         )
     )
 
-    return row
-
 end
 
-others.quickHeader =
-    others.makeOthersHeader(
-        "QUICK BODY",
-        0
-    )
-
-function others.makeOthersQuickRow(
+function others.quickRow(
     labelText,
+    property,
     assetId,
-    yOrder
+    orderValue
 )
 
     local row =
@@ -5731,9 +5388,10 @@ function others.makeOthersQuickRow(
         0
 
     row.LayoutOrder =
-        yOrder
+        orderValue
 
     row.Parent =
+        others.page
 
     local corner =
         Instance.new("UICorner")
@@ -5760,11 +5418,11 @@ function others.makeOthersQuickRow(
 
     label.Position =
         UDim2.new(
-            0,
-            10,
-            0,
-            0
-        )
+        0,
+        10,
+        0,
+        0
+    )
 
     label.BackgroundTransparency =
         1
@@ -5855,10 +5513,8 @@ function others.makeOthersQuickRow(
         apply.MouseButton1Click:Connect(
             function()
 
-                if others.applyOthersBodyPart(
-                    labelText == "HEADLESS"
-                    and "Head"
-                    or "RightLeg",
+                if others.applyBodyPart(
+                    property,
                     assetId
                 ) then
 
@@ -5889,17 +5545,112 @@ function others.makeOthersQuickRow(
 
 end
 
-others.makeOthersQuickRow(
-    "HEADLESS",
-    others.OTHERS_HEADLESS_ID,
+function others.applyBodyPart(
+    property,
+    assetId
+)
+
+    local description =
+        others.getDescription()
+
+    if not description then
+        return false
+    end
+
+    pcall(function()
+        description[property] =
+            assetId
+    end)
+
+    return others.applyDescription(
+        description
+    )
+
+end
+
+others.header(
+    "QUICK BODY",
     1
 )
 
-others.makeOthersQuickRow(
-    "KORBLOX",
-    others.OTHERS_KORBLOX_ID,
+others.quickRow(
+    "HEADLESS",
+    "Head",
+    others.HEADLESS_ID,
     2
 )
+
+others.quickRow(
+    "KORBLOX",
+    "RightLeg",
+    others.KORBLOX_ID,
+    3
+)
+
+others.header(
+    "ACCESSORIES",
+    4
+)
+
+local nextOrder =
+    5
+
+for _, slot in ipairs(
+    others.ACCESSORY_SLOTS
+) do
+
+    others.row(
+        slot,
+        nextOrder
+    )
+
+    nextOrder += 1
+
+end
+
+others.header(
+    "2D CLOTHING",
+    nextOrder
+)
+
+nextOrder += 1
+
+for _, slot in ipairs(
+    others.CLOTHING_SLOTS
+) do
+
+    others.row(
+        slot,
+        nextOrder
+    )
+
+    nextOrder += 1
+
+end
+
+others.header(
+    "BODY BUNDLES",
+    nextOrder
+)
+
+nextOrder += 1
+
+for _, slot in ipairs(
+    others.BODY_SLOTS
+) do
+
+    others.row(
+        slot,
+        nextOrder
+    )
+
+    nextOrder += 1
+
+end
+
+--// =========================================================
+--// FULL SCAN / CLEAR / RESET
+--// =========================================================
 
 others.scanRow =
     Instance.new("Frame")
@@ -5923,21 +5674,10 @@ others.scanRow.BorderSizePixel =
     0
 
 others.scanRow.LayoutOrder =
-    3
+    nextOrder + 1
 
 others.scanRow.Parent =
-
-others.scanCorner =
-    Instance.new("UICorner")
-
-others.scanCorner.CornerRadius =
-    UDim.new(
-        0,
-        6
-    )
-
-others.scanCorner.Parent =
-    others.scanRow
+    others.page
 
 others.scanButton =
     Instance.new("TextButton")
@@ -5999,16 +5739,6 @@ others.scanButtonCorner.CornerRadius =
 others.scanButtonCorner.Parent =
     others.scanButton
 
-addUnusualConnection(
-    others.scanButton.MouseButton1Click:Connect(
-        function()
-
-            others.scanOthers()
-
-        end
-    )
-)
-
 others.status =
     Instance.new("TextLabel")
 
@@ -6053,24 +5783,30 @@ others.status.TextXAlignment =
 others.status.Parent =
     others.scanRow
 
-others.clearRow =
+others.header(
+    "TOOLS",
+    nextOrder + 2
+)
+
+others.toolsFrame =
     Instance.new("Frame")
 
-others.clearRow.Size =
+others.toolsFrame.Size =
     UDim2.new(
         1,
         -4,
         0,
-        40
+        80
     )
 
-others.clearRow.BackgroundTransparency =
+others.toolsFrame.BackgroundTransparency =
     1
 
-others.clearRow.LayoutOrder =
-    200
+others.toolsFrame.LayoutOrder =
+    nextOrder + 3
 
-others.clearRow.Parent =
+others.toolsFrame.Parent =
+    others.page
 
 others.clearButton =
     Instance.new("TextButton")
@@ -6088,7 +5824,7 @@ others.clearButton.Position =
         0,
         0,
         0,
-        3
+        0
     )
 
 others.clearButton.BackgroundColor3 =
@@ -6118,7 +5854,7 @@ others.clearButton.TextColor3 =
     )
 
 others.clearButton.Parent =
-    others.clearRow
+    others.toolsFrame
 
 others.clearCorner =
     Instance.new("UICorner")
@@ -6131,35 +5867,6 @@ others.clearCorner.CornerRadius =
 
 others.clearCorner.Parent =
     others.clearButton
-
-addUnusualConnection(
-    others.clearButton.MouseButton1Click:Connect(
-        function()
-
-            others.clearOthersAccessories()
-
-        end
-    )
-)
-
-others.resetRow =
-    Instance.new("Frame")
-
-others.resetRow.Size =
-    UDim2.new(
-        1,
-        -4,
-        0,
-        40
-    )
-
-others.resetRow.BackgroundTransparency =
-    1
-
-others.resetRow.LayoutOrder =
-    201
-
-others.resetRow.Parent =
 
 others.resetButton =
     Instance.new("TextButton")
@@ -6177,7 +5884,7 @@ others.resetButton.Position =
         0,
         0,
         0,
-        3
+        40
     )
 
 others.resetButton.BackgroundColor3 =
@@ -6207,7 +5914,7 @@ others.resetButton.TextColor3 =
     )
 
 others.resetButton.Parent =
-    others.resetRow
+    others.toolsFrame
 
 others.resetCorner =
     Instance.new("UICorner")
@@ -6222,105 +5929,44 @@ others.resetCorner.Parent =
     others.resetButton
 
 addUnusualConnection(
+    others.scanButton.MouseButton1Click:Connect(
+        function()
+            others.scan()
+        end
+    )
+)
+
+addUnusualConnection(
+    others.clearButton.MouseButton1Click:Connect(
+        function()
+            others.clearAccessories()
+        end
+    )
+)
+
+addUnusualConnection(
     others.resetButton.MouseButton1Click:Connect(
         function()
 
-            if not others.targetHumanoid
-                or not others.originalDescription
-            then
+            others.ensureSnapshot()
 
-                local humanoid =
-                    others.getOthersHumanoid()
-
-                if humanoid then
-                    others.rememberOthersOriginal(
-                        humanoid
-                    )
-                end
-
+            if others.restore(true) then
+                others.scan()
             end
-
-            others.restoreOthers(
-                true
-            )
-
-            task.delay(
-                0.2,
-                function()
-                    others.scanOthers()
-                end
-            )
 
         end
     )
 )
 
-others.makeOthersHeader(
-    "ACCESSORIES",
-    4
+task.defer(
+    function()
+
+        pcall(function()
+            others.scan()
+        end)
+
+    end
 )
-
-others.order = 5
-
-for _, slot in ipairs(
-    others.OTHERS_ACCESSORY_SLOTS
-) do
-
-    others.makeOthersRow(
-        slot,
-        others.order
-    )
-
-    others.order += 1
-
-end
-
-others.makeOthersHeader(
-    "2D CLOTHING",
-    others.order
-)
-
-others.order += 1
-
-for _, slot in ipairs(
-    others.OTHERS_CLOTHING_SLOTS
-) do
-
-    others.makeOthersRow(
-        slot,
-        others.order
-    )
-
-    others.order += 1
-
-end
-
-others.makeOthersHeader(
-    "BODY BUNDLES",
-    others.order
-)
-
-others.order += 1
-
-for _, slot in ipairs(
-    others.OTHERS_BODY_SLOTS
-) do
-
-    others.makeOthersRow(
-        slot,
-        others.order
-    )
-
-    others.order += 1
-
-end
-
---// Capture initial avatar immediately.
-task.defer(function()
-    pcall(function()
-        others.scanOthers()
-    end)
-end)
 
 --// CATEGORY BAR
 -- =========================================================
