@@ -43,12 +43,6 @@ if genv.UNUSUAL_SWAPPER_CLEANUP then
     end)
 end
 
-if genv.UNUSUAL_SWAPPER_CLEANUP then
-    pcall(function()
-        genv.UNUSUAL_SWAPPER_CLEANUP()
-    end)
-end
-
 if genv.EMOTE_SWAPPER_CLEANUP then
     pcall(function()
         genv.EMOTE_SWAPPER_CLEANUP()
