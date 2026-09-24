@@ -4475,21 +4475,42 @@ local OTHERS_CLEAR_ACCESSORY_PROPERTIES = {
     "WaistAccessory"
 }
 
-local function getOthersHumanoid()
+local function getOthersHumanoids()
+
+    local result = {}
+    local seen = {}
+
+    local function addHumanoid(
+        humanoid
+    )
+
+        if humanoid
+            and humanoid:IsA("Humanoid")
+            and not seen[humanoid]
+        then
+
+            seen[humanoid] =
+                true
+
+            table.insert(
+                result,
+                humanoid
+            )
+
+        end
+
+    end
 
     local visualRig =
         getUnusualVisualRig()
 
     if visualRig then
 
-        local humanoid =
+        addHumanoid(
             visualRig:FindFirstChildOfClass(
                 "Humanoid"
             )
-
-        if humanoid then
-            return humanoid
-        end
+        )
 
     end
 
@@ -4498,13 +4519,24 @@ local function getOthersHumanoid()
 
     if character then
 
-        return character:FindFirstChildOfClass(
-            "Humanoid"
+        addHumanoid(
+            character:FindFirstChildOfClass(
+                "Humanoid"
+            )
         )
 
     end
 
-    return nil
+    return result
+
+end
+
+local function getOthersHumanoid()
+
+    local humanoids =
+        getOthersHumanoids()
+
+    return humanoids[1]
 
 end
 
@@ -4512,16 +4544,18 @@ local function rememberOthersOriginal(
     humanoid
 )
 
-    if not humanoid then
-        return false
-    end
-
-    if othersTargetHumanoid == humanoid
-        and othersOriginalDescription
-    then
+    if othersOriginalDescription then
 
         return true
 
+    end
+
+    humanoid =
+        humanoid
+        or getOthersHumanoid()
+
+    if not humanoid then
+        return false
     end
 
     local success, description =
@@ -4714,14 +4748,91 @@ local function getOthersPropertyText(
 
 end
 
-local function applyOthersDescription(
-    description
-)
+local function refreshOthersFields()
+
+    local description
 
     local humanoid =
         getOthersHumanoid()
 
     if not humanoid then
+        return
+    end
+
+    local success =
+        pcall(function()
+
+            description =
+                humanoid:GetAppliedDescription()
+
+        end)
+
+    if not success
+        or not description
+    then
+        return
+    end
+
+    local allSlots = {}
+
+    for _, slot in ipairs(
+        OTHERS_ACCESSORY_SLOTS
+    ) do
+        table.insert(
+            allSlots,
+            slot
+        )
+    end
+
+    for _, slot in ipairs(
+        OTHERS_CLOTHING_SLOTS
+    ) do
+        table.insert(
+            allSlots,
+            slot
+        )
+    end
+
+    for _, slot in ipairs(
+        OTHERS_BODY_SLOTS
+    ) do
+        table.insert(
+            allSlots,
+            slot
+        )
+    end
+
+    for _, slot in ipairs(
+        allSlots
+    ) do
+
+        local box =
+            othersFieldBoxes[
+                slot.property
+            ]
+
+        if box then
+
+            box.Text =
+                getOthersPropertyText(
+                    description,
+                    slot
+                )
+
+        end
+
+    end
+
+end
+
+local function applyOthersDescription(
+    description
+)
+
+    local humanoids =
+        getOthersHumanoids()
+
+    if #humanoids == 0 then
 
         if othersStatus then
             othersStatus.Text =
@@ -4732,67 +4843,114 @@ local function applyOthersDescription(
 
     end
 
-    if humanoid.RigType
-        ~= Enum.HumanoidRigType.R6
-    then
+    local appliedCount = 0
+    local lastError
 
-        if othersStatus then
-            othersStatus.Text =
-                "Только R6"
+    for _, humanoid in ipairs(
+        humanoids
+    ) do
+
+        if humanoid.RigType
+            == Enum.HumanoidRigType.R6
+        then
+
+            --// Reset is important here:
+            --// it forces the whole visual state to match
+            --// the supplied description.
+            local ok, err =
+                pcall(function()
+
+                    humanoid:ApplyDescriptionResetAsync(
+                        description
+                    )
+
+                end)
+
+            if not ok then
+
+                lastError =
+                    err
+
+                local legacyOk, legacyErr =
+                    pcall(function()
+
+                        humanoid:ApplyDescriptionReset(
+                            description
+                        )
+
+                    end)
+
+                if legacyOk then
+
+                    ok =
+                        true
+
+                else
+
+                    lastError =
+                        legacyErr
+
+                    local asyncOk, asyncErr =
+                        pcall(function()
+
+                            humanoid:ApplyDescriptionAsync(
+                                description
+                            )
+
+                        end)
+
+                    if asyncOk then
+
+                        ok =
+                            true
+
+                    else
+
+                        lastError =
+                            asyncErr
+
+                        local oldOk, oldErr =
+                            pcall(function()
+
+                                humanoid:ApplyDescription(
+                                    description
+                                )
+
+                            end)
+
+                        if oldOk then
+
+                            ok =
+                                true
+
+                        else
+
+                            lastError =
+                                oldErr
+
+                        end
+
+                    end
+
+                end
+
+            end
+
+            if ok then
+
+                appliedCount += 1
+
+            end
+
         end
-
-        return false
 
     end
 
-    local applied = false
-    local errorMessage
-
-    local ok, err =
-        pcall(function()
-
-            humanoid:ApplyDescriptionAsync(
-                description
-            )
-
-        end)
-
-    if ok then
-
-        applied = true
-
-    else
-
-        errorMessage =
-            err
-
-        local legacyOk, legacyErr =
-            pcall(function()
-
-                humanoid:ApplyDescription(
-                    description
-                )
-
-        end)
-
-        if legacyOk then
-
-            applied = true
-
-        else
-
-            errorMessage =
-                legacyErr
-
-        end
-
-    end
-
-    if not applied then
+    if appliedCount == 0 then
 
         warn(
             "[Others] ApplyDescription error:",
-            errorMessage
+            lastError
         )
 
         if othersStatus then
@@ -4810,87 +4968,77 @@ local function applyOthersDescription(
     end
 
     task.delay(
-        0.15,
+        0.25,
         function()
 
             pcall(function()
-
-                local fresh =
-                    getOthersCurrentDescription()
-
-                if fresh then
-
-                    for _, slot in ipairs(
-                        OTHERS_ACCESSORY_SLOTS
-                    ) do
-
-                        local box =
-                            othersFieldBoxes[
-                                slot.property
-                            ]
-
-                        if box then
-
-                            box.Text =
-                                getOthersPropertyText(
-                                    fresh,
-                                    slot
-                                )
-
-                        end
-
-                    end
-
-                    for _, slot in ipairs(
-                        OTHERS_CLOTHING_SLOTS
-                    ) do
-
-                        local box =
-                            othersFieldBoxes[
-                                slot.property
-                            ]
-
-                        if box then
-
-                            box.Text =
-                                getOthersPropertyText(
-                                    fresh,
-                                    slot
-                                )
-
-                        end
-
-                    end
-
-                    for _, slot in ipairs(
-                        OTHERS_BODY_SLOTS
-                    ) do
-
-                        local box =
-                            othersFieldBoxes[
-                                slot.property
-                            ]
-
-                        if box then
-
-                            box.Text =
-                                getOthersPropertyText(
-                                    fresh,
-                                    slot
-                                )
-
-                        end
-
-                    end
-
-                end
-
+                refreshOthersFields()
             end)
 
         end
     )
 
     return true
+
+end
+
+--// =========================================================
+--// QUICK BODY APPLY
+--// =========================================================
+
+local function applyOthersBodyPart(
+    property,
+    assetId
+)
+
+    local description
+
+    local humanoid =
+        getOthersHumanoid()
+
+    if not humanoid then
+        return false
+    end
+
+    if not rememberOthersOriginal(
+        humanoid
+    ) then
+        return false
+    end
+
+    local success
+
+    success =
+        pcall(function()
+
+            description =
+                humanoid:GetAppliedDescription()
+
+        end)
+
+    if not success
+        or not description
+    then
+
+        return false
+
+    end
+
+    local setSuccess =
+        pcall(function()
+
+            description[property] =
+                assetId
+
+        end)
+
+    if not setSuccess then
+        return false
+    end
+
+    return applyOthersDescription(
+        description
+    )
 
 end
 
@@ -5074,43 +5222,18 @@ local function restoreOthers(
     keepSnapshot
 )
 
-    if not othersTargetHumanoid
-        or not othersOriginalDescription
-    then
-
-        return
-
+    if not othersOriginalDescription then
+        return false
     end
-
-    local humanoid =
-        othersTargetHumanoid
 
     local description =
         othersOriginalDescription
 
-    local ok =
-        pcall(function()
+    local applied =
+        applyOthersDescription(
+            description
+        )
 
-            humanoid:ApplyDescriptionAsync(
-                description
-            )
-
-        end)
-
-    if not ok then
-
-        pcall(function()
-
-            humanoid:ApplyDescription(
-                description
-            )
-
-        end)
-
-    end
-
-    --// RESET keeps the original snapshot so repeated
-    --// resets always return to the avatar from startup.
     if not keepSnapshot then
 
         othersTargetHumanoid =
@@ -5120,6 +5243,8 @@ local function restoreOthers(
             nil
 
     end
+
+    return applied
 
 end
 
@@ -5582,6 +5707,211 @@ local function makeOthersRow(
 
 end
 
+local quickHeader =
+    makeOthersHeader(
+        "QUICK BODY",
+        0
+    )
+
+local function makeOthersQuickRow(
+    labelText,
+    assetId,
+    yOrder
+)
+
+    local row =
+        Instance.new("Frame")
+
+    row.Size =
+        UDim2.new(
+            1,
+            -4,
+            0,
+            40
+        )
+
+    row.BackgroundColor3 =
+        Color3.fromRGB(
+            40,
+            40,
+            40
+        )
+
+    row.BorderSizePixel =
+        0
+
+    row.LayoutOrder =
+        yOrder
+
+    row.Parent =
+        othersPage
+
+    local corner =
+        Instance.new("UICorner")
+
+    corner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    corner.Parent =
+        row
+
+    local label =
+        Instance.new("TextLabel")
+
+    label.Size =
+        UDim2.new(
+            1,
+            -100,
+            1,
+            0
+        )
+
+    label.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            0
+        )
+
+    label.BackgroundTransparency =
+        1
+
+    label.Text =
+        labelText
+
+    label.TextSize =
+        11
+
+    label.Font =
+        Enum.Font.GothamBold
+
+    label.TextColor3 =
+        Color3.fromRGB(
+            215,
+            215,
+            215
+        )
+
+    label.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    label.Parent =
+        row
+
+    local apply =
+        Instance.new("TextButton")
+
+    apply.Size =
+        UDim2.new(
+            0,
+            65,
+            0,
+            28
+        )
+
+    apply.Position =
+        UDim2.new(
+            1,
+            -75,
+            0.5,
+            -14
+        )
+
+    apply.BackgroundColor3 =
+        Color3.fromRGB(
+            52,
+            52,
+            52
+        )
+
+    apply.BorderSizePixel =
+        0
+
+    apply.Text =
+        "APPLY"
+
+    apply.TextSize =
+        9
+
+    apply.Font =
+        Enum.Font.GothamBold
+
+    apply.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    apply.Parent =
+        row
+
+    local applyCorner =
+        Instance.new("UICorner")
+
+    applyCorner.CornerRadius =
+        UDim.new(
+            0,
+            5
+        )
+
+    applyCorner.Parent =
+        apply
+
+    addUnusualConnection(
+        apply.MouseButton1Click:Connect(
+            function()
+
+                if applyOthersBodyPart(
+                    labelText == "HEADLESS"
+                    and "Head"
+                    or "RightLeg",
+                    assetId
+                ) then
+
+                    apply.Text =
+                        "OK"
+
+                    task.delay(
+                        0.7,
+                        function()
+
+                            pcall(function()
+
+                                if apply.Parent then
+                                    apply.Text =
+                                        "APPLY"
+                                end
+
+                            end)
+
+                        end
+                    )
+
+                end
+
+            end
+        )
+    )
+
+end
+
+makeOthersQuickRow(
+    "HEADLESS",
+    OTHERS_HEADLESS_ID,
+    1
+)
+
+makeOthersQuickRow(
+    "KORBLOX",
+    OTHERS_KORBLOX_ID,
+    2
+)
+
 local scanRow =
     Instance.new("Frame")
 
@@ -5604,7 +5934,7 @@ scanRow.BorderSizePixel =
     0
 
 scanRow.LayoutOrder =
-    1
+    3
 
 scanRow.Parent =
     othersPage
@@ -5941,10 +6271,10 @@ addUnusualConnection(
 
 makeOthersHeader(
     "ACCESSORIES",
-    2
+    4
 )
 
-local order = 3
+local order = 5
 
 for _, slot in ipairs(
     OTHERS_ACCESSORY_SLOTS
