@@ -37,6 +37,12 @@ local genv = getgenv and getgenv() or _G
 --// PREVIOUS INSTANCE CLEANUP
 --// =========================================================
 
+if genv.UNUSUAL_SWAPPER_CLEANUP then
+    pcall(function()
+        genv.UNUSUAL_SWAPPER_CLEANUP()
+    end)
+end
+
 if genv.EMOTE_SWAPPER_CLEANUP then
     pcall(function()
         genv.EMOTE_SWAPPER_CLEANUP()
@@ -1430,6 +1436,43 @@ MinimizeCorner.CornerRadius =
 
 MinimizeCorner.Parent =
     Minimize
+
+
+--// =========================================================
+--// COMBINED CLEANUP WRAPPER
+--// =========================================================
+
+local originalCleanup =
+    cleanup
+
+cleanup =
+    function()
+
+        pcall(function()
+
+            if unusualEnabled then
+                setUnusualEnabled(false)
+            else
+                removeOurUnusualFX()
+            end
+
+        end)
+
+        pcall(function()
+            if unusualPicker then
+                unusualPicker.Visible = false
+            end
+        end)
+
+        originalCleanup()
+
+    end
+
+genv.EMOTE_SWAPPER_CLEANUP =
+    cleanup
+
+genv.UNUSUAL_SWAPPER_CLEANUP =
+    cleanup
 
 --// =========================================================
 --// CLOSE
@@ -2979,6 +3022,2920 @@ addConnection(
 
         end
     )
+)
+
+
+--// =========================================================
+--// UNUSUAL SWAPPER
+--// =========================================================
+
+local UNUSUAL_SLOT_COUNT = 12
+
+local unusualSlots = {}
+
+for i = 1, UNUSUAL_SLOT_COUNT do
+    unusualSlots[i] = {
+        originalId = nil,
+        replaceId = nil,
+        originalName = nil,
+        replaceName = nil
+    }
+end
+
+--// Первый тестовый mapping.
+unusualSlots[1].originalId = 1104
+unusualSlots[1].replaceId = 1466
+
+local unusualList = {}
+
+local unusualEnabled = false
+local unusualActiveOriginalId = nil
+local unusualActiveReplacementId = nil
+
+local unusualPicker
+local unusualPickerScroll
+local unusualPickerSearch
+local unusualPickerTitle
+local unusualPickerClose
+
+local unusualPickerButtons = {}
+
+local unusualPage
+local unusualStatus
+local unusualToggle
+
+local unusualOriginalButtons = {}
+local unusualReplaceButtons = {}
+
+local unusualActivePickerSlot = nil
+local unusualActivePickerSide = nil
+
+local unusualCategoryButton
+local emoteCategoryButton
+local categoryBar
+local currentCategory = "Emotes"
+
+--// =========================================================
+--// BUILD COMPLETE UNUSUAL LIST
+--// SlotType == "Unusual" = полная клиентская база.
+--// =========================================================
+
+local function buildUnusualList()
+
+    table.clear(unusualList)
+
+    local all
+
+    local success, result = pcall(function()
+        return Registry.GetAll()
+    end)
+
+    if not success or not result then
+        warn(
+            "[UnusualSwapper] Registry.GetAll error:",
+            result
+        )
+        return
+    end
+
+    all = result
+
+    local seen = {}
+
+    for id, data in pairs(all) do
+
+        local numericId = tonumber(id)
+
+        if numericId and not seen[numericId] then
+
+            local config
+
+            pcall(function()
+                config = Registry.GetConfig(numericId)
+            end)
+
+            local equipInfo =
+                type(config) == "table"
+                and config.EquipInfo
+                or nil
+
+            if type(equipInfo) == "table"
+                and equipInfo.SlotType == "Unusual"
+            then
+
+                local module =
+                    data
+                    and data.Module
+
+                if not module then
+                    local entry
+
+                    pcall(function()
+                        entry =
+                            Registry.GetById(numericId)
+                    end)
+
+                    if entry then
+                        module = entry.Module
+                    end
+                end
+
+                if module then
+
+                    seen[numericId] = true
+
+                    table.insert(
+                        unusualList,
+                        {
+                            id = numericId,
+                            name = module.Name,
+                            module = module
+                        }
+                    )
+                end
+            end
+        end
+    end
+
+    table.sort(
+        unusualList,
+        function(a, b)
+            return a.id < b.id
+        end
+    )
+
+    print(
+        "[UnusualSwapper] Unusuals:",
+        #unusualList
+    )
+
+end
+
+buildUnusualList()
+
+--// =========================================================
+--// UNUSUAL NAME
+--// =========================================================
+
+local function getUnusualName(id)
+
+    id = tonumber(id)
+
+    if not id then
+        return nil
+    end
+
+    for _, data in ipairs(unusualList) do
+        if data.id == id then
+            return data.name
+        end
+    end
+
+    local module = getItemModule(id)
+
+    if module then
+        return module.Name
+    end
+
+    return nil
+
+end
+
+--// =========================================================
+--// CURRENT UNUSUAL FROM LOADOUT
+--// =========================================================
+
+local function getEquippedUnusualId()
+
+    local value = 0
+
+    pcall(function()
+        value =
+            useLoadout.GetEquippedFromSlot(
+                "UnusualSlot"
+            )
+    end)
+
+    return tonumber(value) or 0
+
+end
+
+--// =========================================================
+--// REAL PLAYER CHARACTER
+--// =========================================================
+
+local function getUnusualPlayerCharacter()
+
+    local folder =
+        workspace:FindFirstChild("Players")
+
+    if folder then
+
+        local character =
+            folder:FindFirstChild(
+                LocalPlayer.Name
+            )
+
+        if character then
+            return character
+        end
+
+    end
+
+    return LocalPlayer.Character
+
+end
+
+--// =========================================================
+--// VISUAL RIG
+--// =========================================================
+
+local function getUnusualVisualRig()
+
+    local folder =
+        workspace:FindFirstChild("Rigs")
+
+    if not folder then
+        return nil
+    end
+
+    return folder:FindFirstChild(
+        LocalPlayer.Name
+    )
+
+end
+
+--// =========================================================
+--// COSMETIC RIG
+--// =========================================================
+
+local function getUnusualCosmeticRig(
+    id,
+    visualRig
+)
+
+    local module =
+        getModule(id)
+
+    if not module then
+        return nil
+    end
+
+    local humanoid =
+        visualRig
+        and visualRig:FindFirstChildOfClass(
+            "Humanoid"
+        )
+
+    if not humanoid then
+        return nil
+    end
+
+    if humanoid.RigType
+        == Enum.HumanoidRigType.R6
+    then
+
+        return module:FindFirstChild(
+            "CharacterClassic"
+        )
+        or module:FindFirstChild(
+            "Character"
+        )
+
+    end
+
+    return module:FindFirstChild(
+        "Character"
+    )
+    or module:FindFirstChild(
+        "CharacterClassic"
+    )
+
+end
+
+--// =========================================================
+--// FX CLASSES
+--// =========================================================
+
+local unusualFXClasses = {
+    ParticleEmitter = true,
+    Trail = true,
+    Beam = true,
+
+    Sparkles = true,
+    Fire = true,
+    Smoke = true,
+
+    Highlight = true,
+
+    PointLight = true,
+    SpotLight = true,
+    SurfaceLight = true,
+
+    BillboardGui = true
+}
+
+local function isUnusualFX(object)
+
+    return unusualFXClasses[
+        object.ClassName
+    ] == true
+
+end
+
+--// =========================================================
+--// FX ATTACHMENT TEST
+--// =========================================================
+
+local function unusualAttachmentHasFX(
+    attachment
+)
+
+    for _, descendant in ipairs(
+        attachment:GetDescendants()
+    ) do
+
+        if isUnusualFX(descendant) then
+            return true
+        end
+
+    end
+
+    return false
+
+end
+
+--// =========================================================
+--// TAG OUR OBJECTS
+--// =========================================================
+
+local function tagUnusualFX(
+    object,
+    id
+)
+
+    pcall(function()
+
+        object:SetAttribute(
+            "DeadEyeUnusualFX",
+            true
+        )
+
+        object:SetAttribute(
+            "DeadEyeUnusualFXID",
+            id
+        )
+
+    end)
+
+    for _, descendant in ipairs(
+        object:GetDescendants()
+    ) do
+
+        pcall(function()
+
+            descendant:SetAttribute(
+                "DeadEyeUnusualFX",
+                true
+            )
+
+            descendant:SetAttribute(
+                "DeadEyeUnusualFXID",
+                id
+            )
+
+        end)
+
+    end
+
+end
+
+--// =========================================================
+--// MAP ALL ATTACHMENTS INSIDE CLONE
+--// =========================================================
+
+local function mapUnusualAttachments(
+    source,
+    clone,
+    map
+)
+
+    if source:IsA("Attachment")
+        and clone:IsA("Attachment")
+    then
+
+        map[source] = clone
+
+    end
+
+    for _, sourceChild in ipairs(
+        source:GetChildren()
+    ) do
+
+        local cloneChild =
+            clone:FindFirstChild(
+                sourceChild.Name
+            )
+
+        if cloneChild then
+
+            if sourceChild:IsA("Attachment")
+                and cloneChild:IsA("Attachment")
+            then
+
+                mapUnusualAttachments(
+                    sourceChild,
+                    cloneChild,
+                    map
+                )
+
+            end
+
+        end
+
+    end
+
+end
+
+--// =========================================================
+--// NEEDED ATTACHMENTS
+--// =========================================================
+
+local function getNeededUnusualAttachments(
+    sourcePart
+)
+
+    local needed = {}
+
+    -- Trail / Beam endpoints
+    for _, object in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+
+        if object:IsA("Trail")
+            or object:IsA("Beam")
+        then
+
+            if object.Attachment0 then
+                needed[
+                    object.Attachment0
+                ] = true
+            end
+
+            if object.Attachment1 then
+                needed[
+                    object.Attachment1
+                ] = true
+            end
+
+        end
+
+    end
+
+    -- Attachments containing FX
+    for _, object in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+
+        if object:IsA("Attachment")
+            and unusualAttachmentHasFX(object)
+        then
+
+            needed[object] = true
+
+        end
+
+    end
+
+    -- Поднимаем нужные nested Attachment
+    -- до верхнего Attachment.
+    local changed = true
+
+    while changed do
+
+        changed = false
+
+        for attachment in pairs(needed) do
+
+            local parent =
+                attachment.Parent
+
+            if parent
+                and parent:IsA("Attachment")
+                and not needed[parent]
+            then
+
+                needed[parent] = true
+                changed = true
+
+            end
+
+        end
+
+    end
+
+    return needed
+
+end
+
+--// =========================================================
+--// INSTALL FX FROM ONE PART
+--// =========================================================
+
+local function installUnusualPartFX(
+    sourcePart,
+    targetPart,
+    id
+)
+
+    local needed =
+        getNeededUnusualAttachments(
+            sourcePart
+        )
+
+    local attachmentMap = {}
+
+    --// -----------------------------------------------------
+    --// СНАЧАЛА ATTACHMENTS
+    --// -----------------------------------------------------
+
+    for attachment in pairs(needed) do
+
+        local parent =
+            attachment.Parent
+
+        -- Только top-level нужный Attachment.
+        if not (
+            parent
+            and parent:IsA("Attachment")
+            and needed[parent]
+        ) then
+
+            local clone =
+                attachment:Clone()
+
+            clone.Parent =
+                targetPart
+
+            tagUnusualFX(
+                clone,
+                id
+            )
+
+            mapUnusualAttachments(
+                attachment,
+                clone,
+                attachmentMap
+            )
+
+        end
+
+    end
+
+    --// -----------------------------------------------------
+    --// ПОТОМ FX НЕ ВНУТРИ ATTACHMENT
+    --// -----------------------------------------------------
+
+    for _, sourceObject in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+
+        if isUnusualFX(sourceObject) then
+
+            local insideAttachment = false
+
+            local parent =
+                sourceObject.Parent
+
+            while parent
+                and parent ~= sourcePart
+            do
+
+                if parent:IsA("Attachment") then
+
+                    insideAttachment = true
+                    break
+
+                end
+
+                parent = parent.Parent
+
+            end
+
+            if not insideAttachment then
+
+                local clone =
+                    sourceObject:Clone()
+
+                if clone:IsA("Trail")
+                    or clone:IsA("Beam")
+                then
+
+                    if sourceObject.Attachment0 then
+
+                        local newA0 =
+                            attachmentMap[
+                                sourceObject.Attachment0
+                            ]
+
+                        if newA0 then
+                            clone.Attachment0 =
+                                newA0
+                        end
+
+                    end
+
+                    if sourceObject.Attachment1 then
+
+                        local newA1 =
+                            attachmentMap[
+                                sourceObject.Attachment1
+                            ]
+
+                        if newA1 then
+                            clone.Attachment1 =
+                                newA1
+                        end
+
+                    end
+
+                end
+
+                clone.Parent =
+                    targetPart
+
+                tagUnusualFX(
+                    clone,
+                    id
+                )
+
+            end
+
+        end
+
+    end
+
+end
+
+--// =========================================================
+--// APPLY ONLY FX
+--// НЕ переносим Head/MeshPart/Decal/Parts.
+--// =========================================================
+
+local function applyUnusualFX(
+    id,
+    visualRig,
+    playerCharacter
+)
+
+    local cosmeticRig =
+        getUnusualCosmeticRig(
+            id,
+            visualRig
+        )
+
+    if not cosmeticRig then
+
+        warn(
+            "[UnusualSwapper] Cosmetic rig not found:",
+            id
+        )
+
+        return false
+
+    end
+
+    local installed = 0
+
+    for _, sourcePart in ipairs(
+        cosmeticRig:GetChildren()
+    ) do
+
+        if sourcePart:IsA("BasePart") then
+
+            local targetPart
+
+            if sourcePart.Name
+                == "HumanoidRootPart"
+            then
+
+                -- В игре cached visual rig удаляет HRP,
+                -- поэтому Root FX идут на настоящий character.
+                if playerCharacter then
+
+                    targetPart =
+                        playerCharacter:FindFirstChild(
+                            "HumanoidRootPart"
+                        )
+
+                end
+
+            else
+
+                if visualRig then
+
+                    targetPart =
+                        visualRig:FindFirstChild(
+                            sourcePart.Name
+                        )
+
+                end
+
+            end
+
+            if targetPart
+                and targetPart:IsA("BasePart")
+            then
+
+                installUnusualPartFX(
+                    sourcePart,
+                    targetPart,
+                    id
+                )
+
+                installed += 1
+
+            end
+
+        end
+
+    end
+
+    print(
+        "[UnusualSwapper] Installed FX:",
+        id,
+        "parts:",
+        installed
+    )
+
+    return true
+
+end
+
+--// =========================================================
+--// REMOVE OUR REPLACEMENT FX
+--// =========================================================
+
+local function removeOurUnusualFX()
+
+    local removed = 0
+
+    local roots = {
+        getUnusualVisualRig(),
+        getUnusualPlayerCharacter()
+    }
+
+    local seen = {}
+
+    for _, root in ipairs(roots) do
+
+        if root
+            and not seen[root]
+        then
+
+            seen[root] = true
+
+            for _, object in ipairs(
+                root:GetDescendants()
+            ) do
+
+                local marked = false
+
+                pcall(function()
+
+                    marked =
+                        object:GetAttribute(
+                            "DeadEyeUnusualFX"
+                        ) == true
+
+                end)
+
+                if marked then
+
+                    pcall(function()
+
+                        object:Destroy()
+                        removed += 1
+
+                    end)
+
+                end
+
+            end
+
+        end
+
+    end
+
+    if removed > 0 then
+
+        print(
+            "[UnusualSwapper] Removed replacement FX:",
+            removed
+        )
+
+    end
+
+end
+
+--// =========================================================
+--// BUILD SIGNATURE FOR ORIGINAL UNUSUAL
+--// =========================================================
+
+local function buildOriginalUnusualSignature(
+    id,
+    visualRig
+)
+
+    local cosmeticRig =
+        getUnusualCosmeticRig(
+            id,
+            visualRig
+        )
+
+    if not cosmeticRig then
+        return nil
+    end
+
+    local signature = {}
+
+    for _, sourcePart in ipairs(
+        cosmeticRig:GetChildren()
+    ) do
+
+        if sourcePart:IsA("BasePart") then
+
+            local objects = {}
+
+            for _, object in ipairs(
+                sourcePart:GetDescendants()
+            ) do
+
+                if isUnusualFX(object) then
+
+                    table.insert(
+                        objects,
+                        {
+                            Class =
+                                object.ClassName,
+                            Name =
+                                object.Name
+                        }
+                    )
+
+                end
+
+            end
+
+            signature[
+                sourcePart.Name
+            ] = objects
+
+        end
+
+    end
+
+    return signature
+
+end
+
+--// =========================================================
+--// REMOVE ORIGINAL UNUSUAL FX
+--// =========================================================
+
+local function removeOriginalUnusualFX(
+    id,
+    visualRig,
+    playerCharacter
+)
+
+    local signature =
+        buildOriginalUnusualSignature(
+            id,
+            visualRig
+        )
+
+    if not signature then
+
+        warn(
+            "[UnusualSwapper] Cannot inspect original:",
+            id
+        )
+
+        return
+
+    end
+
+    local removed = 0
+
+    for partName, objects in pairs(
+        signature
+    ) do
+
+        local targetPart
+
+        if partName
+            == "HumanoidRootPart"
+        then
+
+            if playerCharacter then
+
+                targetPart =
+                    playerCharacter:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+
+            end
+
+        elseif visualRig then
+
+            targetPart =
+                visualRig:FindFirstChild(
+                    partName
+                )
+
+        end
+
+        if targetPart
+            and targetPart:IsA("BasePart")
+        then
+
+            for _, existing in ipairs(
+                targetPart:GetDescendants()
+            ) do
+
+                if isUnusualFX(existing) then
+
+                    for _, info in ipairs(
+                        objects
+                    ) do
+
+                        if
+                            existing.ClassName
+                                == info.Class
+                            and existing.Name
+                                == info.Name
+                        then
+
+                            pcall(function()
+                                existing:Destroy()
+                            end)
+
+                            removed += 1
+
+                            break
+
+                        end
+
+                    end
+
+                end
+
+            end
+
+        end
+
+    end
+
+    print(
+        "[UnusualSwapper] Removed original FX:",
+        removed,
+        "ID:",
+        id
+    )
+
+end
+
+--// =========================================================
+--// SLOT FINDER
+--// =========================================================
+
+local function getUnusualSlotByOriginalId(id)
+
+    id = tonumber(id)
+
+    if not id then
+        return nil
+    end
+
+    for i = 1, UNUSUAL_SLOT_COUNT do
+
+        local slot =
+            unusualSlots[i]
+
+        if slot.originalId
+            == id
+            and slot.replaceId
+        then
+
+            return slot, i
+
+        end
+
+    end
+
+    return nil
+
+end
+
+--// =========================================================
+--// RESTORE ACTIVE ORIGINAL
+--// =========================================================
+
+local function restoreActiveUnusual()
+
+    if not unusualActiveOriginalId then
+        return
+    end
+
+    local visualRig =
+        getUnusualVisualRig()
+
+    local playerCharacter =
+        getUnusualPlayerCharacter()
+
+    if not visualRig then
+        return
+    end
+
+    removeOurUnusualFX()
+
+    task.wait()
+
+    applyUnusualFX(
+        unusualActiveOriginalId,
+        visualRig,
+        playerCharacter
+    )
+
+    unusualActiveOriginalId = nil
+    unusualActiveReplacementId = nil
+
+end
+
+--// =========================================================
+--// ACTIVATE MAPPING
+--// =========================================================
+
+local function activateUnusualMapping(
+    slot
+)
+
+    local visualRig =
+        getUnusualVisualRig()
+
+    local playerCharacter =
+        getUnusualPlayerCharacter()
+
+    if not visualRig then
+        return false
+    end
+
+    if not slot
+        or not slot.originalId
+        or not slot.replaceId
+    then
+        return false
+    end
+
+    if slot.originalId
+        == slot.replaceId
+    then
+
+        warn(
+            "[UnusualSwapper] Original and replacement are identical"
+        )
+
+        return false
+
+    end
+
+    print("")
+    print("================================")
+    print("UNUSUAL SWAP")
+    print(
+        "Original:",
+        slot.originalId,
+        slot.originalName
+            or ""
+    )
+    print(
+        "Replacement:",
+        slot.replaceId,
+        slot.replaceName
+            or ""
+    )
+    print(
+        "Visual rig:",
+        visualRig:GetFullName()
+    )
+    print("================================")
+
+    -- Очищаем всё, что принадлежит нашему прошлому mapping.
+    removeOurUnusualFX()
+
+    task.wait()
+
+    -- Удаляем оригинальный визуал.
+    removeOriginalUnusualFX(
+        slot.originalId,
+        visualRig,
+        playerCharacter
+    )
+
+    task.wait()
+
+    -- Ставим только FX нового Unusual.
+    if not applyUnusualFX(
+        slot.replaceId,
+        visualRig,
+        playerCharacter
+    ) then
+
+        return false
+
+    end
+
+    unusualActiveOriginalId =
+        slot.originalId
+
+    unusualActiveReplacementId =
+        slot.replaceId
+
+    return true
+
+end
+
+--// =========================================================
+--// CHECK UNUSUAL STATE
+--// =========================================================
+
+local function checkUnusualState()
+
+    if cleaned then
+        return
+    end
+
+    local equippedId =
+        getEquippedUnusualId()
+
+    local slot =
+        getUnusualSlotByOriginalId(
+            equippedId
+        )
+
+    if not unusualEnabled then
+
+        if unusualActiveOriginalId then
+
+            restoreActiveUnusual()
+
+        end
+
+        return
+
+    end
+
+    if not slot then
+
+        if unusualActiveOriginalId then
+
+            restoreActiveUnusual()
+
+        end
+
+        return
+
+    end
+
+    if unusualActiveOriginalId
+        == slot.originalId
+        and unusualActiveReplacementId
+        == slot.replaceId
+    then
+
+        return
+
+    end
+
+    if unusualActiveOriginalId then
+
+        restoreActiveUnusual()
+
+    end
+
+    activateUnusualMapping(
+        slot
+    )
+
+end
+
+--// =========================================================
+--// UNUSUAL TOGGLE
+--// =========================================================
+
+local function setUnusualEnabled(
+    state
+)
+
+    unusualEnabled = state
+
+    genv.UNUSUAL_SWAPPER_ENABLED =
+        state
+
+    pcall(function()
+
+        if unusualEnabled then
+
+            unusualToggle.Text =
+                "ПОДМЕНА: ВКЛ"
+
+            unusualToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    65,
+                    65,
+                    65
+                )
+
+            unusualStatus.Text =
+                "Unusual подмена включена"
+
+        else
+
+            unusualToggle.Text =
+                "ПОДМЕНА: ВЫКЛ"
+
+            unusualToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            unusualStatus.Text =
+                "Выключена"
+
+        end
+
+    end)
+
+    if not state
+        and unusualActiveOriginalId
+    then
+
+        restoreActiveUnusual()
+
+    end
+
+end
+
+--// =========================================================
+--// UNUSUAL PICKER REBUILD
+-- =========================================================
+
+local function rebuildUnusualPicker()
+
+    for _, button in ipairs(
+        unusualPickerButtons
+    ) do
+
+        pcall(function()
+            button:Destroy()
+        end)
+
+    end
+
+    table.clear(
+        unusualPickerButtons
+    )
+
+    local query =
+        string.lower(
+            unusualPickerSearch.Text
+                or ""
+        )
+
+    local shown = 0
+
+    for index, data in ipairs(
+        unusualList
+    ) do
+
+        local nameLower =
+            string.lower(
+                data.name
+            )
+
+        local idText =
+            tostring(
+                data.id
+            )
+
+        local matches =
+            query == ""
+            or string.find(
+                nameLower,
+                query,
+                1,
+                true
+            )
+            or string.find(
+                idText,
+                query,
+                1,
+                true
+            )
+
+        if matches then
+
+            shown += 1
+
+            local button =
+                Instance.new(
+                    "TextButton"
+                )
+
+            button.Name =
+                "Unusual_"
+                .. tostring(
+                    data.id
+                )
+
+            button.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            button.BorderSizePixel = 0
+
+            button.Text =
+                data.name
+
+            button.TextSize = 11
+
+            button.Font =
+                Enum.Font.Gotham
+
+            button.TextColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+
+            button.TextTruncate =
+                Enum.TextTruncate.AtEnd
+
+            button.LayoutOrder =
+                index
+
+            button.ZIndex = 32
+
+            button.Parent =
+                unusualPickerScroll
+
+            local corner =
+                Instance.new(
+                    "UICorner"
+                )
+
+            corner.CornerRadius =
+                UDim.new(
+                    0,
+                    5
+                )
+
+            corner.Parent =
+                button
+
+            table.insert(
+                unusualPickerButtons,
+                button
+            )
+
+            addConnection(
+                button.MouseButton1Click:Connect(
+                    function()
+
+                        if not unusualActivePickerSlot
+                            or not unusualActivePickerSide
+                        then
+                            return
+                        end
+
+                        local slot =
+                            unusualSlots[
+                                unusualActivePickerSlot
+                            ]
+
+                        if unusualActivePickerSide
+                            == "Original"
+                        then
+
+                            slot.originalId =
+                                data.id
+
+                            slot.originalName =
+                                data.name
+
+                            unusualOriginalButtons[
+                                unusualActivePickerSlot
+                            ].Text =
+                                data.name
+
+                        else
+
+                            slot.replaceId =
+                                data.id
+
+                            slot.replaceName =
+                                data.name
+
+                            unusualReplaceButtons[
+                                unusualActivePickerSlot
+                            ].Text =
+                                data.name
+
+                        end
+
+                        -- Если изменили активный mapping,
+                        -- на следующем heartbeat он будет
+                        -- пересобран с новыми ID.
+                        if unusualActiveOriginalId then
+
+                            if
+                                unusualActiveOriginalId
+                                    == slot.originalId
+                                or
+                                unusualActiveReplacementId
+                                    == slot.replaceId
+                            then
+
+                                restoreActiveUnusual()
+
+                            end
+
+                        end
+
+                        pcall(function()
+
+                            unusualStatus.Text =
+                                "Slot "
+                                .. tostring(
+                                    unusualActivePickerSlot
+                                )
+                                .. " настроен"
+
+                        end)
+
+                        unusualPicker.Visible =
+                            false
+
+                        unusualActivePickerSlot =
+                            nil
+
+                        unusualActivePickerSide =
+                            nil
+
+                    end
+                )
+            )
+
+        end
+
+    end
+
+    pcall(function()
+
+        unusualStatus.Text =
+            "Найдено: "
+            .. tostring(
+                shown
+            )
+
+    end)
+
+    unusualPickerScroll.CanvasPosition =
+        Vector2.new(
+            0,
+            0
+        )
+
+end
+
+--// =========================================================
+--// OPEN UNUSUAL PICKER
+-- =========================================================
+
+local function openUnusualPicker(
+    slotIndex,
+    side
+)
+
+    unusualActivePickerSlot =
+        slotIndex
+
+    unusualActivePickerSide =
+        side
+
+    if side == "Original" then
+
+        unusualPickerTitle.Text =
+            "Slot "
+            .. tostring(
+                slotIndex
+            )
+            .. " • Original"
+
+    else
+
+        unusualPickerTitle.Text =
+            "Slot "
+            .. tostring(
+                slotIndex
+            )
+            .. " • Replace"
+
+    end
+
+    unusualPickerSearch.Text =
+        ""
+
+    rebuildUnusualPicker()
+
+    Picker.Visible = false
+
+    unusualPicker.Visible = true
+
+end
+
+local function closeUnusualPicker()
+
+    unusualPicker.Visible =
+        false
+
+    unusualActivePickerSlot =
+        nil
+
+    unusualActivePickerSide =
+        nil
+
+end
+
+--// =========================================================
+--// UNUSUAL PAGE
+-- =========================================================
+
+unusualPage =
+    Instance.new("Frame")
+
+unusualPage.Name =
+    "UnusualPage"
+
+unusualPage.Size =
+    UDim2.new(
+        1,
+        -92,
+        1,
+        -76
+    )
+
+unusualPage.Position =
+    UDim2.new(
+        0,
+        82,
+        0,
+        68
+    )
+
+unusualPage.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+unusualPage.BorderSizePixel =
+    0
+
+unusualPage.Visible =
+    false
+
+unusualPage.Parent =
+    Main
+
+local unusualPageCorner =
+    Instance.new("UICorner")
+
+unusualPageCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+
+unusualPageCorner.Parent =
+    unusualPage
+
+local unusualSlotsPadding =
+    Instance.new("UIPadding")
+
+unusualSlotsPadding.PaddingTop =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualSlotsPadding.PaddingBottom =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualSlotsPadding.PaddingLeft =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualSlotsPadding.PaddingRight =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualSlotsPadding.Parent =
+    unusualPage
+
+local unusualSlotsLayout =
+    Instance.new("UIListLayout")
+
+unusualSlotsLayout.Padding =
+    UDim.new(
+        0,
+        6
+    )
+
+unusualSlotsLayout.SortOrder =
+    Enum.SortOrder.LayoutOrder
+
+unusualSlotsLayout.Parent =
+    unusualPage
+
+--// =========================================================
+--// CREATE UNUSUAL SLOTS
+-- =========================================================
+
+for slotIndex = 1, UNUSUAL_SLOT_COUNT do
+
+    local slot =
+        unusualSlots[
+            slotIndex
+        ]
+
+    if slot.originalId then
+        slot.originalName =
+            getUnusualName(
+                slot.originalId
+            )
+    end
+
+    if slot.replaceId then
+        slot.replaceName =
+            getUnusualName(
+                slot.replaceId
+            )
+    end
+
+    local row =
+        Instance.new("Frame")
+
+    row.Name =
+        "UnusualSlot"
+        .. tostring(
+            slotIndex
+        )
+
+    row.Size =
+        UDim2.new(
+            1,
+            -12,
+            0,
+            44
+        )
+
+    row.BackgroundColor3 =
+        Color3.fromRGB(
+            40,
+            40,
+            40
+        )
+
+    row.BorderSizePixel = 0
+
+    row.LayoutOrder =
+        slotIndex
+
+    row.Parent =
+        unusualPage
+
+    local rowCorner =
+        Instance.new("UICorner")
+
+    rowCorner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    rowCorner.Parent =
+        row
+
+    local label =
+        Instance.new("TextLabel")
+
+    label.Size =
+        UDim2.new(
+            0,
+            72,
+            1,
+            0
+        )
+
+    label.Position =
+        UDim2.new(
+            0,
+            6,
+            0,
+            0
+        )
+
+    label.BackgroundTransparency =
+        1
+
+    label.Text =
+        "Unusual "
+        .. tostring(
+            slotIndex
+        )
+
+    label.TextSize = 11
+    label.Font =
+        Enum.Font.GothamBold
+
+    label.TextColor3 =
+        Color3.fromRGB(
+            210,
+            210,
+            210
+        )
+
+    label.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    label.Parent =
+        row
+
+    local originalButton =
+        Instance.new("TextButton")
+
+    originalButton.Size =
+        UDim2.new(
+            0,
+            106,
+            0,
+            30
+        )
+
+    originalButton.Position =
+        UDim2.new(
+            0,
+            80,
+            0.5,
+            -15
+        )
+
+    originalButton.BackgroundColor3 =
+        Color3.fromRGB(
+            52,
+            52,
+            52
+        )
+
+    originalButton.BorderSizePixel = 0
+
+    originalButton.Text =
+        slot.originalName
+        or "Выбрать"
+
+    originalButton.TextSize = 10
+    originalButton.Font =
+        Enum.Font.Gotham
+
+    originalButton.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    originalButton.TextTruncate =
+        Enum.TextTruncate.AtEnd
+
+    originalButton.Parent =
+        row
+
+    local originalCorner =
+        Instance.new("UICorner")
+
+    originalCorner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    originalCorner.Parent =
+        originalButton
+
+    unusualOriginalButtons[
+        slotIndex
+    ] =
+        originalButton
+
+    local arrow =
+        Instance.new("TextLabel")
+
+    arrow.Size =
+        UDim2.new(
+            0,
+            18,
+            0,
+            30
+        )
+
+    arrow.Position =
+        UDim2.new(
+            0,
+            190,
+            0.5,
+            -15
+        )
+
+    arrow.BackgroundTransparency =
+        1
+
+    arrow.Text = "→"
+
+    arrow.TextSize = 18
+    arrow.Font =
+        Enum.Font.GothamBold
+
+    arrow.TextColor3 =
+        Color3.fromRGB(
+            180,
+            180,
+            180
+        )
+
+    arrow.Parent =
+        row
+
+    local replaceButton =
+        Instance.new("TextButton")
+
+    replaceButton.Size =
+        UDim2.new(
+            0,
+            110,
+            0,
+            30
+        )
+
+    replaceButton.Position =
+        UDim2.new(
+            0,
+            212,
+            0.5,
+            -15
+        )
+
+    replaceButton.BackgroundColor3 =
+        Color3.fromRGB(
+            52,
+            52,
+            52
+        )
+
+    replaceButton.BorderSizePixel = 0
+
+    replaceButton.Text =
+        slot.replaceName
+        or "Выбрать"
+
+    replaceButton.TextSize = 10
+    replaceButton.Font =
+        Enum.Font.Gotham
+
+    replaceButton.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    replaceButton.TextTruncate =
+        Enum.TextTruncate.AtEnd
+
+    replaceButton.Parent =
+        row
+
+    local replaceCorner =
+        Instance.new("UICorner")
+
+    replaceCorner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    replaceCorner.Parent =
+        replaceButton
+
+    unusualReplaceButtons[
+        slotIndex
+    ] =
+        replaceButton
+
+    addConnection(
+        originalButton.MouseButton1Click:Connect(
+            function()
+
+                openUnusualPicker(
+                    slotIndex,
+                    "Original"
+                )
+
+            end
+        )
+    )
+
+    addConnection(
+        replaceButton.MouseButton1Click:Connect(
+            function()
+
+                openUnusualPicker(
+                    slotIndex,
+                    "Replace"
+                )
+
+            end
+        )
+    )
+
+end
+
+--// =========================================================
+--// UNUSUAL STATUS
+-- =========================================================
+
+unusualStatus =
+    Instance.new("TextLabel")
+
+unusualStatus.Size =
+    UDim2.new(
+        0,
+        210,
+        0,
+        20
+    )
+
+unusualStatus.Position =
+    UDim2.new(
+        0,
+        82,
+        0,
+        37
+    )
+
+unusualStatus.BackgroundTransparency =
+    1
+
+unusualStatus.Text =
+    "12 слотов • Unusuals: "
+    .. tostring(
+        #unusualList
+    )
+
+unusualStatus.TextSize = 12
+unusualStatus.Font =
+    Enum.Font.Gotham
+
+unusualStatus.TextColor3 =
+    Color3.fromRGB(
+        150,
+        150,
+        150
+    )
+
+unusualStatus.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+unusualStatus.Visible =
+    false
+
+unusualStatus.Parent =
+    Main
+
+--// =========================================================
+--// UNUSUAL TOGGLE
+-- =========================================================
+
+unusualToggle =
+    Instance.new("TextButton")
+
+unusualToggle.Size =
+    UDim2.new(
+        0,
+        120,
+        0,
+        26
+    )
+
+unusualToggle.Position =
+    UDim2.new(
+        1,
+        -130,
+        0,
+        35
+    )
+
+unusualToggle.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+
+unusualToggle.BorderSizePixel = 0
+
+unusualToggle.Text =
+    "ПОДМЕНА: ВЫКЛ"
+
+unusualToggle.TextSize = 11
+
+unusualToggle.Font =
+    Enum.Font.GothamBold
+
+unusualToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+unusualToggle.Visible =
+    false
+
+unusualToggle.Parent =
+    Main
+
+local unusualToggleCorner =
+    Instance.new("UICorner")
+
+unusualToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+unusualToggleCorner.Parent =
+    unusualToggle
+
+addConnection(
+    unusualToggle.MouseButton1Click:Connect(
+        function()
+
+            if unusualEnabled then
+                setUnusualEnabled(false)
+            else
+                setUnusualEnabled(true)
+            end
+
+        end
+    )
+)
+
+--// =========================================================
+--// UNUSUAL PICKER
+-- =========================================================
+
+unusualPicker =
+    Instance.new("Frame")
+
+unusualPicker.Size =
+    UDim2.new(
+        0,
+        335,
+        0,
+        350
+    )
+
+unusualPicker.Position =
+    UDim2.new(
+        0.5,
+        -167,
+        0.5,
+        -175
+    )
+
+unusualPicker.BackgroundColor3 =
+    Color3.fromRGB(
+        24,
+        24,
+        24
+    )
+
+unusualPicker.BorderSizePixel = 0
+
+unusualPicker.Visible =
+    false
+
+unusualPicker.ZIndex =
+    30
+
+unusualPicker.Parent =
+    ScreenGui
+
+local unusualPickerCorner =
+    Instance.new("UICorner")
+
+unusualPickerCorner.CornerRadius =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPickerCorner.Parent =
+    unusualPicker
+
+local unusualPickerStroke =
+    Instance.new("UIStroke")
+
+unusualPickerStroke.Thickness =
+    1
+
+unusualPickerStroke.Transparency =
+    0.4
+
+unusualPickerStroke.Parent =
+    unusualPicker
+
+unusualPickerTitle =
+    Instance.new("TextLabel")
+
+unusualPickerTitle.Size =
+    UDim2.new(
+        1,
+        -45,
+        0,
+        32
+    )
+
+unusualPickerTitle.Position =
+    UDim2.new(
+        0,
+        12,
+        0,
+        2
+    )
+
+unusualPickerTitle.BackgroundTransparency =
+    1
+
+unusualPickerTitle.Text =
+    "Выбор Unusual"
+
+unusualPickerTitle.TextSize =
+    16
+
+unusualPickerTitle.Font =
+    Enum.Font.GothamBold
+
+unusualPickerTitle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+unusualPickerTitle.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+unusualPickerTitle.ZIndex =
+    31
+
+unusualPickerTitle.Parent =
+    unusualPicker
+
+unusualPickerClose =
+    Instance.new("TextButton")
+
+unusualPickerClose.Size =
+    UDim2.new(
+        0,
+        30,
+        0,
+        30
+    )
+
+unusualPickerClose.Position =
+    UDim2.new(
+        1,
+        -35,
+        0,
+        4
+    )
+
+unusualPickerClose.BackgroundTransparency =
+    1
+
+unusualPickerClose.Text =
+    "×"
+
+unusualPickerClose.TextSize =
+    25
+
+unusualPickerClose.Font =
+    Enum.Font.GothamBold
+
+unusualPickerClose.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+unusualPickerClose.ZIndex =
+    31
+
+unusualPickerClose.Parent =
+    unusualPicker
+
+unusualPickerSearch =
+    Instance.new("TextBox")
+
+unusualPickerSearch.Size =
+    UDim2.new(
+        1,
+        -20,
+        0,
+        30
+    )
+
+unusualPickerSearch.Position =
+    UDim2.new(
+        0,
+        10,
+        0,
+        36
+    )
+
+unusualPickerSearch.BackgroundColor3 =
+    Color3.fromRGB(
+        40,
+        40,
+        40
+    )
+
+unusualPickerSearch.BorderSizePixel =
+    0
+
+unusualPickerSearch.ClearTextOnFocus =
+    false
+
+unusualPickerSearch.PlaceholderText =
+    "Поиск по названию или ID..."
+
+unusualPickerSearch.PlaceholderColor3 =
+    Color3.fromRGB(
+        120,
+        120,
+        120
+    )
+
+unusualPickerSearch.Text =
+    ""
+
+unusualPickerSearch.TextSize =
+    12
+
+unusualPickerSearch.Font =
+    Enum.Font.Gotham
+
+unusualPickerSearch.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+unusualPickerSearch.ZIndex =
+    32
+
+unusualPickerSearch.Parent =
+    unusualPicker
+
+local unusualSearchCorner =
+    Instance.new("UICorner")
+
+unusualSearchCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+unusualSearchCorner.Parent =
+    unusualPickerSearch
+
+unusualPickerScroll =
+    Instance.new("ScrollingFrame")
+
+unusualPickerScroll.Size =
+    UDim2.new(
+        1,
+        -16,
+        1,
+        -74
+    )
+
+unusualPickerScroll.Position =
+    UDim2.new(
+        0,
+        8,
+        0,
+        70
+    )
+
+unusualPickerScroll.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+unusualPickerScroll.BorderSizePixel = 0
+
+unusualPickerScroll.ScrollBarThickness =
+    6
+
+unusualPickerScroll.CanvasSize =
+    UDim2.new(
+        0,
+        0,
+        0,
+        0
+    )
+
+unusualPickerScroll.AutomaticCanvasSize =
+    Enum.AutomaticSize.Y
+
+unusualPickerScroll.ZIndex =
+    31
+
+unusualPickerScroll.Parent =
+    unusualPicker
+
+local unusualPickerScrollCorner =
+    Instance.new("UICorner")
+
+unusualPickerScrollCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+
+unusualPickerScrollCorner.Parent =
+    unusualPickerScroll
+
+local unusualPickerPadding =
+    Instance.new("UIPadding")
+
+unusualPickerPadding.PaddingTop =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPickerPadding.PaddingBottom =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPickerPadding.PaddingLeft =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPickerPadding.PaddingRight =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPickerPadding.Parent =
+    unusualPickerScroll
+
+local unusualPickerGrid =
+    Instance.new("UIGridLayout")
+
+unusualPickerGrid.CellSize =
+    UDim2.new(
+        0,
+        96,
+        0,
+        32
+    )
+
+unusualPickerGrid.CellPadding =
+    UDim2.new(
+        0,
+        5,
+        0,
+        5
+    )
+
+unusualPickerGrid.SortOrder =
+    Enum.SortOrder.LayoutOrder
+
+unusualPickerGrid.Parent =
+    unusualPickerScroll
+
+addConnection(
+    unusualPickerSearch:GetPropertyChangedSignal(
+        "Text"
+    ):Connect(
+        function()
+
+            if unusualPicker.Visible then
+                rebuildUnusualPicker()
+            end
+
+        end
+    )
+)
+
+addConnection(
+    unusualPickerClose.MouseButton1Click:Connect(
+        function()
+            closeUnusualPicker()
+        end
+    )
+)
+
+--// =========================================================
+--// CATEGORY SIDEBAR
+-- =========================================================
+
+categoryBar =
+    Instance.new("Frame")
+
+categoryBar.Size =
+    UDim2.new(
+        0,
+        66,
+        0,
+        250
+    )
+
+categoryBar.Position =
+    UDim2.new(
+        0,
+        8,
+        0,
+        58
+    )
+
+categoryBar.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+categoryBar.BorderSizePixel = 0
+
+categoryBar.Parent =
+    Main
+
+local categoryCorner =
+    Instance.new("UICorner")
+
+categoryCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+
+categoryCorner.Parent =
+    categoryBar
+
+local function makeCategoryButton(
+    text,
+    y
+)
+
+    local button =
+        Instance.new("TextButton")
+
+    button.Size =
+        UDim2.new(
+            1,
+            -10,
+            0,
+            38
+        )
+
+    button.Position =
+        UDim2.new(
+            0,
+            5,
+            0,
+            y
+        )
+
+    button.BackgroundColor3 =
+        Color3.fromRGB(
+            45,
+            45,
+            45
+        )
+
+    button.BorderSizePixel = 0
+
+    button.Text =
+        text
+
+    button.TextSize = 10
+
+    button.Font =
+        Enum.Font.GothamBold
+
+    button.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    button.TextWrapped =
+        true
+
+    button.Parent =
+        categoryBar
+
+    local buttonCorner =
+        Instance.new("UICorner")
+
+    buttonCorner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    buttonCorner.Parent =
+        button
+
+    return button
+
+end
+
+emoteCategoryButton =
+    makeCategoryButton(
+        "EMOTES",
+        8
+    )
+
+unusualCategoryButton =
+    makeCategoryButton(
+        "UNUSUAL",
+        52
+    )
+
+--// =========================================================
+--// CATEGORY SWITCH
+-- =========================================================
+
+local function setCategory(
+    category
+)
+
+    currentCategory =
+        category
+
+    pcall(function()
+
+        if category == "Unusual" then
+
+            MainTitle.Text =
+                "Unusual Swapper"
+
+            Status.Visible =
+                false
+
+            Toggle.Visible =
+                false
+
+            SlotsScroll.Visible =
+                false
+
+            unusualPage.Visible =
+                true
+
+            unusualStatus.Visible =
+                true
+
+            unusualToggle.Visible =
+                true
+
+            emoteCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            unusualCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    65,
+                    65,
+                    65
+                )
+
+            Picker.Visible =
+                false
+
+        else
+
+            MainTitle.Text =
+                "Emote Swapper"
+
+            Status.Visible =
+                true
+
+            Toggle.Visible =
+                true
+
+            SlotsScroll.Visible =
+                true
+
+            unusualPage.Visible =
+                false
+
+            unusualStatus.Visible =
+                false
+
+            unusualToggle.Visible =
+                false
+
+            unusualCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            emoteCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    65,
+                    65,
+                    65
+                )
+
+            unusualPicker.Visible =
+                false
+
+        end
+
+    end)
+
+end
+
+addConnection(
+    emoteCategoryButton.MouseButton1Click:Connect(
+        function()
+
+            if mainMinimized then
+                setMainMinimized(false)
+            end
+
+            setCategory(
+                "Emotes"
+            )
+
+        end
+    )
+)
+
+addConnection(
+    unusualCategoryButton.MouseButton1Click:Connect(
+        function()
+
+            if mainMinimized then
+                setMainMinimized(false)
+            end
+
+            setCategory(
+                "Unusual"
+            )
+
+        end
+    )
+)
+
+--// =========================================================
+--// HEARTBEAT WATCHER
+--// =========================================================
+
+addConnection(
+    RunService.Heartbeat:Connect(
+        function()
+
+            checkUnusualState()
+
+        end
+    )
+)
+
+--// =========================================================
+--// MINIMIZE WRAPPER
+--// =========================================================
+
+local originalSetMainMinimized =
+    setMainMinimized
+
+setMainMinimized =
+    function(state)
+
+        originalSetMainMinimized(
+            state
+        )
+
+        pcall(function()
+
+            if state then
+
+                Main.Size =
+                    UDim2.new(
+                        0,
+                        315,
+                        0,
+                        40
+                    )
+
+                MainTitle.Position =
+                    UDim2.new(
+                        0,
+                        84,
+                        0,
+                        2
+                    )
+
+                MainTitle.Size =
+                    UDim2.new(
+                        0,
+                        190,
+                        0,
+                        36
+                    )
+
+                categoryBar.Visible =
+                    false
+
+                unusualPage.Visible =
+                    false
+
+                unusualStatus.Visible =
+                    false
+
+                unusualToggle.Visible =
+                    false
+
+            else
+
+                Main.Size =
+                    UDim2.new(
+                        0,
+                        455,
+                        0,
+                        320
+                    )
+
+                MainTitle.Position =
+                    UDim2.new(
+                        0,
+                        82,
+                        0,
+                        2
+                    )
+
+                MainTitle.Size =
+                    UDim2.new(
+                        1,
+                        -175,
+                        0,
+                        36
+                    )
+
+                Status.Position =
+                    UDim2.new(
+                        0,
+                        82,
+                        0,
+                        37
+                    )
+
+                Toggle.Position =
+                    UDim2.new(
+                        1,
+                        -130,
+                        0,
+                        35
+                    )
+
+                SlotsScroll.Size =
+                    UDim2.new(
+                        1,
+                        -92,
+                        1,
+                        -76
+                    )
+
+                SlotsScroll.Position =
+                    UDim2.new(
+                        0,
+                        82,
+                        0,
+                        68
+                    )
+
+                categoryBar.Visible =
+                    true
+
+                if currentCategory
+                    == "Unusual"
+                then
+
+                    unusualPage.Visible =
+                        true
+
+                    unusualStatus.Visible =
+                        true
+
+                    unusualToggle.Visible =
+                        true
+
+                    Status.Visible =
+                        false
+
+                    Toggle.Visible =
+                        false
+
+                    SlotsScroll.Visible =
+                        false
+
+                else
+
+                    unusualPage.Visible =
+                        false
+
+                    unusualStatus.Visible =
+                        false
+
+                    unusualToggle.Visible =
+                        false
+
+                    Status.Visible =
+                        true
+
+                    Toggle.Visible =
+                        true
+
+                    SlotsScroll.Visible =
+                        true
+
+                end
+
+            end
+
+        end)
+
+    end
+
+setCategory(
+    "Emotes"
 )
 
 --// =========================================================
