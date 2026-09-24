@@ -1735,11 +1735,15 @@ local unusualCategoryButton
 local othersCategoryButton
 local currentCategory = "Emotes"
 
-others.page
+local others = {}
+
 others.originalDescription = nil
 others.targetHumanoid = nil
+others.page = nil
+others.status = nil
+others.fieldButtons = {}
+others.fieldBoxes = {}
 
-local others = {}
 local unusualConnections = {}
 
 local unusualDestroyed = false
@@ -4372,14 +4376,6 @@ others.OTHERS_HEADLESS_ID = 134082579
 others.OTHERS_KORBLOX_ID = 139607718
 
 others.page
-others.status
-
-others.originalDescription = nil
-others.targetHumanoid = nil
-
-others.fieldButtons = {}
-others.fieldBoxes = {}
-
 others.OTHERS_ACCESSORY_SLOTS = {
     {
         label = "Hats",
@@ -5318,9 +5314,7 @@ others.pageCorner.CornerRadius =
     )
 
 others.pageCorner.Parent =
-    others.page
-
-others.padding =
+    others.padding =
     Instance.new("UIPadding")
 
 others.padding.PaddingTop =
