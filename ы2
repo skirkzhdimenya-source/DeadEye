@@ -85,7 +85,11 @@ local savedConfig = {
     version = 1,
     emotes = {},
     unusual = {},
-    others = {}
+    others = {},
+    main = {
+        jumpDelay = 0.01,
+        hotkey = "Z"
+    }
 }
 
 local function loadSavedConfig()
@@ -158,6 +162,11 @@ local function loadSavedConfig()
     if type(decoded.others) == "table" then
         savedConfig.others =
             decoded.others
+    end
+
+    if type(decoded.main) == "table" then
+        savedConfig.main =
+            decoded.main
     end
 
     savedConfig.version =
@@ -1736,10 +1745,13 @@ local unusualPage
 local unusualStatus
 
 local categoryBar
+local mainCategoryButton
 local emoteCategoryButton
 local unusualCategoryButton
 local othersCategoryButton
 local currentCategory = "Emotes"
+
+local mainPage
 
 local others = {}
 
@@ -5051,6 +5063,1224 @@ function others.restore(
 end
 
 --// =========================================================
+--// MAIN
+--// FOOT JUMP SENSOR
+--// =========================================================
+
+local mainJump = {
+    enabled = false,
+    destroyed = false,
+    jumpDelay = 0.01,
+    hotkeyName = "Z",
+    lastJump = 0,
+    character = nil,
+    humanoid = nil,
+    root = nil,
+    sensorPart = nil,
+    frontSensorPart = nil,
+    sensorTouchConnection = nil,
+    frontSensorTouchConnection = nil,
+    connections = {}
+}
+
+mainJump.jumpDelay =
+    math.max(
+        0,
+        tonumber(
+            savedConfig.main
+            and savedConfig.main.jumpDelay
+        ) or 0.01
+    )
+
+mainJump.hotkeyName =
+    tostring(
+        savedConfig.main
+        and savedConfig.main.hotkey
+        or "Z"
+    ):upper()
+
+if not Enum.KeyCode[mainJump.hotkeyName]
+    or Enum.KeyCode[mainJump.hotkeyName] == Enum.KeyCode.Unknown
+then
+    mainJump.hotkeyName = "Z"
+end
+
+genv.DEADEYE_MAIN_JUMP_RUNNING = true
+
+local function mainAddConnection(connection)
+    table.insert(
+        mainJump.connections,
+        connection
+    )
+    return connection
+end
+
+local function mainDisconnectConnections()
+    for _, connection in ipairs(
+        mainJump.connections
+    ) do
+        pcall(function()
+            connection:Disconnect()
+        end)
+    end
+    table.clear(
+        mainJump.connections
+    )
+end
+
+function mainJump.saveConfig()
+    savedConfig.main = {
+        jumpDelay = mainJump.jumpDelay,
+        hotkey = mainJump.hotkeyName
+    }
+    pcall(function()
+        saveSavedConfig()
+    end)
+end
+
+function mainJump.updateToggle()
+    if mainJump.destroyed
+        or not mainJump.toggle
+    then
+        return
+    end
+
+    if mainJump.enabled then
+        mainJump.toggle.Text =
+            "JUMP: ON  |  "
+            .. mainJump.hotkeyName
+        mainJump.toggle.BackgroundColor3 =
+            Color3.fromRGB(65, 65, 65)
+    else
+        mainJump.toggle.Text =
+            "JUMP: OFF |  "
+            .. mainJump.hotkeyName
+        mainJump.toggle.BackgroundColor3 =
+            Color3.fromRGB(45, 45, 45)
+    end
+end
+
+function mainJump.setEnabled(state)
+    if mainJump.destroyed then
+        return
+    end
+
+    mainJump.enabled = state and true or false
+
+    if not mainJump.enabled
+        and mainJump.humanoid
+        and mainJump.humanoid.Parent
+    then
+        pcall(function()
+            mainJump.humanoid.Jump = false
+        end)
+    end
+
+    if mainJump.status then
+        mainJump.status.Text =
+            mainJump.enabled
+            and "ENABLED"
+            or "DISABLED"
+    end
+
+    mainJump.updateToggle()
+end
+
+function mainJump.applyDelay(textValue)
+    local value = tonumber(
+        tostring(textValue or ""):match(
+            "[-+]?%d*%.?%d+"
+        )
+    )
+
+    if not value then
+        if mainJump.status then
+            mainJump.status.Text =
+                "Некорректная задержка"
+        end
+        return false
+    end
+
+    mainJump.jumpDelay =
+        math.clamp(value, 0, 5)
+
+    if mainJump.delayBox then
+        mainJump.delayBox.Text =
+            tostring(mainJump.jumpDelay)
+    end
+
+    mainJump.saveConfig()
+
+    if mainJump.status then
+        mainJump.status.Text =
+            "Delay: "
+            .. tostring(mainJump.jumpDelay)
+            .. " c"
+    end
+
+    return true
+end
+
+function mainJump.applyHotkey(textValue)
+    local keyName =
+        tostring(textValue or "")
+
+    keyName =
+        keyName:gsub("%s+", ""):upper()
+
+    local keyCode =
+        Enum.KeyCode[keyName]
+
+    if not keyCode
+        or keyCode == Enum.KeyCode.Unknown
+    then
+        if mainJump.status then
+            mainJump.status.Text =
+                "Неизвестная клавиша"
+        end
+        return false
+    end
+
+    mainJump.hotkeyName = keyName
+
+    if mainJump.keyBox then
+        mainJump.keyBox.Text =
+            keyName
+    end
+
+    mainJump.saveConfig()
+    mainJump.updateToggle()
+
+    if mainJump.status then
+        mainJump.status.Text =
+            "Hotkey: "
+            .. keyName
+    end
+
+    return true
+end
+
+function mainJump.destroySensors()
+    for _, name in ipairs({
+        "sensorTouchConnection",
+        "frontSensorTouchConnection"
+    }) do
+        local connection =
+            mainJump[name]
+        if connection then
+            pcall(function()
+                connection:Disconnect()
+            end)
+            mainJump[name] = nil
+        end
+    end
+
+    for _, name in ipairs({
+        "sensorPart",
+        "frontSensorPart"
+    }) do
+        local part = mainJump[name]
+        if part then
+            pcall(function()
+                part:Destroy()
+            end)
+            mainJump[name] = nil
+        end
+    end
+end
+
+function mainJump.canJump()
+    if mainJump.destroyed
+        or not mainJump.enabled
+        or not mainJump.humanoid
+        or mainJump.humanoid.Health <= 0
+    then
+        return false
+    end
+
+    if mainJump.humanoid.FloorMaterial
+        == Enum.Material.Air
+    then
+        return false
+    end
+
+    local state =
+        mainJump.humanoid:GetState()
+
+    return state
+        ~= Enum.HumanoidStateType.Jumping
+        and state
+            ~= Enum.HumanoidStateType.Freefall
+        and state
+            ~= Enum.HumanoidStateType.FallingDown
+end
+
+function mainJump.doJump(hit)
+    if not mainJump.canJump() then
+        return
+    end
+
+    local now = tick()
+
+    if now - mainJump.lastJump
+        < 0
+    then
+        return
+    end
+
+    mainJump.lastJump = now
+
+    if mainJump.status then
+        mainJump.status.Text = "JUMP!"
+    end
+
+    if mainJump.debug then
+        mainJump.debug.Text =
+            "Jump: "
+            .. (hit and hit.Name or "?")
+    end
+
+    if mainJump.humanoid then
+        mainJump.humanoid.Jump = true
+        pcall(function()
+            mainJump.humanoid:ChangeState(
+                Enum.HumanoidStateType.Jumping
+            )
+        end)
+    end
+end
+
+function mainJump.contact(hit, sensorName)
+    if mainJump.destroyed
+        or not mainJump.enabled
+        or not hit
+    then
+        return
+    end
+
+    if mainJump.character
+        and hit:IsDescendantOf(
+            mainJump.character
+        )
+    then
+        return
+    end
+
+    if mainJump.status then
+        mainJump.status.Text = "CONTACT"
+    end
+
+    if mainJump.debug then
+        mainJump.debug.Text =
+            sensorName
+            .. ": "
+            .. hit.Name
+    end
+
+    task.wait(
+        mainJump.jumpDelay
+    )
+
+    if mainJump.destroyed
+        or not mainJump.enabled
+    then
+        return
+    end
+
+    mainJump.doJump(hit)
+end
+
+function mainJump.createSensors(char)
+    if mainJump.destroyed then
+        return
+    end
+
+    mainJump.destroySensors()
+
+    mainJump.character = char
+    mainJump.humanoid =
+        char:WaitForChild("Humanoid")
+    mainJump.root =
+        char:WaitForChild(
+            "HumanoidRootPart"
+        )
+
+    local sensorSize =
+        Vector3.new(
+            2.6,
+            0.15,
+            2.6
+        )
+
+    local sensor =
+        Instance.new("Part")
+
+    sensor.Name =
+        "FootJumpSensor"
+
+    sensor.Size =
+        sensorSize
+
+    sensor.Transparency =
+        1
+
+    sensor.Anchored =
+        false
+
+    sensor.CanCollide =
+        false
+
+    sensor.CanTouch =
+        true
+
+    sensor.CanQuery =
+        false
+
+    sensor.Massless =
+        true
+
+    sensor.CastShadow =
+        false
+
+    sensor.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -3,
+            0
+        )
+
+    sensor.Parent =
+        char
+
+    local sensorWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    sensorWeld.Part0 =
+        mainJump.root
+
+    sensorWeld.Part1 =
+        sensor
+
+    sensorWeld.Parent =
+        sensor
+
+    mainJump.sensorPart =
+        sensor
+
+    mainJump.sensorTouchConnection =
+        sensor.Touched:Connect(
+            function(hit)
+                mainJump.contact(
+                    hit,
+                    "MAIN"
+                )
+            end
+        )
+
+    local front =
+        Instance.new("Part")
+
+    front.Name =
+        "FrontJumpSensor"
+
+    front.Size =
+        Vector3.new(
+            2,
+            3,
+            1
+        )
+
+    front.Transparency =
+        1
+
+    front.Color =
+        Color3.fromRGB(
+            255,
+            0,
+            0
+        )
+
+    front.Material =
+        Enum.Material.Neon
+
+    front.Anchored =
+        false
+
+    front.CanCollide =
+        false
+
+    front.CanTouch =
+        true
+
+    front.CanQuery =
+        false
+
+    front.Massless =
+        true
+
+    front.CastShadow =
+        false
+
+    front.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -1,
+            -0.8
+        )
+
+    front.Parent =
+        char
+
+    local frontWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    frontWeld.Part0 =
+        mainJump.root
+
+    frontWeld.Part1 =
+        front
+
+    frontWeld.Parent =
+        front
+
+    mainJump.frontSensorPart =
+        front
+
+    mainJump.frontSensorTouchConnection =
+        front.Touched:Connect(
+            function(hit)
+                mainJump.contact(
+                    hit,
+                    "FRONT"
+                )
+            end
+        )
+
+    if mainJump.status then
+        mainJump.status.Text =
+            mainJump.enabled
+            and "READY"
+            or "OFF"
+    end
+
+    if mainJump.debug then
+        mainJump.debug.Text =
+            "2 sensors active"
+    end
+end
+
+function mainJump.cleanup()
+    if mainJump.destroyed then
+        return
+    end
+
+    mainJump.destroyed = true
+    mainJump.enabled = false
+    genv.DEADEYE_MAIN_JUMP_RUNNING = false
+    mainJump.destroySensors()
+    mainDisconnectConnections()
+    mainJump.character = nil
+    mainJump.humanoid = nil
+    mainJump.root = nil
+
+    pcall(function()
+        if mainJump.page then
+            mainJump.page:Destroy()
+        end
+    end)
+
+    genv.DEADEYE_MAIN_JUMP_CLEANUP = nil
+end
+
+genv.DEADEYE_MAIN_JUMP_CLEANUP =
+    mainJump.cleanup
+
+--// =========================================================
+--// MAIN PAGE
+--// =========================================================
+
+mainPage =
+    Instance.new("ScrollingFrame")
+
+mainPage.Name =
+    "MainPage"
+
+mainPage.Size =
+    UDim2.new(
+        1,
+        -92,
+        1,
+        -76
+    )
+
+mainPage.Position =
+    UDim2.new(
+        0,
+        82,
+        0,
+        68
+    )
+
+mainPage.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+mainPage.BorderSizePixel =
+    0
+
+mainPage.ScrollBarThickness =
+    6
+
+mainPage.AutomaticCanvasSize =
+    Enum.AutomaticSize.Y
+
+mainPage.ScrollingDirection =
+    Enum.ScrollingDirection.Y
+
+mainPage.Visible =
+    false
+
+mainPage.Parent =
+    Main
+
+local mainPageCorner =
+    Instance.new("UICorner")
+
+mainPageCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+
+mainPageCorner.Parent =
+    mainPage
+
+local mainPadding =
+    Instance.new("UIPadding")
+
+mainPadding.PaddingTop =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.PaddingBottom =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.PaddingLeft =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.PaddingRight =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.Parent =
+    mainPage
+
+local mainLayout =
+    Instance.new("UIListLayout")
+
+mainLayout.Padding =
+    UDim.new(
+        0,
+        6
+    )
+
+mainLayout.SortOrder =
+    Enum.SortOrder.LayoutOrder
+
+mainLayout.Parent =
+    mainPage
+
+function mainJump.makeHeader(
+    textValue,
+    orderValue
+)
+    local label =
+        Instance.new("TextLabel")
+
+    label.Size =
+        UDim2.new(
+            1,
+            -4,
+            0,
+            24
+        )
+
+    label.BackgroundTransparency =
+        1
+
+    label.Text =
+        textValue
+
+    label.TextSize =
+        10
+
+    label.Font =
+        Enum.Font.GothamBold
+
+    label.TextColor3 =
+        Color3.fromRGB(
+            150,
+            150,
+            150
+        )
+
+    label.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    label.LayoutOrder =
+        orderValue
+
+    label.Parent =
+        mainPage
+end
+
+function mainJump.makeRow(
+    labelText,
+    initialText,
+    orderValue,
+    kind
+)
+    local row =
+        Instance.new("Frame")
+
+    row.Size =
+        UDim2.new(
+            1,
+            -4,
+            0,
+            40
+        )
+
+    row.BackgroundColor3 =
+        Color3.fromRGB(
+            40,
+            40,
+            40
+        )
+
+    row.BorderSizePixel =
+        0
+
+    row.LayoutOrder =
+        orderValue
+
+    row.Parent =
+        mainPage
+
+    local corner =
+        Instance.new("UICorner")
+
+    corner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    corner.Parent =
+        row
+
+    local label =
+        Instance.new("TextLabel")
+
+    label.Size =
+        UDim2.new(
+            0,
+            105,
+                       1,
+            0
+        )
+
+    label.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            0
+        )
+
+    label.BackgroundTransparency =
+        1
+
+    label.Text =
+        labelText
+
+    label.TextSize =
+        11
+
+    label.Font =
+        Enum.Font.GothamBold
+
+    label.TextColor3 =
+        Color3.fromRGB(
+            215,
+            215,
+            215
+        )
+
+    label.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    label.Parent =
+        row
+
+    local box =
+        Instance.new("TextBox")
+
+    box.Size =
+        UDim2.new(
+            1,
+            -190,
+            0,
+            28
+        )
+
+    box.Position =
+        UDim2.new(
+            0,
+            105,
+            0.5,
+            -14
+        )
+
+    box.BackgroundColor3 =
+        Color3.fromRGB(
+            32,
+            32,
+            32
+        )
+
+    box.BorderSizePixel =
+        0
+
+    box.ClearTextOnFocus =
+        false
+
+    box.Text =
+        initialText
+
+    box.TextSize =
+        11
+
+    box.Font =
+        Enum.Font.Gotham
+
+    box.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    box.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    box.Parent =
+        row
+
+    local boxCorner =
+        Instance.new("UICorner")
+
+    boxCorner.CornerRadius =
+        UDim.new(
+            0,
+            5
+        )
+
+    boxCorner.Parent =
+        box
+
+    local apply =
+        Instance.new("TextButton")
+
+    apply.Size =
+        UDim2.new(
+            0,
+            65,
+            0,
+            28
+        )
+
+    apply.Position =
+        UDim2.new(
+            1,
+            -75,
+            0.5,
+            -14
+        )
+
+    apply.BackgroundColor3 =
+        Color3.fromRGB(
+            52,
+            52,
+            52
+        )
+
+    apply.BorderSizePixel =
+        0
+
+    apply.Text =
+        "APPLY"
+
+    apply.TextSize =
+        9
+
+    apply.Font =
+        Enum.Font.GothamBold
+
+    apply.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    apply.Parent =
+        row
+
+    local applyCorner =
+        Instance.new("UICorner")
+
+    applyCorner.CornerRadius =
+        UDim.new(
+            0,
+            5
+        )
+
+    applyCorner.Parent =
+        apply
+
+    if kind == "delay" then
+        mainJump.delayBox = box
+        mainAddConnection(
+            apply.MouseButton1Click:Connect(
+                function()
+                    mainJump.applyDelay(
+                        box.Text
+                    )
+                end
+            )
+        )
+        mainAddConnection(
+            box.FocusLost:Connect(
+                function(enterPressed)
+                    if enterPressed then
+                        mainJump.applyDelay(
+                            box.Text
+                        )
+                    end
+                end
+            )
+        )
+    else
+        mainJump.keyBox = box
+        mainAddConnection(
+            apply.MouseButton1Click:Connect(
+                function()
+                    mainJump.applyHotkey(
+                        box.Text
+                    )
+                end
+            )
+        )
+        mainAddConnection(
+            box.FocusLost:Connect(
+                function(enterPressed)
+                    if enterPressed then
+                        mainJump.applyHotkey(
+                            box.Text
+                        )
+                    end
+                end
+            )
+        )
+    end
+end
+
+mainJump.makeHeader(
+    "FOOT JUMP SENSOR",
+    1
+)
+
+mainJump.toggle =
+    Instance.new("TextButton")
+
+mainJump.toggle.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        38
+    )
+
+mainJump.toggle.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+
+mainJump.toggle.BorderSizePixel =
+    0
+
+mainJump.toggle.TextSize =
+    11
+
+mainJump.toggle.Font =
+    Enum.Font.GothamBold
+
+mainJump.toggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+mainJump.toggle.LayoutOrder =
+    2
+
+mainJump.toggle.Parent =
+    mainPage
+
+local mainToggleCorner =
+    Instance.new("UICorner")
+
+mainToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+mainToggleCorner.Parent =
+    mainJump.toggle
+
+mainJump.status =
+    Instance.new("TextLabel")
+
+mainJump.status.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        24
+    )
+
+mainJump.status.BackgroundTransparency =
+    1
+
+mainJump.status.Text =
+    "OFF"
+
+mainJump.status.TextSize =
+    11
+
+mainJump.status.Font =
+    Enum.Font.Gotham
+
+mainJump.status.TextColor3 =
+    Color3.fromRGB(
+        150,
+        150,
+        150
+    )
+
+mainJump.status.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+mainJump.status.LayoutOrder =
+    3
+
+mainJump.status.Parent =
+    mainPage
+
+mainJump.makeRow(
+    "DELAY (sec)",
+    tostring(
+        mainJump.jumpDelay
+    ),
+    4,
+    "delay"
+)
+
+mainJump.makeRow(
+    "HOTKEY",
+    mainJump.hotkeyName,
+    5,
+    "hotkey"
+)
+
+mainJump.debug =
+    Instance.new("TextLabel")
+
+mainJump.debug.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        22
+    )
+
+mainJump.debug.BackgroundTransparency =
+    1
+
+mainJump.debug.Text =
+    "Sensor: OFF"
+
+mainJump.debug.TextSize =
+    10
+
+mainJump.debug.Font =
+    Enum.Font.Gotham
+
+mainJump.debug.TextColor3 =
+    Color3.fromRGB(
+        120,
+        120,
+        120
+    )
+
+mainJump.debug.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+mainJump.debug.LayoutOrder =
+    6
+
+mainJump.debug.Parent =
+    mainPage
+
+mainJump.kill =
+    Instance.new("TextButton")
+
+mainJump.kill.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        34
+    )
+
+mainJump.kill.BackgroundColor3 =
+    Color3.fromRGB(
+        100,
+        40,
+        40
+    )
+
+mainJump.kill.BorderSizePixel =
+    0
+
+mainJump.kill.Text =
+    "KILL SCRIPT"
+
+mainJump.kill.TextSize =
+    10
+
+mainJump.kill.Font =
+    Enum.Font.GothamBold
+
+mainJump.kill.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+mainJump.kill.LayoutOrder =
+    7
+
+mainJump.kill.Parent =
+    mainPage
+
+local mainKillCorner =
+    Instance.new("UICorner")
+
+mainKillCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+mainKillCorner.Parent =
+    mainJump.kill
+
+mainAddConnection(
+    mainJump.toggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setEnabled(
+                not mainJump.enabled
+            )
+        end
+    )
+)
+
+mainAddConnection(
+    mainJump.kill.MouseButton1Click:Connect(
+        function()
+            mainJump.cleanup()
+        end
+    )
+)
+
+mainAddConnection(
+    UserInputService.InputBegan:Connect(
+        function(input)
+            if mainJump.destroyed
+                or not mainJump.enabled
+            then
+                return
+            end
+
+            if input.KeyCode
+                == Enum.KeyCode[
+                    mainJump.hotkeyName
+                ]
+            then
+                mainJump.setEnabled(false)
+            end
+        end
+    )
+)
+
+mainAddConnection(
+    LocalPlayer.CharacterAdded:Connect(
+        function(char)
+            task.wait(0.2)
+            mainJump.createSensors(char)
+        end
+    )
+)
+
+if LocalPlayer.Character then
+    task.spawn(
+        function()
+            mainJump.createSensors(
+                LocalPlayer.Character
+            )
+        end
+    )
+end
+
+mainJump.updateToggle()
+
+--// =========================================================
 --// OTHERS PAGE
 --// =========================================================
 
@@ -6143,7 +7373,7 @@ categoryBar.Size =
         0,
         66,
         0,
-        112
+        147
     )
 
 categoryBar.Position =
@@ -6251,22 +7481,28 @@ local function makeCategoryButton(
 
 end
 
+mainCategoryButton =
+    makeCategoryButton(
+        "MAIN",
+        6
+    )
+
 emoteCategoryButton =
     makeCategoryButton(
         "EMOTES",
-        6
+        41
     )
 
 unusualCategoryButton =
     makeCategoryButton(
         "UNUSUAL",
-        41
+        76
     )
 
 othersCategoryButton =
     makeCategoryButton(
         "OTHERS",
-        76
+        111
     )
 
 --// =========================================================
@@ -6282,7 +7518,64 @@ local function setCategory(
 
     pcall(function()
 
-        if category == "Unusual" then
+        if category == "Main" then
+
+            MainTitle.Text =
+                "Main"
+
+            Status.Visible =
+                false
+
+            Toggle.Visible =
+                false
+
+            SlotsScroll.Visible =
+                false
+
+            mainPage.Visible =
+                true
+
+            unusualPage.Visible =
+                false
+
+            unusualStatus.Visible =
+                false
+
+            unusualPicker.Visible =
+                false
+
+            others.page.Visible =
+                false
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    65,
+                    65,
+                    65
+                )
+
+            emoteCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            unusualCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            othersCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+        elseif category == "Unusual" then
 
             MainTitle.Text =
                 "Unusual Swapper"
@@ -6302,11 +7595,21 @@ local function setCategory(
             unusualStatus.Visible =
                 true
 
+            mainPage.Visible =
+                false
+
             unusualPicker.Visible =
                 false
 
             others.page.Visible =
                 false
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
 
             emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
@@ -6351,11 +7654,21 @@ local function setCategory(
             unusualStatus.Visible =
                 false
 
+            mainPage.Visible =
+                false
+
             unusualPicker.Visible =
                 false
 
             others.page.Visible =
                 true
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
 
             emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
@@ -6392,6 +7705,9 @@ local function setCategory(
             SlotsScroll.Visible =
                 true
 
+            mainPage.Visible =
+                false
+
             unusualPage.Visible =
                 false
 
@@ -6403,6 +7719,13 @@ local function setCategory(
 
             others.page.Visible =
                 false
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
 
             unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
@@ -6432,6 +7755,22 @@ local function setCategory(
     end)
 
 end
+
+addUnusualConnection(
+    mainCategoryButton.MouseButton1Click:Connect(
+        function()
+
+            if mainMinimized then
+                setMainMinimized(false)
+            end
+
+            setCategory(
+                "Main"
+            )
+
+        end
+    )
+)
 
 addUnusualConnection(
     emoteCategoryButton.MouseButton1Click:Connect(
@@ -6522,12 +7861,20 @@ local function cleanupUnusual()
 
     pcall(function()
 
+        if genv.DEADEYE_MAIN_JUMP_CLEANUP then
+            genv.DEADEYE_MAIN_JUMP_CLEANUP()
+        end
+
         if unusualPicker then
             unusualPicker:Destroy()
         end
 
         if unusualPage then
             unusualPage:Destroy()
+        end
+
+        if mainPage then
+            mainPage:Destroy()
         end
 
         if others.page then
@@ -7916,6 +9263,7 @@ local function setMainMinimized(state)
 
         pcall(function()
             categoryBar.Visible = false
+            mainPage.Visible = false
             unusualPage.Visible = false
             unusualStatus.Visible = false
             others.page.Visible = false
@@ -7948,10 +9296,19 @@ local function setMainMinimized(state)
         pcall(function()
             categoryBar.Visible = true
 
-            if currentCategory == "Unusual" then
+            if currentCategory == "Main" then
+                Status.Visible = false
+                Toggle.Visible = false
+                SlotsScroll.Visible = false
+                mainPage.Visible = true
+                unusualPage.Visible = false
+                unusualStatus.Visible = false
+                others.page.Visible = false
+            elseif currentCategory == "Unusual" then
                 Status.Visible = false
                 Toggle.Visible = true
                 SlotsScroll.Visible = false
+                mainPage.Visible = false
                 unusualPage.Visible = true
                 unusualStatus.Visible = true
                 others.page.Visible = false
@@ -7959,10 +9316,12 @@ local function setMainMinimized(state)
                 Status.Visible = false
                 Toggle.Visible = false
                 SlotsScroll.Visible = false
+                mainPage.Visible = false
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
                 others.page.Visible = true
             else
+                mainPage.Visible = false
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
                 others.page.Visible = false
