@@ -6031,11 +6031,12 @@ mainConnect(
         function(input)
             if mainJump.capturing then
                 local keyCode =
-                    mainGetPressedKey(
-                        input
-                    )
+                    input.KeyCode
 
-                if not keyCode then
+                if not keyCode
+                    or keyCode
+                        == Enum.KeyCode.Unknown
+                then
                     return
                 end
 
