@@ -37,6 +37,12 @@ local genv = getgenv and getgenv() or _G
 --// PREVIOUS INSTANCE CLEANUP
 --// =========================================================
 
+if genv.UNUSUAL_SWAPPER_CLEANUP then
+    pcall(function()
+        genv.UNUSUAL_SWAPPER_CLEANUP()
+    end)
+end
+
 if genv.EMOTE_SWAPPER_CLEANUP then
     pcall(function()
         genv.EMOTE_SWAPPER_CLEANUP()
@@ -1555,6 +1561,7 @@ local unusualPickerButtons = {}
 local unusualPickerSide = nil
 
 local unusualPage
+local unusualStatus
 
 local categoryBar
 local emoteCategoryButton
@@ -3468,9 +3475,18 @@ local function rebuildUnusualPicker()
 
     pcall(function()
 
-        unusualStatusTextUpdate(
-            shown
-        )
+        if unusualStatus then
+            unusualStatus.Text =
+                "Unusuals: "
+                .. tostring(
+                    #unusualList
+                )
+                .. " • "
+                .. tostring(
+                    shown
+                )
+                .. " найдено"
+        end
 
     end)
 
@@ -3479,31 +3495,6 @@ local function rebuildUnusualPicker()
             0,
             0
         )
-
-end
-
---// =========================================================
---// UNUSUAL STATUS HELPER
---// =========================================================
-
-local function unusualStatusTextUpdate(
-    shown
-)
-
-    if not unusualStatus then
-        return
-    end
-
-    unusualStatus.Text =
-        "Unusuals: "
-        .. tostring(
-            #unusualList
-        )
-        .. " • "
-        .. tostring(
-            shown or #unusualList
-        )
-        .. " найдено"
 
 end
 
@@ -4097,27 +4088,6 @@ ToggleCorner.Parent =
 
 
 --// =========================================================
---// CATEGORY LAYOUT
---// =========================================================
-
--- Existing Emote content moves right of the category rail.
-SlotsScroll.Size =
-    UDim2.new(
-        1,
-        -92,
-        1,
-        -76
-    )
-
-SlotsScroll.Position =
-    UDim2.new(
-        0,
-        82,
-        0,
-        68
-    )
-
---// =========================================================
 --// SLOTS SCROLL
 --// =========================================================
 
@@ -4169,6 +4139,23 @@ SlotsScroll.AutomaticCanvasSize =
 
 SlotsScroll.Parent =
     Main
+
+--// Existing Emote content moves right of the category rail.
+SlotsScroll.Size =
+    UDim2.new(
+        1,
+        -92,
+        1,
+        -76
+    )
+
+SlotsScroll.Position =
+    UDim2.new(
+        0,
+        82,
+        0,
+        68
+    )
 
 local SlotsCorner =
     Instance.new("UICorner")
