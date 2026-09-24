@@ -5378,7 +5378,7 @@ local function setMainMinimized(state)
         Main.Size =
             UDim2.new(
                 0,
-                380,
+                455,
                 0,
                 320
             )
