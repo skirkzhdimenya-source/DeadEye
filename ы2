@@ -2039,6 +2039,31 @@ end
 --// NEEDED ATTACHMENTS
 --// =========================================================
 
+local function unusualObjectBelongsToPart(
+    object,
+    sourcePart
+)
+
+    local parent =
+        object.Parent
+
+    while parent
+        and parent ~= sourcePart
+    do
+
+        if parent:IsA("BasePart") then
+            return false
+        end
+
+        parent =
+            parent.Parent
+
+    end
+
+    return parent == sourcePart
+
+end
+
 local function getNeededUnusualAttachments(
     sourcePart
 )
@@ -2049,20 +2074,41 @@ local function getNeededUnusualAttachments(
         sourcePart:GetDescendants()
     ) do
 
-        if object:IsA("Trail")
-            or object:IsA("Beam")
-        then
+        if unusualObjectBelongsToPart(
+            object,
+            sourcePart
+        ) then
 
-            if object.Attachment0 then
-                needed[
-                    object.Attachment0
-                ] = true
-            end
+            if object:IsA("Trail")
+                or object:IsA("Beam")
+            then
 
-            if object.Attachment1 then
-                needed[
-                    object.Attachment1
-                ] = true
+                if object.Attachment0
+                    and unusualObjectBelongsToPart(
+                        object.Attachment0,
+                        sourcePart
+                    )
+                then
+
+                    needed[
+                        object.Attachment0
+                    ] = true
+
+                end
+
+                if object.Attachment1
+                    and unusualObjectBelongsToPart(
+                        object.Attachment1,
+                        sourcePart
+                    )
+                then
+
+                    needed[
+                        object.Attachment1
+                    ] = true
+
+                end
+
             end
 
         end
@@ -2074,6 +2120,10 @@ local function getNeededUnusualAttachments(
     ) do
 
         if object:IsA("Attachment")
+            and unusualObjectBelongsToPart(
+                object,
+                sourcePart
+            )
             and unusualAttachmentHasFX(
                 object
             )
@@ -2092,7 +2142,9 @@ local function getNeededUnusualAttachments(
 
         changed = false
 
-        for attachment in pairs(needed) do
+        for attachment in pairs(
+            needed
+        ) do
 
             local parent =
                 attachment.Parent
@@ -2141,8 +2193,6 @@ local function getUnusualAttachmentWorldCFrame(
         return result
     end
 
-    --// Fallback для окружений,
-    --// где WorldCFrame недоступен.
     local parent = attachment.Parent
 
     if parent and parent:IsA("BasePart") then
@@ -2150,15 +2200,157 @@ local function getUnusualAttachmentWorldCFrame(
     end
 
     if parent and parent:IsA("Attachment") then
+
         local parentWorld =
-            getUnusualAttachmentWorldCFrame(parent)
+            getUnusualAttachmentWorldCFrame(
+                parent
+            )
 
         if parentWorld then
             return parentWorld * attachment.CFrame
         end
+
     end
 
     return attachment.CFrame
+
+end
+
+--// =========================================================
+--// HAS UNUSUAL CONTENT
+--// =========================================================
+
+local function unusualBasePartHasContent(
+    sourcePart
+)
+
+    for _, object in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+
+        if unusualObjectBelongsToPart(
+            object,
+            sourcePart
+        ) then
+
+            if isUnusualFX(object) then
+                return true
+            end
+
+            if object:IsA("Attachment")
+                and unusualAttachmentHasFX(
+                    object
+                )
+            then
+                return true
+            end
+
+        end
+
+    end
+
+    return false
+
+end
+
+--// =========================================================
+--// CREATE LOCAL ANCHOR FOR NESTED BASEPART
+--// =========================================================
+
+local function createUnusualAnchor(
+    sourceRoot,
+    sourcePart,
+    targetPart,
+    id,
+    index
+)
+
+    local anchor =
+        Instance.new("Part")
+
+    anchor.Name =
+        "DeadEyeUnusualAnchor_" ..
+        tostring(id) ..
+        "_" ..
+        tostring(index)
+
+    anchor.Size =
+        Vector3.new(
+            math.max(
+                sourcePart.Size.X,
+                0.05
+            ),
+            math.max(
+                sourcePart.Size.Y,
+                0.05
+            ),
+            math.max(
+                sourcePart.Size.Z,
+                0.05
+            )
+        )
+
+    anchor.Transparency =
+        1
+
+    anchor.CanCollide =
+        false
+
+    anchor.CanTouch =
+        false
+
+    anchor.CanQuery =
+        false
+
+    anchor.CastShadow =
+        false
+
+    anchor.Massless =
+        true
+
+    anchor.Anchored =
+        false
+
+    local relative =
+        sourceRoot.CFrame:ToObjectSpace(
+            sourcePart.CFrame
+        )
+
+    anchor.CFrame =
+        targetPart.CFrame
+        * relative
+
+    local parent =
+        targetPart.Parent
+
+    if not parent then
+        return nil
+    end
+
+    anchor.Parent =
+        parent
+
+    local weld =
+        Instance.new("WeldConstraint")
+
+    weld.Name =
+        "DeadEyeUnusualWeld"
+
+    weld.Part0 =
+        targetPart
+
+    weld.Part1 =
+        anchor
+
+    weld.Parent =
+        anchor
+
+    tagUnusualFX(
+        anchor,
+        id
+    )
+
+    return anchor
 
 end
 
@@ -2172,156 +2364,227 @@ local function installUnusualPartFX(
     id
 )
 
-    local needed =
-        getNeededUnusualAttachments(
-            sourcePart
-        )
+    local targetMap = {}
+    local sourceNodes = {}
 
-    local attachmentMap = {}
+    --// Root source part uses the real visual part.
+    targetMap[sourcePart] =
+        targetPart
 
-    --// Attachments
+    table.insert(
+        sourceNodes,
+        sourcePart
+    )
 
-    for attachment in pairs(
-        needed
+    --// Automatically recreate nested BaseParts
+    --// that actually carry unusual FX.
+    local anchorIndex = 0
+
+    for _, nested in ipairs(
+        sourcePart:GetDescendants()
     ) do
 
-        local parent =
-            attachment.Parent
+        if nested:IsA("BasePart")
+            and nested ~= sourcePart
+            and unusualBasePartHasContent(
+                nested
+            )
+        then
 
-        if not (
-            parent
-            and parent:IsA("Attachment")
-            and needed[parent]
-        ) then
+            anchorIndex += 1
 
-            local clone =
-                attachment:Clone()
-
-            --// Важный момент:
-            --// Attachment может находиться внутри
-            --// отдельного невидимого BasePart.
-            --// Для таких unusual'ов нужно сохранить
-            --// полный world transform этого Part,
-            --// иначе несколько эффектов схлопываются
-            --// в одну точку тела.
-            local worldCFrame =
-                getUnusualAttachmentWorldCFrame(
-                    attachment
+            local anchor =
+                createUnusualAnchor(
+                    sourcePart,
+                    nested,
+                    targetPart,
+                    id,
+                    anchorIndex
                 )
 
-            if worldCFrame then
+            if anchor then
 
-                pcall(function()
+                targetMap[nested] =
+                    anchor
 
-                    clone.CFrame =
-                        sourcePart.CFrame:ToObjectSpace(
-                            worldCFrame
-                        )
-
-                end)
+                table.insert(
+                    sourceNodes,
+                    nested
+                )
 
             end
-
-            clone.Parent =
-                targetPart
-
-            tagUnusualFX(
-                clone,
-                id
-            )
-
-            mapUnusualAttachments(
-                attachment,
-                clone,
-                attachmentMap
-            )
 
         end
 
     end
 
-    --// FX outside attachments
+    local attachmentMap = {}
 
-    for _, sourceObject in ipairs(
-        sourcePart:GetDescendants()
+    --// -----------------------------------------------------
+    --// PASS 1:
+    --// Clone all needed attachments and remember their mapping.
+    --// -----------------------------------------------------
+
+    for _, currentSourcePart in ipairs(
+        sourceNodes
     ) do
 
-        if isUnusualFX(
-            sourceObject
-        ) then
+        local currentTargetPart =
+            targetMap[currentSourcePart]
 
-            local insideAttachment =
-                false
+        if currentTargetPart then
 
-            local parent =
-                sourceObject.Parent
+            local needed =
+                getNeededUnusualAttachments(
+                    currentSourcePart
+                )
 
-            while parent
-                and parent ~= sourcePart
-            do
+            for attachment in pairs(
+                needed
+            ) do
 
-                if parent:IsA(
-                    "Attachment"
+                local parent =
+                    attachment.Parent
+
+                if not (
+                    parent
+                    and parent:IsA("Attachment")
+                    and needed[parent]
                 ) then
 
-                    insideAttachment =
-                        true
+                    local clone =
+                        attachment:Clone()
 
-                    break
+                    --// Direct clone keeps the same local
+                    --// CFrame because the parent type is identical.
+                    clone.CFrame =
+                        attachment.CFrame
+
+                    clone.Parent =
+                        currentTargetPart
+
+                    tagUnusualFX(
+                        clone,
+                        id
+                    )
+
+                    mapUnusualAttachments(
+                        attachment,
+                        clone,
+                        attachmentMap
+                    )
 
                 end
-
-                parent =
-                    parent.Parent
 
             end
 
-            if not insideAttachment then
+        end
 
-                local clone =
-                    sourceObject:Clone()
+    end
 
-                if clone:IsA("Trail")
-                    or clone:IsA("Beam")
+    --// -----------------------------------------------------
+    --// PASS 2:
+    --// Clone FX in the correct nested-part space.
+    --// -----------------------------------------------------
+
+    for _, currentSourcePart in ipairs(
+        sourceNodes
+    ) do
+
+        local currentTargetPart =
+            targetMap[currentSourcePart]
+
+        if currentTargetPart then
+
+            for _, sourceObject in ipairs(
+                currentSourcePart:GetDescendants()
+            ) do
+
+                if isUnusualFX(
+                    sourceObject
+                )
+                and unusualObjectBelongsToPart(
+                    sourceObject,
+                    currentSourcePart
+                )
                 then
 
-                    if sourceObject.Attachment0 then
+                    local insideAttachment =
+                        false
 
-                        local newA0 =
-                            attachmentMap[
-                                sourceObject.Attachment0
-                            ]
+                    local parent =
+                        sourceObject.Parent
 
-                        if newA0 then
-                            clone.Attachment0 =
-                                newA0
+                    while parent
+                        and parent ~= currentSourcePart
+                    do
+
+                        if parent:IsA(
+                            "Attachment"
+                        ) then
+
+                            insideAttachment =
+                                true
+
+                            break
+
                         end
+
+                        parent =
+                            parent.Parent
 
                     end
 
-                    if sourceObject.Attachment1 then
+                    if not insideAttachment then
 
-                        local newA1 =
-                            attachmentMap[
-                                sourceObject.Attachment1
-                            ]
+                        local clone =
+                            sourceObject:Clone()
 
-                        if newA1 then
-                            clone.Attachment1 =
-                                newA1
+                        if clone:IsA("Trail")
+                            or clone:IsA("Beam")
+                        then
+
+                            if sourceObject.Attachment0 then
+
+                                local newA0 =
+                                    attachmentMap[
+                                        sourceObject.Attachment0
+                                    ]
+
+                                if newA0 then
+                                    clone.Attachment0 =
+                                        newA0
+                                end
+
+                            end
+
+                            if sourceObject.Attachment1 then
+
+                                local newA1 =
+                                    attachmentMap[
+                                        sourceObject.Attachment1
+                                    ]
+
+                                if newA1 then
+                                    clone.Attachment1 =
+                                        newA1
+                                end
+
+                            end
+
                         end
+
+                        clone.Parent =
+                            currentTargetPart
+
+                        tagUnusualFX(
+                            clone,
+                            id
+                        )
 
                     end
 
                 end
-
-                clone.Parent =
-                    targetPart
-
-                tagUnusualFX(
-                    clone,
-                    id
-                )
 
             end
 
