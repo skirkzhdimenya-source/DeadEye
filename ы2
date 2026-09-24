@@ -5070,7 +5070,9 @@ local function clearOthersAccessories()
 
 end
 
-local function restoreOthers()
+local function restoreOthers(
+    keepSnapshot
+)
 
     if not othersTargetHumanoid
         or not othersOriginalDescription
@@ -5107,11 +5109,17 @@ local function restoreOthers()
 
     end
 
-    othersTargetHumanoid =
-        nil
+    --// RESET keeps the original snapshot so repeated
+    --// resets always return to the avatar from startup.
+    if not keepSnapshot then
 
-    othersOriginalDescription =
-        nil
+        othersTargetHumanoid =
+            nil
+
+        othersOriginalDescription =
+            nil
+
+    end
 
 end
 
@@ -5916,7 +5924,9 @@ addUnusualConnection(
 
             end
 
-            restoreOthers()
+            restoreOthers(
+                true
+            )
 
             task.delay(
                 0.2,
