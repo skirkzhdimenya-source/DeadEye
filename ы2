@@ -265,6 +265,7 @@ loadSavedConfig()
 
 local portraitState = {}
 local portraitConnections = {}
+local portraitWatched = {}
 local portraitRigSignature = ""
 local portraitRefreshQueued = false
 
@@ -939,20 +940,11 @@ local function connectPortraitSource(
 
     end
 
-    if source:GetAttribute(
-        "DeadEyePortraitWatched"
-    ) then
-
+    if portraitWatched[source] then
         return
-
     end
 
-    pcall(function()
-        source:SetAttribute(
-            "DeadEyePortraitWatched",
-            true
-        )
-    end)
+    portraitWatched[source] = true
 
     table.insert(
         portraitConnections,
@@ -1321,6 +1313,10 @@ local function cleanupPortraitOverride()
 
     table.clear(
         portraitConnections
+    )
+
+    table.clear(
+        portraitWatched
     )
 
     for source, _ in pairs(
