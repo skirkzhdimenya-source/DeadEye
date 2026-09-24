@@ -2118,6 +2118,51 @@ local function getNeededUnusualAttachments(
 end
 
 --// =========================================================
+--// SOURCE ATTACHMENT WORLD CFRAME
+--// =========================================================
+
+local function getUnusualAttachmentWorldCFrame(
+    attachment
+)
+
+    if not attachment
+        or not attachment:IsA("Attachment")
+    then
+
+        return nil
+
+    end
+
+    local success, result = pcall(function()
+        return attachment.WorldCFrame
+    end)
+
+    if success and result then
+        return result
+    end
+
+    --// Fallback для окружений,
+    --// где WorldCFrame недоступен.
+    local parent = attachment.Parent
+
+    if parent and parent:IsA("BasePart") then
+        return parent.CFrame * attachment.CFrame
+    end
+
+    if parent and parent:IsA("Attachment") then
+        local parentWorld =
+            getUnusualAttachmentWorldCFrame(parent)
+
+        if parentWorld then
+            return parentWorld * attachment.CFrame
+        end
+    end
+
+    return attachment.CFrame
+
+end
+
+--// =========================================================
 --// INSTALL ONE SOURCE PART
 --// =========================================================
 
@@ -2151,6 +2196,31 @@ local function installUnusualPartFX(
 
             local clone =
                 attachment:Clone()
+
+            --// Важный момент:
+            --// Attachment может находиться внутри
+            --// отдельного невидимого BasePart.
+            --// Для таких unusual'ов нужно сохранить
+            --// полный world transform этого Part,
+            --// иначе несколько эффектов схлопываются
+            --// в одну точку тела.
+            local worldCFrame =
+                getUnusualAttachmentWorldCFrame(
+                    attachment
+                )
+
+            if worldCFrame then
+
+                pcall(function()
+
+                    clone.CFrame =
+                        sourcePart.CFrame:ToObjectSpace(
+                            worldCFrame
+                        )
+
+                end)
+
+            end
 
             clone.Parent =
                 targetPart
