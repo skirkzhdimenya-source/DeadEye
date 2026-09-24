@@ -5589,11 +5589,15 @@ function mainJump.cleanup()
     mainJump.humanoid = nil
     mainJump.root = nil
 
-    pcall(function()
-        if mainJump.page then
-            mainJump.page:Destroy()
-        end
-    end)
+    if mainJump.status then
+        mainJump.status.Text =
+            "KILLED"
+    end
+
+    if mainJump.debug then
+        mainJump.debug.Text =
+            "Sensor: killed"
+    end
 
     genv.DEADEYE_MAIN_JUMP_CLEANUP = nil
 end
