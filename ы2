@@ -1735,10 +1735,11 @@ local unusualCategoryButton
 local othersCategoryButton
 local currentCategory = "Emotes"
 
-local othersPage
-local othersOriginalDescription = nil
-local othersTargetHumanoid = nil
+local others.page
+local others.originalDescription = nil
+local others.targetHumanoid = nil
 
+local others = {}
 local unusualConnections = {}
 
 local unusualDestroyed = false
@@ -4367,19 +4368,19 @@ end
 --// R6 AVATAR SCANNER / EDITOR
 --// =========================================================
 
-local OTHERS_HEADLESS_ID = 134082579
-local OTHERS_KORBLOX_ID = 139607718
+others.OTHERS_HEADLESS_ID = 134082579
+others.OTHERS_KORBLOX_ID = 139607718
 
-local othersPage
-local othersStatus
+local others.page
+local others.status
 
-local othersOriginalDescription = nil
-local othersTargetHumanoid = nil
+local others.originalDescription = nil
+local others.targetHumanoid = nil
 
-local othersFieldButtons = {}
-local othersFieldBoxes = {}
+local others.fieldButtons = {}
+local others.fieldBoxes = {}
 
-local OTHERS_ACCESSORY_SLOTS = {
+others.OTHERS_ACCESSORY_SLOTS = {
     {
         label = "Hats",
         property = "HatAccessory",
@@ -4422,7 +4423,7 @@ local OTHERS_ACCESSORY_SLOTS = {
     }
 }
 
-local OTHERS_CLOTHING_SLOTS = {
+others.OTHERS_CLOTHING_SLOTS = {
     {
         label = "Shirt",
         property = "Shirt"
@@ -4437,7 +4438,7 @@ local OTHERS_CLOTHING_SLOTS = {
     }
 }
 
-local OTHERS_BODY_SLOTS = {
+others.OTHERS_BODY_SLOTS = {
     {
         label = "Head",
         property = "Head"
@@ -4464,7 +4465,7 @@ local OTHERS_BODY_SLOTS = {
     }
 }
 
-local OTHERS_CLEAR_ACCESSORY_PROPERTIES = {
+others.OTHERS_CLEAR_ACCESSORY_PROPERTIES = {
     "HatAccessory",
     "HairAccessory",
     "FaceAccessory",
@@ -4475,7 +4476,7 @@ local OTHERS_CLEAR_ACCESSORY_PROPERTIES = {
     "WaistAccessory"
 }
 
-local function getOthersHumanoids()
+function others.getOthersHumanoids()
 
     local result = {}
     local seen = {}
@@ -4531,20 +4532,20 @@ local function getOthersHumanoids()
 
 end
 
-local function getOthersHumanoid()
+function others.getOthersHumanoid()
 
     local humanoids =
-        getOthersHumanoids()
+        others.getOthersHumanoids()
 
     return humanoids[1]
 
 end
 
-local function rememberOthersOriginal(
+function others.rememberOthersOriginal(
     humanoid
 )
 
-    if othersOriginalDescription then
+    if others.originalDescription then
 
         return true
 
@@ -4552,7 +4553,7 @@ local function rememberOthersOriginal(
 
     humanoid =
         humanoid
-        or getOthersHumanoid()
+        or others.getOthersHumanoid()
 
     if not humanoid then
         return false
@@ -4593,17 +4594,17 @@ local function rememberOthersOriginal(
 
     end
 
-    othersTargetHumanoid =
+    others.targetHumanoid =
         humanoid
 
-    othersOriginalDescription =
+    others.originalDescription =
         clone
 
     return true
 
 end
 
-local function normalizeOthersAccessoryText(
+function others.normalizeOthersAccessoryText(
     value
 )
 
@@ -4649,7 +4650,7 @@ local function normalizeOthersAccessoryText(
 
 end
 
-local function normalizeOthersNumberText(
+function others.normalizeOthersNumberText(
     value
 )
 
@@ -4663,10 +4664,10 @@ local function normalizeOthersNumberText(
 
 end
 
-local function getOthersCurrentDescription()
+function others.getOthersCurrentDescription()
 
     local humanoid =
-        getOthersHumanoid()
+        others.getOthersHumanoid()
 
     if not humanoid then
         return nil
@@ -4676,8 +4677,8 @@ local function getOthersCurrentDescription()
         ~= Enum.HumanoidRigType.R6
     then
 
-        if othersStatus then
-            othersStatus.Text =
+        if others.status then
+            others.status.Text =
                 "Только R6"
         end
 
@@ -4685,7 +4686,7 @@ local function getOthersCurrentDescription()
 
     end
 
-    if not rememberOthersOriginal(
+    if not others.rememberOthersOriginal(
         humanoid
     ) then
         return nil
@@ -4700,8 +4701,8 @@ local function getOthersCurrentDescription()
         or not description
     then
 
-        if othersStatus then
-            othersStatus.Text =
+        if others.status then
+            others.status.Text =
                 "Не удалось получить AvatarDescription"
         end
 
@@ -4713,7 +4714,7 @@ local function getOthersCurrentDescription()
 
 end
 
-local function getOthersPropertyText(
+function others.getOthersPropertyText(
     description,
     slot
 )
@@ -4748,12 +4749,12 @@ local function getOthersPropertyText(
 
 end
 
-local function refreshOthersFields()
+function others.refreshOthersFields()
 
     local description
 
     local humanoid =
-        getOthersHumanoid()
+        others.getOthersHumanoid()
 
     if not humanoid then
         return
@@ -4776,7 +4777,7 @@ local function refreshOthersFields()
     local allSlots = {}
 
     for _, slot in ipairs(
-        OTHERS_ACCESSORY_SLOTS
+        others.OTHERS_ACCESSORY_SLOTS
     ) do
         table.insert(
             allSlots,
@@ -4785,7 +4786,7 @@ local function refreshOthersFields()
     end
 
     for _, slot in ipairs(
-        OTHERS_CLOTHING_SLOTS
+        others.OTHERS_CLOTHING_SLOTS
     ) do
         table.insert(
             allSlots,
@@ -4794,7 +4795,7 @@ local function refreshOthersFields()
     end
 
     for _, slot in ipairs(
-        OTHERS_BODY_SLOTS
+        others.OTHERS_BODY_SLOTS
     ) do
         table.insert(
             allSlots,
@@ -4807,14 +4808,14 @@ local function refreshOthersFields()
     ) do
 
         local box =
-            othersFieldBoxes[
+            others.fieldBoxes[
                 slot.property
             ]
 
         if box then
 
             box.Text =
-                getOthersPropertyText(
+                others.getOthersPropertyText(
                     description,
                     slot
                 )
@@ -4825,17 +4826,17 @@ local function refreshOthersFields()
 
 end
 
-local function applyOthersDescription(
+function others.applyOthersDescription(
     description
 )
 
     local humanoids =
-        getOthersHumanoids()
+        others.getOthersHumanoids()
 
     if #humanoids == 0 then
 
-        if othersStatus then
-            othersStatus.Text =
+        if others.status then
+            others.status.Text =
                 "Humanoid не найден"
         end
 
@@ -4953,8 +4954,8 @@ local function applyOthersDescription(
             lastError
         )
 
-        if othersStatus then
-            othersStatus.Text =
+        if others.status then
+            others.status.Text =
                 "Ошибка Apply"
         end
 
@@ -4962,8 +4963,8 @@ local function applyOthersDescription(
 
     end
 
-    if othersStatus then
-        othersStatus.Text =
+    if others.status then
+        others.status.Text =
             "Применено"
     end
 
@@ -4972,7 +4973,7 @@ local function applyOthersDescription(
         function()
 
             pcall(function()
-                refreshOthersFields()
+                others.refreshOthersFields()
             end)
 
         end
@@ -4986,7 +4987,7 @@ end
 --// QUICK BODY APPLY
 --// =========================================================
 
-local function applyOthersBodyPart(
+function others.applyOthersBodyPart(
     property,
     assetId
 )
@@ -4994,13 +4995,13 @@ local function applyOthersBodyPart(
     local description
 
     local humanoid =
-        getOthersHumanoid()
+        others.getOthersHumanoid()
 
     if not humanoid then
         return false
     end
 
-    if not rememberOthersOriginal(
+    if not others.rememberOthersOriginal(
         humanoid
     ) then
         return false
@@ -5036,19 +5037,19 @@ local function applyOthersBodyPart(
         return false
     end
 
-    return applyOthersDescription(
+    return others.applyOthersDescription(
         description
     )
 
 end
 
-local function applyOthersField(
+function others.applyOthersField(
     slot,
     textValue
 )
 
     local description =
-        getOthersCurrentDescription()
+        others.getOthersCurrentDescription()
 
     if not description then
         return false
@@ -5059,7 +5060,7 @@ local function applyOthersField(
     if slot.multi then
 
         value =
-            normalizeOthersAccessoryText(
+            others.normalizeOthersAccessoryText(
                 textValue
             )
 
@@ -5067,7 +5068,7 @@ local function applyOthersField(
 
         value =
             tonumber(
-                normalizeOthersNumberText(
+                others.normalizeOthersNumberText(
                     textValue
                 )
             )
@@ -5093,8 +5094,8 @@ local function applyOthersField(
             err
         )
 
-        if othersStatus then
-            othersStatus.Text =
+        if others.status then
+            others.status.Text =
                 "Не удалось изменить " ..
                 slot.label
         end
@@ -5103,16 +5104,16 @@ local function applyOthersField(
 
     end
 
-    return applyOthersDescription(
+    return others.applyOthersDescription(
         description
     )
 
 end
 
-local function scanOthers()
+function others.scanOthers()
 
     local description =
-        getOthersCurrentDescription()
+        others.getOthersCurrentDescription()
 
     if not description then
         return false
@@ -5121,7 +5122,7 @@ local function scanOthers()
     local allSlots = {}
 
     for _, slot in ipairs(
-        OTHERS_ACCESSORY_SLOTS
+        others.OTHERS_ACCESSORY_SLOTS
     ) do
 
         table.insert(
@@ -5132,7 +5133,7 @@ local function scanOthers()
     end
 
     for _, slot in ipairs(
-        OTHERS_CLOTHING_SLOTS
+        others.OTHERS_CLOTHING_SLOTS
     ) do
 
         table.insert(
@@ -5143,7 +5144,7 @@ local function scanOthers()
     end
 
     for _, slot in ipairs(
-        OTHERS_BODY_SLOTS
+        others.OTHERS_BODY_SLOTS
     ) do
 
         table.insert(
@@ -5158,14 +5159,14 @@ local function scanOthers()
     ) do
 
         local box =
-            othersFieldBoxes[
+            others.fieldBoxes[
                 slot.property
             ]
 
         if box then
 
             box.Text =
-                getOthersPropertyText(
+                others.getOthersPropertyText(
                     description,
                     slot
                 )
@@ -5174,9 +5175,9 @@ local function scanOthers()
 
     end
 
-    if othersStatus then
+    if others.status then
 
-        othersStatus.Text =
+        others.status.Text =
             "Сканировано • R6"
 
     end
@@ -5185,17 +5186,17 @@ local function scanOthers()
 
 end
 
-local function clearOthersAccessories()
+function others.clearOthersAccessories()
 
     local description =
-        getOthersCurrentDescription()
+        others.getOthersCurrentDescription()
 
     if not description then
         return false
     end
 
     for _, property in ipairs(
-        OTHERS_CLEAR_ACCESSORY_PROPERTIES
+        others.OTHERS_CLEAR_ACCESSORY_PROPERTIES
     ) do
 
         pcall(function()
@@ -5212,34 +5213,34 @@ local function clearOthersAccessories()
         description.Face = 0
     end)
 
-    return applyOthersDescription(
+    return others.applyOthersDescription(
         description
     )
 
 end
 
-local function restoreOthers(
+function others.restoreOthers(
     keepSnapshot
 )
 
-    if not othersOriginalDescription then
+    if not others.originalDescription then
         return false
     end
 
     local description =
-        othersOriginalDescription
+        others.originalDescription
 
     local applied =
-        applyOthersDescription(
+        others.applyOthersDescription(
             description
         )
 
     if not keepSnapshot then
 
-        othersTargetHumanoid =
+        others.targetHumanoid =
             nil
 
-        othersOriginalDescription =
+        others.originalDescription =
             nil
 
     end
@@ -5252,13 +5253,13 @@ end
 --// OTHERS PAGE
 --// =========================================================
 
-othersPage =
+others.page =
     Instance.new("ScrollingFrame")
 
-othersPage.Name =
+others.page.Name =
     "OthersPage"
 
-othersPage.Size =
+others.page.Size =
     UDim2.new(
         1,
         -92,
@@ -5266,7 +5267,7 @@ othersPage.Size =
         -76
     )
 
-othersPage.Position =
+others.page.Position =
     UDim2.new(
         0,
         82,
@@ -5274,20 +5275,20 @@ othersPage.Position =
         68
     )
 
-othersPage.BackgroundColor3 =
+others.page.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
 
-othersPage.BorderSizePixel =
+others.page.BorderSizePixel =
     0
 
-othersPage.ScrollBarThickness =
+others.page.ScrollBarThickness =
     6
 
-othersPage.CanvasSize =
+others.page.CanvasSize =
     UDim2.new(
         0,
         0,
@@ -5295,78 +5296,78 @@ othersPage.CanvasSize =
         0
     )
 
-othersPage.AutomaticCanvasSize =
+others.page.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
 
-othersPage.ScrollingDirection =
+others.page.ScrollingDirection =
     Enum.ScrollingDirection.Y
 
-othersPage.Visible =
+others.page.Visible =
     false
 
-othersPage.Parent =
+others.page.Parent =
     Main
 
-local othersPageCorner =
+others.others.othersPageCorner =
     Instance.new("UICorner")
 
-othersPageCorner.CornerRadius =
+others.othersPageCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
 
-othersPageCorner.Parent =
-    othersPage
+others.othersPageCorner.Parent =
+    others.page
 
-local othersPadding =
+others.others.othersPadding =
     Instance.new("UIPadding")
 
-othersPadding.PaddingTop =
+others.othersPadding.PaddingTop =
     UDim.new(
         0,
         8
     )
 
-othersPadding.PaddingBottom =
+others.othersPadding.PaddingBottom =
     UDim.new(
         0,
         8
     )
 
-othersPadding.PaddingLeft =
+others.othersPadding.PaddingLeft =
     UDim.new(
         0,
         8
     )
 
-othersPadding.PaddingRight =
+others.othersPadding.PaddingRight =
     UDim.new(
         0,
         8
     )
 
-othersPadding.Parent =
-    othersPage
+others.othersPadding.Parent =
+    others.page
 
-local othersLayout =
+others.others.othersLayout =
     Instance.new("UIListLayout")
 
-othersLayout.Padding =
+others.othersLayout.Padding =
     UDim.new(
         0,
         6
     )
 
-othersLayout.SortOrder =
+others.othersLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
 
-othersLayout.Parent =
-    othersPage
+others.othersLayout.Parent =
+    others.page
 
-local function makeOthersHeader(
+function others.makeOthersHeader(
     textValue,
-    order
+    others.order
 )
 
     local header =
@@ -5403,18 +5404,18 @@ local function makeOthersHeader(
         Enum.TextXAlignment.Left
 
     header.LayoutOrder =
-        order
+        others.order
 
     header.Parent =
-        othersPage
+        others.page
 
     return header
 
 end
 
-local function makeOthersRow(
+function others.makeOthersRow(
     slot,
-    order
+    others.order
 )
 
     local row =
@@ -5443,10 +5444,10 @@ local function makeOthersRow(
         0
 
     row.LayoutOrder =
-        order
+        others.order
 
     row.Parent =
-        othersPage
+        others.page
 
     local corner =
         Instance.new("UICorner")
@@ -5642,12 +5643,12 @@ local function makeOthersRow(
     applyCorner.Parent =
         apply
 
-    othersFieldBoxes[
+    others.fieldBoxes[
         slot.property
     ] =
         box
 
-    othersFieldButtons[
+    others.fieldButtons[
         slot.property
     ] =
         apply
@@ -5656,7 +5657,7 @@ local function makeOthersRow(
         apply.MouseButton1Click:Connect(
             function()
 
-                if applyOthersField(
+                if others.applyOthersField(
                     slot,
                     box.Text
                 ) then
@@ -5692,7 +5693,7 @@ local function makeOthersRow(
 
                 if enterPressed then
 
-                    applyOthersField(
+                    others.applyOthersField(
                         slot,
                         box.Text
                     )
@@ -5707,13 +5708,13 @@ local function makeOthersRow(
 
 end
 
-local quickHeader =
-    makeOthersHeader(
+others.others.quickHeader =
+    others.makeOthersHeader(
         "QUICK BODY",
         0
     )
 
-local function makeOthersQuickRow(
+function others.makeOthersQuickRow(
     labelText,
     assetId,
     yOrder
@@ -5744,7 +5745,7 @@ local function makeOthersQuickRow(
         yOrder
 
     row.Parent =
-        othersPage
+        others.page
 
     local corner =
         Instance.new("UICorner")
@@ -5866,7 +5867,7 @@ local function makeOthersQuickRow(
         apply.MouseButton1Click:Connect(
             function()
 
-                if applyOthersBodyPart(
+                if others.applyOthersBodyPart(
                     labelText == "HEADLESS"
                     and "Head"
                     or "RightLeg",
@@ -5900,22 +5901,22 @@ local function makeOthersQuickRow(
 
 end
 
-makeOthersQuickRow(
+others.makeOthersQuickRow(
     "HEADLESS",
-    OTHERS_HEADLESS_ID,
+    others.OTHERS_HEADLESS_ID,
     1
 )
 
-makeOthersQuickRow(
+others.makeOthersQuickRow(
     "KORBLOX",
-    OTHERS_KORBLOX_ID,
+    others.OTHERS_KORBLOX_ID,
     2
 )
 
-local scanRow =
+others.others.scanRow =
     Instance.new("Frame")
 
-scanRow.Size =
+others.scanRow.Size =
     UDim2.new(
         1,
         -4,
@@ -5923,38 +5924,38 @@ scanRow.Size =
         40
     )
 
-scanRow.BackgroundColor3 =
+others.scanRow.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
 
-scanRow.BorderSizePixel =
+others.scanRow.BorderSizePixel =
     0
 
-scanRow.LayoutOrder =
+others.scanRow.LayoutOrder =
     3
 
-scanRow.Parent =
-    othersPage
+others.scanRow.Parent =
+    others.page
 
-local scanCorner =
+others.others.scanCorner =
     Instance.new("UICorner")
 
-scanCorner.CornerRadius =
+others.scanCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
 
-scanCorner.Parent =
-    scanRow
+others.scanCorner.Parent =
+    others.scanRow
 
-local scanButton =
+others.others.scanButton =
     Instance.new("TextButton")
 
-scanButton.Size =
+others.scanButton.Size =
     UDim2.new(
         0,
         100,
@@ -5962,7 +5963,7 @@ scanButton.Size =
         28
     )
 
-scanButton.Position =
+others.scanButton.Position =
     UDim2.new(
         0,
         8,
@@ -5970,61 +5971,61 @@ scanButton.Position =
         -14
     )
 
-scanButton.BackgroundColor3 =
+others.scanButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
 
-scanButton.BorderSizePixel =
+others.scanButton.BorderSizePixel =
     0
 
-scanButton.Text =
+others.scanButton.Text =
     "FULL SCAN"
 
-scanButton.TextSize =
+others.scanButton.TextSize =
     9
 
-scanButton.Font =
+others.scanButton.Font =
     Enum.Font.GothamBold
 
-scanButton.TextColor3 =
+others.scanButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
 
-scanButton.Parent =
-    scanRow
+others.scanButton.Parent =
+    others.scanRow
 
-local scanButtonCorner =
+others.others.scanButtonCorner =
     Instance.new("UICorner")
 
-scanButtonCorner.CornerRadius =
+others.scanButtonCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
 
-scanButtonCorner.Parent =
-    scanButton
+others.scanButtonCorner.Parent =
+    others.scanButton
 
 addUnusualConnection(
-    scanButton.MouseButton1Click:Connect(
+    others.scanButton.MouseButton1Click:Connect(
         function()
 
-            scanOthers()
+            others.scanOthers()
 
         end
     )
 )
 
-othersStatus =
+others.status =
     Instance.new("TextLabel")
 
-othersStatus.Size =
+others.status.Size =
     UDim2.new(
         1,
         -122,
@@ -6032,7 +6033,7 @@ othersStatus.Size =
         0
     )
 
-othersStatus.Position =
+others.status.Position =
     UDim2.new(
         0,
         118,
@@ -6040,35 +6041,35 @@ othersStatus.Position =
         0
     )
 
-othersStatus.BackgroundTransparency =
+others.status.BackgroundTransparency =
     1
 
-othersStatus.Text =
+others.status.Text =
     "Нажми FULL SCAN"
 
-othersStatus.TextSize =
+others.status.TextSize =
     10
 
-othersStatus.Font =
+others.status.Font =
     Enum.Font.Gotham
 
-othersStatus.TextColor3 =
+others.status.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
 
-othersStatus.TextXAlignment =
+others.status.TextXAlignment =
     Enum.TextXAlignment.Left
 
-othersStatus.Parent =
-    scanRow
+others.status.Parent =
+    others.scanRow
 
-local clearRow =
+others.others.clearRow =
     Instance.new("Frame")
 
-clearRow.Size =
+others.clearRow.Size =
     UDim2.new(
         1,
         -4,
@@ -6076,19 +6077,19 @@ clearRow.Size =
         40
     )
 
-clearRow.BackgroundTransparency =
+others.clearRow.BackgroundTransparency =
     1
 
-clearRow.LayoutOrder =
+others.clearRow.LayoutOrder =
     200
 
-clearRow.Parent =
-    othersPage
+others.clearRow.Parent =
+    others.page
 
-local clearButton =
+others.others.clearButton =
     Instance.new("TextButton")
 
-clearButton.Size =
+others.clearButton.Size =
     UDim2.new(
         1,
         0,
@@ -6096,7 +6097,7 @@ clearButton.Size =
         34
     )
 
-clearButton.Position =
+others.clearButton.Position =
     UDim2.new(
         0,
         0,
@@ -6104,61 +6105,61 @@ clearButton.Position =
         3
     )
 
-clearButton.BackgroundColor3 =
+others.clearButton.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
 
-clearButton.BorderSizePixel =
+others.clearButton.BorderSizePixel =
     0
 
-clearButton.Text =
+others.clearButton.Text =
     "REMOVE EVERYTHING EXCEPT 2D CLOTHES + BODY"
 
-clearButton.TextSize =
+others.clearButton.TextSize =
     9
 
-clearButton.Font =
+others.clearButton.Font =
     Enum.Font.GothamBold
 
-clearButton.TextColor3 =
+others.clearButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
 
-clearButton.Parent =
-    clearRow
+others.clearButton.Parent =
+    others.clearRow
 
-local clearCorner =
+others.others.clearCorner =
     Instance.new("UICorner")
 
-clearCorner.CornerRadius =
+others.clearCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
 
-clearCorner.Parent =
-    clearButton
+others.clearCorner.Parent =
+    others.clearButton
 
 addUnusualConnection(
-    clearButton.MouseButton1Click:Connect(
+    others.clearButton.MouseButton1Click:Connect(
         function()
 
-            clearOthersAccessories()
+            others.clearOthersAccessories()
 
         end
     )
 )
 
-local resetRow =
+others.others.resetRow =
     Instance.new("Frame")
 
-resetRow.Size =
+others.resetRow.Size =
     UDim2.new(
         1,
         -4,
@@ -6166,19 +6167,19 @@ resetRow.Size =
         40
     )
 
-resetRow.BackgroundTransparency =
+others.resetRow.BackgroundTransparency =
     1
 
-resetRow.LayoutOrder =
+others.resetRow.LayoutOrder =
     201
 
-resetRow.Parent =
-    othersPage
+others.resetRow.Parent =
+    others.page
 
-local resetButton =
+others.others.resetButton =
     Instance.new("TextButton")
 
-resetButton.Size =
+others.resetButton.Size =
     UDim2.new(
         1,
         0,
@@ -6186,7 +6187,7 @@ resetButton.Size =
         34
     )
 
-resetButton.Position =
+others.resetButton.Position =
     UDim2.new(
         0,
         0,
@@ -6194,74 +6195,74 @@ resetButton.Position =
         3
     )
 
-resetButton.BackgroundColor3 =
+others.resetButton.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
 
-resetButton.BorderSizePixel =
+others.resetButton.BorderSizePixel =
     0
 
-resetButton.Text =
+others.resetButton.Text =
     "RESET TO INITIAL AVATAR"
 
-resetButton.TextSize =
+others.resetButton.TextSize =
     9
 
-resetButton.Font =
+others.resetButton.Font =
     Enum.Font.GothamBold
 
-resetButton.TextColor3 =
+others.resetButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
 
-resetButton.Parent =
-    resetRow
+others.resetButton.Parent =
+    others.resetRow
 
-local resetCorner =
+others.others.resetCorner =
     Instance.new("UICorner")
 
-resetCorner.CornerRadius =
+others.resetCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
 
-resetCorner.Parent =
-    resetButton
+others.resetCorner.Parent =
+    others.resetButton
 
 addUnusualConnection(
-    resetButton.MouseButton1Click:Connect(
+    others.resetButton.MouseButton1Click:Connect(
         function()
 
-            if not othersTargetHumanoid
-                or not othersOriginalDescription
+            if not others.targetHumanoid
+                or not others.originalDescription
             then
 
                 local humanoid =
-                    getOthersHumanoid()
+                    others.getOthersHumanoid()
 
                 if humanoid then
-                    rememberOthersOriginal(
+                    others.rememberOthersOriginal(
                         humanoid
                     )
                 end
 
             end
 
-            restoreOthers(
+            others.restoreOthers(
                 true
             )
 
             task.delay(
                 0.2,
                 function()
-                    scanOthers()
+                    others.scanOthers()
                 end
             )
 
@@ -6269,70 +6270,70 @@ addUnusualConnection(
     )
 )
 
-makeOthersHeader(
+others.makeOthersHeader(
     "ACCESSORIES",
     4
 )
 
-local order = 5
+others.others.order = 5
 
 for _, slot in ipairs(
-    OTHERS_ACCESSORY_SLOTS
+    others.OTHERS_ACCESSORY_SLOTS
 ) do
 
-    makeOthersRow(
+    others.makeOthersRow(
         slot,
-        order
+        others.order
     )
 
-    order += 1
+    others.order += 1
 
 end
 
-makeOthersHeader(
+others.makeOthersHeader(
     "2D CLOTHING",
-    order
+    others.order
 )
 
-order += 1
+others.order += 1
 
 for _, slot in ipairs(
-    OTHERS_CLOTHING_SLOTS
+    others.OTHERS_CLOTHING_SLOTS
 ) do
 
-    makeOthersRow(
+    others.makeOthersRow(
         slot,
-        order
+        others.order
     )
 
-    order += 1
+    others.order += 1
 
 end
 
-makeOthersHeader(
+others.makeOthersHeader(
     "BODY BUNDLES",
-    order
+    others.order
 )
 
-order += 1
+others.order += 1
 
 for _, slot in ipairs(
-    OTHERS_BODY_SLOTS
+    others.OTHERS_BODY_SLOTS
 ) do
 
-    makeOthersRow(
+    others.makeOthersRow(
         slot,
-        order
+        others.order
     )
 
-    order += 1
+    others.order += 1
 
 end
 
 --// Capture initial avatar immediately.
 task.defer(function()
     pcall(function()
-        scanOthers()
+        others.scanOthers()
     end)
 end)
 
@@ -6512,7 +6513,7 @@ local function setCategory(
             unusualPicker.Visible =
                 false
 
-            othersPage.Visible =
+            others.page.Visible =
                 false
 
             emoteCategoryButton.BackgroundColor3 =
@@ -6561,7 +6562,7 @@ local function setCategory(
             unusualPicker.Visible =
                 false
 
-            othersPage.Visible =
+            others.page.Visible =
                 true
 
             emoteCategoryButton.BackgroundColor3 =
@@ -6608,7 +6609,7 @@ local function setCategory(
             unusualPicker.Visible =
                 false
 
-            othersPage.Visible =
+            others.page.Visible =
                 false
 
             unusualCategoryButton.BackgroundColor3 =
@@ -6710,7 +6711,7 @@ local function cleanupUnusual()
     end
 
     pcall(function()
-        restoreOthers()
+        others.restoreOthers()
     end)
 
     unusualEnabled =
@@ -6737,8 +6738,8 @@ local function cleanupUnusual()
             unusualPage:Destroy()
         end
 
-        if othersPage then
-            othersPage:Destroy()
+        if others.page then
+            others.page:Destroy()
         end
 
         if unusualStatus then
@@ -8125,7 +8126,7 @@ local function setMainMinimized(state)
             categoryBar.Visible = false
             unusualPage.Visible = false
             unusualStatus.Visible = false
-            othersPage.Visible = false
+            others.page.Visible = false
         end)
 
         Minimize.Text = "+"
@@ -8161,18 +8162,18 @@ local function setMainMinimized(state)
                 SlotsScroll.Visible = false
                 unusualPage.Visible = true
                 unusualStatus.Visible = true
-                othersPage.Visible = false
+                others.page.Visible = false
             elseif currentCategory == "Others" then
                 Status.Visible = false
                 Toggle.Visible = false
                 SlotsScroll.Visible = false
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
-                othersPage.Visible = true
+                others.page.Visible = true
             else
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
-                othersPage.Visible = false
+                others.page.Visible = false
             end
         end)
 
