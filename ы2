@@ -6253,7 +6253,9 @@ mainAddConnection(
                     mainJump.hotkeyName
                 ]
             then
-                mainJump.setEnabled(false)
+                mainJump.setEnabled(
+                    not mainJump.enabled
+                )
             end
         end
     )
