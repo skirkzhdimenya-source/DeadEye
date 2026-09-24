@@ -5050,28 +5050,14 @@ mainJump.hotkeyName =
         savedConfig.main
         and savedConfig.main.hotkey
         or "Z"
-    ):upper()
+    )
 
 mainJump.hideUIHotkeyName =
     tostring(
         savedConfig.main
         and savedConfig.main.hideUIHotkey
         or "H"
-    ):upper()
-
-if not Enum.KeyCode[mainJump.hotkeyName]
-    or Enum.KeyCode[mainJump.hotkeyName]
-        == Enum.KeyCode.Unknown
-then
-    mainJump.hotkeyName = "Z"
-end
-
-if not Enum.KeyCode[mainJump.hideUIHotkeyName]
-    or Enum.KeyCode[mainJump.hideUIHotkeyName]
-        == Enum.KeyCode.Unknown
-then
-    mainJump.hideUIHotkeyName = "H"
-end
+    )
 
 local function mainConnect(connection)
     table.insert(
@@ -5195,6 +5181,30 @@ local function mainFindKeyCode(value)
     end
 
     return nil
+end
+
+local jumpKey =
+    mainFindKeyCode(
+        mainJump.hotkeyName
+    )
+
+if jumpKey then
+    mainJump.hotkeyName =
+        jumpKey.Name
+else
+    mainJump.hotkeyName = "Z"
+end
+
+local hideKey =
+    mainFindKeyCode(
+        mainJump.hideUIHotkeyName
+    )
+
+if hideKey then
+    mainJump.hideUIHotkeyName =
+        hideKey.Name
+else
+    mainJump.hideUIHotkeyName = "H"
 end
 
 function mainJump.setHotkey(value)
