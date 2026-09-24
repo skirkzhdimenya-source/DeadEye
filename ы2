@@ -1263,9 +1263,9 @@ Main =
 Main.Size =
     UDim2.new(
         0,
-        450,
+        350,
         0,
-        380
+        300
     )
 
 Main.Position =
@@ -1323,9 +1323,9 @@ local MainTitle =
 MainTitle.Size =
     UDim2.new(
         1,
-        -82,
+        -105,
         0,
-        40
+        36
     )
 
 MainTitle.Position =
@@ -1371,27 +1371,40 @@ local Minimize =
 Minimize.Size =
     UDim2.new(
         0,
-        28,
+        27,
         0,
-        28
+        27
     )
 
 Minimize.Position =
     UDim2.new(
         1,
-        -69,
+        -68,
         0,
-        7
+        6
     )
 
-Minimize.BackgroundTransparency =
-    1
+Minimize.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+
+Minimize.BorderSizePixel =
+    0
 
 Minimize.Text =
     "−"
 
 Minimize.TextSize =
-    22
+    20
+
+Minimize.AutoButtonColor =
+    true
+
+Minimize.ZIndex =
+    5
 
 Minimize.Font =
     Enum.Font.GothamBold
@@ -1416,17 +1429,17 @@ local Close =
 Close.Size =
     UDim2.new(
         0,
-        32,
+        27,
         0,
-        32
+        27
     )
 
 Close.Position =
     UDim2.new(
         1,
-        -38,
+        -33,
         0,
-        5
+        6
     )
 
 Close.BackgroundTransparency =
@@ -1461,17 +1474,17 @@ Status =
 Status.Size =
     UDim2.new(
         0,
-        250,
+        190,
         0,
-        22
+        20
     )
 
 Status.Position =
     UDim2.new(
         0,
-        12,
+        10,
         0,
-        39
+        37
     )
 
 Status.BackgroundTransparency =
@@ -1525,17 +1538,17 @@ Toggle =
 Toggle.Size =
     UDim2.new(
         0,
-        150,
+        120,
         0,
-        28
+        26
     )
 
 Toggle.Position =
     UDim2.new(
         1,
-        -195,
+        -130,
         0,
-        37
+        35
     )
 
 Toggle.BackgroundColor3 =
@@ -1592,17 +1605,17 @@ SlotsScroll.Name =
 SlotsScroll.Size =
     UDim2.new(
         1,
-        -20,
+        -16,
         1,
-        -105
+        -98
     )
 
 SlotsScroll.Position =
     UDim2.new(
         0,
-        10,
+        8,
         0,
-        72
+        68
     )
 
 SlotsScroll.BackgroundColor3 =
@@ -1704,9 +1717,9 @@ for slotIndex = 1, SLOT_COUNT do
     row.Size =
         UDim2.new(
             1,
-            -16,
+            -12,
             0,
-            55
+            48
         )
 
     row.BackgroundColor3 =
@@ -1745,7 +1758,7 @@ for slotIndex = 1, SLOT_COUNT do
     slotLabel.Size =
         UDim2.new(
             0,
-            70,
+            52,
             1,
             0
         )
@@ -1753,7 +1766,7 @@ for slotIndex = 1, SLOT_COUNT do
     slotLabel.Position =
         UDim2.new(
             0,
-            7,
+            5,
             0,
             0
         )
@@ -1792,17 +1805,17 @@ for slotIndex = 1, SLOT_COUNT do
     originalButton.Size =
         UDim2.new(
             0,
-            125,
+            98,
             0,
-            35
+            32
         )
 
     originalButton.Position =
         UDim2.new(
             0,
-            78,
+            60,
             0.5,
-            -17
+            -16
         )
 
     originalButton.BackgroundColor3 =
@@ -1863,17 +1876,17 @@ for slotIndex = 1, SLOT_COUNT do
     arrow.Size =
         UDim2.new(
             0,
-            25,
+            18,
             0,
-            35
+            32
         )
 
     arrow.Position =
         UDim2.new(
             0,
-            208,
+            162,
             0.5,
-            -17
+            -16
         )
 
     arrow.BackgroundTransparency =
@@ -1906,17 +1919,17 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.Size =
         UDim2.new(
             0,
-            125,
+            98,
             0,
-            35
+            32
         )
 
     replaceButton.Position =
         UDim2.new(
             0,
-            236,
+            184,
             0.5,
-            -17
+            -16
         )
 
     replaceButton.BackgroundColor3 =
@@ -1981,17 +1994,17 @@ Picker =
 Picker.Size =
     UDim2.new(
         0,
-        390,
+        320,
         0,
-        400
+        340
     )
 
 Picker.Position =
     UDim2.new(
         0.5,
-        -195,
+        -160,
         0.5,
-        -200
+        -170
     )
 
 Picker.BackgroundColor3 =
@@ -2045,9 +2058,9 @@ PickerTitle =
 PickerTitle.Size =
     UDim2.new(
         1,
-        -50,
+        -45,
         0,
-        35
+        32
     )
 
 PickerTitle.Position =
@@ -2144,17 +2157,17 @@ PickerSearch =
 PickerSearch.Size =
     UDim2.new(
         1,
-        -24,
+        -20,
         0,
-        32
+        30
     )
 
 PickerSearch.Position =
     UDim2.new(
         0,
-        12,
+        10,
         0,
-        38
+        36
     )
 
 PickerSearch.BackgroundColor3 =
@@ -2224,17 +2237,17 @@ PickerScroll =
 PickerScroll.Size =
     UDim2.new(
         1,
-        -20,
+        -16,
         1,
-        -82
+        -74
     )
 
 PickerScroll.Position =
     UDim2.new(
         0,
-        10,
+        8,
         0,
-        75
+        70
     )
 
 PickerScroll.BackgroundColor3 =
@@ -2315,9 +2328,9 @@ local PickerGrid =
 PickerGrid.CellSize =
     UDim2.new(
         0,
-        112,
+        91,
         0,
-        34
+        32
     )
 
 PickerGrid.CellPadding =
@@ -2773,9 +2786,9 @@ local function setMainMinimized(state)
         Main.Size =
             UDim2.new(
                 0,
-                450,
+                350,
                 0,
-                42
+                40
             )
 
         Status.Visible = false
@@ -2793,9 +2806,9 @@ local function setMainMinimized(state)
         Main.Size =
             UDim2.new(
                 0,
-                450,
+                350,
                 0,
-                380
+                300
             )
 
         Status.Visible = true
