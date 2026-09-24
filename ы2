@@ -5175,57 +5175,63 @@ function mainJump.setDelay(value)
     mainJump.saveConfig()
 end
 
-function mainJump.setHotkey(value)
-    local name =
+local function mainFindKeyCode(value)
+    local wanted =
         tostring(
             value or ""
         ):gsub(
             "%s+",
             ""
-        ):upper()
+        ):lower()
 
+    for _, keyCode in ipairs(
+        Enum.KeyCode:GetEnumItems()
+    ) do
+
+        if keyCode.Name:lower() == wanted then
+            return keyCode
+        end
+
+    end
+
+    return nil
+end
+
+function mainJump.setHotkey(value)
     local key =
-        Enum.KeyCode[name]
+        mainFindKeyCode(
+            value
+        )
 
-    if not key
-        or key == Enum.KeyCode.Unknown
-    then
+    if not key then
         return
     end
 
     mainJump.hotkeyName =
-        name
+        key.Name
 
     mainJump.hotkeyBox.Text =
-        name
+        key.Name
 
     mainJump.saveConfig()
     mainJump.capturing = nil
 end
 
 function mainJump.setHideUIHotkey(value)
-    local name =
-        tostring(
-            value or ""
-        ):gsub(
-            "%s+",
-            ""
-        ):upper()
-
     local key =
-        Enum.KeyCode[name]
+        mainFindKeyCode(
+            value
+        )
 
-    if not key
-        or key == Enum.KeyCode.Unknown
-    then
+    if not key then
         return
     end
 
     mainJump.hideUIHotkeyName =
-        name
+        key.Name
 
     mainJump.hideUIHotkeyBox.Text =
-        name
+        key.Name
 
     mainJump.saveConfig()
     mainJump.capturing = nil
@@ -5242,44 +5248,6 @@ function mainJump.startCapture(kind)
         mainJump.hideUIHotkeyBox.Text =
             "PRESS KEY..."
     end
-end
-
-local mainModifierKeys = {
-    Enum.KeyCode.LeftShift,
-    Enum.KeyCode.RightShift,
-    Enum.KeyCode.LeftControl,
-    Enum.KeyCode.RightControl,
-    Enum.KeyCode.LeftAlt,
-    Enum.KeyCode.RightAlt,
-    Enum.KeyCode.LeftMeta,
-    Enum.KeyCode.RightMeta
-}
-
-local function mainGetPressedKey(input)
-    if input
-        and input.KeyCode
-        and input.KeyCode
-            ~= Enum.KeyCode.Unknown
-    then
-        return input.KeyCode
-    end
-
-    for _, keyCode in ipairs(
-        mainModifierKeys
-    ) do
-        local ok, down =
-            pcall(function()
-                return UserInputService:IsKeyDown(
-                    keyCode
-                )
-            end)
-
-        if ok and down then
-            return keyCode
-        end
-    end
-
-    return nil
 end
 
 function mainJump.destroySensors()
@@ -6087,9 +6055,9 @@ mainConnect(
             end
 
             if input.KeyCode
-                == Enum.KeyCode[
+                == mainFindKeyCode(
                     mainJump.hotkeyName
-                ]
+                )
             then
                 mainJump.setEnabled(
                     not mainJump.enabled
@@ -6097,9 +6065,9 @@ mainConnect(
             end
 
             if input.KeyCode
-                == Enum.KeyCode[
+                == mainFindKeyCode(
                     mainJump.hideUIHotkeyName
-                ]
+                )
             then
                 ScreenGui.Enabled =
                     not ScreenGui.Enabled
