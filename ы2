@@ -4375,7 +4375,6 @@ end
 others.OTHERS_HEADLESS_ID = 134082579
 others.OTHERS_KORBLOX_ID = 139607718
 
-others.page
 others.OTHERS_ACCESSORY_SLOTS = {
     {
         label = "Hats",
@@ -5342,7 +5341,6 @@ others.padding.PaddingRight =
     )
 
 others.padding.Parent =
-    others.page
 
 others.layout =
     Instance.new("UIListLayout")
@@ -5357,7 +5355,6 @@ others.layout.SortOrder =
     Enum.SortOrder.LayoutOrder
 
 others.layout.Parent =
-    others.page
 
 function others.makeOthersHeader(
     textValue,
@@ -5401,7 +5398,6 @@ function others.makeOthersHeader(
         others.order
 
     header.Parent =
-        others.page
 
     return header
 
@@ -5441,7 +5437,6 @@ function others.makeOthersRow(
         others.order
 
     row.Parent =
-        others.page
 
     local corner =
         Instance.new("UICorner")
@@ -5739,7 +5734,6 @@ function others.makeOthersQuickRow(
         yOrder
 
     row.Parent =
-        others.page
 
     local corner =
         Instance.new("UICorner")
@@ -5932,7 +5926,6 @@ others.scanRow.LayoutOrder =
     3
 
 others.scanRow.Parent =
-    others.page
 
 others.scanCorner =
     Instance.new("UICorner")
@@ -6078,7 +6071,6 @@ others.clearRow.LayoutOrder =
     200
 
 others.clearRow.Parent =
-    others.page
 
 others.clearButton =
     Instance.new("TextButton")
@@ -6168,7 +6160,6 @@ others.resetRow.LayoutOrder =
     201
 
 others.resetRow.Parent =
-    others.page
 
 others.resetButton =
     Instance.new("TextButton")
