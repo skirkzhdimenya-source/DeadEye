@@ -1735,9 +1735,9 @@ local unusualCategoryButton
 local othersCategoryButton
 local currentCategory = "Emotes"
 
-local others.page
-local others.originalDescription = nil
-local others.targetHumanoid = nil
+others.page
+others.originalDescription = nil
+others.targetHumanoid = nil
 
 local others = {}
 local unusualConnections = {}
@@ -4371,14 +4371,14 @@ end
 others.OTHERS_HEADLESS_ID = 134082579
 others.OTHERS_KORBLOX_ID = 139607718
 
-local others.page
-local others.status
+others.page
+others.status
 
-local others.originalDescription = nil
-local others.targetHumanoid = nil
+others.originalDescription = nil
+others.targetHumanoid = nil
 
-local others.fieldButtons = {}
-local others.fieldBoxes = {}
+others.fieldButtons = {}
+others.fieldBoxes = {}
 
 others.OTHERS_ACCESSORY_SLOTS = {
     {
@@ -5308,61 +5308,61 @@ others.page.Visible =
 others.page.Parent =
     Main
 
-others.others.othersPageCorner =
+others.pageCorner =
     Instance.new("UICorner")
 
-others.othersPageCorner.CornerRadius =
+others.pageCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
 
-others.othersPageCorner.Parent =
+others.pageCorner.Parent =
     others.page
 
-others.others.othersPadding =
+others.padding =
     Instance.new("UIPadding")
 
-others.othersPadding.PaddingTop =
+others.padding.PaddingTop =
     UDim.new(
         0,
         8
     )
 
-others.othersPadding.PaddingBottom =
+others.padding.PaddingBottom =
     UDim.new(
         0,
         8
     )
 
-others.othersPadding.PaddingLeft =
+others.padding.PaddingLeft =
     UDim.new(
         0,
         8
     )
 
-others.othersPadding.PaddingRight =
+others.padding.PaddingRight =
     UDim.new(
         0,
         8
     )
 
-others.othersPadding.Parent =
+others.padding.Parent =
     others.page
 
-others.others.othersLayout =
+others.layout =
     Instance.new("UIListLayout")
 
-others.othersLayout.Padding =
+others.layout.Padding =
     UDim.new(
         0,
         6
     )
 
-others.othersLayout.SortOrder =
+others.layout.SortOrder =
     Enum.SortOrder.LayoutOrder
 
-others.othersLayout.Parent =
+others.layout.Parent =
     others.page
 
 function others.makeOthersHeader(
@@ -5708,7 +5708,7 @@ function others.makeOthersRow(
 
 end
 
-others.others.quickHeader =
+others.quickHeader =
     others.makeOthersHeader(
         "QUICK BODY",
         0
@@ -5913,7 +5913,7 @@ others.makeOthersQuickRow(
     2
 )
 
-others.others.scanRow =
+others.scanRow =
     Instance.new("Frame")
 
 others.scanRow.Size =
@@ -5940,7 +5940,7 @@ others.scanRow.LayoutOrder =
 others.scanRow.Parent =
     others.page
 
-others.others.scanCorner =
+others.scanCorner =
     Instance.new("UICorner")
 
 others.scanCorner.CornerRadius =
@@ -5952,7 +5952,7 @@ others.scanCorner.CornerRadius =
 others.scanCorner.Parent =
     others.scanRow
 
-others.others.scanButton =
+others.scanButton =
     Instance.new("TextButton")
 
 others.scanButton.Size =
@@ -6000,7 +6000,7 @@ others.scanButton.TextColor3 =
 others.scanButton.Parent =
     others.scanRow
 
-others.others.scanButtonCorner =
+others.scanButtonCorner =
     Instance.new("UICorner")
 
 others.scanButtonCorner.CornerRadius =
@@ -6066,7 +6066,7 @@ others.status.TextXAlignment =
 others.status.Parent =
     others.scanRow
 
-others.others.clearRow =
+others.clearRow =
     Instance.new("Frame")
 
 others.clearRow.Size =
@@ -6086,7 +6086,7 @@ others.clearRow.LayoutOrder =
 others.clearRow.Parent =
     others.page
 
-others.others.clearButton =
+others.clearButton =
     Instance.new("TextButton")
 
 others.clearButton.Size =
@@ -6134,7 +6134,7 @@ others.clearButton.TextColor3 =
 others.clearButton.Parent =
     others.clearRow
 
-others.others.clearCorner =
+others.clearCorner =
     Instance.new("UICorner")
 
 others.clearCorner.CornerRadius =
@@ -6156,7 +6156,7 @@ addUnusualConnection(
     )
 )
 
-others.others.resetRow =
+others.resetRow =
     Instance.new("Frame")
 
 others.resetRow.Size =
@@ -6176,7 +6176,7 @@ others.resetRow.LayoutOrder =
 others.resetRow.Parent =
     others.page
 
-others.others.resetButton =
+others.resetButton =
     Instance.new("TextButton")
 
 others.resetButton.Size =
@@ -6224,7 +6224,7 @@ others.resetButton.TextColor3 =
 others.resetButton.Parent =
     others.resetRow
 
-others.others.resetCorner =
+others.resetCorner =
     Instance.new("UICorner")
 
 others.resetCorner.CornerRadius =
@@ -6275,7 +6275,7 @@ others.makeOthersHeader(
     4
 )
 
-others.others.order = 5
+others.order = 5
 
 for _, slot in ipairs(
     others.OTHERS_ACCESSORY_SLOTS
