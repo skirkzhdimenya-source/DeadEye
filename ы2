@@ -5244,6 +5244,44 @@ function mainJump.startCapture(kind)
     end
 end
 
+local mainModifierKeys = {
+    Enum.KeyCode.LeftShift,
+    Enum.KeyCode.RightShift,
+    Enum.KeyCode.LeftControl,
+    Enum.KeyCode.RightControl,
+    Enum.KeyCode.LeftAlt,
+    Enum.KeyCode.RightAlt,
+    Enum.KeyCode.LeftMeta,
+    Enum.KeyCode.RightMeta
+}
+
+local function mainGetPressedKey(input)
+    if input
+        and input.KeyCode
+        and input.KeyCode
+            ~= Enum.KeyCode.Unknown
+    then
+        return input.KeyCode
+    end
+
+    for _, keyCode in ipairs(
+        mainModifierKeys
+    ) do
+        local ok, down =
+            pcall(function()
+                return UserInputService:IsKeyDown(
+                    keyCode
+                )
+            end)
+
+        if ok and down then
+            return keyCode
+        end
+    end
+
+    return nil
+end
+
 function mainJump.destroySensors()
     if mainJump.sensorTouchConnection then
         pcall(function()
@@ -6024,9 +6062,12 @@ mainConnect(
     UserInputService.InputBegan:Connect(
         function(input)
             if mainJump.capturing then
-                if input.KeyCode
-                    == Enum.KeyCode.Unknown
-                then
+                local keyCode =
+                    mainGetPressedKey(
+                        input
+                    )
+
+                if not keyCode then
                     return
                 end
 
@@ -6034,11 +6075,11 @@ mainConnect(
                     == "jump"
                 then
                     mainJump.setHotkey(
-                        input.KeyCode.Name
+                        keyCode.Name
                     )
                 else
                     mainJump.setHideUIHotkey(
-                        input.KeyCode.Name
+                        keyCode.Name
                     )
                 end
 
