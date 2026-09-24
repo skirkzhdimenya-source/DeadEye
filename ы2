@@ -3551,6 +3551,74 @@ local function rebuildUnusualPicker()
                 or ""
         )
     local shown = 0
+
+    do
+        local button =
+            Instance.new("TextButton")
+
+        button.Name = "Unusual_None"
+        button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+        button.BorderSizePixel = 0
+        button.Text = "НИЧЕГО"
+        button.TextSize = 11
+        button.Font = Enum.Font.GothamBold
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.TextTruncate = Enum.TextTruncate.AtEnd
+        button.LayoutOrder = 0
+        button.ZIndex = 32
+        button.Parent = unusualPickerScroll
+
+        local corner =
+            Instance.new("UICorner")
+
+        corner.CornerRadius =
+            UDim.new(0, 5)
+        corner.Parent = button
+
+        table.insert(
+            unusualPickerButtons,
+            button
+        )
+
+        addUnusualConnection(
+            button.MouseButton1Click:Connect(
+                function()
+                    if unusualPickerSide == "Original" then
+                        unusualSlot.originalId = nil
+                        unusualSlot.originalName = nil
+                        unusualOriginalButton.Text = "НИЧЕГО"
+                    elseif unusualPickerSide == "Replace" then
+                        unusualSlot.replaceId = nil
+                        unusualSlot.replaceName = nil
+                        unusualReplaceButton.Text = "НИЧЕГО"
+                    else
+                        return
+                    end
+
+                    savedConfig.unusual = {
+                        originalId = unusualSlot.originalId,
+                        replaceId = unusualSlot.replaceId
+                    }
+
+                    saveSavedConfig()
+
+                    if unusualEnabled then
+                        unusualEnabled = false
+                        genv.UNUSUAL_SWAPPER_ENABLED = false
+                        restoreUnusual()
+                        updateUnusualToggle()
+                    end
+
+                    unusualPicker.Visible = false
+                    unusualPickerSide = nil
+                    closeUnusualPicker()
+                end
+            )
+        )
+
+        shown += 1
+    end
+
     for index, data in ipairs(
         unusualList
     ) do
@@ -7298,6 +7366,92 @@ local function rebuildPicker()
                 or ""
         )
     local shown = 0
+
+    do
+        local button =
+            Instance.new("TextButton")
+
+        button.Name = "Emote_None"
+        button.Size = UDim2.new(0, 150, 0, 34)
+        button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+        button.BorderSizePixel = 0
+        button.Text = "НИЧЕГО"
+        button.TextSize = 11
+        button.Font = Enum.Font.GothamBold
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.TextTruncate = Enum.TextTruncate.AtEnd
+        button.LayoutOrder = 0
+        button.ZIndex = 22
+        button.Parent = PickerScroll
+
+        local corner =
+            Instance.new("UICorner")
+
+        corner.CornerRadius =
+            UDim.new(0, 5)
+        corner.Parent = button
+
+        table.insert(
+            pickerButtons,
+            button
+        )
+
+        button.MouseButton1Click:Connect(
+            function()
+                if not activePickerSlot
+                    or not activePickerSide then
+                    return
+                end
+
+                local slot =
+                    slots[activePickerSlot]
+
+                if activePickerSide == "Original" then
+                    slot.originalId = nil
+                    slot.originalName = nil
+                    slotOriginalButtons[
+                        activePickerSlot
+                    ].Text = "НИЧЕГО"
+                else
+                    slot.replaceId = nil
+                    slot.replaceName = nil
+                    slotReplaceButtons[
+                        activePickerSlot
+                    ].Text = "НИЧЕГО"
+                end
+
+                savedConfig.emotes[
+                    activePickerSlot
+                ] = {
+                    originalId = slot.originalId,
+                    replaceId = slot.replaceId
+                }
+
+                saveSavedConfig()
+
+                if currentOriginalId == slot.originalId
+                    or (
+                        currentOriginalId
+                        and not slot.originalId
+                    )
+                then
+                    stopCustomEmote()
+                end
+
+                Status.Text =
+                    "Slot "
+                    .. tostring(activePickerSlot)
+                    .. " очищен"
+
+                Picker.Visible = false
+                activePickerSlot = nil
+                activePickerSide = nil
+            end
+        )
+
+        shown = shown + 1
+    end
+
     for index, data in ipairs(
         emoteList
     ) do
