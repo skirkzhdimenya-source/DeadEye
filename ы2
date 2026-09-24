@@ -3277,7 +3277,7 @@ end
 --// =========================================================
 
 unusualPage =
-    Instance.new("Frame")
+    Instance.new("ScrollingFrame")
 
 unusualPage.Name =
     "UnusualPage"
@@ -3286,8 +3286,8 @@ unusualPage.Size =
     UDim2.new(
         1,
         -92,
-        0,
-        82
+        1,
+        -76
     )
 
 unusualPage.Position =
@@ -3308,6 +3308,23 @@ unusualPage.BackgroundColor3 =
 unusualPage.BorderSizePixel =
     0
 
+unusualPage.ScrollBarThickness =
+    6
+
+unusualPage.CanvasSize =
+    UDim2.new(
+        0,
+        0,
+        0,
+        0
+    )
+
+unusualPage.AutomaticCanvasSize =
+    Enum.AutomaticSize.Y
+
+unusualPage.ScrollingDirection =
+    Enum.ScrollingDirection.Y
+
 unusualPage.Visible =
     false
 
@@ -3326,6 +3343,122 @@ unusualPageCorner.CornerRadius =
 unusualPageCorner.Parent =
     unusualPage
 
+
+local unusualPadding =
+    Instance.new("UIPadding")
+
+unusualPadding.PaddingTop =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPadding.PaddingBottom =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPadding.PaddingLeft =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPadding.PaddingRight =
+    UDim.new(
+        0,
+        8
+    )
+
+unusualPadding.Parent =
+    unusualPage
+
+local unusualRow =
+    Instance.new("Frame")
+
+unusualRow.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        48
+    )
+
+unusualRow.BackgroundColor3 =
+    Color3.fromRGB(
+        40,
+        40,
+        40
+    )
+
+unusualRow.BorderSizePixel =
+    0
+
+unusualRow.LayoutOrder =
+    1
+
+unusualRow.Parent =
+    unusualPage
+
+local unusualRowCorner =
+    Instance.new("UICorner")
+
+unusualRowCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+unusualRowCorner.Parent =
+    unusualRow
+
+local unusualRowLabel =
+    Instance.new("TextLabel")
+
+unusualRowLabel.Size =
+    UDim2.new(
+        0,
+        60,
+        1,
+        0
+    )
+
+unusualRowLabel.Position =
+    UDim2.new(
+        0,
+        8,
+        0,
+        0
+    )
+
+unusualRowLabel.BackgroundTransparency =
+    1
+
+unusualRowLabel.Text =
+    "UNUSUAL"
+
+unusualRowLabel.TextSize =
+    10
+
+unusualRowLabel.Font =
+    Enum.Font.GothamBold
+
+unusualRowLabel.TextColor3 =
+    Color3.fromRGB(
+        210,
+        210,
+        210
+    )
+
+unusualRowLabel.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+unusualRowLabel.Parent =
+    unusualRow
+
+
+
 --// ORIGINAL
 
 unusualOriginalButton =
@@ -3334,17 +3467,17 @@ unusualOriginalButton =
 unusualOriginalButton.Size =
     UDim2.new(
         0,
-        145,
+        125,
         0,
-        40
+        32
     )
 
 unusualOriginalButton.Position =
     UDim2.new(
         0,
-        10,
-        0,
-        10
+        72,
+        0.5,
+        -16
     )
 
 unusualOriginalButton.BackgroundColor3 =
@@ -3378,7 +3511,7 @@ unusualOriginalButton.TextTruncate =
     Enum.TextTruncate.AtEnd
 
 unusualOriginalButton.Parent =
-    unusualPage
+    unusualRow
 
 local unusualOriginalCorner =
     Instance.new("UICorner")
@@ -3400,17 +3533,17 @@ local unusualArrow =
 unusualArrow.Size =
     UDim2.new(
         0,
-        30,
+        24,
         0,
-        40
+        32
     )
 
 unusualArrow.Position =
     UDim2.new(
         0,
-        160,
-        0,
-        10
+        202,
+        0.5,
+        -16
     )
 
 unusualArrow.BackgroundTransparency =
@@ -3433,7 +3566,7 @@ unusualArrow.TextColor3 =
     )
 
 unusualArrow.Parent =
-    unusualPage
+    unusualRow
 
 --// REPLACE
 
@@ -3443,17 +3576,17 @@ local unusualReplaceButton =
 unusualReplaceButton.Size =
     UDim2.new(
         0,
-        145,
+        125,
         0,
-        40
+        32
     )
 
 unusualReplaceButton.Position =
     UDim2.new(
         0,
-        195,
-        0,
-        10
+        226,
+        0.5,
+        -16
     )
 
 unusualReplaceButton.BackgroundColor3 =
@@ -3487,7 +3620,7 @@ unusualReplaceButton.TextTruncate =
     Enum.TextTruncate.AtEnd
 
 unusualReplaceButton.Parent =
-    unusualPage
+    unusualRow
 
 local unusualReplaceCorner =
     Instance.new("UICorner")
@@ -4231,11 +4364,116 @@ end
 
 --// =========================================================
 --// OTHERS
---// HEADLESS + KORBLOX
--- =========================================================
+--// R6 AVATAR SCANNER / EDITOR
+--// =========================================================
 
 local OTHERS_HEADLESS_ID = 134082579
 local OTHERS_KORBLOX_ID = 139607718
+
+local othersPage
+local othersStatus
+
+local othersOriginalDescription = nil
+local othersTargetHumanoid = nil
+
+local othersFieldButtons = {}
+local othersFieldBoxes = {}
+
+local OTHERS_ACCESSORY_SLOTS = {
+    {
+        label = "Hats",
+        property = "HatAccessory",
+        multi = true
+    },
+    {
+        label = "Hair",
+        property = "HairAccessory",
+        multi = true
+    },
+    {
+        label = "Face Accessory",
+        property = "FaceAccessory",
+        multi = true
+    },
+    {
+        label = "Neck",
+        property = "NeckAccessory",
+        multi = true
+    },
+    {
+        label = "Shoulder",
+        property = "ShouldersAccessory",
+        multi = true
+    },
+    {
+        label = "Front",
+        property = "FrontAccessory",
+        multi = true
+    },
+    {
+        label = "Back",
+        property = "BackAccessory",
+        multi = true
+    },
+    {
+        label = "Waist",
+        property = "WaistAccessory",
+        multi = true
+    }
+}
+
+local OTHERS_CLOTHING_SLOTS = {
+    {
+        label = "Shirt",
+        property = "Shirt"
+    },
+    {
+        label = "Pants",
+        property = "Pants"
+    },
+    {
+        label = "T-Shirt",
+        property = "GraphicTShirt"
+    }
+}
+
+local OTHERS_BODY_SLOTS = {
+    {
+        label = "Head",
+        property = "Head"
+    },
+    {
+        label = "Torso",
+        property = "Torso"
+    },
+    {
+        label = "Left Arm",
+        property = "LeftArm"
+    },
+    {
+        label = "Right Arm",
+        property = "RightArm"
+    },
+    {
+        label = "Left Leg",
+        property = "LeftLeg"
+    },
+    {
+        label = "Right Leg",
+        property = "RightLeg"
+    }
+}
+
+local OTHERS_CLEAR_ACCESSORY_PROPERTIES = {
+    "HatAccessory",
+    "HairAccessory",
+    "FaceAccessory",
+    "NeckAccessory",
+    "ShouldersAccessory",
+    "FrontAccessory",
+    "BackAccessory",
+    "WaistAccessory"
+}
 
 local function getOthersHumanoid()
 
@@ -4314,7 +4552,7 @@ local function rememberOthersOriginal(
     then
 
         warn(
-            "[Others] Failed to clone HumanoidDescription"
+            "[Others] Failed to clone initial HumanoidDescription"
         )
 
         return false
@@ -4331,30 +4569,92 @@ local function rememberOthersOriginal(
 
 end
 
-local function applyOthersBodyPart(
-    property,
-    assetId
+local function normalizeOthersAccessoryText(
+    value
 )
+
+    value =
+        tostring(value or "")
+
+    value =
+        string.gsub(
+            value,
+            "%s+",
+            ""
+        )
+
+    value =
+        string.gsub(
+            value,
+            "[^%d,]",
+            ""
+        )
+
+    value =
+        string.gsub(
+            value,
+            ",+",
+            ","
+        )
+
+    value =
+        string.gsub(
+            value,
+            "^,",
+            ""
+        )
+
+    value =
+        string.gsub(
+            value,
+            ",$",
+            ""
+        )
+
+    return value
+
+end
+
+local function normalizeOthersNumberText(
+    value
+)
+
+    local number =
+        string.match(
+            tostring(value or ""),
+            "%d+"
+        )
+
+    return number or ""
+
+end
+
+local function getOthersCurrentDescription()
 
     local humanoid =
         getOthersHumanoid()
 
     if not humanoid then
+        return nil
+    end
 
-        warn(
-            "[Others] Humanoid not found"
-        )
+    if humanoid.RigType
+        ~= Enum.HumanoidRigType.R6
+    then
 
-        return false
+        if othersStatus then
+            othersStatus.Text =
+                "Только R6"
+        end
+
+        return nil
 
     end
 
     if not rememberOthersOriginal(
         humanoid
     ) then
-
-        return false
-
+        return nil
     end
 
     local success, description =
@@ -4366,42 +4666,95 @@ local function applyOthersBodyPart(
         or not description
     then
 
-        warn(
-            "[Others] GetAppliedDescription error:",
-            description
-        )
+        if othersStatus then
+            othersStatus.Text =
+                "Не удалось получить AvatarDescription"
+        end
+
+        return nil
+
+    end
+
+    return description
+
+end
+
+local function getOthersPropertyText(
+    description,
+    slot
+)
+
+    local success, value =
+        pcall(function()
+            return description[
+                slot.property
+            ]
+        end)
+
+    if not success
+        or value == nil
+    then
+        return ""
+    end
+
+    if slot.multi then
+        return tostring(value)
+    end
+
+    local number =
+        tonumber(value)
+
+    if not number
+        or number == 0
+    then
+        return ""
+    end
+
+    return tostring(number)
+
+end
+
+local function applyOthersDescription(
+    description
+)
+
+    local humanoid =
+        getOthersHumanoid()
+
+    if not humanoid then
+
+        if othersStatus then
+            othersStatus.Text =
+                "Humanoid не найден"
+        end
 
         return false
 
     end
 
-    local setSuccess, setError =
-        pcall(function()
-            description[property] =
-                assetId
-        end)
+    if humanoid.RigType
+        ~= Enum.HumanoidRigType.R6
+    then
 
-    if not setSuccess then
-
-        warn(
-            "[Others] Failed to set",
-            property,
-            ":",
-            setError
-        )
+        if othersStatus then
+            othersStatus.Text =
+                "Только R6"
+        end
 
         return false
 
     end
 
     local applied = false
-    local applyError
+    local errorMessage
 
     local ok, err =
         pcall(function()
+
             humanoid:ApplyDescriptionAsync(
                 description
             )
+
         end)
 
     if ok then
@@ -4410,19 +4763,27 @@ local function applyOthersBodyPart(
 
     else
 
-        applyError = err
+        errorMessage =
+            err
 
         local legacyOk, legacyErr =
             pcall(function()
+
                 humanoid:ApplyDescription(
                     description
                 )
-            end)
+
+        end)
 
         if legacyOk then
+
             applied = true
+
         else
-            applyError = legacyErr
+
+            errorMessage =
+                legacyErr
+
         end
 
     end
@@ -4431,14 +4792,281 @@ local function applyOthersBodyPart(
 
         warn(
             "[Others] ApplyDescription error:",
-            applyError
+            errorMessage
         )
+
+        if othersStatus then
+            othersStatus.Text =
+                "Ошибка Apply"
+        end
 
         return false
 
     end
 
+    if othersStatus then
+        othersStatus.Text =
+            "Применено"
+    end
+
+    task.delay(
+        0.15,
+        function()
+
+            pcall(function()
+
+                local fresh =
+                    getOthersCurrentDescription()
+
+                if fresh then
+
+                    for _, slot in ipairs(
+                        OTHERS_ACCESSORY_SLOTS
+                    ) do
+
+                        local box =
+                            othersFieldBoxes[
+                                slot.property
+                            ]
+
+                        if box then
+
+                            box.Text =
+                                getOthersPropertyText(
+                                    fresh,
+                                    slot
+                                )
+
+                        end
+
+                    end
+
+                    for _, slot in ipairs(
+                        OTHERS_CLOTHING_SLOTS
+                    ) do
+
+                        local box =
+                            othersFieldBoxes[
+                                slot.property
+                            ]
+
+                        if box then
+
+                            box.Text =
+                                getOthersPropertyText(
+                                    fresh,
+                                    slot
+                                )
+
+                        end
+
+                    end
+
+                    for _, slot in ipairs(
+                        OTHERS_BODY_SLOTS
+                    ) do
+
+                        local box =
+                            othersFieldBoxes[
+                                slot.property
+                            ]
+
+                        if box then
+
+                            box.Text =
+                                getOthersPropertyText(
+                                    fresh,
+                                    slot
+                                )
+
+                        end
+
+                    end
+
+                end
+
+            end)
+
+        end
+    )
+
     return true
+
+end
+
+local function applyOthersField(
+    slot,
+    textValue
+)
+
+    local description =
+        getOthersCurrentDescription()
+
+    if not description then
+        return false
+    end
+
+    local value
+
+    if slot.multi then
+
+        value =
+            normalizeOthersAccessoryText(
+                textValue
+            )
+
+    else
+
+        value =
+            tonumber(
+                normalizeOthersNumberText(
+                    textValue
+                )
+            )
+            or 0
+
+    end
+
+    local success, err =
+        pcall(function()
+
+            description[
+                slot.property
+            ] =
+                value
+
+        end)
+
+    if not success then
+
+        warn(
+            "[Others] Failed to set",
+            slot.property,
+            err
+        )
+
+        if othersStatus then
+            othersStatus.Text =
+                "Не удалось изменить " ..
+                slot.label
+        end
+
+        return false
+
+    end
+
+    return applyOthersDescription(
+        description
+    )
+
+end
+
+local function scanOthers()
+
+    local description =
+        getOthersCurrentDescription()
+
+    if not description then
+        return false
+    end
+
+    local allSlots = {}
+
+    for _, slot in ipairs(
+        OTHERS_ACCESSORY_SLOTS
+    ) do
+
+        table.insert(
+            allSlots,
+            slot
+        )
+
+    end
+
+    for _, slot in ipairs(
+        OTHERS_CLOTHING_SLOTS
+    ) do
+
+        table.insert(
+            allSlots,
+            slot
+        )
+
+    end
+
+    for _, slot in ipairs(
+        OTHERS_BODY_SLOTS
+    ) do
+
+        table.insert(
+            allSlots,
+            slot
+        )
+
+    end
+
+    for _, slot in ipairs(
+        allSlots
+    ) do
+
+        local box =
+            othersFieldBoxes[
+                slot.property
+            ]
+
+        if box then
+
+            box.Text =
+                getOthersPropertyText(
+                    description,
+                    slot
+                )
+
+        end
+
+    end
+
+    if othersStatus then
+
+        othersStatus.Text =
+            "Сканировано • R6"
+
+    end
+
+    return true
+
+end
+
+local function clearOthersAccessories()
+
+    local description =
+        getOthersCurrentDescription()
+
+    if not description then
+        return false
+    end
+
+    for _, property in ipairs(
+        OTHERS_CLEAR_ACCESSORY_PROPERTIES
+    ) do
+
+        pcall(function()
+
+            description[property] =
+                ""
+
+        end)
+
+    end
+
+    --// Face is not 2D clothing and is therefore removed.
+    pcall(function()
+        description.Face = 0
+    end)
+
+    return applyOthersDescription(
+        description
+    )
 
 end
 
@@ -4460,17 +5088,21 @@ local function restoreOthers()
 
     local ok =
         pcall(function()
+
             humanoid:ApplyDescriptionAsync(
                 description
             )
+
         end)
 
     if not ok then
 
         pcall(function()
+
             humanoid:ApplyDescription(
                 description
             )
+
         end)
 
     end
@@ -4488,7 +5120,7 @@ end
 --// =========================================================
 
 othersPage =
-    Instance.new("Frame")
+    Instance.new("ScrollingFrame")
 
 othersPage.Name =
     "OthersPage"
@@ -4497,8 +5129,8 @@ othersPage.Size =
     UDim2.new(
         1,
         -92,
-        0,
-        105
+        1,
+        -76
     )
 
 othersPage.Position =
@@ -4519,6 +5151,23 @@ othersPage.BackgroundColor3 =
 othersPage.BorderSizePixel =
     0
 
+othersPage.ScrollBarThickness =
+    6
+
+othersPage.CanvasSize =
+    UDim2.new(
+        0,
+        0,
+        0,
+        0
+    )
+
+othersPage.AutomaticCanvasSize =
+    Enum.AutomaticSize.Y
+
+othersPage.ScrollingDirection =
+    Enum.ScrollingDirection.Y
+
 othersPage.Visible =
     false
 
@@ -4537,29 +5186,117 @@ othersPageCorner.CornerRadius =
 othersPageCorner.Parent =
     othersPage
 
+local othersPadding =
+    Instance.new("UIPadding")
+
+othersPadding.PaddingTop =
+    UDim.new(
+        0,
+        8
+    )
+
+othersPadding.PaddingBottom =
+    UDim.new(
+        0,
+        8
+    )
+
+othersPadding.PaddingLeft =
+    UDim.new(
+        0,
+        8
+    )
+
+othersPadding.PaddingRight =
+    UDim.new(
+        0,
+        8
+    )
+
+othersPadding.Parent =
+    othersPage
+
+local othersLayout =
+    Instance.new("UIListLayout")
+
+othersLayout.Padding =
+    UDim.new(
+        0,
+        6
+    )
+
+othersLayout.SortOrder =
+    Enum.SortOrder.LayoutOrder
+
+othersLayout.Parent =
+    othersPage
+
+local function makeOthersHeader(
+    textValue,
+    order
+)
+
+    local header =
+        Instance.new("TextLabel")
+
+    header.Size =
+        UDim2.new(
+            1,
+            -4,
+            0,
+            24
+        )
+
+    header.BackgroundTransparency =
+        1
+
+    header.Text =
+        textValue
+
+    header.TextSize =
+        10
+
+    header.Font =
+        Enum.Font.GothamBold
+
+    header.TextColor3 =
+        Color3.fromRGB(
+            150,
+            150,
+            150
+        )
+
+    header.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    header.LayoutOrder =
+        order
+
+    header.Parent =
+        othersPage
+
+    return header
+
+end
+
 local function makeOthersRow(
-    labelText,
-    y,
-    callback
+    slot,
+    order
 )
 
     local row =
         Instance.new("Frame")
 
+    row.Name =
+        "Slot_" ..
+        slot.property
+
     row.Size =
         UDim2.new(
             1,
-            -16,
+            -4,
             0,
-            42
-        )
-
-    row.Position =
-        UDim2.new(
-            0,
-            8,
-            0,
-            y
+            40
         )
 
     row.BackgroundColor3 =
@@ -4572,19 +5309,22 @@ local function makeOthersRow(
     row.BorderSizePixel =
         0
 
+    row.LayoutOrder =
+        order
+
     row.Parent =
         othersPage
 
-    local rowCorner =
+    local corner =
         Instance.new("UICorner")
 
-    rowCorner.CornerRadius =
+    corner.CornerRadius =
         UDim.new(
             0,
             6
         )
 
-    rowCorner.Parent =
+    corner.Parent =
         row
 
     local label =
@@ -4592,8 +5332,8 @@ local function makeOthersRow(
 
     label.Size =
         UDim2.new(
-            1,
-            -100,
+            0,
+            105,
             1,
             0
         )
@@ -4610,19 +5350,19 @@ local function makeOthersRow(
         1
 
     label.Text =
-        labelText
+        slot.label
 
     label.TextSize =
-        12
+        11
 
     label.Font =
         Enum.Font.GothamBold
 
     label.TextColor3 =
         Color3.fromRGB(
-            220,
-            220,
-            220
+            215,
+            215,
+            215
         )
 
     label.TextXAlignment =
@@ -4631,13 +5371,91 @@ local function makeOthersRow(
     label.Parent =
         row
 
+    local box =
+        Instance.new("TextBox")
+
+    box.Size =
+        UDim2.new(
+            1,
+            -190,
+            0,
+            28
+        )
+
+    box.Position =
+        UDim2.new(
+            0,
+            105,
+            0.5,
+            -14
+        )
+
+    box.BackgroundColor3 =
+        Color3.fromRGB(
+            32,
+            32,
+            32
+        )
+
+    box.BorderSizePixel =
+        0
+
+    box.ClearTextOnFocus =
+        false
+
+    box.Text =
+        ""
+
+    box.PlaceholderText =
+        slot.multi
+        and "ID или ID,ID,ID"
+        or "Пусто"
+
+    box.TextSize =
+        11
+
+    box.Font =
+        Enum.Font.Gotham
+
+    box.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    box.PlaceholderColor3 =
+        Color3.fromRGB(
+            105,
+            105,
+            105
+        )
+
+    box.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    box.Parent =
+        row
+
+    local boxCorner =
+        Instance.new("UICorner")
+
+    boxCorner.CornerRadius =
+        UDim.new(
+            0,
+            5
+        )
+
+    boxCorner.Parent =
+        box
+
     local apply =
         Instance.new("TextButton")
 
     apply.Size =
         UDim2.new(
             0,
-            72,
+            65,
             0,
             28
         )
@@ -4645,7 +5463,7 @@ local function makeOthersRow(
     apply.Position =
         UDim2.new(
             1,
-            -82,
+            -75,
             0.5,
             -14
         )
@@ -4664,7 +5482,7 @@ local function makeOthersRow(
         "APPLY"
 
     apply.TextSize =
-        10
+        9
 
     apply.Font =
         Enum.Font.GothamBold
@@ -4685,23 +5503,36 @@ local function makeOthersRow(
     applyCorner.CornerRadius =
         UDim.new(
             0,
-            6
+            5
         )
 
     applyCorner.Parent =
+        apply
+
+    othersFieldBoxes[
+        slot.property
+    ] =
+        box
+
+    othersFieldButtons[
+        slot.property
+    ] =
         apply
 
     addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
 
-                if callback() then
+                if applyOthersField(
+                    slot,
+                    box.Text
+                ) then
 
                     apply.Text =
-                        "APPLIED"
+                        "OK"
 
                     task.delay(
-                        0.8,
+                        0.7,
                         function()
 
                             pcall(function()
@@ -4722,31 +5553,448 @@ local function makeOthersRow(
         )
     )
 
+    addUnusualConnection(
+        box.FocusLost:Connect(
+            function(enterPressed)
+
+                if enterPressed then
+
+                    applyOthersField(
+                        slot,
+                        box.Text
+                    )
+
+                end
+
+            end
+        )
+    )
+
     return row
 
 end
 
-makeOthersRow(
-    "HEADLESS",
-    8,
-    function()
-        return applyOthersBodyPart(
-            "Head",
-            OTHERS_HEADLESS_ID
-        )
-    end
+local scanRow =
+    Instance.new("Frame")
+
+scanRow.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        40
+    )
+
+scanRow.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+
+scanRow.BorderSizePixel =
+    0
+
+scanRow.LayoutOrder =
+    1
+
+scanRow.Parent =
+    othersPage
+
+local scanCorner =
+    Instance.new("UICorner")
+
+scanCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+scanCorner.Parent =
+    scanRow
+
+local scanButton =
+    Instance.new("TextButton")
+
+scanButton.Size =
+    UDim2.new(
+        0,
+        100,
+        0,
+        28
+    )
+
+scanButton.Position =
+    UDim2.new(
+        0,
+        8,
+        0.5,
+        -14
+    )
+
+scanButton.BackgroundColor3 =
+    Color3.fromRGB(
+        52,
+        52,
+        52
+    )
+
+scanButton.BorderSizePixel =
+    0
+
+scanButton.Text =
+    "FULL SCAN"
+
+scanButton.TextSize =
+    9
+
+scanButton.Font =
+    Enum.Font.GothamBold
+
+scanButton.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+scanButton.Parent =
+    scanRow
+
+local scanButtonCorner =
+    Instance.new("UICorner")
+
+scanButtonCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+scanButtonCorner.Parent =
+    scanButton
+
+addUnusualConnection(
+    scanButton.MouseButton1Click:Connect(
+        function()
+
+            scanOthers()
+
+        end
+    )
 )
 
-makeOthersRow(
-    "KORBLOX",
-    55,
-    function()
-        return applyOthersBodyPart(
-            "RightLeg",
-            OTHERS_KORBLOX_ID
-        )
-    end
+othersStatus =
+    Instance.new("TextLabel")
+
+othersStatus.Size =
+    UDim2.new(
+        1,
+        -122,
+        1,
+        0
+    )
+
+othersStatus.Position =
+    UDim2.new(
+        0,
+        118,
+        0,
+        0
+    )
+
+othersStatus.BackgroundTransparency =
+    1
+
+othersStatus.Text =
+    "Нажми FULL SCAN"
+
+othersStatus.TextSize =
+    10
+
+othersStatus.Font =
+    Enum.Font.Gotham
+
+othersStatus.TextColor3 =
+    Color3.fromRGB(
+        150,
+        150,
+        150
+    )
+
+othersStatus.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+othersStatus.Parent =
+    scanRow
+
+local clearRow =
+    Instance.new("Frame")
+
+clearRow.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        40
+    )
+
+clearRow.BackgroundTransparency =
+    1
+
+clearRow.LayoutOrder =
+    200
+
+clearRow.Parent =
+    othersPage
+
+local clearButton =
+    Instance.new("TextButton")
+
+clearButton.Size =
+    UDim2.new(
+        1,
+        0,
+        0,
+        34
+    )
+
+clearButton.Position =
+    UDim2.new(
+        0,
+        0,
+        0,
+        3
+    )
+
+clearButton.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+
+clearButton.BorderSizePixel =
+    0
+
+clearButton.Text =
+    "REMOVE EVERYTHING EXCEPT 2D CLOTHES + BODY"
+
+clearButton.TextSize =
+    9
+
+clearButton.Font =
+    Enum.Font.GothamBold
+
+clearButton.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+clearButton.Parent =
+    clearRow
+
+local clearCorner =
+    Instance.new("UICorner")
+
+clearCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+clearCorner.Parent =
+    clearButton
+
+addUnusualConnection(
+    clearButton.MouseButton1Click:Connect(
+        function()
+
+            clearOthersAccessories()
+
+        end
+    )
 )
+
+local resetRow =
+    Instance.new("Frame")
+
+resetRow.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        40
+    )
+
+resetRow.BackgroundTransparency =
+    1
+
+resetRow.LayoutOrder =
+    201
+
+resetRow.Parent =
+    othersPage
+
+local resetButton =
+    Instance.new("TextButton")
+
+resetButton.Size =
+    UDim2.new(
+        1,
+        0,
+        0,
+        34
+    )
+
+resetButton.Position =
+    UDim2.new(
+        0,
+        0,
+        0,
+        3
+    )
+
+resetButton.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+
+resetButton.BorderSizePixel =
+    0
+
+resetButton.Text =
+    "RESET TO INITIAL AVATAR"
+
+resetButton.TextSize =
+    9
+
+resetButton.Font =
+    Enum.Font.GothamBold
+
+resetButton.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+resetButton.Parent =
+    resetRow
+
+local resetCorner =
+    Instance.new("UICorner")
+
+resetCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+
+resetCorner.Parent =
+    resetButton
+
+addUnusualConnection(
+    resetButton.MouseButton1Click:Connect(
+        function()
+
+            if not othersTargetHumanoid
+                or not othersOriginalDescription
+            then
+
+                local humanoid =
+                    getOthersHumanoid()
+
+                if humanoid then
+                    rememberOthersOriginal(
+                        humanoid
+                    )
+                end
+
+            end
+
+            restoreOthers()
+
+            task.delay(
+                0.2,
+                function()
+                    scanOthers()
+                end
+            )
+
+        end
+    )
+)
+
+makeOthersHeader(
+    "ACCESSORIES",
+    2
+)
+
+local order = 3
+
+for _, slot in ipairs(
+    OTHERS_ACCESSORY_SLOTS
+) do
+
+    makeOthersRow(
+        slot,
+        order
+    )
+
+    order += 1
+
+end
+
+makeOthersHeader(
+    "2D CLOTHING",
+    order
+)
+
+order += 1
+
+for _, slot in ipairs(
+    OTHERS_CLOTHING_SLOTS
+) do
+
+    makeOthersRow(
+        slot,
+        order
+    )
+
+    order += 1
+
+end
+
+makeOthersHeader(
+    "BODY BUNDLES",
+    order
+)
+
+order += 1
+
+for _, slot in ipairs(
+    OTHERS_BODY_SLOTS
+) do
+
+    makeOthersRow(
+        slot,
+        order
+    )
+
+    order += 1
+
+end
+
+--// Capture initial avatar immediately.
+task.defer(function()
+    pcall(function()
+        scanOthers()
+    end)
+end)
 
 --// CATEGORY BAR
 -- =========================================================
