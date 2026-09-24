@@ -71,11 +71,149 @@ local Registry = require(
     ReplicatedStorage.Items.Registry
 )
 
+local HttpService = game:GetService("HttpService")
+
 --// =========================================================
 --// SETTINGS
 --// =========================================================
 
 local SLOT_COUNT = 12
+
+local CONFIG_FILE = "DeadEye_Config.json"
+
+local savedConfig = {
+    version = 1,
+    emotes = {},
+    unusual = {}
+}
+
+local function loadSavedConfig()
+
+    if type(readfile) ~= "function" then
+        return
+    end
+
+    local success, raw
+
+    if type(isfile) == "function" then
+
+        local exists = false
+
+        pcall(function()
+            exists = isfile(CONFIG_FILE)
+        end)
+
+        if not exists then
+            return
+        end
+
+    end
+
+    success, raw =
+        pcall(function()
+            return readfile(
+                CONFIG_FILE
+            )
+        end)
+
+    if not success
+        or type(raw) ~= "string"
+        or raw == ""
+    then
+
+        return
+
+    end
+
+    local decodeSuccess, decoded =
+        pcall(function()
+            return HttpService:JSONDecode(
+                raw
+            )
+        end)
+
+    if not decodeSuccess
+        or type(decoded) ~= "table"
+    then
+
+        warn(
+            "[DeadEye] Invalid config file, using defaults"
+        )
+
+        return
+
+    end
+
+    if type(decoded.emotes) == "table" then
+        savedConfig.emotes =
+            decoded.emotes
+    end
+
+    if type(decoded.unusual) == "table" then
+        savedConfig.unusual =
+            decoded.unusual
+    end
+
+    savedConfig.version =
+        tonumber(decoded.version)
+        or 1
+
+end
+
+local function saveSavedConfig()
+
+    if type(writefile) ~= "function" then
+        return false
+    end
+
+    local success, raw =
+        pcall(function()
+
+            return HttpService:JSONEncode(
+                savedConfig
+            )
+
+        end)
+
+    if not success
+        or type(raw) ~= "string"
+    then
+
+        warn(
+            "[DeadEye] Config encode failed:",
+            raw
+        )
+
+        return false
+
+    end
+
+    local writeSuccess, writeError =
+        pcall(function()
+
+            writefile(
+                CONFIG_FILE,
+                raw
+            )
+
+        end)
+
+    if not writeSuccess then
+
+        warn(
+            "[DeadEye] Config save failed:",
+            writeError
+        )
+
+        return false
+
+    end
+
+    return true
+
+end
+
+loadSavedConfig()
 
 --// =========================================================
 --// SLOTS
@@ -97,6 +235,34 @@ slots[1].originalId = 1631
 slots[1].replaceId = 51
 slots[1].originalName = "Banger"
 slots[1].replaceName = "RockinStride"
+
+--// Load saved Emote mappings.
+for i = 1, SLOT_COUNT do
+
+    local saved =
+        savedConfig.emotes[i]
+
+    if type(saved) == "table" then
+
+        local originalId =
+            tonumber(saved.originalId)
+
+        local replaceId =
+            tonumber(saved.replaceId)
+
+        if originalId then
+            slots[i].originalId =
+                originalId
+        end
+
+        if replaceId then
+            slots[i].replaceId =
+                replaceId
+        end
+
+    end
+
+end
 
 --// =========================================================
 --// RUNTIME STATE
@@ -1792,6 +1958,42 @@ do
             getUnusualName(
                 equipped
             )
+
+    end
+
+    local savedUnusual =
+        savedConfig.unusual
+
+    if type(savedUnusual) == "table" then
+
+        local savedOriginal =
+            tonumber(
+                savedUnusual.originalId
+            )
+
+        local savedReplace =
+            tonumber(
+                savedUnusual.replaceId
+            )
+
+        if savedOriginal then
+
+            unusualSlot.originalId =
+                savedOriginal
+
+            unusualSlot.originalName =
+                getUnusualName(
+                    savedOriginal
+                )
+
+        end
+
+        if savedReplace then
+
+            unusualSlot.replaceId =
+                savedReplace
+
+        end
 
     end
 
@@ -3794,6 +3996,15 @@ local function rebuildUnusualPicker()
                                 data.name
 
                         end
+
+                        savedConfig.unusual = {
+                            originalId =
+                                unusualSlot.originalId,
+                            replaceId =
+                                unusualSlot.replaceId
+                        }
+
+                        saveSavedConfig()
 
                         closeUnusualPicker()
 
@@ -5975,6 +6186,17 @@ local function rebuildPicker()
 
                     end
 
+                    savedConfig.emotes[
+                        activePickerSlot
+                    ] = {
+                        originalId =
+                            slot.originalId,
+                        replaceId =
+                            slot.replaceId
+                    }
+
+                    saveSavedConfig()
+
                     --// Если текущий активный mapping
                     --// относится к изменённому слоту,
                     --// заставляем его пересоздаться
@@ -6601,6 +6823,31 @@ addConnection(
 --// =========================================================
 
 prepareSlots()
+
+savedConfig.emotes =
+    savedConfig.emotes
+    or {}
+
+for i = 1, SLOT_COUNT do
+
+    savedConfig.emotes[i] = {
+        originalId =
+            slots[i].originalId,
+        replaceId =
+            slots[i].replaceId
+    }
+
+end
+
+savedConfig.unusual = {
+    originalId =
+        unusualSlot.originalId,
+    replaceId =
+        unusualSlot.replaceId
+}
+
+saveSavedConfig()
+
 setMainMinimized(false)
 updateGUI()
 
