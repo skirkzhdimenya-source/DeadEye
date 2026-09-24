@@ -6130,7 +6130,6 @@ task.defer(
     function()
 
         pcall(function()
-            others.scan()
             others.loadConfig()
         end)
 
