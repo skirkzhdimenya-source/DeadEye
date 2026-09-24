@@ -748,6 +748,64 @@ local function stopOriginalTracks(
 end
 
 --// =========================================================
+--// =========================================================
+--// STOP ORIGINAL EMOTE SOUNDS
+--// =========================================================
+
+local function stopOriginalSounds(object)
+
+    if not object then
+        return
+    end
+
+    local keepSound = nil
+
+    if currentCustomEmote
+        and currentCustomEmote.EmoteSound then
+
+        keepSound =
+            currentCustomEmote.EmoteSound
+
+    end
+
+    local seen = {}
+
+    local roots = {
+        object.Model,
+        getRigModel(object)
+    }
+
+    for _, root in ipairs(roots) do
+
+        if root and not seen[root] then
+
+            seen[root] = true
+
+            for _, descendant in ipairs(
+                root:GetDescendants()
+            ) do
+
+                if descendant:IsA("Sound")
+                    and descendant.Name == "EmoteSound"
+                    and descendant ~= keepSound then
+
+                    pcall(function()
+                        descendant:Stop()
+                    end)
+
+                    pcall(function()
+                        descendant:Destroy()
+                    end)
+
+                end
+
+            end
+
+        end
+
+    end
+end
+
 --// STOP EMOTE OBJECT
 --// =========================================================
 
@@ -938,6 +996,10 @@ local function startReplacement(
             originalId
         )
 
+        stopOriginalSounds(
+            object
+        )
+
         --// =================================================
         --// СОЗДАЁМ REPLACEMENT
         --// =================================================
@@ -980,6 +1042,10 @@ local function startReplacement(
 
         object.Emote =
             replacement
+
+        stopOriginalSounds(
+            object
+        )
 
         --// Сохраняем штатное состояние
         pcall(function()
@@ -1099,6 +1165,10 @@ local function checkState()
         stopOriginalTracks(
             object,
             emoteId
+        )
+
+        stopOriginalSounds(
+            object
         )
 
         --// Если штатная система снова создала
