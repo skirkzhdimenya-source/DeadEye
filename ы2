@@ -1566,7 +1566,12 @@ local unusualStatus
 local categoryBar
 local emoteCategoryButton
 local unusualCategoryButton
+local othersCategoryButton
 local currentCategory = "Emotes"
+
+local othersPage
+local othersOriginalDescription = nil
+local othersTargetHumanoid = nil
 
 local unusualConnections = {}
 
@@ -3080,7 +3085,7 @@ unusualPage.Size =
         1,
         -92,
         0,
-        105
+        82
     )
 
 unusualPage.Position =
@@ -4014,6 +4019,524 @@ local function updateUnusualToggle()
 end
 
 --// =========================================================
+--// OTHERS
+--// HEADLESS + KORBLOX
+-- =========================================================
+
+local OTHERS_HEADLESS_ID = 134082579
+local OTHERS_KORBLOX_ID = 139607718
+
+local function getOthersHumanoid()
+
+    local visualRig =
+        getUnusualVisualRig()
+
+    if visualRig then
+
+        local humanoid =
+            visualRig:FindFirstChildOfClass(
+                "Humanoid"
+            )
+
+        if humanoid then
+            return humanoid
+        end
+
+    end
+
+    local character =
+        getUnusualPlayerCharacter()
+
+    if character then
+
+        return character:FindFirstChildOfClass(
+            "Humanoid"
+        )
+
+    end
+
+    return nil
+
+end
+
+local function rememberOthersOriginal(
+    humanoid
+)
+
+    if not humanoid then
+        return false
+    end
+
+    if othersTargetHumanoid == humanoid
+        and othersOriginalDescription
+    then
+
+        return true
+
+    end
+
+    local success, description =
+        pcall(function()
+            return humanoid:GetAppliedDescription()
+        end)
+
+    if not success
+        or not description
+    then
+
+        warn(
+            "[Others] GetAppliedDescription error:",
+            description
+        )
+
+        return false
+
+    end
+
+    local cloneSuccess, clone =
+        pcall(function()
+            return description:Clone()
+        end)
+
+    if not cloneSuccess
+        or not clone
+    then
+
+        warn(
+            "[Others] Failed to clone HumanoidDescription"
+        )
+
+        return false
+
+    end
+
+    othersTargetHumanoid =
+        humanoid
+
+    othersOriginalDescription =
+        clone
+
+    return true
+
+end
+
+local function applyOthersBodyPart(
+    property,
+    assetId
+)
+
+    local humanoid =
+        getOthersHumanoid()
+
+    if not humanoid then
+
+        warn(
+            "[Others] Humanoid not found"
+        )
+
+        return false
+
+    end
+
+    if not rememberOthersOriginal(
+        humanoid
+    ) then
+
+        return false
+
+    end
+
+    local success, description =
+        pcall(function()
+            return humanoid:GetAppliedDescription()
+        end)
+
+    if not success
+        or not description
+    then
+
+        warn(
+            "[Others] GetAppliedDescription error:",
+            description
+        )
+
+        return false
+
+    end
+
+    local setSuccess, setError =
+        pcall(function()
+            description[property] =
+                assetId
+        end)
+
+    if not setSuccess then
+
+        warn(
+            "[Others] Failed to set",
+            property,
+            ":",
+            setError
+        )
+
+        return false
+
+    end
+
+    local applied = false
+    local applyError
+
+    local ok, err =
+        pcall(function()
+            humanoid:ApplyDescriptionAsync(
+                description
+            )
+        end)
+
+    if ok then
+
+        applied = true
+
+    else
+
+        applyError = err
+
+        local legacyOk, legacyErr =
+            pcall(function()
+                humanoid:ApplyDescription(
+                    description
+                )
+            end)
+
+        if legacyOk then
+            applied = true
+        else
+            applyError = legacyErr
+        end
+
+    end
+
+    if not applied then
+
+        warn(
+            "[Others] ApplyDescription error:",
+            applyError
+        )
+
+        return false
+
+    end
+
+    return true
+
+end
+
+local function restoreOthers()
+
+    if not othersTargetHumanoid
+        or not othersOriginalDescription
+    then
+
+        return
+
+    end
+
+    local humanoid =
+        othersTargetHumanoid
+
+    local description =
+        othersOriginalDescription
+
+    local ok =
+        pcall(function()
+            humanoid:ApplyDescriptionAsync(
+                description
+            )
+        end)
+
+    if not ok then
+
+        pcall(function()
+            humanoid:ApplyDescription(
+                description
+            )
+        end)
+
+    end
+
+    othersTargetHumanoid =
+        nil
+
+    othersOriginalDescription =
+        nil
+
+end
+
+--// =========================================================
+--// OTHERS PAGE
+--// =========================================================
+
+othersPage =
+    Instance.new("Frame")
+
+othersPage.Name =
+    "OthersPage"
+
+othersPage.Size =
+    UDim2.new(
+        1,
+        -92,
+        0,
+        105
+    )
+
+othersPage.Position =
+    UDim2.new(
+        0,
+        82,
+        0,
+        68
+    )
+
+othersPage.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+othersPage.BorderSizePixel =
+    0
+
+othersPage.Visible =
+    false
+
+othersPage.Parent =
+    Main
+
+local othersPageCorner =
+    Instance.new("UICorner")
+
+othersPageCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+
+othersPageCorner.Parent =
+    othersPage
+
+local function makeOthersRow(
+    labelText,
+    y,
+    callback
+)
+
+    local row =
+        Instance.new("Frame")
+
+    row.Size =
+        UDim2.new(
+            1,
+            -16,
+            0,
+            42
+        )
+
+    row.Position =
+        UDim2.new(
+            0,
+            8,
+            0,
+            y
+        )
+
+    row.BackgroundColor3 =
+        Color3.fromRGB(
+            40,
+            40,
+            40
+        )
+
+    row.BorderSizePixel =
+        0
+
+    row.Parent =
+        othersPage
+
+    local rowCorner =
+        Instance.new("UICorner")
+
+    rowCorner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    rowCorner.Parent =
+        row
+
+    local label =
+        Instance.new("TextLabel")
+
+    label.Size =
+        UDim2.new(
+            1,
+            -100,
+            1,
+            0
+        )
+
+    label.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            0
+        )
+
+    label.BackgroundTransparency =
+        1
+
+    label.Text =
+        labelText
+
+    label.TextSize =
+        12
+
+    label.Font =
+        Enum.Font.GothamBold
+
+    label.TextColor3 =
+        Color3.fromRGB(
+            220,
+            220,
+            220
+        )
+
+    label.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    label.Parent =
+        row
+
+    local apply =
+        Instance.new("TextButton")
+
+    apply.Size =
+        UDim2.new(
+            0,
+            72,
+            0,
+            28
+        )
+
+    apply.Position =
+        UDim2.new(
+            1,
+            -82,
+            0.5,
+            -14
+        )
+
+    apply.BackgroundColor3 =
+        Color3.fromRGB(
+            52,
+            52,
+            52
+        )
+
+    apply.BorderSizePixel =
+        0
+
+    apply.Text =
+        "APPLY"
+
+    apply.TextSize =
+        10
+
+    apply.Font =
+        Enum.Font.GothamBold
+
+    apply.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    apply.Parent =
+        row
+
+    local applyCorner =
+        Instance.new("UICorner")
+
+    applyCorner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    applyCorner.Parent =
+        apply
+
+    addUnusualConnection(
+        apply.MouseButton1Click:Connect(
+            function()
+
+                if callback() then
+
+                    apply.Text =
+                        "APPLIED"
+
+                    task.delay(
+                        0.8,
+                        function()
+
+                            pcall(function()
+
+                                if apply.Parent then
+                                    apply.Text =
+                                        "APPLY"
+                                end
+
+                            end)
+
+                        end
+                    )
+
+                end
+
+            end
+        )
+    )
+
+    return row
+
+end
+
+makeOthersRow(
+    "HEADLESS",
+    8,
+    function()
+        return applyOthersBodyPart(
+            "Head",
+            OTHERS_HEADLESS_ID
+        )
+    end
+)
+
+makeOthersRow(
+    "KORBLOX",
+    55,
+    function()
+        return applyOthersBodyPart(
+            "RightLeg",
+            OTHERS_KORBLOX_ID
+        )
+    end
+)
+
 --// CATEGORY BAR
 -- =========================================================
 
@@ -4028,7 +4551,7 @@ categoryBar.Size =
         0,
         66,
         0,
-        105
+        112
     )
 
 categoryBar.Position =
@@ -4077,7 +4600,7 @@ local function makeCategoryButton(
             1,
             -10,
             0,
-            38
+            30
         )
 
     button.Position =
@@ -4139,13 +4662,19 @@ end
 emoteCategoryButton =
     makeCategoryButton(
         "EMOTES",
-        8
+        6
     )
 
 unusualCategoryButton =
     makeCategoryButton(
         "UNUSUAL",
-        52
+        41
+    )
+
+othersCategoryButton =
+    makeCategoryButton(
+        "OTHERS",
+        76
     )
 
 --// =========================================================
@@ -4181,14 +4710,10 @@ local function setCategory(
             unusualStatus.Visible =
                 true
 
-            unusualPage.BackgroundColor3 =
-                Color3.fromRGB(
-                    32,
-                    32,
-                    32
-                )
+            unusualPicker.Visible =
+                false
 
-            Picker.Visible =
+            othersPage.Visible =
                 false
 
             emoteCategoryButton.BackgroundColor3 =
@@ -4205,7 +4730,61 @@ local function setCategory(
                     65
                 )
 
+            othersCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
             updateUnusualToggle()
+
+        elseif category == "Others" then
+
+            MainTitle.Text =
+                "Others"
+
+            Status.Visible =
+                false
+
+            Toggle.Visible =
+                false
+
+            SlotsScroll.Visible =
+                false
+
+            unusualPage.Visible =
+                false
+
+            unusualStatus.Visible =
+                false
+
+            unusualPicker.Visible =
+                false
+
+            othersPage.Visible =
+                true
+
+            emoteCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            unusualCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            othersCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    65,
+                    65,
+                    65
+                )
 
         else
 
@@ -4230,7 +4809,17 @@ local function setCategory(
             unusualPicker.Visible =
                 false
 
+            othersPage.Visible =
+                false
+
             unusualCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
@@ -4284,6 +4873,22 @@ addUnusualConnection(
     )
 )
 
+addUnusualConnection(
+    othersCategoryButton.MouseButton1Click:Connect(
+        function()
+
+            if mainMinimized then
+                setMainMinimized(false)
+            end
+
+            setCategory(
+                "Others"
+            )
+
+        end
+    )
+)
+
 --// =========================================================
 --// EXTERNAL CLEANUP
 --// =========================================================
@@ -4304,6 +4909,10 @@ local function cleanupUnusual()
         end)
 
     end
+
+    pcall(function()
+        restoreOthers()
+    end)
 
     unusualEnabled =
         false
@@ -4327,6 +4936,10 @@ local function cleanupUnusual()
 
         if unusualPage then
             unusualPage:Destroy()
+        end
+
+        if othersPage then
+            othersPage:Destroy()
         end
 
         if unusualStatus then
@@ -5702,6 +6315,7 @@ local function setMainMinimized(state)
             categoryBar.Visible = false
             unusualPage.Visible = false
             unusualStatus.Visible = false
+            othersPage.Visible = false
         end)
 
         Minimize.Text = "+"
@@ -5737,9 +6351,18 @@ local function setMainMinimized(state)
                 SlotsScroll.Visible = false
                 unusualPage.Visible = true
                 unusualStatus.Visible = true
+                othersPage.Visible = false
+            elseif currentCategory == "Others" then
+                Status.Visible = false
+                Toggle.Visible = false
+                SlotsScroll.Visible = false
+                unusualPage.Visible = false
+                unusualStatus.Visible = false
+                othersPage.Visible = true
             else
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
+                othersPage.Visible = false
             end
         end)
 
