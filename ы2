@@ -6111,7 +6111,7 @@ mainJump.makeRow(
         0
 
     apply.Text =
-        "APPLY"
+        "SET"
 
     apply.TextSize =
         9
