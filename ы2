@@ -5876,10 +5876,44 @@ hotkeyLabel.Parent =
     hotkeyRow
 
 mainJump.hotkeyBox =
-    mainJump.delayBox:Clone()
+    Instance.new("TextButton")
 
+mainJump.hotkeyBox.Size =
+    UDim2.new(
+        1,
+        -120,
+        0,
+        28
+    )
+
+mainJump.hotkeyBox.Position =
+    UDim2.new(
+        0,
+        105,
+        0.5,
+        -14
+    )
+
+mainJump.hotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+mainJump.hotkeyBox.BorderSizePixel = 0
 mainJump.hotkeyBox.Text =
     mainJump.hotkeyName
+mainJump.hotkeyBox.TextSize = 11
+mainJump.hotkeyBox.Font =
+    Enum.Font.Gotham
+
+mainJump.hotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
 
 mainJump.hotkeyBox.Parent =
     hotkeyRow
@@ -5897,25 +5931,11 @@ hotkeyCorner.Parent =
     mainJump.hotkeyBox
 
 mainConnect(
-    mainJump.hotkeyBox.Focused:Connect(
+    mainJump.hotkeyBox.MouseButton1Click:Connect(
         function()
             mainJump.startCapture(
                 "jump"
             )
-        end
-    )
-)
-
-mainConnect(
-    mainJump.hotkeyBox.FocusLost:Connect(
-        function()
-            if mainJump.capturing
-                == "jump"
-            then
-                mainJump.hotkeyBox.Text =
-                    mainJump.hotkeyName
-                mainJump.capturing = nil
-            end
         end
     )
 )
@@ -5936,10 +5956,44 @@ hideLabel.Parent =
     hideRow
 
 mainJump.hideUIHotkeyBox =
-    mainJump.delayBox:Clone()
+    Instance.new("TextButton")
 
+mainJump.hideUIHotkeyBox.Size =
+    UDim2.new(
+        1,
+        -120,
+        0,
+        28
+    )
+
+mainJump.hideUIHotkeyBox.Position =
+    UDim2.new(
+        0,
+        105,
+        0.5,
+        -14
+    )
+
+mainJump.hideUIHotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+mainJump.hideUIHotkeyBox.BorderSizePixel = 0
 mainJump.hideUIHotkeyBox.Text =
     mainJump.hideUIHotkeyName
+mainJump.hideUIHotkeyBox.TextSize = 11
+mainJump.hideUIHotkeyBox.Font =
+    Enum.Font.Gotham
+
+mainJump.hideUIHotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
 
 mainJump.hideUIHotkeyBox.Parent =
     hideRow
@@ -5957,25 +6011,11 @@ hideCorner.Parent =
     mainJump.hideUIHotkeyBox
 
 mainConnect(
-    mainJump.hideUIHotkeyBox.Focused:Connect(
+    mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
         function()
             mainJump.startCapture(
                 "hide"
             )
-        end
-    )
-)
-
-mainConnect(
-    mainJump.hideUIHotkeyBox.FocusLost:Connect(
-        function()
-            if mainJump.capturing
-                == "hide"
-            then
-                mainJump.hideUIHotkeyBox.Text =
-                    mainJump.hideUIHotkeyName
-                mainJump.capturing = nil
-            end
         end
     )
 )
