@@ -2658,6 +2658,19 @@ local function buildOriginalUnusualSignature(
                                 getUnusualAttachmentSignature(object)
                         }
                     )
+                elseif object:IsA("MeshPart")
+                    and object ~= sourcePart
+                then
+                    table.insert(
+                        objects,
+                        {
+                            Kind = "Mesh",
+                            Class = "MeshPart",
+                            Name = object.Name,
+                            MeshId = tostring(object.MeshId),
+                            TextureId = tostring(object.TextureID)
+                        }
+                    )
                 end
             end
             signature[
@@ -2731,9 +2744,34 @@ local function removeOriginalUnusualFX(
                             and existing.Name == info.Name
                             and getUnusualAttachmentSignature(existing)
                                 == info.MeshSignature
+                    elseif info.Kind == "Mesh" then
+                        match =
+                            existing:IsA("MeshPart")
+                            and existing.Name == info.Name
+                            and tostring(existing.MeshId) == info.MeshId
+                            and tostring(existing.TextureID) == info.TextureId
                     end
 
                     if match then
+                        local removedName = existing.Name
+
+                        if existing:IsA("MeshPart") then
+                            for _, sibling in ipairs(
+                                targetPart:GetChildren()
+                            ) do
+                                if sibling:IsA("Weld")
+                                    or sibling:IsA("WeldConstraint")
+                                    or sibling:IsA("Motor6D")
+                                then
+                                    if sibling.Name == removedName then
+                                        pcall(function()
+                                            sibling:Destroy()
+                                        end)
+                                    end
+                                end
+                            end
+                        end
+
                         pcall(function()
                             existing:Destroy()
                         end)
