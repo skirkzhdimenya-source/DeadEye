@@ -473,11 +473,7 @@ local function buildEmoteList()
         end
     )
 
-    print(
-        "[EmoteSwapper] Эмоций:",
-        #emoteList
-    )
-
+    
 end
 
 buildEmoteList()
@@ -1241,13 +1237,7 @@ local function startReplacement(
             )
         end)
 
-        print(
-            "[EmoteSwapper] ACTIVE:",
-            originalId,
-            "->",
-            replaceId
-        )
-
+        
         replacementRunning = false
 
     end)
@@ -1282,10 +1272,7 @@ local function checkState()
 
         if currentCustomEmote then
 
-            print(
-                "[EmoteSwapper] Emote finished"
-            )
-
+            
         end
 
         stopCustomEmote()
@@ -1900,11 +1887,7 @@ local function buildUnusualList()
         end
     )
 
-    print(
-        "[UnusualSwapper] Unusuals:",
-        #unusualList
-    )
-
+    
 end
 
 buildUnusualList()
@@ -2906,12 +2889,7 @@ local function applyUnusualFX(
 
     end
 
-    print(
-        "[UnusualSwapper] Installed FX on",
-        installed,
-        "parts"
-    )
-
+    
     return true
 
 end
@@ -2977,11 +2955,7 @@ local function removeOurUnusualFX()
 
     if removed > 0 then
 
-        print(
-            "[UnusualSwapper] Removed replacement FX:",
-            removed
-        )
-
+        
     end
 
 end
@@ -3150,13 +3124,7 @@ local function removeOriginalUnusualFX(
 
     end
 
-    print(
-        "[UnusualSwapper] Removed original FX:",
-        removed,
-        "ID:",
-        id
-    )
-
+    
 end
 
 --// =========================================================
@@ -3228,21 +3196,7 @@ local function activateUnusual()
         return false
     end
 
-    print("")
-    print("================================")
-    print("UNUSUAL SWAP")
-    print(
-        "Original:",
-        unusualSlot.originalId,
-        unusualSlot.originalName or ""
-    )
-    print(
-        "Replacement:",
-        unusualSlot.replaceId,
-        unusualSlot.replaceName or ""
-    )
-    print("================================")
-
+                        
     removeOurUnusualFX()
 
     task.wait()
@@ -5146,15 +5100,11 @@ function mainJump.updateToggle()
     end
 
     if mainJump.enabled then
-        mainJump.toggle.Text =
-            "JUMP: ON  |  "
-            .. mainJump.hotkeyName
+        mainJump.toggle.Text = "ON"
         mainJump.toggle.BackgroundColor3 =
             Color3.fromRGB(65, 65, 65)
     else
-        mainJump.toggle.Text =
-            "JUMP: OFF |  "
-            .. mainJump.hotkeyName
+        mainJump.toggle.Text = "OFF"
         mainJump.toggle.BackgroundColor3 =
             Color3.fromRGB(45, 45, 45)
     end
@@ -5176,13 +5126,6 @@ function mainJump.setEnabled(state)
         end)
     end
 
-    if mainJump.status then
-        mainJump.status.Text =
-            mainJump.enabled
-            and "ENABLED"
-            or "DISABLED"
-    end
-
     mainJump.updateToggle()
 end
 
@@ -5194,10 +5137,6 @@ function mainJump.applyDelay(textValue)
     )
 
     if not value then
-        if mainJump.status then
-            mainJump.status.Text =
-                "Некорректная задержка"
-        end
         return false
     end
 
@@ -5210,13 +5149,6 @@ function mainJump.applyDelay(textValue)
     end
 
     mainJump.saveConfig()
-
-    if mainJump.status then
-        mainJump.status.Text =
-            "Delay: "
-            .. tostring(mainJump.jumpDelay)
-            .. " c"
-    end
 
     return true
 end
@@ -5234,10 +5166,6 @@ function mainJump.applyHotkey(textValue)
     if not keyCode
         or keyCode == Enum.KeyCode.Unknown
     then
-        if mainJump.status then
-            mainJump.status.Text =
-                "Неизвестная клавиша"
-        end
         return false
     end
 
@@ -5250,12 +5178,6 @@ function mainJump.applyHotkey(textValue)
 
     mainJump.saveConfig()
     mainJump.updateToggle()
-
-    if mainJump.status then
-        mainJump.status.Text =
-            "Hotkey: "
-            .. keyName
-    end
 
     return true
 end
@@ -5330,16 +5252,6 @@ function mainJump.doJump(hit)
 
     mainJump.lastJump = now
 
-    if mainJump.status then
-        mainJump.status.Text = "JUMP!"
-    end
-
-    if mainJump.debug then
-        mainJump.debug.Text =
-            "Jump: "
-            .. (hit and hit.Name or "?")
-    end
-
     if mainJump.humanoid then
         mainJump.humanoid.Jump = true
         pcall(function()
@@ -5364,17 +5276,6 @@ function mainJump.contact(hit, sensorName)
         )
     then
         return
-    end
-
-    if mainJump.status then
-        mainJump.status.Text = "CONTACT"
-    end
-
-    if mainJump.debug then
-        mainJump.debug.Text =
-            sensorName
-            .. ": "
-            .. hit.Name
     end
 
     task.wait(
@@ -5562,17 +5463,7 @@ function mainJump.createSensors(char)
             end
         )
 
-    if mainJump.status then
-        mainJump.status.Text =
-            mainJump.enabled
-            and "READY"
-            or "OFF"
-    end
 
-    if mainJump.debug then
-        mainJump.debug.Text =
-            "2 sensors active"
-    end
 end
 
 function mainJump.cleanup()
@@ -5588,16 +5479,6 @@ function mainJump.cleanup()
     mainJump.character = nil
     mainJump.humanoid = nil
     mainJump.root = nil
-
-    if mainJump.status then
-        mainJump.status.Text =
-            "KILLED"
-    end
-
-    if mainJump.debug then
-        mainJump.debug.Text =
-            "Sensor: killed"
-    end
 
     genv.DEADEYE_MAIN_JUMP_CLEANUP = nil
 end
@@ -5713,51 +5594,339 @@ mainLayout.SortOrder =
 mainLayout.Parent =
     mainPage
 
-function mainJump.makeHeader(
-    textValue,
-    orderValue
+function mainJump.makeRow(
+    labelText,
+    initialText,
+    orderValue,
+    kind
 )
+    local row =
+        Instance.new("Frame")
+
+    row.Size =
+        UDim2.new(
+            1,
+            -4,
+            0,
+            40
+        )
+
+    row.BackgroundColor3 =
+        Color3.fromRGB(
+            40,
+            40,
+            40
+        )
+
+    row.BorderSizePixel =
+        0
+
+    row.LayoutOrder =
+        orderValue
+
+    row.Parent =
+        mainPage
+
+    local corner =
+        Instance.new("UICorner")
+
+    corner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    corner.Parent =
+        row
+
     local label =
         Instance.new("TextLabel")
 
     label.Size =
         UDim2.new(
-            1,
-            -4,
             0,
-            24
+            105,
+            1,
+            0
+        )
+
+    label.Position =
+        UDim2.new(
+            0,
+            10,
+            0,
+            0
         )
 
     label.BackgroundTransparency =
         1
 
     label.Text =
-        textValue
+        labelText
 
     label.TextSize =
-        10
+        11
 
     label.Font =
         Enum.Font.GothamBold
 
     label.TextColor3 =
         Color3.fromRGB(
-            150,
-            150,
-            150
+            215,
+            215,
+            215
         )
 
     label.TextXAlignment =
         Enum.TextXAlignment.Left
 
-    label.LayoutOrder =
-        orderValue
-
     label.Parent =
-        mainPage
+        row
+
+    if kind == "toggle" then
+
+        mainJump.toggle =
+            Instance.new("TextButton")
+
+        mainJump.toggle.Size =
+            UDim2.new(
+                0,
+                65,
+                0,
+                28
+            )
+
+        mainJump.toggle.Position =
+            UDim2.new(
+                1,
+                -75,
+                0.5,
+                -14
+            )
+
+        mainJump.toggle.BorderSizePixel =
+            0
+
+        mainJump.toggle.TextSize =
+            10
+
+        mainJump.toggle.Font =
+            Enum.Font.GothamBold
+
+        mainJump.toggle.TextColor3 =
+            Color3.fromRGB(
+                255,
+                255,
+                255
+            )
+
+        mainJump.toggle.Parent =
+            row
+
+        local toggleCorner =
+            Instance.new("UICorner")
+
+        toggleCorner.CornerRadius =
+            UDim.new(
+                0,
+                5
+            )
+
+        toggleCorner.Parent =
+            mainJump.toggle
+
+        mainAddConnection(
+            mainJump.toggle.MouseButton1Click:Connect(
+                function()
+                    mainJump.setEnabled(
+                        not mainJump.enabled
+                    )
+                end
+            )
+        )
+
+        return
+    end
+
+    local box =
+        Instance.new("TextBox")
+
+    box.Size =
+        UDim2.new(
+            1,
+            -190,
+            0,
+            28
+        )
+
+    box.Position =
+        UDim2.new(
+            0,
+            105,
+            0.5,
+            -14
+        )
+
+    box.BackgroundColor3 =
+        Color3.fromRGB(
+            32,
+            32,
+            32
+        )
+
+    box.BorderSizePixel =
+        0
+
+    box.ClearTextOnFocus =
+        false
+
+    box.Text =
+        initialText
+
+    box.TextSize =
+        11
+
+    box.Font =
+        Enum.Font.Gotham
+
+    box.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    box.TextXAlignment =
+        Enum.TextXAlignment.Left
+
+    box.Parent =
+        row
+
+    local boxCorner =
+        Instance.new("UICorner")
+
+    boxCorner.CornerRadius =
+        UDim.new(
+            0,
+            5
+        )
+
+    boxCorner.Parent =
+        box
+
+    local apply =
+        Instance.new("TextButton")
+
+    apply.Size =
+        UDim2.new(
+            0,
+            65,
+            0,
+            28
+        )
+
+    apply.Position =
+        UDim2.new(
+            1,
+            -75,
+            0.5,
+            -14
+        )
+
+    apply.BackgroundColor3 =
+        Color3.fromRGB(
+            52,
+            52,
+            52
+        )
+
+    apply.BorderSizePixel =
+        0
+
+    apply.Text =
+        "SET"
+
+    apply.TextSize =
+        9
+
+    apply.Font =
+        Enum.Font.GothamBold
+
+    apply.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    apply.Parent =
+        row
+
+    local applyCorner =
+        Instance.new("UICorner")
+
+    applyCorner.CornerRadius =
+        UDim.new(
+            0,
+            5
+        )
+
+    applyCorner.Parent =
+        apply
+
+    if kind == "delay" then
+        mainJump.delayBox = box
+
+        mainAddConnection(
+            apply.MouseButton1Click:Connect(
+                function()
+                    mainJump.applyDelay(
+                        box.Text
+                    )
+                end
+            )
+        )
+
+        mainAddConnection(
+            box.FocusLost:Connect(
+                function(enterPressed)
+                    if enterPressed then
+                        mainJump.applyDelay(
+                            box.Text
+                        )
+                    end
+                end
+            )
+        )
+
+    else
+        mainJump.keyBox = box
+
+        mainAddConnection(
+            apply.MouseButton1Click:Connect(
+                function()
+                    mainJump.applyHotkey(
+                        box.Text
+                    )
+                end
+            )
+        )
+
+        mainAddConnection(
+            box.FocusLost:Connect(
+                function(enterPressed)
+                    if enterPressed then
+                        mainJump.applyHotkey(
+                            box.Text
+                        )
+                    end
+                end
+            )
+        )
+    end
 end
 
-function mainJump.makeRow(
+mainJump.makeRow(
     labelText,
     initialText,
     orderValue,
@@ -6019,236 +6188,33 @@ function mainJump.makeRow(
     end
 end
 
-mainJump.makeHeader(
-    "FOOT JUMP SENSOR",
-    1
+mainJump.makeRow(
+    "AUTOJUMP",
+    "",
+    1,
+    "toggle"
 )
 
-mainJump.toggle =
-    Instance.new("TextButton")
-
-mainJump.toggle.Size =
-    UDim2.new(
-        1,
-        -4,
-        0,
-        38
-    )
-
-mainJump.toggle.BackgroundColor3 =
-    Color3.fromRGB(
-        45,
-        45,
-        45
-    )
-
-mainJump.toggle.BorderSizePixel =
-    0
-
-mainJump.toggle.TextSize =
-    11
-
-mainJump.toggle.Font =
-    Enum.Font.GothamBold
-
-mainJump.toggle.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-
-mainJump.toggle.LayoutOrder =
-    2
-
-mainJump.toggle.Parent =
-    mainPage
-
-local mainToggleCorner =
-    Instance.new("UICorner")
-
-mainToggleCorner.CornerRadius =
-    UDim.new(
-        0,
-        6
-    )
-
-mainToggleCorner.Parent =
-    mainJump.toggle
-
-mainJump.status =
-    Instance.new("TextLabel")
-
-mainJump.status.Size =
-    UDim2.new(
-        1,
-        -4,
-        0,
-        24
-    )
-
-mainJump.status.BackgroundTransparency =
-    1
-
-mainJump.status.Text =
-    "OFF"
-
-mainJump.status.TextSize =
-    11
-
-mainJump.status.Font =
-    Enum.Font.Gotham
-
-mainJump.status.TextColor3 =
-    Color3.fromRGB(
-        150,
-        150,
-        150
-    )
-
-mainJump.status.TextXAlignment =
-    Enum.TextXAlignment.Left
-
-mainJump.status.LayoutOrder =
-    3
-
-mainJump.status.Parent =
-    mainPage
-
 mainJump.makeRow(
-    "DELAY (sec)",
+    "DELAY",
     tostring(
         mainJump.jumpDelay
     ),
-    4,
+    2,
     "delay"
 )
 
 mainJump.makeRow(
     "HOTKEY",
     mainJump.hotkeyName,
-    5,
+    3,
     "hotkey"
-)
-
-mainJump.debug =
-    Instance.new("TextLabel")
-
-mainJump.debug.Size =
-    UDim2.new(
-        1,
-        -4,
-        0,
-        22
-    )
-
-mainJump.debug.BackgroundTransparency =
-    1
-
-mainJump.debug.Text =
-    "Sensor: OFF"
-
-mainJump.debug.TextSize =
-    10
-
-mainJump.debug.Font =
-    Enum.Font.Gotham
-
-mainJump.debug.TextColor3 =
-    Color3.fromRGB(
-        120,
-        120,
-        120
-    )
-
-mainJump.debug.TextXAlignment =
-    Enum.TextXAlignment.Left
-
-mainJump.debug.LayoutOrder =
-    6
-
-mainJump.debug.Parent =
-    mainPage
-
-mainJump.kill =
-    Instance.new("TextButton")
-
-mainJump.kill.Size =
-    UDim2.new(
-        1,
-        -4,
-        0,
-        34
-    )
-
-mainJump.kill.BackgroundColor3 =
-    Color3.fromRGB(
-        100,
-        40,
-        40
-    )
-
-mainJump.kill.BorderSizePixel =
-    0
-
-mainJump.kill.Text =
-    "KILL SCRIPT"
-
-mainJump.kill.TextSize =
-    10
-
-mainJump.kill.Font =
-    Enum.Font.GothamBold
-
-mainJump.kill.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-
-mainJump.kill.LayoutOrder =
-    7
-
-mainJump.kill.Parent =
-    mainPage
-
-local mainKillCorner =
-    Instance.new("UICorner")
-
-mainKillCorner.CornerRadius =
-    UDim.new(
-        0,
-        6
-    )
-
-mainKillCorner.Parent =
-    mainJump.kill
-
-mainAddConnection(
-    mainJump.toggle.MouseButton1Click:Connect(
-        function()
-            mainJump.setEnabled(
-                not mainJump.enabled
-            )
-        end
-    )
-)
-
-mainAddConnection(
-    mainJump.kill.MouseButton1Click:Connect(
-        function()
-            mainJump.cleanup()
-        end
-    )
 )
 
 mainAddConnection(
     UserInputService.InputBegan:Connect(
         function(input)
-            if mainJump.destroyed
-                or not mainJump.enabled
-            then
+            if mainJump.destroyed then
                 return
             end
 
@@ -7900,10 +7866,7 @@ local function cleanupUnusual()
     genv.UNUSUAL_SWAPPER_CLEANUP =
         nil
 
-    print(
-        "[UnusualSwapper] Fully cleaned"
-    )
-
+    
 end
 
 genv.UNUSUAL_SWAPPER_CLEANUP =
@@ -9162,10 +9125,7 @@ addConnection(
                 Status.Text =
                     "Подмена выключена"
 
-                print(
-                    "[EmoteSwapper] Выключен"
-                )
-
+                
                 return
             end
 
@@ -9222,11 +9182,7 @@ addConnection(
                 )
                 .. " слотов"
 
-            print(
-                "[EmoteSwapper] Включён. Слотов:",
-                validSlots
-            )
-
+            
         end
     )
 )
@@ -9543,10 +9499,7 @@ local function cleanup()
     genv.EMOTE_SWAPPER_CLEANUP =
         nil
 
-    print(
-        "[EmoteSwapper] Полностью завершён"
-    )
-
+    
 end
 
 genv.EMOTE_SWAPPER_CLEANUP =
@@ -9601,14 +9554,3 @@ pcall(function()
     setCategory("Emotes")
 end)
 
-print("==============================")
-print("[EmoteSwapper] 12 SLOT + SEARCH")
-print(
-    "[EmoteSwapper] Slot 1:",
-    "1631 -> 51"
-)
-print(
-    "[EmoteSwapper] Эмоций:",
-    #emoteList
-)
-print("==============================")
