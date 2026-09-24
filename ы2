@@ -43,12 +43,19 @@ if genv.UNUSUAL_SWAPPER_CLEANUP then
     end)
 end
 
+if genv.UNUSUAL_SWAPPER_CLEANUP then
+    pcall(function()
+        genv.UNUSUAL_SWAPPER_CLEANUP()
+    end)
+end
+
 if genv.EMOTE_SWAPPER_CLEANUP then
     pcall(function()
         genv.EMOTE_SWAPPER_CLEANUP()
     end)
 end
 
+genv.DEADEYE_MAIN_RUNNING = true
 genv.EMOTE_SWAPPER_RUNNING = true
 
 --// =========================================================
@@ -85,7 +92,11 @@ local savedConfig = {
     version = 1,
     emotes = {},
     unusual = {},
-    others = {}
+    others = {},
+    main = {
+        jumpDelay = 0.01,
+        hotkey = "Z"
+    }
 }
 
 local function loadSavedConfig()
@@ -158,6 +169,11 @@ local function loadSavedConfig()
     if type(decoded.others) == "table" then
         savedConfig.others =
             decoded.others
+    end
+
+    if type(decoded.main) == "table" then
+        savedConfig.main =
+            decoded.main
     end
 
     savedConfig.version =
@@ -464,12 +480,7 @@ local function buildEmoteList()
         end
     )
 
-    print(
-        "[EmoteSwapper] Эмоций:",
-        #emoteList
-    )
-
-end
+    end
 
 buildEmoteList()
 
@@ -1232,14 +1243,7 @@ local function startReplacement(
             )
         end)
 
-        print(
-            "[EmoteSwapper] ACTIVE:",
-            originalId,
-            "->",
-            replaceId
-        )
-
-        replacementRunning = false
+                replacementRunning = false
 
     end)
 end
@@ -1273,11 +1277,7 @@ local function checkState()
 
         if currentCustomEmote then
 
-            print(
-                "[EmoteSwapper] Emote finished"
-            )
-
-        end
+                    end
 
         stopCustomEmote()
 
@@ -1736,10 +1736,13 @@ local unusualPage
 local unusualStatus
 
 local categoryBar
+local mainCategoryButton
 local emoteCategoryButton
 local unusualCategoryButton
 local othersCategoryButton
 local currentCategory = "Emotes"
+
+local mainPage
 
 local others = {}
 
@@ -1888,12 +1891,7 @@ local function buildUnusualList()
         end
     )
 
-    print(
-        "[UnusualSwapper] Unusuals:",
-        #unusualList
-    )
-
-end
+    end
 
 buildUnusualList()
 
@@ -2894,13 +2892,7 @@ local function applyUnusualFX(
 
     end
 
-    print(
-        "[UnusualSwapper] Installed FX on",
-        installed,
-        "parts"
-    )
-
-    return true
+        return true
 
 end
 
@@ -2965,12 +2957,7 @@ local function removeOurUnusualFX()
 
     if removed > 0 then
 
-        print(
-            "[UnusualSwapper] Removed replacement FX:",
-            removed
-        )
-
-    end
+            end
 
 end
 
@@ -3138,14 +3125,7 @@ local function removeOriginalUnusualFX(
 
     end
 
-    print(
-        "[UnusualSwapper] Removed original FX:",
-        removed,
-        "ID:",
-        id
-    )
-
-end
+    end
 
 --// =========================================================
 --// RESTORE UNUSUAL
@@ -3216,22 +3196,7 @@ local function activateUnusual()
         return false
     end
 
-    print("")
-    print("================================")
-    print("UNUSUAL SWAP")
-    print(
-        "Original:",
-        unusualSlot.originalId,
-        unusualSlot.originalName or ""
-    )
-    print(
-        "Replacement:",
-        unusualSlot.replaceId,
-        unusualSlot.replaceName or ""
-    )
-    print("================================")
-
-    removeOurUnusualFX()
+                            removeOurUnusualFX()
 
     task.wait()
 
@@ -5051,6 +5016,903 @@ function others.restore(
 end
 
 --// =========================================================
+--// MAIN / AUTOJUMP
+--// =========================================================
+
+local mainJump = {
+    enabled = false,
+    jumpDelay = 0.01,
+    hotkeyName = "Z",
+    lastJump = 0,
+    character = nil,
+    humanoid = nil,
+    root = nil,
+    sensorPart = nil,
+    frontSensorPart = nil,
+    sensorTouchConnection = nil,
+    frontSensorTouchConnection = nil,
+    connections = {}
+}
+
+mainJump.jumpDelay =
+    math.clamp(
+        tonumber(
+            savedConfig.main
+            and savedConfig.main.jumpDelay
+        ) or 0.01,
+        0,
+        5
+    )
+
+mainJump.hotkeyName =
+    tostring(
+        savedConfig.main
+        and savedConfig.main.hotkey
+        or "Z"
+    ):upper()
+
+if not Enum.KeyCode[mainJump.hotkeyName]
+    or Enum.KeyCode[mainJump.hotkeyName]
+        == Enum.KeyCode.Unknown
+then
+    mainJump.hotkeyName = "Z"
+end
+
+local function mainConnect(connection)
+    table.insert(
+        mainJump.connections,
+        connection
+    )
+end
+
+local function mainDisconnect()
+    for _, connection in ipairs(
+        mainJump.connections
+    ) do
+        pcall(function()
+            connection:Disconnect()
+        end)
+    end
+    table.clear(
+        mainJump.connections
+    )
+end
+
+function mainJump.saveConfig()
+    savedConfig.main = {
+        jumpDelay = mainJump.jumpDelay,
+        hotkey = mainJump.hotkeyName
+    }
+
+    pcall(function()
+        saveSavedConfig()
+    end)
+end
+
+function mainJump.update()
+    if not mainJump.toggle then
+        return
+    end
+
+    if mainJump.enabled then
+        mainJump.toggle.Text =
+            "ON"
+
+        mainJump.toggle.BackgroundColor3 =
+            Color3.fromRGB(
+                65,
+                65,
+                65
+            )
+    else
+        mainJump.toggle.Text =
+            "OFF"
+
+        mainJump.toggle.BackgroundColor3 =
+            Color3.fromRGB(
+                45,
+                45,
+                45
+            )
+    end
+end
+
+function mainJump.setEnabled(state)
+    mainJump.enabled =
+        state and true or false
+
+    if not mainJump.enabled
+        and mainJump.humanoid
+        and mainJump.humanoid.Parent
+    then
+        pcall(function()
+            mainJump.humanoid.Jump = false
+        end)
+    end
+
+    mainJump.update()
+end
+
+function mainJump.setDelay(value)
+    value =
+        tonumber(
+            tostring(value or "")
+        )
+
+    if not value then
+        return
+    end
+
+    mainJump.jumpDelay =
+        math.clamp(
+            value,
+            0,
+            5
+        )
+
+    mainJump.delayBox.Text =
+        tostring(
+            mainJump.jumpDelay
+        )
+
+    mainJump.saveConfig()
+end
+
+function mainJump.setHotkey(value)
+    local name =
+        tostring(
+            value or ""
+        ):gsub(
+            "%s+",
+            ""
+        ):upper()
+
+    local key =
+        Enum.KeyCode[name]
+
+    if not key
+        or key == Enum.KeyCode.Unknown
+    then
+        return
+    end
+
+    mainJump.hotkeyName =
+        name
+
+    mainJump.hotkeyBox.Text =
+        name
+
+    mainJump.saveConfig()
+end
+
+function mainJump.destroySensors()
+    if mainJump.sensorTouchConnection then
+        pcall(function()
+            mainJump.sensorTouchConnection:Disconnect()
+        end)
+        mainJump.sensorTouchConnection = nil
+    end
+
+    if mainJump.frontSensorTouchConnection then
+        pcall(function()
+            mainJump.frontSensorTouchConnection:Disconnect()
+        end)
+        mainJump.frontSensorTouchConnection = nil
+    end
+
+    if mainJump.sensorPart then
+        pcall(function()
+            mainJump.sensorPart:Destroy()
+        end)
+        mainJump.sensorPart = nil
+    end
+
+    if mainJump.frontSensorPart then
+        pcall(function()
+            mainJump.frontSensorPart:Destroy()
+        end)
+        mainJump.frontSensorPart = nil
+    end
+end
+
+function mainJump.canJump()
+    if not genv.DEADEYE_MAIN_RUNNING
+        or not mainJump.enabled
+        or not mainJump.humanoid
+        or mainJump.humanoid.Health <= 0
+    then
+        return false
+    end
+
+    if mainJump.humanoid.FloorMaterial
+        == Enum.Material.Air
+    then
+        return false
+    end
+
+    local state =
+        mainJump.humanoid:GetState()
+
+    return state
+        ~= Enum.HumanoidStateType.Jumping
+        and state
+            ~= Enum.HumanoidStateType.Freefall
+        and state
+            ~= Enum.HumanoidStateType.FallingDown
+end
+
+function mainJump.jump(hit)
+    if not mainJump.canJump() then
+        return
+    end
+
+    if tick() - mainJump.lastJump < 0 then
+        return
+    end
+
+    mainJump.lastJump = tick()
+
+    mainJump.humanoid.Jump = true
+
+    pcall(function()
+        mainJump.humanoid:ChangeState(
+            Enum.HumanoidStateType.Jumping
+        )
+    end)
+end
+
+function mainJump.contact(hit)
+    if not genv.DEADEYE_MAIN_RUNNING
+        or not mainJump.enabled
+        or not hit
+    then
+        return
+    end
+
+    if mainJump.character
+        and hit:IsDescendantOf(
+            mainJump.character
+        )
+    then
+        return
+    end
+
+    task.wait(
+        mainJump.jumpDelay
+    )
+
+    if not genv.DEADEYE_MAIN_RUNNING
+        or not mainJump.enabled
+    then
+        return
+    end
+
+    mainJump.jump(hit)
+end
+
+function mainJump.createSensors(char)
+    mainJump.destroySensors()
+
+    mainJump.character = char
+    mainJump.humanoid =
+        char:WaitForChild(
+            "Humanoid"
+        )
+
+    mainJump.root =
+        char:WaitForChild(
+            "HumanoidRootPart"
+        )
+
+    local sensor =
+        Instance.new("Part")
+
+    sensor.Name =
+        "FootJumpSensor"
+
+    sensor.Size =
+        Vector3.new(
+            2.6,
+            0.15,
+            2.6
+        )
+
+    sensor.Transparency = 1
+    sensor.Anchored = false
+    sensor.CanCollide = false
+    sensor.CanTouch = true
+    sensor.CanQuery = false
+    sensor.Massless = true
+    sensor.CastShadow = false
+
+    sensor.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -3,
+            0
+        )
+
+    sensor.Parent = char
+
+    local weld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    weld.Part0 =
+        mainJump.root
+
+    weld.Part1 =
+        sensor
+
+    weld.Parent =
+        sensor
+
+    mainJump.sensorPart =
+        sensor
+
+    mainJump.sensorTouchConnection =
+        sensor.Touched:Connect(
+            function(hit)
+                mainJump.contact(hit)
+            end
+        )
+
+    local front =
+        Instance.new("Part")
+
+    front.Name =
+        "FrontJumpSensor"
+
+    front.Size =
+        Vector3.new(
+            2,
+            3,
+            1
+        )
+
+    front.Transparency = 1
+    front.Anchored = false
+    front.CanCollide = false
+    front.CanTouch = true
+    front.CanQuery = false
+    front.Massless = true
+    front.CastShadow = false
+
+    front.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -1,
+            -0.8
+        )
+
+    front.Parent = char
+
+    local frontWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    frontWeld.Part0 =
+        mainJump.root
+
+    frontWeld.Part1 =
+        front
+
+    frontWeld.Parent =
+        front
+
+    mainJump.frontSensorPart =
+        front
+
+    mainJump.frontSensorTouchConnection =
+        front.Touched:Connect(
+            function(hit)
+                mainJump.contact(hit)
+            end
+        )
+end
+
+genv.DEADEYE_MAIN_RUNNING = true
+
+mainPage =
+    Instance.new("ScrollingFrame")
+
+mainPage.Name =
+    "MainPage"
+
+mainPage.Size =
+    UDim2.new(
+        1,
+        -92,
+        1,
+        -76
+    )
+
+mainPage.Position =
+    UDim2.new(
+        0,
+        82,
+        0,
+        68
+    )
+
+mainPage.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+mainPage.BorderSizePixel = 0
+
+mainPage.ScrollBarThickness = 6
+mainPage.AutomaticCanvasSize =
+    Enum.AutomaticSize.Y
+
+mainPage.ScrollingDirection =
+    Enum.ScrollingDirection.Y
+
+mainPage.Visible = false
+mainPage.Parent = Main
+
+local mainCorner =
+    Instance.new("UICorner")
+
+mainCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+
+mainCorner.Parent =
+    mainPage
+
+local mainPadding =
+    Instance.new("UIPadding")
+
+mainPadding.PaddingTop =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.PaddingBottom =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.PaddingLeft =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.PaddingRight =
+    UDim.new(
+        0,
+        8
+    )
+
+mainPadding.Parent =
+    mainPage
+
+local mainLayout =
+    Instance.new("UIListLayout")
+
+mainLayout.Padding =
+    UDim.new(
+        0,
+        6
+    )
+
+mainLayout.SortOrder =
+    Enum.SortOrder.LayoutOrder
+
+mainLayout.Parent =
+    mainPage
+
+local function mainRow(labelText, order)
+    local row =
+        Instance.new("Frame")
+
+    row.Size =
+        UDim2.new(
+            1,
+            -4,
+            0,
+            40
+        )
+
+    row.BackgroundColor3 =
+        Color3.fromRGB(
+            40,
+            40,
+            40
+        )
+
+    row.BorderSizePixel = 0
+    row.LayoutOrder = order
+    row.Parent = mainPage
+
+    local rowCorner =
+        Instance.new("UICorner")
+
+    rowCorner.CornerRadius =
+        UDim.new(
+            0,
+            6
+        )
+
+    rowCorner.Parent =
+        row
+
+    return row
+end
+
+local autoRow =
+    mainRow(
+        "AUTOJUMP",
+        1
+    )
+
+local autoLabel =
+    Instance.new("TextLabel")
+
+autoLabel.Size =
+    UDim2.new(
+        0.7,
+        0,
+        1,
+        0
+    )
+
+autoLabel.Position =
+    UDim2.new(
+        0,
+        10,
+        0,
+        0
+    )
+
+autoLabel.BackgroundTransparency = 1
+autoLabel.Text = "AUTOJUMP"
+autoLabel.TextSize = 11
+autoLabel.Font = Enum.Font.GothamBold
+
+autoLabel.TextColor3 =
+    Color3.fromRGB(
+        215,
+        215,
+        215
+    )
+
+autoLabel.TextXAlignment =
+    Enum.TextXAlignment.Left
+
+autoLabel.Parent = autoRow
+
+mainJump.toggle =
+    Instance.new("TextButton")
+
+mainJump.toggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+
+mainJump.toggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+
+mainJump.toggle.BorderSizePixel = 0
+mainJump.toggle.TextSize = 10
+mainJump.toggle.Font =
+    Enum.Font.GothamBold
+
+mainJump.toggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+mainJump.toggle.Parent =
+    autoRow
+
+local toggleCorner =
+    Instance.new("UICorner")
+
+toggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+toggleCorner.Parent =
+    mainJump.toggle
+
+mainConnect(
+    mainJump.toggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setEnabled(
+                not mainJump.enabled
+            )
+        end
+    )
+)
+
+local delayRow =
+    mainRow(
+        "DELAY",
+        2
+    )
+
+local delayLabel =
+    autoLabel:Clone()
+
+delayLabel.Text =
+    "DELAY"
+
+delayLabel.Parent =
+    delayRow
+
+mainJump.delayBox =
+    Instance.new("TextBox")
+
+mainJump.delayBox.Size =
+    UDim2.new(
+        1,
+        -190,
+        0,
+        28
+    )
+
+mainJump.delayBox.Position =
+    UDim2.new(
+        0,
+        105,
+        0.5,
+        -14
+    )
+
+mainJump.delayBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+
+mainJump.delayBox.BorderSizePixel = 0
+mainJump.delayBox.ClearTextOnFocus = false
+mainJump.delayBox.Text =
+    tostring(
+        mainJump.jumpDelay
+    )
+
+mainJump.delayBox.TextSize = 11
+mainJump.delayBox.Font =
+    Enum.Font.Gotham
+
+mainJump.delayBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+mainJump.delayBox.Parent =
+    delayRow
+
+local delayCorner =
+    Instance.new("UICorner")
+
+delayCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+delayCorner.Parent =
+    mainJump.delayBox
+
+local delaySet =
+    Instance.new("TextButton")
+
+delaySet.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+
+delaySet.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+
+delaySet.BackgroundColor3 =
+    Color3.fromRGB(
+        52,
+        52,
+        52
+    )
+
+delaySet.BorderSizePixel = 0
+delaySet.Text = "SET"
+delaySet.TextSize = 9
+delaySet.Font =
+    Enum.Font.GothamBold
+
+delaySet.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+delaySet.Parent =
+    delayRow
+
+local delaySetCorner =
+    Instance.new("UICorner")
+
+delaySetCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+delaySetCorner.Parent =
+    delaySet
+
+mainConnect(
+    delaySet.MouseButton1Click:Connect(
+        function()
+            mainJump.setDelay(
+                mainJump.delayBox.Text
+            )
+        end
+    )
+)
+
+mainConnect(
+    mainJump.delayBox.FocusLost:Connect(
+        function(enterPressed)
+            if enterPressed then
+                mainJump.setDelay(
+                    mainJump.delayBox.Text
+                )
+            end
+        end
+    )
+)
+
+local hotkeyRow =
+    mainRow(
+        "HOTKEY",
+        3
+    )
+
+local hotkeyLabel =
+    autoLabel:Clone()
+
+hotkeyLabel.Text =
+    "HOTKEY"
+
+hotkeyLabel.Parent =
+    hotkeyRow
+
+mainJump.hotkeyBox =
+    mainJump.delayBox:Clone()
+
+mainJump.hotkeyBox.Text =
+    mainJump.hotkeyName
+
+mainJump.hotkeyBox.Parent =
+    hotkeyRow
+
+local hotkeyCorner =
+    Instance.new("UICorner")
+
+hotkeyCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+hotkeyCorner.Parent =
+    mainJump.hotkeyBox
+
+local hotkeySet =
+    delaySet:Clone()
+
+hotkeySet.Parent =
+    hotkeyRow
+
+local oldSetPosition =
+    hotkeySet.Position
+
+hotkeySet.Position =
+    oldSetPosition
+
+mainConnect(
+    hotkeySet.MouseButton1Click:Connect(
+        function()
+            mainJump.setHotkey(
+                mainJump.hotkeyBox.Text
+            )
+        end
+    )
+)
+
+mainConnect(
+    mainJump.hotkeyBox.FocusLost:Connect(
+        function(enterPressed)
+            if enterPressed then
+                mainJump.setHotkey(
+                    mainJump.hotkeyBox.Text
+                )
+            end
+        end
+    )
+)
+
+mainConnect(
+    UserInputService.InputBegan:Connect(
+        function(input)
+            if input.KeyCode
+                == Enum.KeyCode[
+                    mainJump.hotkeyName
+                ]
+            then
+                mainJump.setEnabled(
+                    not mainJump.enabled
+                )
+            end
+        end
+    )
+)
+
+mainConnect(
+    LocalPlayer.CharacterAdded:Connect(
+        function(char)
+            task.wait(0.2)
+            if genv.DEADEYE_MAIN_RUNNING then
+                mainJump.createSensors(char)
+            end
+        end
+    )
+)
+
+if LocalPlayer.Character
+    and genv.DEADEYE_MAIN_RUNNING
+then
+    task.spawn(
+        function()
+            mainJump.createSensors(
+                LocalPlayer.Character
+            )
+        end
+    )
+end
+
+mainJump.update()
+
+--// =========================================================
 --// OTHERS PAGE
 --// =========================================================
 
@@ -6143,7 +7005,7 @@ categoryBar.Size =
         0,
         66,
         0,
-        112
+        147
     )
 
 categoryBar.Position =
@@ -6251,22 +7113,28 @@ local function makeCategoryButton(
 
 end
 
+mainCategoryButton =
+    makeCategoryButton(
+        "MAIN",
+        6
+    )
+
 emoteCategoryButton =
     makeCategoryButton(
         "EMOTES",
-        6
+        41
     )
 
 unusualCategoryButton =
     makeCategoryButton(
         "UNUSUAL",
-        41
+        76
     )
 
 othersCategoryButton =
     makeCategoryButton(
         "OTHERS",
-        76
+        111
     )
 
 --// =========================================================
@@ -6282,7 +7150,50 @@ local function setCategory(
 
     pcall(function()
 
-        if category == "Unusual" then
+        if category == "Main" then
+
+            MainTitle.Text =
+                "Main"
+
+            Status.Visible = false
+            Toggle.Visible = false
+            SlotsScroll.Visible = false
+
+            mainPage.Visible = true
+            unusualPage.Visible = false
+            unusualStatus.Visible = false
+            unusualPicker.Visible = false
+            others.page.Visible = false
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    65,
+                    65,
+                    65
+                )
+
+            emoteCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            unusualCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+            othersCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
+
+        elseif category == "Unusual" then
 
             MainTitle.Text =
                 "Unusual Swapper"
@@ -6296,6 +7207,9 @@ local function setCategory(
             SlotsScroll.Visible =
                 false
 
+            mainPage.Visible =
+                false
+
             unusualPage.Visible =
                 true
 
@@ -6307,6 +7221,13 @@ local function setCategory(
 
             others.page.Visible =
                 false
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
 
             emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
@@ -6351,11 +7272,21 @@ local function setCategory(
             unusualStatus.Visible =
                 false
 
+            mainPage.Visible =
+                false
+
             unusualPicker.Visible =
                 false
 
             others.page.Visible =
                 true
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
 
             emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
@@ -6392,6 +7323,9 @@ local function setCategory(
             SlotsScroll.Visible =
                 true
 
+            mainPage.Visible =
+                false
+
             unusualPage.Visible =
                 false
 
@@ -6403,6 +7337,13 @@ local function setCategory(
 
             others.page.Visible =
                 false
+
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    45
+                )
 
             unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
@@ -6432,6 +7373,22 @@ local function setCategory(
     end)
 
 end
+
+addUnusualConnection(
+    mainCategoryButton.MouseButton1Click:Connect(
+        function()
+
+            if mainMinimized then
+                setMainMinimized(false)
+            end
+
+            setCategory(
+                "Main"
+            )
+
+        end
+    )
+)
 
 addUnusualConnection(
     emoteCategoryButton.MouseButton1Click:Connect(
@@ -6520,7 +7477,15 @@ local function cleanupUnusual()
 
     end)
 
+    genv.DEADEYE_MAIN_RUNNING = false
+
     pcall(function()
+
+        if mainPage then
+            mainPage.Visible = false
+        end
+
+        mainDisconnect()
 
         if unusualPicker then
             unusualPicker:Destroy()
@@ -6547,11 +7512,7 @@ local function cleanupUnusual()
     genv.UNUSUAL_SWAPPER_CLEANUP =
         nil
 
-    print(
-        "[UnusualSwapper] Fully cleaned"
-    )
-
-end
+    end
 
 genv.UNUSUAL_SWAPPER_CLEANUP =
     cleanupUnusual
@@ -7809,11 +8770,7 @@ addConnection(
                 Status.Text =
                     "Подмена выключена"
 
-                print(
-                    "[EmoteSwapper] Выключен"
-                )
-
-                return
+                                return
             end
 
             local validSlots = 0
@@ -7869,12 +8826,7 @@ addConnection(
                 )
                 .. " слотов"
 
-            print(
-                "[EmoteSwapper] Включён. Слотов:",
-                validSlots
-            )
-
-        end
+                    end
     )
 )
 
@@ -7916,6 +8868,7 @@ local function setMainMinimized(state)
 
         pcall(function()
             categoryBar.Visible = false
+            mainPage.Visible = false
             unusualPage.Visible = false
             unusualStatus.Visible = false
             others.page.Visible = false
@@ -7948,10 +8901,19 @@ local function setMainMinimized(state)
         pcall(function()
             categoryBar.Visible = true
 
-            if currentCategory == "Unusual" then
+            if currentCategory == "Main" then
+                Status.Visible = false
+                Toggle.Visible = false
+                SlotsScroll.Visible = false
+                mainPage.Visible = true
+                unusualPage.Visible = false
+                unusualStatus.Visible = false
+                others.page.Visible = false
+            elseif currentCategory == "Unusual" then
                 Status.Visible = false
                 Toggle.Visible = true
                 SlotsScroll.Visible = false
+                mainPage.Visible = false
                 unusualPage.Visible = true
                 unusualStatus.Visible = true
                 others.page.Visible = false
@@ -7959,10 +8921,12 @@ local function setMainMinimized(state)
                 Status.Visible = false
                 Toggle.Visible = false
                 SlotsScroll.Visible = false
+                mainPage.Visible = false
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
                 others.page.Visible = true
             else
+                mainPage.Visible = false
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
                 others.page.Visible = false
@@ -8178,11 +9142,7 @@ local function cleanup()
     genv.EMOTE_SWAPPER_CLEANUP =
         nil
 
-    print(
-        "[EmoteSwapper] Полностью завершён"
-    )
-
-end
+    end
 
 genv.EMOTE_SWAPPER_CLEANUP =
     cleanup
@@ -8236,14 +9196,3 @@ pcall(function()
     setCategory("Emotes")
 end)
 
-print("==============================")
-print("[EmoteSwapper] 12 SLOT + SEARCH")
-print(
-    "[EmoteSwapper] Slot 1:",
-    "1631 -> 51"
-)
-print(
-    "[EmoteSwapper] Эмоций:",
-    #emoteList
-)
-print("==============================")
