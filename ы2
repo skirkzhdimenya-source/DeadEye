@@ -1263,9 +1263,9 @@ Main =
 Main.Size =
     UDim2.new(
         0,
-        560,
+        450,
         0,
-        500
+        380
     )
 
 Main.Position =
@@ -1323,7 +1323,7 @@ local MainTitle =
 MainTitle.Size =
     UDim2.new(
         1,
-        -50,
+        -82,
         0,
         40
     )
@@ -1359,6 +1359,51 @@ MainTitle.TextXAlignment =
     Enum.TextXAlignment.Left
 
 MainTitle.Parent =
+    Main
+
+--// =========================================================
+--// MINIMIZE
+--// =========================================================
+
+local Minimize =
+    Instance.new("TextButton")
+
+Minimize.Size =
+    UDim2.new(
+        0,
+        28,
+        0,
+        28
+    )
+
+Minimize.Position =
+    UDim2.new(
+        1,
+        -69,
+        0,
+        7
+    )
+
+Minimize.BackgroundTransparency =
+    1
+
+Minimize.Text =
+    "−"
+
+Minimize.TextSize =
+    22
+
+Minimize.Font =
+    Enum.Font.GothamBold
+
+Minimize.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+Minimize.Parent =
     Main
 
 --// =========================================================
@@ -1453,6 +1498,22 @@ Status.TextXAlignment =
 
 Status.Parent =
     Main
+
+--// =========================================================
+--// MINIMIZE BUTTON
+--// =========================================================
+
+addConnection(
+    Minimize.MouseButton1Click:Connect(
+        function()
+
+            setMainMinimized(
+                not mainMinimized
+            )
+
+        end
+    )
+)
 
 --// =========================================================
 --// TOGGLE
@@ -1684,7 +1745,7 @@ for slotIndex = 1, SLOT_COUNT do
     slotLabel.Size =
         UDim2.new(
             0,
-            77,
+            70,
             1,
             0
         )
@@ -1731,17 +1792,17 @@ for slotIndex = 1, SLOT_COUNT do
     originalButton.Size =
         UDim2.new(
             0,
-            175,
+            125,
             0,
-            37
+            35
         )
 
     originalButton.Position =
         UDim2.new(
             0,
-            85,
+            78,
             0.5,
-            -18
+            -17
         )
 
     originalButton.BackgroundColor3 =
@@ -1802,17 +1863,17 @@ for slotIndex = 1, SLOT_COUNT do
     arrow.Size =
         UDim2.new(
             0,
-            35,
+            25,
             0,
-            37
+            35
         )
 
     arrow.Position =
         UDim2.new(
             0,
-            263,
+            208,
             0.5,
-            -18
+            -17
         )
 
     arrow.BackgroundTransparency =
@@ -1845,17 +1906,17 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.Size =
         UDim2.new(
             0,
-            175,
+            125,
             0,
-            37
+            35
         )
 
     replaceButton.Position =
         UDim2.new(
             0,
-            302,
+            236,
             0.5,
-            -18
+            -17
         )
 
     replaceButton.BackgroundColor3 =
@@ -1920,17 +1981,17 @@ Picker =
 Picker.Size =
     UDim2.new(
         0,
-        500,
+        390,
         0,
-        540
+        400
     )
 
 Picker.Position =
     UDim2.new(
         0.5,
-        -250,
+        -195,
         0.5,
-        -270
+        -200
     )
 
 Picker.BackgroundColor3 =
@@ -2254,7 +2315,7 @@ local PickerGrid =
 PickerGrid.CellSize =
     UDim2.new(
         0,
-        150,
+        112,
         0,
         34
     )
@@ -2698,6 +2759,56 @@ addConnection(
 )
 
 --// =========================================================
+--// MINIMIZE STATE
+--// =========================================================
+
+local mainMinimized = false
+
+local function setMainMinimized(state)
+
+    mainMinimized = state
+
+    if mainMinimized then
+
+        Main.Size =
+            UDim2.new(
+                0,
+                450,
+                0,
+                42
+            )
+
+        Status.Visible = false
+        Toggle.Visible = false
+        SlotsScroll.Visible = false
+
+        if Picker then
+            Picker.Visible = false
+        end
+
+        Minimize.Text = "+"
+
+    else
+
+        Main.Size =
+            UDim2.new(
+                0,
+                450,
+                0,
+                380
+            )
+
+        Status.Visible = true
+        Toggle.Visible = true
+        SlotsScroll.Visible = true
+
+        Minimize.Text = "−"
+
+    end
+
+end
+
+--// =========================================================
 --// GUI UPDATE
 --// =========================================================
 
@@ -2865,6 +2976,10 @@ local function cleanup()
 
     end
 
+    pcall(function()
+        Picker.Visible = false
+    end)
+
     disconnectAll()
 
     pcall(function()
@@ -2900,6 +3015,7 @@ addConnection(
 --// =========================================================
 
 prepareSlots()
+setMainMinimized(false)
 updateGUI()
 
 print("==============================")
