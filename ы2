@@ -3247,6 +3247,350 @@ local function reapplyUnusual()
 
 end
 
+
+--// =========================================================
+--// FIRST PERSON / VIEWMODEL SYNC
+--//
+--// 3P uses workspace.Rigs.<name>.
+--// 1P uses workspace.Camera.Viewmodel.Clothing.
+--// In 1P the game hides the 3P rig with LocalTransparencyModifier.
+--// =========================================================
+
+genv.DEADEYE_UNUSUAL_POV_RUNNING = true
+
+local lastUnusualPOVState = nil
+
+local function getUnusualViewmodel()
+
+    local camera =
+        workspace.CurrentCamera
+
+    if not camera then
+        return nil
+    end
+
+    local viewmodel =
+        camera:FindFirstChild(
+            "Viewmodel"
+        )
+
+    if not viewmodel then
+        return nil
+    end
+
+    return viewmodel
+
+end
+
+local function isUnusualFirstPerson()
+
+    local visualRig =
+        getUnusualVisualRig()
+
+    if not visualRig then
+        return false
+    end
+
+    local bodyNames = {
+        "Head",
+        "Torso",
+        "Left Arm",
+        "Right Arm",
+        "Left Leg",
+        "Right Leg"
+    }
+
+    local total = 0
+    local hidden = 0
+
+    for _, name in ipairs(
+        bodyNames
+    ) do
+
+        local part =
+            visualRig:FindFirstChild(
+                name
+            )
+
+        if part
+            and part:IsA("BasePart")
+        then
+
+            total += 1
+
+            if part.LocalTransparencyModifier
+                >= 0.99
+            then
+
+                hidden += 1
+
+            end
+
+        end
+
+    end
+
+    if total > 0
+        and hidden >= math.ceil(
+            total * 0.5
+        )
+    then
+
+        return true
+
+    end
+
+    --// Fallback only when the rig does not expose
+    --// LocalTransparencyModifier yet.
+    local camera =
+        workspace.CurrentCamera
+
+    local head =
+        visualRig:FindFirstChild(
+            "Head"
+        )
+
+    if camera
+        and head
+    then
+
+        local distance =
+            (
+                camera.CFrame.Position
+                - head.Position
+            ).Magnitude
+
+        if distance < 1.5 then
+            return true
+        end
+
+    end
+
+    return false
+
+end
+
+local function syncUnusualViewmodelAppearance()
+
+    local visualRig =
+        getUnusualVisualRig()
+
+    if not visualRig then
+        return
+    end
+
+    local viewmodel =
+        getUnusualViewmodel()
+
+    if not viewmodel then
+        return
+    end
+
+    local clothing =
+        viewmodel:FindFirstChild(
+            "Clothing"
+        )
+
+    if not clothing then
+        return
+    end
+
+    --// Shirt: the 1P viewmodel has its own shirt,
+    --// and it was confirmed to contain the old skin.
+    local sourceShirt =
+        visualRig:FindFirstChildOfClass(
+            "Shirt"
+        )
+
+    local targetShirt =
+        clothing:FindFirstChildOfClass(
+            "Shirt"
+        )
+
+    if sourceShirt
+        and targetShirt
+    then
+
+        pcall(function()
+
+            if targetShirt.ShirtTemplate
+                ~= sourceShirt.ShirtTemplate
+            then
+
+                targetShirt.ShirtTemplate =
+                    sourceShirt.ShirtTemplate
+
+            end
+
+        end)
+
+    end
+
+    --// Body colors.
+    local sourceColors =
+        visualRig:FindFirstChildOfClass(
+            "BodyColors"
+        )
+
+    local targetColors =
+        clothing:FindFirstChildOfClass(
+            "BodyColors"
+        )
+
+    if sourceColors
+        and targetColors
+    then
+
+        local properties = {
+            "HeadColor3",
+            "TorsoColor3",
+            "LeftArmColor3",
+            "RightArmColor3",
+            "LeftLegColor3",
+            "RightLegColor3"
+        }
+
+        for _, property in ipairs(
+            properties
+        ) do
+
+            pcall(function()
+
+                targetColors[property] =
+                    sourceColors[property]
+
+            end)
+
+        end
+
+    end
+
+end
+
+local function setUnusualFXForPOV(
+    firstPerson
+)
+
+    local roots = {
+        getUnusualVisualRig(),
+        getUnusualPlayerCharacter()
+    }
+
+    local seen = {}
+
+    for _, root in ipairs(
+        roots
+    ) do
+
+        if root
+            and not seen[root]
+        then
+
+            seen[root] =
+                true
+
+            for _, object in ipairs(
+                root:GetDescendants()
+            ) do
+
+                local tagged =
+                    false
+
+                pcall(function()
+
+                    tagged =
+                        object:GetAttribute(
+                            "DeadEyeUnusualFX"
+                        ) == true
+
+                end)
+
+                if tagged then
+
+                    --// Trail is always kept.
+                    --// Every other supported FX is hidden in 1P.
+                    if object:IsA("Trail") then
+
+                        pcall(function()
+                            object.Enabled =
+                                true
+                        end)
+
+                    elseif object:IsA("ParticleEmitter")
+                        or object:IsA("Beam")
+                        or object:IsA("Sparkles")
+                        or object:IsA("Fire")
+                        or object:IsA("Smoke")
+                        or object:IsA("Highlight")
+                        or object:IsA("PointLight")
+                        or object:IsA("SpotLight")
+                        or object:IsA("SurfaceLight")
+                        or object:IsA("BillboardGui")
+                    then
+
+                        pcall(function()
+                            object.Enabled =
+                                not firstPerson
+                        end)
+
+                    end
+
+                end
+
+            end
+
+        end
+
+    end
+
+end
+
+local function updateUnusualPOV()
+
+    if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
+        return
+    end
+
+    syncUnusualViewmodelAppearance()
+
+    local firstPerson =
+        isUnusualFirstPerson()
+
+    if firstPerson
+        ~= lastUnusualPOVState
+    then
+
+        lastUnusualPOVState =
+            firstPerson
+
+        setUnusualFXForPOV(
+            firstPerson
+        )
+
+    elseif unusualActive then
+
+        --// Re-apply the state when the game recreates
+        --// one of the tagged FX while staying in the same POV.
+        setUnusualFXForPOV(
+            firstPerson
+        )
+
+    end
+
+end
+
+addUnusualConnection(
+    RunService.Heartbeat:Connect(
+        function()
+
+            if genv.DEADEYE_UNUSUAL_POV_RUNNING then
+                updateUnusualPOV()
+            end
+
+        end
+    )
+)
+
 --// =========================================================
 --// UNUSUAL PAGE
 --// =========================================================
