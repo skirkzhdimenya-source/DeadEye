@@ -1964,6 +1964,7 @@ local unusualPickerTitle
 local unusualPickerClose
 local unusualPickerButtons = {}
 local unusualPickerSide = nil
+local unusualIconCache = {}
 local unusualPage
 local unusualStatus
 local categoryBar
@@ -5960,14 +5961,14 @@ unusualPickerGrid.CellSize =
         0,
         96,
         0,
-        32
+        38
     )
 unusualPickerGrid.CellPadding =
     UDim2.new(
         0,
         5,
         0,
-        5
+        6
     )
 unusualPickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
@@ -5977,6 +5978,54 @@ unusualPickerGrid.Parent =
 --// REBUILD UNUSUAL PICKER
 --// =========================================================
 local function rebuildUnusualPicker()
+
+    table.clear(unusualIconCache)
+
+    pcall(function()
+        local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
+
+        if playerGui then
+            for _, obj in ipairs(playerGui:GetDescendants()) do
+
+                if obj:IsA("ImageLabel")
+                    and obj.Name == "IconIMG"
+                then
+
+                    local image = obj.Image
+
+                    if type(image) == "string"
+                        and image ~= ""
+                    then
+
+                        local parent = obj.Parent
+                        local itemName = nil
+
+                        if parent then
+                            for _, child in ipairs(parent:GetChildren()) do
+                                if child:IsA("TextLabel")
+                                    and child.Text
+                                    and child.Text ~= ""
+                                then
+                                    itemName = tostring(child.Text)
+                                    break
+                                end
+                            end
+                        end
+
+                        if itemName then
+                            unusualIconCache[
+                                string.lower(itemName)
+                            ] = image
+                        end
+
+                    end
+
+                end
+
+            end
+        end
+    end)
+
     for _, button in ipairs(
         unusualPickerButtons
     ) do
@@ -6104,7 +6153,7 @@ local function rebuildUnusualPicker()
             button.BorderSizePixel =
                 0
             button.Text =
-                data.name
+                ""
             button.TextSize =
                 11
             button.Font =
@@ -6123,6 +6172,88 @@ local function rebuildUnusualPicker()
                 32
             button.Parent =
                 unusualPickerScroll
+
+            local icon =
+                Instance.new("ImageLabel")
+            icon.Name =
+                "EffectIcon"
+            icon.Size =
+                UDim2.new(
+                    0,
+                    26,
+                    0,
+                    26
+                )
+            icon.Position =
+                UDim2.new(
+                    0,
+                    3,
+                    0.5,
+                    -13
+                )
+            icon.BackgroundTransparency =
+                1
+            icon.BorderSizePixel =
+                0
+            icon.Image =
+                unusualIconCache[
+                    string.lower(
+                        tostring(data.name)
+                    )
+                ]
+                or ""
+            icon.ScaleType =
+                Enum.ScaleType.Fit
+            icon.ZIndex =
+                33
+            icon.Parent =
+                button
+
+            local textLabel =
+                Instance.new("TextLabel")
+            textLabel.Name =
+                "EffectName"
+            textLabel.Size =
+                UDim2.new(
+                    1,
+                    -34,
+                    1,
+                    0
+                )
+            textLabel.Position =
+                UDim2.new(
+                    0,
+                    34,
+                    0,
+                    0
+                )
+            textLabel.BackgroundTransparency =
+                1
+            textLabel.BorderSizePixel =
+                0
+            textLabel.Text =
+                data.name
+            textLabel.TextSize =
+                10
+            textLabel.Font =
+                Enum.Font.Gotham
+            textLabel.TextColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            textLabel.TextXAlignment =
+                Enum.TextXAlignment.Left
+            textLabel.TextYAlignment =
+                Enum.TextYAlignment.Center
+            textLabel.TextTruncate =
+                Enum.TextTruncate.AtEnd
+            textLabel.ZIndex =
+                33
+            textLabel.Parent =
+                button
+
             local corner =
                 Instance.new(
                     "UICorner"
@@ -6130,7 +6261,7 @@ local function rebuildUnusualPicker()
             corner.CornerRadius =
                 UDim.new(
                     0,
-                    5
+                    7
                 )
             corner.Parent =
                 button
@@ -6207,6 +6338,7 @@ end
 local function openUnusualPicker(
     side
 )
+    table.clear(unusualIconCache)
     unusualPickerSide =
         side
     if side == "Original" then
@@ -6219,7 +6351,7 @@ local function openUnusualPicker(
     unusualPickerSearch.Text =
         ""
     rebuildUnusualPicker()
-    Picker.Visible =
+    unusualPicker.Visible =
         false
     unusualPicker.Visible =
         true
