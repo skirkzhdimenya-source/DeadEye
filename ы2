@@ -2716,6 +2716,15 @@ local function applyUnusualFX(
 
                 end
 
+                if not targetPart then
+
+                    targetPart =
+                        visualRig:FindFirstChild(
+                            "HumanoidRootPart"
+                        )
+
+                end
+
             else
 
                 targetPart =
@@ -2751,7 +2760,7 @@ local function applyUnusualFX(
         "parts"
     )
 
-    return true
+    return installed > 0
 
 end
 
