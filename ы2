@@ -2636,6 +2636,13 @@ local function buildUnusualList()
     )
     end
 buildUnusualList()
+
+-- Icons are read directly from AppearanceInfo.Icon,
+-- so the picker starts with its icons already populated.
+task.spawn(function()
+    pcall(preloadNativeUnusualIcons)
+end)
+
 --// =========================================================
 --// GET UNUSUAL NAME
 --// =========================================================
@@ -6266,25 +6273,29 @@ unusualPicker =
 unusualPicker.Size =
     UDim2.new(
         0,
-        335,
+        560,
         0,
-        350
+        450
     )
 unusualPicker.Position =
     UDim2.new(
         0.5,
-        -167,
+        -280,
         0.5,
-        -175
+        -225
     )
 unusualPicker.BackgroundColor3 =
     Color3.fromRGB(
         24,
         24,
-        24
+        28
     )
+unusualPicker.BackgroundTransparency =
+    0.12
 unusualPicker.BorderSizePixel =
     0
+unusualPicker.ClipsDescendants =
+    true
 unusualPicker.Visible =
     false
 unusualPicker.ZIndex =
@@ -6396,10 +6407,12 @@ unusualPickerSearch.Position =
     )
 unusualPickerSearch.BackgroundColor3 =
     Color3.fromRGB(
-        40,
-        40,
-        40
+        55,
+        58,
+        68
     )
+unusualPickerSearch.BackgroundTransparency =
+    0.28
 unusualPickerSearch.BorderSizePixel =
     0
 unusualPickerSearch.ClearTextOnFocus =
@@ -6455,10 +6468,12 @@ unusualPickerScroll.Position =
     )
 unusualPickerScroll.BackgroundColor3 =
     Color3.fromRGB(
-        32,
-        32,
-        32
+        35,
+        37,
+        45
     )
+unusualPickerScroll.BackgroundTransparency =
+    0.32
 unusualPickerScroll.BorderSizePixel =
     0
 unusualPickerScroll.ScrollBarThickness =
@@ -6502,16 +6517,16 @@ local unusualPickerGrid =
 unusualPickerGrid.CellSize =
     UDim2.new(
         0,
-        96,
+        172,
         0,
-        38
+        92
     )
 unusualPickerGrid.CellPadding =
     UDim2.new(
         0,
-        5,
+        7,
         0,
-        6
+        8
     )
 unusualPickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
@@ -6552,8 +6567,10 @@ local function rebuildUnusualPicker()
             Instance.new("TextButton")
 
         button.Name = "Unusual_None"
-        button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+        button.BackgroundColor3 = Color3.fromRGB(55, 58, 68)
+        button.BackgroundTransparency = 0.12
         button.BorderSizePixel = 0
+        button.ClipsDescendants = true
         button.Text = "NONE"
         button.TextSize = 11
         button.Font = Enum.Font.GothamBold
@@ -6652,10 +6669,14 @@ local function rebuildUnusualPicker()
                 Color3.fromRGB(
                     45,
                     45,
-                    45
+                    50
                 )
+            button.BackgroundTransparency =
+                0.05
             button.BorderSizePixel =
                 0
+            button.ClipsDescendants =
+                true
             button.Text =
                 ""
             button.TextSize =
@@ -6683,17 +6704,17 @@ local function rebuildUnusualPicker()
                 "EffectIcon"
             icon.Size =
                 UDim2.new(
+                    1,
                     0,
-                    26,
-                    0,
-                    26
+                    1,
+                    0
                 )
             icon.Position =
                 UDim2.new(
                     0,
-                    3,
-                    0.5,
-                    -13
+                    0,
+                    0,
+                    0
                 )
             icon.BackgroundTransparency =
                 1
@@ -6717,55 +6738,151 @@ local function rebuildUnusualPicker()
                 ]
                 or ""
             icon.ScaleType =
-                Enum.ScaleType.Fit
+                Enum.ScaleType.Crop
             icon.ZIndex =
                 33
             icon.Parent =
                 button
 
-            local textLabel =
-                Instance.new("TextLabel")
-            textLabel.Name =
-                "EffectName"
-            textLabel.Size =
+            local iconCorner =
+                Instance.new("UICorner")
+            iconCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            iconCorner.Parent =
+                icon
+
+            local glass =
+                Instance.new("Frame")
+            glass.Name =
+                "GlassOverlay"
+            glass.Size =
                 UDim2.new(
                     1,
-                    -34,
+                    0,
                     1,
                     0
                 )
-            textLabel.Position =
+            glass.Position =
                 UDim2.new(
                     0,
-                    34,
+                    0,
                     0,
                     0
                 )
-            textLabel.BackgroundTransparency =
-                1
-            textLabel.BorderSizePixel =
-                0
-            textLabel.Text =
-                data.name
-            textLabel.TextSize =
-                10
-            textLabel.Font =
-                Enum.Font.Gotham
-            textLabel.TextColor3 =
+            glass.BackgroundColor3 =
                 Color3.fromRGB(
                     255,
                     255,
                     255
                 )
-            textLabel.TextXAlignment =
+            glass.BackgroundTransparency =
+                0.91
+            glass.BorderSizePixel =
+                0
+            glass.ZIndex =
+                34
+            glass.Parent =
+                button
+
+            local glassCorner =
+                Instance.new("UICorner")
+            glassCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            glassCorner.Parent =
+                glass
+
+            local shade =
+                Instance.new("Frame")
+            shade.Name =
+                "NameShade"
+            shade.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    0,
+                    36
+                )
+            shade.Position =
+                UDim2.new(
+                    0,
+                    0,
+                    1,
+                    -36
+                )
+            shade.BackgroundColor3 =
+                Color3.fromRGB(
+                    0,
+                    0,
+                    0
+                )
+            shade.BackgroundTransparency =
+                0.42
+            shade.BorderSizePixel =
+                0
+            shade.ZIndex =
+                35
+            shade.Parent =
+                button
+
+            local nameCorner =
+                Instance.new("UICorner")
+            nameCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            nameCorner.Parent =
+                shade
+
+            local nameLabel =
+                Instance.new("TextLabel")
+            nameLabel.Name =
+                "EffectName"
+            nameLabel.Size =
+                UDim2.new(
+                    1,
+                    -12,
+                    0,
+                    30
+                )
+            nameLabel.Position =
+                UDim2.new(
+                    0,
+                    6,
+                    1,
+                    -33
+                )
+            nameLabel.BackgroundTransparency =
+                1
+            nameLabel.BorderSizePixel =
+                0
+            nameLabel.Text =
+                data.name
+            nameLabel.TextSize =
+                11
+            nameLabel.Font =
+                Enum.Font.GothamMedium
+            nameLabel.TextColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            nameLabel.TextXAlignment =
                 Enum.TextXAlignment.Left
-            textLabel.TextYAlignment =
+            nameLabel.TextYAlignment =
                 Enum.TextYAlignment.Center
-            textLabel.TextTruncate =
+            nameLabel.TextTruncate =
                 Enum.TextTruncate.AtEnd
-            textLabel.ZIndex =
-                33
-            textLabel.Parent =
+            nameLabel.ZIndex =
+                36
+            nameLabel.Parent =
                 button
 
             local corner =
