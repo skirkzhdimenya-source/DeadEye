@@ -1708,7 +1708,9 @@ local unusualDestroyed = false
 local unusualReapplyBusy = false
 local unusualRuntime = {
     appliedRig = nil,
-    reapplyGeneration = 0
+    reapplyGeneration = 0,
+    clone = nil,
+    folder = nil
 }
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
@@ -2266,11 +2268,34 @@ local function applyUnusualFX(
             sourcePivot
         )
 
-    --// Keep the cosmetic clone out of the real character hierarchy.
-    --// Ragdoll code may iterate character descendants and mutate
-    --// their joints/parts; our cosmetic rig must never be included.
+    --// Keep the cosmetic clone completely outside all
+    --// character/rig hierarchies. This prevents ragdoll code
+    --// from touching its joints and prevents our clone from
+    --// becoming part of the player's physics assembly.
+    local folder =
+        unusualRuntime.folder
+
+    if not folder
+        or not folder.Parent
+    then
+        folder =
+            Instance.new("Folder")
+
+        folder.Name =
+            "DeadEyeUnusualVisuals"
+
+        folder.Parent =
+            workspace
+
+        unusualRuntime.folder =
+            folder
+    end
+
     clone.Parent =
-        visualRig
+        folder
+
+    cloneRoot.Anchored =
+        true
 
     pcall(function()
         clone:PivotTo(
@@ -2278,23 +2303,6 @@ local function applyUnusualFX(
             pivotOffset
         )
     end)
-
-    local weld =
-        Instance.new(
-            "WeldConstraint"
-        )
-
-    weld.Name =
-        "DeadEyeUnusualRootWeld"
-
-    weld.Part0 =
-        targetRoot
-
-    weld.Part1 =
-        cloneRoot
-
-    weld.Parent =
-        clone
 
     tagUnusualFX(
         clone,
@@ -2304,6 +2312,16 @@ local function applyUnusualFX(
     startUnusualAnimations(
         clone
     )
+
+    unusualRuntime.clone =
+        clone
+
+    pcall(function()
+        clone:SetAttribute(
+            "DeadEyeRootOffset",
+            pivotOffset
+        )
+    end)
 
     --// Do not enable embedded scripts here.
     --// A script inside the cosmetic clone could be picked up by
@@ -2318,11 +2336,52 @@ end
 -- =========================================================
 local function removeOurUnusualFX()
     local removed = 0
+
+    if unusualRuntime.clone then
+        pcall(function()
+            if unusualRuntime.clone.Parent then
+                unusualRuntime.clone:Destroy()
+                removed += 1
+            end
+        end)
+        unusualRuntime.clone = nil
+    end
+
+    local folder =
+        unusualRuntime.folder
+
+    if folder
+        and folder.Parent
+    then
+        for _, object in ipairs(
+            folder:GetDescendants()
+        ) do
+            local marked = false
+
+            pcall(function()
+                marked =
+                    object:GetAttribute(
+                        "DeadEyeUnusualFX"
+                    ) == true
+            end)
+
+            if marked then
+                pcall(function()
+                    object:Destroy()
+                    removed += 1
+                end)
+            end
+        end
+    end
+
     local roots = {
         getUnusualVisualRig(),
-        getUnusualPlayerCharacter()
+        getUnusualPlayerCharacter(),
+        unusualRuntime.folder
     }
+
     local seen = {}
+
     for _, root in ipairs(
         roots
     ) do
@@ -2331,17 +2390,19 @@ local function removeOurUnusualFX()
         then
             seen[root] =
                 true
+
             for _, object in ipairs(
                 root:GetDescendants()
             ) do
-                local marked =
-                    false
+                local marked = false
+
                 pcall(function()
                     marked =
                         object:GetAttribute(
                             "DeadEyeUnusualFX"
                         ) == true
                 end)
+
                 if marked then
                     pcall(function()
                         object:Destroy()
@@ -2351,8 +2412,8 @@ local function removeOurUnusualFX()
             end
         end
     end
-    if removed > 0 then
-            end
+
+    return removed
 end
 --// =========================================================
 --// ORIGINAL SIGNATURE
@@ -3037,6 +3098,51 @@ addUnusualConnection(
             end
 
             updateUnusualPOV()
+
+            local activeClone =
+                unusualRuntime.clone
+
+            if activeClone
+                and activeClone.Parent
+            then
+
+                local rig =
+                    unusualRuntime.appliedRig
+
+                local root =
+                    activeClone:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+
+                local target =
+                    rig
+                    and rig:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+
+                if root
+                    and target
+                    and root.Anchored
+                then
+                    local offset
+
+                    pcall(function()
+                        offset =
+                            activeClone:GetAttribute(
+                                "DeadEyeRootOffset"
+                            )
+                    end)
+
+                    if typeof(offset) == "CFrame" then
+                        pcall(function()
+                            root.CFrame =
+                                target.CFrame
+                                * offset
+                        end)
+                    end
+                end
+
+            end
 
             if unusualEnabled
                 and not unusualReapplyBusy
@@ -6756,6 +6862,13 @@ local function cleanupUnusual()
         false
     unusualRuntime.reapplyGeneration += 1
     unusualRuntime.appliedRig = nil
+    unusualRuntime.clone = nil
+    if unusualRuntime.folder then
+        pcall(function()
+            unusualRuntime.folder:Destroy()
+        end)
+    end
+    unusualRuntime.folder = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
     disconnectUnusualConnections()
