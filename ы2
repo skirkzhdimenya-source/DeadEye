@@ -717,6 +717,16 @@ local replacementGeneration = 0
 local lastRegistryEmote = 0
 local cleaned = false
 local connections = {}
+
+--// Native wheel visual state.
+--// Weak keys let recreated native slots disappear naturally.
+local nativeWheelStates =
+    setmetatable(
+        {},
+        {
+            __mode = "k"
+        }
+    )
 --// =========================================================
 --// CACHE
 --// =========================================================
@@ -997,8 +1007,7 @@ local function getRigModel(object)
         pcall(function()
             return object.Rig:GetRigModel()
         end)
-    if success then
-        return result
+    if success then        return result
     end
     return nil
 end
@@ -1997,8 +2006,7 @@ local function isLikelyImageKey(key)
         or string.find(key, "thumbnail", 1, true)
         or string.find(key, "thumb", 1, true)
         or string.find(key, "preview", 1, true)
-        or string.find(key, "sprite", 1, true)
-end
+        or string.find(key, "sprite", 1, true)end
 
 local function extractAssetId(value)
     if type(value) == "number" then
@@ -2997,8 +3005,7 @@ local function unusualObjectBelongsToPart(
 end
 
 local function getNeededUnusualAttachments(
-    sourcePart
-)
+    sourcePart)
 
     local needed = {}
 
@@ -3997,7 +4004,6 @@ unusualRuntime.createAnimationSource = function(
         )
 
     local runtimeParent
-
     if hasLocalScriptDriver
         and not hasClientScriptDriver
     then
@@ -4997,8 +5003,7 @@ local function applyUnusualFX(
 
     if not cosmeticRig then
 
-        warn(
-            "[UnusualSwapper] Cosmetic rig not found:",
+        warn(            "[UnusualSwapper] Cosmetic rig not found:",
             id
         )
 
@@ -5997,8 +6002,7 @@ __UI.unusualPageCorner.CornerRadius =
         9
     )
 __UI.unusualPageCorner.Parent =
-    unusualPage
-local unusualPadding =
+    unusualPagelocal unusualPadding =
     Instance.new("UIPadding")
 unusualPadding.PaddingTop =
     UDim.new(
@@ -6997,8 +7001,7 @@ local function closeUnusualPicker()
     unusualPickerSide =
         nil
 end
-addUnusualConnection(
-    unusualOriginalButton.MouseButton1Click:Connect(
+addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
         function()
             openUnusualPicker(
                 "Original"
@@ -7997,8 +8000,7 @@ function mainJump.createSensors(char)
         sensor.Touched:Connect(
             function(hit)
                 mainJump.contact(hit)
-            end
-        )
+            end        )
     local front =
         Instance.new("Part")
     front.Name =
@@ -8997,8 +8999,7 @@ function others.quickRow(
             0
         )
     label.Position =
-        UDim2.new(
-        0,
+        UDim2.new(        0,
         10,
         0,
         0
@@ -9997,8 +9998,7 @@ addUnusualConnection(
         end
     )
 )
-addUnusualConnection(
-    unusualCategoryButton.MouseButton1Click:Connect(
+addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
                 setMainMinimized(false)
@@ -10997,8 +10997,7 @@ local function createEmotePreview(
                             and animation.AnimationId ~= ""
                         then
                             mainAnimation =
-                                animation
-                        end
+                                animation                        end
 
                         local walk =
                             rigAnimations:FindFirstChild(
@@ -11364,6 +11363,419 @@ local function createEmotePreview(
 
     return success
 end
+--// =========================================================
+--// NATIVE EMOTE WHEEL VISUAL SWAP
+--//
+--// The game wheel uses:
+--// Wheel.Emote1..Emote6
+--//   -> TextLabel
+--//   -> ViewportFrame
+--//      -> WorldModel
+--//         -> VisualRigClassic
+--//            -> AnimationController.Animator
+--//
+--// We replace only the visual/name. The original Button and
+--// the native emote binding remain untouched.
+--// =========================================================
+local function getNativeEmoteWheel()
+    local playerGui =
+        LocalPlayer:FindFirstChild(
+            "PlayerGui"
+        )
+
+    if not playerGui then
+        return nil
+    end
+
+    local gameGui =
+        playerGui:FindFirstChild(
+            "Game"
+        )
+
+    local hud =
+        gameGui
+        and gameGui:FindFirstChild(
+            "HUD"
+        )
+
+    local interactors =
+        hud
+        and hud:FindFirstChild(
+            "Interactors"
+        )
+
+    local popups =
+        interactors
+        and interactors:FindFirstChild(
+            "Popups"
+        )
+
+    local emote =
+        popups
+        and popups:FindFirstChild(
+            "Emote"
+        )
+
+    local wheel =
+        emote
+        and emote:FindFirstChild(
+            "Wheel"
+        )
+
+    if wheel
+        and wheel:IsA("GuiObject")
+    then
+        return wheel
+    end
+
+    return nil
+end
+
+local function getConfiguredSlotByOriginalName(
+    name
+)
+    name =
+        tostring(
+            name or ""
+        )
+
+    if name == "" then
+        return nil
+    end
+
+    for i = 1, SLOT_COUNT do
+        local slot =
+            slots[i]
+
+        if slot
+            and slot.originalId
+            and slot.replaceId
+            and tostring(
+                slot.originalName
+                    or ""
+            ) == name
+        then
+            return slot, i
+        end
+    end
+
+    return nil
+end
+
+local function restoreNativeEmoteSlot(
+    nativeSlot,
+    state
+)
+    if not nativeSlot
+        or not state
+    then
+        return
+    end
+
+    nativeWheelStates[
+        nativeSlot
+    ] = nil
+
+    local textLabel =
+        nativeSlot:FindFirstChild(
+            "TextLabel"
+        )
+
+    if not textLabel then
+        return
+    end
+
+    -- Only touch the slot if its visible name is still ours.
+    -- A different name means the native wheel has already
+    -- recycled this slot for another emote/page.
+    if tostring(
+        textLabel.Text
+            or ""
+        )
+        ~= tostring(
+            state.replaceName
+                or ""
+        )
+    then
+        return
+    end
+
+    local viewport =
+        nativeSlot:FindFirstChild(
+            "ViewportFrame"
+        )
+
+    local originalModule =
+        prepareOriginalModule(
+            state.originalId
+        )
+
+    if viewport
+        and originalModule
+    then
+        pcall(function()
+            createEmotePreview(
+                originalModule,
+                viewport
+            )
+        end)
+    end
+
+    pcall(function()
+        textLabel.Text =
+            state.originalName
+            or getEmoteName(
+                state.originalId
+            )
+            or textLabel.Text
+    end)
+end
+
+local function restoreNativeEmoteWheel()
+    local restoreList = {}
+
+    for nativeSlot, state in pairs(
+        nativeWheelStates
+    ) do
+        table.insert(
+            restoreList,
+            {
+                slot = nativeSlot,
+                state = state
+            }
+        )
+    end
+
+    for _, entry in ipairs(
+        restoreList
+    ) do
+        pcall(function()
+            restoreNativeEmoteSlot(
+                entry.slot,
+                entry.state
+            )
+        end)
+    end
+
+    table.clear(
+        nativeWheelStates
+    )
+end
+
+local function applyNativeEmoteSlot(
+    nativeSlot,
+    slot
+)
+    if not nativeSlot
+        or not slot
+        or not slot.originalId
+        or not slot.replaceId
+    then
+        return false
+    end
+
+    local textLabel =
+        nativeSlot:FindFirstChild(
+            "TextLabel"
+        )
+
+    local viewport =
+        nativeSlot:FindFirstChild(
+            "ViewportFrame"
+        )
+
+    if not textLabel
+        or not viewport
+    then
+        return false
+    end
+
+    local replaceModule =
+        prepareReplaceModule(
+            slot.replaceId
+        )
+
+    if not replaceModule then
+        return false
+    end
+
+    local replacementName =
+        slot.replaceName
+        or replaceModule.Name
+        or getEmoteName(
+            slot.replaceId
+        )
+
+    if not replacementName then
+        return false
+    end
+
+    local previewOk = false
+
+    local success =
+        pcall(function()
+            previewOk =
+                createEmotePreview(
+                    replaceModule,
+                    viewport
+                )
+        end)
+
+    if not success
+        or not previewOk
+    then
+        return false
+    end
+
+    pcall(function()
+        textLabel.Text =
+            replacementName
+    end)
+
+    nativeWheelStates[
+        nativeSlot
+    ] = {
+        originalId =
+            slot.originalId,
+        originalName =
+            slot.originalName
+                or getEmoteName(
+                    slot.originalId
+                ),
+        replaceId =
+            slot.replaceId,
+        replaceName =
+            replacementName
+    }
+
+    return true
+end
+
+local function syncNativeEmoteWheel()
+    if not genv.EMOTE_SWAPPER_RUNNING
+        or not enabled
+    then
+        restoreNativeEmoteWheel()
+        return
+    end
+
+    local wheel =
+        getNativeEmoteWheel()
+
+    if not wheel then
+        return
+    end
+
+    -- Native wheel has six visible emote slots.
+    for i = 1, 6 do
+        local nativeSlot =
+            wheel:FindFirstChild(
+                "Emote"
+                .. tostring(i)
+            )
+
+        if not nativeSlot then
+            continue
+        end
+
+        local textLabel =
+            nativeSlot:FindFirstChild(
+                "TextLabel"
+            )
+
+        if not textLabel
+            or tostring(
+                textLabel.Text
+                    or ""
+            ) == ""
+        then
+            continue
+        end
+
+        local state =
+            nativeWheelStates[
+                nativeSlot
+            ]
+
+        if state then
+            local configuredSlot =
+                nil
+
+            for slotIndex = 1, SLOT_COUNT do
+                local configured =
+                    slots[slotIndex]
+
+                if configured
+                    and configured.originalId
+                        == state.originalId
+                then
+                    configuredSlot =
+                        configured
+                    break
+                end
+            end
+
+            local stillConfigured =
+                configuredSlot
+                and configuredSlot.replaceId
+                    == state.replaceId
+
+            if not stillConfigured then
+                if tostring(
+                    textLabel.Text
+                        or ""
+                    )
+                    == tostring(
+                        state.replaceName
+                            or ""
+                    )
+                then
+                    restoreNativeEmoteSlot(
+                        nativeSlot,
+                        state
+                    )
+                else
+                    nativeWheelStates[
+                        nativeSlot
+                    ] = nil
+                end
+
+                state = nil
+            elseif tostring(
+                textLabel.Text
+                    or ""
+                )
+                ~= tostring(
+                    state.replaceName
+                        or ""
+                )
+            then
+                -- Native wheel rebuilt/recycled this slot.
+                -- Let it finish its own render, then match the
+                -- new original name below.
+                nativeWheelStates[
+                    nativeSlot
+                ] = nil
+                state = nil
+            end
+        end
+
+        if not state then
+            local configuredSlot =
+                getConfiguredSlotByOriginalName(
+                    textLabel.Text
+                )
+
+            if configuredSlot then
+                applyNativeEmoteSlot(
+                    nativeSlot,
+                    configuredSlot
+                )
+            end
+        end
+    end
+end
+
 --// =========================================================
 --// REBUILD PICKER
 --// =========================================================
@@ -11937,6 +12349,7 @@ addConnection(
             if enabled then
                 enabled = false
                 stopCustomEmote()
+                restoreNativeEmoteWheel()
                 updateGUI()
                 Status.Text =
                     "Swap disabled"
@@ -11972,6 +12385,7 @@ addConnection(
                 true
             lastRegistryEmote =
                 0
+            syncNativeEmoteWheel()
             updateGUI()
             Status.Text =
                 "Active • "
@@ -11997,8 +12411,7 @@ setMainMinimized = function(state)
     if mainMinimized then
         Main.Size =
             UDim2.new(
-                0,
-                245,
+                0,                245,
                 0,
                 40
             )
@@ -12156,6 +12569,7 @@ addConnection(
             if not genv.EMOTE_SWAPPER_RUNNING then
                 return
             end
+            syncNativeEmoteWheel()
             checkState()
         end
     )
@@ -12658,6 +13072,8 @@ local function cleanup()
     if cleaned then
         return
     end
+
+    restoreNativeEmoteWheel()
 
     --// Stop every active loop before doing any cleanup that may yield.
     cleaned = true
