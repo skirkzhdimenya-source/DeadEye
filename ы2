@@ -25,6 +25,7 @@
 --//   close button
 --// =========================================================
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local __UI = {}
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -54,14 +55,14 @@ genv.DEADEYE_PORTRAIT_RUNNING = true
 --// =========================================================
 --// SERVICES
 --// =========================================================
-local CharacterService = require(
-    ReplicatedStorage.Services.Asset.CharacterService
+__UI.CharacterService = require(
+    ReplicatedStorage.Services.Asset.__UI.CharacterService
 )
-local ClientItemService = require(
-    ReplicatedStorage.Services.Items.ClientItemService
+__UI.ClientItemService = require(
+    ReplicatedStorage.Services.Items.__UI.ClientItemService
 )
-local EmoteService = require(
-    ReplicatedStorage.Services.Items.EmoteService
+__UI.EmoteService = require(
+    ReplicatedStorage.Services.Items.__UI.EmoteService
 )
 local Registry = require(
     ReplicatedStorage.Items.Registry
@@ -779,7 +780,7 @@ local function getItemModule(id)
         return nil
     end
     local success, result = pcall(function()
-        return ClientItemService:GetItemFromID(id)
+        return __UI.ClientItemService:GetItemFromID(id)
     end)
     if success then
         return result
@@ -955,7 +956,7 @@ local function getCharacterObject()
     local object
     local success = pcall(function()
         object =
-            CharacterService:GetLocalCharacter()
+            __UI.CharacterService:GetLocalCharacter()
     end)
     if not success or not object then
         return nil
@@ -1245,7 +1246,7 @@ local function createReplacement(
     end
     local success, result =
         pcall(function()
-            return EmoteService:SetEmote(
+            return __UI.EmoteService:SetEmote(
                 character,
                 replaceModule,
                 false,
@@ -1532,11 +1533,11 @@ Main.ClipsDescendants =
 Main.Parent =
     ScreenGui
 
-local MainGradient =
+__UI.MainGradient =
     Instance.new("UIGradient")
-MainGradient.Rotation =
+__UI.MainGradient.Rotation =
     115
-MainGradient.Color =
+__UI.MainGradient.Color =
     ColorSequence.new({
         ColorSequenceKeypoint.new(
             0,
@@ -1563,25 +1564,25 @@ MainGradient.Color =
             )
         )
     })
-MainGradient.Parent =
+__UI.MainGradient.Parent =
     Main
 
-local MainCorner =
+__UI.MainCorner =
     Instance.new("UICorner")
-MainCorner.CornerRadius =
+__UI.MainCorner.CornerRadius =
     UDim.new(
         0,
         8
     )
-MainCorner.Parent =
+__UI.MainCorner.Parent =
     Main
-local MainStroke =
+__UI.MainStroke =
     Instance.new("UIStroke")
-MainStroke.Thickness =
+__UI.MainStroke.Thickness =
     1
-MainStroke.Transparency =
+__UI.MainStroke.Transparency =
     0.45
-MainStroke.Parent =
+__UI.MainStroke.Parent =
     Main
 
 local MainHeader =
@@ -1615,11 +1616,11 @@ MainHeader.ZIndex =
 MainHeader.Parent =
     Main
 
-local MainHeaderGradient =
+__UI.MainHeaderGradient =
     Instance.new("UIGradient")
-MainHeaderGradient.Rotation =
+__UI.MainHeaderGradient.Rotation =
     90
-MainHeaderGradient.Transparency =
+__UI.MainHeaderGradient.Transparency =
     NumberSequence.new({
         NumberSequenceKeypoint.new(
             0,
@@ -1630,38 +1631,38 @@ MainHeaderGradient.Transparency =
             0.35
         )
     })
-MainHeaderGradient.Parent =
+__UI.MainHeaderGradient.Parent =
     MainHeader
 
-local MainHeaderLine =
+__UI.MainHeaderLine =
     Instance.new("Frame")
-MainHeaderLine.Name =
+__UI.MainHeaderLine.Name =
     "HeaderAccent"
-MainHeaderLine.Size =
+__UI.MainHeaderLine.Size =
     UDim2.new(
         1,
         -24,
         0,
         1
     )
-MainHeaderLine.Position =
+__UI.MainHeaderLine.Position =
     UDim2.new(
         0,
         12,
         1,
         -1
     )
-MainHeaderLine.BackgroundColor3 =
+__UI.MainHeaderLine.BackgroundColor3 =
     Color3.fromRGB(
         110,
         170,
         255
     )
-MainHeaderLine.BorderSizePixel =
+__UI.MainHeaderLine.BorderSizePixel =
     0
-MainHeaderLine.ZIndex =
+__UI.MainHeaderLine.ZIndex =
     1
-MainHeaderLine.Parent =
+__UI.MainHeaderLine.Parent =
     Main
 
 --// =========================================================
@@ -1750,14 +1751,14 @@ Minimize.TextColor3 =
     )
 Minimize.Parent =
     Main
-local MinimizeCorner =
+__UI.MinimizeCorner =
     Instance.new("UICorner")
-MinimizeCorner.CornerRadius =
+__UI.MinimizeCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-MinimizeCorner.Parent =
+__UI.MinimizeCorner.Parent =
     Minimize
 --// =========================================================
 --// CLOSE
@@ -1805,23 +1806,23 @@ Close.TextColor3 =
 Close.Parent =
     Main
 
-local CloseCorner =
+__UI.CloseCorner =
     Instance.new("UICorner")
-CloseCorner.CornerRadius =
+__UI.CloseCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-CloseCorner.Parent =
+__UI.CloseCorner.Parent =
     Close
 
-local CloseStroke =
+__UI.CloseStroke =
     Instance.new("UIStroke")
-CloseStroke.Thickness =
+__UI.CloseStroke.Thickness =
     1
-CloseStroke.Transparency =
+__UI.CloseStroke.Transparency =
     0.65
-CloseStroke.Parent =
+__UI.CloseStroke.Parent =
     Close
 
 --// =========================================================
@@ -5392,14 +5393,14 @@ unusualPage.Visible =
     false
 unusualPage.Parent =
     Main
-local unusualPageCorner =
+__UI.unusualPageCorner =
     Instance.new("UICorner")
-unusualPageCorner.CornerRadius =
+__UI.unusualPageCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-unusualPageCorner.Parent =
+__UI.unusualPageCorner.Parent =
     unusualPage
 local unusualPadding =
     Instance.new("UIPadding")
@@ -5446,14 +5447,14 @@ unusualRow.LayoutOrder =
     1
 unusualRow.Parent =
     unusualPage
-local unusualRowCorner =
+__UI.unusualRowCorner =
     Instance.new("UICorner")
-unusualRowCorner.CornerRadius =
+__UI.unusualRowCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-unusualRowCorner.Parent =
+__UI.unusualRowCorner.Parent =
     unusualRow
 local unusualRowLabel =
     Instance.new("TextLabel")
@@ -5531,14 +5532,14 @@ unusualOriginalButton.TextTruncate =
     Enum.TextTruncate.AtEnd
 unusualOriginalButton.Parent =
     unusualRow
-local unusualOriginalCorner =
+__UI.unusualOriginalCorner =
     Instance.new("UICorner")
-unusualOriginalCorner.CornerRadius =
+__UI.unusualOriginalCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-unusualOriginalCorner.Parent =
+__UI.unusualOriginalCorner.Parent =
     unusualOriginalButton
 --// ARROW
 local unusualArrow =
@@ -5615,14 +5616,14 @@ unusualReplaceButton.TextTruncate =
     Enum.TextTruncate.AtEnd
 unusualReplaceButton.Parent =
     unusualRow
-local unusualReplaceCorner =
+__UI.unusualReplaceCorner =
     Instance.new("UICorner")
-unusualReplaceCorner.CornerRadius =
+__UI.unusualReplaceCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-unusualReplaceCorner.Parent =
+__UI.unusualReplaceCorner.Parent =
     unusualReplaceButton
 --// =========================================================
 --// UNUSUAL PICKER
@@ -5657,22 +5658,22 @@ unusualPicker.ZIndex =
     30
 unusualPicker.Parent =
     ScreenGui
-local unusualPickerCorner =
+__UI.unusualPickerCorner =
     Instance.new("UICorner")
-unusualPickerCorner.CornerRadius =
+__UI.unusualPickerCorner.CornerRadius =
     UDim.new(
         0,
         8
     )
-unusualPickerCorner.Parent =
+__UI.unusualPickerCorner.Parent =
     unusualPicker
-local unusualPickerStroke =
+__UI.unusualPickerStroke =
     Instance.new("UIStroke")
-unusualPickerStroke.Thickness =
+__UI.unusualPickerStroke.Thickness =
     1
-unusualPickerStroke.Transparency =
+__UI.unusualPickerStroke.Transparency =
     0.4
-unusualPickerStroke.Parent =
+__UI.unusualPickerStroke.Parent =
     unusualPicker
 unusualPickerTitle =
     Instance.new("TextLabel")
@@ -5794,14 +5795,14 @@ unusualPickerSearch.ZIndex =
     32
 unusualPickerSearch.Parent =
     unusualPicker
-local unusualSearchCorner =
+__UI.unusualSearchCorner =
     Instance.new("UICorner")
-unusualSearchCorner.CornerRadius =
+__UI.unusualSearchCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-unusualSearchCorner.Parent =
+__UI.unusualSearchCorner.Parent =
     unusualPickerSearch
 unusualPickerScroll =
     Instance.new("ScrollingFrame")
@@ -5842,14 +5843,14 @@ unusualPickerScroll.ZIndex =
     31
 unusualPickerScroll.Parent =
     unusualPicker
-local unusualPickerScrollCorner =
+__UI.unusualPickerScrollCorner =
     Instance.new("UICorner")
-unusualPickerScrollCorner.CornerRadius =
+__UI.unusualPickerScrollCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-unusualPickerScrollCorner.Parent =
+__UI.unusualPickerScrollCorner.Parent =
     unusualPickerScroll
 local unusualPickerPadding =
     Instance.new("UIPadding")
@@ -7158,14 +7159,14 @@ mainPage.ScrollingDirection =
     Enum.ScrollingDirection.Y
 mainPage.Visible = false
 mainPage.Parent = Main
-local mainCorner =
+__UI.mainCorner =
     Instance.new("UICorner")
-mainCorner.CornerRadius =
+__UI.mainCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-mainCorner.Parent =
+__UI.mainCorner.Parent =
     mainPage
 local mainPadding =
     Instance.new("UIPadding")
@@ -7191,16 +7192,16 @@ mainPadding.PaddingRight =
     )
 mainPadding.Parent =
     mainPage
-local mainLayout =
+__UI.mainLayout =
     Instance.new("UIListLayout")
-mainLayout.Padding =
+__UI.mainLayout.Padding =
     UDim.new(
         0,
         6
     )
-mainLayout.SortOrder =
+__UI.mainLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
-mainLayout.Parent =
+__UI.mainLayout.Parent =
     mainPage
 local function mainRow(labelText, order)
     local row =
@@ -7242,7 +7243,7 @@ local function mainRow(labelText, order)
         row
     return row
 end
-local autoRow =
+__UI.autoRow =
     mainRow(
         "AUTOJUMP",
         1
@@ -7275,7 +7276,7 @@ autoLabel.TextColor3 =
     )
 autoLabel.TextXAlignment =
     Enum.TextXAlignment.Left
-autoLabel.Parent = autoRow
+autoLabel.Parent = __UI.autoRow
 mainJump.toggle =
     Instance.new("TextButton")
 mainJump.toggle.Size =
@@ -7303,15 +7304,15 @@ mainJump.toggle.TextColor3 =
         255
     )
 mainJump.toggle.Parent =
-    autoRow
-local toggleCorner =
+    __UI.autoRow
+__UI.toggleCorner =
     Instance.new("UICorner")
-toggleCorner.CornerRadius =
+__UI.toggleCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-toggleCorner.Parent =
+__UI.toggleCorner.Parent =
     mainJump.toggle
 mainConnect(
     mainJump.toggle.MouseButton1Click:Connect(
@@ -7322,17 +7323,17 @@ mainConnect(
         end
     )
 )
-local delayRow =
+__UI.delayRow =
     mainRow(
         "DELAY",
         2
     )
-local delayLabel =
+__UI.delayLabel =
     autoLabel:Clone()
-delayLabel.Text =
+__UI.delayLabel.Text =
     "DELAY"
-delayLabel.Parent =
-    delayRow
+__UI.delayLabel.Parent =
+    __UI.delayRow
 mainJump.delayBox =
     Instance.new("TextBox")
 mainJump.delayBox.Size =
@@ -7371,15 +7372,15 @@ mainJump.delayBox.TextColor3 =
         255
     )
 mainJump.delayBox.Parent =
-    delayRow
-local delayCorner =
+    __UI.delayRow
+__UI.delayCorner =
     Instance.new("UICorner")
-delayCorner.CornerRadius =
+__UI.delayCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-delayCorner.Parent =
+__UI.delayCorner.Parent =
     mainJump.delayBox
 local delaySet =
     Instance.new("TextButton")
@@ -7415,15 +7416,15 @@ delaySet.TextColor3 =
         255
     )
 delaySet.Parent =
-    delayRow
-local delaySetCorner =
+    __UI.delayRow
+__UI.delaySetCorner =
     Instance.new("UICorner")
-delaySetCorner.CornerRadius =
+__UI.delaySetCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-delaySetCorner.Parent =
+__UI.delaySetCorner.Parent =
     delaySet
 mainConnect(
     delaySet.MouseButton1Click:Connect(
@@ -7445,17 +7446,17 @@ mainConnect(
         end
     )
 )
-local hotkeyRow =
+__UI.hotkeyRow =
     mainRow(
         "HOTKEY",
         3
     )
-local hotkeyLabel =
+__UI.hotkeyLabel =
     autoLabel:Clone()
-hotkeyLabel.Text =
+__UI.hotkeyLabel.Text =
     "HOTKEY"
-hotkeyLabel.Parent =
-    hotkeyRow
+__UI.hotkeyLabel.Parent =
+    __UI.hotkeyRow
 mainJump.hotkeyBox =
     Instance.new("TextButton")
 mainJump.hotkeyBox.Size =
@@ -7491,15 +7492,15 @@ mainJump.hotkeyBox.TextColor3 =
         255
     )
 mainJump.hotkeyBox.Parent =
-    hotkeyRow
-local hotkeyCorner =
+    __UI.hotkeyRow
+__UI.hotkeyCorner =
     Instance.new("UICorner")
-hotkeyCorner.CornerRadius =
+__UI.hotkeyCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-hotkeyCorner.Parent =
+__UI.hotkeyCorner.Parent =
     mainJump.hotkeyBox
 mainConnect(
     mainJump.hotkeyBox.MouseButton1Click:Connect(
@@ -7510,17 +7511,17 @@ mainConnect(
         end
     )
 )
-local hideRow =
+__UI.hideRow =
     mainRow(
         "HIDE UI",
         4
     )
-local hideLabel =
+__UI.hideLabel =
     autoLabel:Clone()
-hideLabel.Text =
+__UI.hideLabel.Text =
     "HIDE UI"
-hideLabel.Parent =
-    hideRow
+__UI.hideLabel.Parent =
+    __UI.hideRow
 mainJump.hideUIHotkeyBox =
     Instance.new("TextButton")
 mainJump.hideUIHotkeyBox.Size =
@@ -7556,15 +7557,15 @@ mainJump.hideUIHotkeyBox.TextColor3 =
         255
     )
 mainJump.hideUIHotkeyBox.Parent =
-    hideRow
-local hideCorner =
+    __UI.hideRow
+__UI.hideCorner =
     Instance.new("UICorner")
-hideCorner.CornerRadius =
+__UI.hideCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-hideCorner.Parent =
+__UI.hideCorner.Parent =
     mainJump.hideUIHotkeyBox
 mainConnect(
     mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
@@ -8700,11 +8701,11 @@ categoryBar.BorderSizePixel =
 categoryBar.Parent =
     Main
 
-local categoryGradient =
+__UI.categoryGradient =
     Instance.new("UIGradient")
-categoryGradient.Rotation =
+__UI.categoryGradient.Rotation =
     90
-categoryGradient.Transparency =
+__UI.categoryGradient.Transparency =
     NumberSequence.new({
         NumberSequenceKeypoint.new(
             0,
@@ -8715,26 +8716,26 @@ categoryGradient.Transparency =
             0.2
         )
     })
-categoryGradient.Parent =
+__UI.categoryGradient.Parent =
     categoryBar
 
-local categoryStroke =
+__UI.categoryStroke =
     Instance.new("UIStroke")
-categoryStroke.Thickness =
+__UI.categoryStroke.Thickness =
     1
-categoryStroke.Transparency =
+__UI.categoryStroke.Transparency =
     0.72
-categoryStroke.Parent =
+__UI.categoryStroke.Parent =
     categoryBar
 
-local categoryCorner =
+__UI.categoryCorner =
     Instance.new("UICorner")
-categoryCorner.CornerRadius =
+__UI.categoryCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-categoryCorner.Parent =
+__UI.categoryCorner.Parent =
     categoryBar
 local function makeCategoryButton(
     text,
@@ -9147,14 +9148,14 @@ Toggle.TextColor3 =
     )
 Toggle.Parent =
     Main
-local ToggleCorner =
+__UI.ToggleCorner =
     Instance.new("UICorner")
-ToggleCorner.CornerRadius =
+__UI.ToggleCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-ToggleCorner.Parent =
+__UI.ToggleCorner.Parent =
     Toggle
 --// =========================================================
 --// SLOTS SCROLL
@@ -9213,49 +9214,49 @@ SlotsScroll.Position =
         0,
         68
     )
-local SlotsCorner =
+__UI.SlotsCorner =
     Instance.new("UICorner")
-SlotsCorner.CornerRadius =
+__UI.SlotsCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-SlotsCorner.Parent =
+__UI.SlotsCorner.Parent =
     SlotsScroll
-local SlotsPadding =
+__UI.SlotsPadding =
     Instance.new("UIPadding")
-SlotsPadding.PaddingTop =
+__UI.SlotsPadding.PaddingTop =
     UDim.new(
         0,
         8
     )
-SlotsPadding.PaddingBottom =
+__UI.SlotsPadding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-SlotsPadding.PaddingLeft =
+__UI.SlotsPadding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-SlotsPadding.PaddingRight =
+__UI.SlotsPadding.PaddingRight =
     UDim.new(
         0,
         8
     )
-SlotsPadding.Parent =
+__UI.SlotsPadding.Parent =
     SlotsScroll
-local SlotsLayout =
+__UI.SlotsLayout =
     Instance.new("UIListLayout")
-SlotsLayout.Padding =
+__UI.SlotsLayout.Padding =
     UDim.new(
         0,
         7
     )
-SlotsLayout.SortOrder =
+__UI.SlotsLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
-SlotsLayout.Parent =
+__UI.SlotsLayout.Parent =
     SlotsScroll
 --// =========================================================
 --// CREATE SLOT ROWS
@@ -9506,22 +9507,22 @@ Picker.ZIndex =
     20
 Picker.Parent =
     ScreenGui
-local PickerCorner =
+__UI.PickerCorner =
     Instance.new("UICorner")
-PickerCorner.CornerRadius =
+__UI.PickerCorner.CornerRadius =
     UDim.new(
         0,
         8
     )
-PickerCorner.Parent =
+__UI.PickerCorner.Parent =
     Picker
-local PickerStroke =
+__UI.PickerStroke =
     Instance.new("UIStroke")
-PickerStroke.Thickness =
+__UI.PickerStroke.Thickness =
     1
-PickerStroke.Transparency =
+__UI.PickerStroke.Transparency =
     0.4
-PickerStroke.Parent =
+__UI.PickerStroke.Parent =
     Picker
 --// PICKER TITLE
 PickerTitle =
@@ -9650,14 +9651,14 @@ PickerSearch.ZIndex =
     22
 PickerSearch.Parent =
     Picker
-local SearchCorner =
+__UI.SearchCorner =
     Instance.new("UICorner")
-SearchCorner.CornerRadius =
+__UI.SearchCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-SearchCorner.Parent =
+__UI.SearchCorner.Parent =
     PickerSearch
 --// =========================================================
 --// PICKER SCROLL
@@ -9701,58 +9702,58 @@ PickerScroll.ZIndex =
     21
 PickerScroll.Parent =
     Picker
-local PickerScrollCorner =
+__UI.PickerScrollCorner =
     Instance.new("UICorner")
-PickerScrollCorner.CornerRadius =
+__UI.PickerScrollCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-PickerScrollCorner.Parent =
+__UI.PickerScrollCorner.Parent =
     PickerScroll
-local PickerPadding =
+__UI.PickerPadding =
     Instance.new("UIPadding")
-PickerPadding.PaddingTop =
+__UI.PickerPadding.PaddingTop =
     UDim.new(
         0,
         8
     )
-PickerPadding.PaddingBottom =
+__UI.PickerPadding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-PickerPadding.PaddingLeft =
+__UI.PickerPadding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-PickerPadding.PaddingRight =
+__UI.PickerPadding.PaddingRight =
     UDim.new(
         0,
         8
     )
-PickerPadding.Parent =
+__UI.PickerPadding.Parent =
     PickerScroll
-local PickerGrid =
+__UI.PickerGrid =
     Instance.new("UIGridLayout")
-PickerGrid.CellSize =
+__UI.PickerGrid.CellSize =
     UDim2.new(
         0,
         96,
         0,
         32
     )
-PickerGrid.CellPadding =
+__UI.PickerGrid.CellPadding =
     UDim2.new(
         0,
         5,
         0,
         5
     )
-PickerGrid.SortOrder =
+__UI.PickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
-PickerGrid.Parent =
+__UI.PickerGrid.Parent =
     PickerScroll
 --// =========================================================
 --// REBUILD PICKER
