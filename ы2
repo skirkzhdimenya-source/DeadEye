@@ -8598,6 +8598,26 @@ mainConnect(
 
             local humanoid = mainJump.humanoid
 
+            if humanoid.Health <= 0
+                or humanoid.FloorMaterial
+                    == Enum.Material.Air
+            then
+                return
+            end
+
+            local state =
+                humanoid:GetState()
+
+            if state
+                    == Enum.HumanoidStateType.Jumping
+                or state
+                    == Enum.HumanoidStateType.Freefall
+                or state
+                    == Enum.HumanoidStateType.FallingDown
+            then
+                return
+            end
+
             pcall(function()
                 humanoid:SetStateEnabled(
                     Enum.HumanoidStateType.Jumping,
