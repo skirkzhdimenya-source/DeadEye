@@ -7738,14 +7738,51 @@ end
 function mainJump.setEnabled(state)
     mainJump.enabled =
         state and true or false
-    if not mainJump.enabled
-        and mainJump.humanoid
-        and mainJump.humanoid.Parent
-    then
-        pcall(function()
-            mainJump.humanoid.Jump = false
-        end)
+
+    if mainJump.enabled then
+        if mainJump.character
+            and mainJump.humanoid
+            and mainJump.humanoid.Parent
+        then
+            pcall(function()
+                mainJump.createSensors(
+                    mainJump.character
+                )
+            end)
+
+            task.defer(function()
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or not mainJump.enabled
+                    or not mainJump.humanoid
+                    or not mainJump.humanoid.Parent
+                then
+                    return
+                end
+                if mainJump.canJump() then
+                    mainJump.jump()
+                end
+            end)
+        end
+    else
+        mainJump.destroySensors()
+
+        if mainJump.humanoid
+            and mainJump.humanoid.Parent
+        then
+            pcall(function()
+                mainJump.humanoid.Jump = false
+
+                if mainJump.humanoid:GetState()
+                    == Enum.HumanoidStateType.Swimming
+                then
+                    mainJump.humanoid:ChangeState(
+                        Enum.HumanoidStateType.Swimming
+                    )
+                end
+            end)
+        end
     end
+
     mainJump.update()
 end
 function mainJump.setDelay(value)
