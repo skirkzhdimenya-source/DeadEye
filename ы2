@@ -2060,6 +2060,466 @@ local function tagUnusualFX(
     end
 end
 --// =========================================================
+--// APPLY UNUSUAL FX IN LOBBY / MENU
+--// Uses the proven pre-clone implementation.
+--// =========================================================
+local function applyUnusualMenuFX(
+    id,
+    visualRig,
+    playerCharacter
+)
+local function unusualObjectBelongsToPart(
+    object,
+    sourcePart
+)
+    local parent =
+        object.Parent
+    while parent
+        and parent ~= sourcePart
+    do
+        if parent:IsA("BasePart") then
+            return false
+        end
+        parent =
+            parent.Parent
+    end
+    return parent == sourcePart
+end
+local function getNeededUnusualAttachments(
+    sourcePart
+)
+    local needed = {}
+    for _, object in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+        if unusualObjectBelongsToPart(
+            object,
+            sourcePart
+        ) then
+            if object:IsA("Trail")
+                or object:IsA("Beam")
+            then
+                if object.Attachment0
+                    and unusualObjectBelongsToPart(
+                        object.Attachment0,
+                        sourcePart
+                    )
+                then
+                    needed[
+                        object.Attachment0
+                    ] = true
+                end
+                if object.Attachment1
+                    and unusualObjectBelongsToPart(
+                        object.Attachment1,
+                        sourcePart
+                    )
+                then
+                    needed[
+                        object.Attachment1
+                    ] = true
+                end
+            end
+        end
+    end
+    for _, object in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+        if object:IsA("Attachment")
+            and unusualObjectBelongsToPart(
+                object,
+                sourcePart
+            )
+            and unusualAttachmentHasFX(
+                object
+            )
+        then
+            needed[object] =
+                true
+        end
+    end
+    local changed = true
+    while changed do
+        changed = false
+        for attachment in pairs(
+            needed
+        ) do
+            local parent =
+                attachment.Parent
+            if parent
+                and parent:IsA("Attachment")
+                and not needed[parent]
+            then
+                needed[parent] =
+                    true
+                changed = true
+            end
+        end
+    end
+    return needed
+end
+--// =========================================================
+--// SOURCE ATTACHMENT WORLD CFRAME
+--// =========================================================
+local function getUnusualAttachmentWorldCFrame(
+    attachment
+)
+    if not attachment
+        or not attachment:IsA("Attachment")
+    then
+        return nil
+    end
+    local success, result = pcall(function()
+        return attachment.WorldCFrame
+    end)
+    if success and result then
+        return result
+    end
+    local parent = attachment.Parent
+    if parent and parent:IsA("BasePart") then
+        return parent.CFrame * attachment.CFrame
+    end
+    if parent and parent:IsA("Attachment") then
+        local parentWorld =
+            getUnusualAttachmentWorldCFrame(
+                parent
+            )
+        if parentWorld then
+            return parentWorld * attachment.CFrame
+        end
+    end
+    return attachment.CFrame
+end
+--// =========================================================
+--// HAS UNUSUAL CONTENT
+--// =========================================================
+local function unusualBasePartHasContent(
+    sourcePart
+)
+    for _, object in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+        if unusualObjectBelongsToPart(
+            object,
+            sourcePart
+        ) then
+            if isUnusualFX(object) then
+                return true
+            end
+            if object:IsA("Attachment")
+                and unusualAttachmentHasFX(
+                    object
+                )
+            then
+                return true
+            end
+        end
+    end
+    return false
+end
+--// =========================================================
+--// CREATE LOCAL ANCHOR FOR NESTED BASEPART
+--// =========================================================
+local function createUnusualAnchor(
+    sourceRoot,
+    sourcePart,
+    targetPart,
+    id,
+    index
+)
+    local anchor =
+        Instance.new("Part")
+    anchor.Name =
+        "DeadEyeUnusualAnchor_" ..
+        tostring(id) ..
+        "_" ..
+        tostring(index)
+    anchor.Size =
+        Vector3.new(
+            math.max(
+                sourcePart.Size.X,
+                0.05
+            ),
+            math.max(
+                sourcePart.Size.Y,
+                0.05
+            ),
+            math.max(
+                sourcePart.Size.Z,
+                0.05
+            )
+        )
+    anchor.Transparency =
+        1
+    anchor.CanCollide =
+        false
+    anchor.CanTouch =
+        false
+    anchor.CanQuery =
+        false
+    anchor.CastShadow =
+        false
+    anchor.Massless =
+        true
+    anchor.Anchored =
+        false
+    local relative =
+        sourceRoot.CFrame:ToObjectSpace(
+            sourcePart.CFrame
+        )
+    anchor.CFrame =
+        targetPart.CFrame
+        * relative
+    local parent =
+        targetPart.Parent
+    if not parent then
+        return nil
+    end
+    anchor.Parent =
+        parent
+    local weld =
+        Instance.new("WeldConstraint")
+    weld.Name =
+        "DeadEyeUnusualWeld"
+    weld.Part0 =
+        targetPart
+    weld.Part1 =
+        anchor
+    weld.Parent =
+        anchor
+    tagUnusualFX(
+        anchor,
+        id
+    )
+    return anchor
+end
+--// =========================================================
+--// INSTALL ONE SOURCE PART
+--// =========================================================
+local function installUnusualPartFX(
+    sourcePart,
+    targetPart,
+    id
+)
+    local targetMap = {}
+    local sourceNodes = {}
+    --// Root source part uses the real visual part.
+    targetMap[sourcePart] =
+        targetPart
+    table.insert(
+        sourceNodes,
+        sourcePart
+    )
+    --// Automatically recreate nested BaseParts
+    --// that actually carry unusual FX.
+    local anchorIndex = 0
+    for _, nested in ipairs(
+        sourcePart:GetDescendants()
+    ) do
+        if nested:IsA("BasePart")
+            and nested ~= sourcePart
+            and unusualBasePartHasContent(
+                nested
+            )
+        then
+            anchorIndex += 1
+            local anchor =
+                createUnusualAnchor(
+                    sourcePart,
+                    nested,
+                    targetPart,
+                    id,
+                    anchorIndex
+                )
+            if anchor then
+                targetMap[nested] =
+                    anchor
+                table.insert(
+                    sourceNodes,
+                    nested
+                )
+            end
+        end
+    end
+    local attachmentMap = {}
+    --// -----------------------------------------------------
+    --// PASS 1:
+    --// Clone all needed attachments and remember their mapping.
+    --// -----------------------------------------------------
+    for _, currentSourcePart in ipairs(
+        sourceNodes
+    ) do
+        local currentTargetPart =
+            targetMap[currentSourcePart]
+        if currentTargetPart then
+            local needed =
+                getNeededUnusualAttachments(
+                    currentSourcePart
+                )
+            for attachment in pairs(
+                needed
+            ) do
+                local parent =
+                    attachment.Parent
+                if not (
+                    parent
+                    and parent:IsA("Attachment")
+                    and needed[parent]
+                ) then
+                    local clone =
+                        attachment:Clone()
+                    --// Direct clone keeps the same local
+                    --// CFrame because the parent type is identical.
+                    clone.CFrame =
+                        attachment.CFrame
+                    clone.Parent =
+                        currentTargetPart
+                    tagUnusualFX(
+                        clone,
+                        id
+                    )
+                    mapUnusualAttachments(
+                        attachment,
+                        clone,
+                        attachmentMap
+                    )
+                end
+            end
+        end
+    end
+    --// -----------------------------------------------------
+    --// PASS 2:
+    --// Clone FX in the correct nested-part space.
+    --// -----------------------------------------------------
+    for _, currentSourcePart in ipairs(
+        sourceNodes
+    ) do
+        local currentTargetPart =
+            targetMap[currentSourcePart]
+        if currentTargetPart then
+            for _, sourceObject in ipairs(
+                currentSourcePart:GetDescendants()
+            ) do
+                if isUnusualFX(
+                    sourceObject
+                )
+                and unusualObjectBelongsToPart(
+                    sourceObject,
+                    currentSourcePart
+                )
+                then
+                    local insideAttachment =
+                        false
+                    local parent =
+                        sourceObject.Parent
+                    while parent
+                        and parent ~= currentSourcePart
+                    do
+                        if parent:IsA(
+                            "Attachment"
+                        ) then
+                            insideAttachment =
+                                true
+                            break
+                        end
+                        parent =
+                            parent.Parent
+                    end
+                    if not insideAttachment then
+                        local clone =
+                            sourceObject:Clone()
+                        if clone:IsA("Trail")
+                            or clone:IsA("Beam")
+                        then
+                            if sourceObject.Attachment0 then
+                                local newA0 =
+                                    attachmentMap[
+                                        sourceObject.Attachment0
+                                    ]
+                                if newA0 then
+                                    clone.Attachment0 =
+                                        newA0
+                                end
+                            end
+                            if sourceObject.Attachment1 then
+                                local newA1 =
+                                    attachmentMap[
+                                        sourceObject.Attachment1
+                                    ]
+                                if newA1 then
+                                    clone.Attachment1 =
+                                        newA1
+                                end
+                            end
+                        end
+                        clone.Parent =
+                            currentTargetPart
+                        tagUnusualFX(
+                            clone,
+                            id
+                        )
+                    end
+                end
+            end
+        end
+    end
+end
+--// =========================================================
+--// APPLY UNUSUAL FX ONLY
+--// =========================================================
+    local cosmeticRig =
+        getUnusualCosmeticRig(
+            id,
+            visualRig
+        )
+    if not cosmeticRig then
+        warn(
+            "[UnusualSwapper] Cosmetic rig not found:",
+            id
+        )
+        return false
+    end
+    local installed =
+        0
+    for _, sourcePart in ipairs(
+        cosmeticRig:GetChildren()
+    ) do
+        if sourcePart:IsA(
+            "BasePart"
+        ) then
+            local targetPart
+            if sourcePart.Name
+                == "HumanoidRootPart"
+            then
+                if playerCharacter then
+                    targetPart =
+                        playerCharacter:FindFirstChild(
+                            "HumanoidRootPart"
+                        )
+                end
+            else
+                targetPart =
+                    visualRig:FindFirstChild(
+                        sourcePart.Name
+                    )
+            end
+            if targetPart
+                and targetPart:IsA(
+                    "BasePart"
+                )
+            then
+                installUnusualPartFX(
+                    sourcePart,
+                    targetPart,
+                    id
+                )
+                installed += 1
+            end
+        end
+    end
+        return true
+end
+
 --// =========================================================
 --// APPLY UNUSUAL FX ONLY
 -- =========================================================
@@ -2078,135 +2538,24 @@ local function applyUnusualFX(
         return false
     end
 
-    --// Lobby/menu uses the game's real character parts.
-    --// This is the old working path and intentionally differs
-    --// from the full cosmetic clone used inside a round.
-    local roundRigs =
-        workspace:FindFirstChild("Rigs")
+    local rigsFolder =
+        workspace:FindFirstChild(
+            "Rigs"
+        )
 
     local roundRig =
-        roundRigs
-        and roundRigs:FindFirstChild(
+        rigsFolder
+        and rigsFolder:FindFirstChild(
             LocalPlayer.Name
         )
 
-    if not roundRig
-        and visualRig
-        and visualRig.Parent
-    then
-
-        local hasRoundRig = false
-
-        pcall(function()
-            hasRoundRig =
-                visualRig.Parent.Name == "Rigs"
-                or (
-                    roundRigs
-                    and roundRigs:FindFirstChild(
-                        LocalPlayer.Name
-                    ) == visualRig
-                )
-        end)
-
-        if not hasRoundRig then
-            local rootClone
-
-            if pcall(function()
-                rootClone =
-                    cosmeticRig:Clone()
-            end) and rootClone
-            then
-                for _, object in ipairs(
-                    rootClone:GetDescendants()
-                ) do
-                    if object:IsA("Script")
-                        or object:IsA("LocalScript")
-                        or object:IsA("ModuleScript")
-                    then
-                        pcall(function()
-                            object:Destroy()
-                        end)
-                    elseif object:IsA("BasePart") then
-                        object.CanCollide = false
-                        object.CanTouch = false
-                        object.CanQuery = false
-                        object.Massless = true
-                    end
-                end
-
-                local installedRoot =
-                    rootClone:FindFirstChild(
-                        "HumanoidRootPart"
-                    )
-
-                for _, sourcePart in ipairs(
-                    cosmeticRig:GetChildren()
-                ) do
-                    if sourcePart:IsA("BasePart") then
-                        local targetPart
-
-                        if sourcePart.Name ==
-                            "HumanoidRootPart"
-                        then
-                            targetPart =
-                                playerCharacter
-                                and playerCharacter:FindFirstChild(
-                                    "HumanoidRootPart"
-                                )
-                        else
-                            targetPart =
-                                visualRig:FindFirstChild(
-                                    sourcePart.Name
-                                )
-                        end
-
-                        if targetPart
-                            and installedRoot
-                            and installedRoot:IsA("BasePart")
-                        then
-                            local clonePart =
-                                rootClone:FindFirstChild(
-                                    sourcePart.Name
-                                )
-
-                            if clonePart
-                                and clonePart:IsA("BasePart")
-                            then
-                                for _, child in ipairs(
-                                    clonePart:GetChildren()
-                                ) do
-
-                                    local isJoint =
-                                        child:IsA("Weld")
-                                        or child:IsA("WeldConstraint")
-                                        or child:IsA("Motor6D")
-                                        or child:IsA("Motor")
-                                        or child:IsA("CFrameValue")
-
-                                    if not isJoint then
-                                        pcall(function()
-                                            child.Parent =
-                                                targetPart
-                                        end)
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-
-                tagUnusualFX(
-                    visualRig,
-                    id
-                )
-
-                pcall(function()
-                    rootClone:Destroy()
-                end)
-
-                return true
-            end
-        end
+    --// Lobby/menu: use the exact legacy installer.
+    if not roundRig then
+        return applyUnusualMenuFX(
+            id,
+            visualRig,
+            playerCharacter
+        )
     end
 
     local targetRoot =
