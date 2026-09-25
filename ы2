@@ -2376,26 +2376,40 @@ local function applyUnusualFX(
         )
 
     if not cosmeticRig then
-        warn(
-            "[UnusualSwapper] Cosmetic rig not found:",
-            id
-        )
         return false
     end
-
-    local installed =
-        0
 
     local rootClone
 
     if not pcall(function()
-        rootClone = cosmeticRig:Clone()
-    end) or not rootClone then
+        rootClone =
+            cosmeticRig:Clone()
+    end) or not rootClone
+    then
         return false
     end
 
     rootClone.Parent =
         visualRig.Parent
+
+    local sourceRoot =
+        cosmeticRig:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    local targetRoot =
+        visualRig:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not targetRoot
+        and playerCharacter
+    then
+        targetRoot =
+            playerCharacter:FindFirstChild(
+                "HumanoidRootPart"
+            )
+    end
 
     for _, sourcePart in ipairs(
         cosmeticRig:GetChildren()
@@ -2408,21 +2422,13 @@ local function applyUnusualFX(
             if sourcePart.Name
                 == "HumanoidRootPart"
             then
-
-                if playerCharacter then
-                    targetPart =
-                        playerCharacter:FindFirstChild(
-                            "HumanoidRootPart"
-                        )
-                end
-
+                targetPart =
+                    targetRoot
             else
-
                 targetPart =
                     visualRig:FindFirstChild(
                         sourcePart.Name
                     )
-
             end
 
             if targetPart
@@ -2436,7 +2442,55 @@ local function applyUnusualFX(
                     rootClone
                 )
 
-                installed += 1
+            elseif sourceRoot
+                and targetRoot
+                and sourcePart ~= sourceRoot
+            then
+
+                local clonePart =
+                    rootClone:FindFirstChild(
+                        sourcePart.Name
+                    )
+
+                if clonePart
+                    and clonePart:IsA("BasePart")
+                then
+
+                    local relative =
+                        sourceRoot.CFrame:ToObjectSpace(
+                            sourcePart.CFrame
+                        )
+
+                    clonePart.Parent =
+                        targetRoot.Parent
+
+                    clonePart.CFrame =
+                        targetRoot.CFrame *
+                        relative
+
+                    local weld =
+                        Instance.new(
+                            "WeldConstraint"
+                        )
+
+                    weld.Name =
+                        "DeadEyeUnusualWeld"
+
+                    weld.Part0 =
+                        targetRoot
+
+                    weld.Part1 =
+                        clonePart
+
+                    weld.Parent =
+                        targetRoot
+
+                    tagUnusualFX(
+                        clonePart,
+                        id
+                    )
+
+                end
 
             end
 
@@ -2444,9 +2498,10 @@ local function applyUnusualFX(
 
     end
 
-    --// Preserve non-body-root effect objects too.
+    --// Root-level non-body objects are moved from the
+    --// SAME clone, preserving references between them.
     for _, child in ipairs(
-        cosmeticRig:GetChildren()
+        rootClone:GetChildren()
     ) do
 
         if not child:IsA("BasePart")
@@ -2454,30 +2509,90 @@ local function applyUnusualFX(
             and not child:IsA("AnimationController")
         then
 
-            local clone
+            local hasBasePart =
+                false
 
-            if pcall(function()
-                clone = child:Clone()
-            end)
-            and clone
+            for _, descendant in ipairs(
+                child:GetDescendants()
+            ) do
+
+                if descendant:IsA("BasePart") then
+                    hasBasePart = true
+                    break
+                end
+
+            end
+
+            if hasBasePart
+                and sourceRoot
+                and targetRoot
             then
 
-                if clone:IsA("Folder")
-                    or clone:IsA("Model")
-                    or clone:IsA("Accessory")
-                then
+                local relativePivot = nil
 
-                    clone.Parent =
-                        visualRig.Parent
+                pcall(function()
+                    relativePivot =
+                        sourceRoot.CFrame:ToObjectSpace(
+                            child:GetPivot()
+                        )
+                end)
+
+                child.Parent =
+                    targetRoot.Parent
+
+                if relativePivot then
+
+                    pcall(function()
+                        child:PivotTo(
+                            targetRoot.CFrame *
+                            relativePivot
+                        )
+                    end)
 
                 else
 
-                    clone.Parent =
-                        visualRig
+                    for _, descendant in ipairs(
+                        child:GetDescendants()
+                    ) do
+
+                        if descendant:IsA("BasePart") then
+
+                            local relative =
+                                sourceRoot.CFrame:ToObjectSpace(
+                                    descendant.CFrame
+                                )
+
+                            descendant.CFrame =
+                                targetRoot.CFrame *
+                                relative
+
+                            descendant.CanCollide =
+                                false
+
+                            descendant.CanTouch =
+                                false
+
+                            descendant.CanQuery =
+                                false
+
+                        end
+
+                    end
+
                 end
 
                 tagUnusualFX(
-                    clone,
+                    child,
+                    id
+                )
+
+            else
+
+                child.Parent =
+                    visualRig
+
+                tagUnusualFX(
+                    child,
                     id
                 )
 
@@ -2487,8 +2602,13 @@ local function applyUnusualFX(
 
     end
 
+    pcall(function()
+        rootClone:Destroy()
+    end)
+
     return true
 end
+
 --// =========================================================
 --// REMOVE OUR FX
 -- =========================================================
