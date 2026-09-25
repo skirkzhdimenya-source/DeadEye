@@ -2515,15 +2515,18 @@ unusualRuntime.createAnimationSource = function(
 
         elseif object:IsA("BasePart") then
 
-            --// Runtime source is never used for rendering.
-            --// Keep its complete joint/part structure intact
-            --// so client drivers can animate it normally.
+            --// Runtime source is animation-only. Never render
+            --// any geometry from the copied cosmetic rig.
+            --// The visible FX/geometry is installed separately
+            --// onto the real visual rig.
             pcall(function()
                 object.CanCollide = false
                 object.CanTouch = false
                 object.CanQuery = false
                 object.Massless = true
                 object.CastShadow = false
+                object.Transparency = 1
+                object.LocalTransparencyModifier = 1
             end)
 
         end
@@ -2537,6 +2540,44 @@ unusualRuntime.createAnimationSource = function(
             source:Destroy()
         end)
         return nil
+    end
+
+    --// Safety pass: the runtime clone must never produce
+    --// a second visible Unusual, even for nested geometry.
+    for _, object in ipairs(
+        source:GetDescendants()
+    ) do
+        if object:IsA("BasePart") then
+            pcall(function()
+                object.Transparency = 1
+                object.LocalTransparencyModifier = 1
+                object.CastShadow = false
+                object.CanCollide = false
+                object.CanTouch = false
+                object.CanQuery = false
+            end)
+        elseif object:IsA("Decal")
+            or object:IsA("Texture")
+        then
+            pcall(function()
+                object.Transparency = 1
+            end)
+        elseif object:IsA("ParticleEmitter")
+            or object:IsA("Trail")
+            or object:IsA("Beam")
+            or object:IsA("Fire")
+            or object:IsA("Smoke")
+            or object:IsA("Sparkles")
+            or object:IsA("Highlight")
+            or object:IsA("BillboardGui")
+            or object:IsA("PointLight")
+            or object:IsA("SpotLight")
+            or object:IsA("SurfaceLight")
+        then
+            pcall(function()
+                object.Enabled = false
+            end)
+        end
     end
 
     local root =
@@ -2826,6 +2867,13 @@ unusualRuntime.updateAnimatedParts = function()
             and targetPart
             and targetPart.Parent
         then
+
+            pcall(function()
+                sourceRootPart.Transparency = 1
+                sourceRootPart.LocalTransparencyModifier = 1
+                sourcePart.Transparency = 1
+                sourcePart.LocalTransparencyModifier = 1
+            end)
 
             local relative =
                 sourceRootPart.CFrame:ToObjectSpace(
