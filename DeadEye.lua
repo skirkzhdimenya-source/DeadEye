@@ -227,7 +227,7 @@ loadSavedConfig()
 --// =========================================================
 --// LOCAL PORTRAIT OVERRIDE MODULE
 --// =========================================================
-loadstring(game:HttpGet("https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_Portrait.lua"), "@DeadEye_Portrait")()
+--// Portrait module is loaded at the original final initialization point.
 
 --// =========================================================
 --// SLOTS
@@ -12912,3 +12912,4 @@ updateGUI()
 pcall(function()
     setCategory("Emotes")
 end)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_Portrait.lua"), "@DeadEye_Portrait")()
