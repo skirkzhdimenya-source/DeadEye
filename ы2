@@ -11510,7 +11510,8 @@ end
 
 local function restoreNativeEmoteSlot(
     nativeSlot,
-    state
+    state,
+    force
 )
     if not nativeSlot
         or not state
@@ -11531,12 +11532,14 @@ local function restoreNativeEmoteSlot(
         return
     end
 
-    -- Only touch the slot if its visible name is still ours.
-    -- A different name means the native wheel has already
-    -- recycled this slot for another emote/page.
-    if normalizeEmoteName(
-        textLabel.Text
-            or ""
+    -- During normal wheel synchronization, avoid touching a slot
+    -- that native UI has already recycled. During OFF/cleanup,
+    -- "force" restoration must also restore the viewport when
+    -- the native UI has already changed the text back.
+    if not force
+        and normalizeEmoteName(
+            textLabel.Text
+                or ""
         )
         ~= normalizeEmoteName(
             state.replaceName
@@ -11598,7 +11601,8 @@ local function restoreNativeEmoteWheel()
         pcall(function()
             restoreNativeEmoteSlot(
                 entry.slot,
-                entry.state
+                entry.state,
+                true
             )
         end)
     end
