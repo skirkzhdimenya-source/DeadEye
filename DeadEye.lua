@@ -6723,10 +6723,7 @@ function others.getFirstPersonParts()
     end
 
     local head =
-        rig:FindFirstChild(
-            "Head",
-            true
-        )
+        rig:FindFirstChild("Head", true)
 
     if not head or not head:IsA("BasePart") then
         return {}
@@ -6736,40 +6733,48 @@ function others.getFirstPersonParts()
         head
     }
 
-    local headAttachments = {}
-
+    --// Any geometry directly under Head belongs to the head/face.
     for _, object in ipairs(
         head:GetDescendants()
     ) do
-        if object:IsA("Attachment") then
-            headAttachments[object.Name] = true
+        if object:IsA("BasePart") then
+            table.insert(
+                result,
+                object
+            )
         end
     end
 
+    --// Catch head accessories regardless of their attachment naming.
     for _, accessory in ipairs(
         rig:GetDescendants()
     ) do
         if accessory:IsA("Accessory") then
             local handle =
-                accessory:FindFirstChild(
-                    "Handle",
-                    true
-                )
+                accessory:FindFirstChild("Handle", true)
 
             if handle and handle:IsA("BasePart") then
                 local attachedToHead = false
 
+                --// Standard attachment matching.
                 for _, object in ipairs(
                     handle:GetDescendants()
                 ) do
-                    if object:IsA("Attachment")
-                        and headAttachments[object.Name]
-                    then
-                        attachedToHead = true
-                        break
+                    if object:IsA("Attachment") then
+                        local headAttachment =
+                            head:FindFirstChild(
+                                object.Name,
+                                true
+                            )
+
+                        if headAttachment then
+                            attachedToHead = true
+                            break
+                        end
                     end
                 end
 
+                --// Weld / motor fallback.
                 if not attachedToHead then
                     for _, joint in ipairs(
                         handle:GetDescendants()
@@ -6778,6 +6783,7 @@ function others.getFirstPersonParts()
                             joint:IsA("Weld")
                             or joint:IsA("WeldConstraint")
                             or joint:IsA("Motor6D")
+                            or joint:IsA("Motor")
                         )
                         and (
                             joint.Part0 == head
@@ -6790,11 +6796,28 @@ function others.getFirstPersonParts()
                     end
                 end
 
+                --// Last fallback: head accessories are physically very close
+                --// to Head even when the game uses a custom attachment setup.
+                if not attachedToHead then
+                    local distance =
+                        (handle.Position - head.Position).Magnitude
+
+                    if distance <= 3.25 then
+                        attachedToHead = true
+                    end
+                end
+
                 if attachedToHead then
-                    table.insert(
-                        result,
-                        handle
-                    )
+                    for _, object in ipairs(
+                        accessory:GetDescendants()
+                    ) do
+                        if object:IsA("BasePart") then
+                            table.insert(
+                                result,
+                                object
+                            )
+                        end
+                    end
                 end
             end
         end
@@ -6848,11 +6871,10 @@ function others.updateFirstPersonTransparency()
     end
 
     local inFirstPerson =
-        camera.CameraSubject == humanoid
-        and (
+        (
             camera.CFrame.Position
             - head.Position
-        ).Magnitude <= 2.5
+        ).Magnitude <= 3
 
     if not inFirstPerson then
         others.restoreFirstPersonTransparency()
@@ -6874,22 +6896,33 @@ function others.updateFirstPersonTransparency()
 end
 
 genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP = function()
-    if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION then
-        pcall(function()
-            genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION:Disconnect()
-        end)
-        genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION = nil
-    end
+    pcall(function()
+        RunService:UnbindFromRenderStep(
+            "DeadEyeFirstPersonHeadFix"
+        )
+    end)
+    genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION = nil
 
     pcall(function()
         others.restoreFirstPersonTransparency()
     end)
 end
 
-genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION =
-    RunService.RenderStepped:Connect(function()
+pcall(function()
+    RunService:UnbindFromRenderStep(
+        "DeadEyeFirstPersonHeadFix"
+    )
+end)
+
+RunService:BindToRenderStep(
+    "DeadEyeFirstPersonHeadFix",
+    Enum.RenderPriority.Camera.Value + 10,
+    function()
         others.updateFirstPersonTransparency()
-    end)
+    end
+)
+
+genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION = true
 --// =========================================================
 --// MAIN / AUTOJUMP
 --// =========================================================
