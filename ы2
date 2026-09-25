@@ -1544,17 +1544,17 @@ MainSurface.Name =
 MainSurface.Size =
     UDim2.new(
         1,
-        0,
+        -2,
         1,
-        0
+        -2
     )
 
 MainSurface.Position =
     UDim2.new(
         0,
+        1,
         0,
-        0,
-        0
+        1
     )
 
 MainSurface.BackgroundColor3 =
@@ -5735,9 +5735,9 @@ unusualPicker.Position =
     )
 unusualPicker.BackgroundColor3 =
     Color3.fromRGB(
-        18,
-        21,
-        26
+        24,
+        24,
+        24
     )
 unusualPicker.BorderSizePixel =
     0
@@ -5852,8 +5852,8 @@ unusualPickerSearch.Position =
     )
 unusualPickerSearch.BackgroundColor3 =
     Color3.fromRGB(
-        30,
-        34,
+        40,
+        40,
         40
     )
 unusualPickerSearch.BorderSizePixel =
@@ -5911,9 +5911,9 @@ unusualPickerScroll.Position =
     )
 unusualPickerScroll.BackgroundColor3 =
     Color3.fromRGB(
-        22,
-        26,
-        31
+        32,
+        32,
+        32
     )
 unusualPickerScroll.BorderSizePixel =
     0
@@ -10372,7 +10372,7 @@ local function setMainMinimized(state)
                 SlotsScroll.Visible = false
                 mainPage.Visible = false
                 unusualPage.Visible = true
-                unusualStatus.Visible = true
+                unusualStatus.Visible = false
                 others.page.Visible = false
             elseif currentCategory == "Others" then
                 Status.Visible = false
