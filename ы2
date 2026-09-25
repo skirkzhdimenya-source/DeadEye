@@ -10722,6 +10722,43 @@ __UI.PickerGrid.Parent =
 --// =========================================================
 local emoteViewportTemplate
 
+local function findUsableViewport(root)
+    if not root then
+        return nil
+    end
+
+    local fallback
+
+    for _, obj in ipairs(
+        root:GetDescendants()
+    ) do
+        if obj.ClassName == "ViewportFrame" then
+            fallback =
+                fallback
+                or obj
+
+            local hasWorldModel =
+                obj:FindFirstChildOfClass(
+                    "WorldModel"
+                )
+
+            local hasCamera =
+                obj.CurrentCamera
+                or obj:FindFirstChildOfClass(
+                    "Camera"
+                )
+
+            if hasWorldModel
+                and hasCamera
+            then
+                return obj
+            end
+        end
+    end
+
+    return fallback
+end
+
 local function getEmoteViewportTemplate()
     if emoteViewportTemplate
         and emoteViewportTemplate.Parent
@@ -10731,98 +10768,95 @@ local function getEmoteViewportTemplate()
 
     local source
 
+    -- Prefer an already-rendered native viewport.
     pcall(function()
-        local objects =
-            ReplicatedStorage:FindFirstChild(
-                "Objects"
+        local players =
+            game:GetService(
+                "Players"
             )
 
-        local menu =
-            objects
-            and objects:FindFirstChild(
-                "Menu"
+        local localPlayer =
+            players.LocalPlayer
+
+        local playerGui =
+            localPlayer
+            and localPlayer:FindFirstChildOfClass(
+                "PlayerGui"
             )
 
-        local menuModule =
-            menu
-            and menu:FindFirstChild(
-                "Menu"
-            )
-
-        local slotBuilder =
-            menuModule
-            and menuModule:FindFirstChild(
-                "SlotBuilder"
-            )
-
-        local assets =
-            slotBuilder
-            and slotBuilder:FindFirstChild(
-                "Assets"
-            )
-
-        local slot =
-            assets
-            and assets:FindFirstChild(
-                "Slot"
-            )
-
-        local button =
-            slot
-            and slot:FindFirstChild(
-                "Button"
-            )
-
-        if button then
+        if playerGui then
             source =
-                button:FindFirstChildWhichIsA(
-                    "ViewportFrame",
-                    true
+                findUsableViewport(
+                    playerGui
                 )
         end
     end)
 
     if not source then
         pcall(function()
-            local players =
-                game:GetService(
-                    "Players"
+            source =
+                findUsableViewport(
+                    game:GetService(
+                        "CoreGui"
+                    )
+                )
+        end)
+    end
+
+    -- Fallback to the native SlotBuilder asset.
+    if not source then
+        pcall(function()
+            local objects =
+                ReplicatedStorage:FindFirstChild(
+                    "Objects"
                 )
 
-            local localPlayer =
-                players.LocalPlayer
-
-            local playerGui =
-                localPlayer
-                and localPlayer:FindFirstChildOfClass(
-                    "PlayerGui"
+            local menu =
+                objects
+                and objects:FindFirstChild(
+                    "Menu"
                 )
 
-            if playerGui then
+            local menuModule =
+                menu
+                and menu:FindFirstChild(
+                    "Menu"
+                )
+
+            local slotBuilder =
+                menuModule
+                and menuModule:FindFirstChild(
+                    "SlotBuilder"
+                )
+
+            local assets =
+                slotBuilder
+                and slotBuilder:FindFirstChild(
+                    "Assets"
+                )
+
+            local slot =
+                assets
+                and assets:FindFirstChild(
+                    "Slot"
+                )
+
+            local button =
+                slot
+                and slot:FindFirstChild(
+                    "Button"
+                )
+
+            if button then
                 source =
-                    playerGui:FindFirstChildWhichIsA(
-                        "ViewportFrame",
-                        true
+                    findUsableViewport(
+                        button
                     )
             end
         end)
     end
 
-    if not source then
-        pcall(function()
-            source =
-                game:GetService(
-                    "CoreGui"
-                ):FindFirstChildWhichIsA(
-                    "ViewportFrame",
-                    true
-                )
-        end)
-    end
-
-    if source
-        and source:IsA("ViewportFrame")
-    then
+    if source then
         emoteViewportTemplate =
             source
         return source
@@ -10830,7 +10864,6 @@ local function getEmoteViewportTemplate()
 
     return nil
 end
-
 local function createEmotePreview(
     itemModule,
     viewport
