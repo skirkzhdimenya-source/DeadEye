@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.4"
+    "DeadEyes v1.5"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -2209,6 +2209,47 @@ function cosmetic.refreshRig()
         return false
     end
 
+    --// The live rig can have a custom skin applied locally.
+    --// PlayerCache is only the game's clean base and must not
+    --// be treated as the player's actual visual skin.
+    --// Snapshot the current HumanoidDescription once per live rig.
+    if cosmetic.skinCharacter ~= live
+        or not cosmetic.skinDescription
+    then
+        local description
+
+        local descriptionOK =
+            pcall(function()
+                description =
+                    humanoid:GetAppliedDescription()
+            end)
+
+        if not descriptionOK
+            or not description
+        then
+            return false
+        end
+
+        local clone
+
+        local cloneOK =
+            pcall(function()
+                clone =
+                    description:Clone()
+            end)
+
+        if not cloneOK
+            or not clone
+        then
+            return false
+        end
+
+        cosmetic.skinDescription =
+            clone
+        cosmetic.skinCharacter =
+            live
+    end
+
     local cache =
         workspace:FindFirstChild(
             "PlayerCache"
@@ -2241,10 +2282,8 @@ function cosmetic.refreshRig()
     local success =
         pcall(function()
 
-            --// AddCosmetics merges cosmetic contents into
-            --// the existing body parts. Restore those parts
-            --// to the exact clean PlayerCache state first,
-            --// then run the game's native merge again.
+            --// Strip only the visual contents of the body parts
+            --// back to the game's clean merge base.
             for _, basePart in ipairs(
                 base:GetChildren()
             ) do
@@ -2281,6 +2320,44 @@ function cosmetic.refreshRig()
                         end
                     end
                 end
+            end
+
+            --// Restore the actual skin captured from the live
+            --// Humanoid, instead of leaving the PlayerCache skin.
+            local restoredSkin = false
+
+            pcall(function()
+                humanoid:ApplyDescriptionResetAsync(
+                    cosmetic.skinDescription
+                )
+
+                restoredSkin = true
+            end)
+
+            if not restoredSkin then
+                pcall(function()
+                    humanoid:ApplyDescriptionReset(
+                        cosmetic.skinDescription
+                    )
+
+                    restoredSkin = true
+                end)
+            end
+
+            if not restoredSkin then
+                pcall(function()
+                    humanoid:ApplyDescriptionAsync(
+                        cosmetic.skinDescription
+                    )
+
+                    restoredSkin = true
+                end)
+            end
+
+            if not restoredSkin then
+                error(
+                    "Failed to restore saved skin"
+                )
             end
 
             local useLoadout =
@@ -10737,7 +10814,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.4"
+            MainTitle.Text = "DeadEyes v1.5"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10759,7 +10836,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.4"
+            MainTitle.Text = "DeadEyes v1.5"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -10784,7 +10861,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.4"
+            MainTitle.Text = "DeadEyes v1.5"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10806,7 +10883,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.4"
+            MainTitle.Text = "DeadEyes v1.5"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -10831,7 +10908,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.4"
+            MainTitle.Text = "DeadEyes v1.5"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
