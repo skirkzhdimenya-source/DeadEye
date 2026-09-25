@@ -606,6 +606,12 @@ if not guiParent then
         game:GetService("CoreGui")
 end
 --// =========================================================
+--// WINDOW SIZE LIMITS
+--// =========================================================
+local MIN_WINDOW_WIDTH = 480
+local MIN_WINDOW_HEIGHT = 285
+local RESIZE_EDGE = 8
+--// =========================================================
 --// SCREEN GUI
 --// =========================================================
 ScreenGui =
@@ -13707,12 +13713,6 @@ addConnection(
                     end
     )
 )
---// =========================================================
---// WINDOW SIZE LIMITS
---// =========================================================
-local MIN_WINDOW_WIDTH = 480
-local MIN_WINDOW_HEIGHT = 285
-local RESIZE_EDGE = 8
 
 --// =========================================================
 --// MINIMIZE STATE
