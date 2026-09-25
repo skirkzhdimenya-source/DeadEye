@@ -10817,24 +10817,96 @@ local function createEmotePreview(
                 )
             end
 
-            -- Native SetModel normally attaches the emote model
-            -- to the preview rig. Do the same locally.
-            local characterFolder =
+            -- Match Evade's model layout:
+            -- many emotes keep their visual inside Selection.1/2/3.
+            local selectedRoot
+
+            local selectionFolder =
                 itemModule:FindFirstChild(
-                    isR15
-                    and "Character"
-                    or "CharacterClassic"
+                    "Selection"
                 )
+
+            if selectionFolder then
+                local selections = {}
+
+                for _, child in ipairs(
+                    selectionFolder:GetChildren()
+                ) do
+                    local numericName =
+                        tonumber(
+                            child.Name
+                        )
+
+                    if numericName then
+                        table.insert(
+                            selections,
+                            {
+                                object = child,
+                                index = numericName
+                            }
+                        )
+                    end
+                end
+
+                table.sort(
+                    selections,
+                    function(x, y)
+                        return x.index < y.index
+                    end
+                )
+
+                -- Use a deterministic selection so the same emote
+                -- does not change every time the picker rebuilds.
+                local chosenSelection =
+                    selections[1]
+
+                if chosenSelection then
+                    selectedRoot =
+                        chosenSelection.object
+                end
+            end
+
+            local characterFolder
+
+            if selectedRoot then
+                characterFolder =
+                    selectedRoot:FindFirstChild(
+                        isR15
+                        and "Character"
+                        or "CharacterClassic"
+                    )
+
+                if not characterFolder then
+                    characterFolder =
+                        selectedRoot:FindFirstChild(
+                            "CharacterClassic"
+                        )
+                        or selectedRoot:FindFirstChild(
+                            "Character"
+                        )
+                end
+            end
 
             if not characterFolder then
                 characterFolder =
                     itemModule:FindFirstChild(
-                        "CharacterClassic"
+                        isR15
+                        and "Character"
+                        or "CharacterClassic"
                     )
-                    or itemModule:FindFirstChild(
-                        "Character"
-                    )
+
+                if not characterFolder then
+                    characterFolder =
+                        itemModule:FindFirstChild(
+                            "CharacterClassic"
+                        )
+                        or itemModule:FindFirstChild(
+                            "Character"
+                        )
+                end
             end
+
+            local emoteClone
 
             if characterFolder then
                 local emoteModel =
@@ -10843,8 +10915,33 @@ local function createEmotePreview(
                     )
 
                 if emoteModel then
-                    local emoteClone =
+                    emoteClone =
                         emoteModel:Clone()
+
+                    -- Keep the authored internal offsets, but move the
+                    -- model's pivot onto the preview rig root.
+                    local pivotSuccess =
+                        pcall(function()
+                            emoteClone:PivotTo(
+                                rig.PrimaryPart.CFrame
+                            )
+                        end)
+
+                    if not pivotSuccess then
+                        local modelPrimary =
+                            emoteClone.PrimaryPart
+
+                        if modelPrimary then
+                            local delta =
+                                rig.PrimaryPart.CFrame
+                                * modelPrimary.CFrame:Inverse()
+
+                            emoteClone:PivotTo(
+                                delta
+                                * emoteClone:GetPivot()
+                            )
+                        end
+                    end
 
                     emoteClone.Parent =
                         rig
@@ -10998,70 +11095,142 @@ local function createEmotePreview(
                 end
             end
 
-            -- 1) Real Animation instances.
-            for _, obj in ipairs(
-                itemModule:GetDescendants()
-            ) do
-                if obj:IsA("Animation") then
-                    local name =
-                        string.lower(
-                            obj.Name
-                        )
+            local function scanAnimationInstances(
+                root,
+                basePriority
+            )
+                if not root then
+                    return
+                end
 
-                    local priority = 100
+                for _, obj in ipairs(
+                    root:GetDescendants()
+                ) do
+                    if obj:IsA("Animation") then
+                        local score =
+                            basePriority
+                            or 100
 
-                    if string.find(
-                        name,
-                        "r6",
-                        1,
-                        true
-                    ) then
-                        priority = 1
-                    elseif string.find(
-                        name,
-                        "r15",
-                        1,
-                        true
-                    ) then
-                        priority = 2
-                    elseif string.find(
-                        name,
-                        "animation",
-                        1,
-                        true
-                    ) then
-                        priority = 10
-                    end
+                        local current =
+                            obj
 
-                    if not isR15
-                        and string.find(
+                        for _ = 1, 6 do
+                            local parent =
+                                current.Parent
+
+                            if not parent then
+                                break
+                            end
+
+                            local parentName =
+                                string.lower(
+                                    parent.Name
+                                )
+
+                            if not isR15
+                                and (
+                                    string.find(
+                                        parentName,
+                                        "r6",
+                                        1,
+                                        true
+                                    )
+                                    or string.find(
+                                        parentName,
+                                        "classic",
+                                        1,
+                                        true
+                                    )
+                                )
+                            then
+                                score = 0
+                                break
+                            end
+
+                            if isR15
+                                and string.find(
+                                    parentName,
+                                    "r15",
+                                    1,
+                                    true
+                                )
+                            then
+                                score = 0
+                                break
+                            end
+
+                            if string.find(
+                                parentName,
+                                "animation",
+                                1,
+                                true
+                            )
+                            then
+                                score =
+                                    math.min(
+                                        score,
+                                        5
+                                    )
+                            end
+
+                            current =
+                                parent
+                        end
+
+                        local name =
+                            string.lower(
+                                obj.Name
+                            )
+
+                        if string.find(
                             name,
-                            "r6",
+                            isR15 and "r15" or "r6",
                             1,
                             true
                         )
-                    then
-                        priority = 0
-                    elseif isR15
-                        and string.find(
+                        then
+                            score =
+                                math.min(
+                                    score,
+                                    0
+                                )
+                        elseif string.find(
                             name,
-                            "r15",
+                            "animation",
                             1,
                             true
                         )
-                    then
-                        priority = 0
-                    end
+                        then
+                            score =
+                                math.min(
+                                    score,
+                                    10
+                                )
+                        end
 
-                    addAnimationId(
-                        obj.AnimationId,
-                        priority
-                    )
+                        addAnimationId(
+                            obj.AnimationId,
+                            score
+                        )
+                    end
                 end
             end
 
-            -- 2) Number/String values and attributes whose
-            -- names explicitly indicate animation data.
+            -- First inspect the same Selection as the visual model.
+            if selectedRoot then
+                scanAnimationInstances(
+                    selectedRoot,
+                    0
+                )
+            end
+
+            -- Then inspect the whole emote module as fallback.
+            scanAnimationInstances(
+                itemModule,
+                50
+            )
+
+            -- Attributes / value objects containing animation IDs.
             for _, obj in ipairs(
                 itemModule:GetDescendants()
             ) do
@@ -11090,7 +11259,7 @@ local function createEmotePreview(
                     then
                         addAnimationId(
                             value,
-                            5
+                            20
                         )
                     end
                 end
@@ -11120,39 +11289,16 @@ local function createEmotePreview(
                         true
                     )
                     then
-                        local priority = 10
-
-                        if not isR15
-                            and string.find(
-                                key,
-                                "r6",
-                                1,
-                                true
-                            )
-                        then
-                            priority = 0
-                        elseif isR15
-                            and string.find(
-                                key,
-                                "r15",
-                                1,
-                                true
-                            )
-                        then
-                            priority = 0
-                        end
-
                         addAnimationId(
                             obj.Value,
-                            priority
+                            20
                         )
                     end
                 end
             end
 
-            -- 3) Some Evade item modules keep the animation
-            -- definition in their returned data table rather than
-            -- as Instances. Walk that table without touching Source.
+            -- Some items expose their animation definition only
+            -- through the table returned by the ModuleScript.
             local requiredData
 
             pcall(function()
@@ -11203,44 +11349,28 @@ local function createEmotePreview(
                         1,
                         true
                     )
-                    or string.find(
-                        key,
-                        "r6",
-                        1,
-                        true
+                    or (
+                        isR15
+                        and string.find(
+                            key,
+                            "r15",
+                            1,
+                            true
+                        )
                     )
-                    or string.find(
-                        key,
-                        "r15",
-                        1,
-                        true
+                    or (
+                        not isR15
+                        and string.find(
+                            key,
+                            "r6",
+                            1,
+                            true
+                        )
                     )
                     then
-                        local priority = 20
-
-                        if not isR15
-                            and string.find(
-                                key,
-                                "r6",
-                                1,
-                                true
-                            )
-                        then
-                            priority = 0
-                        elseif isR15
-                            and string.find(
-                                key,
-                                "r15",
-                                1,
-                                true
-                            )
-                        then
-                            priority = 0
-                        end
-
                         addAnimationId(
                             value,
-                            priority
+                            30
                         )
                     end
 
@@ -11274,6 +11404,7 @@ local function createEmotePreview(
                 nil,
                 0
             )
+
 
             table.sort(
                 animationIds,
