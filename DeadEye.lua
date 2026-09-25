@@ -1601,6 +1601,7 @@ others.page = nil
 others.status = nil
 others.fieldButtons = {}
 others.fieldBoxes = {}
+others.firstPersonTransparency = {}
 local unusualConnections = {}
 local unusualDestroyed = false
 local unusualReapplyBusy = false
@@ -6699,6 +6700,181 @@ function others.restore(
     end
     return result
 end
+
+--// =========================================================
+--// LOCAL FIRST-PERSON HEAD HIDE
+--// Re-apply the game's expected local transparency after
+--// ApplyDescriptionResetAsync() recreates Head/accessories.
+--// =========================================================
+function others.getFirstPersonParts()
+    local humanoid =
+        others.getHumanoid()
+
+    local rig =
+        humanoid and humanoid.Parent
+
+    if not rig or not rig:IsA("Model") then
+        return {}
+    end
+
+    local head =
+        rig:FindFirstChild(
+            "Head",
+            true
+        )
+
+    if not head or not head:IsA("BasePart") then
+        return {}
+    end
+
+    local result = {
+        head
+    }
+
+    local headAttachments = {}
+
+    for _, object in ipairs(
+        head:GetDescendants()
+    ) do
+        if object:IsA("Attachment") then
+            headAttachments[object.Name] = true
+        end
+    end
+
+    for _, accessory in ipairs(
+        rig:GetDescendants()
+    ) do
+        if accessory:IsA("Accessory") then
+            local handle =
+                accessory:FindFirstChild(
+                    "Handle",
+                    true
+                )
+
+            if handle and handle:IsA("BasePart") then
+                local attachedToHead = false
+
+                for _, object in ipairs(
+                    handle:GetDescendants()
+                ) do
+                    if object:IsA("Attachment")
+                        and headAttachments[object.Name]
+                    then
+                        attachedToHead = true
+                        break
+                    end
+                end
+
+                if not attachedToHead then
+                    for _, joint in ipairs(
+                        handle:GetDescendants()
+                    ) do
+                        if (
+                            joint:IsA("Weld")
+                            or joint:IsA("WeldConstraint")
+                            or joint:IsA("Motor6D")
+                        )
+                        and (
+                            joint.Part0 == head
+                            or joint.Part1 == head
+                        )
+                        then
+                            attachedToHead = true
+                            break
+                        end
+                    end
+                end
+
+                if attachedToHead then
+                    table.insert(
+                        result,
+                        handle
+                    )
+                end
+            end
+        end
+    end
+
+    return result
+end
+
+function others.restoreFirstPersonTransparency()
+    for part, transparency in pairs(
+        others.firstPersonTransparency
+    ) do
+        if part and part.Parent then
+            pcall(function()
+                part.LocalTransparencyModifier =
+                    transparency
+            end)
+        end
+    end
+
+    table.clear(
+        others.firstPersonTransparency
+    )
+end
+
+function others.updateFirstPersonTransparency()
+    local camera =
+        workspace.CurrentCamera
+
+    local humanoid =
+        others.getHumanoid()
+
+    if not camera or not humanoid then
+        others.restoreFirstPersonTransparency()
+        return
+    end
+
+    local rig =
+        humanoid.Parent
+
+    local head =
+        rig
+        and rig:FindFirstChild(
+            "Head",
+            true
+        )
+
+    if not head or not head:IsA("BasePart") then
+        others.restoreFirstPersonTransparency()
+        return
+    end
+
+    local inFirstPerson =
+        camera.CameraSubject == humanoid
+        and (
+            camera.CFrame.Position
+            - head.Position
+        ).Magnitude <= 2.5
+
+    if not inFirstPerson then
+        others.restoreFirstPersonTransparency()
+        return
+    end
+
+    for _, part in ipairs(
+        others.getFirstPersonParts()
+    ) do
+        if part and part.Parent then
+            if others.firstPersonTransparency[part] == nil then
+                others.firstPersonTransparency[part] =
+                    part.LocalTransparencyModifier
+            end
+
+            part.LocalTransparencyModifier = 1
+        end
+    end
+end
+
+UnusualFns.addUnusualConnection(
+    RunService.Heartbeat:Connect(function()
+        if not unusualDestroyed then
+            others.updateFirstPersonTransparency()
+        end
+    end)
+)
 --// =========================================================
 --// MAIN / AUTOJUMP
 --// =========================================================
@@ -9114,6 +9290,9 @@ local function cleanupUnusual()
     end
     unusualDestroyed =
         true
+    pcall(function()
+        others.restoreFirstPersonTransparency()
+    end)
     if unusualActive then
         pcall(function()
             UnusualFns.restoreUnusual()
