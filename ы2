@@ -2775,6 +2775,7 @@ unusualRuntime.installAnimatedNestedModels = function(
                     if object:IsA("BasePart") then
 
                         pcall(function()
+                            object.Anchored = false
                             object.CanCollide = false
                             object.CanTouch = false
                             object.CanQuery = false
@@ -2794,42 +2795,76 @@ unusualRuntime.installAnimatedNestedModels = function(
 
                 end
 
+                local hostPart
+                local ancestor = sourceModel.Parent
+
+                while ancestor
+                    and ancestor ~= cosmeticRig
+                do
+                    if ancestor:IsA("BasePart") then
+                        hostPart = ancestor
+                        break
+                    end
+
+                    ancestor = ancestor.Parent
+                end
+
+                if not hostPart then
+                    hostPart =
+                        cosmeticRig:FindFirstChild(
+                            "HumanoidRootPart"
+                        )
+                end
+
+                local targetHost
+
+                if hostPart
+                    and hostPart:IsA("BasePart")
+                then
+                    if targetRig then
+                        targetHost =
+                            targetRig:FindFirstChild(
+                                hostPart.Name
+                            )
+                    end
+
+                    if not targetHost
+                        and playerCharacter
+                    then
+                        targetHost =
+                            playerCharacter:FindFirstChild(
+                                hostPart.Name
+                            )
+                    end
+                end
+
+                if not targetHost
+                    or not targetHost:IsA("BasePart")
+                then
+                    targetHost = targetRoot
+                end
+
                 local sourceRoot =
                     sourceModel:FindFirstChild(
                         root.Name,
                         true
                     )
 
-                local relative
+                local relative = CFrame.new()
 
                 if sourceRoot
                     and sourceRoot:IsA("BasePart")
+                    and hostPart
+                    and hostPart:IsA("BasePart")
                 then
                     relative =
-                        cosmeticRig:FindFirstChild(
-                            "HumanoidRootPart"
+                        hostPart.CFrame:ToObjectSpace(
+                            sourceRoot.CFrame
                         )
-
-                    if relative
-                        and relative:IsA("BasePart")
-                    then
-                        relative =
-                            relative.CFrame:ToObjectSpace(
-                                sourceRoot.CFrame
-                            )
-                    else
-                        relative =
-                            root.CFrame:ToObjectSpace(
-                                root.CFrame
-                            )
-                    end
-                else
-                    relative =
-                        CFrame.new()
                 end
 
                 root.CFrame =
-                    targetRoot.CFrame *
+                    targetHost.CFrame *
                     relative
 
                 local folder =
@@ -2868,7 +2903,7 @@ unusualRuntime.installAnimatedNestedModels = function(
                     "DeadEyeAnimatedRootWeld"
 
                 weld.Part0 =
-                    targetRoot
+                    targetHost
 
                 weld.Part1 =
                     root
@@ -3849,8 +3884,25 @@ local function installUnusualPartFX(
 
             end
 
+            local hasAnimationController = false
+            local hasAnimation = false
+
+            for _, object in ipairs(
+                child:GetDescendants()
+            ) do
+                if object:IsA("AnimationController") then
+                    hasAnimationController = true
+                elseif object:IsA("Animation") then
+                    hasAnimation = true
+                end
+            end
+
             if hasNestedPart
                 and hasAnimationDriver
+                and not (
+                    hasAnimationController
+                    and hasAnimation
+                )
             then
                 unusualRuntime.createVisualMirror(
                     child,
