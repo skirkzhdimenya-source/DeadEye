@@ -10733,13 +10733,13 @@ local function createEmotePreview(
     local success, result =
         pcall(function()
 
-            local worldModel =
+            local oldWorldModel =
                 viewport:FindFirstChildOfClass(
                     "WorldModel"
                 )
 
-            if worldModel then
-                worldModel:Destroy()
+            if oldWorldModel then
+                oldWorldModel:Destroy()
             end
 
             local oldCamera =
@@ -10751,17 +10751,33 @@ local function createEmotePreview(
                     nil
             end
 
-            worldModel =
+            local worldModel =
                 Instance.new(
                     "WorldModel"
                 )
             worldModel.Parent =
                 viewport
 
-            -- Evade's decompiled ClientItemService:IsPlayerR15()
-            -- returns false here, so keep the preview on the classic
-            -- rig and avoid calling another service from this thread.
+            -- Match ClientItemService:GetVisualModel()
+            -- without calling the service from the executor thread.
             local isR15 = false
+
+            pcall(function()
+                local character =
+                    LocalPlayer.Character
+
+                local humanoid =
+                    character
+                    and character:FindFirstChildOfClass(
+                        "Humanoid"
+                    )
+
+                if humanoid then
+                    isR15 =
+                        humanoid.RigType
+                        == Enum.HumanoidRigType.R15
+                end
+            end)
 
             local assets =
                 ReplicatedStorage:FindFirstChild(
@@ -10812,101 +10828,198 @@ local function createEmotePreview(
 
             if not rig.PrimaryPart then
                 rig:Destroy()
+
                 error(
                     "Visual rig has no PrimaryPart"
                 )
             end
 
-            -- Match Evade's model layout:
-            -- many emotes keep their visual inside Selection.1/2/3.
-            local selectedRoot
+            -- =================================================
+            -- EXACT GetSelection() BEHAVIOR
+            -- =================================================
 
-            local selectionFolder =
+            local selection
+
+            if itemModule:FindFirstChild(
+                "Selection"
+            ) then
+                local selectionFolder =
+                    itemModule.Selection
+
+                local children =
+                    selectionFolder:GetChildren()
+
+                selection =
+                    children[1]
+            end
+
+            -- =================================================
+            -- EXACT GetAnimations() BEHAVIOR
+            -- =================================================
+
+            local mainAnimation
+            local introAnimation
+            local walkAnimation
+            local idleAnimation
+            local activateModule
+
+            local hasAnimations =
+                itemModule:FindFirstChild(
+                    "Animations"
+                )
+
+            local hasSelection =
                 itemModule:FindFirstChild(
                     "Selection"
                 )
 
-            if selectionFolder then
-                local selections = {}
-
-                for _, child in ipairs(
-                    selectionFolder:GetChildren()
-                ) do
-                    local numericName =
-                        tonumber(
-                            child.Name
+            if not hasAnimations
+                and not hasSelection
+            then
+                if isR15 then
+                    mainAnimation =
+                        itemModule:FindFirstChild(
+                            "Animation"
                         )
-
-                    if numericName then
-                        table.insert(
-                            selections,
-                            {
-                                object = child,
-                                index = numericName
-                            }
+                else
+                    mainAnimation =
+                        itemModule:FindFirstChild(
+                            "AnimationClassic"
                         )
-                    end
+                end
+            else
+                local animationRoot
+
+                if hasSelection then
+                    animationRoot =
+                        selection
+                        and selection:FindFirstChild(
+                            "Animations"
+                        )
+                else
+                    animationRoot =
+                        itemModule:FindFirstChild(
+                            "Animations"
+                        )
                 end
 
-                table.sort(
-                    selections,
-                    function(x, y)
-                        return x.index < y.index
+                if animationRoot then
+                    local rigAnimations
+
+                    if isR15 then
+                        rigAnimations =
+                            animationRoot:FindFirstChild(
+                                "R15"
+                            )
+                    else
+                        rigAnimations =
+                            animationRoot:FindFirstChild(
+                                "R6"
+                            )
                     end
+
+                    if rigAnimations then
+                        local intro =
+                            rigAnimations:FindFirstChild(
+                                "Intro"
+                            )
+
+                        if intro
+                            and intro:IsA("Animation")
+                            and intro.AnimationId ~= ""
+                        then
+                            introAnimation =
+                                intro
+                        end
+
+                        local animation =
+                            rigAnimations:FindFirstChild(
+                                "Animation"
+                            )
+
+                        if animation
+                            and animation:IsA("Animation")
+                            and animation.AnimationId ~= ""
+                        then
+                            mainAnimation =
+                                animation
+                        end
+
+                        local walk =
+                            rigAnimations:FindFirstChild(
+                                "Walk"
+                            )
+
+                        if walk
+                            and walk:IsA("Animation")
+                            and walk.AnimationId ~= ""
+                        then
+                            walkAnimation =
+                                walk
+                        end
+
+                        local idle =
+                            rigAnimations:FindFirstChild(
+                                "Idle"
+                            )
+
+                        if idle
+                            and idle:IsA("Animation")
+                            and idle.AnimationId ~= ""
+                        then
+                            idleAnimation =
+                                idle
+                        end
+
+                        local activate =
+                            rigAnimations:FindFirstChild(
+                                "Activate"
+                            )
+
+                        if activate then
+                            activateModule =
+                                activate
+                        elseif rigAnimations.Parent then
+                            activateModule =
+                                rigAnimations.Parent:
+                                FindFirstChild(
+                                    "Activate"
+                                )
+                        end
+                    end
+                end
+            end
+
+            -- =================================================
+            -- EXACT SetModel() BEHAVIOR
+            -- =================================================
+
+            local visualRoot =
+                selection
+                or itemModule
+
+            local characterFolder =
+                visualRoot
+                and visualRoot:FindFirstChild(
+                    isR15
+                    and "Character"
+                    or "CharacterClassic"
                 )
-
-                -- Use a deterministic selection so the same emote
-                -- does not change every time the picker rebuilds.
-                local chosenSelection =
-                    selections[1]
-
-                if chosenSelection then
-                    selectedRoot =
-                        chosenSelection.object
-                end
-            end
-
-            local characterFolder
-
-            if selectedRoot then
-                characterFolder =
-                    selectedRoot:FindFirstChild(
-                        isR15
-                        and "Character"
-                        or "CharacterClassic"
-                    )
-
-                if not characterFolder then
-                    characterFolder =
-                        selectedRoot:FindFirstChild(
-                            "CharacterClassic"
-                        )
-                        or selectedRoot:FindFirstChild(
-                            "Character"
-                        )
-                end
-            end
 
             if not characterFolder then
                 characterFolder =
-                    itemModule:FindFirstChild(
-                        isR15
-                        and "Character"
-                        or "CharacterClassic"
-                    )
-
-                if not characterFolder then
-                    characterFolder =
-                        itemModule:FindFirstChild(
+                    visualRoot
+                    and (
+                        visualRoot:FindFirstChild(
                             "CharacterClassic"
                         )
-                        or itemModule:FindFirstChild(
+                        or visualRoot:FindFirstChild(
                             "Character"
                         )
-                end
+                    )
             end
 
-            local emoteClone
+            local emoteModelClone
 
             if characterFolder then
                 local emoteModel =
@@ -10915,20 +11028,242 @@ local function createEmotePreview(
                     )
 
                 if emoteModel then
-                    emoteClone =
+                    -- Match the native optimization flags.
+                    pcall(function()
+                        if not emoteModel:GetAttribute(
+                            "Optimized"
+                        ) then
+                            emoteModel:SetAttribute(
+                                "Optimized",
+                                true
+                            )
+
+                            for _, part in ipairs(
+                                emoteModel:GetDescendants()
+                            ) do
+                                if part:IsA(
+                                    "BasePart"
+                                ) then
+                                    part.CanCollide =
+                                        false
+                                    part.CanQuery =
+                                        false
+                                    part.CanTouch =
+                                        false
+                                    part.Massless =
+                                        true
+                                    part.RootPriority =
+                                        -1
+
+                                    pcall(function()
+                                        part.CollisionGroup =
+                                            "PlayerVis"
+                                    end)
+                                end
+                            end
+                        end
+                    end)
+
+                    emoteModelClone =
                         emoteModel:Clone()
 
-                    -- Keep the authored model transform.
-                    -- Native emote models are authored around the
-                    -- preview rig; forcing PivotTo(root) was corrupting
-                    -- some multi-part emotes.
-                    emoteClone.Parent =
+                    emoteModelClone.Parent =
                         rig
+
+                    -- This is the important part that the previous
+                    -- preview was missing. Native SetModel rewires
+                    -- the authored Motor6D/Weld Part0 references
+                    -- from the source character to the preview rig.
+                    for _, joint in ipairs(
+                        emoteModelClone:GetChildren()
+                    ) do
+                        if joint:IsA("Motor6D")
+                            or joint:IsA("Weld")
+                        then
+                            local part0 =
+                                joint.Part0
+
+                            if part0
+                                and part0.Parent
+                                    == characterFolder
+                            then
+                                if part0.Name
+                                    == "HumanoidRootPart"
+                                then
+                                    joint.Part0 =
+                                        rig.PrimaryPart
+                                else
+                                    joint.Part0 =
+                                        rig:FindFirstChild(
+                                            part0.Name
+                                        )
+                                end
+                            end
+                        end
+                    end
                 end
             end
 
             rig.Parent =
                 worldModel
+
+            -- =================================================
+            -- EXACT Activate() STATE
+            -- =================================================
+
+            local emoteInfo
+
+            pcall(function()
+                local info =
+                    require(
+                        itemModule
+                    )
+
+                if type(info) == "table" then
+                    emoteInfo =
+                        info.EmoteInfo
+                end
+            end)
+
+            local previewState = {
+                Active = true,
+                Character = rig,
+                Rig = nil,
+                EmoteModule = itemModule,
+                EmoteInfo = emoteInfo,
+                EmoteModel = emoteModelClone,
+                Animations = {}
+            }
+
+            if activateModule then
+                pcall(function()
+                    local fn =
+                        require(
+                            activateModule
+                        )
+
+                    if type(fn) == "function"
+                    then
+                        fn(
+                            emoteModelClone,
+                            previewState
+                        )
+                    end
+                end)
+            end
+
+            -- =================================================
+            -- EXACT MAIN ANIMATION
+            -- =================================================
+
+            local humanoid =
+                rig:FindFirstChildOfClass(
+                    "Humanoid"
+                )
+
+            local animator
+
+            if humanoid then
+                animator =
+                    humanoid:FindFirstChildOfClass(
+                        "Animator"
+                    )
+
+                if not animator then
+                    animator =
+                        Instance.new(
+                            "Animator"
+                        )
+
+                    animator.Parent =
+                        humanoid
+                end
+            end
+
+            if not animator then
+                local controller =
+                    rig:FindFirstChildOfClass(
+                        "AnimationController"
+                    )
+
+                if not controller then
+                    controller =
+                        Instance.new(
+                            "AnimationController"
+                        )
+
+                    controller.Parent =
+                        rig
+                end
+
+                animator =
+                    controller:FindFirstChildOfClass(
+                        "Animator"
+                    )
+
+                if not animator then
+                    animator =
+                        Instance.new(
+                            "Animator"
+                        )
+
+                    animator.Parent =
+                        controller
+                end
+            end
+
+            if mainAnimation
+                and animator
+            then
+                local loaded,
+                    track =
+                    pcall(function()
+                        -- Native code loads the actual Animation
+                        -- object directly, not a reconstructed ID.
+                        return animator:
+                            LoadAnimation(
+                                mainAnimation
+                            )
+                    end)
+
+                if loaded
+                    and track
+                then
+                    track.Priority =
+                        Enum.AnimationPriority.Action3
+
+                    track.Looped =
+                        not (
+                            emoteInfo
+                            and emoteInfo.Length
+                            and emoteInfo.Length > 0
+                        )
+
+                    previewState.Animations.Animation =
+                        track
+
+                    pcall(function()
+                        track:Play(
+                            0
+                        )
+                    end)
+
+                    -- Native preview path:
+                    -- Activate(..., true) -> pause at 0.5.
+                    pcall(function()
+                        track:AdjustSpeed(
+                            0
+                        )
+
+                        track.TimePosition =
+                            0.5
+                    end)
+                end
+            end
+
+            -- =================================================
+            -- CAMERA
+            -- =================================================
 
             local camera =
                 Instance.new(
@@ -10961,513 +11296,6 @@ local function createEmotePreview(
 
             viewport.CurrentCamera =
                 camera
-
-            -- Do not call EmoteService:SetEmote().
-            -- It eventually reaches Objects.Items.Emote:IsR15()
-            -- from this executor thread and Roblox rejects that
-            -- Instance access with capability Plugin.
-            local humanoid =
-                rig:FindFirstChildOfClass(
-                    "Humanoid"
-                )
-
-            local animator
-
-            if humanoid then
-                animator =
-                    humanoid:FindFirstChildOfClass(
-                        "Animator"
-                    )
-
-                if not animator then
-                    animator =
-                        Instance.new(
-                            "Animator"
-                        )
-                    animator.Parent =
-                        humanoid
-                end
-            end
-
-            if not animator then
-                local controller =
-                    rig:FindFirstChildOfClass(
-                        "AnimationController"
-                    )
-
-                if not controller then
-                    controller =
-                        Instance.new(
-                            "AnimationController"
-                        )
-                    controller.Parent =
-                        rig
-                end
-
-                animator =
-                    controller:FindFirstChildOfClass(
-                        "Animator"
-                    )
-
-                if not animator then
-                    animator =
-                        Instance.new(
-                            "Animator"
-                        )
-                    animator.Parent =
-                        controller
-                end
-            end
-
-            local animationSources = {}
-            local animationSeen = {}
-
-            local function addAnimationObject(
-                object,
-                priority
-            )
-                if not object
-                    or not object:IsA("Animation")
-                then
-                    return
-                end
-
-                local id =
-                    tostring(
-                        object.AnimationId
-                            or ""
-                    )
-
-                local numeric =
-                    string.match(
-                        id,
-                        "%d+"
-                    )
-
-                if not numeric
-                    or tonumber(numeric) <= 0
-                then
-                    return
-                end
-
-                if not animationSeen[
-                    numeric
-                ] then
-                    animationSeen[numeric] =
-                        true
-
-                    table.insert(
-                        animationSources,
-                        {
-                            object = object,
-                            id = numeric,
-                            priority =
-                                priority
-                                or 100
-                        }
-                    )
-                end
-            end
-
-            local function collectAnimations(
-                root,
-                basePriority
-            )
-                if not root then
-                    return
-                end
-
-                for _, obj in ipairs(
-                    root:GetDescendants()
-                ) do
-                    if obj:IsA("Animation") then
-                        local priority =
-                            basePriority
-                            or 100
-
-                        local current =
-                            obj
-
-                        for _ = 1, 8 do
-                            local parent =
-                                current.Parent
-
-                            if not parent then
-                                break
-                            end
-
-                            local parentName =
-                                string.lower(
-                                    parent.Name
-                                )
-
-                            if parentName == "characterclassic"
-                                and not isR15
-                            then
-                                priority =
-                                    math.min(
-                                        priority,
-                                        0
-                                    )
-                            elseif parentName == "character"
-                                and isR15
-                            then
-                                priority =
-                                    math.min(
-                                        priority,
-                                        0
-                                    )
-                            end
-
-                            if string.find(
-                                parentName,
-                                "animation",
-                                1,
-                                true
-                            )
-                            then
-                                priority =
-                                    math.min(
-                                        priority,
-                                        5
-                                    )
-                            end
-
-                            current =
-                                parent
-                        end
-
-                        local name =
-                            string.lower(
-                                obj.Name
-                            )
-
-                        if not isR15
-                            and string.find(
-                                name,
-                                "r6",
-                                1,
-                                true
-                            )
-                        then
-                            priority =
-                                math.min(
-                                    priority,
-                                    0
-                                )
-                        elseif isR15
-                            and string.find(
-                                name,
-                                "r15",
-                                1,
-                                true
-                            )
-                        then
-                            priority =
-                                math.min(
-                                    priority,
-                                    0
-                                )
-                        end
-
-                        addAnimationObject(
-                            obj,
-                            priority
-                        )
-                    end
-                end
-            end
-
-            -- Prefer animations belonging to the exact character
-            -- branch whose EmoteModel we just attached.
-            if characterFolder then
-                collectAnimations(
-                    characterFolder,
-                    0
-                )
-            end
-
-            if #animationSources == 0
-                and selectedRoot
-            then
-                collectAnimations(
-                    selectedRoot,
-                    10
-                )
-            end
-
-            if #animationSources == 0 then
-                collectAnimations(
-                    itemModule,
-                    50
-                )
-            end
-
-            -- Some emotes store animation IDs as values/attributes.
-            -- Keep those only as a fallback.
-            if #animationSources == 0 then
-                for _, obj in ipairs(
-                    itemModule:GetDescendants()
-                ) do
-                    for attributeName, value in pairs(
-                        obj:GetAttributes()
-                    ) do
-                        local key =
-                            string.lower(
-                                tostring(
-                                    attributeName
-                                )
-                            )
-
-                        if string.find(
-                            key,
-                            "animation",
-                            1,
-                            true
-                        )
-                        or string.find(
-                            key,
-                            "anim",
-                            1,
-                            true
-                        )
-                        then
-                            local id =
-                                string.match(
-                                    tostring(
-                                        value
-                                    ),
-                                    "%d+"
-                                )
-
-                            if id
-                                and tonumber(id) > 0
-                                and not animationSeen[id]
-                            then
-                                animationSeen[id] =
-                                    true
-
-                                table.insert(
-                                    animationSources,
-                                    {
-                                        object = nil,
-                                        id = id,
-                                        priority = 80
-                                    }
-                                )
-                            end
-                        end
-                    end
-                end
-            end
-
-            table.sort(
-                animationSources,
-                function(
-                    x,
-                    y
-                )
-                    if x.priority
-                        ~= y.priority
-                    then
-                        return x.priority
-                            < y.priority
-                    end
-
-                    return tonumber(
-                        x.id
-                    )
-                        < tonumber(
-                            y.id
-                        )
-                end
-            )
-
-            -- Get every Animator inside the assembled preview.
-            -- Complex emotes can animate both the character rig and
-            -- an EmoteModel/AnimationController at the same time.
-            local animators = {}
-            local animatorSeen = {}
-
-            local function addAnimator(
-                animator
-            )
-                if animator
-                    and animator:IsA("Animator")
-                    and not animatorSeen[animator]
-                then
-                    animatorSeen[animator] =
-                        true
-
-                    table.insert(
-                        animators,
-                        animator
-                    )
-                end
-            end
-
-            for _, obj in ipairs(
-                rig:GetDescendants()
-            ) do
-                if obj:IsA("Animator") then
-                    addAnimator(
-                        obj
-                    )
-                elseif obj:IsA("Humanoid")
-                    or obj:IsA(
-                        "AnimationController"
-                    )
-                then
-                    addAnimator(
-                        obj:FindFirstChildOfClass(
-                            "Animator"
-                        )
-                    )
-                end
-            end
-
-            if #animators == 0 then
-                local controller =
-                    rig:FindFirstChildOfClass(
-                        "AnimationController"
-                    )
-
-                if not controller then
-                    controller =
-                        Instance.new(
-                            "AnimationController"
-                        )
-                    controller.Parent =
-                        rig
-                end
-
-                local fallbackAnimator =
-                    controller:FindFirstChildOfClass(
-                        "Animator"
-                    )
-
-                if not fallbackAnimator then
-                    fallbackAnimator =
-                        Instance.new(
-                            "Animator"
-                        )
-                    fallbackAnimator.Parent =
-                        controller
-                end
-
-                addAnimator(
-                    fallbackAnimator
-                )
-            end
-
-            local loadedTracks = 0
-
-            for _, candidate in ipairs(
-                animationSources
-            ) do
-                local sourceAnimation =
-                    candidate.object
-
-                for _, animator in ipairs(
-                    animators
-                ) do
-                    local animationObject
-
-                    if sourceAnimation then
-                        animationObject =
-                            sourceAnimation:Clone()
-                    else
-                        animationObject =
-                            Instance.new(
-                                "Animation"
-                            )
-                        animationObject.AnimationId =
-                            "rbxassetid://"
-                            .. candidate.id
-                    end
-
-                    local loaded, track =
-                        pcall(function()
-                            return animator:
-                                LoadAnimation(
-                                    animationObject
-                                )
-                        end)
-
-                    if loaded
-                        and track
-                    then
-                        track.Looped =
-                            true
-
-                        local played =
-                            pcall(function()
-                                track:Play(
-                                    0.05,
-                                    1,
-                                    1
-                                )
-                            end)
-
-                        if played then
-                            loadedTracks =
-                                loadedTracks + 1
-
-                            task.spawn(
-                                function()
-                                    pcall(function()
-                                        for _ = 1, 10 do
-                                            if track.Length
-                                                and track.Length
-                                                    > 0
-                                            then
-                                                break
-                                            end
-
-                                            task.wait()
-                                        end
-
-                                        local length =
-                                            track.Length
-                                                or 0
-
-                                        if length > 0 then
-                                            track.TimePosition =
-                                                math.min(
-                                                    0.5,
-                                                    length
-                                                        * 0.5
-                                                )
-                                        else
-                                            track.TimePosition =
-                                                0.5
-                                        end
-
-                                        track:AdjustSpeed(
-                                            0
-                                        )
-                                    end)
-                                end
-                            )
-                        else
-                            pcall(function()
-                                animationObject:Destroy()
-                            end)
-                        end
-                    else
-                        pcall(function()
-                            animationObject:Destroy()
-                        end)
-                    end
-                end
-            end
-
-            if loadedTracks == 0 then
-                warn(
-                    "[DeadEye] No usable animation found for emote:",
-                    itemModule.Name
-                )
-            end
 
             return true
         end)
