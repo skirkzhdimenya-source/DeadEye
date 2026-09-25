@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.3"
+    "DeadEyes v1.4"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -2188,22 +2188,171 @@ function cosmetic.refreshRig()
         return false
     end
 
-    local rig =
-        cosmetic.getLiveRig()
+    local live =
+        workspace:FindFirstChild("Rigs")
+        and workspace.Rigs:FindFirstChild(
+            LocalPlayer.Name
+        )
 
-    if not rig then
+    if not live
+        or not live:IsA("Model")
+    then
+        return false
+    end
+
+    local humanoid =
+        live:FindFirstChildOfClass(
+            "Humanoid"
+        )
+
+    if not humanoid then
+        return false
+    end
+
+    local cache =
+        workspace:FindFirstChild(
+            "PlayerCache"
+        )
+
+    local playerCache =
+        cache
+        and cache:FindFirstChild(
+            LocalPlayer.Name
+        )
+
+    local baseName =
+        humanoid.RigType
+        == Enum.HumanoidRigType.R6
+        and "R6"
+        or "Player"
+
+    local base =
+        playerCache
+        and playerCache:FindFirstChild(
+            baseName
+        )
+
+    if not base then
         return false
     end
 
     cosmetic.refreshBusy = true
 
-    local success = pcall(function()
-        --// Character.Rig.BuildRig() exits when Built is already true.
-        --// Reset only that internal flag and let the game's own
-        --// RegistryTermUpdated("Cosmetics") path rebuild the live rig.
-        rig.Built = false
-        rig:RegistryTermUpdated("Cosmetics")
-    end)
+    local success =
+        pcall(function()
+
+            --// AddCosmetics merges cosmetic contents into
+            --// the existing body parts. Restore those parts
+            --// to the exact clean PlayerCache state first,
+            --// then run the game's native merge again.
+            for _, basePart in ipairs(
+                base:GetChildren()
+            ) do
+
+                if basePart:IsA("BasePart")
+                    and basePart.Name
+                        ~= "HumanoidRootPart"
+                then
+
+                    local livePart =
+                        live:FindFirstChild(
+                            basePart.Name
+                        )
+
+                    if livePart
+                        and livePart:IsA("BasePart")
+                    then
+
+                        for _, child in ipairs(
+                            livePart:GetChildren()
+                        ) do
+                            pcall(function()
+                                child:Destroy()
+                            end)
+                        end
+
+                        for _, child in ipairs(
+                            basePart:GetChildren()
+                        ) do
+                            pcall(function()
+                                child:Clone().Parent =
+                                    livePart
+                            end)
+                        end
+                    end
+                end
+            end
+
+            local useLoadout =
+                require(
+                    ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild(
+                        "useLoadout"
+                    )
+                )
+
+            local equipped = {}
+
+            for slotIndex = 1, 2 do
+                local id =
+                    tonumber(
+                        useLoadout.GetEquippedFromSlot(
+                            "CosmeticSlot_"
+                                .. tostring(slotIndex)
+                        )
+                    )
+
+                if id
+                    and id ~= 0
+                then
+
+                    local effectiveId =
+                        id
+
+                    if cosmetic.enabled then
+                        local state =
+                            cosmetic.slots[
+                                slotIndex
+                            ]
+
+                        if state
+                            and state.originalId
+                            and state.replaceId
+                            and tonumber(
+                                state.originalId
+                            ) == id
+                            and tonumber(
+                                state.originalId
+                            )
+                                ~= tonumber(
+                                    state.replaceId
+                                )
+                        then
+                            effectiveId =
+                                tonumber(
+                                    state.replaceId
+                                )
+                        end
+                    end
+
+                    table.insert(
+                        equipped,
+                        effectiveId
+                    )
+                end
+            end
+
+            local AddCosmetics =
+                require(
+                    ReplicatedStorage.Services.Asset.RigService:WaitForChild(
+                        "AddCosmetics"
+                    )
+                )
+
+            AddCosmetics(
+                live,
+                equipped
+            )
+        end)
 
     cosmetic.refreshBusy = false
 
@@ -2288,6 +2437,30 @@ function cosmetic.installHook()
     return true
 end
 
+function cosmetic.removeHook()
+    if not cosmetic.hooked
+        or type(hookfunction) ~= "function"
+    then
+        return
+    end
+
+    pcall(function()
+        if cosmetic.targetSetRig
+            and cosmetic.originalSetRig
+        then
+            hookfunction(
+                cosmetic.targetSetRig,
+                cosmetic.originalSetRig
+            )
+        end
+    end)
+
+    cosmetic.hooked = false
+    cosmetic.targetSetRig = nil
+    cosmetic.originalSetRig = nil
+    cosmetic.lastSetRigArgs = nil
+end
+
 function cosmetic.updateToggle()
     pcall(function()
         if cosmetic.enabled then
@@ -2349,6 +2522,10 @@ function cosmetic.select(
     if cosmetic.enabled then
         cosmetic.enabled = false
         pcall(cosmetic.updateToggle)
+
+        task.spawn(function()
+            pcall(cosmetic.refreshRig)
+        end)
     end
 
     -- The executor may invoke this picker callback from a
@@ -2390,9 +2567,8 @@ function cosmetic.select(
         end
     end)
 
-    -- A changed mapping is intentionally applied on the next
-    -- native SetRig call; this avoids a forced synchronous rig
-    -- rebuild from an input callback.
+    -- The new mapping is kept disabled until the user
+    -- explicitly turns Cosmetic Swap back on.
 end
 
 function cosmetic.rebuildPicker()
@@ -3173,6 +3349,12 @@ function cosmetic.buildUI()
 end
 
 function cosmetic.cleanup()
+    pcall(function()
+        if cosmetic.enabled then
+            cosmetic.refreshRig()
+        end
+    end)
+
     cosmetic.enabled = false
     cosmetic.closePicker()
     cosmetic.refreshBusy = false
@@ -10555,7 +10737,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.3"
+            MainTitle.Text = "DeadEyes v1.4"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10577,7 +10759,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.3"
+            MainTitle.Text = "DeadEyes v1.4"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -10602,7 +10784,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.3"
+            MainTitle.Text = "DeadEyes v1.4"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10624,7 +10806,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.3"
+            MainTitle.Text = "DeadEyes v1.4"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -10649,7 +10831,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.3"
+            MainTitle.Text = "DeadEyes v1.4"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12730,8 +12912,8 @@ addConnection(
                         cosmetic.updateToggle
                     )
 
-                    -- Rebuild only the live round rig through
-                    -- the game's own Character.Rig path.
+                    -- Apply directly to the existing live rig.
+                    -- Future respawns are still handled by SetRig.
                     task.spawn(function()
                         pcall(
                             cosmetic.refreshRig
