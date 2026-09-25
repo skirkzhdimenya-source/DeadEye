@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.10"
+    "DeadEyes v1.11"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -3982,11 +3982,31 @@ function cosmetic.buildUI()
                             slotIndex
                         ]
 
-                    if not current
-                        or not current.originalId
-                        or tonumber(
+                    if not current then
+                        return
+                    end
+
+                    local originalId =
+                        tonumber(
                             current.originalId
-                        ) == 0
+                        )
+
+                    local replaceId =
+                        tonumber(
+                            current.replaceId
+                        )
+
+                    --// If Original exists, remove it.
+                    --// If only Replace exists, remove the
+                    --// directly-added cosmetic instead.
+                    if (
+                        not originalId
+                        or originalId == 0
+                    )
+                        and (
+                            not replaceId
+                            or replaceId == 0
+                        )
                     then
                         return
                     end
@@ -11399,7 +11419,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.10"
+            MainTitle.Text = "DeadEyes v1.11"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11421,7 +11441,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.10"
+            MainTitle.Text = "DeadEyes v1.11"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11446,7 +11466,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.10"
+            MainTitle.Text = "DeadEyes v1.11"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11468,7 +11488,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.10"
+            MainTitle.Text = "DeadEyes v1.11"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11493,7 +11513,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.10"
+            MainTitle.Text = "DeadEyes v1.11"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
