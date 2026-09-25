@@ -11431,7 +11431,7 @@ local function getNativeEmoteWheel()
     return nil
 end
 
-local function getConfiguredSlotByOriginalName(
+local function normalizeEmoteName(
     name
 )
     name =
@@ -11440,6 +11440,34 @@ local function getConfiguredSlotByOriginalName(
         )
 
     if name == "" then
+        return ""
+    end
+
+    -- Native wheel uses display names with spaces
+    -- (e.g. "Bold March"), while DeadEye config
+    -- stores module names (e.g. "BoldMarch").
+    -- Compare a compact lowercase form so both
+    -- representations resolve to the same emote.
+    return string.lower(
+        (
+            name
+                :gsub(
+                    "[%s_%-%'%.]",
+                    ""
+                )
+        )
+    )
+end
+
+local function getConfiguredSlotByOriginalName(
+    name
+)
+    local normalizedName =
+        normalizeEmoteName(
+            name
+        )
+
+    if normalizedName == "" then
         return nil
     end
 
@@ -11450,10 +11478,12 @@ local function getConfiguredSlotByOriginalName(
         if slot
             and slot.originalId
             and slot.replaceId
-            and tostring(
+            and normalizeEmoteName(
                 slot.originalName
-                    or ""
-            ) == name
+                    or getEmoteName(
+                        slot.originalId
+                    )
+            ) == normalizedName
         then
             return slot, i
         end
@@ -11488,11 +11518,11 @@ local function restoreNativeEmoteSlot(
     -- Only touch the slot if its visible name is still ours.
     -- A different name means the native wheel has already
     -- recycled this slot for another emote/page.
-    if tostring(
+    if normalizeEmoteName(
         textLabel.Text
             or ""
         )
-        ~= tostring(
+        ~= normalizeEmoteName(
             state.replaceName
                 or ""
         )
@@ -11637,11 +11667,11 @@ local function applyNativeEmoteSlot(
     ] = {
         originalId =
             slot.originalId,
+        -- Keep the exact text native wheel had before
+        -- replacement so restore returns its real
+        -- display form ("Headless Baller", etc.).
         originalName =
-            slot.originalName
-                or getEmoteName(
-                    slot.originalId
-                ),
+            textLabel.Text,
         replaceId =
             slot.replaceId,
         replaceName =
