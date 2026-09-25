@@ -1988,63 +1988,6 @@ local function unusualAttachmentHasFX(
     return false
 end
 
-local function unusualAttachmentHasMesh(
-    attachment
-)
-    for _, descendant in ipairs(
-        attachment:GetDescendants()
-    ) do
-        if descendant:IsA("MeshPart")
-            or descendant:IsA("SpecialMesh")
-            or descendant:IsA("UnionOperation")
-        then
-            return true
-        end
-    end
-    return false
-end
-
-local function getUnusualAttachmentSignature(
-    attachment
-)
-    local values = {}
-
-    for _, descendant in ipairs(
-        attachment:GetDescendants()
-    ) do
-        if descendant:IsA("MeshPart") then
-            table.insert(
-                values,
-                "M:"
-                .. descendant.Name
-                .. ":"
-                .. tostring(descendant.MeshId)
-                .. ":"
-                .. tostring(descendant.TextureID)
-            )
-        elseif descendant:IsA("SpecialMesh") then
-            table.insert(
-                values,
-                "S:"
-                .. descendant.Name
-                .. ":"
-                .. tostring(descendant.MeshId)
-                .. ":"
-                .. tostring(descendant.TextureId)
-            )
-        elseif descendant:IsA("UnionOperation") then
-            table.insert(
-                values,
-                "U:"
-                .. descendant.Name
-            )
-        end
-    end
-
-    table.sort(values)
-
-    return table.concat(values, "|")
-end
 --// =========================================================
 --// TAG OUR FX
 --// =========================================================
@@ -2078,290 +2021,6 @@ local function tagUnusualFX(
     end
 end
 --// =========================================================
---// UNIVERSAL UNUSUAL CLONE
--- =========================================================
-local function installUnusualPartFX(
-    sourcePart,
-    targetPart,
-    id,
-    rootClone
-)
-    if not rootClone then
-        return
-    end
-
-    local clonePart =
-        rootClone:FindFirstChild(
-            sourcePart.Name
-        )
-
-    if not clonePart
-        or not clonePart:IsA("BasePart")
-    then
-        rootClone:Destroy()
-        return
-    end
-
-    rootClone.Parent =
-        targetPart.Parent
-
-    local movedRoots = {}
-
-    for _, child in ipairs(
-        clonePart:GetChildren()
-    ) do
-
-        if child:IsA("Weld")
-            or child:IsA("WeldConstraint")
-            or child:IsA("Motor6D")
-            or child:IsA("Motor")
-            or child:IsA("CFrameValue")
-        then
-            continue
-        end
-
-        local hasBasePart =
-            child:IsA("BasePart")
-
-        if not hasBasePart then
-            for _, descendant in ipairs(
-                child:GetDescendants()
-            ) do
-                if descendant:IsA("BasePart") then
-                    hasBasePart = true
-                    break
-                end
-            end
-        end
-
-        if child:IsA("BasePart") then
-
-            local relative =
-                sourcePart.CFrame:ToObjectSpace(
-                    child.CFrame
-                )
-
-            child.Parent =
-                targetPart.Parent
-
-            child.CFrame =
-                targetPart.CFrame *
-                relative
-
-            movedRoots[child] =
-                targetPart
-
-        elseif hasBasePart then
-
-            local relativePivot = nil
-
-            pcall(function()
-                relativePivot =
-                    sourcePart.CFrame:ToObjectSpace(
-                        child:GetPivot()
-                    )
-            end)
-
-            child.Parent =
-                targetPart.Parent
-
-            if relativePivot then
-                pcall(function()
-                    child:PivotTo(
-                        targetPart.CFrame *
-                        relativePivot
-                    )
-                end)
-            else
-                for _, descendant in ipairs(
-                    child:GetDescendants()
-                ) do
-                    if descendant:IsA("BasePart") then
-
-                        local rel =
-                            sourcePart.CFrame:ToObjectSpace(
-                                descendant.CFrame
-                            )
-
-                        descendant.CFrame =
-                            targetPart.CFrame *
-                            rel
-
-                    end
-                end
-            end
-
-            movedRoots[child] =
-                targetPart
-
-        else
-
-            child.Parent =
-                targetPart
-
-            movedRoots[child] =
-                targetPart
-
-        end
-
-        tagUnusualFX(
-            child,
-            id
-        )
-
-    end
-
-    --// Reconnect joints to the real target body part.
-    for root in pairs(
-        movedRoots
-    ) do
-
-        for _, joint in ipairs(
-            root:GetDescendants()
-        ) do
-
-            if joint:IsA("Weld")
-                or joint:IsA("WeldConstraint")
-                or joint:IsA("Motor6D")
-                or joint:IsA("Motor")
-            then
-
-                pcall(function()
-
-                    if joint.Part0 ==
-                        clonePart
-                    then
-                        joint.Part0 =
-                            targetPart
-                    end
-
-                    if joint.Part1 ==
-                        clonePart
-                    then
-                        joint.Part1 =
-                            targetPart
-                    end
-
-                end)
-
-            end
-
-        end
-
-    end
-
-    --// Direct joints that originally connected an
-    --// extra part to this body part must be recreated
-    --// on the real body part.
-    for _, joint in ipairs(
-        clonePart:GetChildren()
-    ) do
-
-        if joint:IsA("Weld")
-            or joint:IsA("WeldConstraint")
-            or joint:IsA("Motor6D")
-            or joint:IsA("Motor")
-        then
-
-            local p0
-            local p1
-
-            pcall(function()
-                p0 = joint.Part0
-            end)
-
-            pcall(function()
-                p1 = joint.Part1
-            end)
-
-            if p0 == clonePart
-                or p1 == clonePart
-            then
-
-                local other =
-                    p0 == clonePart
-                    and p1
-                    or p0
-
-                if other
-                    and other.Parent
-                then
-
-                    if joint:IsA("WeldConstraint") then
-
-                        local newJoint =
-                            Instance.new(
-                                "WeldConstraint"
-                            )
-
-                        newJoint.Name =
-                            "DeadEyeUnusualWeld"
-
-                        newJoint.Part0 =
-                            targetPart
-
-                        newJoint.Part1 =
-                            other
-
-                        newJoint.Parent =
-                            targetPart
-
-                        tagUnusualFX(
-                            newJoint,
-                            id
-                        )
-
-                    elseif joint:IsA("Weld") then
-
-                        local newJoint =
-                            joint:Clone()
-
-                        newJoint.Part0 =
-                            targetPart
-
-                        newJoint.Part1 =
-                            other
-
-                        newJoint.Parent =
-                            targetPart
-
-                        tagUnusualFX(
-                            newJoint,
-                            id
-                        )
-
-                    elseif joint:IsA("Motor6D") then
-
-                        local newJoint =
-                            joint:Clone()
-
-                        newJoint.Part0 =
-                            targetPart
-
-                        newJoint.Part1 =
-                            other
-
-                        newJoint.Parent =
-                            targetPart
-
-                        tagUnusualFX(
-                            newJoint,
-                            id
-                        )
-
-                    end
-
-                end
-
-            end
-
-        end
-
-    end
-
-end
-
---// =========================================================
 --// APPLY UNUSUAL FX ONLY
 -- =========================================================
 local function applyUnusualFX(
@@ -2379,24 +2038,6 @@ local function applyUnusualFX(
         return false
     end
 
-    local rootClone
-
-    if not pcall(function()
-        rootClone =
-            cosmeticRig:Clone()
-    end) or not rootClone
-    then
-        return false
-    end
-
-    rootClone.Parent =
-        visualRig.Parent
-
-    local sourceRoot =
-        cosmeticRig:FindFirstChild(
-            "HumanoidRootPart"
-        )
-
     local targetRoot =
         visualRig:FindFirstChild(
             "HumanoidRootPart"
@@ -2411,190 +2052,117 @@ local function applyUnusualFX(
             )
     end
 
-    for _, sourcePart in ipairs(
-        cosmeticRig:GetChildren()
-    ) do
-
-        if sourcePart:IsA("BasePart") then
-
-            local targetPart
-
-            if sourcePart.Name
-                == "HumanoidRootPart"
-            then
-                targetPart =
-                    targetRoot
-            else
-                targetPart =
-                    visualRig:FindFirstChild(
-                        sourcePart.Name
-                    )
-            end
-
-            if targetPart
-                and targetPart:IsA("BasePart")
-            then
-
-                installUnusualPartFX(
-                    sourcePart,
-                    targetPart,
-                    id,
-                    rootClone
-                )
-
-            elseif sourceRoot
-                and targetRoot
-                and sourcePart ~= sourceRoot
-            then
-
-                local clonePart =
-                    rootClone:FindFirstChild(
-                        sourcePart.Name
-                    )
-
-                if clonePart
-                    and clonePart:IsA("BasePart")
-                then
-
-                    local relative =
-                        sourceRoot.CFrame:ToObjectSpace(
-                            sourcePart.CFrame
-                        )
-
-                    clonePart.Parent =
-                        targetRoot.Parent
-
-                    clonePart.CFrame =
-                        targetRoot.CFrame *
-                        relative
-
-                    local weld =
-                        Instance.new(
-                            "WeldConstraint"
-                        )
-
-                    weld.Name =
-                        "DeadEyeUnusualWeld"
-
-                    weld.Part0 =
-                        targetRoot
-
-                    weld.Part1 =
-                        clonePart
-
-                    weld.Parent =
-                        targetRoot
-
-                    tagUnusualFX(
-                        clonePart,
-                        id
-                    )
-
-                end
-
-            end
-
-        end
-
+    if not targetRoot then
+        return false
     end
 
-    --// Root-level non-body objects are moved from the
-    --// SAME clone, preserving references between them.
-    for _, child in ipairs(
-        rootClone:GetChildren()
+    local clone
+
+    if not pcall(function()
+        clone =
+            cosmeticRig:Clone()
+    end) or not clone
+    then
+        return false
+    end
+
+    local cloneRoot =
+        clone:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not cloneRoot
+        or not cloneRoot:IsA("BasePart")
+    then
+        clone:Destroy()
+        return false
+    end
+
+    clone.Name =
+        "DeadEyeUnusual_" ..
+        tostring(id)
+
+    --// Remove executable code, but keep the complete
+    --// visual/animation structure of the cosmetic rig.
+    for _, object in ipairs(
+        clone:GetDescendants()
     ) do
 
-        if not child:IsA("BasePart")
-            and not child:IsA("Humanoid")
-            and not child:IsA("AnimationController")
+        if object:IsA("Script")
+            or object:IsA("LocalScript")
+            or object:IsA("ModuleScript")
         then
 
-            local hasBasePart =
+            pcall(function()
+                object:Destroy()
+            end)
+
+        elseif object:IsA("BasePart") then
+
+            object.CanCollide =
                 false
 
-            for _, descendant in ipairs(
-                child:GetDescendants()
+            object.CanTouch =
+                false
+
+            object.CanQuery =
+                false
+
+            object.Massless =
+                true
+
+        end
+
+    end
+
+    --// Hide only the cosmetic rig's own body meshes.
+    --// Their children (ears, whiskers, particles, trails,
+    --// accessories, attachments, etc.) remain visible.
+    local bodyNames = {
+        Head = true,
+        Torso = true,
+        ["Left Arm"] = true,
+        ["Right Arm"] = true,
+        ["Left Leg"] = true,
+        ["Right Leg"] = true,
+        HumanoidRootPart = true
+    }
+
+    for _, object in ipairs(
+        clone:GetChildren()
+    ) do
+
+        if object:IsA("BasePart")
+            and bodyNames[object.Name]
+        then
+
+            object.Transparency =
+                1
+
+            object.CastShadow =
+                false
+
+            pcall(function()
+                object.LocalTransparencyModifier =
+                    1
+            end)
+
+            --// Do not render a face/decal belonging to
+            --// the hidden cosmetic head itself.
+            for _, child in ipairs(
+                object:GetChildren()
             ) do
 
-                if descendant:IsA("BasePart") then
-                    hasBasePart = true
-                    break
-                end
-
-            end
-
-            if hasBasePart
-                and sourceRoot
-                and targetRoot
-            then
-
-                local relativePivot = nil
-
-                pcall(function()
-                    relativePivot =
-                        sourceRoot.CFrame:ToObjectSpace(
-                            child:GetPivot()
-                        )
-                end)
-
-                child.Parent =
-                    targetRoot.Parent
-
-                if relativePivot then
+                if child:IsA("Decal")
+                    or child:IsA("Texture")
+                then
 
                     pcall(function()
-                        child:PivotTo(
-                            targetRoot.CFrame *
-                            relativePivot
-                        )
+                        child.Transparency =
+                            1
                     end)
 
-                else
-
-                    for _, descendant in ipairs(
-                        child:GetDescendants()
-                    ) do
-
-                        if descendant:IsA("BasePart") then
-
-                            local relative =
-                                sourceRoot.CFrame:ToObjectSpace(
-                                    descendant.CFrame
-                                )
-
-                            descendant.CFrame =
-                                targetRoot.CFrame *
-                                relative
-
-                            descendant.CanCollide =
-                                false
-
-                            descendant.CanTouch =
-                                false
-
-                            descendant.CanQuery =
-                                false
-
-                        end
-
-                    end
-
                 end
-
-                tagUnusualFX(
-                    child,
-                    id
-                )
-
-            else
-
-                child.Parent =
-                    visualRig
-
-                tagUnusualFX(
-                    child,
-                    id
-                )
 
             end
 
@@ -2602,9 +2170,47 @@ local function applyUnusualFX(
 
     end
 
+    local sourcePivot =
+        cosmeticRig:GetPivot()
+
+    local pivotOffset =
+        cosmeticRig:FindFirstChild(
+            "HumanoidRootPart"
+        ).CFrame:ToObjectSpace(
+            sourcePivot
+        )
+
+    clone.Parent =
+        visualRig
+
     pcall(function()
-        rootClone:Destroy()
+        clone:PivotTo(
+            targetRoot.CFrame *
+            pivotOffset
+        )
     end)
+
+    local weld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    weld.Name =
+        "DeadEyeUnusualRootWeld"
+
+    weld.Part0 =
+        targetRoot
+
+    weld.Part1 =
+        cloneRoot
+
+    weld.Parent =
+        clone
+
+    tagUnusualFX(
+        clone,
+        id
+    )
 
     return true
 end
