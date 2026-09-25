@@ -7652,6 +7652,7 @@ local mainJump = {
     hideUIHotkeyName = "H",
     lastJump = 0,
     capturing = nil,
+    needsInputRearm = false,
     character = nil,
     humanoid = nil,
     root = nil,
@@ -7740,6 +7741,8 @@ function mainJump.setEnabled(state)
         state and true or false
 
     if mainJump.enabled then
+        mainJump.needsInputRearm = false
+
         if mainJump.character
             and mainJump.humanoid
             and mainJump.humanoid.Parent
@@ -7764,6 +7767,7 @@ function mainJump.setEnabled(state)
             end)
         end
     else
+        mainJump.needsInputRearm = true
         mainJump.destroySensors()
 
         if mainJump.humanoid
@@ -7771,13 +7775,15 @@ function mainJump.setEnabled(state)
         then
             pcall(function()
                 mainJump.humanoid.Jump = false
+            end)
 
-                if mainJump.humanoid:GetState()
-                    == Enum.HumanoidStateType.Swimming
+            task.defer(function()
+                if mainJump.humanoid
+                    and mainJump.humanoid.Parent
                 then
-                    mainJump.humanoid:ChangeState(
-                        Enum.HumanoidStateType.Swimming
-                    )
+                    pcall(function()
+                        mainJump.humanoid.Jump = false
+                    end)
                 end
             end)
         end
@@ -8549,6 +8555,34 @@ mainConnect(
                 end
                 return
             end
+
+            if input.KeyCode
+                == Enum.KeyCode.Space
+                and not mainJump.enabled
+                and mainJump.needsInputRearm
+            then
+                mainJump.needsInputRearm = false
+
+                if mainJump.humanoid
+                    and mainJump.humanoid.Parent
+                then
+                    pcall(function()
+                        mainJump.humanoid.Jump = false
+                    end)
+
+                    task.defer(function()
+                        if mainJump.humanoid
+                            and mainJump.humanoid.Parent
+                            and not mainJump.enabled
+                        then
+                            pcall(function()
+                                mainJump.humanoid.Jump = true
+                            end)
+                        end
+                    end)
+                end
+            end
+
             if input.KeyCode
                 == mainFindKeyCode(
                     mainJump.hotkeyName
@@ -8565,6 +8599,22 @@ mainConnect(
             then
                 ScreenGui.Enabled =
                     not ScreenGui.Enabled
+            end
+        end
+    )
+)
+mainConnect(
+    UserInputService.InputEnded:Connect(
+        function(input)
+            if input.KeyCode
+                == Enum.KeyCode.Space
+                and not mainJump.enabled
+                and mainJump.humanoid
+                and mainJump.humanoid.Parent
+            then
+                pcall(function()
+                    mainJump.humanoid.Jump = false
+                end)
             end
         end
     )
