@@ -2068,6 +2068,42 @@ local function applyUnusualMenuFX(
     visualRig,
     playerCharacter
 )
+local function mapUnusualAttachments(
+    source,
+    clone,
+    map
+)
+    if source:IsA("Attachment")
+        and clone:IsA("Attachment")
+    then
+        map[source] =
+            clone
+    end
+
+    for _, sourceChild in ipairs(
+        source:GetChildren()
+    ) do
+
+        local cloneChild =
+            clone:FindFirstChild(
+                sourceChild.Name
+            )
+
+        if sourceChild:IsA("Attachment")
+            and cloneChild
+            and cloneChild:IsA("Attachment")
+        then
+
+            mapUnusualAttachments(
+                sourceChild,
+                cloneChild,
+                map
+            )
+
+        end
+    end
+end
+
 local function unusualObjectBelongsToPart(
     object,
     sourcePart
