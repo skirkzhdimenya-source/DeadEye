@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.1"
+    "DeadEyes v1.2"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1121,7 +1121,10 @@ local cosmetic = {
     pageStatus = nil,
     picking = false,
     pickerSide = nil,
-    categoryButton = nil
+    categoryButton = nil,
+    skinDescription = nil,
+    skinCharacter = nil,
+    refreshBusy = false
 }
 
 local function normalizeUnusualIconKey(value)
@@ -2144,25 +2147,65 @@ function cosmetic.replaceArray(cosmetics)
     return result or cosmetics
 end
 
-function cosmetic.refreshRig()
-    local success = false
+function cosmetic.getLiveRig()
+    local characterObject
+    local model
 
     pcall(function()
-        local loadout =
-            require(
-                ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild(
-                    "useLoadout"
-                )
-            )
-
-        if loadout
-            and loadout.Changed
-            and loadout.Changed.Fire
-        then
-            loadout.Changed:Fire()
-            success = true
-        end
+        characterObject =
+            __UI.CharacterService:GetLocalCharacter()
     end)
+
+    if not characterObject
+        or not characterObject.Rig
+    then
+        return nil
+    end
+
+    model =
+        characterObject.Model
+
+    if not model
+        or not model.Parent
+    then
+        return nil
+    end
+
+    local rigs =
+        workspace:FindFirstChild("Rigs")
+
+    if rigs
+        and not model:IsDescendantOf(rigs)
+    then
+        return nil
+    end
+
+    return characterObject.Rig
+end
+
+function cosmetic.refreshRig()
+    if cosmetic.refreshBusy then
+        return false
+    end
+
+    local rig =
+        cosmetic.getLiveRig()
+
+    if not rig then
+        return false
+    end
+
+    cosmetic.refreshBusy = true
+
+    local success = pcall(function()
+        --// Character.Rig.BuildRig() exits when Built is already true.
+        --// Reset only that internal flag and let the game's own
+        --// RegistryTermUpdated("Cosmetics") path rebuild the live rig.
+        rig.Built = false
+        rig:RegistryTermUpdated("Cosmetics")
+    end)
+
+    cosmetic.refreshBusy = false
 
     return success
 end
@@ -2213,16 +2256,109 @@ function cosmetic.installHook()
                             boombox = boombox
                         }
 
-                        return original(
-                            self,
-                            character,
-                            rigType,
-                            cosmetic.replaceArray(
-                                cosmetics
-                            ),
-                            gear,
-                            boombox
-                        )
+                        --// Preserve the non-accessory part of a custom
+                        --// HumanoidDescription. The game's SetRig rebuild
+                        --// otherwise restores its own skin whenever an
+                        --// accessory/cosmetic causes a rig rebuild.
+                        if cosmetic.enabled
+                            and character
+                            and character:IsA("Model")
+                        then
+                            pcall(function()
+                                local humanoid =
+                                    character:FindFirstChildOfClass(
+                                        "Humanoid"
+                                    )
+
+                                if humanoid then
+                                    cosmetic.skinDescription =
+                                        humanoid:GetAppliedDescription()
+                                    cosmetic.skinCharacter =
+                                        character
+                                end
+                            end)
+                        end
+
+                        local result =
+                            original(
+                                self,
+                                character,
+                                rigType,
+                                cosmetic.replaceArray(
+                                    cosmetics
+                                ),
+                                gear,
+                                boombox
+                            )
+
+                        if cosmetic.enabled
+                            and cosmetic.skinDescription
+                            and result
+                            and result:IsA("Model")
+                        then
+                            task.spawn(function()
+                                pcall(function()
+                                    local humanoid =
+                                        result:FindFirstChildOfClass(
+                                            "Humanoid"
+                                        )
+
+                                    if not humanoid then
+                                        return
+                                    end
+
+                                    local description =
+                                        humanoid:GetAppliedDescription()
+
+                                    --// Keep the new rig's accessory fields
+                                    --// intact so the cosmetic replacement is
+                                    --// not removed by the skin restoration.
+                                    local properties = {
+                                        "Face",
+                                        "Head",
+                                        "Torso",
+                                        "LeftArm",
+                                        "RightArm",
+                                        "LeftLeg",
+                                        "RightLeg",
+                                        "HeadColor",
+                                        "TorsoColor",
+                                        "LeftArmColor",
+                                        "RightArmColor",
+                                        "LeftLegColor",
+                                        "RightLegColor",
+                                        "Shirt",
+                                        "Pants",
+                                        "GraphicTShirt",
+                                        "BodyTypeScale",
+                                        "DepthScale",
+                                        "HeadScale",
+                                        "HeightScale",
+                                        "ProportionScale",
+                                        "WidthScale",
+                                        "ClimbAnimation",
+                                        "FallAnimation",
+                                        "IdleAnimation",
+                                        "JumpAnimation",
+                                        "RunAnimation",
+                                        "SwimAnimation"
+                                    }
+
+                                    for _, property in ipairs(properties) do
+                                        pcall(function()
+                                            description[property] =
+                                                cosmetic.skinDescription[property]
+                                        end)
+                                    end
+
+                                    humanoid:ApplyDescriptionAsync(
+                                        description
+                                    )
+                                end)
+                            end)
+                        end
+
+                        return result
                     end
                 )
         end)
@@ -3129,6 +3265,9 @@ end
 function cosmetic.cleanup()
     cosmetic.enabled = false
     cosmetic.closePicker()
+    cosmetic.refreshBusy = false
+    cosmetic.skinDescription = nil
+    cosmetic.skinCharacter = nil
     cosmetic.removeHook()
 
     pcall(function()
@@ -10506,7 +10645,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.1"
+            MainTitle.Text = "DeadEyes v1.2"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10528,7 +10667,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.1"
+            MainTitle.Text = "DeadEyes v1.2"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -10553,7 +10692,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.1"
+            MainTitle.Text = "DeadEyes v1.2"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10575,7 +10714,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.1"
+            MainTitle.Text = "DeadEyes v1.2"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -10600,7 +10739,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.1"
+            MainTitle.Text = "DeadEyes v1.2"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12681,9 +12820,8 @@ addConnection(
                         cosmetic.updateToggle
                     )
 
-                    -- Ask the game's own loadout listeners to
-                    -- rebuild the rig. SetRig is then called
-                    -- naturally and our hook swaps the IDs.
+                    -- Rebuild only the live round rig through
+                    -- the game's own Character.Rig path.
                     task.spawn(function()
                         pcall(
                             cosmetic.refreshRig
