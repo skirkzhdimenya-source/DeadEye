@@ -1708,9 +1708,7 @@ local unusualDestroyed = false
 local unusualReapplyBusy = false
 local unusualRuntime = {
     appliedRig = nil,
-    reapplyGeneration = 0,
-    clone = nil,
-    folder = nil
+    reapplyGeneration = 0
 }
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
@@ -2032,69 +2030,6 @@ end
 --// =========================================================
 --// APPLY UNUSUAL FX ONLY
 -- =========================================================
-local function startUnusualAnimations(
-    root
-)
-    if not root then
-        return
-    end
-
-    for _, controller in ipairs(
-        root:GetDescendants()
-    ) do
-
-        if controller:IsA(
-            "AnimationController"
-        ) then
-
-            local animator =
-                controller:FindFirstChildOfClass(
-                    "Animator"
-                )
-
-            if not animator then
-                pcall(function()
-                    animator =
-                        Instance.new(
-                            "Animator"
-                        )
-                    animator.Parent =
-                        controller
-                end)
-            end
-
-            if animator then
-
-                for _, animation in ipairs(
-                    controller:GetDescendants()
-                ) do
-
-                    if animation:IsA(
-                        "Animation"
-                    ) then
-
-                        pcall(function()
-                            local track =
-                                animator:LoadAnimation(
-                                    animation
-                                )
-
-                            if track then
-                                track:Play(0)
-                            end
-                        end)
-
-                    end
-
-                end
-
-            end
-
-        end
-
-    end
-end
-
 local function applyUnusualFX(
     id,
     visualRig,
@@ -2154,36 +2089,20 @@ local function applyUnusualFX(
         "DeadEyeUnusual_" ..
         tostring(id)
 
-    --// Keep the complete runtime structure of the cosmetic rig.
-    --// Some Unusuals animate through embedded client drivers,
-    --// while others use AnimationController/Animation objects.
-    --//
-    --// Client drivers are temporarily disabled while the clone
-    --// is assembled, then enabled after it is parented.
+    --// Remove executable code, but keep the complete
+    --// visual/animation structure of the cosmetic rig.
     for _, object in ipairs(
         clone:GetDescendants()
     ) do
 
-        if object:IsA("LocalScript")
-            or object:IsA("Script")
+        if object:IsA("Script")
+            or object:IsA("LocalScript")
+            or object:IsA("ModuleScript")
         then
 
-            local isClientDriver =
-                object:IsA("LocalScript")
-
-            if object:IsA("Script") then
-                pcall(function()
-                    isClientDriver =
-                        object.RunContext ==
-                        Enum.RunContext.Client
-                end)
-            end
-
-            if isClientDriver then
-                pcall(function()
-                    object.Disabled = true
-                end)
-            end
+            pcall(function()
+                object:Destroy()
+            end)
 
         elseif object:IsA("BasePart") then
 
@@ -2268,34 +2187,8 @@ local function applyUnusualFX(
             sourcePivot
         )
 
-    --// Keep the cosmetic clone completely outside all
-    --// character/rig hierarchies. This prevents ragdoll code
-    --// from touching its joints and prevents our clone from
-    --// becoming part of the player's physics assembly.
-    local folder =
-        unusualRuntime.folder
-
-    if not folder
-        or not folder.Parent
-    then
-        folder =
-            Instance.new("Folder")
-
-        folder.Name =
-            "DeadEyeUnusualVisuals"
-
-        folder.Parent =
-            workspace
-
-        unusualRuntime.folder =
-            folder
-    end
-
     clone.Parent =
-        folder
-
-    cloneRoot.Anchored =
-        true
+        visualRig
 
     pcall(function()
         clone:PivotTo(
@@ -2304,29 +2197,27 @@ local function applyUnusualFX(
         )
     end)
 
+    local weld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    weld.Name =
+        "DeadEyeUnusualRootWeld"
+
+    weld.Part0 =
+        targetRoot
+
+    weld.Part1 =
+        cloneRoot
+
+    weld.Parent =
+        clone
+
     tagUnusualFX(
         clone,
         id
     )
-
-    startUnusualAnimations(
-        clone
-    )
-
-    unusualRuntime.clone =
-        clone
-
-    pcall(function()
-        clone:SetAttribute(
-            "DeadEyeRootOffset",
-            pivotOffset
-        )
-    end)
-
-    --// Do not enable embedded scripts here.
-    --// A script inside the cosmetic clone could be picked up by
-    --// the game's character/ragdoll lifecycle and corrupt joints.
-    --// AnimationController tracks are started separately above.
 
     return true
 end
@@ -2336,52 +2227,11 @@ end
 -- =========================================================
 local function removeOurUnusualFX()
     local removed = 0
-
-    if unusualRuntime.clone then
-        pcall(function()
-            if unusualRuntime.clone.Parent then
-                unusualRuntime.clone:Destroy()
-                removed += 1
-            end
-        end)
-        unusualRuntime.clone = nil
-    end
-
-    local folder =
-        unusualRuntime.folder
-
-    if folder
-        and folder.Parent
-    then
-        for _, object in ipairs(
-            folder:GetDescendants()
-        ) do
-            local marked = false
-
-            pcall(function()
-                marked =
-                    object:GetAttribute(
-                        "DeadEyeUnusualFX"
-                    ) == true
-            end)
-
-            if marked then
-                pcall(function()
-                    object:Destroy()
-                    removed += 1
-                end)
-            end
-        end
-    end
-
     local roots = {
         getUnusualVisualRig(),
-        getUnusualPlayerCharacter(),
-        unusualRuntime.folder
+        getUnusualPlayerCharacter()
     }
-
     local seen = {}
-
     for _, root in ipairs(
         roots
     ) do
@@ -2390,19 +2240,17 @@ local function removeOurUnusualFX()
         then
             seen[root] =
                 true
-
             for _, object in ipairs(
                 root:GetDescendants()
             ) do
-                local marked = false
-
+                local marked =
+                    false
                 pcall(function()
                     marked =
                         object:GetAttribute(
                             "DeadEyeUnusualFX"
                         ) == true
                 end)
-
                 if marked then
                     pcall(function()
                         object:Destroy()
@@ -2412,8 +2260,8 @@ local function removeOurUnusualFX()
             end
         end
     end
-
-    return removed
+    if removed > 0 then
+            end
 end
 --// =========================================================
 --// ORIGINAL SIGNATURE
@@ -3099,49 +2947,6 @@ addUnusualConnection(
 
             updateUnusualPOV()
 
-            local activeClone =
-                unusualRuntime.clone
-
-            if activeClone
-                and activeClone.Parent
-            then
-
-                local rig =
-                    unusualRuntime.appliedRig
-
-                local target =
-                    rig
-                    and rig:FindFirstChild(
-                        "HumanoidRootPart"
-                    )
-
-                if target then
-                    local offset
-
-                    pcall(function()
-                        offset =
-                            activeClone:GetAttribute(
-                                "DeadEyeRootOffset"
-                            )
-                    end)
-
-                    if typeof(offset) == "CFrame" then
-                        pcall(function()
-                            --// Move the entire cosmetic model instead
-                            --// of only its root. This keeps every
-                            --// disconnected/animated part attached
-                            --// to the character while preserving
-                            --// its own internal motion.
-                            activeClone:PivotTo(
-                                target.CFrame
-                                * offset
-                            )
-                        end)
-                    end
-                end
-
-            end
-
             if unusualEnabled
                 and not unusualReapplyBusy
             then
@@ -3151,36 +2956,16 @@ addUnusualConnection(
 
                 if rig then
 
-                    if unusualRuntime.appliedRig ~= rig then
-                        unusualActive = false
-                        reapplyUnusual()
-                    else
-                        local expected =
-                            rig:FindFirstChild(
-                                "DeadEyeUnusual_" ..
-                                tostring(
-                                    unusualSlot.replaceId
-                                )
+                    local expected =
+                        rig:FindFirstChild(
+                            "DeadEyeUnusual_" ..
+                            tostring(
+                                unusualSlot.replaceId
                             )
+                        )
 
-                        if not expected then
-                            local playerCharacter =
-                                getUnusualPlayerCharacter()
-
-                            if playerCharacter then
-                                expected =
-                                    playerCharacter:FindFirstChild(
-                                        "DeadEyeUnusual_" ..
-                                        tostring(
-                                            unusualSlot.replaceId
-                                        )
-                                    )
-                            end
-                        end
-
-                        if not expected then
-                            reapplyUnusual()
-                        end
+                    if not expected then
+                        reapplyUnusual()
                     end
 
                 end
@@ -6860,13 +6645,6 @@ local function cleanupUnusual()
         false
     unusualRuntime.reapplyGeneration += 1
     unusualRuntime.appliedRig = nil
-    unusualRuntime.clone = nil
-    if unusualRuntime.folder then
-        pcall(function()
-            unusualRuntime.folder:Destroy()
-        end)
-    end
-    unusualRuntime.folder = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
     disconnectUnusualConnections()
