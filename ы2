@@ -11608,6 +11608,45 @@ local function restoreNativeEmoteWheel()
     )
 end
 
+local function restoreNativeEmoteWheelPart(
+    wheel
+)
+    if not wheel then
+        return
+    end
+
+    local restoreList = {}
+
+    for nativeSlot, state in pairs(
+        nativeWheelStates
+    ) do
+        if nativeSlot
+            and nativeSlot:IsDescendantOf(
+                wheel
+            )
+        then
+            table.insert(
+                restoreList,
+                {
+                    slot = nativeSlot,
+                    state = state
+                }
+            )
+        end
+    end
+
+    for _, entry in ipairs(
+        restoreList
+    ) do
+        pcall(function()
+            restoreNativeEmoteSlot(
+                entry.slot,
+                entry.state
+            )
+        end)
+    end
+end
+
 local function applyNativeEmoteSlot(
     nativeSlot,
     slot
@@ -11721,9 +11760,19 @@ local function syncNativeEmoteWheel()
     -- Sync both native wheels:
     -- Wheel  = first/default six emotes
     -- Wheel2 = second six emotes shown with Q
+    --
+    -- Only the currently visible wheel is swapped.
+    -- A closed wheel is restored to its original names/previews.
     for _, wheel in ipairs(
         wheels
     ) do
+        if not wheel.Visible then
+            restoreNativeEmoteWheelPart(
+                wheel
+            )
+            continue
+        end
+
         -- Native wheel has six visible emote slots.
         for i = 1, 6 do
             local nativeSlot =
