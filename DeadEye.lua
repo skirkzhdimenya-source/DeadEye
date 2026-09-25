@@ -10439,24 +10439,26 @@ local function createEmotePreview(
 end
 --// =========================================================
 --// NativeWheel module
+getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT = {
+    LocalPlayer = LocalPlayer,
+    genv = genv,
+    SLOT_COUNT = SLOT_COUNT,
+    slots = slots,
+    prepareOriginalModule = prepareOriginalModule,
+    prepareReplaceModule = prepareReplaceModule,
+    getEmoteName = getEmoteName,
+    createEmotePreview = createEmotePreview
+}
+
 local NativeWheel =
     loadstring(
         game:HttpGet(
             "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_NativeWheel.lua"
         ),
         "@DeadEye_NativeWheel"
-    )(
-        {
-            LocalPlayer = LocalPlayer,
-            genv = genv,
-            SLOT_COUNT = SLOT_COUNT,
-            slots = slots,
-            prepareOriginalModule = prepareOriginalModule,
-            prepareReplaceModule = prepareReplaceModule,
-            getEmoteName = getEmoteName,
-            createEmotePreview = createEmotePreview
-        }
-    )
+    )()
+
+getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT = nil
 --// =========================================================
 --// REBUILD PICKER
 --// =========================================================
