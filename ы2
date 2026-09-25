@@ -10717,6 +10717,160 @@ __UI.PickerGrid.SortOrder =
 __UI.PickerGrid.Parent =
     PickerScroll
 --// =========================================================
+--// EMOTE VIEWPORT PREVIEW
+--// Локальная копия native preview без CreateViewport()
+--// =========================================================
+local function createEmotePreview(
+    itemModule,
+    viewport
+)
+    if not itemModule
+        or not viewport
+    then
+        return false
+    end
+
+    local success, result =
+        pcall(function()
+
+            local oldWorldModel =
+                viewport:FindFirstChildOfClass(
+                    "WorldModel"
+                )
+
+            if oldWorldModel then
+                oldWorldModel:Destroy()
+            end
+
+            local oldCamera =
+                viewport.CurrentCamera
+
+            if oldCamera then
+                oldCamera:Destroy()
+                viewport.CurrentCamera =
+                    nil
+            end
+
+            local rigTemplate
+            local isR15 = false
+
+            pcall(function()
+                isR15 =
+                    __UI.ClientItemService:IsPlayerR15()
+            end)
+
+            if isR15 then
+                rigTemplate =
+                    ReplicatedStorage.Assets.Items
+                        .VisualRigR15Emote
+            else
+                rigTemplate =
+                    ReplicatedStorage.Assets.Items
+                        .VisualRigClassic
+            end
+
+            if not rigTemplate then
+                error(
+                    "Visual rig template not found"
+                )
+            end
+
+            local rig =
+                rigTemplate:Clone()
+
+            if not rig.PrimaryPart then
+                rig.PrimaryPart =
+                    rig:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+                    or rig:FindFirstChildWhichIsA(
+                        "BasePart",
+                        true
+                    )
+            end
+
+            if not rig.PrimaryPart then
+                rig:Destroy()
+                error(
+                    "Visual rig has no PrimaryPart"
+                )
+            end
+
+            local worldModel =
+                Instance.new(
+                    "WorldModel"
+                )
+
+            worldModel.Parent =
+                viewport
+
+            rig.Parent =
+                worldModel
+
+            local camera =
+                Instance.new(
+                    "Camera"
+                )
+
+            camera.FieldOfView =
+                30
+
+            camera.CFrame =
+                CFrame.new(
+                    0,
+                    0.34,
+                    0
+                )
+                * CFrame.new(
+                    (
+                        rig.PrimaryPart.CFrame
+                        * CFrame.new(
+                            4.25,
+                            1.7,
+                            -8.5
+                        )
+                    ).Position,
+                    rig.PrimaryPart.CFrame.Position
+                )
+
+            camera.Parent =
+                worldModel
+
+            viewport.CurrentCamera =
+                camera
+
+            local emoteSuccess, emoteResult =
+                pcall(function()
+                    return __UI.EmoteService:SetEmote(
+                        rig,
+                        itemModule,
+                        true
+                    )
+                end)
+
+            if not emoteSuccess then
+                rig:Destroy()
+                error(
+                    tostring(
+                        emoteResult
+                    )
+                )
+            end
+
+            return true
+        end)
+
+    if not success then
+        warn(
+            "[DeadEye] Emote preview failed:",
+            result
+        )
+    end
+
+    return success
+end
+
+--// =========================================================
 --// REBUILD PICKER
 --// =========================================================
 local function rebuildPicker()
@@ -10929,12 +11083,10 @@ local function rebuildPicker()
             viewportCorner.Parent =
                 viewport
 
-            pcall(function()
-                __UI.ClientItemService:CreateViewport(
-                    data.module,
-                    viewport
-                )
-            end)
+            createEmotePreview(
+                data.module,
+                viewport
+            )
 
             --// GLASS OVERLAY
             local glass =
