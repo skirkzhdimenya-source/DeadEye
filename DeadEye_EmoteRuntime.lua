@@ -350,7 +350,7 @@ local function startReplacement(
         --// Даём штатному коду игры создать оригинал
         task.wait()
         if not genv.EMOTE_SWAPPER_RUNNING
-            or not enabled then
+            or not isEnabled() then
             replacementRunning = false
             return
         end
@@ -398,7 +398,7 @@ local function startReplacement(
         end
         if myGeneration ~=
             replacementGeneration
-            or not enabled then
+            or not isEnabled() then
             stopEmoteObject(
                 replacement
             )
