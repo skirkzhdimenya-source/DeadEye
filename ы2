@@ -2577,7 +2577,7 @@ unusualRuntime.addAnimationLink = function(
         )
 
     local animatedRoot =
-        findUnusualRelative(
+        unusualRuntime.findRelative(
             animatedSource,
             sourcePart
         )
@@ -3153,7 +3153,7 @@ end
 --// REMOVE OUR FX
 -- =========================================================
 local function removeOurUnusualFX()
-    destroyUnusualAnimationSource()
+    unusualRuntime.destroyAnimationSource()
 
     local removed = 0
     local roots = {
