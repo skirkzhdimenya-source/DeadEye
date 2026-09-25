@@ -723,6 +723,7 @@ local connections = {}
 --// not GUI Instances. The game can recreate Emote1..Emote6;
 --// logical state survives those recreations and repeated ON/OFF.
 local nativeWheelStates = {}
+local nativeWheelRestoreDone = false
 --// =========================================================
 --// CACHE
 --// =========================================================
@@ -11561,10 +11562,15 @@ local function restoreNativeEmoteSlot(
         nativeSlot
 end
 
-local function restoreNativeEmoteWheel()
-    -- Restore every known logical slot. This intentionally does
-    -- NOT clear nativeWheelStates, because the next ON must still
-    -- know which original belongs to each Wheel/EmoteN position.
+local function restoreNativeEmoteWheel(
+    force
+)
+    if nativeWheelRestoreDone
+        and not force
+    then
+        return
+    end
+
     local wheels =
         getNativeEmoteWheels()
 
@@ -11601,12 +11607,17 @@ local function restoreNativeEmoteWheel()
             end
         end
     end
+
+    nativeWheelRestoreDone = true
 end
+
 
 local function applyNativeEmoteSlot(
     nativeSlot,
     slot
 )
+    nativeWheelRestoreDone = false
+
     if not nativeSlot
         or not slot
         or not slot.originalId
@@ -12487,6 +12498,8 @@ addConnection(
             end
             enabled =
                 true
+            nativeWheelRestoreDone =
+                false
             lastRegistryEmote =
                 0
             syncNativeEmoteWheel()
@@ -13177,7 +13190,7 @@ local function cleanup()
         return
     end
 
-    restoreNativeEmoteWheel()
+    restoreNativeEmoteWheel(true)
 
     --// Stop every active loop before doing any cleanup that may yield.
     cleaned = true
