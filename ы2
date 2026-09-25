@@ -5437,14 +5437,14 @@ unusualPage.Size =
         1,
         -92,
         1,
-        -76
+        -56
     )
 unusualPage.Position =
     UDim2.new(
         0,
         82,
         0,
-        68
+        48
     )
 unusualPage.BackgroundColor3 =
     Color3.fromRGB(
@@ -7222,14 +7222,14 @@ mainPage.Size =
         1,
         -92,
         1,
-        -76
+        -56
     )
 mainPage.Position =
     UDim2.new(
         0,
         82,
         0,
-        68
+        48
     )
 mainPage.BackgroundColor3 =
     Color3.fromRGB(
@@ -7741,14 +7741,14 @@ others.page.Size =
         1,
         -92,
         1,
-        -76
+        -56
     )
 others.page.Position =
     UDim2.new(
         0,
         82,
         0,
-        68
+        48
     )
 others.page.BackgroundColor3 =
     Color3.fromRGB(
@@ -8766,15 +8766,15 @@ categoryBar.Size =
     UDim2.new(
         0,
         66,
-        0,
-        147
+        1,
+        -56
     )
 categoryBar.Position =
     UDim2.new(
         0,
         8,
         0,
-        68
+        48
     )
 categoryBar.BackgroundColor3 =
     Color3.fromRGB(
@@ -9301,14 +9301,14 @@ SlotsScroll.Size =
         1,
         -92,
         1,
-        -76
+        -56
     )
 SlotsScroll.Position =
     UDim2.new(
         0,
         82,
         0,
-        68
+        48
     )
 __UI.SlotsCorner =
     Instance.new("UICorner")
