@@ -1706,6 +1706,10 @@ others.fieldBoxes = {}
 local unusualConnections = {}
 local unusualDestroyed = false
 local unusualReapplyBusy = false
+local unusualRuntime = {
+    appliedRig = nil,
+    reapplyGeneration = 0
+}
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
 --// =========================================================
@@ -2752,28 +2756,76 @@ local function reapplyUnusual()
     end
 
     unusualReapplyBusy = true
+    unusualRuntime.reapplyGeneration += 1
+
+    local generation =
+        unusualRuntime.reapplyGeneration
 
     task.spawn(function()
 
-        if not unusualEnabled
-            or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
-        then
-            unusualReapplyBusy = false
-            return
-        end
+        --// Wait for the game to finish rebuilding the new rig.
+        for attempt = 1, 15 do
 
-        if unusualActive then
-            restoreUnusual()
-            task.wait()
-        end
+            if not unusualEnabled
+                or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
+                or generation ~= unusualRuntime.reapplyGeneration
+            then
+                break
+            end
 
-        local ok =
-            pcall(function()
-                activateUnusual()
-            end)
+            local visualRig =
+                getUnusualVisualRig()
 
-        if not ok then
-            unusualActive = false
+            local playerCharacter =
+                getUnusualPlayerCharacter()
+
+            local ready = false
+
+            if visualRig
+                and playerCharacter
+            then
+
+                local humanoid =
+                    visualRig:FindFirstChildOfClass(
+                        "Humanoid"
+                    )
+
+                local root =
+                    visualRig:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+
+                ready =
+                    humanoid ~= nil
+                    and root ~= nil
+                    and root:IsA("BasePart")
+            end
+
+            if ready then
+
+                --// The previous round's clone is already gone.
+                --// Do not restore the original here: activate directly
+                --// against the freshly rebuilt character.
+                unusualActive = false
+                removeOurUnusualFX()
+
+                local ok, result =
+                    pcall(function()
+                        return activateUnusual()
+                    end)
+
+                if ok
+                    and result == true
+                then
+                    unusualRuntime.appliedRig =
+                        visualRig
+                    break
+                end
+
+            end
+
+            task.wait(0.35)
+
         end
 
         unusualReapplyBusy = false
@@ -3027,7 +3079,6 @@ addUnusualConnection(
             updateUnusualPOV()
 
             if unusualEnabled
-                and unusualActive
                 and not unusualReapplyBusy
             then
 
@@ -3036,31 +3087,36 @@ addUnusualConnection(
 
                 if rig then
 
-                    local expected =
-                        rig:FindFirstChild(
-                            "DeadEyeUnusual_" ..
-                            tostring(
-                                unusualSlot.replaceId
-                            )
-                        )
-
-                    if not expected then
-                        local playerCharacter =
-                            getUnusualPlayerCharacter()
-
-                        if playerCharacter then
-                            expected =
-                                playerCharacter:FindFirstChild(
-                                    "DeadEyeUnusual_" ..
-                                    tostring(
-                                        unusualSlot.replaceId
-                                    )
-                                )
-                        end
-                    end
-
-                    if not expected then
+                    if unusualRuntime.appliedRig ~= rig then
+                        unusualActive = false
                         reapplyUnusual()
+                    else
+                        local expected =
+                            rig:FindFirstChild(
+                                "DeadEyeUnusual_" ..
+                                tostring(
+                                    unusualSlot.replaceId
+                                )
+                            )
+
+                        if not expected then
+                            local playerCharacter =
+                                getUnusualPlayerCharacter()
+
+                            if playerCharacter then
+                                expected =
+                                    playerCharacter:FindFirstChild(
+                                        "DeadEyeUnusual_" ..
+                                        tostring(
+                                            unusualSlot.replaceId
+                                        )
+                                    )
+                            end
+                        end
+
+                        if not expected then
+                            reapplyUnusual()
+                        end
                     end
 
                 end
@@ -6738,6 +6794,8 @@ local function cleanupUnusual()
     end)
     unusualEnabled =
         false
+    unusualRuntime.reapplyGeneration += 1
+    unusualRuntime.appliedRig = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
     disconnectUnusualConnections()
@@ -7787,6 +7845,8 @@ addConnection(
                     if activateUnusual() then
                         unusualEnabled =
                             true
+                        unusualRuntime.appliedRig =
+                            getUnusualVisualRig()
                         genv.UNUSUAL_SWAPPER_ENABLED =
                             true
                     end
