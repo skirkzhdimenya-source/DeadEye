@@ -1208,13 +1208,26 @@ local function stopCustomEmote()
     replacementGeneration =
         replacementGeneration + 1
     replacementRunning = false
+
+    local object =
+        getCharacterObject()
+
     if currentCustomEmote then
+        if object
+            and object.Emote
+            == currentCustomEmote
+        then
+            object.Emote = nil
+        end
+
         stopEmoteObject(
             currentCustomEmote
         )
+
         currentCustomEmote =
             nil
     end
+
     currentOriginalId = nil
     currentReplaceId = nil
 end
@@ -7652,7 +7665,6 @@ local mainJump = {
     hideUIHotkeyName = "H",
     lastJump = 0,
     capturing = nil,
-    needsInputRearm = false,
     character = nil,
     humanoid = nil,
     root = nil,
@@ -7741,8 +7753,6 @@ function mainJump.setEnabled(state)
         state and true or false
 
     if mainJump.enabled then
-        mainJump.needsInputRearm = false
-
         if mainJump.character
             and mainJump.humanoid
             and mainJump.humanoid.Parent
@@ -7767,7 +7777,6 @@ function mainJump.setEnabled(state)
             end)
         end
     else
-        mainJump.needsInputRearm = true
         mainJump.destroySensors()
 
         if mainJump.humanoid
@@ -8557,33 +8566,6 @@ mainConnect(
             end
 
             if input.KeyCode
-                == Enum.KeyCode.Space
-                and not mainJump.enabled
-                and mainJump.needsInputRearm
-            then
-                mainJump.needsInputRearm = false
-
-                if mainJump.humanoid
-                    and mainJump.humanoid.Parent
-                then
-                    pcall(function()
-                        mainJump.humanoid.Jump = false
-                    end)
-
-                    task.defer(function()
-                        if mainJump.humanoid
-                            and mainJump.humanoid.Parent
-                            and not mainJump.enabled
-                        then
-                            pcall(function()
-                                mainJump.humanoid.Jump = true
-                            end)
-                        end
-                    end)
-                end
-            end
-
-            if input.KeyCode
                 == mainFindKeyCode(
                     mainJump.hotkeyName
                 )
@@ -8604,18 +8586,25 @@ mainConnect(
     )
 )
 mainConnect(
-    UserInputService.InputEnded:Connect(
-        function(input)
-            if input.KeyCode
-                == Enum.KeyCode.Space
-                and not mainJump.enabled
-                and mainJump.humanoid
-                and mainJump.humanoid.Parent
+    UserInputService.JumpRequest:Connect(
+        function()
+            if mainJump.enabled
+                or not genv.DEADEYE_MAIN_RUNNING
+                or not mainJump.humanoid
+                or not mainJump.humanoid.Parent
             then
-                pcall(function()
-                    mainJump.humanoid.Jump = false
-                end)
+                return
             end
+
+            pcall(function()
+                mainJump.humanoid.Jump = true
+
+                if mainJump.canJump() then
+                    mainJump.humanoid:ChangeState(
+                        Enum.HumanoidStateType.Jumping
+                    )
+                end
+            end)
         end
     )
 )
@@ -12694,42 +12683,77 @@ local function cleanup()
         return
     end
 
-    pcall(function()
-        saveWindowState()
-    end)
+    --// Stop every active loop before doing any cleanup that may yield.
+    cleaned = true
+    genv.EMOTE_SWAPPER_RUNNING = false
+    genv.DEADEYE_MAIN_RUNNING = false
+    genv.DEADEYE_UNUSUAL_POV_RUNNING = false
+    genv.DEADEYE_PORTRAIT_RUNNING = false
+
+    enabled = false
+    replacementGeneration =
+        replacementGeneration + 1
+    replacementRunning =
+        false
+
+    local activeObject =
+        getCharacterObject()
+
+    if activeObject
+        and currentCustomEmote
+        and activeObject.Emote
+            == currentCustomEmote
+    then
+        pcall(function()
+            activeObject.Emote = nil
+        end)
+    end
+
+    local emoteToStop =
+        currentCustomEmote
+
+    currentCustomEmote = nil
+    currentOriginalId = nil
+    currentReplaceId = nil
+
+    if emoteToStop then
+        task.spawn(function()
+            stopEmoteObject(
+                emoteToStop
+            )
+        end)
+    end
+
+    disconnectAll()
 
     pcall(function()
         if genv.UNUSUAL_SWAPPER_CLEANUP then
             genv.UNUSUAL_SWAPPER_CLEANUP()
         end
     end)
+
     pcall(function()
         if genv.DEADEYE_PORTRAIT_CLEANUP then
             genv.DEADEYE_PORTRAIT_CLEANUP()
         end
     end)
-    cleaned = true
-    genv.EMOTE_SWAPPER_RUNNING =
-        false
-    enabled = false
-    replacementGeneration =
-        replacementGeneration + 1
-    replacementRunning =
-        false
-    if currentCustomEmote then
-        stopEmoteObject(
-            currentCustomEmote
-        )
-        currentCustomEmote =
-            nil
-    end
+
     pcall(function()
-        Picker.Visible = false
+        saveWindowState()
     end)
-    disconnectAll()
+
     pcall(function()
-        ScreenGui:Destroy()
+        if Picker then
+            Picker.Visible = false
+        end
     end)
+
+    pcall(function()
+        if ScreenGui then
+            ScreenGui:Destroy()
+        end
+    end)
+
     genv.EMOTE_SWAPPER_CLEANUP =
         nil
 end
