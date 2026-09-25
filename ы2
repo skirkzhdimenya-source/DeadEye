@@ -2659,6 +2659,15 @@ unusualRuntime.createAnimationSource = function(
                     object:Destroy()
                 end)
 
+            elseif object:IsA("BasePart") then
+
+                --// The copied driver clone has no joints, so
+                --// keep its parts out of physics. The client
+                --// script itself is still free to move them.
+                pcall(function()
+                    object.Anchored = true
+                end)
+
             end
 
         end
