@@ -9944,7 +9944,7 @@ local function rebuildPicker()
                 Status.Text =
                     "Slot "
                     .. tostring(activePickerSlot)
-                    .. " очищен"
+                    .. " cleared"
 
                 Picker.Visible = false
                 activePickerSlot = nil
@@ -10083,7 +10083,7 @@ local function rebuildPicker()
                         .. tostring(
                             activePickerSlot
                         )
-                        .. " настроен"
+                        .. " configured"
                     Picker.Visible =
                         false
                     activePickerSlot =
