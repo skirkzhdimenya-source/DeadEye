@@ -1711,7 +1711,8 @@ local unusualRuntime = {
     reapplyGeneration = 0,
     animationSource = nil,
     animationLinks = {},
-    visualMirrors = {}
+    visualMirrors = {},
+    specialCircling = nil
 }
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
@@ -2353,6 +2354,16 @@ unusualRuntime.destroyAnimationSource = function()
     table.clear(
         unusualRuntime.visualMirrors
     )
+
+    if unusualRuntime.specialCircling
+        and unusualRuntime.specialCircling.model
+    then
+        pcall(function()
+            unusualRuntime.specialCircling.model:Destroy()
+        end)
+    end
+
+    unusualRuntime.specialCircling = nil
 end
 
 unusualRuntime.findRelative = function(
@@ -2519,6 +2530,207 @@ unusualRuntime.startAnimations = function(
     end
 
     return started
+end
+
+unusualRuntime.installCirclingEclipse = function(
+    cosmeticRig,
+    id,
+    playerCharacter
+)
+    unusualRuntime.destroyAnimationSource()
+
+    if not cosmeticRig then
+        return false
+    end
+
+    local cosmeticRoot =
+        cosmeticRig:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not cosmeticRoot
+        or not cosmeticRoot:IsA("BasePart")
+    then
+        return false
+    end
+
+    local sourceSpins =
+        cosmeticRoot:FindFirstChild(
+            "spins"
+        )
+
+    if not sourceSpins
+        or not sourceSpins:IsA("Model")
+    then
+        return false
+    end
+
+    local targetRoot
+
+    if playerCharacter then
+        targetRoot =
+            playerCharacter:FindFirstChild(
+                "HumanoidRootPart"
+            )
+    end
+
+    if not targetRoot then
+        local visualRig =
+            getUnusualVisualRig()
+
+        if visualRig then
+            targetRoot =
+                visualRig:FindFirstChild(
+                    "HumanoidRootPart"
+                )
+        end
+    end
+
+    if not targetRoot
+        or not targetRoot:IsA("BasePart")
+    then
+        return false
+    end
+
+    local clone
+
+    local ok =
+        pcall(function()
+            clone =
+                sourceSpins:Clone()
+        end)
+
+    if not ok
+        or not clone
+    then
+        return false
+    end
+
+    clone.Name =
+        "DeadEyeUnusualCircling_" ..
+        tostring(id)
+
+    --// The original spins model is already a complete
+    --// self-contained mini-rig. Keep its Script,
+    --// AnimationController, Motor6D and Weld intact.
+    for _, object in ipairs(
+        clone:GetDescendants()
+    ) do
+
+        if object:IsA("BasePart") then
+
+            pcall(function()
+                object.CanCollide = false
+                object.CanTouch = false
+                object.CanQuery = false
+                object.Massless = true
+                object.CastShadow = false
+            end)
+
+        elseif object:IsA("Script")
+            or object:IsA("LocalScript")
+        then
+
+            pcall(function()
+                object.Disabled = true
+            end)
+
+        end
+
+    end
+
+    local root =
+        clone:FindFirstChild(
+            "HRP"
+        )
+
+    if not root
+        or not root:IsA("BasePart")
+    then
+        pcall(function()
+            clone:Destroy()
+        end)
+        return false
+    end
+
+    local relative =
+        cosmeticRoot.CFrame:ToObjectSpace(
+            sourceSpins:FindFirstChild("HRP").CFrame
+        )
+
+    root.CFrame =
+        targetRoot.CFrame *
+        relative
+
+    root.Anchored = true
+
+    for _, object in ipairs(
+        clone:GetDescendants()
+    ) do
+
+        if object:IsA("BasePart")
+            and object.Name ~= "HRP"
+        then
+
+            pcall(function()
+                object.Anchored = false
+            end)
+
+        end
+
+    end
+
+    local folder =
+        workspace:FindFirstChild(
+            "DeadEyeUnusualVisuals"
+        )
+
+    if not folder then
+        folder =
+            Instance.new("Folder")
+
+        folder.Name =
+            "DeadEyeUnusualVisuals"
+
+        folder.Parent =
+            workspace
+    end
+
+    clone.Parent =
+        folder
+
+    --// Mark this one visible instance so the normal
+    --// cleanup path removes it completely.
+    tagUnusualFX(
+        clone,
+        id
+    )
+
+    --// Start the actual client runtime exactly as the
+    --// isolated diagnostic proved works.
+    for _, object in ipairs(
+        clone:GetDescendants()
+    ) do
+
+        if object:IsA("Script")
+            or object:IsA("LocalScript")
+        then
+
+            pcall(function()
+                object.Disabled = false
+            end)
+
+        end
+
+    end
+
+    unusualRuntime.specialCircling = {
+        model = clone,
+        root = root,
+        offset = relative
+    }
+
+    return true
 end
 
 unusualRuntime.createAnimationSource = function(
@@ -3054,12 +3266,6 @@ unusualRuntime.updateAnimatedParts = function()
     local source =
         unusualRuntime.animationSource
 
-    if not source
-        or not source.Parent
-    then
-        return
-    end
-
     local targetRig =
         getUnusualVisualRig()
 
@@ -3082,6 +3288,26 @@ unusualRuntime.updateAnimatedParts = function()
                     "HumanoidRootPart"
                 )
         end
+    end
+
+    if unusualRuntime.specialCircling
+        and unusualRuntime.specialCircling.root
+        and unusualRuntime.specialCircling.root.Parent
+        and targetRoot
+    then
+
+        pcall(function()
+            unusualRuntime.specialCircling.root.CFrame =
+                targetRoot.CFrame *
+                unusualRuntime.specialCircling.offset
+        end)
+
+    end
+
+    if not source
+        or not source.Parent
+    then
+        return
     end
 
     local sourceRoot =
@@ -3683,6 +3909,14 @@ local function applyUnusualFX(
 
         return false
 
+    end
+
+    if tonumber(id) == 1266 then
+        return unusualRuntime.installCirclingEclipse(
+            cosmeticRig,
+            id,
+            playerCharacter
+        )
     end
 
     local installed =
