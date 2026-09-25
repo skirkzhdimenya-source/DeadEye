@@ -2741,8 +2741,75 @@ unusualRuntime.installCirclingEclipse = function(
         id
     )
 
-    --// Start the actual client runtime exactly as the
-    --// isolated diagnostic proved works.
+    --// Start the exact animation that the isolated
+    --// diagnostic proved works. The animation is stored
+    --// under spins.Script, while the AnimationController
+    --// is a sibling of that Script.
+    local specialController =
+        clone:FindFirstChild(
+            "AnimationController"
+        )
+
+    local specialAnimator =
+        specialController
+        and specialController:FindFirstChildOfClass(
+            "Animator"
+        )
+
+    if specialController
+        and not specialAnimator
+    then
+
+        pcall(function()
+            specialAnimator =
+                Instance.new(
+                    "Animator"
+                )
+
+            specialAnimator.Parent =
+                specialController
+        end)
+
+    end
+
+    local specialScript =
+        clone:FindFirstChild(
+            "Script"
+        )
+
+    local specialAnimation =
+        specialScript
+        and specialScript:FindFirstChild(
+            "Animation"
+        )
+
+    if specialAnimator
+        and specialAnimation
+    then
+
+        pcall(function()
+
+            local track =
+                specialAnimator:LoadAnimation(
+                    specialAnimation
+                )
+
+            if track then
+                track.Looped = true
+                track:Play(0)
+                clone:SetAttribute(
+                    "DeadEyeSpecialAnimationPlaying",
+                    true
+                )
+            end
+
+        end)
+
+    end
+
+    --// Keep the copied client script disabled. The direct
+    --// animation above is the known-working movement path
+    --// and avoids another runtime dependency.
     for _, object in ipairs(
         clone:GetDescendants()
     ) do
@@ -2762,7 +2829,8 @@ unusualRuntime.installCirclingEclipse = function(
     unusualRuntime.specialCircling = {
         model = clone,
         root = root,
-        offset = relative
+        offset = relative,
+        track = nil
     }
 
     return true
@@ -6559,6 +6627,12 @@ function mainJump.contact(hit)
     mainJump.jump(hit)
 end
 function mainJump.createSensors(char)
+    if not char
+        or not char:IsA("Model")
+    then
+        return
+    end
+
     mainJump.destroySensors()
     mainJump.character = char
     mainJump.humanoid =
