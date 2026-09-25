@@ -10943,93 +10943,426 @@ local function createEmotePreview(
                 end
             end
 
-            local animation
-            local fallbackAnimation
+            local animationIds = {}
+            local animationIdSeen = {}
 
-            local descendants =
-                itemModule:GetDescendants()
+            local function addAnimationId(
+                value,
+                priority
+            )
+                if value == nil then
+                    return
+                end
 
+                local text =
+                    tostring(
+                        value
+                    )
+
+                local id =
+                    string.match(
+                        text,
+                        "%d+"
+                    )
+
+                if not id then
+                    return
+                end
+
+                local numeric =
+                    tonumber(
+                        id
+                    )
+
+                if not numeric
+                    or numeric <= 0
+                then
+                    return
+                end
+
+                if not animationIdSeen[
+                    id
+                ] then
+                    animationIdSeen[id] =
+                        true
+
+                    table.insert(
+                        animationIds,
+                        {
+                            id = id,
+                            priority =
+                                priority
+                                or 100
+                        }
+                    )
+                end
+            end
+
+            -- 1) Real Animation instances.
             for _, obj in ipairs(
-                descendants
+                itemModule:GetDescendants()
             ) do
                 if obj:IsA("Animation") then
-                    fallbackAnimation =
-                        fallbackAnimation
-                        or obj
-
                     local name =
                         string.lower(
                             obj.Name
                         )
 
-                    local r15Name =
-                        string.find(
-                            name,
-                            "r15",
-                            1,
-                            true
-                        )
+                    local priority = 100
 
-                    local r6Name =
-                        string.find(
+                    if string.find(
+                        name,
+                        "r6",
+                        1,
+                        true
+                    ) then
+                        priority = 1
+                    elseif string.find(
+                        name,
+                        "r15",
+                        1,
+                        true
+                    ) then
+                        priority = 2
+                    elseif string.find(
+                        name,
+                        "animation",
+                        1,
+                        true
+                    ) then
+                        priority = 10
+                    end
+
+                    if not isR15
+                        and string.find(
                             name,
                             "r6",
                             1,
                             true
                         )
+                    then
+                        priority = 0
+                    elseif isR15
+                        and string.find(
+                            name,
+                            "r15",
+                            1,
+                            true
+                        )
+                    then
+                        priority = 0
+                    end
 
-                    if isR15
-                        and r15Name
+                    addAnimationId(
+                        obj.AnimationId,
+                        priority
+                    )
+                end
+            end
+
+            -- 2) Number/String values and attributes whose
+            -- names explicitly indicate animation data.
+            for _, obj in ipairs(
+                itemModule:GetDescendants()
+            ) do
+                for attributeName, value in pairs(
+                    obj:GetAttributes()
+                ) do
+                    local key =
+                        string.lower(
+                            tostring(
+                                attributeName
+                            )
+                        )
+
+                    if string.find(
+                        key,
+                        "animation",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        key,
+                        "anim",
+                        1,
+                        true
+                    )
                     then
-                        animation =
-                            obj
-                        break
-                    elseif not isR15
-                        and r6Name
+                        addAnimationId(
+                            value,
+                            5
+                        )
+                    end
+                end
+
+                local className =
+                    obj.ClassName
+
+                if className == "StringValue"
+                    or className == "NumberValue"
+                    or className == "IntValue"
+                then
+                    local key =
+                        string.lower(
+                            obj.Name
+                        )
+
+                    if string.find(
+                        key,
+                        "animation",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        key,
+                        "anim",
+                        1,
+                        true
+                    )
                     then
-                        animation =
-                            obj
-                        break
+                        local priority = 10
+
+                        if not isR15
+                            and string.find(
+                                key,
+                                "r6",
+                                1,
+                                true
+                            )
+                        then
+                            priority = 0
+                        elseif isR15
+                            and string.find(
+                                key,
+                                "r15",
+                                1,
+                                true
+                            )
+                        then
+                            priority = 0
+                        end
+
+                        addAnimationId(
+                            obj.Value,
+                            priority
+                        )
                     end
                 end
             end
 
-            animation =
-                animation
-                or fallbackAnimation
+            -- 3) Some Evade item modules keep the animation
+            -- definition in their returned data table rather than
+            -- as Instances. Walk that table without touching Source.
+            local requiredData
 
-            if animation then
-                local animationClone =
-                    animation:Clone()
+            pcall(function()
+                requiredData =
+                    require(
+                        itemModule
+                    )
+            end)
 
-                local track =
-                    animator:LoadAnimation(
-                        animationClone
+            local visitedTables = {}
+
+            local function scanAnimationData(
+                value,
+                keyHint,
+                depth
+            )
+                if depth > 8
+                    or value == nil
+                then
+                    return
+                end
+
+                local valueType =
+                    type(
+                        value
                     )
 
-                track.Looped =
+                if valueType == "string"
+                    or valueType == "number"
+                then
+                    local key =
+                        string.lower(
+                            tostring(
+                                keyHint
+                                or ""
+                            )
+                        )
+
+                    if string.find(
+                        key,
+                        "animation",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        key,
+                        "anim",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        key,
+                        "r6",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        key,
+                        "r15",
+                        1,
+                        true
+                    )
+                    then
+                        local priority = 20
+
+                        if not isR15
+                            and string.find(
+                                key,
+                                "r6",
+                                1,
+                                true
+                            )
+                        then
+                            priority = 0
+                        elseif isR15
+                            and string.find(
+                                key,
+                                "r15",
+                                1,
+                                true
+                            )
+                        then
+                            priority = 0
+                        end
+
+                        addAnimationId(
+                            value,
+                            priority
+                        )
+                    end
+
+                    return
+                end
+
+                if valueType ~= "table"
+                    or visitedTables[value]
+                then
+                    return
+                end
+
+                visitedTables[value] =
                     true
 
-                track:Play(
-                    0,
-                    1,
-                    1
+                for key, child in pairs(
+                    value
+                ) do
+                    scanAnimationData(
+                        child,
+                        tostring(
+                            key
+                        ),
+                        depth + 1
+                    )
+                end
+            end
+
+            scanAnimationData(
+                requiredData,
+                nil,
+                0
+            )
+
+            table.sort(
+                animationIds,
+                function(
+                    x,
+                    y
                 )
-
-                track.TimePosition =
-                    0.5
-
-                track:AdjustSpeed(
-                    0
-                )
-
-                task.delay(
-                    0.25,
-                    function()
-                        pcall(function()
-                            animationClone:Destroy()
-                        end)
+                    if x.priority
+                        ~= y.priority
+                    then
+                        return x.priority
+                            < y.priority
                     end
+
+                    return tonumber(
+                        x.id
+                    )
+                        < tonumber(
+                            y.id
+                        )
+                end
+            )
+
+            local trackCreated = false
+
+            for _, candidate in ipairs(
+                animationIds
+            ) do
+                local animationObject =
+                    Instance.new(
+                        "Animation"
+                    )
+
+                animationObject.AnimationId =
+                    "rbxassetid://"
+                    .. candidate.id
+
+                local loaded, track =
+                    pcall(function()
+                        return animator:
+                            LoadAnimation(
+                                animationObject
+                            )
+                    end)
+
+                if loaded and track then
+                    track.Looped =
+                        true
+
+                    local played =
+                        pcall(function()
+                            track:Play(
+                                0.05,
+                                1,
+                                1
+                            )
+
+                            task.wait()
+
+                            track.TimePosition =
+                                0.5
+
+                            track:AdjustSpeed(
+                                0
+                            )
+                        end)
+
+                    if played then
+                        trackCreated =
+                            true
+                        break
+                    end
+
+                    pcall(function()
+                        track:Stop(
+                            0
+                        )
+                    end)
+                end
+
+                pcall(function()
+                    animationObject:Destroy()
+                end)
+            end
+
+            if not trackCreated then
+                warn(
+                    "[DeadEye] No usable animation found for emote:",
+                    itemModule.Name
                 )
             end
 
