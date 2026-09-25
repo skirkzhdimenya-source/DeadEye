@@ -10400,29 +10400,33 @@ Picker =
 Picker.Size =
     UDim2.new(
         0,
-        335,
+        560,
         0,
-        350
+        450
     )
 Picker.Position =
     UDim2.new(
         0.5,
-        -167,
+        -280,
         0.5,
-        -175
+        -225
     )
 Picker.BackgroundColor3 =
     Color3.fromRGB(
-        24,
-        24,
-        24
+        31,
+        35,
+        42
     )
+Picker.BackgroundTransparency =
+    0.10
 Picker.BorderSizePixel =
     0
+Picker.ClipsDescendants =
+    true
 Picker.Visible =
     false
 Picker.ZIndex =
-    20
+    30
 Picker.Parent =
     ScreenGui
 __UI.PickerCorner =
@@ -10439,8 +10443,43 @@ __UI.PickerStroke =
 __UI.PickerStroke.Thickness =
     1
 __UI.PickerStroke.Transparency =
-    0.4
+    0.66
 __UI.PickerStroke.Parent =
+    Picker
+__UI.PickerGlass =
+    Instance.new("UIGradient")
+__UI.PickerGlass.Rotation =
+    115
+__UI.PickerGlass.Color =
+    ColorSequence.new({
+        ColorSequenceKeypoint.new(
+            0,
+            Color3.fromRGB(
+                55,
+                61,
+                72
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            0.42,
+            Color3.fromRGB(
+                38,
+                43,
+                51
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            1,
+            Color3.fromRGB(
+                24,
+                28,
+                34
+            )
+        )
+    })
+__UI.PickerGlass.Transparency =
+    NumberSequence.new(0.20)
+__UI.PickerGlass.Parent =
     Picker
 --// PICKER TITLE
 PickerTitle =
@@ -10476,7 +10515,7 @@ PickerTitle.TextColor3 =
 PickerTitle.TextXAlignment =
     Enum.TextXAlignment.Left
 PickerTitle.ZIndex =
-    21
+    31
 PickerTitle.Parent =
     Picker
 --// =========================================================
@@ -10513,7 +10552,7 @@ PickerClose.TextColor3 =
         255
     )
 PickerClose.ZIndex =
-    21
+    31
 PickerClose.Parent =
     Picker
 --// =========================================================
@@ -10538,9 +10577,11 @@ PickerSearch.Position =
 PickerSearch.BackgroundColor3 =
     Color3.fromRGB(
         40,
-        40,
-        40
+        45,
+        53
     )
+PickerSearch.BackgroundTransparency =
+    0.20
 PickerSearch.BorderSizePixel =
     0
 PickerSearch.ClearTextOnFocus =
@@ -10566,7 +10607,7 @@ PickerSearch.TextColor3 =
         255
     )
 PickerSearch.ZIndex =
-    22
+    32
 PickerSearch.Parent =
     Picker
 __UI.SearchCorner =
@@ -10600,9 +10641,11 @@ PickerScroll.Position =
 PickerScroll.BackgroundColor3 =
     Color3.fromRGB(
         32,
-        32,
-        32
+        35,
+        42
     )
+PickerScroll.BackgroundTransparency =
+    0.20
 PickerScroll.BorderSizePixel =
     0
 PickerScroll.ScrollBarThickness =
@@ -10617,7 +10660,7 @@ PickerScroll.CanvasSize =
 PickerScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
 PickerScroll.ZIndex =
-    21
+    31
 PickerScroll.Parent =
     Picker
 __UI.PickerScrollCorner =
@@ -10658,16 +10701,16 @@ __UI.PickerGrid =
 __UI.PickerGrid.CellSize =
     UDim2.new(
         0,
-        96,
+        170,
         0,
-        32
+        92
     )
 __UI.PickerGrid.CellPadding =
     UDim2.new(
         0,
-        5,
+        6,
         0,
-        5
+        8
     )
 __UI.PickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
@@ -10803,10 +10846,10 @@ local function rebuildPicker()
                 )
             button.Size =
                 UDim2.new(
+                    1,
                     0,
-                    150,
-                    0,
-                    34
+                    1,
+                    0
                 )
             button.BackgroundColor3 =
                 Color3.fromRGB(
@@ -10817,7 +10860,7 @@ local function rebuildPicker()
             button.BorderSizePixel =
                 0
             button.Text =
-                data.name
+                ""
             button.TextSize =
                 11
             button.Font =
@@ -10833,9 +10876,202 @@ local function rebuildPicker()
             button.LayoutOrder =
                 index
             button.ZIndex =
-                22
+                32
             button.Parent =
                 PickerScroll
+
+
+            --// NATIVE EMOTE PREVIEW
+            --// Same mechanism used by Evade's native slots:
+            --// ClientItemService:CreateViewport(...)
+            local viewport =
+                Instance.new("ViewportFrame")
+            viewport.Name =
+                "EmotePreview"
+            viewport.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+            viewport.Position =
+                UDim2.new(
+                    0,
+                    0,
+                    0,
+                    0
+                )
+            viewport.BackgroundColor3 =
+                Color3.fromRGB(
+                    31,
+                    35,
+                    42
+                )
+            viewport.BackgroundTransparency =
+                0
+            viewport.BorderSizePixel =
+                0
+            viewport.Active =
+                false
+            viewport.ZIndex =
+                33
+            viewport.Parent =
+                button
+
+            local viewportCorner =
+                Instance.new("UICorner")
+            viewportCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            viewportCorner.Parent =
+                viewport
+
+            pcall(function()
+                __UI.ClientItemService:CreateViewport(
+                    data.module,
+                    viewport
+                )
+            end)
+
+            --// GLASS OVERLAY
+            local glass =
+                Instance.new("Frame")
+            glass.Name =
+                "GlassOverlay"
+            glass.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+            glass.Position =
+                UDim2.new(
+                    0,
+                    0,
+                    0,
+                    0
+                )
+            glass.BackgroundColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            glass.BackgroundTransparency =
+                0.95
+            glass.BorderSizePixel =
+                0
+            glass.Active =
+                false
+            glass.ZIndex =
+                34
+            glass.Parent =
+                button
+
+            local glassCorner =
+                Instance.new("UICorner")
+            glassCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            glassCorner.Parent =
+                glass
+
+            --// NAME SHADE
+            local shade =
+                Instance.new("Frame")
+            shade.Name =
+                "NameShade"
+            shade.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    0,
+                    36
+                )
+            shade.Position =
+                UDim2.new(
+                    0,
+                    0,
+                    1,
+                    -36
+                )
+            shade.BackgroundColor3 =
+                Color3.fromRGB(
+                    0,
+                    0,
+                    0
+                )
+            shade.BackgroundTransparency =
+                0.42
+            shade.BorderSizePixel =
+                0
+            shade.Active =
+                false
+            shade.ZIndex =
+                35
+            shade.Parent =
+                button
+
+            local nameCorner =
+                Instance.new("UICorner")
+            nameCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            nameCorner.Parent =
+                shade
+
+            local nameLabel =
+                Instance.new("TextLabel")
+            nameLabel.Name =
+                "EmoteName"
+            nameLabel.Size =
+                UDim2.new(
+                    1,
+                    -12,
+                    0,
+                    30
+                )
+            nameLabel.Position =
+                UDim2.new(
+                    0,
+                    6,
+                    1,
+                    -33
+                )
+            nameLabel.BackgroundTransparency =
+                1
+            nameLabel.BorderSizePixel =
+                0
+            nameLabel.Text =
+                data.name
+            nameLabel.TextSize =
+                11
+            nameLabel.Font =
+                Enum.Font.GothamMedium
+            nameLabel.TextColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            nameLabel.TextXAlignment =
+                Enum.TextXAlignment.Left
+            nameLabel.TextYAlignment =
+                Enum.TextYAlignment.Center
+            nameLabel.TextTruncate =
+                Enum.TextTruncate.AtEnd
+            nameLabel.ZIndex =
+                36
+            nameLabel.Parent =
+                button
             local buttonCorner =
                 Instance.new("UICorner")
             buttonCorner.CornerRadius =
