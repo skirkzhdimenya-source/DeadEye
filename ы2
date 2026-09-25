@@ -1504,12 +1504,12 @@ Main.Size =
     UDim2.new(
         0,
         math.max(
-            380,
+            455,
             savedConfig.gui.width
         ),
         0,
         math.max(
-            260,
+            285,
             savedConfig.gui.height
         )
     )
@@ -1522,9 +1522,9 @@ Main.Position =
     )
 Main.BackgroundColor3 =
     Color3.fromRGB(
-        25,
-        25,
-        25
+        18,
+        20,
+        24
     )
 Main.BorderSizePixel =
     0
@@ -1564,6 +1564,8 @@ __UI.MainGradient.Color =
             )
         )
     })
+__UI.MainGradient.Transparency =
+    NumberSequence.new(1)
 __UI.MainGradient.Parent =
     Main
 
@@ -1581,7 +1583,7 @@ __UI.MainStroke =
 __UI.MainStroke.Thickness =
     1
 __UI.MainStroke.Transparency =
-    0.45
+    0.76
 __UI.MainStroke.Parent =
     Main
 
@@ -1605,9 +1607,9 @@ MainHeader.Position =
     )
 MainHeader.BackgroundColor3 =
     Color3.fromRGB(
-        30,
-        30,
-        34
+        25,
+        28,
+        33
     )
 MainHeader.BorderSizePixel =
     0
@@ -1652,12 +1654,8 @@ __UI.MainHeaderLine.Position =
         1,
         -1
     )
-__UI.MainHeaderLine.BackgroundColor3 =
-    Color3.fromRGB(
-        110,
-        170,
-        255
-    )
+__UI.MainHeaderLine.BackgroundTransparency =
+    1
 __UI.MainHeaderLine.BorderSizePixel =
     0
 __UI.MainHeaderLine.ZIndex =
@@ -5370,9 +5368,9 @@ unusualPage.Position =
     )
 unusualPage.BackgroundColor3 =
     Color3.fromRGB(
-        32,
-        32,
-        32
+        21,
+        24,
+        29
     )
 unusualPage.BorderSizePixel =
     0
@@ -5437,9 +5435,9 @@ unusualRow.Size =
     )
 unusualRow.BackgroundColor3 =
     Color3.fromRGB(
-        40,
-        40,
-        40
+        28,
+        32,
+        38
     )
 unusualRow.BorderSizePixel =
     0
@@ -5509,9 +5507,9 @@ unusualOriginalButton.Position =
     )
 unusualOriginalButton.BackgroundColor3 =
     Color3.fromRGB(
-        52,
-        52,
-        52
+        35,
+        39,
+        46
     )
 unusualOriginalButton.BorderSizePixel =
     0
@@ -5593,9 +5591,9 @@ unusualReplaceButton.Position =
     )
 unusualReplaceButton.BackgroundColor3 =
     Color3.fromRGB(
-        52,
-        52,
-        52
+        35,
+        39,
+        46
     )
 unusualReplaceButton.BorderSizePixel =
     0
@@ -5646,9 +5644,9 @@ unusualPicker.Position =
     )
 unusualPicker.BackgroundColor3 =
     Color3.fromRGB(
-        24,
-        24,
-        24
+        18,
+        21,
+        26
     )
 unusualPicker.BorderSizePixel =
     0
@@ -5763,8 +5761,8 @@ unusualPickerSearch.Position =
     )
 unusualPickerSearch.BackgroundColor3 =
     Color3.fromRGB(
-        40,
-        40,
+        30,
+        34,
         40
     )
 unusualPickerSearch.BorderSizePixel =
@@ -5822,9 +5820,9 @@ unusualPickerScroll.Position =
     )
 unusualPickerScroll.BackgroundColor3 =
     Color3.fromRGB(
-        32,
-        32,
-        32
+        22,
+        26,
+        31
     )
 unusualPickerScroll.BorderSizePixel =
     0
@@ -7147,9 +7145,9 @@ mainPage.Position =
     )
 mainPage.BackgroundColor3 =
     Color3.fromRGB(
-        32,
-        32,
-        32
+        21,
+        24,
+        29
     )
 mainPage.BorderSizePixel = 0
 mainPage.ScrollBarThickness = 6
@@ -7666,9 +7664,9 @@ others.page.Position =
     )
 others.page.BackgroundColor3 =
     Color3.fromRGB(
-        32,
-        32,
-        32
+        21,
+        24,
+        29
     )
 others.page.BorderSizePixel =
     0
@@ -8692,9 +8690,9 @@ categoryBar.Position =
     )
 categoryBar.BackgroundColor3 =
     Color3.fromRGB(
-        32,
-        32,
-        32
+        23,
+        26,
+        31
     )
 categoryBar.BorderSizePixel =
     0
@@ -8759,9 +8757,9 @@ local function makeCategoryButton(
         )
     button.BackgroundColor3 =
         Color3.fromRGB(
-            45,
-            45,
-            45
+            31,
+            35,
+            41
         )
     button.BorderSizePixel =
         0
@@ -8798,7 +8796,7 @@ local function makeCategoryButton(
     stroke.Thickness =
         1
     stroke.Transparency =
-        0.82
+        0.9
     stroke.Parent =
         button
 
@@ -10218,12 +10216,12 @@ local function setMainMinimized(state)
             UDim2.new(
                 0,
                 math.max(
-                    380,
+                    MIN_WINDOW_WIDTH,
                     savedConfig.gui.width
                 ),
                 0,
                 math.max(
-                    260,
+                    MIN_WINDOW_HEIGHT,
                     savedConfig.gui.height
                 )
             )
@@ -10322,7 +10320,35 @@ addConnection(
         end
     )
 )
---// =========================================================
+local DragHandle =
+    Instance.new("Frame")
+DragHandle.Name =
+    "DragHandle"
+DragHandle.Size =
+    UDim2.new(
+        1,
+        -105,
+        0,
+        46
+    )
+DragHandle.Position =
+    UDim2.new(
+        0,
+        1,
+        0,
+        1
+    )
+DragHandle.BackgroundTransparency =
+    1
+DragHandle.BorderSizePixel =
+    0
+DragHandle.Active =
+    true
+DragHandle.ZIndex =
+    4
+DragHandle.Parent =
+    Main
+
 --// =========================================================
 --// WINDOW GEOMETRY / DRAG / RESIZE
 -- =========================================================
@@ -10335,8 +10361,8 @@ local resizeMode = nil
 local resizeStart
 local resizeStartSize
 
-local MIN_WINDOW_WIDTH = 380
-local MIN_WINDOW_HEIGHT = 260
+local MIN_WINDOW_WIDTH = 455
+local MIN_WINDOW_HEIGHT = 285
 local RESIZE_EDGE = 8
 
 local function saveWindowState()
@@ -10453,24 +10479,32 @@ local function setMainSize(
 end
 
 --// Drag the title bar.
+local function beginWindowDrag(input)
+    if input.UserInputType ==
+            Enum.UserInputType.MouseButton1
+        or input.UserInputType ==
+            Enum.UserInputType.Touch
+    then
+        dragging = true
+        dragStart =
+            input.Position
+        startPosition =
+            Main.Position
+    end
+end
+
+addConnection(
+    DragHandle.InputBegan:Connect(
+        function(input)
+            beginWindowDrag(input)
+        end
+    )
+)
+
 addConnection(
     MainTitle.InputBegan:Connect(
         function(input)
-            if mainMinimized then
-                return
-            end
-
-            if input.UserInputType ==
-                    Enum.UserInputType.MouseButton1
-                or input.UserInputType ==
-                    Enum.UserInputType.Touch
-            then
-                dragging = true
-                dragStart =
-                    input.Position
-                startPosition =
-                    Main.Position
-            end
+            beginWindowDrag(input)
         end
     )
 )
@@ -10627,35 +10661,67 @@ ResizeCorner.Name =
 ResizeCorner.Size =
     UDim2.new(
         0,
-        20,
+        24,
         0,
-        20
+        24
     )
 ResizeCorner.Position =
     UDim2.new(
         1,
-        -20,
+        -24,
         1,
-        -20
+        -24
     )
 ResizeCorner.BackgroundTransparency =
     1
 ResizeCorner.BorderSizePixel =
     0
 ResizeCorner.Text =
-    "⋰"
+    ""
 ResizeCorner.TextSize =
-    14
-ResizeCorner.Font =
-    Enum.Font.GothamBold
-ResizeCorner.TextColor3 =
-    Color3.fromRGB(
-        120,
-        130,
-        145
-    )
+    1
 ResizeCorner.ZIndex =
     21
+
+for i = 1, 3 do
+    local grip =
+        Instance.new("Frame")
+
+    grip.Name =
+        "Grip" .. tostring(i)
+
+    grip.Size =
+        UDim2.new(
+            0,
+            2,
+            0,
+            2
+        )
+
+    grip.Position =
+        UDim2.new(
+            0,
+            7 + ((i - 1) * 4),
+            0,
+            15 - ((i - 1) * 4)
+        )
+
+    grip.BackgroundColor3 =
+        Color3.fromRGB(
+            135,
+            142,
+            155
+        )
+
+    grip.BorderSizePixel =
+        0
+
+    grip.ZIndex =
+        22
+
+    grip.Parent =
+        ResizeCorner
+end
 ResizeCorner.AutoButtonColor =
     false
 ResizeCorner.Parent =
