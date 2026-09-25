@@ -2697,23 +2697,25 @@ unusualRuntime.installCirclingEclipse = function(
         targetRoot.CFrame *
         relative
 
-    root.Anchored = true
+    --// Keep the mini-rig attached to the player through its
+    --// invisible root. Internal Motor6D joints stay intact,
+    --// so the animation can move Body/default normally.
+    local rootWeld =
+        Instance.new("WeldConstraint")
 
-    for _, object in ipairs(
-        clone:GetDescendants()
-    ) do
+    rootWeld.Name =
+        "DeadEyeCirclingRootWeld"
 
-        if object:IsA("BasePart")
-            and object.Name ~= "HRP"
-        then
+    rootWeld.Part0 =
+        targetRoot
 
-            pcall(function()
-                object.Anchored = false
-            end)
+    rootWeld.Part1 =
+        root
 
-        end
+    rootWeld.Parent =
+        root
 
-    end
+    root.Anchored = false
 
     local folder =
         workspace:FindFirstChild(
@@ -2807,24 +2809,10 @@ unusualRuntime.installCirclingEclipse = function(
 
     end
 
-    --// Keep the copied client script disabled. The direct
-    --// animation above is the known-working movement path
-    --// and avoids another runtime dependency.
-    for _, object in ipairs(
-        clone:GetDescendants()
-    ) do
-
-        if object:IsA("Script")
-            or object:IsA("LocalScript")
-        then
-
-            pcall(function()
-                object.Disabled = false
-            end)
-
-        end
-
-    end
+    --// The copied client Script stays disabled.
+    --// We directly play its Animation through the cloned
+    --// AnimationController, which is the path proven by
+    --// the isolated diagnostic.
 
     unusualRuntime.specialCircling = {
         model = clone,
