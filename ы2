@@ -1639,23 +1639,7 @@ __UI.MainGradient.Transparency =
 __UI.MainGradient.Parent =
     MainSurface
 
-__UI.MainCorner =
-    Instance.new("UICorner")
-__UI.MainCorner.CornerRadius =
-    UDim.new(
-        0,
-        8
-    )
-__UI.MainCorner.Parent =
-    Main
-__UI.MainStroke =
-    Instance.new("UIStroke")
-__UI.MainStroke.Thickness =
-    1
-__UI.MainStroke.Transparency =
-    0.76
-__UI.MainStroke.Parent =
-    Main
+--// MainSurface owns the outer rounded shell; keep Main itself fully transparent.
 
 local MainHeader =
     Instance.new("Frame")
@@ -1941,7 +1925,7 @@ Status.Position =
 Status.BackgroundTransparency =
     1
 Status.Text =
-    "12 slots"
+    ""
 Status.TextSize =
     12
 Status.Font =
@@ -5464,9 +5448,9 @@ unusualPage.Position =
     )
 unusualPage.BackgroundColor3 =
     Color3.fromRGB(
-        23,
-        27,
-        33
+        32,
+        32,
+        32
     )
 unusualPage.BorderSizePixel =
     0
@@ -5492,7 +5476,7 @@ __UI.unusualPageCorner =
 __UI.unusualPageCorner.CornerRadius =
     UDim.new(
         0,
-        7
+        9
     )
 __UI.unusualPageCorner.Parent =
     unusualPage
@@ -5520,6 +5504,17 @@ unusualPadding.PaddingRight =
     )
 unusualPadding.Parent =
     unusualPage
+local unusualLayout =
+    Instance.new("UIListLayout")
+unusualLayout.Padding =
+    UDim.new(
+        0,
+        7
+    )
+unusualLayout.SortOrder =
+    Enum.SortOrder.LayoutOrder
+unusualLayout.Parent =
+    unusualPage
 local unusualRow =
     Instance.new("Frame")
 unusualRow.Size =
@@ -5531,9 +5526,9 @@ unusualRow.Size =
     )
 unusualRow.BackgroundColor3 =
     Color3.fromRGB(
-        28,
-        32,
-        38
+        40,
+        40,
+        40
     )
 unusualRow.BorderSizePixel =
     0
@@ -5546,7 +5541,7 @@ __UI.unusualRowCorner =
 __UI.unusualRowCorner.CornerRadius =
     UDim.new(
         0,
-        6
+        7
     )
 __UI.unusualRowCorner.Parent =
     unusualRow
@@ -5603,9 +5598,9 @@ unusualOriginalButton.Position =
     )
 unusualOriginalButton.BackgroundColor3 =
     Color3.fromRGB(
-        35,
-        39,
-        46
+        52,
+        52,
+        52
     )
 unusualOriginalButton.BorderSizePixel =
     0
@@ -5631,7 +5626,7 @@ __UI.unusualOriginalCorner =
 __UI.unusualOriginalCorner.CornerRadius =
     UDim.new(
         0,
-        6
+        7
     )
 __UI.unusualOriginalCorner.Parent =
     unusualOriginalButton
@@ -5687,9 +5682,9 @@ unusualReplaceButton.Position =
     )
 unusualReplaceButton.BackgroundColor3 =
     Color3.fromRGB(
-        35,
-        39,
-        46
+        52,
+        52,
+        52
     )
 unusualReplaceButton.BorderSizePixel =
     0
@@ -5715,7 +5710,7 @@ __UI.unusualReplaceCorner =
 __UI.unusualReplaceCorner.CornerRadius =
     UDim.new(
         0,
-        6
+        7
     )
 __UI.unusualReplaceCorner.Parent =
     unusualReplaceButton
@@ -6295,10 +6290,7 @@ unusualStatusText.Position =
 unusualStatusText.BackgroundTransparency =
     1
 unusualStatusText.Text =
-    "Unusuals: "
-    .. tostring(
-        #unusualList
-    )
+    ""
 unusualStatusText.TextSize =
     12
 unusualStatusText.Font =
@@ -6324,18 +6316,18 @@ local function updateUnusualToggle()
                 "SWAP: ON"
             Toggle.BackgroundColor3 =
                 Color3.fromRGB(
-                    65,
-                    65,
-                    65
+                    68,
+                    74,
+                    84
                 )
         else
             Toggle.Text =
                 "SWAP: OFF"
             Toggle.BackgroundColor3 =
                 Color3.fromRGB(
-                    45,
-                    45,
-                    45
+                    47,
+                    52,
+                    61
                 )
         end
     end)
@@ -7241,9 +7233,9 @@ mainPage.Position =
     )
 mainPage.BackgroundColor3 =
     Color3.fromRGB(
-        23,
-        27,
-        33
+        32,
+        32,
+        32
     )
 mainPage.BorderSizePixel = 0
 mainPage.ScrollBarThickness = 6
@@ -7760,9 +7752,9 @@ others.page.Position =
     )
 others.page.BackgroundColor3 =
     Color3.fromRGB(
-        23,
-        27,
-        33
+        32,
+        32,
+        32
     )
 others.page.BorderSizePixel =
     0
@@ -8361,9 +8353,9 @@ others.applyAllRow.Size =
     )
 others.applyAllRow.BackgroundColor3 =
     Color3.fromRGB(
-        48,
-        48,
-        48
+        40,
+        40,
+        40
     )
 others.applyAllRow.BorderSizePixel =
     0
@@ -8398,9 +8390,9 @@ others.applyAllButton.Position =
     )
 others.applyAllButton.BackgroundColor3 =
     Color3.fromRGB(
-        65,
-        65,
-        65
+        52,
+        52,
+        52
     )
 others.applyAllButton.BorderSizePixel =
     0
@@ -8522,9 +8514,9 @@ others.scanRow.Size =
     )
 others.scanRow.BackgroundColor3 =
     Color3.fromRGB(
-        45,
-        45,
-        45
+        40,
+        40,
+        40
     )
 others.scanRow.BorderSizePixel =
     0
@@ -8969,6 +8961,10 @@ local function setCategory(
                 false
             Toggle.Visible =
                 true
+            Toggle.Parent =
+                unusualPage
+            Toggle.LayoutOrder =
+                0
             SlotsScroll.Visible =
                 false
             mainPage.Visible =
@@ -8976,7 +8972,7 @@ local function setCategory(
             unusualPage.Visible =
                 true
             unusualStatus.Visible =
-                true
+                false
             unusualPicker.Visible =
                 false
             others.page.Visible =
@@ -9053,9 +9049,13 @@ local function setCategory(
             MainTitle.Text =
                 "DeadEyes v1"
             Status.Visible =
-                true
+                false
             Toggle.Visible =
                 true
+            Toggle.Parent =
+                SlotsScroll
+            Toggle.LayoutOrder =
+                0
             SlotsScroll.Visible =
                 true
             mainPage.Visible =
@@ -9208,18 +9208,20 @@ Toggle =
     Instance.new("TextButton")
 Toggle.Size =
     UDim2.new(
+        1,
+        -12,
         0,
-        120,
-        0,
-        26
+        36
     )
 Toggle.Position =
     UDim2.new(
-        1,
-        -130,
         0,
-        42
+        0,
+        0,
+        0
     )
+Toggle.LayoutOrder =
+    0
 Toggle.BackgroundColor3 =
     Color3.fromRGB(
         45,
@@ -9241,13 +9243,13 @@ Toggle.TextColor3 =
         255
     )
 Toggle.Parent =
-    Main
+    SlotsScroll
 __UI.ToggleCorner =
     Instance.new("UICorner")
 __UI.ToggleCorner.CornerRadius =
     UDim.new(
         0,
-        7
+        8
     )
 __UI.ToggleCorner.Parent =
     Toggle
@@ -10363,6 +10365,10 @@ local function setMainMinimized(state)
             elseif currentCategory == "Unusual" then
                 Status.Visible = false
                 Toggle.Visible = true
+                Toggle.Parent =
+                    unusualPage
+                Toggle.LayoutOrder =
+                    0
                 SlotsScroll.Visible = false
                 mainPage.Visible = false
                 unusualPage.Visible = true
@@ -11009,7 +11015,7 @@ for _, object in ipairs(
             object.BackgroundTransparency =
                 math.max(
                     object.BackgroundTransparency,
-                    0.28
+                    0.30
                 )
         end)
     elseif object:IsA("TextBox") then
