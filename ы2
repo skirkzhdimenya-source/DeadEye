@@ -1988,6 +1988,13 @@ local function isLikelyImageKey(key)
 end
 
 local function extractAssetId(value)
+    if type(value) == "number" then
+        if value ~= 0 then
+            return "rbxassetid://" .. tostring(math.floor(value))
+        end
+        return nil
+    end
+
     if type(value) ~= "string" then
         return nil
     end
@@ -2016,7 +2023,7 @@ local function extractAssetId(value)
             "^%s*(%d+)%s*$"
         )
 
-    if id then
+    if id and id ~= "0" then
         return "rbxassetid://" .. id
     end
 
