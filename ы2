@@ -3109,21 +3109,13 @@ addUnusualConnection(
                 local rig =
                     unusualRuntime.appliedRig
 
-                local root =
-                    activeClone:FindFirstChild(
-                        "HumanoidRootPart"
-                    )
-
                 local target =
                     rig
                     and rig:FindFirstChild(
                         "HumanoidRootPart"
                     )
 
-                if root
-                    and target
-                    and root.Anchored
-                then
+                if target then
                     local offset
 
                     pcall(function()
@@ -3135,9 +3127,15 @@ addUnusualConnection(
 
                     if typeof(offset) == "CFrame" then
                         pcall(function()
-                            root.CFrame =
+                            --// Move the entire cosmetic model instead
+                            --// of only its root. This keeps every
+                            --// disconnected/animated part attached
+                            --// to the character while preserving
+                            --// its own internal motion.
+                            activeClone:PivotTo(
                                 target.CFrame
                                 * offset
+                            )
                         end)
                     end
                 end
