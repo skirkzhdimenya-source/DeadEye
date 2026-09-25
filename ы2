@@ -11377,14 +11377,14 @@ end
 --// We replace only the visual/name. The original Button and
 --// the native emote binding remain untouched.
 --// =========================================================
-local function getNativeEmoteWheel()
+local function getNativeEmoteWheels()
     local playerGui =
         LocalPlayer:FindFirstChild(
             "PlayerGui"
         )
 
     if not playerGui then
-        return nil
+        return {}
     end
 
     local gameGui =
@@ -11416,19 +11416,35 @@ local function getNativeEmoteWheel()
             "Emote"
         )
 
-    local wheel =
-        emote
-        and emote:FindFirstChild(
-            "Wheel"
-        )
-
-    if wheel
-        and wheel:IsA("GuiObject")
-    then
-        return wheel
+    if not emote then
+        return {}
     end
 
-    return nil
+    local wheels = {}
+
+    -- The game has two native emote wheels:
+    -- Wheel  = first/default six emotes
+    -- Wheel2 = second wheel shown with Q
+    for _, wheelName in ipairs({
+        "Wheel",
+        "Wheel2"
+    }) do
+        local wheel =
+            emote:FindFirstChild(
+                wheelName
+            )
+
+        if wheel
+            and wheel:IsA("GuiObject")
+        then
+            table.insert(
+                wheels,
+                wheel
+            )
+        end
+    end
+
+    return wheels
 end
 
 local function normalizeEmoteName(
@@ -11657,6 +11673,12 @@ local function applyNativeEmoteSlot(
         return false
     end
 
+    local originalDisplayName =
+        tostring(
+            textLabel.Text
+                or ""
+        )
+
     pcall(function()
         textLabel.Text =
             replacementName
@@ -11671,7 +11693,7 @@ local function applyNativeEmoteSlot(
         -- replacement so restore returns its real
         -- display form ("Headless Baller", etc.).
         originalName =
-            textLabel.Text,
+            originalDisplayName,
         replaceId =
             slot.replaceId,
         replaceName =
@@ -11689,118 +11711,125 @@ local function syncNativeEmoteWheel()
         return
     end
 
-    local wheel =
-        getNativeEmoteWheel()
+    local wheels =
+        getNativeEmoteWheels()
 
-    if not wheel then
+    if #wheels == 0 then
         return
     end
 
-    -- Native wheel has six visible emote slots.
-    for i = 1, 6 do
-        local nativeSlot =
-            wheel:FindFirstChild(
-                "Emote"
-                .. tostring(i)
-            )
+    -- Sync both native wheels:
+    -- Wheel  = first/default six emotes
+    -- Wheel2 = second six emotes shown with Q
+    for _, wheel in ipairs(
+        wheels
+    ) do
+        -- Native wheel has six visible emote slots.
+        for i = 1, 6 do
+            local nativeSlot =
+                wheel:FindFirstChild(
+                    "Emote"
+                    .. tostring(i)
+                )
 
-        if not nativeSlot then
-            continue
-        end
-
-        local textLabel =
-            nativeSlot:FindFirstChild(
-                "TextLabel"
-            )
-
-        if not textLabel
-            or tostring(
-                textLabel.Text
-                    or ""
-            ) == ""
-        then
-            continue
-        end
-
-        local state =
-            nativeWheelStates[
-                nativeSlot
-            ]
-
-        if state then
-            local configuredSlot =
-                nil
-
-            for slotIndex = 1, SLOT_COUNT do
-                local configured =
-                    slots[slotIndex]
-
-                if configured
-                    and configured.originalId
-                        == state.originalId
-                then
-                    configuredSlot =
-                        configured
-                    break
-                end
+            if not nativeSlot then
+                continue
             end
 
-            local stillConfigured =
-                configuredSlot
-                and configuredSlot.replaceId
-                    == state.replaceId
+            local textLabel =
+                nativeSlot:FindFirstChild(
+                    "TextLabel"
+                )
 
-            if not stillConfigured then
-                if tostring(
+            if not textLabel
+                or tostring(
+                    textLabel.Text
+                        or ""
+                ) == ""
+            then
+                continue
+            end
+
+            local state =
+                nativeWheelStates[
+                    nativeSlot
+                ]
+
+            if state then
+                local configuredSlot =
+                    nil
+
+                for slotIndex = 1, SLOT_COUNT do
+                    local configured =
+                        slots[slotIndex]
+
+                    if configured
+                        and configured.originalId
+                            == state.originalId
+                    then
+                        configuredSlot =
+                            configured
+                        break
+                    end
+                end
+
+                local stillConfigured =
+                    configuredSlot
+                    and configuredSlot.replaceId
+                        == state.replaceId
+
+                if not stillConfigured then
+                    if normalizeEmoteName(
+                        textLabel.Text
+                            or ""
+                        )
+                        == normalizeEmoteName(
+                            state.replaceName
+                                or ""
+                        )
+                    then
+                        restoreNativeEmoteSlot(
+                            nativeSlot,
+                            state
+                        )
+                    else
+                        nativeWheelStates[
+                            nativeSlot
+                        ] = nil
+                    end
+
+                    state = nil
+                elseif normalizeEmoteName(
                     textLabel.Text
                         or ""
                     )
-                    == tostring(
+                    ~= normalizeEmoteName(
                         state.replaceName
                             or ""
                     )
                 then
-                    restoreNativeEmoteSlot(
-                        nativeSlot,
-                        state
-                    )
-                else
+                    -- Native wheel rebuilt/recycled this slot.
+                    -- Drop the old state so the current original
+                    -- display name can be matched below.
                     nativeWheelStates[
                         nativeSlot
                     ] = nil
+                    state = nil
                 end
-
-                state = nil
-            elseif tostring(
-                textLabel.Text
-                    or ""
-                )
-                ~= tostring(
-                    state.replaceName
-                        or ""
-                )
-            then
-                -- Native wheel rebuilt/recycled this slot.
-                -- Let it finish its own render, then match the
-                -- new original name below.
-                nativeWheelStates[
-                    nativeSlot
-                ] = nil
-                state = nil
             end
-        end
 
-        if not state then
-            local configuredSlot =
-                getConfiguredSlotByOriginalName(
-                    textLabel.Text
-                )
+            if not state then
+                local configuredSlot =
+                    getConfiguredSlotByOriginalName(
+                        textLabel.Text
+                    )
 
-            if configuredSlot then
-                applyNativeEmoteSlot(
-                    nativeSlot,
-                    configuredSlot
-                )
+                if configuredSlot then
+                    applyNativeEmoteSlot(
+                        nativeSlot,
+                        configuredSlot
+                    )
+                end
             end
         end
     end
