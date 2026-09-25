@@ -10720,6 +10720,117 @@ __UI.PickerGrid.Parent =
 --// EMOTE VIEWPORT PREVIEW
 --// Локальная копия native preview без CreateViewport()
 --// =========================================================
+local emoteViewportTemplate
+
+local function getEmoteViewportTemplate()
+    if emoteViewportTemplate
+        and emoteViewportTemplate.Parent
+    then
+        return emoteViewportTemplate
+    end
+
+    local source
+
+    pcall(function()
+        local objects =
+            ReplicatedStorage:FindFirstChild(
+                "Objects"
+            )
+
+        local menu =
+            objects
+            and objects:FindFirstChild(
+                "Menu"
+            )
+
+        local menuModule =
+            menu
+            and menu:FindFirstChild(
+                "Menu"
+            )
+
+        local slotBuilder =
+            menuModule
+            and menuModule:FindFirstChild(
+                "SlotBuilder"
+            )
+
+        local assets =
+            slotBuilder
+            and slotBuilder:FindFirstChild(
+                "Assets"
+            )
+
+        local slot =
+            assets
+            and assets:FindFirstChild(
+                "Slot"
+            )
+
+        local button =
+            slot
+            and slot:FindFirstChild(
+                "Button"
+            )
+
+        if button then
+            source =
+                button:FindFirstChildWhichIsA(
+                    "ViewportFrame",
+                    true
+                )
+        end
+    end)
+
+    if not source then
+        pcall(function()
+            local players =
+                game:GetService(
+                    "Players"
+                )
+
+            local localPlayer =
+                players.LocalPlayer
+
+            local playerGui =
+                localPlayer
+                and localPlayer:FindFirstChildOfClass(
+                    "PlayerGui"
+                )
+
+            if playerGui then
+                source =
+                    playerGui:FindFirstChildWhichIsA(
+                        "ViewportFrame",
+                        true
+                    )
+            end
+        end)
+    end
+
+    if not source then
+        pcall(function()
+            source =
+                game:GetService(
+                    "CoreGui"
+                ):FindFirstChildWhichIsA(
+                    "ViewportFrame",
+                    true
+                )
+        end)
+    end
+
+    if source
+        and source:IsA("ViewportFrame")
+    then
+        emoteViewportTemplate =
+            source
+        return source
+    end
+
+    return nil
+end
+
 local function createEmotePreview(
     itemModule,
     viewport
@@ -10733,22 +10844,35 @@ local function createEmotePreview(
     local success, result =
         pcall(function()
 
-            local oldWorldModel =
+            local worldModel =
                 viewport:FindFirstChildOfClass(
                     "WorldModel"
                 )
 
-            if oldWorldModel then
-                oldWorldModel:Destroy()
-            end
-
-            local oldCamera =
+            local camera =
                 viewport.CurrentCamera
 
-            if oldCamera then
-                oldCamera:Destroy()
-                viewport.CurrentCamera =
-                    nil
+            if not camera then
+                camera =
+                    viewport:FindFirstChildOfClass(
+                        "Camera"
+                    )
+            end
+
+            if not worldModel
+                or not camera
+            then
+                error(
+                    "Viewport template has no WorldModel/Camera"
+                )
+            end
+
+            for _, child in ipairs(
+                worldModel:GetChildren()
+            ) do
+                if not child:IsA("Camera") then
+                    child:Destroy()
+                end
             end
 
             local rigTemplate
@@ -10796,21 +10920,8 @@ local function createEmotePreview(
                 )
             end
 
-            local worldModel =
-                Instance.new(
-                    "WorldModel"
-                )
-
-            worldModel.Parent =
-                viewport
-
             rig.Parent =
                 worldModel
-
-            local camera =
-                Instance.new(
-                    "Camera"
-                )
 
             camera.FieldOfView =
                 30
@@ -10832,9 +10943,6 @@ local function createEmotePreview(
                     ).Position,
                     rig.PrimaryPart.CFrame.Position
                 )
-
-            camera.Parent =
-                worldModel
 
             viewport.CurrentCamera =
                 camera
@@ -11036,57 +11144,68 @@ local function rebuildPicker()
 
 
             --// NATIVE EMOTE PREVIEW
-            --// Same mechanism used by Evade's native slots:
-            --// ClientItemService:CreateViewport(...)
-            local viewport =
-                Instance.new("ViewportFrame")
-            viewport.Name =
-                "EmotePreview"
-            viewport.Size =
-                UDim2.new(
-                    1,
-                    0,
-                    1,
-                    0
-                )
-            viewport.Position =
-                UDim2.new(
-                    0,
-                    0,
-                    0,
-                    0
-                )
-            viewport.BackgroundColor3 =
-                Color3.fromRGB(
-                    31,
-                    35,
-                    42
-                )
-            viewport.BackgroundTransparency =
-                0
-            viewport.BorderSizePixel =
-                0
-            viewport.Active =
-                false
-            viewport.ZIndex =
-                33
-            viewport.Parent =
-                button
+            --// Do not Instance.new("ViewportFrame") here.
+            --// Clone an existing native ViewportFrame so the
+            --// current executor thread never has to create that class.
+            local viewportTemplate =
+                getEmoteViewportTemplate()
 
-            local viewportCorner =
-                Instance.new("UICorner")
-            viewportCorner.CornerRadius =
-                UDim.new(
-                    0,
-                    10
+            if not viewportTemplate then
+                warn(
+                    "[DeadEye] No native ViewportFrame template found"
                 )
-            viewportCorner.Parent =
-                viewport
+            else
+                local viewport =
+                    viewportTemplate:Clone()
 
-            createEmotePreview(
-                data.module,
-                viewport
-            )
+                viewport.Name =
+                    "EmotePreview"
+                viewport.Size =
+                    UDim2.new(
+                        1,
+                        0,
+                        1,
+                        0
+                    )
+                viewport.Position =
+                    UDim2.new(
+                        0,
+                        0,
+                        0,
+                        0
+                    )
+                viewport.BackgroundColor3 =
+                    Color3.fromRGB(
+                        31,
+                        35,
+                        42
+                    )
+                viewport.BackgroundTransparency =
+                    0
+                viewport.BorderSizePixel =
+                    0
+                viewport.Active =
+                    false
+                viewport.ZIndex =
+                    33
+                viewport.Parent =
+                    button
+
+                local viewportCorner =
+                    Instance.new("UICorner")
+                viewportCorner.CornerRadius =
+                    UDim.new(
+                        0,
+                        10
+                    )
+                viewportCorner.Parent =
+                    viewport
+
+                createEmotePreview(
+                    data.module,
+                    viewport
+                )
+            end
 
             --// GLASS OVERLAY
             local glass =
