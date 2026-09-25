@@ -2272,70 +2272,116 @@ local function createUnusualAnchor(
     id,
     index
 )
-    local anchor =
-        Instance.new("Part")
-    anchor.Name =
-        "DeadEyeUnusualAnchor_" ..
-        tostring(id) ..
-        "_" ..
-        tostring(index)
-    anchor.Size =
-        Vector3.new(
-            math.max(
-                sourcePart.Size.X,
-                0.05
-            ),
-            math.max(
-                sourcePart.Size.Y,
-                0.05
-            ),
-            math.max(
-                sourcePart.Size.Z,
-                0.05
+    local anchor
+
+    if sourcePart:IsA("MeshPart")
+        or sourcePart:IsA("Part")
+        or sourcePart:IsA("UnionOperation")
+        or sourcePart:IsA("TrussPart")
+    then
+        local success
+
+        success = pcall(function()
+            anchor = sourcePart:Clone()
+        end)
+
+        if not success or not anchor then
+            return nil
+        end
+
+        anchor.Name =
+            "DeadEyeUnusualGeometry_" ..
+            tostring(id) ..
+            "_" ..
+            tostring(index)
+
+        for _, joint in ipairs(
+            anchor:GetDescendants()
+        ) do
+            if joint:IsA("Weld")
+                or joint:IsA("WeldConstraint")
+                or joint:IsA("Motor6D")
+                or joint:IsA("Motor")
+            then
+                pcall(function()
+                    joint:Destroy()
+                end)
+            end
+        end
+
+        anchor.Anchored = false
+        anchor.CanCollide = false
+        anchor.CanTouch = false
+        anchor.CanQuery = false
+        anchor.Massless = true
+        anchor.CastShadow = false
+
+    else
+        anchor =
+            Instance.new("Part")
+
+        anchor.Name =
+            "DeadEyeUnusualAnchor_" ..
+            tostring(id) ..
+            "_" ..
+            tostring(index)
+
+        anchor.Size =
+            Vector3.new(
+                math.max(sourcePart.Size.X, 0.05),
+                math.max(sourcePart.Size.Y, 0.05),
+                math.max(sourcePart.Size.Z, 0.05)
             )
-        )
-    anchor.Transparency =
-        1
-    anchor.CanCollide =
-        false
-    anchor.CanTouch =
-        false
-    anchor.CanQuery =
-        false
-    anchor.CastShadow =
-        false
-    anchor.Massless =
-        true
-    anchor.Anchored =
-        false
+
+        anchor.Transparency = 1
+        anchor.CanCollide = false
+        anchor.CanTouch = false
+        anchor.CanQuery = false
+        anchor.CastShadow = false
+        anchor.Massless = true
+        anchor.Anchored = false
+    end
+
     local relative =
         sourceRoot.CFrame:ToObjectSpace(
             sourcePart.CFrame
         )
+
     anchor.CFrame =
-        targetPart.CFrame
-        * relative
+        targetPart.CFrame *
+        relative
+
     local parent =
         targetPart.Parent
+
     if not parent then
+        anchor:Destroy()
         return nil
     end
+
     anchor.Parent =
         parent
+
     local weld =
         Instance.new("WeldConstraint")
+
     weld.Name =
         "DeadEyeUnusualWeld"
+
     weld.Part0 =
         targetPart
+
     weld.Part1 =
         anchor
+
     weld.Parent =
         anchor
+
     tagUnusualFX(
         anchor,
         id
     )
+
     return anchor
 end
 --// =========================================================
@@ -2355,17 +2401,15 @@ local function installUnusualPartFX(
         sourceNodes,
         sourcePart
     )
-    --// Automatically recreate nested BaseParts
-    --// that actually carry unusual FX.
+    --// Copy every extra BasePart from the
+    --// cosmetic effect, even when it has no FX.
+    --// This is required for geometry such as
+    --// CatRadiance ears and whiskers.
     local anchorIndex = 0
     for _, nested in ipairs(
-        sourcePart:GetDescendants()
+        sourcePart:GetChildren()
     ) do
         if nested:IsA("BasePart")
-            and nested ~= sourcePart
-            and unusualBasePartHasContent(
-                nested
-            )
         then
             anchorIndex += 1
             local anchor =
@@ -2379,10 +2423,6 @@ local function installUnusualPartFX(
             if anchor then
                 targetMap[nested] =
                     anchor
-                table.insert(
-                    sourceNodes,
-                    nested
-                )
             end
         end
     end
