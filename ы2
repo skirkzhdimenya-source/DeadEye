@@ -1965,6 +1965,13 @@ local unusualPickerClose
 local unusualPickerButtons = {}
 local unusualPickerSide = nil
 local unusualIconCache = {}
+
+local function normalizeUnusualIconKey(value)
+    value = tostring(value or "")
+    value = string.lower(value)
+    value = string.gsub(value, "[^%w]", "")
+    return value
+end
 local unusualPage
 local unusualStatus
 local categoryBar
@@ -5982,46 +5989,74 @@ local function rebuildUnusualPicker()
     table.clear(unusualIconCache)
 
     pcall(function()
-        local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
+        local playerGui =
+            LocalPlayer:FindFirstChild("PlayerGui")
 
-        if playerGui then
-            for _, obj in ipairs(playerGui:GetDescendants()) do
+        if not playerGui then
+            return
+        end
 
-                if obj:IsA("ImageLabel")
-                    and obj.Name == "IconIMG"
+        for _, obj in ipairs(
+            playerGui:GetDescendants()
+        ) do
+            if obj:IsA("ImageLabel")
+                and obj.Name == "IconIMG"
+            then
+                local image = obj.Image
+
+                if type(image) == "string"
+                    and image ~= ""
                 then
+                    local node = obj
+                    local depth = 0
+                    local names = {}
 
-                    local image = obj.Image
-
-                    if type(image) == "string"
-                        and image ~= ""
-                    then
-
-                        local parent = obj.Parent
-                        local itemName = nil
-
-                        if parent then
-                            for _, child in ipairs(parent:GetChildren()) do
+                    while node
+                        and depth < 8
+                    do
+                        if node.Name == "Slot"
+                            or node.Name == "Button"
+                        then
+                            for _, child in ipairs(
+                                node:GetDescendants()
+                            ) do
                                 if child:IsA("TextLabel")
-                                    and child.Text
-                                    and child.Text ~= ""
+                                    or child:IsA("TextButton")
                                 then
-                                    itemName = tostring(child.Text)
-                                    break
+                                    local text =
+                                        tostring(
+                                            child.Text
+                                                or ""
+                                        )
+
+                                    if text ~= "" then
+                                        table.insert(
+                                            names,
+                                            text
+                                        )
+                                    end
                                 end
                             end
                         end
 
-                        if itemName then
-                            unusualIconCache[
-                                string.lower(itemName)
-                            ] = image
-                        end
-
+                        node = node.Parent
+                        depth += 1
                     end
 
-                end
+                    for _, name in ipairs(names) do
+                        local key =
+                            normalizeUnusualIconKey(
+                                name
+                            )
 
+                        if key ~= ""
+                            and #key >= 3
+                        then
+                            unusualIconCache[key] =
+                                image
+                        end
+                    end
+                end
             end
         end
     end)
@@ -6195,10 +6230,16 @@ local function rebuildUnusualPicker()
                 1
             icon.BorderSizePixel =
                 0
+            icon.Visible =
+                true
+            icon.ImageTransparency =
+                0
+            icon.Active =
+                false
             icon.Image =
                 unusualIconCache[
-                    string.lower(
-                        tostring(data.name)
+                    normalizeUnusualIconKey(
+                        data.name
                     )
                 ]
                 or ""
@@ -6338,7 +6379,6 @@ end
 local function openUnusualPicker(
     side
 )
-    table.clear(unusualIconCache)
     unusualPickerSide =
         side
     if side == "Original" then
