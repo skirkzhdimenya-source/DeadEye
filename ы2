@@ -4335,48 +4335,6 @@ unusualRuntime.addAnimationLink = function(
 end
 
 unusualRuntime.updateAnimatedParts = function()
-    local targetRig =
-        getUnusualVisualRig()
-
-    local targetRoot
-
-    if targetRig then
-        targetRoot =
-            targetRig:FindFirstChild(
-                "HumanoidRootPart"
-            )
-    end
-
-    if not targetRoot then
-        local character =
-            getUnusualPlayerCharacter()
-
-        if character then
-            targetRoot =
-                character:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-        end
-    end
-
-    for _, item in ipairs(
-        unusualRuntime.animatedNestedVisuals
-    ) do
-
-        if item.model
-            and item.model.Parent
-            and item.root
-            and item.root.Parent
-            and targetRoot
-        then
-
-            --// The root is already WeldConstraint-attached.
-            --// Do not touch it here; Motor6D animation must be
-            --// allowed to solve the complete nested rig.
-        end
-
-    end
-
     local source =
         unusualRuntime.animationSource
 
@@ -7174,7 +7132,6 @@ end
 --// OTHERS
 --// R6 AVATAR SCANNER / EDITOR
 --// =========================================================
-local others = {}
 function others.saveConfig()
     savedConfig.others =
         savedConfig.others
@@ -7948,9 +7905,6 @@ function mainJump.canJump()
 end
 function mainJump.jump(hit)
     if not mainJump.canJump() then
-        return
-    end
-    if tick() - mainJump.lastJump < 0 then
         return
     end
     mainJump.lastJump = tick()
