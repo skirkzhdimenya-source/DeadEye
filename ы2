@@ -2060,6 +2060,7 @@ local function tagUnusualFX(
     end
 end
 --// =========================================================
+--// =========================================================
 --// APPLY UNUSUAL FX ONLY
 -- =========================================================
 local function applyUnusualFX(
@@ -2075,6 +2076,137 @@ local function applyUnusualFX(
 
     if not cosmeticRig then
         return false
+    end
+
+    --// Lobby/menu uses the game's real character parts.
+    --// This is the old working path and intentionally differs
+    --// from the full cosmetic clone used inside a round.
+    local roundRigs =
+        workspace:FindFirstChild("Rigs")
+
+    local roundRig =
+        roundRigs
+        and roundRigs:FindFirstChild(
+            LocalPlayer.Name
+        )
+
+    if not roundRig
+        and visualRig
+        and visualRig.Parent
+    then
+
+        local hasRoundRig = false
+
+        pcall(function()
+            hasRoundRig =
+                visualRig.Parent.Name == "Rigs"
+                or (
+                    roundRigs
+                    and roundRigs:FindFirstChild(
+                        LocalPlayer.Name
+                    ) == visualRig
+                )
+        end)
+
+        if not hasRoundRig then
+            local rootClone
+
+            if pcall(function()
+                rootClone =
+                    cosmeticRig:Clone()
+            end) and rootClone
+            then
+                for _, object in ipairs(
+                    rootClone:GetDescendants()
+                ) do
+                    if object:IsA("Script")
+                        or object:IsA("LocalScript")
+                        or object:IsA("ModuleScript")
+                    then
+                        pcall(function()
+                            object:Destroy()
+                        end)
+                    elseif object:IsA("BasePart") then
+                        object.CanCollide = false
+                        object.CanTouch = false
+                        object.CanQuery = false
+                        object.Massless = true
+                    end
+                end
+
+                local installedRoot =
+                    rootClone:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+
+                for _, sourcePart in ipairs(
+                    cosmeticRig:GetChildren()
+                ) do
+                    if sourcePart:IsA("BasePart") then
+                        local targetPart
+
+                        if sourcePart.Name ==
+                            "HumanoidRootPart"
+                        then
+                            targetPart =
+                                playerCharacter
+                                and playerCharacter:FindFirstChild(
+                                    "HumanoidRootPart"
+                                )
+                        else
+                            targetPart =
+                                visualRig:FindFirstChild(
+                                    sourcePart.Name
+                                )
+                        end
+
+                        if targetPart
+                            and installedRoot
+                            and installedRoot:IsA("BasePart")
+                        then
+                            local clonePart =
+                                rootClone:FindFirstChild(
+                                    sourcePart.Name
+                                )
+
+                            if clonePart
+                                and clonePart:IsA("BasePart")
+                            then
+                                for _, child in ipairs(
+                                    clonePart:GetChildren()
+                                ) do
+
+                                    local isJoint =
+                                        child:IsA("Weld")
+                                        or child:IsA("WeldConstraint")
+                                        or child:IsA("Motor6D")
+                                        or child:IsA("Motor")
+                                        or child:IsA("CFrameValue")
+
+                                    if not isJoint then
+                                        pcall(function()
+                                            child.Parent =
+                                                targetPart
+                                        end)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+
+                tagUnusualFX(
+                    visualRig,
+                    id
+                )
+
+                pcall(function()
+                    rootClone:Destroy()
+                end)
+
+                return true
+            end
+        end
     end
 
     local targetRoot =
