@@ -2327,7 +2327,7 @@ end
 --// =========================================================
 --// UNUSUAL ANIMATION SOURCE
 --// =========================================================
-local function destroyUnusualAnimationSource()
+unusualRuntime.destroyAnimationSource = function()
     if unusualRuntime.animationSource then
         pcall(function()
             unusualRuntime.animationSource:Destroy()
@@ -2340,7 +2340,7 @@ local function destroyUnusualAnimationSource()
     )
 end
 
-local function findUnusualRelative(
+unusualRuntime.findRelative = function(
     root,
     object
 )
@@ -2386,7 +2386,7 @@ local function findUnusualRelative(
     return current
 end
 
-local function startUnusualAnimations(
+unusualRuntime.startAnimations = function(
     root
 )
     if not root then
@@ -2446,11 +2446,11 @@ local function startUnusualAnimations(
     return started
 end
 
-local function createUnusualAnimationSource(
+unusualRuntime.createAnimationSource = function(
     cosmeticRig,
     id
 )
-    destroyUnusualAnimationSource()
+    unusualRuntime.destroyAnimationSource()
 
     if not cosmeticRig then
         return nil
@@ -2550,7 +2550,7 @@ local function createUnusualAnimationSource(
 
     root.Anchored = true
 
-    startUnusualAnimations(
+    unusualRuntime.startAnimations(
         source
     )
 
@@ -2560,7 +2560,7 @@ local function createUnusualAnimationSource(
     return source
 end
 
-local function addUnusualAnimationLink(
+unusualRuntime.addAnimationLink = function(
     sourcePart,
     nested,
     targetPart,
@@ -2571,7 +2571,7 @@ local function addUnusualAnimationLink(
     end
 
     local animatedPart =
-        findUnusualRelative(
+        unusualRuntime.findRelative(
             animatedSource,
             nested
         )
@@ -2609,7 +2609,7 @@ local function addUnusualAnimationLink(
     return true
 end
 
-local function updateUnusualAnimatedParts()
+unusualRuntime.updateAnimatedParts = function()
     local source =
         unusualRuntime.animationSource
 
@@ -2819,7 +2819,7 @@ local function installUnusualPartFX(
                     anchor
 
                 local animated =
-                    addUnusualAnimationLink(
+                    unusualRuntime.addAnimationLink(
                         sourcePart,
                         nested,
                         targetPart,
@@ -3072,7 +3072,7 @@ local function applyUnusualFX(
         0
 
     local animatedSource =
-        createUnusualAnimationSource(
+        unusualRuntime.createAnimationSource(
             cosmeticRig,
             id
         )
@@ -3942,7 +3942,7 @@ addUnusualConnection(
                 return
             end
 
-            updateUnusualAnimatedParts()
+            unusualRuntime.updateAnimatedParts()
             updateUnusualPOV()
 
             if unusualEnabled
