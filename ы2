@@ -2481,13 +2481,7 @@ unusualRuntime.createAnimationSource = function(
         source:GetDescendants()
     ) do
 
-        if object:IsA("Humanoid") then
-
-            pcall(function()
-                object:Destroy()
-            end)
-
-        elseif object:IsA("LocalScript")
+        if object:IsA("LocalScript")
             or object:IsA("Script")
         then
 
@@ -2508,6 +2502,7 @@ unusualRuntime.createAnimationSource = function(
                 pcall(function()
                     object.Disabled = true
                 end)
+
             else
                 pcall(function()
                     object:Destroy()
@@ -2520,6 +2515,9 @@ unusualRuntime.createAnimationSource = function(
 
         elseif object:IsA("BasePart") then
 
+            --// Runtime source is never used for rendering.
+            --// Keep its complete joint/part structure intact
+            --// so client drivers can animate it normally.
             pcall(function()
                 object.CanCollide = false
                 object.CanTouch = false
@@ -2539,52 +2537,6 @@ unusualRuntime.createAnimationSource = function(
             source:Destroy()
         end)
         return nil
-    end
-
-    local bodyNames = {
-        Head = true,
-        Torso = true,
-        ["Left Arm"] = true,
-        ["Right Arm"] = true,
-        ["Left Leg"] = true,
-        ["Right Leg"] = true,
-        HumanoidRootPart = true
-    }
-
-    for _, object in ipairs(
-        source:GetChildren()
-    ) do
-
-        if object:IsA("BasePart")
-            and bodyNames[object.Name]
-        then
-
-            pcall(function()
-                object.Transparency = 1
-                object.CastShadow = false
-                object.CanCollide = false
-                object.CanTouch = false
-                object.CanQuery = false
-                object.Massless = true
-                object.LocalTransparencyModifier = 1
-            end)
-
-            for _, child in ipairs(
-                object:GetChildren()
-            ) do
-
-                if child:IsA("Decal")
-                    or child:IsA("Texture")
-                then
-                    pcall(function()
-                        child.Transparency = 1
-                    end)
-                end
-
-            end
-
-        end
-
     end
 
     local root =
@@ -2636,44 +2588,52 @@ unusualRuntime.createAnimationSource = function(
             source:GetPivot()
         )
 
-    if hasClientDriver
-        and playerCharacter
-    then
+    if hasClientDriver then
 
-        --// Client driver scripts need a
-        --// Character descendant in order to run.
-        --// Keep the clone visual-only: remove all
-        --// character joints so ragdoll cannot bind
-        --// to this copied Unusual.
-        for _, object in ipairs(
-            source:GetDescendants()
-        ) do
+        --// LocalScripts execute from PlayerGui without
+        --// becoming descendants of the real Character.
+        --// This keeps the copied runtime completely invisible
+        --// to the game's ragdoll/joint code.
+        local playerGui =
+            LocalPlayer:FindFirstChildOfClass(
+                "PlayerGui"
+            )
 
-            if object:IsA("Weld")
-                or object:IsA("WeldConstraint")
-                or object:IsA("Motor6D")
-                or object:IsA("Motor")
-            then
+        if not playerGui then
+            pcall(function()
+                playerGui =
+                    LocalPlayer:WaitForChild(
+                        "PlayerGui",
+                        5
+                    )
+            end)
+        end
 
-                pcall(function()
-                    object:Destroy()
-                end)
+        if not playerGui then
+            pcall(function()
+                source:Destroy()
+            end)
+            return nil
+        end
 
-            elseif object:IsA("BasePart") then
+        local folder =
+            playerGui:FindFirstChild(
+                "DeadEyeUnusualRuntime"
+            )
 
-                --// The copied driver clone has no joints, so
-                --// keep its parts out of physics. The client
-                --// script itself is still free to move them.
-                pcall(function()
-                    object.Anchored = true
-                end)
+        if not folder then
+            folder =
+                Instance.new("Folder")
 
-            end
+            folder.Name =
+                "DeadEyeUnusualRuntime"
 
+            folder.Parent =
+                playerGui
         end
 
         source.Parent =
-            playerCharacter
+            folder
 
     else
 
@@ -2705,13 +2665,16 @@ unusualRuntime.createAnimationSource = function(
         )
     end)
 
-    root.Anchored = true
+    if not hasClientDriver then
+        root.Anchored = true
 
-    unusualRuntime.startAnimations(
-        source
-    )
+        unusualRuntime.startAnimations(
+            source
+        )
+    end
 
     if hasClientDriver then
+
         for _, object in ipairs(
             source:GetDescendants()
         ) do
@@ -2727,6 +2690,7 @@ unusualRuntime.createAnimationSource = function(
             end
 
         end
+
     end
 
     unusualRuntime.animationSource =
