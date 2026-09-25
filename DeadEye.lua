@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.6"
+    "DeadEyes v1.7"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -2733,6 +2733,283 @@ function cosmetic.select(
     -- explicitly turns Cosmetic Swap back on.
 end
 
+--// =========================================================
+--// COSMETIC NATIVE VIEWPORT PREVIEW
+--// Mirrors ClientItemService:GetVisualModel/CreateViewport.
+--// =========================================================
+function cosmetic.createPreview(
+    id,
+    viewport
+)
+    if not viewport then
+        return false
+    end
+
+    local module
+    local moduleOK =
+        pcall(function()
+            local entry =
+                Registry.GetById(
+                    tonumber(id)
+                )
+            module =
+                entry
+                and entry.Module
+        end)
+
+    if not moduleOK
+        or not module
+    then
+        return false
+    end
+
+    local data
+    local dataOK =
+        pcall(function()
+            data = require(module)
+        end)
+
+    if not dataOK
+        or type(data) ~= "table"
+    then
+        return false
+    end
+
+    local appearance =
+        type(data.AppearanceInfo) == "table"
+        and data.AppearanceInfo
+        or {}
+
+    local isR15 = false
+
+    pcall(function()
+        local character =
+            LocalPlayer.Character
+
+        local humanoid =
+            character
+            and character:FindFirstChildOfClass(
+                "Humanoid"
+            )
+
+        if humanoid then
+            isR15 =
+                humanoid.RigType
+                == Enum.HumanoidRigType.R15
+        end
+    end)
+
+    local source
+
+    if isR15
+        and module:FindFirstChild("Character")
+    then
+        source =
+            module:FindFirstChild(
+                "Character"
+            )
+    elseif not module:FindFirstChild(
+        "CharacterClassic"
+    )
+        and module:FindFirstChild(
+            "Character"
+        )
+    then
+        source =
+            module:FindFirstChild(
+                "Character"
+            )
+    else
+        source =
+            module:FindFirstChild(
+                "CharacterClassic"
+            )
+    end
+
+    if not source
+        or not source:IsA("Model")
+    then
+        return false
+    end
+
+    local visual
+
+    local cloneOK =
+        pcall(function()
+            visual =
+                source:Clone()
+        end)
+
+    if not cloneOK
+        or not visual
+    then
+        return false
+    end
+
+    if appearance.CameraType == "Back" then
+        pcall(function()
+            if isR15 then
+                local lowerTorso =
+                    visual:FindFirstChild(
+                        "LowerTorso"
+                    )
+
+                local root =
+                    lowerTorso
+                    and lowerTorso:FindFirstChild(
+                        "Root"
+                    )
+
+                if root
+                    and root:IsA("Motor6D")
+                then
+                    root.C0 =
+                        CFrame.Angles(
+                            0,
+                            math.pi,
+                            0
+                        )
+                        * root.C0
+                end
+            else
+                local humanoidRootPart =
+                    visual:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+
+                local torsoRot =
+                    humanoidRootPart
+                    and humanoidRootPart:FindFirstChild(
+                        "TorsoRot"
+                    )
+
+                if torsoRot
+                    and torsoRot:IsA("Motor6D")
+                then
+                    torsoRot.C0 =
+                        CFrame.Angles(
+                            0,
+                            math.pi,
+                            0
+                        )
+                        * torsoRot.C0
+                end
+            end
+        end)
+    end
+
+    if not visual.PrimaryPart then
+        visual.PrimaryPart =
+            visual:FindFirstChild(
+                "HumanoidRootPart"
+            )
+    end
+
+    if not visual.PrimaryPart then
+        visual:Destroy()
+        return false
+    end
+
+    for _, child in ipairs(
+        viewport:GetChildren()
+    ) do
+        pcall(function()
+            child:Destroy()
+        end)
+    end
+
+    local worldModel =
+        Instance.new(
+            "WorldModel"
+        )
+
+    local camera =
+        Instance.new(
+            "Camera"
+        )
+
+    local rootCFrame =
+        visual.PrimaryPart.CFrame
+
+    local cameraCFrame
+
+    if appearance.CameraType == "Head" then
+        cameraCFrame =
+            CFrame.new(
+                0,
+                1.65,
+                0
+            )
+            * CFrame.new(
+                (
+                    rootCFrame
+                    * CFrame.new(
+                        0.85,
+                        -0.51,
+                        -5.1
+                    )
+                ).Position,
+                rootCFrame.Position
+            )
+    elseif appearance.CameraType == "Back" then
+        cameraCFrame =
+            CFrame.new(
+                0,
+                0.34,
+                0
+            )
+            * CFrame.new(
+                (
+                    rootCFrame
+                    * CFrame.new(
+                        4.25,
+                        1.7,
+                        8.5
+                    )
+                ).Position,
+                rootCFrame.Position
+            )
+    else
+        cameraCFrame =
+            CFrame.new(
+                0,
+                0.34,
+                0
+            )
+            * CFrame.new(
+                (
+                    rootCFrame
+                    * CFrame.new(
+                        4.25,
+                        1.7,
+                        -8.5
+                    )
+                ).Position,
+                rootCFrame.Position
+            )
+    end
+
+    visual.Parent =
+        worldModel
+
+    camera.CFrame =
+        cameraCFrame
+
+    camera.FieldOfView =
+        30
+
+    worldModel.Parent =
+        viewport
+
+    camera.Parent =
+        worldModel
+
+    viewport.CurrentCamera =
+        camera
+
+    return true
+end
+
 function cosmetic.rebuildPicker()
     for _, button in ipairs(
         unusualPickerButtons
@@ -2884,45 +3161,51 @@ function cosmetic.rebuildPicker()
             button.Parent =
                 unusualPickerScroll
 
-            local icon =
+            local preview =
                 Instance.new(
-                    "ImageLabel"
+                    "ViewportFrame"
                 )
-            icon.Name =
-                "EffectIcon"
-            icon.Size =
+            preview.Name =
+                "CosmeticPreview"
+            preview.Size =
                 UDim2.new(
                     1,
                     0,
                     1,
                     0
                 )
-            icon.BackgroundTransparency = 1
-            icon.Image =
-                data.icon
-                or unusualIconCache[
-                    normalizeUnusualIconKey(
-                        name
-                    )
-                ]
-                or ""
-            icon.ScaleType =
-                Enum.ScaleType.Crop
-            icon.ZIndex = 33
-            icon.Parent =
+            preview.BackgroundColor3 =
+                Color3.fromRGB(
+                    31,
+                    35,
+                    42
+                )
+            preview.BackgroundTransparency =
+                0
+            preview.BorderSizePixel =
+                0
+            preview.Active =
+                false
+            preview.ZIndex =
+                33
+            preview.Parent =
                 button
 
-            local corner =
+            local previewCorner =
                 Instance.new(
                     "UICorner"
                 )
-            corner.CornerRadius =
-                UDim.new(
-                    0,
-                    10
+            previewCorner.CornerRadius =
+                UDim.new(0, 10)
+            previewCorner.Parent =
+                preview
+
+            pcall(function()
+                cosmetic.createPreview(
+                    data.id,
+                    preview
                 )
-            corner.Parent =
-                icon
+            end)
 
             local glass =
                 Instance.new(
@@ -10903,7 +11186,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.6"
+            MainTitle.Text = "DeadEyes v1.7"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10925,7 +11208,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.6"
+            MainTitle.Text = "DeadEyes v1.7"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -10950,7 +11233,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.6"
+            MainTitle.Text = "DeadEyes v1.7"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10972,7 +11255,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.6"
+            MainTitle.Text = "DeadEyes v1.7"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -10997,7 +11280,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.6"
+            MainTitle.Text = "DeadEyes v1.7"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
