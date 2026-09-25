@@ -1585,11 +1585,11 @@ local MainSurfaceCorner =
 MainSurfaceCorner.CornerRadius =
     UDim.new(
         0,
-        10
+        12
     )
 
 MainSurfaceCorner.Parent =
-    Main
+    MainSurface
 
 local MainSurfaceStroke =
     Instance.new("UIStroke")
@@ -1598,7 +1598,7 @@ MainSurfaceStroke.Thickness =
     1
 
 MainSurfaceStroke.Transparency =
-    0.72
+    0.66
 
 MainSurfaceStroke.Parent =
     MainSurface
@@ -1682,7 +1682,7 @@ MainHeader.BackgroundColor3 =
         53
     )
 MainHeader.BackgroundTransparency =
-    0.08
+    0.20
 MainHeader.BorderSizePixel =
     0
 MainHeader.ZIndex =
@@ -1696,7 +1696,7 @@ local MainHeaderCorner =
 MainHeaderCorner.CornerRadius =
     UDim.new(
         0,
-        9
+        11
     )
 
 MainHeaderCorner.Parent =
@@ -1726,7 +1726,7 @@ __UI.MainHeaderGradient.Color =
         )
     })
 __UI.MainHeaderGradient.Transparency =
-    NumberSequence.new(0.05)
+    NumberSequence.new(0.18)
 __UI.MainHeaderGradient.Parent =
     MainHeader
 
@@ -6903,18 +6903,18 @@ function mainJump.update()
             "ON"
         mainJump.toggle.BackgroundColor3 =
             Color3.fromRGB(
-                65,
-                65,
-                65
+                68,
+                74,
+                84
             )
     else
         mainJump.toggle.Text =
             "OFF"
         mainJump.toggle.BackgroundColor3 =
             Color3.fromRGB(
-                45,
-                45,
-                45
+                47,
+                52,
+                61
             )
     end
 end
@@ -7258,7 +7258,7 @@ __UI.mainCorner =
 __UI.mainCorner.CornerRadius =
     UDim.new(
         0,
-        7
+        9
     )
 __UI.mainCorner.Parent =
     mainPage
@@ -7331,7 +7331,7 @@ local function mainRow(labelText, order)
     rowCorner.CornerRadius =
         UDim.new(
             0,
-            6
+            7
         )
     rowCorner.Parent =
         row
@@ -7788,7 +7788,7 @@ others.pageCorner =
 others.pageCorner.CornerRadius =
     UDim.new(
         0,
-        7
+        9
     )
 others.pageCorner.Parent =
     others.page
@@ -8827,7 +8827,7 @@ __UI.categoryCorner =
 __UI.categoryCorner.CornerRadius =
     UDim.new(
         0,
-        7
+        9
     )
 __UI.categoryCorner.Parent =
     categoryBar
@@ -9247,7 +9247,7 @@ __UI.ToggleCorner =
 __UI.ToggleCorner.CornerRadius =
     UDim.new(
         0,
-        6
+        7
     )
 __UI.ToggleCorner.Parent =
     Toggle
@@ -9313,7 +9313,7 @@ __UI.SlotsCorner =
 __UI.SlotsCorner.CornerRadius =
     UDim.new(
         0,
-        7
+        9
     )
 __UI.SlotsCorner.Parent =
     SlotsScroll
@@ -9384,7 +9384,7 @@ for slotIndex = 1, SLOT_COUNT do
     rowCorner.CornerRadius =
         UDim.new(
             0,
-            6
+            7
         )
     rowCorner.Parent =
         row
@@ -9471,7 +9471,7 @@ for slotIndex = 1, SLOT_COUNT do
     originalCorner.CornerRadius =
         UDim.new(
             0,
-            6
+            7
         )
     originalCorner.Parent =
         originalButton
@@ -9559,7 +9559,7 @@ for slotIndex = 1, SLOT_COUNT do
     replaceCorner.CornerRadius =
         UDim.new(
             0,
-            6
+            7
         )
     replaceCorner.Parent =
         replaceButton
@@ -10419,18 +10419,18 @@ function updateGUI()
             "SWAP: ON"
         Toggle.BackgroundColor3 =
             Color3.fromRGB(
-                65,
-                65,
-                65
+                68,
+                74,
+                84
             )
     else
         Toggle.Text =
             "SWAP: OFF"
         Toggle.BackgroundColor3 =
             Color3.fromRGB(
-                45,
-                45,
-                45
+                47,
+                52,
+                61
             )
     end
 end
@@ -11009,7 +11009,7 @@ for _, object in ipairs(
             object.BackgroundTransparency =
                 math.max(
                     object.BackgroundTransparency,
-                    0.14
+                    0.28
                 )
         end)
     elseif object:IsA("TextBox") then
@@ -11017,7 +11017,7 @@ for _, object in ipairs(
             object.BackgroundTransparency =
                 math.max(
                     object.BackgroundTransparency,
-                    0.10
+                    0.24
                 )
         end)
     elseif object:IsA("ScrollingFrame") then
@@ -11025,7 +11025,7 @@ for _, object in ipairs(
             object.BackgroundTransparency =
                 math.max(
                     object.BackgroundTransparency,
-                    0.10
+                    0.24
                 )
         end)
     elseif object:IsA("Frame")
@@ -11036,7 +11036,7 @@ for _, object in ipairs(
             object.BackgroundTransparency =
                 math.max(
                     object.BackgroundTransparency,
-                    0.12
+                    0.24
                 )
         end)
     end
