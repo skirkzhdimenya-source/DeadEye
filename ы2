@@ -4139,6 +4139,16 @@ local function applyUnusualFX(
 
     end
 
+    --// Build the hidden animation source first. This cleanup
+    --// routine destroys previous runtime/animated visuals,
+    --// so the visible animated mini-rig must be installed after it.
+    local animatedSource =
+        unusualRuntime.createAnimationSource(
+            cosmeticRig,
+            id,
+            playerCharacter
+        )
+
     local animatedNestedInstalled =
         unusualRuntime.installAnimatedNestedModels(
             cosmeticRig,
@@ -4152,14 +4162,13 @@ local function applyUnusualFX(
 
     if animatedNestedInstalled > 0 then
         installed += animatedNestedInstalled
-    end
-
-    local animatedSource =
-        unusualRuntime.createAnimationSource(
-            cosmeticRig,
-            id,
-            playerCharacter
+        print(
+            "[UnusualSwapper] Animated nested models:",
+            animatedNestedInstalled,
+            "ID:",
+            id
         )
+    end
 
     for _, sourcePart in ipairs(
         cosmeticRig:GetChildren()
