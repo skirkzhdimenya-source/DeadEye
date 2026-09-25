@@ -2083,22 +2083,10 @@ end
 local function installUnusualPartFX(
     sourcePart,
     targetPart,
-    id
+    id,
+    rootClone
 )
-    local cosmeticRig =
-        sourcePart.Parent
-
-    if not cosmeticRig then
-        return
-    end
-
-    local rootClone
-
-    if not pcall(function()
-        rootClone =
-            cosmeticRig:Clone()
-    end) or not rootClone
-    then
+    if not rootClone then
         return
     end
 
@@ -2400,6 +2388,17 @@ local function applyUnusualFX(
     local installed =
         0
 
+    local rootClone
+
+    if not pcall(function()
+        rootClone = cosmeticRig:Clone()
+    end) or not rootClone then
+        return false
+    end
+
+    rootClone.Parent =
+        visualRig.Parent
+
     for _, sourcePart in ipairs(
         cosmeticRig:GetChildren()
     ) do
@@ -2435,7 +2434,8 @@ local function applyUnusualFX(
                 installUnusualPartFX(
                     sourcePart,
                     targetPart,
-                    id
+                    id,
+                    rootClone
                 )
 
                 installed += 1
@@ -2549,7 +2549,11 @@ local function applyUnusualFX(
             end
         end
     end
-        return true
+        pcall(function()
+        rootClone:Destroy()
+    end)
+
+    return true
 end
 --// =========================================================
 --// REMOVE OUR FX
