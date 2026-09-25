@@ -31,6 +31,11 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local genv = getgenv and getgenv() or _G
+if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP()
+    end)
+end
 --// =========================================================
 --// PREVIOUS INSTANCE CLEANUP
 --// =========================================================
@@ -6868,13 +6873,23 @@ function others.updateFirstPersonTransparency()
     end
 end
 
-UnusualFns.addUnusualConnection(
-    RunService.Heartbeat:Connect(function()
-        if not unusualDestroyed then
-            others.updateFirstPersonTransparency()
-        end
+genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP = function()
+    if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION then
+        pcall(function()
+            genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION:Disconnect()
+        end)
+        genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION = nil
+    end
+
+    pcall(function()
+        others.restoreFirstPersonTransparency()
     end)
-)
+end
+
+genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION =
+    RunService.RenderStepped:Connect(function()
+        others.updateFirstPersonTransparency()
+    end)
 --// =========================================================
 --// MAIN / AUTOJUMP
 --// =========================================================
@@ -9290,9 +9305,6 @@ local function cleanupUnusual()
     end
     unusualDestroyed =
         true
-    pcall(function()
-        others.restoreFirstPersonTransparency()
-    end)
     if unusualActive then
         pcall(function()
             UnusualFns.restoreUnusual()
