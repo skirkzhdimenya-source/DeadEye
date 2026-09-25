@@ -10447,18 +10447,34 @@ getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT = {
     prepareOriginalModule = prepareOriginalModule,
     prepareReplaceModule = prepareReplaceModule,
     getEmoteName = getEmoteName,
-    createEmotePreview = createEmotePreview
+    createEmotePreview = createEmotePreview,
+    isEnabled = function()
+        return enabled
+    end
 }
 
 local NativeWheel =
     loadstring(
         game:HttpGet(
-            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_NativeWheel.lua"
+            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/8d0f6ff3659781c4beedbf2d2b33f6c6c0731fe3/DeadEye_NativeWheel.lua"
         ),
         "@DeadEye_NativeWheel"
     )()
 
+--// Backward-compatible guard for a cached old factory-style module.
+if type(NativeWheel) == "function" then
+    NativeWheel = NativeWheel(
+        getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT
+    )
+end
+
 getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT = nil
+
+if type(NativeWheel) ~= "table" then
+    error(
+        "[DeadEye] NativeWheel module did not return an API table"
+    )
+end
 --// =========================================================
 --// REBUILD PICKER
 --// =========================================================
