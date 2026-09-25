@@ -2785,10 +2785,59 @@ unusualRuntime.updateAnimatedParts = function()
         return
     end
 
+    local targetRig =
+        getUnusualVisualRig()
+
+    local targetRoot
+
+    if targetRig then
+        targetRoot =
+            targetRig:FindFirstChild(
+                "HumanoidRootPart"
+            )
+    end
+
+    if not targetRoot then
+        local character =
+            getUnusualPlayerCharacter()
+
+        if character then
+            targetRoot =
+                character:FindFirstChild(
+                    "HumanoidRootPart"
+                )
+        end
+    end
+
+    local sourceRoot =
+        source:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if targetRoot
+        and sourceRoot
+        and targetRoot:IsA("BasePart")
+        and sourceRoot:IsA("BasePart")
+    then
+
+        local delta =
+            targetRoot.CFrame *
+            sourceRoot.CFrame:Inverse()
+
+        pcall(function()
+            source:PivotTo(
+                delta *
+                source:GetPivot()
+            )
+        end)
+
+    end
+
     for _, link in ipairs(
         unusualRuntime.animationLinks
     ) do
-        local sourceRoot =
+
+        local sourceRootPart =
             link.sourceRoot
 
         local sourcePart =
@@ -2797,35 +2846,35 @@ unusualRuntime.updateAnimatedParts = function()
         local targetPart =
             link.targetPart
 
-        local anchor =
-            link.anchor
-
-        if sourceRoot
-            and sourceRoot.Parent
+        if sourceRootPart
+            and sourceRootPart.Parent
             and sourcePart
             and sourcePart.Parent
             and targetPart
             and targetPart.Parent
-            and anchor
-            and anchor.Parent
         then
-            local relative
 
-            pcall(function()
-                relative =
-                    sourceRoot.CFrame:ToObjectSpace(
-                        sourcePart.CFrame
-                    )
-            end)
+            local relative =
+                sourceRootPart.CFrame:ToObjectSpace(
+                    sourcePart.CFrame
+                )
 
-            if relative then
+            local anchor =
+                link.anchor
+
+            if anchor
+                and anchor.Parent
+                and anchor:IsA("BasePart")
+            then
                 pcall(function()
                     anchor.CFrame =
                         targetPart.CFrame *
                         relative
                 end)
             end
+
         end
+
     end
 end
 
