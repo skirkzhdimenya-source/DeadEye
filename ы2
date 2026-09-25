@@ -4876,7 +4876,6 @@ local function rebuildUnusualPicker()
 
                     unusualPicker.Visible = false
                     unusualPickerSide = nil
-                    closeUnusualPicker()
                 end
             )
         )
