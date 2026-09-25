@@ -1972,6 +1972,225 @@ local function normalizeUnusualIconKey(value)
     value = string.gsub(value, "[^%w]", "")
     return value
 end
+
+local function cacheUnusualIconFromObject(icon)
+    if not icon
+        or not icon:IsA("ImageLabel")
+        or icon.Name ~= "IconIMG"
+    then
+        return
+    end
+
+    local image = icon.Image
+
+    if type(image) ~= "string"
+        or image == ""
+    then
+        return
+    end
+
+    local node = icon
+    local depth = 0
+    local names = {}
+
+    while node
+        and depth < 10
+    do
+        if node.Name == "Slot"
+            or node.Name == "Button"
+            or node.Name == "Slots"
+        then
+            for _, child in ipairs(
+                node:GetDescendants()
+            ) do
+                if child:IsA("TextLabel")
+                    or child:IsA("TextButton")
+                then
+                    local text =
+                        tostring(
+                            child.Text
+                                or ""
+                        )
+
+                    if text ~= "" then
+                        table.insert(
+                            names,
+                            text
+                        )
+                    end
+                end
+            end
+        end
+
+        node = node.Parent
+        depth += 1
+    end
+
+    for _, name in ipairs(names) do
+        local key =
+            normalizeUnusualIconKey(
+                name
+            )
+
+        if key ~= ""
+            and #key >= 3
+        then
+            unusualIconCache[key] = image
+        end
+    end
+end
+
+local function collectCurrentUnusualIcons(playerGui)
+    if not playerGui then
+        return
+    end
+
+    for _, obj in ipairs(
+        playerGui:GetDescendants()
+    ) do
+        if obj:IsA("ImageLabel")
+            and obj.Name == "IconIMG"
+        then
+            cacheUnusualIconFromObject(obj)
+        end
+    end
+end
+
+local function findNativeUnusualScroll(playerGui)
+    local menu =
+        playerGui
+        and playerGui:FindFirstChild(
+            "Menu"
+        )
+
+    local views =
+        menu
+        and menu:FindFirstChild(
+            "Views"
+        )
+
+    local inventory =
+        views
+        and views:FindFirstChild(
+            "Inventory"
+        )
+
+    local selectView =
+        inventory
+        and inventory:FindFirstChild(
+            "Select"
+        )
+
+    local center =
+        selectView
+        and selectView:FindFirstChild(
+            "Center"
+        )
+
+    local frame =
+        center
+        and center:FindFirstChild(
+            "Frame"
+        )
+
+    local list =
+        frame
+        and frame:FindFirstChild(
+            "List"
+        )
+
+    local scroll =
+        list
+        and list:FindFirstChild(
+            "ScrollingFrame"
+        )
+
+    if scroll
+        and scroll:IsA("ScrollingFrame")
+    then
+        return scroll
+    end
+
+    return nil
+end
+
+local function preloadNativeUnusualIcons()
+    local playerGui =
+        LocalPlayer:FindFirstChild(
+            "PlayerGui"
+        )
+
+    if not playerGui then
+        return
+    end
+
+    collectCurrentUnusualIcons(
+        playerGui
+    )
+
+    local scroll =
+        findNativeUnusualScroll(
+            playerGui
+        )
+
+    if not scroll then
+        return
+    end
+
+    local oldPosition =
+        scroll.CanvasPosition
+
+    local oldVisible =
+        scroll.Visible
+
+    local maxY =
+        math.max(
+            0,
+            scroll.AbsoluteCanvasSize.Y
+                - scroll.AbsoluteWindowSize.Y
+        )
+
+    -- The native list is virtualized/recycled.
+    -- Walk through it so every batch of slots gets instantiated.
+    local steps = 32
+
+    for i = 0, steps do
+        pcall(function()
+            scroll.Visible = true
+            scroll.CanvasPosition =
+                Vector2.new(
+                    oldPosition.X,
+                    maxY * (i / steps)
+                )
+        end)
+
+        RunService.Heartbeat:Wait()
+        RunService.Heartbeat:Wait()
+
+        collectCurrentUnusualIcons(
+            playerGui
+        )
+
+        -- CanvasSize can change while the list recycles slots.
+        maxY =
+            math.max(
+                maxY,
+                scroll.AbsoluteCanvasSize.Y
+                    - scroll.AbsoluteWindowSize.Y
+            )
+    end
+
+    pcall(function()
+        scroll.CanvasPosition =
+            oldPosition
+        scroll.Visible =
+            oldVisible
+    end)
+
+    collectCurrentUnusualIcons(
+        playerGui
+    )
+end
 local unusualPage
 local unusualStatus
 local categoryBar
@@ -5986,79 +6205,12 @@ unusualPickerGrid.Parent =
 --// =========================================================
 local function rebuildUnusualPicker()
 
-    table.clear(unusualIconCache)
-
     pcall(function()
-        local playerGui =
-            LocalPlayer:FindFirstChild("PlayerGui")
-
-        if not playerGui then
-            return
-        end
-
-        for _, obj in ipairs(
-            playerGui:GetDescendants()
-        ) do
-            if obj:IsA("ImageLabel")
-                and obj.Name == "IconIMG"
-            then
-                local image = obj.Image
-
-                if type(image) == "string"
-                    and image ~= ""
-                then
-                    local node = obj
-                    local depth = 0
-                    local names = {}
-
-                    while node
-                        and depth < 8
-                    do
-                        if node.Name == "Slot"
-                            or node.Name == "Button"
-                        then
-                            for _, child in ipairs(
-                                node:GetDescendants()
-                            ) do
-                                if child:IsA("TextLabel")
-                                    or child:IsA("TextButton")
-                                then
-                                    local text =
-                                        tostring(
-                                            child.Text
-                                                or ""
-                                        )
-
-                                    if text ~= "" then
-                                        table.insert(
-                                            names,
-                                            text
-                                        )
-                                    end
-                                end
-                            end
-                        end
-
-                        node = node.Parent
-                        depth += 1
-                    end
-
-                    for _, name in ipairs(names) do
-                        local key =
-                            normalizeUnusualIconKey(
-                                name
-                            )
-
-                        if key ~= ""
-                            and #key >= 3
-                        then
-                            unusualIconCache[key] =
-                                image
-                        end
-                    end
-                end
-            end
-        end
+        collectCurrentUnusualIcons(
+            LocalPlayer:FindFirstChild(
+                "PlayerGui"
+            )
+        )
     end)
 
     for _, button in ipairs(
@@ -6376,11 +6528,14 @@ end
 --// =========================================================
 --// OPEN / CLOSE PICKER
 --// =========================================================
+local unusualIconPreloadGeneration = 0
+
 local function openUnusualPicker(
     side
 )
     unusualPickerSide =
         side
+
     if side == "Original" then
         unusualPickerTitle.Text =
             "Select Original"
@@ -6388,13 +6543,29 @@ local function openUnusualPicker(
         unusualPickerTitle.Text =
             "Select Replacement"
     end
+
     unusualPickerSearch.Text =
         ""
-    rebuildUnusualPicker()
-    unusualPicker.Visible =
-        false
+
     unusualPicker.Visible =
         true
+
+    unusualIconPreloadGeneration += 1
+    local generation =
+        unusualIconPreloadGeneration
+
+    rebuildUnusualPicker()
+
+    task.spawn(function()
+        preloadNativeUnusualIcons()
+
+        if generation
+            == unusualIconPreloadGeneration
+            and unusualPicker.Visible
+        then
+            rebuildUnusualPicker()
+        end
+    end)
 end
 local function closeUnusualPicker()
     unusualPicker.Visible =
@@ -6438,9 +6609,34 @@ addUnusualConnection(
         end
     )
 )
+
+addUnusualConnection(
+    LocalPlayer:WaitForChild(
+        "PlayerGui"
+    ).DescendantAdded:Connect(
+        function(obj)
+            if obj:IsA("ImageLabel")
+                and obj.Name == "IconIMG"
+            then
+                cacheUnusualIconFromObject(
+                    obj
+                )
+
+                if unusualPicker.Visible then
+                    task.defer(function()
+                        if unusualPicker.Visible then
+                            rebuildUnusualPicker()
+                        end
+                    end)
+                end
+            end
+        end
+    )
+)
+
 --// =========================================================
 --// UNUSUAL STATUS + TOGGLE USE EXISTING GUI
--- =========================================================
+-- =================================================
 local unusualStatusText =
     Instance.new("TextLabel")
 unusualStatusText.Name =
