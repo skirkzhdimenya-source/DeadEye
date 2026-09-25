@@ -2452,48 +2452,31 @@ local function removeOriginalUnusualFX(
 
                     if match then
 
-                        --// Remove only joints that actually connect
-                        --// to this exact effect object. Never remove a
-                        --// character Motor6D merely because its name
-                        --// happens to match the effect object.
+                        pcall(function()
+                            existing:Destroy()
+                        end)
+
                         for _, joint in ipairs(
                             targetPart:GetChildren()
                         ) do
 
-                            local connected = false
-
-                            if joint:IsA("Weld")
+                            if (
+                                joint:IsA("Weld")
+                                or joint:IsA("WeldConstraint")
                                 or joint:IsA("Motor6D")
                                 or joint:IsA("Motor")
+                            )
+                            and joint.Name ==
+                                info.Name
                             then
 
                                 pcall(function()
-                                    connected =
-                                        joint.Part0 == existing
-                                        or joint.Part1 == existing
-                                end)
-
-                            elseif joint:IsA("WeldConstraint") then
-
-                                pcall(function()
-                                    connected =
-                                        joint.Part0 == existing
-                                        or joint.Part1 == existing
-                                end)
-
-                            end
-
-                            if connected then
-                                pcall(function()
                                     joint:Destroy()
                                 end)
+
                             end
 
                         end
-
-                        pcall(function()
-                            existing:Destroy()
-                        end)
 
                         break
 
@@ -2503,9 +2486,39 @@ local function removeOriginalUnusualFX(
 
             end
 
-            --// Joint cleanup is handled only when a joint is
-            --// proven to be connected to the exact effect object
-            --// that is being removed.
+            --// Remove matching original joints such as
+            --// CatRadiance Head.Ears / Head.Bigotes.
+            for _, joint in ipairs(
+                targetPart:GetChildren()
+            ) do
+
+                if joint:IsA("Weld")
+                    or joint:IsA("WeldConstraint")
+                    or joint:IsA("Motor6D")
+                    or joint:IsA("Motor")
+                then
+
+                    for _, info in ipairs(
+                        objects
+                    ) do
+
+                        if joint.Name ==
+                            info.Name
+                        then
+
+                            pcall(function()
+                                joint:Destroy()
+                            end)
+
+                            break
+
+                        end
+
+                    end
+
+                end
+
+            end
 
         end
 
