@@ -1708,7 +1708,9 @@ local unusualDestroyed = false
 local unusualReapplyBusy = false
 local unusualRuntime = {
     appliedRig = nil,
-    reapplyGeneration = 0
+    reapplyGeneration = 0,
+    animationSource = nil,
+    animationLinks = {}
 }
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
@@ -2323,6 +2325,345 @@ local function unusualBasePartHasContent(
 end
 
 --// =========================================================
+--// UNUSUAL ANIMATION SOURCE
+--// =========================================================
+local function destroyUnusualAnimationSource()
+    if unusualRuntime.animationSource then
+        pcall(function()
+            unusualRuntime.animationSource:Destroy()
+        end)
+    end
+
+    unusualRuntime.animationSource = nil
+    table.clear(
+        unusualRuntime.animationLinks
+    )
+end
+
+local function findUnusualRelative(
+    root,
+    object
+)
+    if not root
+        or not object
+    then
+        return nil
+    end
+
+    local names = {}
+    local node = object
+
+    while node
+        and node ~= root
+    do
+        table.insert(
+            names,
+            1,
+            node.Name
+        )
+        node = node.Parent
+    end
+
+    if node ~= root then
+        return nil
+    end
+
+    local current = root
+
+    for _, name in ipairs(
+        names
+    ) do
+        current =
+            current:FindFirstChild(
+                name
+            )
+
+        if not current then
+            return nil
+        end
+    end
+
+    return current
+end
+
+local function startUnusualAnimations(
+    root
+)
+    if not root then
+        return false
+    end
+
+    local started = false
+
+    for _, controller in ipairs(
+        root:GetDescendants()
+    ) do
+        if controller:IsA(
+            "AnimationController"
+        ) then
+            local animator =
+                controller:FindFirstChildOfClass(
+                    "Animator"
+                )
+
+            if not animator then
+                pcall(function()
+                    animator =
+                        Instance.new(
+                            "Animator"
+                        )
+                    animator.Parent =
+                        controller
+                end)
+            end
+
+            if animator then
+                for _, animation in ipairs(
+                    controller:GetDescendants()
+                ) do
+                    if animation:IsA(
+                        "Animation"
+                    ) then
+                        pcall(function()
+                            local track =
+                                animator:LoadAnimation(
+                                    animation
+                                )
+
+                            if track then
+                                track:Play(
+                                    0
+                                )
+                                started = true
+                            end
+                        end)
+                    end
+                end
+            end
+        end
+    end
+
+    return started
+end
+
+local function createUnusualAnimationSource(
+    cosmeticRig,
+    id
+)
+    destroyUnusualAnimationSource()
+
+    if not cosmeticRig then
+        return nil
+    end
+
+    local source
+    local ok =
+        pcall(function()
+            source =
+                cosmeticRig:Clone()
+        end)
+
+    if not ok
+        or not source
+    then
+        return nil
+    end
+
+    source.Name =
+        "DeadEyeUnusualAnimation_" ..
+        tostring(id)
+
+    for _, object in ipairs(
+        source:GetDescendants()
+    ) do
+        if object:IsA("Humanoid") then
+            pcall(function()
+                object:Destroy()
+            end)
+        elseif object:IsA("Script")
+            or object:IsA("LocalScript")
+            or object:IsA("ModuleScript")
+        then
+            pcall(function()
+                object:Destroy()
+            end)
+        elseif object:IsA("BasePart") then
+            pcall(function()
+                object.CanCollide = false
+                object.CanTouch = false
+                object.CanQuery = false
+                object.Massless = true
+                object.Transparency = 1
+                object.CastShadow = false
+                object.LocalTransparencyModifier = 1
+            end)
+        end
+    end
+
+    local controllerCount = 0
+
+    for _, object in ipairs(
+        source:GetDescendants()
+    ) do
+        if object:IsA(
+            "AnimationController"
+        ) then
+            controllerCount += 1
+        end
+    end
+
+    if controllerCount == 0 then
+        source:Destroy()
+        return nil
+    end
+
+    local folder =
+        workspace:FindFirstChild(
+            "DeadEyeUnusualAnimationSources"
+        )
+
+    if not folder then
+        folder =
+            Instance.new("Folder")
+
+        folder.Name =
+            "DeadEyeUnusualAnimationSources"
+
+        folder.Parent =
+            workspace
+    end
+
+    source.Parent =
+        folder
+
+    local root =
+        source:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not root
+        or not root:IsA("BasePart")
+    then
+        source:Destroy()
+        return nil
+    end
+
+    root.Anchored = true
+
+    startUnusualAnimations(
+        source
+    )
+
+    unusualRuntime.animationSource =
+        source
+
+    return source
+end
+
+local function addUnusualAnimationLink(
+    sourcePart,
+    nested,
+    targetPart,
+    animatedSource
+)
+    if not animatedSource then
+        return false
+    end
+
+    local animatedPart =
+        findUnusualRelative(
+            animatedSource,
+            nested
+        )
+
+    local animatedRoot =
+        findUnusualRelative(
+            animatedSource,
+            sourcePart
+        )
+
+    if not animatedPart
+        or not animatedRoot
+        or not animatedPart:IsA("BasePart")
+        or not animatedRoot:IsA("BasePart")
+    then
+        return false
+    end
+
+    if not targetPart
+        or not targetPart:IsA("BasePart")
+    then
+        return false
+    end
+
+    table.insert(
+        unusualRuntime.animationLinks,
+        {
+            sourceRoot = animatedRoot,
+            sourcePart = animatedPart,
+            targetPart = targetPart,
+            anchor = nil
+        }
+    )
+
+    return true
+end
+
+local function updateUnusualAnimatedParts()
+    local source =
+        unusualRuntime.animationSource
+
+    if not source
+        or not source.Parent
+    then
+        return
+    end
+
+    for _, link in ipairs(
+        unusualRuntime.animationLinks
+    ) do
+        local sourceRoot =
+            link.sourceRoot
+
+        local sourcePart =
+            link.sourcePart
+
+        local targetPart =
+            link.targetPart
+
+        local anchor =
+            link.anchor
+
+        if sourceRoot
+            and sourceRoot.Parent
+            and sourcePart
+            and sourcePart.Parent
+            and targetPart
+            and targetPart.Parent
+            and anchor
+            and anchor.Parent
+        then
+            local relative
+
+            pcall(function()
+                relative =
+                    sourceRoot.CFrame:ToObjectSpace(
+                        sourcePart.CFrame
+                    )
+            end)
+
+            if relative then
+                pcall(function()
+                    anchor.CFrame =
+                        targetPart.CFrame *
+                        relative
+                end)
+            end
+        end
+    end
+end
+
+--// =========================================================
 --// CREATE LOCAL ANCHOR FOR NESTED BASEPART
 --// =========================================================
 
@@ -2430,7 +2771,8 @@ end
 local function installUnusualPartFX(
     sourcePart,
     targetPart,
-    id
+    id,
+    animatedSource
 )
 
     local targetMap = {}
@@ -2475,6 +2817,42 @@ local function installUnusualPartFX(
 
                 targetMap[nested] =
                     anchor
+
+                local animated =
+                    addUnusualAnimationLink(
+                        sourcePart,
+                        nested,
+                        targetPart,
+                        animatedSource
+                    )
+
+                if animated then
+                    for _, child in ipairs(
+                        anchor:GetChildren()
+                    ) do
+                        if child:IsA(
+                            "WeldConstraint"
+                        )
+                        or child:IsA(
+                            "Weld"
+                        )
+                        or child:IsA(
+                            "Motor6D"
+                        )
+                        then
+                            pcall(function()
+                                child:Destroy()
+                            end)
+                        end
+                    end
+
+                    anchor.Anchored = true
+
+                    unusualRuntime.animationLinks[
+                        #unusualRuntime.animationLinks
+                    ].anchor =
+                        anchor
+                end
 
                 table.insert(
                     sourceNodes,
@@ -2693,6 +3071,12 @@ local function applyUnusualFX(
     local installed =
         0
 
+    local animatedSource =
+        createUnusualAnimationSource(
+            cosmeticRig,
+            id
+        )
+
     for _, sourcePart in ipairs(
         cosmeticRig:GetChildren()
     ) do
@@ -2743,7 +3127,8 @@ local function applyUnusualFX(
                 installUnusualPartFX(
                     sourcePart,
                     targetPart,
-                    id
+                    id,
+                    animatedSource
                 )
 
                 installed += 1
@@ -2768,6 +3153,8 @@ end
 --// REMOVE OUR FX
 -- =========================================================
 local function removeOurUnusualFX()
+    destroyUnusualAnimationSource()
+
     local removed = 0
     local roots = {
         getUnusualVisualRig(),
@@ -3555,6 +3942,7 @@ addUnusualConnection(
                 return
             end
 
+            updateUnusualAnimatedParts()
             updateUnusualPOV()
 
             if unusualEnabled
