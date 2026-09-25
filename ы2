@@ -10720,150 +10720,6 @@ __UI.PickerGrid.Parent =
 --// EMOTE VIEWPORT PREVIEW
 --// Локальная копия native preview без CreateViewport()
 --// =========================================================
-local emoteViewportTemplate
-
-local function findUsableViewport(root)
-    if not root then
-        return nil
-    end
-
-    local fallback
-
-    for _, obj in ipairs(
-        root:GetDescendants()
-    ) do
-        if obj.ClassName == "ViewportFrame" then
-            fallback =
-                fallback
-                or obj
-
-            local hasWorldModel =
-                obj:FindFirstChildOfClass(
-                    "WorldModel"
-                )
-
-            local hasCamera =
-                obj.CurrentCamera
-                or obj:FindFirstChildOfClass(
-                    "Camera"
-                )
-
-            if hasWorldModel
-                and hasCamera
-            then
-                return obj
-            end
-        end
-    end
-
-    return fallback
-end
-
-local function getEmoteViewportTemplate()
-    if emoteViewportTemplate
-        and emoteViewportTemplate.Parent
-    then
-        return emoteViewportTemplate
-    end
-
-    local source
-
-    -- Prefer an already-rendered native viewport.
-    pcall(function()
-        local players =
-            game:GetService(
-                "Players"
-            )
-
-        local localPlayer =
-            players.LocalPlayer
-
-        local playerGui =
-            localPlayer
-            and localPlayer:FindFirstChildOfClass(
-                "PlayerGui"
-            )
-
-        if playerGui then
-            source =
-                findUsableViewport(
-                    playerGui
-                )
-        end
-    end)
-
-    if not source then
-        pcall(function()
-            source =
-                findUsableViewport(
-                    game:GetService(
-                        "CoreGui"
-                    )
-                )
-        end)
-    end
-
-    -- Fallback to the native SlotBuilder asset.
-    if not source then
-        pcall(function()
-            local objects =
-                ReplicatedStorage:FindFirstChild(
-                    "Objects"
-                )
-
-            local menu =
-                objects
-                and objects:FindFirstChild(
-                    "Menu"
-                )
-
-            local menuModule =
-                menu
-                and menu:FindFirstChild(
-                    "Menu"
-                )
-
-            local slotBuilder =
-                menuModule
-                and menuModule:FindFirstChild(
-                    "SlotBuilder"
-                )
-
-            local assets =
-                slotBuilder
-                and slotBuilder:FindFirstChild(
-                    "Assets"
-                )
-
-            local slot =
-                assets
-                and assets:FindFirstChild(
-                    "Slot"
-                )
-
-            local button =
-                slot
-                and slot:FindFirstChild(
-                    "Button"
-                )
-
-            if button then
-                source =
-                    findUsableViewport(
-                        button
-                    )
-            end
-        end)
-    end
-
-    if source then
-        emoteViewportTemplate =
-            source
-        return source
-    end
-
-    return nil
-end
 local function createEmotePreview(
     itemModule,
     viewport
@@ -10882,33 +10738,26 @@ local function createEmotePreview(
                     "WorldModel"
                 )
 
-            local camera =
+            if worldModel then
+                worldModel:Destroy()
+            end
+
+            local oldCamera =
                 viewport.CurrentCamera
 
-            if not camera then
-                camera =
-                    viewport:FindFirstChildOfClass(
-                        "Camera"
-                    )
+            if oldCamera then
+                oldCamera:Destroy()
+                viewport.CurrentCamera =
+                    nil
             end
 
-            if not worldModel
-                or not camera
-            then
-                error(
-                    "Viewport template has no WorldModel/Camera"
+            worldModel =
+                Instance.new(
+                    "WorldModel"
                 )
-            end
+            worldModel.Parent =
+                viewport
 
-            for _, child in ipairs(
-                worldModel:GetChildren()
-            ) do
-                if not child:IsA("Camera") then
-                    child:Destroy()
-                end
-            end
-
-            local rigTemplate
             local isR15 = false
 
             pcall(function()
@@ -10916,14 +10765,31 @@ local function createEmotePreview(
                     __UI.ClientItemService:IsPlayerR15()
             end)
 
+            local assets =
+                ReplicatedStorage:FindFirstChild(
+                    "Assets"
+                )
+
+            local items =
+                assets
+                and assets:FindFirstChild(
+                    "Items"
+                )
+
+            local rigTemplate
+
             if isR15 then
                 rigTemplate =
-                    ReplicatedStorage.Assets.Items
-                        .VisualRigR15Emote
+                    items
+                    and items:FindFirstChild(
+                        "VisualRigR15Emote"
+                    )
             else
                 rigTemplate =
-                    ReplicatedStorage.Assets.Items
-                        .VisualRigClassic
+                    items
+                    and items:FindFirstChild(
+                        "VisualRigClassic"
+                    )
             end
 
             if not rigTemplate then
@@ -10953,8 +10819,47 @@ local function createEmotePreview(
                 )
             end
 
+            -- Native SetModel normally attaches the emote model
+            -- to the preview rig. Do the same locally.
+            local characterFolder =
+                itemModule:FindFirstChild(
+                    isR15
+                    and "Character"
+                    or "CharacterClassic"
+                )
+
+            if not characterFolder then
+                characterFolder =
+                    itemModule:FindFirstChild(
+                        "CharacterClassic"
+                    )
+                    or itemModule:FindFirstChild(
+                        "Character"
+                    )
+            end
+
+            if characterFolder then
+                local emoteModel =
+                    characterFolder:FindFirstChild(
+                        "EmoteModel"
+                    )
+
+                if emoteModel then
+                    local emoteClone =
+                        emoteModel:Clone()
+
+                    emoteClone.Parent =
+                        rig
+                end
+            end
+
             rig.Parent =
                 worldModel
+
+            local camera =
+                Instance.new(
+                    "Camera"
+                )
 
             camera.FieldOfView =
                 30
@@ -10977,24 +10882,156 @@ local function createEmotePreview(
                     rig.PrimaryPart.CFrame.Position
                 )
 
+            camera.Parent =
+                worldModel
+
             viewport.CurrentCamera =
                 camera
 
-            local emoteSuccess, emoteResult =
-                pcall(function()
-                    return __UI.EmoteService:SetEmote(
-                        rig,
-                        itemModule,
-                        true
-                    )
-                end)
+            -- Do not call EmoteService:SetEmote().
+            -- It eventually reaches Objects.Items.Emote:IsR15()
+            -- from this executor thread and Roblox rejects that
+            -- Instance access with capability Plugin.
+            local humanoid =
+                rig:FindFirstChildOfClass(
+                    "Humanoid"
+                )
 
-            if not emoteSuccess then
-                rig:Destroy()
-                error(
-                    tostring(
-                        emoteResult
+            local animator
+
+            if humanoid then
+                animator =
+                    humanoid:FindFirstChildOfClass(
+                        "Animator"
                     )
+
+                if not animator then
+                    animator =
+                        Instance.new(
+                            "Animator"
+                        )
+                    animator.Parent =
+                        humanoid
+                end
+            end
+
+            if not animator then
+                local controller =
+                    rig:FindFirstChildOfClass(
+                        "AnimationController"
+                    )
+
+                if not controller then
+                    controller =
+                        Instance.new(
+                            "AnimationController"
+                        )
+                    controller.Parent =
+                        rig
+                end
+
+                animator =
+                    controller:FindFirstChildOfClass(
+                        "Animator"
+                    )
+
+                if not animator then
+                    animator =
+                        Instance.new(
+                            "Animator"
+                        )
+                    animator.Parent =
+                        controller
+                end
+            end
+
+            local animation
+            local fallbackAnimation
+
+            local descendants =
+                itemModule:GetDescendants()
+
+            for _, obj in ipairs(
+                descendants
+            ) do
+                if obj:IsA("Animation") then
+                    fallbackAnimation =
+                        fallbackAnimation
+                        or obj
+
+                    local name =
+                        string.lower(
+                            obj.Name
+                        )
+
+                    local r15Name =
+                        string.find(
+                            name,
+                            "r15",
+                            1,
+                            true
+                        )
+
+                    local r6Name =
+                        string.find(
+                            name,
+                            "r6",
+                            1,
+                            true
+                        )
+
+                    if isR15
+                        and r15Name
+                    then
+                        animation =
+                            obj
+                        break
+                    elseif not isR15
+                        and r6Name
+                    then
+                        animation =
+                            obj
+                        break
+                    end
+                end
+            end
+
+            animation =
+                animation
+                or fallbackAnimation
+
+            if animation then
+                local animationClone =
+                    animation:Clone()
+
+                local track =
+                    animator:LoadAnimation(
+                        animationClone
+                    )
+
+                track.Looped =
+                    true
+
+                track:Play(
+                    0,
+                    1,
+                    1
+                )
+
+                track.TimePosition =
+                    0.5
+
+                track:AdjustSpeed(
+                    0
+                )
+
+                task.delay(
+                    0.25,
+                    function()
+                        pcall(function()
+                            animationClone:Destroy()
+                        end)
+                    end
                 )
             end
 
@@ -11010,7 +11047,6 @@ local function createEmotePreview(
 
     return success
 end
-
 --// =========================================================
 --// REBUILD PICKER
 --// =========================================================
@@ -11177,68 +11213,61 @@ local function rebuildPicker()
 
 
             --// NATIVE EMOTE PREVIEW
-            --// Do not Instance.new("ViewportFrame") here.
-            --// Clone an existing native ViewportFrame so the
-            --// current executor thread never has to create that class.
-            local viewportTemplate =
-                getEmoteViewportTemplate()
-
-            if not viewportTemplate then
-                warn(
-                    "[DeadEye] No native ViewportFrame template found"
+            --// Fully local: no native ViewportFrame clone and
+            --// no EmoteService/ClientItemService viewport call.
+            local viewport =
+                Instance.new(
+                    "ViewportFrame"
                 )
-            else
-                local viewport =
-                    viewportTemplate:Clone()
-
-                viewport.Name =
-                    "EmotePreview"
-                viewport.Size =
-                    UDim2.new(
-                        1,
-                        0,
-                        1,
-                        0
-                    )
-                viewport.Position =
-                    UDim2.new(
-                        0,
-                        0,
-                        0,
-                        0
-                    )
-                viewport.BackgroundColor3 =
-                    Color3.fromRGB(
-                        31,
-                        35,
-                        42
-                    )
-                viewport.BackgroundTransparency =
+            viewport.Name =
+                "EmotePreview"
+            viewport.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
                     0
-                viewport.BorderSizePixel =
-                    0
-                viewport.Active =
-                    false
-                viewport.ZIndex =
-                    33
-                viewport.Parent =
-                    button
-
-                local viewportCorner =
-                    Instance.new("UICorner")
-                viewportCorner.CornerRadius =
-                    UDim.new(
-                        0,
-                        10
-                    )
-                viewportCorner.Parent =
-                    viewport
-
-                createEmotePreview(
-                    data.module,
-                    viewport
                 )
-            end
+            viewport.Position =
+                UDim2.new(
+                    0,
+                    0,
+                    0,
+                    0
+                )
+            viewport.BackgroundColor3 =
+                Color3.fromRGB(
+                    31,
+                    35,
+                    42
+                )
+            viewport.BackgroundTransparency =
+                0
+            viewport.BorderSizePixel =
+                0
+            viewport.Active =
+                false
+            viewport.ZIndex =
+                33
+            viewport.Parent =
+                button
+
+            local viewportCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            viewportCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            viewportCorner.Parent =
+                viewport
+
+            createEmotePreview(
+                data.module,
+                viewport
+            )
 
             --// GLASS OVERLAY
             local glass =
