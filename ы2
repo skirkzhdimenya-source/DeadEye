@@ -10758,12 +10758,10 @@ local function createEmotePreview(
             worldModel.Parent =
                 viewport
 
+            -- Evade's decompiled ClientItemService:IsPlayerR15()
+            -- returns false here, so keep the preview on the classic
+            -- rig and avoid calling another service from this thread.
             local isR15 = false
-
-            pcall(function()
-                isR15 =
-                    __UI.ClientItemService:IsPlayerR15()
-            end)
 
             local assets =
                 ReplicatedStorage:FindFirstChild(
