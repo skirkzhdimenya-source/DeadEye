@@ -627,7 +627,7 @@ Main.Size =
     UDim2.new(
         0,
         math.max(
-            455,
+            MIN_WINDOW_WIDTH,
             savedConfig.gui.width
         ),
         0,
@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.9"
+    "DeadEyes v1.10"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11399,7 +11399,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.9"
+            MainTitle.Text = "DeadEyes v1.10"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11421,7 +11421,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.9"
+            MainTitle.Text = "DeadEyes v1.10"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11446,7 +11446,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.9"
+            MainTitle.Text = "DeadEyes v1.10"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11468,7 +11468,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.9"
+            MainTitle.Text = "DeadEyes v1.10"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11493,7 +11493,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.9"
+            MainTitle.Text = "DeadEyes v1.10"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13690,7 +13690,7 @@ addConnection(
 --// =========================================================
 --// WINDOW SIZE LIMITS
 --// =========================================================
-local MIN_WINDOW_WIDTH = 455
+local MIN_WINDOW_WIDTH = 480
 local MIN_WINDOW_HEIGHT = 285
 local RESIZE_EDGE = 8
 
