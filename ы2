@@ -56,13 +56,13 @@ genv.DEADEYE_PORTRAIT_RUNNING = true
 --// SERVICES
 --// =========================================================
 __UI.CharacterService = require(
-    ReplicatedStorage.Services.Asset.__UI.CharacterService
+    ReplicatedStorage.Services.Asset.CharacterService
 )
 __UI.ClientItemService = require(
-    ReplicatedStorage.Services.Items.__UI.ClientItemService
+    ReplicatedStorage.Services.Items.ClientItemService
 )
 __UI.EmoteService = require(
-    ReplicatedStorage.Services.Items.__UI.EmoteService
+    ReplicatedStorage.Services.Items.EmoteService
 )
 local Registry = require(
     ReplicatedStorage.Items.Registry
