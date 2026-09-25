@@ -2293,46 +2293,56 @@ function cosmetic.select(
         return
     end
 
+    cosmetic.saveState()
+    pcall(saveSavedConfig)
+
     if cosmetic.enabled then
         cosmetic.enabled = false
-        cosmetic.updateToggle()
-        cosmetic.refreshRig()
+        pcall(cosmetic.updateToggle)
     end
 
-    cosmetic.saveState()
+    -- The executor may invoke this picker callback from a
+    -- thread without Instance access. Never let GUI access
+    -- prevent the actual selection from being saved.
+    pcall(function()
+        cosmetic.closePicker()
+    end)
 
-    local row =
-        cosmetic.page
-        and cosmetic.page:FindFirstChild(
-            "CosmeticRow_"
-                .. tostring(slotIndex)
-        )
-
-    if row then
-        local a =
-            row:FindFirstChild(
-                "OriginalButton"
-            )
-        local b =
-            row:FindFirstChild(
-                "ReplaceButton"
+    pcall(function()
+        local row =
+            cosmetic.page
+            and cosmetic.page:FindFirstChild(
+                "CosmeticRow_"
+                    .. tostring(slotIndex)
             )
 
-        if a then
-            a.Text =
-                state.originalName
-                or "Select"
-        end
+        if row then
+            local a =
+                row:FindFirstChild(
+                    "OriginalButton"
+                )
+            local b =
+                row:FindFirstChild(
+                    "ReplaceButton"
+                )
 
-        if b then
-            b.Text =
-                state.replaceName
-                or "NONE"
-        end
-    end
+            if a then
+                a.Text =
+                    state.originalName
+                    or "Select"
+            end
 
-    cosmetic.closePicker()
-    pcall(saveSavedConfig)
+            if b then
+                b.Text =
+                    state.replaceName
+                    or "NONE"
+            end
+        end
+    end)
+
+    -- A changed mapping is intentionally applied on the next
+    -- native SetRig call; this avoids a forced synchronous rig
+    -- rebuild from an input callback.
 end
 
 function cosmetic.rebuildPicker()
@@ -12662,12 +12672,29 @@ addConnection(
                 if valid then
                     cosmetic.enabled =
                         not cosmetic.enabled
-                    cosmetic.refreshRig()
+
+                    -- Update the button immediately.
+                    pcall(
+                        cosmetic.updateToggle
+                    )
+
+                    -- Do not block the input callback on SetRig.
+                    if cosmetic.lastSetRigArgs
+                        and cosmetic.originalSetRig
+                    then
+                        task.spawn(function()
+                            pcall(
+                                cosmetic.refreshRig
+                            )
+                        end)
+                    end
                 else
                     cosmetic.enabled = false
+                    pcall(
+                        cosmetic.updateToggle
+                    )
                 end
 
-                cosmetic.updateToggle()
                 return
             end
 
