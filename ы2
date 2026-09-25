@@ -10924,6 +10924,8 @@ local function createEmotePreview(
                     -- some multi-part emotes.
                     emoteClone.Parent =
                         rig
+                end
+            end
 
             rig.Parent =
                 worldModel
