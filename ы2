@@ -1710,7 +1710,8 @@ local unusualRuntime = {
     appliedRig = nil,
     reapplyGeneration = 0,
     animationSource = nil,
-    animationLinks = {}
+    animationLinks = {},
+    visualMirrors = {}
 }
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
@@ -2338,6 +2339,20 @@ unusualRuntime.destroyAnimationSource = function()
     table.clear(
         unusualRuntime.animationLinks
     )
+
+    for _, mirror in ipairs(
+        unusualRuntime.visualMirrors
+    ) do
+        if mirror.model then
+            pcall(function()
+                mirror.model:Destroy()
+            end)
+        end
+    end
+
+    table.clear(
+        unusualRuntime.visualMirrors
+    )
 end
 
 unusualRuntime.findRelative = function(
@@ -2394,15 +2409,18 @@ unusualRuntime.startAnimations = function(
     end
 
     local started = false
+    local controllers = {}
 
-    for _, controller in ipairs(
+    for _, object in ipairs(
         root:GetDescendants()
     ) do
-        if controller:IsA(
+
+        if object:IsA(
             "AnimationController"
         ) then
+
             local animator =
-                controller:FindFirstChildOfClass(
+                object:FindFirstChildOfClass(
                     "Animator"
                 )
 
@@ -2413,34 +2431,91 @@ unusualRuntime.startAnimations = function(
                             "Animator"
                         )
                     animator.Parent =
-                        controller
+                        object
                 end)
             end
 
             if animator then
-                for _, animation in ipairs(
-                    controller:GetDescendants()
-                ) do
-                    if animation:IsA(
-                        "Animation"
-                    ) then
-                        pcall(function()
-                            local track =
-                                animator:LoadAnimation(
-                                    animation
-                                )
-
-                            if track then
-                                track:Play(
-                                    0
-                                )
-                                started = true
-                            end
-                        end)
-                    end
-                end
+                controllers[object] =
+                    animator
             end
+
         end
+
+    end
+
+    for _, animation in ipairs(
+        root:GetDescendants()
+    ) do
+
+        if animation:IsA(
+            "Animation"
+        ) then
+
+            local controller
+            local current =
+                animation.Parent
+
+            --// First prefer an AnimationController
+            --// directly above this Animation.
+            while current
+                and current ~= root.Parent
+            do
+
+                if current:IsA(
+                    "AnimationController"
+                ) then
+
+                    controller =
+                        current
+                    break
+
+                end
+
+                local sibling =
+                    current:FindFirstChildOfClass(
+                        "AnimationController"
+                    )
+
+                if sibling then
+                    controller =
+                        sibling
+                    break
+                end
+
+                current =
+                    current.Parent
+
+            end
+
+            if controller then
+
+                local animator =
+                    controllers[
+                        controller
+                    ]
+
+                if animator then
+
+                    pcall(function()
+                        local track =
+                            animator:LoadAnimation(
+                                animation
+                            )
+
+                        if track then
+                            track:Play(0)
+                            started = true
+                        end
+
+                    end)
+
+                end
+
+            end
+
+        end
+
     end
 
     return started
@@ -2475,6 +2550,8 @@ unusualRuntime.createAnimationSource = function(
         tostring(id)
 
     local hasClientDriver = false
+    local hasLocalScriptDriver = false
+    local hasClientScriptDriver = false
     local controllerCount = 0
 
     for _, object in ipairs(
@@ -2498,6 +2575,12 @@ unusualRuntime.createAnimationSource = function(
 
             if isClientDriver then
                 hasClientDriver = true
+
+                if object:IsA("LocalScript") then
+                    hasLocalScriptDriver = true
+                else
+                    hasClientScriptDriver = true
+                end
 
                 pcall(function()
                     object.Disabled = true
@@ -2629,12 +2712,12 @@ unusualRuntime.createAnimationSource = function(
             source:GetPivot()
         )
 
-    if hasClientDriver then
+    local runtimeParent
 
-        --// LocalScripts execute from PlayerGui without
-        --// becoming descendants of the real Character.
-        --// This keeps the copied runtime completely invisible
-        --// to the game's ragdoll/joint code.
+    if hasLocalScriptDriver
+        and not hasClientScriptDriver
+    then
+
         local playerGui =
             LocalPlayer:FindFirstChildOfClass(
                 "PlayerGui"
@@ -2650,37 +2733,34 @@ unusualRuntime.createAnimationSource = function(
             end)
         end
 
-        if not playerGui then
-            pcall(function()
-                source:Destroy()
-            end)
-            return nil
+        if playerGui then
+
+            local folder =
+                playerGui:FindFirstChild(
+                    "DeadEyeUnusualRuntime"
+                )
+
+            if not folder then
+                folder =
+                    Instance.new("Folder")
+
+                folder.Name =
+                    "DeadEyeUnusualRuntime"
+
+                folder.Parent =
+                    playerGui
+            end
+
+            runtimeParent =
+                folder
+
         end
-
-        local folder =
-            playerGui:FindFirstChild(
-                "DeadEyeUnusualRuntime"
-            )
-
-        if not folder then
-            folder =
-                Instance.new("Folder")
-
-            folder.Name =
-                "DeadEyeUnusualRuntime"
-
-            folder.Parent =
-                playerGui
-        end
-
-        source.Parent =
-            folder
 
     else
 
         local folder =
             workspace:FindFirstChild(
-                "DeadEyeUnusualAnimationSources"
+                "DeadEyeUnusualRuntime"
             )
 
         if not folder then
@@ -2688,16 +2768,26 @@ unusualRuntime.createAnimationSource = function(
                 Instance.new("Folder")
 
             folder.Name =
-                "DeadEyeUnusualAnimationSources"
+                "DeadEyeUnusualRuntime"
 
             folder.Parent =
                 workspace
         end
 
-        source.Parent =
+        runtimeParent =
             folder
 
     end
+
+    if not runtimeParent then
+        pcall(function()
+            source:Destroy()
+        end)
+        return nil
+    end
+
+    source.Parent =
+        runtimeParent
 
     pcall(function()
         source:PivotTo(
@@ -2738,6 +2828,177 @@ unusualRuntime.createAnimationSource = function(
         source
 
     return source
+end
+
+unusualRuntime.createVisualMirror = function(
+    sourceModel,
+    id
+)
+    if not sourceModel
+        or not sourceModel:IsA("Model")
+    then
+        return false
+    end
+
+    local sourceParts = {}
+
+    for _, object in ipairs(
+        sourceModel:GetDescendants()
+    ) do
+        if object:IsA("BasePart") then
+            table.insert(
+                sourceParts,
+                object
+            )
+        end
+    end
+
+    if #sourceParts == 0 then
+        return false
+    end
+
+    local clone
+    local ok =
+        pcall(function()
+            clone =
+                sourceModel:Clone()
+        end)
+
+    if not ok
+        or not clone
+    then
+        return false
+    end
+
+    clone.Name =
+        "DeadEyeUnusualMirror_" ..
+        tostring(id) ..
+        "_" ..
+        tostring(
+            #unusualRuntime.visualMirrors + 1
+        )
+
+    for _, object in ipairs(
+        clone:GetDescendants()
+    ) do
+
+        if object:IsA("Script")
+            or object:IsA("LocalScript")
+            or object:IsA("ModuleScript")
+            or object:IsA("AnimationController")
+            or object:IsA("Animator")
+            or object:IsA("Humanoid")
+            or object:IsA("Weld")
+            or object:IsA("WeldConstraint")
+            or object:IsA("Motor6D")
+            or object:IsA("Motor")
+        then
+
+            pcall(function()
+                object:Destroy()
+            end)
+
+        elseif object:IsA("BasePart") then
+
+            pcall(function()
+                object.CanCollide = false
+                object.CanTouch = false
+                object.CanQuery = false
+                object.Massless = true
+                object.CastShadow = false
+            end)
+
+        end
+
+    end
+
+    local folder =
+        workspace:FindFirstChild(
+            "DeadEyeUnusualVisuals"
+        )
+
+    if not folder then
+        folder =
+            Instance.new("Folder")
+
+        folder.Name =
+            "DeadEyeUnusualVisuals"
+
+        folder.Parent =
+            workspace
+    end
+
+    clone.Parent =
+        folder
+
+    local links = {}
+
+    for _, sourcePart in ipairs(
+        sourceParts
+    ) do
+
+        local names = {}
+        local current =
+            sourcePart
+
+        while current
+            and current ~= sourceModel
+        do
+
+            table.insert(
+                names,
+                1,
+                current.Name
+            )
+
+            current =
+                current.Parent
+
+        end
+
+        local target =
+            clone
+
+        for _, name in ipairs(
+            names
+        ) do
+
+            target =
+                target:FindFirstChild(
+                    name
+                )
+
+            if not target then
+                break
+            end
+
+        end
+
+        if target
+            and target:IsA("BasePart")
+        then
+
+            table.insert(
+                links,
+                {
+                    source = sourcePart,
+                    target = target
+                }
+            )
+
+        end
+
+    end
+
+    table.insert(
+        unusualRuntime.visualMirrors,
+        {
+            model = clone,
+            links = links
+        }
+    )
+
+    return true
 end
 
 unusualRuntime.addAnimationLink = function(
@@ -2844,6 +3105,37 @@ unusualRuntime.updateAnimatedParts = function()
                 source:GetPivot()
             )
         end)
+
+    end
+
+    for _, mirror in ipairs(
+        unusualRuntime.visualMirrors
+    ) do
+
+        if mirror.model
+            and mirror.model.Parent
+        then
+
+            for _, link in ipairs(
+                mirror.links
+            ) do
+
+                if link.source
+                    and link.source.Parent
+                    and link.target
+                    and link.target.Parent
+                then
+
+                    pcall(function()
+                        link.target.CFrame =
+                            link.source.CFrame
+                    end)
+
+                end
+
+            end
+
+        end
 
     end
 
@@ -3071,9 +3363,40 @@ local function installUnusualPartFX(
         sourcePart
     )
 
-    --// Copy every direct extra BasePart from the
-    --// cosmetic effect. Geometry is part of the visual
-    --// effect even when it has no FX itself.
+    --// Complete nested visual models (for example
+    --// CirclingEclipseCola.spins) are mirrored as a
+    --// self-contained mini-rig. Their internal Motor6D/Weld
+    --// chain remains on the hidden animated source.
+    for _, child in ipairs(
+        sourcePart:GetChildren()
+    ) do
+
+        if child:IsA("Model") then
+
+            local hasNestedPart = false
+
+            for _, object in ipairs(
+                child:GetDescendants()
+            ) do
+                if object:IsA("BasePart") then
+                    hasNestedPart = true
+                    break
+                end
+            end
+
+            if hasNestedPart then
+                unusualRuntime.createVisualMirror(
+                    child,
+                    id
+                )
+            end
+
+        end
+
+    end
+
+    --// Direct extra BaseParts are handled by the
+    --// existing anchor path.
     local anchorIndex = 0
 
     for _, nested in ipairs(
