@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.5"
+    "DeadEyes v1.6"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -2212,9 +2212,11 @@ function cosmetic.refreshRig()
     --// The live rig can have a custom skin applied locally.
     --// PlayerCache is only the game's clean base and must not
     --// be treated as the player's actual visual skin.
-    --// Snapshot the current HumanoidDescription once per live rig.
-    if cosmetic.skinCharacter ~= live
-        or not cosmetic.skinDescription
+    --// Preserve the current custom skin on the same live rig.
+    --// When a new rig appears, keep the saved description instead
+    --// of replacing it with the game's default cache description.
+    if not cosmetic.skinDescription
+        or cosmetic.skinCharacter == live
     then
         local description
 
@@ -2275,6 +2277,16 @@ function cosmetic.refreshRig()
 
     if not base then
         return false
+    end
+
+    local restoreUnusual =
+        unusualEnabled
+        and unusualActive
+
+    if restoreUnusual then
+        pcall(function()
+            UnusualFns.removeOurUnusualFX()
+        end)
     end
 
     cosmetic.refreshBusy = true
@@ -2429,7 +2441,23 @@ function cosmetic.refreshRig()
                 live,
                 equipped
             )
+
+            if restoreUnusual then
+                unusualActive = false
+
+                pcall(function()
+                    if UnusualFns.activateUnusual() then
+                        unusualEnabled = true
+                        unusualActive = true
+                        unusualRuntime.appliedRig =
+                            UnusualFns.getUnusualVisualRig()
+                    end
+                end)
+            end
         end)
+
+    cosmetic.skinCharacter =
+        live
 
     cosmetic.refreshBusy = false
 
@@ -2482,19 +2510,76 @@ function cosmetic.installHook()
                             boombox = boombox
                         }
 
+                        local liveBefore =
+                            workspace:FindFirstChild("Rigs")
+                            and workspace.Rigs:FindFirstChild(
+                                LocalPlayer.Name
+                            )
+
+                        if liveBefore
+                            and liveBefore:IsA("Model")
+                            and (
+                                not cosmetic.skinDescription
+                                or cosmetic.skinCharacter == liveBefore
+                            )
+                        then
+                            local beforeHumanoid =
+                                liveBefore:FindFirstChildOfClass(
+                                    "Humanoid"
+                                )
+
+                            if beforeHumanoid then
+                                pcall(function()
+                                    local description =
+                                        beforeHumanoid:GetAppliedDescription()
+
+                                    local clone =
+                                        description:Clone()
+
+                                    cosmetic.skinDescription =
+                                        clone
+                                    cosmetic.skinCharacter =
+                                        liveBefore
+                                end)
+                            end
+                        end
+
                         -- SetRig receives the game's character wrapper
                         -- (a table), not necessarily a Roblox Model.
                         -- Never call Instance methods on it here.
-                        return original(
-                            self,
-                            character,
-                            rigType,
-                            cosmetic.replaceArray(
-                                cosmetics
-                            ),
-                            gear,
-                            boombox
-                        )
+                        local result =
+                            original(
+                                self,
+                                character,
+                                rigType,
+                                cosmetic.replaceArray(
+                                    cosmetics
+                                ),
+                                gear,
+                                boombox
+                            )
+
+                        if cosmetic.skinDescription
+                            and type(result) == "table"
+                            and result.Model
+                            and result.Model:IsA("Model")
+                            and result.Model.Parent
+                                == workspace:FindFirstChild("Rigs")
+                            and result.Model.Name
+                                == LocalPlayer.Name
+                        then
+                            task.defer(function()
+                                if genv.DEADEYE_MAIN_RUNNING
+                                    and not cosmetic.refreshBusy
+                                then
+                                    pcall(
+                                        cosmetic.refreshRig
+                                    )
+                                end
+                            end)
+                        end
+
+                        return result
                     end
                 )
         end)
@@ -10818,7 +10903,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.5"
+            MainTitle.Text = "DeadEyes v1.6"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10840,7 +10925,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.5"
+            MainTitle.Text = "DeadEyes v1.6"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -10865,7 +10950,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.5"
+            MainTitle.Text = "DeadEyes v1.6"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10887,7 +10972,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.5"
+            MainTitle.Text = "DeadEyes v1.6"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -10912,7 +10997,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.5"
+            MainTitle.Text = "DeadEyes v1.6"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -11007,20 +11092,37 @@ local function cleanupUnusual()
     end
     unusualDestroyed =
         true
-    if unusualActive then
+
+    local restoreNativeUnusual =
+        unusualActive
+
+    unusualEnabled =
+        false
+    unusualActive =
+        false
+
+    pcall(function()
+        others.restore(false)
+    end)
+
+    pcall(function()
+        cosmetic.cleanup()
+    end)
+
+    if restoreNativeUnusual then
+        unusualActive =
+            true
+
         pcall(function()
             UnusualFns.restoreUnusual()
         end)
     end
-    pcall(function()
-        others.restore(false)
-    end)
-    pcall(function()
-        cosmetic.cleanup()
-    end)
+
     genv.DEADEYE_COSMETIC_CLEANUP =
         nil
     unusualEnabled =
+        false
+    unusualActive =
         false
     unusualRuntime.reapplyGeneration += 1
     unusualRuntime.appliedRig = nil
@@ -13780,6 +13882,10 @@ local function cleanup()
         return
     end
 
+    pcall(function()
+        ScreenGui.Enabled = false
+    end)
+
     NativeWheel.restore(true)
 
     --// Stop every active loop before doing any cleanup that may yield.
@@ -13790,9 +13896,14 @@ local function cleanup()
     genv.DEADEYE_PORTRAIT_RUNNING = false
 
     enabled = false
-    EmoteRuntime.stopForCleanup()
 
-    disconnectAll()
+    pcall(function()
+        EmoteRuntime.stopForCleanup()
+    end)
+
+    pcall(function()
+        disconnectAll()
+    end)
 
     pcall(function()
         if genv.UNUSUAL_SWAPPER_CLEANUP then
