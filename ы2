@@ -1559,19 +1559,22 @@ MainSurface.Position =
 
 MainSurface.BackgroundColor3 =
     Color3.fromRGB(
-        18,
-        20,
-        24
+        31,
+        35,
+        42
     )
 
 MainSurface.BackgroundTransparency =
-    0.08
+    0.10
 
 MainSurface.BorderSizePixel =
     0
 
 MainSurface.ZIndex =
     0
+
+MainSurface.ClipsDescendants =
+    true
 
 MainSurface.Parent =
     Main
@@ -1609,30 +1612,30 @@ __UI.MainGradient.Color =
         ColorSequenceKeypoint.new(
             0,
             Color3.fromRGB(
-                28,
-                29,
-                34
+                55,
+                61,
+                72
             )
         ),
         ColorSequenceKeypoint.new(
-            0.55,
+            0.42,
             Color3.fromRGB(
-                23,
-                24,
-                29
+                38,
+                43,
+                51
             )
         ),
         ColorSequenceKeypoint.new(
             1,
             Color3.fromRGB(
-                19,
-                20,
-                24
+                24,
+                28,
+                34
             )
         )
     })
 __UI.MainGradient.Transparency =
-    NumberSequence.new(0.08)
+    NumberSequence.new(0.20)
 __UI.MainGradient.Parent =
     MainSurface
 
@@ -1674,12 +1677,12 @@ MainHeader.Position =
     )
 MainHeader.BackgroundColor3 =
     Color3.fromRGB(
-        25,
-        28,
-        33
+        40,
+        45,
+        53
     )
 MainHeader.BackgroundTransparency =
-    0.04
+    0.08
 MainHeader.BorderSizePixel =
     0
 MainHeader.ZIndex =
@@ -1693,7 +1696,7 @@ local MainHeaderCorner =
 MainHeaderCorner.CornerRadius =
     UDim.new(
         0,
-        10
+        9
     )
 
 MainHeaderCorner.Parent =
@@ -1708,17 +1711,17 @@ __UI.MainHeaderGradient.Color =
         ColorSequenceKeypoint.new(
             0,
             Color3.fromRGB(
-                29,
-                32,
-                38
+                52,
+                57,
+                67
             )
         ),
         ColorSequenceKeypoint.new(
             1,
             Color3.fromRGB(
-                24,
-                27,
-                33
+                34,
+                39,
+                47
             )
         )
     })
@@ -1778,7 +1781,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "Emote Swapper"
+    "DeadEyes v1"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1938,7 +1941,7 @@ Status.Position =
 Status.BackgroundTransparency =
     1
 Status.Text =
-    "12 слотов"
+    "12 slots"
 Status.TextSize =
     12
 Status.Font =
@@ -5608,7 +5611,7 @@ unusualOriginalButton.BorderSizePixel =
     0
 unusualOriginalButton.Text =
     unusualSlot.originalName
-    or "Выбрать"
+    or "Select"
 unusualOriginalButton.TextSize =
     11
 unusualOriginalButton.Font =
@@ -5692,7 +5695,7 @@ unusualReplaceButton.BorderSizePixel =
     0
 unusualReplaceButton.Text =
     unusualSlot.replaceName
-    or "НИЧЕГО"
+    or "NONE"
 unusualReplaceButton.TextSize =
     11
 unusualReplaceButton.Font =
@@ -5785,7 +5788,7 @@ unusualPickerTitle.Position =
 unusualPickerTitle.BackgroundTransparency =
     1
 unusualPickerTitle.Text =
-    "Выбор Unusual"
+    "Unusual Selector"
 unusualPickerTitle.TextSize =
     16
 unusualPickerTitle.Font =
@@ -5863,7 +5866,7 @@ unusualPickerSearch.BorderSizePixel =
 unusualPickerSearch.ClearTextOnFocus =
     false
 unusualPickerSearch.PlaceholderText =
-    "Поиск по названию или ID..."
+    "Search by name or ID..."
 unusualPickerSearch.PlaceholderColor3 =
     Color3.fromRGB(
         120,
@@ -6003,7 +6006,7 @@ local function rebuildUnusualPicker()
         button.Name = "Unusual_None"
         button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
         button.BorderSizePixel = 0
-        button.Text = "НИЧЕГО"
+        button.Text = "NONE"
         button.TextSize = 11
         button.Font = Enum.Font.GothamBold
         button.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -6030,11 +6033,11 @@ local function rebuildUnusualPicker()
                     if unusualPickerSide == "Original" then
                         unusualSlot.originalId = nil
                         unusualSlot.originalName = nil
-                        unusualOriginalButton.Text = "Выбрать"
+                        unusualOriginalButton.Text = "Select"
                     elseif unusualPickerSide == "Replace" then
                         unusualSlot.replaceId = nil
                         unusualSlot.replaceName = nil
-                        unusualReplaceButton.Text = "Выбрать"
+                        unusualReplaceButton.Text = "Select"
                     else
                         return
                     end
@@ -6194,7 +6197,7 @@ local function rebuildUnusualPicker()
                 .. tostring(
                     shown
                 )
-                .. " найдено"
+                .. " found"
         end
     end)
     unusualPickerScroll.CanvasPosition =
@@ -6213,10 +6216,10 @@ local function openUnusualPicker(
         side
     if side == "Original" then
         unusualPickerTitle.Text =
-            "Выбор оригинала"
+            "Select Original"
     else
         unusualPickerTitle.Text =
-            "Выбор замены"
+            "Select Replacement"
     end
     unusualPickerSearch.Text =
         ""
@@ -6318,7 +6321,7 @@ local function updateUnusualToggle()
     pcall(function()
         if unusualEnabled then
             Toggle.Text =
-                "ПОДМЕНА: ВКЛ"
+                "SWAP: ON"
             Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     65,
@@ -6327,7 +6330,7 @@ local function updateUnusualToggle()
                 )
         else
             Toggle.Text =
-                "ПОДМЕНА: ВЫКЛ"
+                "SWAP: OFF"
             Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
@@ -6559,7 +6562,7 @@ function others.getDescription()
     if not others.isR6() then
         if others.status then
             others.status.Text =
-                "Только R6"
+                "R6 only"
         end
         return nil
     end
@@ -6636,7 +6639,7 @@ function others.applyDescription(
     if not others.isR6() then
         if others.status then
             others.status.Text =
-                "Только R6"
+                "R6 only"
         end
         return false
     end
@@ -6693,13 +6696,13 @@ function others.applyDescription(
         )
         if others.status then
             others.status.Text =
-                "Ошибка Apply"
+                "Apply Error"
         end
         return false
     end
     if others.status then
         others.status.Text =
-            "Применено"
+            "Applied"
     end
     return true
 end
@@ -6780,7 +6783,7 @@ function others.scan()
     others.refresh()
     if others.status then
         others.status.Text =
-            "Сканировано • R6"
+            "Scanned • R6"
     end
     return true
 end
@@ -7957,8 +7960,8 @@ function others.row(
         false
     box.PlaceholderText =
         slot.multi
-        and "ID или ID,ID"
-        or "Пусто"
+        and "ID or ID,ID"
+        or "Empty"
     box.TextSize =
         11
     box.Font =
@@ -8595,7 +8598,7 @@ others.status.Position =
 others.status.BackgroundTransparency =
     1
 others.status.Text =
-    "Нажми FULL SCAN"
+    "Click FULL SCAN"
 others.status.TextSize =
     10
 others.status.Font =
@@ -8926,7 +8929,7 @@ local function setCategory(
     pcall(function()
         if category == "Main" then
             MainTitle.Text =
-                "Main"
+                "DeadEyes v1"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -8961,7 +8964,7 @@ local function setCategory(
                 )
         elseif category == "Unusual" then
             MainTitle.Text =
-                "Unusual Swapper"
+                "DeadEyes v1"
             Status.Visible =
                 false
             Toggle.Visible =
@@ -9005,7 +9008,7 @@ local function setCategory(
             updateUnusualToggle()
         elseif category == "Others" then
             MainTitle.Text =
-                "Others"
+                "DeadEyes v1"
             Status.Visible =
                 false
             Toggle.Visible =
@@ -9048,7 +9051,7 @@ local function setCategory(
                 )
         else
             MainTitle.Text =
-                "Emote Swapper"
+                "DeadEyes v1"
             Status.Visible =
                 true
             Toggle.Visible =
@@ -9226,7 +9229,7 @@ Toggle.BackgroundColor3 =
 Toggle.BorderSizePixel =
     0
 Toggle.Text =
-    "ПОДМЕНА: ВЫКЛ"
+    "SWAP: OFF"
 Toggle.TextSize =
     11
 Toggle.Font =
@@ -9448,7 +9451,7 @@ for slotIndex = 1, SLOT_COUNT do
         0
     originalButton.Text =
         slots[slotIndex].originalName
-        or "Выбрать"
+        or "Select"
     originalButton.TextSize =
         11
     originalButton.Font =
@@ -9536,7 +9539,7 @@ for slotIndex = 1, SLOT_COUNT do
         0
     replaceButton.Text =
         slots[slotIndex].replaceName
-        or "Выбрать"
+        or "Select"
     replaceButton.TextSize =
         11
     replaceButton.Font =
@@ -9635,7 +9638,7 @@ PickerTitle.Position =
 PickerTitle.BackgroundTransparency =
     1
 PickerTitle.Text =
-    "Выбор эмоции"
+    "Select Emote"
 PickerTitle.TextSize =
     16
 PickerTitle.Font =
@@ -9719,7 +9722,7 @@ PickerSearch.BorderSizePixel =
 PickerSearch.ClearTextOnFocus =
     false
 PickerSearch.PlaceholderText =
-    "Поиск по названию..."
+    "Search by name..."
 PickerSearch.PlaceholderColor3 =
     Color3.fromRGB(
         120,
@@ -9875,7 +9878,7 @@ local function rebuildPicker()
         button.Size = UDim2.new(0, 150, 0, 34)
         button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
         button.BorderSizePixel = 0
-        button.Text = "НИЧЕГО"
+        button.Text = "NONE"
         button.TextSize = 11
         button.Font = Enum.Font.GothamBold
         button.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -9911,13 +9914,13 @@ local function rebuildPicker()
                     slot.originalName = nil
                     slotOriginalButtons[
                         activePickerSlot
-                    ].Text = "Выбрать"
+                    ].Text = "Select"
                 else
                     slot.replaceId = nil
                     slot.replaceName = nil
                     slotReplaceButtons[
                         activePickerSlot
-                    ].Text = "Выбрать"
+                    ].Text = "Select"
                 end
 
                 savedConfig.emotes[
@@ -10092,7 +10095,7 @@ local function rebuildPicker()
         end
     end
     Status.Text =
-        "Найдено: "
+        "Found: "
         .. tostring(shown)
     PickerScroll.CanvasPosition =
         Vector2.new(
@@ -10205,7 +10208,7 @@ addConnection(
                         or not unusualSlot.replaceId
                     then
                         unusualStatus.Text =
-                            "Сначала выбери оба Unusual"
+                            "Select both Unusuals first"
                         return
                     end
                     if activateUnusual() then
@@ -10226,7 +10229,7 @@ addConnection(
                 stopCustomEmote()
                 updateGUI()
                 Status.Text =
-                    "Подмена выключена"
+                    "Swap disabled"
                                 return
             end
             local validSlots = 0
@@ -10252,7 +10255,7 @@ addConnection(
             end
             if validSlots == 0 then
                 Status.Text =
-                    "Нет настроенных слотов"
+                    "No configured slots"
                 return
             end
             enabled =
@@ -10261,11 +10264,11 @@ addConnection(
                 0
             updateGUI()
             Status.Text =
-                "Активно • "
+                "Active • "
                 .. tostring(
                     validSlots
                 )
-                .. " слотов"
+                .. " slots"
                     end
     )
 )
@@ -10413,7 +10416,7 @@ addConnection(
 function updateGUI()
     if enabled then
         Toggle.Text =
-            "ПОДМЕНА: ВКЛ"
+            "SWAP: ON"
         Toggle.BackgroundColor3 =
             Color3.fromRGB(
                 65,
@@ -10422,7 +10425,7 @@ function updateGUI()
             )
     else
         Toggle.Text =
-            "ПОДМЕНА: ВЫКЛ"
+            "SWAP: OFF"
         Toggle.BackgroundColor3 =
             Color3.fromRGB(
                 45,
@@ -10995,6 +10998,50 @@ addConnection(
     )
 )
 --// =========================================================
+--// =========================================================
+--// GLASS SURFACE FINISH
+--// =========================================================
+for _, object in ipairs(
+    Main:GetDescendants()
+) do
+    if object:IsA("TextButton") then
+        pcall(function()
+            object.BackgroundTransparency =
+                math.max(
+                    object.BackgroundTransparency,
+                    0.14
+                )
+        end)
+    elseif object:IsA("TextBox") then
+        pcall(function()
+            object.BackgroundTransparency =
+                math.max(
+                    object.BackgroundTransparency,
+                    0.10
+                )
+        end)
+    elseif object:IsA("ScrollingFrame") then
+        pcall(function()
+            object.BackgroundTransparency =
+                math.max(
+                    object.BackgroundTransparency,
+                    0.10
+                )
+        end)
+    elseif object:IsA("Frame")
+        and object ~= MainSurface
+        and object ~= MainHeader
+    then
+        pcall(function()
+            object.BackgroundTransparency =
+                math.max(
+                    object.BackgroundTransparency,
+                    0.12
+                )
+        end)
+    end
+end
+
 --// INIT
 --// =========================================================
 pcall(function()
