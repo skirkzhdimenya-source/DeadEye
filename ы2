@@ -8608,12 +8608,11 @@ mainConnect(
             local state =
                 humanoid:GetState()
 
+            --// Native manual jump is allowed only while the
+            --// humanoid is actually grounded. FloorMaterial alone
+            --// can become non-Air slightly before physical contact.
             if state
-                    == Enum.HumanoidStateType.Jumping
-                or state
-                    == Enum.HumanoidStateType.Freefall
-                or state
-                    == Enum.HumanoidStateType.FallingDown
+                    ~= Enum.HumanoidStateType.Running
             then
                 return
             end
