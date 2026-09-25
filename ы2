@@ -719,14 +719,10 @@ local cleaned = false
 local connections = {}
 
 --// Native wheel visual state.
---// Weak keys let recreated native slots disappear naturally.
-local nativeWheelStates =
-    setmetatable(
-        {},
-        {
-            __mode = "k"
-        }
-    )
+--// Keys are logical wheel positions ("Wheel:1", "Wheel2:4"),
+--// not GUI Instances. The game can recreate Emote1..Emote6;
+--// logical state survives those recreations and repeated ON/OFF.
+local nativeWheelStates = {}
 --// =========================================================
 --// CACHE
 --// =========================================================
@@ -11366,17 +11362,14 @@ end
 --// =========================================================
 --// NATIVE EMOTE WHEEL VISUAL SWAP
 --//
---// The game wheel uses:
---// Wheel.Emote1..Emote6
---//   -> TextLabel
---//   -> ViewportFrame
---//      -> WorldModel
---//         -> VisualRigClassic
---//            -> AnimationController.Animator
+--// The game has two native wheels:
+--//   Wheel  = first/default six emotes
+--//   Wheel2 = second six emotes shown with Q
 --//
---// We replace only the visual/name. The original Button and
---// the native emote binding remain untouched.
---// =========================================================
+--// IMPORTANT:
+--// The native UI can recreate Emote1..Emote6. Therefore state
+--// is stored by logical position (Wheel:1 / Wheel2:4), while
+--// the current GUI Instance is tracked separately.
 local function getNativeEmoteWheels()
     local playerGui =
         LocalPlayer:FindFirstChild(
@@ -11422,9 +11415,6 @@ local function getNativeEmoteWheels()
 
     local wheels = {}
 
-    -- The game has two native emote wheels:
-    -- Wheel  = first/default six emotes
-    -- Wheel2 = second wheel shown with Q
     for _, wheelName in ipairs({
         "Wheel",
         "Wheel2"
@@ -11459,11 +11449,8 @@ local function normalizeEmoteName(
         return ""
     end
 
-    -- Native wheel uses display names with spaces
-    -- (e.g. "Bold March"), while DeadEye config
-    -- stores module names (e.g. "BoldMarch").
-    -- Compare a compact lowercase form so both
-    -- representations resolve to the same emote.
+    -- Native display names can contain spaces while module
+    -- names may not (Bold March / BoldMarch).
     return string.lower(
         (
             name
@@ -11473,6 +11460,17 @@ local function normalizeEmoteName(
                 )
         )
     )
+end
+
+local function getNativeEmoteStateKey(
+    wheel,
+    index
+)
+    return tostring(
+        wheel.Name
+    )
+        .. ":"
+        .. tostring(index)
 end
 
 local function getConfiguredSlotByOriginalName(
@@ -11528,10 +11526,9 @@ local function restoreNativeEmoteSlot(
             "ViewportFrame"
         )
 
-    -- This is an explicit OFF/cleanup restore.
-    -- Do not depend on what the native UI currently
-    -- has in TextLabel: the native UI may have already
-    -- recycled/redrawn the slot while Swap was toggled.
+    -- Always restore from the persistent logical snapshot.
+    -- Do not care what TextLabel currently says: native UI may
+    -- already have redrawn/reused this slot.
     local originalModule =
         prepareOriginalModule(
             state.originalId
@@ -11558,23 +11555,51 @@ local function restoreNativeEmoteSlot(
                 or textLabel.Text
         end)
     end
+
+    -- Remember the current GUI Instance for the next ON cycle.
+    state.instance =
+        nativeSlot
 end
 
 local function restoreNativeEmoteWheel()
-    -- IMPORTANT:
-    -- Keep nativeWheelStates after restoring.
-    -- It is the persistent snapshot of what each native
-    -- slot originally contained, so repeated ON/OFF cycles
-    -- never lose the original emote information.
-    for nativeSlot, state in pairs(
-        nativeWheelStates
+    -- Restore every known logical slot. This intentionally does
+    -- NOT clear nativeWheelStates, because the next ON must still
+    -- know which original belongs to each Wheel/EmoteN position.
+    local wheels =
+        getNativeEmoteWheels()
+
+    for _, wheel in ipairs(
+        wheels
     ) do
-        pcall(function()
-            restoreNativeEmoteSlot(
-                nativeSlot,
-                state
-            )
-        end)
+        for i = 1, 6 do
+            local key =
+                getNativeEmoteStateKey(
+                    wheel,
+                    i
+                )
+
+            local state =
+                nativeWheelStates[
+                    key
+                ]
+
+            local nativeSlot =
+                wheel:FindFirstChild(
+                    "Emote"
+                    .. tostring(i)
+                )
+
+            if state
+                and nativeSlot
+            then
+                pcall(function()
+                    restoreNativeEmoteSlot(
+                        nativeSlot,
+                        state
+                    )
+                end)
+            end
+        end
     end
 end
 
@@ -11652,13 +11677,6 @@ local function applyNativeEmoteSlot(
 end
 
 local function syncNativeEmoteWheel()
-    if not genv.EMOTE_SWAPPER_RUNNING
-        or not enabled
-    then
-        restoreNativeEmoteWheel()
-        return
-    end
-
     local wheels =
         getNativeEmoteWheels()
 
@@ -11666,13 +11684,16 @@ local function syncNativeEmoteWheel()
         return
     end
 
-    -- Sync both native wheels:
-    -- Wheel  = first/default six emotes
-    -- Wheel2 = second six emotes shown with Q
-    --
-    -- nativeWheelStates is a persistent per-slot snapshot of
-    -- the ORIGINAL emote. It is intentionally not cleared on
-    -- OFF, so ON -> OFF -> ON -> OFF can repeat indefinitely.
+    -- OFF = restore from the persistent logical snapshots.
+    if not genv.EMOTE_SWAPPER_RUNNING
+        or not enabled
+    then
+        restoreNativeEmoteWheel()
+        return
+    end
+
+    -- ON = keep both wheels synchronized. State is keyed by
+    -- Wheel/EmoteN, while state.instance detects GUI recreation.
     for _, wheel in ipairs(
         wheels
     ) do
@@ -11701,17 +11722,23 @@ local function syncNativeEmoteWheel()
                 continue
             end
 
+            local key =
+                getNativeEmoteStateKey(
+                    wheel,
+                    i
+                )
+
             local state =
                 nativeWheelStates[
-                    nativeSlot
+                    key
                 ]
 
             local configuredSlot =
                 nil
 
+            -- Existing logical snapshot tells us exactly which
+            -- original belongs to this position.
             if state then
-                -- Find the currently configured replacement
-                -- for this slot using the immutable originalId.
                 for slotIndex = 1, SLOT_COUNT do
                     local configured =
                         slots[slotIndex]
@@ -11725,72 +11752,12 @@ local function syncNativeEmoteWheel()
                         break
                     end
                 end
+            end
 
-                -- If native UI rebuilt this slot into a genuinely
-                -- different original emote, refresh the snapshot.
-                local currentName =
-                    normalizeEmoteName(
-                        textLabel.Text
-                    )
-
-                local originalName =
-                    normalizeEmoteName(
-                        state.originalName
-                            or ""
-                    )
-
-                local replacementName =
-                    configuredSlot
-                    and normalizeEmoteName(
-                        configuredSlot.replaceName
-                            or ""
-                    )
-                        or ""
-
-                local expectedCurrent =
-                    currentName
-                        == originalName
-                    or (
-                        replacementName ~= ""
-                        and currentName
-                            == replacementName
-                    )
-
-                if not expectedCurrent then
-                    local rebuiltSlot =
-                        getConfiguredSlotByOriginalName(
-                            textLabel.Text
-                        )
-
-                    if rebuiltSlot then
-                        state = {
-                            originalId =
-                                rebuiltSlot.originalId,
-                            originalName =
-                                tostring(
-                                    textLabel.Text
-                                        or ""
-                                )
-                        }
-
-                        nativeWheelStates[
-                            nativeSlot
-                        ] = state
-
-                        configuredSlot =
-                            rebuiltSlot
-                    else
-                        nativeWheelStates[
-                            nativeSlot
-                        ] = nil
-
-                        state = nil
-                    end
-                end
-            else
-                -- First time we see this native slot:
-                -- only create a snapshot when its CURRENT text
-                -- is one of the configured originals.
+            -- First sight of a logical position: capture its
+            -- current original only when it matches a configured
+            -- original emote.
+            if not state then
                 configuredSlot =
                     getConfiguredSlotByOriginalName(
                         textLabel.Text
@@ -11804,12 +11771,42 @@ local function syncNativeEmoteWheel()
                             tostring(
                                 textLabel.Text
                                     or ""
-                            )
+                            ),
+                        instance =
+                            nil
                     }
 
                     nativeWheelStates[
-                        nativeSlot
+                        key
                     ] = state
+                end
+            end
+
+            -- If this position was rebuilt and currently shows a
+            -- configured original that is different from the old
+            -- snapshot, refresh the logical snapshot.
+            if state then
+                local currentConfigured =
+                    getConfiguredSlotByOriginalName(
+                        textLabel.Text
+                    )
+
+                if currentConfigured
+                    and currentConfigured.originalId
+                        ~= state.originalId
+                then
+                    state.originalId =
+                        currentConfigured.originalId
+                    state.originalName =
+                        tostring(
+                            textLabel.Text
+                                or ""
+                        )
+                    state.instance =
+                        nil
+
+                    configuredSlot =
+                        currentConfigured
                 end
             end
 
@@ -11841,23 +11838,39 @@ local function syncNativeEmoteWheel()
                         configuredSlot.replaceId
                     )
 
-                if replacementName
-                    and normalizeEmoteName(
-                        textLabel.Text
-                    )
-                    ~= normalizeEmoteName(
-                        replacementName
-                    )
-                then
-                    applyNativeEmoteSlot(
-                        nativeSlot,
-                        configuredSlot
-                    )
+                if replacementName then
+                    local instanceChanged =
+                        state.instance
+                            ~= nativeSlot
+
+                    local nameChanged =
+                        normalizeEmoteName(
+                            textLabel.Text
+                        )
+                        ~= normalizeEmoteName(
+                            replacementName
+                        )
+
+                    -- Re-apply on a NEW GUI Instance even when its
+                    -- TextLabel already contains the replacement name.
+                    if instanceChanged
+                        or nameChanged
+                    then
+                        local applied =
+                            applyNativeEmoteSlot(
+                                nativeSlot,
+                                configuredSlot
+                            )
+
+                        if applied then
+                            state.instance =
+                                nativeSlot
+                        end
+                    end
                 end
             elseif state
             then
-                -- Configuration was removed/changed:
-                -- immediately return this slot to its original.
+                -- Configuration was removed/changed.
                 restoreNativeEmoteSlot(
                     nativeSlot,
                     state
