@@ -3374,17 +3374,30 @@ local function installUnusualPartFX(
         if child:IsA("Model") then
 
             local hasNestedPart = false
+            local hasAnimationDriver = false
 
             for _, object in ipairs(
                 child:GetDescendants()
             ) do
+
                 if object:IsA("BasePart") then
                     hasNestedPart = true
-                    break
                 end
+
+                if object:IsA("Motor6D")
+                    or object:IsA("AnimationController")
+                    or object:IsA("Animator")
+                    or object:IsA("Script")
+                    or object:IsA("LocalScript")
+                then
+                    hasAnimationDriver = true
+                end
+
             end
 
-            if hasNestedPart then
+            if hasNestedPart
+                and hasAnimationDriver
+            then
                 unusualRuntime.createVisualMirror(
                     child,
                     id
