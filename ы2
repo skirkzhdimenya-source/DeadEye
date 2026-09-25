@@ -1965,12 +1965,253 @@ local unusualPickerClose
 local unusualPickerButtons = {}
 local unusualPickerSide = nil
 local unusualIconCache = {}
+local unusualIconIdCache = {}
 
 local function normalizeUnusualIconKey(value)
     value = tostring(value or "")
     value = string.lower(value)
     value = string.gsub(value, "[^%w]", "")
     return value
+end
+
+local function isLikelyImageKey(key)
+    key = string.lower(
+        tostring(key or "")
+    )
+
+    return string.find(key, "icon", 1, true)
+        or string.find(key, "image", 1, true)
+        or string.find(key, "thumbnail", 1, true)
+        or string.find(key, "thumb", 1, true)
+        or string.find(key, "preview", 1, true)
+        or string.find(key, "sprite", 1, true)
+end
+
+local function extractAssetId(value)
+    if type(value) ~= "string" then
+        return nil
+    end
+
+    local text = value
+
+    if string.find(
+        text,
+        "rbxassetid://",
+        1,
+        true
+    )
+    or string.find(
+        text,
+        "rbxthumb://",
+        1,
+        true
+    )
+    then
+        return text
+    end
+
+    local id =
+        string.match(
+            text,
+            "^%s*(%d+)%s*$"
+        )
+
+    if id then
+        return "rbxassetid://" .. id
+    end
+
+    return nil
+end
+
+local function scanIconValue(
+    value,
+    preferred,
+    depth,
+    seen
+)
+    if depth > 5 then
+        return nil
+    end
+
+    local direct =
+        extractAssetId(
+            value
+        )
+
+    if direct then
+        return direct
+    end
+
+    if type(value) ~= "table" then
+        return nil
+    end
+
+    if seen[value] then
+        return nil
+    end
+
+    seen[value] = true
+
+    local fallback = nil
+
+    for key, child in pairs(value) do
+        local keyString =
+            tostring(key)
+
+        if isLikelyImageKey(
+            keyString
+        )
+        then
+            local found =
+                scanIconValue(
+                    child,
+                    true,
+                    depth + 1,
+                    seen
+                )
+
+            if found then
+                return found
+            end
+        elseif not preferred then
+            local found =
+                scanIconValue(
+                    child,
+                    false,
+                    depth + 1,
+                    seen
+                )
+
+            if found
+                and not fallback
+            then
+                fallback = found
+            end
+        end
+    end
+
+    return fallback
+end
+
+local function getUnusualIconFromData(
+    numericId,
+    registryData,
+    module
+)
+    local candidates = {}
+
+    local config
+    pcall(function()
+        config =
+            Registry.GetConfig(
+                numericId
+            )
+    end)
+
+    if config then
+        table.insert(
+            candidates,
+            config
+        )
+    end
+
+    if registryData then
+        table.insert(
+            candidates,
+            registryData
+        )
+    end
+
+    if module then
+        pcall(function()
+            local attributes =
+                module:GetAttributes()
+
+            if type(attributes) == "table" then
+                table.insert(
+                    candidates,
+                    attributes
+                )
+            end
+        end)
+
+        -- Some item ModuleScripts return a metadata table.
+        pcall(function()
+            local required =
+                require(module)
+
+            if type(required) == "table" then
+                table.insert(
+                    candidates,
+                    required
+                )
+            end
+        end)
+    end
+
+    for _, candidate in ipairs(
+        candidates
+    ) do
+        local found =
+            scanIconValue(
+                candidate,
+                false,
+                0,
+                {}
+            )
+
+        if found then
+            return found
+        end
+    end
+
+    -- Last direct-object fallback: attributes / StringValue descendants.
+    if module then
+        for _, obj in ipairs(
+            module:GetDescendants()
+        ) do
+            if obj:IsA("StringValue") then
+                local key =
+                    obj.Name
+
+                if isLikelyImageKey(
+                    key
+                )
+                then
+                    local found =
+                        extractAssetId(
+                            obj.Value
+                        )
+
+                    if found then
+                        return found
+                    end
+                end
+            end
+
+            if obj:IsA("IntValue")
+                or obj:IsA("NumberValue")
+            then
+                if isLikelyImageKey(
+                    obj.Name
+                )
+                then
+                    local found =
+                        extractAssetId(
+                            tostring(
+                                obj.Value
+                            )
+                        )
+
+                    if found then
+                        return found
+                    end
+                end
+            end
+        end
+    end
+
+    return nil
 end
 
 local function cacheUnusualIconFromObject(icon)
@@ -2337,12 +2578,26 @@ local function buildUnusualList()
                 end
                 if module then
                     seen[numericId] = true
+                    local icon =
+                        getUnusualIconFromData(
+                            numericId,
+                            data,
+                            module
+                        )
+
+                    if icon then
+                        unusualIconIdCache[
+                            numericId
+                        ] = icon
+                    end
+
                     table.insert(
                         unusualList,
                         {
                             id = numericId,
                             name = module.Name,
-                            module = module
+                            module = module,
+                            icon = icon
                         }
                     )
                 end
@@ -2354,6 +2609,23 @@ local function buildUnusualList()
         function(a, b)
             return a.id < b.id
         end
+    )
+
+    local iconCount = 0
+
+    for _, data in ipairs(
+        unusualList
+    ) do
+        if data.icon then
+            iconCount += 1
+        end
+    end
+
+    warn(
+        "[DeadEye] Native Unusual icons:",
+        tostring(iconCount),
+        "/",
+        tostring(#unusualList)
     )
     end
 buildUnusualList()
@@ -6427,7 +6699,11 @@ local function rebuildUnusualPicker()
             icon.Active =
                 false
             icon.Image =
-                unusualIconCache[
+                data.icon
+                or unusualIconIdCache[
+                    data.id
+                ]
+                or unusualIconCache[
                     normalizeUnusualIconKey(
                         data.name
                     )
