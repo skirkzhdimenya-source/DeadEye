@@ -1526,6 +1526,8 @@ Main.BackgroundColor3 =
         20,
         24
     )
+Main.BackgroundTransparency =
+    0
 Main.BorderSizePixel =
     0
 Main.ClipsDescendants =
@@ -1611,6 +1613,8 @@ MainHeader.BackgroundColor3 =
         28,
         33
     )
+MainHeader.BackgroundTransparency =
+    0
 MainHeader.BorderSizePixel =
     0
 MainHeader.ZIndex =
@@ -10177,6 +10181,13 @@ addConnection(
     )
 )
 --// =========================================================
+--// WINDOW SIZE LIMITS
+--// =========================================================
+local MIN_WINDOW_WIDTH = 455
+local MIN_WINDOW_HEIGHT = 285
+local RESIZE_EDGE = 8
+
+--// =========================================================
 --// MINIMIZE STATE
 --// =========================================================
 local mainMinimized = false
@@ -10360,10 +10371,6 @@ local resizing = false
 local resizeMode = nil
 local resizeStart
 local resizeStartSize
-
-local MIN_WINDOW_WIDTH = 455
-local MIN_WINDOW_HEIGHT = 285
-local RESIZE_EDGE = 8
 
 local function saveWindowState()
     savedConfig.gui =
