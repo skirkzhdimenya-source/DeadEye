@@ -2274,73 +2274,42 @@ local function createUnusualAnchor(
 )
     local anchor
 
-    if sourcePart:IsA("MeshPart")
-        or sourcePart:IsA("Part")
-        or sourcePart:IsA("UnionOperation")
-        or sourcePart:IsA("TrussPart")
-    then
-        local success
+    local success
 
-        success = pcall(function()
-            anchor = sourcePart:Clone()
-        end)
+    success = pcall(function()
+        anchor = sourcePart:Clone()
+    end)
 
-        if not success or not anchor then
-            return nil
-        end
-
-        anchor.Name =
-            "DeadEyeUnusualGeometry_" ..
-            tostring(id) ..
-            "_" ..
-            tostring(index)
-
-        for _, joint in ipairs(
-            anchor:GetDescendants()
-        ) do
-            if joint:IsA("Weld")
-                or joint:IsA("WeldConstraint")
-                or joint:IsA("Motor6D")
-                or joint:IsA("Motor")
-            then
-                pcall(function()
-                    joint:Destroy()
-                end)
-            end
-        end
-
-        anchor.Anchored = false
-        anchor.CanCollide = false
-        anchor.CanTouch = false
-        anchor.CanQuery = false
-        anchor.Massless = true
-        anchor.CastShadow = false
-
-    else
-        anchor =
-            Instance.new("Part")
-
-        anchor.Name =
-            "DeadEyeUnusualAnchor_" ..
-            tostring(id) ..
-            "_" ..
-            tostring(index)
-
-        anchor.Size =
-            Vector3.new(
-                math.max(sourcePart.Size.X, 0.05),
-                math.max(sourcePart.Size.Y, 0.05),
-                math.max(sourcePart.Size.Z, 0.05)
-            )
-
-        anchor.Transparency = 1
-        anchor.CanCollide = false
-        anchor.CanTouch = false
-        anchor.CanQuery = false
-        anchor.CastShadow = false
-        anchor.Massless = true
-        anchor.Anchored = false
+    if not success or not anchor then
+        return nil
     end
+
+    anchor.Name =
+        "DeadEyeUnusualGeometry_" ..
+        tostring(id) ..
+        "_" ..
+        tostring(index)
+
+    for _, joint in ipairs(
+        anchor:GetDescendants()
+    ) do
+        if joint:IsA("Weld")
+            or joint:IsA("WeldConstraint")
+            or joint:IsA("Motor6D")
+            or joint:IsA("Motor")
+        then
+            pcall(function()
+                joint:Destroy()
+            end)
+        end
+    end
+
+    anchor.Anchored = false
+    anchor.CanCollide = false
+    anchor.CanTouch = false
+    anchor.CanQuery = false
+    anchor.Massless = true
+    anchor.CastShadow = false
 
     local relative =
         sourceRoot.CFrame:ToObjectSpace(
