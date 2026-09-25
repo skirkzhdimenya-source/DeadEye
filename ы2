@@ -81,6 +81,12 @@ local savedConfig = {
         jumpDelay = 0.01,
         hotkey = "Z",
         hideUIHotkey = "H"
+    },
+    gui = {
+        x = 35,
+        y = 80,
+        width = 455,
+        height = 320
     }
 }
 local function loadSavedConfig()
@@ -142,6 +148,40 @@ local function loadSavedConfig()
     savedConfig.main.hideUIHotkey =
         savedConfig.main.hideUIHotkey
         or "H"
+
+    if type(decoded.gui) == "table" then
+        savedConfig.gui = savedConfig.gui or {}
+
+        savedConfig.gui.x =
+            tonumber(decoded.gui.x)
+            or savedConfig.gui.x
+            or 35
+
+        savedConfig.gui.y =
+            tonumber(decoded.gui.y)
+            or savedConfig.gui.y
+            or 80
+
+        savedConfig.gui.width =
+            tonumber(decoded.gui.width)
+            or savedConfig.gui.width
+            or 455
+
+        savedConfig.gui.height =
+            tonumber(decoded.gui.height)
+            or savedConfig.gui.height
+            or 320
+    end
+
+    savedConfig.gui.x =
+        tonumber(savedConfig.gui.x) or 35
+    savedConfig.gui.y =
+        tonumber(savedConfig.gui.y) or 80
+    savedConfig.gui.width =
+        tonumber(savedConfig.gui.width) or 455
+    savedConfig.gui.height =
+        tonumber(savedConfig.gui.height) or 320
+
     savedConfig.version =
         tonumber(decoded.version)
         or 1
@@ -1462,16 +1502,22 @@ Main =
 Main.Size =
     UDim2.new(
         0,
-        455,
+        math.max(
+            380,
+            savedConfig.gui.width
+        ),
         0,
-        320
+        math.max(
+            260,
+            savedConfig.gui.height
+        )
     )
 Main.Position =
     UDim2.new(
         0,
-        35,
+        savedConfig.gui.x,
         0,
-        80
+        savedConfig.gui.y
     )
 Main.BackgroundColor3 =
     Color3.fromRGB(
@@ -1500,6 +1546,87 @@ MainStroke.Transparency =
     0.45
 MainStroke.Parent =
     Main
+
+local MainHeader =
+    Instance.new("Frame")
+MainHeader.Name =
+    "MainHeader"
+MainHeader.Size =
+    UDim2.new(
+        1,
+        -2,
+        0,
+        46
+    )
+MainHeader.Position =
+    UDim2.new(
+        0,
+        1,
+        0,
+        1
+    )
+MainHeader.BackgroundColor3 =
+    Color3.fromRGB(
+        30,
+        30,
+        34
+    )
+MainHeader.BorderSizePixel =
+    0
+MainHeader.ZIndex =
+    0
+MainHeader.Parent =
+    Main
+
+local MainHeaderGradient =
+    Instance.new("UIGradient")
+MainHeaderGradient.Rotation =
+    90
+MainHeaderGradient.Transparency =
+    NumberSequence.new({
+        NumberSequenceKeypoint.new(
+            0,
+            0
+        ),
+        NumberSequenceKeypoint.new(
+            1,
+            0.35
+        )
+    })
+MainHeaderGradient.Parent =
+    MainHeader
+
+local MainHeaderLine =
+    Instance.new("Frame")
+MainHeaderLine.Name =
+    "HeaderAccent"
+MainHeaderLine.Size =
+    UDim2.new(
+        1,
+        -24,
+        0,
+        1
+    )
+MainHeaderLine.Position =
+    UDim2.new(
+        0,
+        12,
+        1,
+        -1
+    )
+MainHeaderLine.BackgroundColor3 =
+    Color3.fromRGB(
+        110,
+        170,
+        255
+    )
+MainHeaderLine.BorderSizePixel =
+    0
+MainHeaderLine.ZIndex =
+    1
+MainHeaderLine.Parent =
+    Main
+
 --// =========================================================
 --// TITLE
 --// =========================================================
@@ -1527,6 +1654,8 @@ MainTitle.TextSize =
     18
 MainTitle.Font =
     Enum.Font.GothamBold
+MainTitle.ZIndex =
+    2
 MainTitle.TextColor3 =
     Color3.fromRGB(
         255,
@@ -1572,6 +1701,8 @@ Minimize.AutoButtonColor =
     true
 Minimize.ZIndex =
     5
+Minimize.BackgroundTransparency =
+    0.05
 Minimize.Font =
     Enum.Font.GothamBold
 Minimize.TextColor3 =
@@ -1610,8 +1741,18 @@ Close.Position =
         0,
         6
     )
+Close.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        50
+    )
 Close.BackgroundTransparency =
-    1
+    0.05
+Close.BorderSizePixel =
+    0
+Close.ZIndex =
+    5
 Close.Text =
     "×"
 Close.TextSize =
@@ -1626,6 +1767,26 @@ Close.TextColor3 =
     )
 Close.Parent =
     Main
+
+local CloseCorner =
+    Instance.new("UICorner")
+CloseCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+CloseCorner.Parent =
+    Close
+
+local CloseStroke =
+    Instance.new("UIStroke")
+CloseStroke.Thickness =
+    1
+CloseStroke.Transparency =
+    0.65
+CloseStroke.Parent =
+    Close
+
 --// =========================================================
 --// STATUS
 --// =========================================================
@@ -8491,6 +8652,34 @@ categoryBar.BorderSizePixel =
     0
 categoryBar.Parent =
     Main
+
+local categoryGradient =
+    Instance.new("UIGradient")
+categoryGradient.Rotation =
+    90
+categoryGradient.Transparency =
+    NumberSequence.new({
+        NumberSequenceKeypoint.new(
+            0,
+            0.05
+        ),
+        NumberSequenceKeypoint.new(
+            1,
+            0.2
+        )
+    })
+categoryGradient.Parent =
+    categoryBar
+
+local categoryStroke =
+    Instance.new("UIStroke")
+categoryStroke.Thickness =
+    1
+categoryStroke.Transparency =
+    0.72
+categoryStroke.Parent =
+    categoryBar
+
 local categoryCorner =
     Instance.new("UICorner")
 categoryCorner.CornerRadius =
@@ -9968,9 +10157,15 @@ local function setMainMinimized(state)
         Main.Size =
             UDim2.new(
                 0,
-                455,
+                math.max(
+                    380,
+                    savedConfig.gui.width
+                ),
                 0,
-                320
+                math.max(
+                    260,
+                    savedConfig.gui.height
+                )
             )
         MainTitle.Size =
             UDim2.new(
@@ -10068,18 +10263,146 @@ addConnection(
     )
 )
 --// =========================================================
---// DRAG
 --// =========================================================
+--// WINDOW GEOMETRY / DRAG / RESIZE
+-- =========================================================
 local dragging = false
 local dragStart
 local startPosition
+
+local resizing = false
+local resizeMode = nil
+local resizeStart
+local resizeStartSize
+
+local MIN_WINDOW_WIDTH = 380
+local MIN_WINDOW_HEIGHT = 260
+local RESIZE_EDGE = 8
+
+local function saveWindowState()
+    savedConfig.gui =
+        savedConfig.gui
+        or {}
+
+    savedConfig.gui.x =
+        math.floor(
+            Main.Position.X.Offset
+            + 0.5
+        )
+
+    savedConfig.gui.y =
+        math.floor(
+            Main.Position.Y.Offset
+            + 0.5
+        )
+
+    savedConfig.gui.width =
+        math.floor(
+            Main.AbsoluteSize.X
+            + 0.5
+        )
+
+    savedConfig.gui.height =
+        math.floor(
+            Main.AbsoluteSize.Y
+            + 0.5
+        )
+
+    pcall(function()
+        saveSavedConfig()
+    end)
+end
+
+local function clampWindowPosition()
+    local camera =
+        workspace.CurrentCamera
+
+    if not camera then
+        return
+    end
+
+    local viewport =
+        camera.ViewportSize
+
+    local width =
+        Main.AbsoluteSize.X
+
+    local height =
+        Main.AbsoluteSize.Y
+
+    local x =
+        Main.Position.X.Offset
+
+    local y =
+        Main.Position.Y.Offset
+
+    local maxX =
+        math.max(
+            8,
+            viewport.X - width - 8
+        )
+
+    local maxY =
+        math.max(
+            8,
+            viewport.Y - height - 8
+        )
+
+    Main.Position =
+        UDim2.new(
+            0,
+            math.clamp(
+                x,
+                8,
+                maxX
+            ),
+            0,
+            math.clamp(
+                y,
+                8,
+                maxY
+            )
+        )
+end
+
+local function setMainSize(
+    width,
+    height
+)
+    Main.Size =
+        UDim2.new(
+            0,
+            math.max(
+                MIN_WINDOW_WIDTH,
+                math.floor(
+                    width + 0.5
+                )
+            ),
+            0,
+            math.max(
+                MIN_WINDOW_HEIGHT,
+                math.floor(
+                    height + 0.5
+                )
+            )
+        )
+
+    clampWindowPosition()
+end
+
+--// Drag the title bar.
 addConnection(
     MainTitle.InputBegan:Connect(
         function(input)
+            if mainMinimized then
+                return
+            end
+
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
                 or input.UserInputType ==
-                    Enum.UserInputType.Touch then
+                    Enum.UserInputType.Touch
+            then
                 dragging = true
                 dragStart =
                     input.Position
@@ -10089,21 +10412,26 @@ addConnection(
         end
     )
 )
+
 addConnection(
     UserInputService.InputChanged:Connect(
         function(input)
             if not dragging then
                 return
             end
+
             if input.UserInputType ~=
                     Enum.UserInputType.MouseMovement
                 and input.UserInputType ~=
-                    Enum.UserInputType.Touch then
+                    Enum.UserInputType.Touch
+            then
                 return
             end
+
             local delta =
                 input.Position -
                 dragStart
+
             Main.Position =
                 UDim2.new(
                     startPosition.X.Scale,
@@ -10113,28 +10441,264 @@ addConnection(
                     startPosition.Y.Offset
                         + delta.Y
                 )
+
+            clampWindowPosition()
         end
     )
 )
+
+local function beginResize(
+    position,
+    mode
+)
+    if mainMinimized then
+        return
+    end
+
+    resizing = true
+    resizeMode = mode
+    resizeStart =
+        position
+    resizeStartSize =
+        Main.AbsoluteSize
+end
+
+--// Invisible right-edge resize target.
+local ResizeRight =
+    Instance.new("Frame")
+ResizeRight.Name =
+    "ResizeRight"
+ResizeRight.Size =
+    UDim2.new(
+        0,
+        RESIZE_EDGE,
+        1,
+        -54
+    )
+ResizeRight.Position =
+    UDim2.new(
+        1,
+        -RESIZE_EDGE,
+        0,
+        48
+    )
+ResizeRight.BackgroundTransparency =
+    1
+ResizeRight.BorderSizePixel =
+    0
+ResizeRight.ZIndex =
+    20
+ResizeRight.Active =
+    true
+ResizeRight.Parent =
+    Main
+
+addConnection(
+    ResizeRight.InputBegan:Connect(
+        function(input)
+            if input.UserInputType ==
+                    Enum.UserInputType.MouseButton1
+                or input.UserInputType ==
+                    Enum.UserInputType.Touch
+            then
+                beginResize(
+                    input.Position,
+                    "right"
+                )
+            end
+        end
+    )
+)
+
+--// Bottom-edge resize target.
+local ResizeBottom =
+    Instance.new("Frame")
+ResizeBottom.Name =
+    "ResizeBottom"
+ResizeBottom.Size =
+    UDim2.new(
+        1,
+        -54,
+        0,
+        RESIZE_EDGE
+    )
+ResizeBottom.Position =
+    UDim2.new(
+        0,
+        8,
+        1,
+        -RESIZE_EDGE
+    )
+ResizeBottom.BackgroundTransparency =
+    1
+ResizeBottom.BorderSizePixel =
+    0
+ResizeBottom.ZIndex =
+    20
+ResizeBottom.Active =
+    true
+ResizeBottom.Parent =
+    Main
+
+addConnection(
+    ResizeBottom.InputBegan:Connect(
+        function(input)
+            if input.UserInputType ==
+                    Enum.UserInputType.MouseButton1
+                or input.UserInputType ==
+                    Enum.UserInputType.Touch
+            then
+                beginResize(
+                    input.Position,
+                    "bottom"
+                )
+            end
+        end
+    )
+)
+
+--// Bottom-right corner: width + height together.
+local ResizeCorner =
+    Instance.new("TextButton")
+ResizeCorner.Name =
+    "ResizeCorner"
+ResizeCorner.Size =
+    UDim2.new(
+        0,
+        20,
+        0,
+        20
+    )
+ResizeCorner.Position =
+    UDim2.new(
+        1,
+        -20,
+        1,
+        -20
+    )
+ResizeCorner.BackgroundTransparency =
+    1
+ResizeCorner.BorderSizePixel =
+    0
+ResizeCorner.Text =
+    "⋰"
+ResizeCorner.TextSize =
+    14
+ResizeCorner.Font =
+    Enum.Font.GothamBold
+ResizeCorner.TextColor3 =
+    Color3.fromRGB(
+        120,
+        130,
+        145
+    )
+ResizeCorner.ZIndex =
+    21
+ResizeCorner.AutoButtonColor =
+    false
+ResizeCorner.Parent =
+    Main
+
+addConnection(
+    ResizeCorner.InputBegan:Connect(
+        function(input)
+            if input.UserInputType ==
+                    Enum.UserInputType.MouseButton1
+                or input.UserInputType ==
+                    Enum.UserInputType.Touch
+            then
+                beginResize(
+                    input.Position,
+                    "corner"
+                )
+            end
+        end
+    )
+)
+
+addConnection(
+    UserInputService.InputChanged:Connect(
+        function(input)
+            if not resizing then
+                return
+            end
+
+            if input.UserInputType ~=
+                    Enum.UserInputType.MouseMovement
+                and input.UserInputType ~=
+                    Enum.UserInputType.Touch
+            then
+                return
+            end
+
+            local delta =
+                input.Position -
+                resizeStart
+
+            local width =
+                resizeStartSize.X
+
+            local height =
+                resizeStartSize.Y
+
+            if resizeMode == "right"
+                or resizeMode == "corner"
+            then
+                width =
+                    resizeStartSize.X +
+                    delta.X
+            end
+
+            if resizeMode == "bottom"
+                or resizeMode == "corner"
+            then
+                height =
+                    resizeStartSize.Y +
+                    delta.Y
+            end
+
+            setMainSize(
+                width,
+                height
+            )
+        end
+    )
+)
+
 addConnection(
     UserInputService.InputEnded:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
                 or input.UserInputType ==
-                    Enum.UserInputType.Touch then
-                dragging = false
+                    Enum.UserInputType.Touch
+            then
+                if dragging then
+                    dragging = false
+                    saveWindowState()
+                end
+
+                if resizing then
+                    resizing = false
+                    resizeMode = nil
+                    saveWindowState()
+                end
             end
         end
     )
 )
---// =========================================================
+
 --// CLEANUP
 --// =========================================================
 local function cleanup()
     if cleaned then
         return
     end
+
+    pcall(function()
+        saveWindowState()
+    end)
+
     pcall(function()
         if genv.UNUSUAL_SWAPPER_CLEANUP then
             genv.UNUSUAL_SWAPPER_CLEANUP()
@@ -10185,6 +10749,9 @@ addConnection(
 --// =========================================================
 --// INIT
 --// =========================================================
+pcall(function()
+    clampWindowPosition()
+end)
 prepareSlots()
 savedConfig.emotes =
     savedConfig.emotes
