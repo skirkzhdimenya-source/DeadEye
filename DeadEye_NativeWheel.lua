@@ -1,17 +1,23 @@
 --// DeadEye NativeWheel module
 
-return function(__ctx)
-    local SLOT_COUNT = __ctx.SLOT_COUNT
-    local slots = __ctx.slots
-    local genv = __ctx.genv
-    local LocalPlayer = __ctx.LocalPlayer
-    local prepareOriginalModule = __ctx.prepareOriginalModule
-    local prepareReplaceModule = __ctx.prepareReplaceModule
-    local getEmoteName = __ctx.getEmoteName
-    local createEmotePreview = __ctx.createEmotePreview
+local __ctx =
+    (getgenv and getgenv() or _G).DEADEYE_NATIVE_WHEEL_CONTEXT
 
-    local nativeWheelStates = {}
-    local nativeWheelRestoreDone = false
+if type(__ctx) ~= "table" then
+    error("[DeadEye NativeWheel] Context missing")
+end
+
+local SLOT_COUNT = __ctx.SLOT_COUNT
+local slots = __ctx.slots
+local genv = __ctx.genv
+local LocalPlayer = __ctx.LocalPlayer
+local prepareOriginalModule = __ctx.prepareOriginalModule
+local prepareReplaceModule = __ctx.prepareReplaceModule
+local getEmoteName = __ctx.getEmoteName
+local createEmotePreview = __ctx.createEmotePreview
+
+local nativeWheelStates = {}
+local nativeWheelRestoreDone = false
 
 --// NATIVE EMOTE WHEEL VISUAL SWAP
 --//
@@ -545,11 +551,10 @@ end
 
 --// =========================================================
 
-    return {
-        sync = syncNativeEmoteWheel,
-        restore = restoreNativeEmoteWheel,
-        reset = function()
-            nativeWheelRestoreDone = false
-        end
-    }
-end
+return {
+    sync = syncNativeEmoteWheel,
+    restore = restoreNativeEmoteWheel,
+    reset = function()
+        nativeWheelRestoreDone = false
+    end
+}
