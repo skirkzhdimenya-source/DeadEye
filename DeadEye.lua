@@ -753,10 +753,10 @@ local pickerButtons = {}
 --// =========================================================
 --// CONNECTION HELPER
 --// =========================================================
-local function addConnection(connection)
+function DEADEYE_FN_addConnection(connection)
     table.insert(connections, connection)
 end
-local function disconnectAll()
+function DEADEYE_FN_disconnectAll()
     for _, connection in ipairs(connections) do
         pcall(function()
             connection:Disconnect()
@@ -979,7 +979,7 @@ end
 --// =========================================================
 --// CURRENT EMOTE
 --// =========================================================
-local function getCurrentEmoteId(object)
+function DEADEYE_FN_getCurrentEmoteId(object)
     if not object then
         return 0
     end
@@ -995,7 +995,7 @@ end
 --// =========================================================
 --// GET RIG MODEL
 --// =========================================================
-local function getRigModel(object)
+function DEADEYE_FN_getRigModel(object)
     if not object
         or not object.Rig then
         return nil
@@ -1011,7 +1011,7 @@ end
 --// =========================================================
 --// GET CONTROLLERS
 -- =========================================================
-local function getControllers(object)
+function DEADEYE_FN_getControllers(object)
     local result = {}
     local seen = {}
     if not object then
@@ -1030,7 +1030,7 @@ local function getControllers(object)
     local character =
         object.Model
     local rig =
-        getRigModel(object)
+        DEADEYE_FN_getRigModel(object)
     for _, root in ipairs({
         character,
         rig
@@ -1065,10 +1065,10 @@ end
 --// =========================================================
 --// GET CURRENT PLAYING TRACKS
 -- =========================================================
-local function getPlayingTracks(object)
+function DEADEYE_FN_getPlayingTracks(object)
     local result = {}
     for _, controller in ipairs(
-        getControllers(object)
+        DEADEYE_FN_getControllers(object)
     ) do
         local success, tracks =
             pcall(function()
@@ -1091,7 +1091,7 @@ end
 --// =========================================================
 --// STOP ORIGINAL TRACKS
 -- =========================================================
-local function stopOriginalTracks(
+function DEADEYE_FN_stopOriginalTracks(
     object,
     originalId
 )
@@ -1129,7 +1129,7 @@ local function stopOriginalTracks(
         end
     end
     for _, track in ipairs(
-        getPlayingTracks(object)
+        DEADEYE_FN_getPlayingTracks(object)
     ) do
         local animation =
             track.Animation
@@ -1162,7 +1162,7 @@ end
 --// =========================================================
 --// STOP ORIGINAL EMOTE SOUNDS
 --// =========================================================
-local function stopOriginalSounds(object)
+function DEADEYE_FN_stopOriginalSounds(object)
     if not object then
         return
     end
@@ -1175,7 +1175,7 @@ local function stopOriginalSounds(object)
     local seen = {}
     local roots = {
         object.Model,
-        getRigModel(object)
+        DEADEYE_FN_getRigModel(object)
     }
     for _, root in ipairs(roots) do
         if root and not seen[root] then
@@ -1199,7 +1199,7 @@ local function stopOriginalSounds(object)
 end
 --// STOP EMOTE OBJECT
 --// =========================================================
-local function stopEmoteObject(emote)
+function DEADEYE_FN_stopEmoteObject(emote)
     if not emote then
         return
     end
@@ -1210,7 +1210,7 @@ end
 --// =========================================================
 --// STOP CUSTOM
 -- =========================================================
-local function stopCustomEmote()
+function DEADEYE_FN_stopCustomEmote()
     replacementGeneration =
         replacementGeneration + 1
     replacementRunning = false
@@ -1226,7 +1226,7 @@ local function stopCustomEmote()
             object.Emote = nil
         end
 
-        stopEmoteObject(
+        DEADEYE_FN_stopEmoteObject(
             currentCustomEmote
         )
 
@@ -1240,7 +1240,7 @@ end
 --// =========================================================
 --// CREATE REPLACEMENT
 --// =========================================================
-local function createReplacement(
+function DEADEYE_FN_createReplacement(
     object,
     replaceId
 )
@@ -1258,7 +1258,7 @@ local function createReplacement(
     local character =
         object.Model
     local rigModel =
-        getRigModel(object)
+        DEADEYE_FN_getRigModel(object)
     if not character
         or not rigModel then
         return nil
@@ -1286,7 +1286,7 @@ end
 --// =========================================================
 --// START REPLACEMENT
 -- =========================================================
-local function startReplacement(
+function DEADEYE_FN_startReplacement(
     object,
     slot
 )
@@ -1322,7 +1322,7 @@ local function startReplacement(
             replacementRunning = false
             return
         end
-        if getCurrentEmoteId(object)
+        if DEADEYE_FN_getCurrentEmoteId(object)
             ~= originalId then
             replacementRunning = false
             return
@@ -1332,7 +1332,7 @@ local function startReplacement(
         --// =================================================
         if object.Emote
             and object.Emote ~= currentCustomEmote then
-            stopEmoteObject(
+            DEADEYE_FN_stopEmoteObject(
                 object.Emote
             )
             object.Emote = nil
@@ -1340,18 +1340,18 @@ local function startReplacement(
         --// =================================================
         --// ГАСИМ ОРИГИНАЛЬНЫЕ TRACKS
         --// =================================================
-        stopOriginalTracks(
+        DEADEYE_FN_stopOriginalTracks(
             object,
             originalId
         )
-        stopOriginalSounds(
+        DEADEYE_FN_stopOriginalSounds(
             object
         )
         --// =================================================
         --// СОЗДАЁМ REPLACEMENT
         --// =================================================
         local replacement =
-            createReplacement(
+            DEADEYE_FN_createReplacement(
                 object,
                 replaceId
             )
@@ -1362,7 +1362,7 @@ local function startReplacement(
         if myGeneration ~=
             replacementGeneration
             or not enabled then
-            stopEmoteObject(
+            DEADEYE_FN_stopEmoteObject(
                 replacement
             )
             replacementRunning = false
@@ -1376,7 +1376,7 @@ local function startReplacement(
             replaceId
         object.Emote =
             replacement
-        stopOriginalSounds(
+        DEADEYE_FN_stopOriginalSounds(
             object
         )
         --// Сохраняем штатное состояние
@@ -1391,7 +1391,7 @@ end
 --// =========================================================
 --// MAIN STATE WATCHER
 -- =========================================================
-local function checkState()
+function DEADEYE_FN_checkState()
     if not genv.EMOTE_SWAPPER_RUNNING then
         return
     end
@@ -1401,7 +1401,7 @@ local function checkState()
         return
     end
     local emoteId =
-        getCurrentEmoteId(object)
+        DEADEYE_FN_getCurrentEmoteId(object)
     --// =====================================================
     --// NO EMOTE
     --// =====================================================
@@ -1409,7 +1409,7 @@ local function checkState()
         or emoteId == 0 then
         if currentCustomEmote then
                     end
-        stopCustomEmote()
+        DEADEYE_FN_stopCustomEmote()
         lastRegistryEmote = 0
         return
     end
@@ -1425,7 +1425,7 @@ local function checkState()
     --// =====================================================
     if not slot then
         if currentCustomEmote then
-            stopCustomEmote()
+            DEADEYE_FN_stopCustomEmote()
         end
         lastRegistryEmote =
             emoteId
@@ -1438,7 +1438,7 @@ local function checkState()
     --// =====================================================
     if not currentCustomEmote
         and not replacementRunning then
-        startReplacement(
+        DEADEYE_FN_startReplacement(
             object,
             slot
         )
@@ -1451,18 +1451,18 @@ local function checkState()
     --// CONTINUOUSLY SUPPRESS ORIGINAL
     --// =====================================================
     if currentCustomEmote then
-        stopOriginalTracks(
+        DEADEYE_FN_stopOriginalTracks(
             object,
             emoteId
         )
-        stopOriginalSounds(
+        DEADEYE_FN_stopOriginalSounds(
             object
         )
         --// Если штатная система снова создала
         --// оригинальный Emote object.
         if object.Emote
             and object.Emote ~= currentCustomEmote then
-            stopEmoteObject(
+            DEADEYE_FN_stopEmoteObject(
                 object.Emote
             )
             object.Emote =
@@ -2529,13 +2529,13 @@ local unusualRuntime = {
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
 --// =========================================================
-local function addUnusualConnection(connection)
+function DEADEYE_FN_addUnusualConnection(connection)
     table.insert(
         unusualConnections,
         connection
     )
 end
-local function disconnectUnusualConnections()
+function DEADEYE_FN_disconnectUnusualConnections()
     for _, connection in ipairs(
         unusualConnections
     ) do
@@ -2552,7 +2552,7 @@ end
 --// =========================================================
 --// UNUSUAL LIST
 --// =========================================================
-local function buildUnusualList()
+function DEADEYE_FN_buildUnusualList()
     table.clear(
         unusualList
     )
@@ -2656,11 +2656,11 @@ local function buildUnusualList()
         tostring(#unusualList)
     )
     end
-buildUnusualList()
+DEADEYE_FN_buildUnusualList()
 --// =========================================================
 --// GET UNUSUAL NAME
 --// =========================================================
-local function getUnusualName(id)
+function DEADEYE_FN_getUnusualName(id)
     id =
         tonumber(id)
     if not id then
@@ -2683,7 +2683,7 @@ end
 --// =========================================================
 --// CURRENT EQUIPPED UNUSUAL
 --// =========================================================
-local function getEquippedUnusualId()
+function DEADEYE_FN_getEquippedUnusualId()
     local value = 0
     pcall(function()
         value =
@@ -2698,12 +2698,12 @@ end
 --// First run: original = actual equipped Unusual.
 do
     local equipped =
-        getEquippedUnusualId()
+        DEADEYE_FN_getEquippedUnusualId()
     if equipped ~= 0 then
         unusualSlot.originalId =
             equipped
         unusualSlot.originalName =
-            getUnusualName(
+            DEADEYE_FN_getUnusualName(
                 equipped
             )
     end
@@ -2722,7 +2722,7 @@ do
             unusualSlot.originalId =
                 savedOriginal
             unusualSlot.originalName =
-                getUnusualName(
+                DEADEYE_FN_getUnusualName(
                     savedOriginal
                 )
         end
@@ -2732,14 +2732,14 @@ do
         end
     end
     unusualSlot.replaceName =
-        getUnusualName(
+        DEADEYE_FN_getUnusualName(
             unusualSlot.replaceId
         )
 end
 --// =========================================================
 --// GET REAL PLAYER CHARACTER
 --// =========================================================
-local function getUnusualPlayerCharacter()
+function DEADEYE_FN_getUnusualPlayerCharacter()
     local folder =
         workspace:FindFirstChild(
             "Players"
@@ -2758,7 +2758,7 @@ end
 --// =========================================================
 --// GET VISUAL RIG
 --// =========================================================
-local function getUnusualVisualRig()
+function DEADEYE_FN_getUnusualVisualRig()
     local folder =
         workspace:FindFirstChild(
             "Rigs"
@@ -2826,7 +2826,7 @@ end
 --// =========================================================
 --// GET COSMETIC RIG
 --// =========================================================
-local function getUnusualCosmeticRig(
+function DEADEYE_FN_getUnusualCosmeticRig(
     id,
     visualRig
 )
@@ -2877,18 +2877,18 @@ local UNUSUAL_FX_CLASSES = {
     SurfaceLight = true,
     BillboardGui = true
 }
-local function isUnusualFX(object)
+function DEADEYE_FN_isUnusualFX(object)
     return UNUSUAL_FX_CLASSES[
         object.ClassName
     ] == true
 end
-local function unusualAttachmentHasFX(
+function DEADEYE_FN_unusualAttachmentHasFX(
     attachment
 )
     for _, descendant in ipairs(
         attachment:GetDescendants()
     ) do
-        if isUnusualFX(descendant) then
+        if DEADEYE_FN_isUnusualFX(descendant) then
             return true
         end
     end
@@ -2898,7 +2898,7 @@ end
 --// =========================================================
 --// TAG OUR FX
 --// =========================================================
-local function tagUnusualFX(
+function DEADEYE_FN_tagUnusualFX(
     object,
     id
 )
@@ -3060,7 +3060,7 @@ local function getNeededUnusualAttachments(
                 object,
                 sourcePart
             )
-            and unusualAttachmentHasFX(
+            and DEADEYE_FN_unusualAttachmentHasFX(
                 object
             )
         then
@@ -3169,12 +3169,12 @@ local function unusualBasePartHasContent(
             sourcePart
         ) then
 
-            if isUnusualFX(object) then
+            if DEADEYE_FN_isUnusualFX(object) then
                 return true
             end
 
             if object:IsA("Attachment")
-                and unusualAttachmentHasFX(
+                and DEADEYE_FN_unusualAttachmentHasFX(
                     object
                 )
             then
@@ -3772,7 +3772,7 @@ unusualRuntime.installAnimatedNestedModels = function(
                 weld.Parent =
                     root
 
-                tagUnusualFX(
+                DEADEYE_FN_tagUnusualFX(
                     clone,
                     id
                 )
@@ -3976,7 +3976,7 @@ unusualRuntime.createAnimationSource = function(
 
     if not targetRoot then
         local rig =
-            getUnusualVisualRig()
+            DEADEYE_FN_getUnusualVisualRig()
 
         if rig then
             targetRoot =
@@ -4348,7 +4348,7 @@ unusualRuntime.updateAnimatedParts = function()
     end
 
     local targetRig =
-        getUnusualVisualRig()
+        DEADEYE_FN_getUnusualVisualRig()
 
     local targetRoot
 
@@ -4361,7 +4361,7 @@ unusualRuntime.updateAnimatedParts = function()
 
     if not targetRoot then
         local character =
-            getUnusualPlayerCharacter()
+            DEADEYE_FN_getUnusualPlayerCharacter()
 
         if character then
             targetRoot =
@@ -4639,7 +4639,7 @@ local function createUnusualAnchor(
     weld.Parent =
         anchor
 
-    tagUnusualFX(
+    DEADEYE_FN_tagUnusualFX(
         anchor,
         id
     )
@@ -4851,7 +4851,7 @@ local function installUnusualPartFX(
                     clone.Parent =
                         currentTargetPart
 
-                    tagUnusualFX(
+                    DEADEYE_FN_tagUnusualFX(
                         clone,
                         id
                     )
@@ -4888,7 +4888,7 @@ local function installUnusualPartFX(
                 currentSourcePart:GetDescendants()
             ) do
 
-                if isUnusualFX(
+                if DEADEYE_FN_isUnusualFX(
                     sourceObject
                 )
                 and unusualObjectBelongsToPart(
@@ -4965,7 +4965,7 @@ local function installUnusualPartFX(
                         clone.Parent =
                             currentTargetPart
 
-                        tagUnusualFX(
+                        DEADEYE_FN_tagUnusualFX(
                             clone,
                             id
                         )
@@ -4993,7 +4993,7 @@ local function applyUnusualFX(
 )
 
     local cosmeticRig =
-        getUnusualCosmeticRig(
+        DEADEYE_FN_getUnusualCosmeticRig(
             id,
             visualRig
         )
@@ -5114,13 +5114,13 @@ end
 --// =========================================================
 --// REMOVE OUR FX
 -- =========================================================
-local function removeOurUnusualFX()
+function DEADEYE_FN_removeOurUnusualFX()
     unusualRuntime.destroyAnimationSource()
 
     local removed = 0
     local roots = {
-        getUnusualVisualRig(),
-        getUnusualPlayerCharacter()
+        DEADEYE_FN_getUnusualVisualRig(),
+        DEADEYE_FN_getUnusualPlayerCharacter()
     }
     local seen = {}
     for _, root in ipairs(
@@ -5157,7 +5157,7 @@ end
 --// =========================================================
 --// CHECK OUR INSTALLED FX
 --// =========================================================
-local function hasOurUnusualFX(
+function DEADEYE_FN_hasOurUnusualFX(
     root,
     id
 )
@@ -5203,12 +5203,12 @@ end
 --// =========================================================
 --// ORIGINAL SIGNATURE
 -- =========================================================
-local function buildOriginalUnusualSignature(
+function DEADEYE_FN_buildOriginalUnusualSignature(
     id,
     visualRig
 )
     local cosmeticRig =
-        getUnusualCosmeticRig(
+        DEADEYE_FN_getUnusualCosmeticRig(
             id,
             visualRig
         )
@@ -5222,7 +5222,7 @@ local function buildOriginalUnusualSignature(
     local function hasEffectContent(
         object
     )
-        if isUnusualFX(object) then
+        if DEADEYE_FN_isUnusualFX(object) then
             return true
         end
 
@@ -5233,7 +5233,7 @@ local function buildOriginalUnusualSignature(
         for _, descendant in ipairs(
             object:GetDescendants()
         ) do
-            if isUnusualFX(descendant)
+            if DEADEYE_FN_isUnusualFX(descendant)
                 or descendant:IsA("BasePart")
             then
                 return true
@@ -5306,13 +5306,13 @@ end
 --// =========================================================
 --// REMOVE ORIGINAL FX
 -- =========================================================
-local function removeOriginalUnusualFX(
+function DEADEYE_FN_removeOriginalUnusualFX(
     id,
     visualRig,
     playerCharacter
 )
     local signature =
-        buildOriginalUnusualSignature(
+        DEADEYE_FN_buildOriginalUnusualSignature(
             id,
             visualRig
         )
@@ -5499,18 +5499,18 @@ end
 --// =========================================================
 --// RESTORE UNUSUAL
 -- =========================================================
-local function restoreUnusual()
+function DEADEYE_FN_restoreUnusual()
     if not unusualActive then
         return
     end
     local visualRig =
-        getUnusualVisualRig()
+        DEADEYE_FN_getUnusualVisualRig()
     local playerCharacter =
-        getUnusualPlayerCharacter()
+        DEADEYE_FN_getUnusualPlayerCharacter()
     if visualRig
         and unusualSlot.originalId
     then
-        removeOurUnusualFX()
+        DEADEYE_FN_removeOurUnusualFX()
         task.wait()
         applyUnusualFX(
             unusualSlot.originalId,
@@ -5526,7 +5526,7 @@ end
 --// =========================================================
 --// ACTIVATE UNUSUAL
 -- =========================================================
-local function activateUnusual()
+function DEADEYE_FN_activateUnusual()
     if not unusualSlot.originalId
         or not unusualSlot.replaceId
     then
@@ -5538,15 +5538,15 @@ local function activateUnusual()
         return false
     end
     local visualRig =
-        getUnusualVisualRig()
+        DEADEYE_FN_getUnusualVisualRig()
     local playerCharacter =
-        getUnusualPlayerCharacter()
+        DEADEYE_FN_getUnusualPlayerCharacter()
     if not visualRig then
         return false
     end
-                            removeOurUnusualFX()
+                            DEADEYE_FN_removeOurUnusualFX()
     task.wait()
-    removeOriginalUnusualFX(
+    DEADEYE_FN_removeOriginalUnusualFX(
         unusualSlot.originalId,
         visualRig,
         playerCharacter
@@ -5571,7 +5571,7 @@ local function activateUnusual()
         visualRig
     return true
 end
-local function reapplyUnusual()
+function DEADEYE_FN_reapplyUnusual()
     if not unusualEnabled
         or unusualReapplyBusy
     then
@@ -5596,10 +5596,10 @@ local function reapplyUnusual()
             end
 
             local visualRig =
-                getUnusualVisualRig()
+                DEADEYE_FN_getUnusualVisualRig()
 
             local playerCharacter =
-                getUnusualPlayerCharacter()
+                DEADEYE_FN_getUnusualPlayerCharacter()
 
             local root =
                 visualRig
@@ -5621,11 +5621,11 @@ local function reapplyUnusual()
                 task.wait(0.2)
 
                 unusualActive = false
-                removeOurUnusualFX()
+                DEADEYE_FN_removeOurUnusualFX()
 
                 local ok, result =
                     pcall(function()
-                        return activateUnusual()
+                        return DEADEYE_FN_activateUnusual()
                     end)
 
                 if ok
@@ -5636,11 +5636,11 @@ local function reapplyUnusual()
                         (
                             #unusualRuntime.animatedNestedVisuals > 0
                         )
-                        or hasOurUnusualFX(
+                        or DEADEYE_FN_hasOurUnusualFX(
                             visualRig,
                             unusualSlot.replaceId
                         )
-                        or hasOurUnusualFX(
+                        or DEADEYE_FN_hasOurUnusualFX(
                             playerCharacter,
                             unusualSlot.replaceId
                         )
@@ -5672,7 +5672,7 @@ end
 --// =========================================================
 genv.DEADEYE_UNUSUAL_POV_RUNNING = true
 local lastUnusualPOVState = nil
-local function getUnusualViewmodel()
+function DEADEYE_FN_getUnusualViewmodel()
     local camera =
         workspace.CurrentCamera
     if not camera then
@@ -5687,9 +5687,9 @@ local function getUnusualViewmodel()
     end
     return viewmodel
 end
-local function isUnusualFirstPerson()
+function DEADEYE_FN_isUnusualFirstPerson()
     local visualRig =
-        getUnusualVisualRig()
+        DEADEYE_FN_getUnusualVisualRig()
     if not visualRig then
         return false
     end
@@ -5750,14 +5750,14 @@ local function isUnusualFirstPerson()
     end
     return false
 end
-local function syncUnusualViewmodelAppearance()
+function DEADEYE_FN_syncUnusualViewmodelAppearance()
     local visualRig =
-        getUnusualVisualRig()
+        DEADEYE_FN_getUnusualVisualRig()
     if not visualRig then
         return
     end
     local viewmodel =
-        getUnusualViewmodel()
+        DEADEYE_FN_getUnusualViewmodel()
     if not viewmodel then
         return
     end
@@ -5820,12 +5820,12 @@ local function syncUnusualViewmodelAppearance()
         end
     end
 end
-local function setUnusualFXForPOV(
+function DEADEYE_FN_setUnusualFXForPOV(
     firstPerson
 )
     local roots = {
-        getUnusualVisualRig(),
-        getUnusualPlayerCharacter()
+        DEADEYE_FN_getUnusualVisualRig(),
+        DEADEYE_FN_getUnusualPlayerCharacter()
     }
     local seen = {}
     for _, root in ipairs(
@@ -5876,30 +5876,30 @@ local function setUnusualFXForPOV(
         end
     end
 end
-local function updateUnusualPOV()
+function DEADEYE_FN_updateUnusualPOV()
     if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
         return
     end
-    syncUnusualViewmodelAppearance()
+    DEADEYE_FN_syncUnusualViewmodelAppearance()
     local firstPerson =
-        isUnusualFirstPerson()
+        DEADEYE_FN_isUnusualFirstPerson()
     if firstPerson
         ~= lastUnusualPOVState
     then
         lastUnusualPOVState =
             firstPerson
-        setUnusualFXForPOV(
+        DEADEYE_FN_setUnusualFXForPOV(
             firstPerson
         )
     elseif unusualActive then
         --// Re-apply the state when the game recreates
         --// one of the tagged FX while staying in the same POV.
-        setUnusualFXForPOV(
+        DEADEYE_FN_setUnusualFXForPOV(
             firstPerson
         )
     end
 end
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     RunService.Heartbeat:Connect(
         function()
 
@@ -5908,14 +5908,14 @@ addUnusualConnection(
             end
 
             unusualRuntime.updateAnimatedParts()
-            updateUnusualPOV()
+            DEADEYE_FN_updateUnusualPOV()
 
             if unusualEnabled
                 and not unusualReapplyBusy
             then
 
                 local rig =
-                    getUnusualVisualRig()
+                    DEADEYE_FN_getUnusualVisualRig()
 
                 if rig then
 
@@ -5923,19 +5923,19 @@ addUnusualConnection(
                         (
                             #unusualRuntime.animatedNestedVisuals > 0
                         )
-                        or hasOurUnusualFX(
+                        or DEADEYE_FN_hasOurUnusualFX(
                             rig,
                             unusualSlot.replaceId
                         )
-                        or hasOurUnusualFX(
-                            getUnusualPlayerCharacter(),
+                        or DEADEYE_FN_hasOurUnusualFX(
+                            DEADEYE_FN_getUnusualPlayerCharacter(),
                             unusualSlot.replaceId
                         )
 
                     if unusualRuntime.appliedRig ~= rig
                         or not expected
                     then
-                        reapplyUnusual()
+                        DEADEYE_FN_reapplyUnusual()
                     end
 
                 end
@@ -6540,7 +6540,7 @@ unusualPickerGrid.Parent =
 --// =========================================================
 --// REBUILD UNUSUAL PICKER
 --// =========================================================
-local function rebuildUnusualPicker()
+function DEADEYE_FN_rebuildUnusualPicker()
 
     pcall(function()
         collectCurrentUnusualIcons(
@@ -6597,7 +6597,7 @@ local function rebuildUnusualPicker()
             button
         )
 
-        addUnusualConnection(
+        DEADEYE_FN_addUnusualConnection(
             button.MouseButton1Click:Connect(
                 function()
                     if unusualPickerSide == "Original" then
@@ -6622,7 +6622,7 @@ local function rebuildUnusualPicker()
                     if unusualEnabled then
                         unusualEnabled = false
                         genv.UNUSUAL_SWAPPER_ENABLED = false
-                        restoreUnusual()
+                        DEADEYE_FN_restoreUnusual()
                         updateUnusualToggle()
                     end
 
@@ -6905,7 +6905,7 @@ local function rebuildUnusualPicker()
                 unusualPickerButtons,
                 button
             )
-            addUnusualConnection(
+            DEADEYE_FN_addUnusualConnection(
                 button.MouseButton1Click:Connect(
                     function()
                         if unusualPickerSide
@@ -6940,7 +6940,7 @@ local function rebuildUnusualPicker()
                             nil
                         if unusualEnabled then
                             task.spawn(
-                                reapplyUnusual
+                                DEADEYE_FN_reapplyUnusual
                             )
                         end
                     end
@@ -6971,7 +6971,7 @@ end
 --// =========================================================
 --// OPEN / CLOSE PICKER
 -- =========================================================
-local function openUnusualPicker(
+function DEADEYE_FN_openUnusualPicker(
     side
 )
     unusualPickerSide =
@@ -6990,51 +6990,51 @@ local function openUnusualPicker(
     unusualPicker.Visible =
         true
 
-    rebuildUnusualPicker()
+    DEADEYE_FN_rebuildUnusualPicker()
 end
-local function closeUnusualPicker()
+function DEADEYE_FN_closeUnusualPicker()
     unusualPicker.Visible =
         false
     unusualPickerSide =
         nil
 end
-addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
+DEADEYE_FN_addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
         function()
-            openUnusualPicker(
+            DEADEYE_FN_openUnusualPicker(
                 "Original"
             )
         end
     )
 )
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     unusualReplaceButton.MouseButton1Click:Connect(
         function()
-            openUnusualPicker(
+            DEADEYE_FN_openUnusualPicker(
                 "Replace"
             )
         end
     )
 )
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     unusualPickerClose.MouseButton1Click:Connect(
         function()
-            closeUnusualPicker()
+            DEADEYE_FN_closeUnusualPicker()
         end
     )
 )
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     unusualPickerSearch:GetPropertyChangedSignal(
         "Text"
     ):Connect(
         function()
             if unusualPicker.Visible then
-                rebuildUnusualPicker()
+                DEADEYE_FN_rebuildUnusualPicker()
             end
         end
     )
 )
 
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     LocalPlayer:WaitForChild(
         "PlayerGui"
     ).DescendantAdded:Connect(
@@ -7046,7 +7046,7 @@ addUnusualConnection(
                     obj
                 )
 
-                addUnusualConnection(
+                DEADEYE_FN_addUnusualConnection(
                     obj:GetPropertyChangedSignal(
                         "Image"
                     ):Connect(
@@ -7287,7 +7287,7 @@ function others.getHumanoids()
         end
     end
     local rig =
-        getUnusualVisualRig()
+        DEADEYE_FN_getUnusualVisualRig()
     if rig then
         add(
             rig:FindFirstChildOfClass(
@@ -7296,7 +7296,7 @@ function others.getHumanoids()
         )
     end
     local character =
-        getUnusualPlayerCharacter()
+        DEADEYE_FN_getUnusualPlayerCharacter()
     if character then
         add(
             character:FindFirstChildOfClass(
@@ -7652,13 +7652,13 @@ mainJump.hideUIHotkeyName =
         and savedConfig.main.hideUIHotkey
         or "H"
     )
-local function mainConnect(connection)
+function DEADEYE_FN_mainConnect(connection)
     table.insert(
         mainJump.connections,
         connection
     )
 end
-local function mainDisconnect()
+function DEADEYE_FN_mainDisconnect()
     for _, connection in ipairs(
         mainJump.connections
     ) do
@@ -7777,7 +7777,7 @@ function mainJump.setDelay(value)
         )
     mainJump.saveConfig()
 end
-local function mainFindKeyCode(value)
+function DEADEYE_FN_mainFindKeyCode(value)
     local wanted =
         tostring(
             value or ""
@@ -7795,7 +7795,7 @@ local function mainFindKeyCode(value)
     return nil
 end
 local jumpKey =
-    mainFindKeyCode(
+    DEADEYE_FN_mainFindKeyCode(
         mainJump.hotkeyName
     )
 if jumpKey then
@@ -7805,7 +7805,7 @@ else
     mainJump.hotkeyName = "Z"
 end
 local hideKey =
-    mainFindKeyCode(
+    DEADEYE_FN_mainFindKeyCode(
         mainJump.hideUIHotkeyName
     )
 if hideKey then
@@ -7816,7 +7816,7 @@ else
 end
 function mainJump.setHotkey(value)
     local key =
-        mainFindKeyCode(
+        DEADEYE_FN_mainFindKeyCode(
             value
         )
     if not key then
@@ -7831,7 +7831,7 @@ function mainJump.setHotkey(value)
 end
 function mainJump.setHideUIHotkey(value)
     local key =
-        mainFindKeyCode(
+        DEADEYE_FN_mainFindKeyCode(
             value
         )
     if not key then
@@ -8119,7 +8119,7 @@ __UI.mainLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
 __UI.mainLayout.Parent =
     mainPage
-local function mainRow(labelText, order)
+function DEADEYE_FN_mainRow(labelText, order)
     local row =
         Instance.new("Frame")
     row.Size =
@@ -8160,7 +8160,7 @@ local function mainRow(labelText, order)
     return row
 end
 __UI.autoRow =
-    mainRow(
+    DEADEYE_FN_mainRow(
         "AUTOJUMP",
         1
     )
@@ -8230,7 +8230,7 @@ __UI.toggleCorner.CornerRadius =
     )
 __UI.toggleCorner.Parent =
     mainJump.toggle
-mainConnect(
+DEADEYE_FN_mainConnect(
     mainJump.toggle.MouseButton1Click:Connect(
         function()
             mainJump.setEnabled(
@@ -8240,7 +8240,7 @@ mainConnect(
     )
 )
 __UI.delayRow =
-    mainRow(
+    DEADEYE_FN_mainRow(
         "DELAY",
         2
     )
@@ -8342,7 +8342,7 @@ __UI.delaySetCorner.CornerRadius =
     )
 __UI.delaySetCorner.Parent =
     delaySet
-mainConnect(
+DEADEYE_FN_mainConnect(
     delaySet.MouseButton1Click:Connect(
         function()
             mainJump.setDelay(
@@ -8351,7 +8351,7 @@ mainConnect(
         end
     )
 )
-mainConnect(
+DEADEYE_FN_mainConnect(
     mainJump.delayBox.FocusLost:Connect(
         function(enterPressed)
             if enterPressed then
@@ -8363,7 +8363,7 @@ mainConnect(
     )
 )
 __UI.hotkeyRow =
-    mainRow(
+    DEADEYE_FN_mainRow(
         "HOTKEY",
         3
     )
@@ -8418,7 +8418,7 @@ __UI.hotkeyCorner.CornerRadius =
     )
 __UI.hotkeyCorner.Parent =
     mainJump.hotkeyBox
-mainConnect(
+DEADEYE_FN_mainConnect(
     mainJump.hotkeyBox.MouseButton1Click:Connect(
         function()
             mainJump.startCapture(
@@ -8428,7 +8428,7 @@ mainConnect(
     )
 )
 __UI.hideRow =
-    mainRow(
+    DEADEYE_FN_mainRow(
         "HIDE UI",
         4
     )
@@ -8483,7 +8483,7 @@ __UI.hideCorner.CornerRadius =
     )
 __UI.hideCorner.Parent =
     mainJump.hideUIHotkeyBox
-mainConnect(
+DEADEYE_FN_mainConnect(
     mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
         function()
             mainJump.startCapture(
@@ -8492,7 +8492,7 @@ mainConnect(
         end
     )
 )
-mainConnect(
+DEADEYE_FN_mainConnect(
     UserInputService.InputBegan:Connect(
         function(input)
             if mainJump.capturing then
@@ -8519,7 +8519,7 @@ mainConnect(
             end
 
             if input.KeyCode
-                == mainFindKeyCode(
+                == DEADEYE_FN_mainFindKeyCode(
                     mainJump.hotkeyName
                 )
             then
@@ -8528,7 +8528,7 @@ mainConnect(
                 )
             end
             if input.KeyCode
-                == mainFindKeyCode(
+                == DEADEYE_FN_mainFindKeyCode(
                     mainJump.hideUIHotkeyName
                 )
             then
@@ -8538,7 +8538,7 @@ mainConnect(
         end
     )
 )
-mainConnect(
+DEADEYE_FN_mainConnect(
     UserInputService.JumpRequest:Connect(
         function()
             if mainJump.enabled
@@ -8583,7 +8583,7 @@ mainConnect(
         end
     )
 )
-mainConnect(
+DEADEYE_FN_mainConnect(
     LocalPlayer.CharacterAdded:Connect(
         function(char)
             task.wait(0.2)
@@ -8910,7 +8910,7 @@ function others.row(
         slot.property
     ] =
         box
-    addUnusualConnection(
+    DEADEYE_FN_addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
                 if others.applyField(
@@ -8935,7 +8935,7 @@ function others.row(
             end
         )
     )
-    addUnusualConnection(
+    DEADEYE_FN_addUnusualConnection(
         box.FocusLost:Connect(
             function(enterPressed)
                 if enterPressed then
@@ -9066,7 +9066,7 @@ function others.quickRow(
         )
     applyCorner.Parent =
         apply
-    addUnusualConnection(
+    DEADEYE_FN_addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
                 if others.applyBodyPart(
@@ -9294,7 +9294,7 @@ others.applyAllButtonCorner.CornerRadius =
     )
 others.applyAllButtonCorner.Parent =
     others.applyAllButton
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     others.applyAllButton.MouseButton1Click:Connect(
         function()
             if others.applyAll() then
@@ -9593,14 +9593,14 @@ others.resetCorner.CornerRadius =
     )
 others.resetCorner.Parent =
     others.resetButton
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     others.scanButton.MouseButton1Click:Connect(
         function()
             others.scan()
         end
     )
 )
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     others.clearButton.MouseButton1Click:Connect(
         function()
             if others.clearAccessories() then
@@ -9614,7 +9614,7 @@ addUnusualConnection(
         end
     )
 )
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     others.resetButton.MouseButton1Click:Connect(
         function()
             others.ensureSnapshot()
@@ -9698,7 +9698,7 @@ __UI.categoryCorner.CornerRadius =
     )
 __UI.categoryCorner.Parent =
     categoryBar
-local function makeCategoryButton(
+function DEADEYE_FN_makeCategoryButton(
     text,
     y
 )
@@ -9766,29 +9766,29 @@ local function makeCategoryButton(
     return button
 end
 mainCategoryButton =
-    makeCategoryButton(
+    DEADEYE_FN_makeCategoryButton(
         "MAIN",
         6
     )
 emoteCategoryButton =
-    makeCategoryButton(
+    DEADEYE_FN_makeCategoryButton(
         "EMOTES",
         41
     )
 unusualCategoryButton =
-    makeCategoryButton(
+    DEADEYE_FN_makeCategoryButton(
         "UNUSUAL",
         76
     )
 othersCategoryButton =
-    makeCategoryButton(
+    DEADEYE_FN_makeCategoryButton(
         "OTHERS",
         111
     )
 --// =========================================================
 --// CATEGORY SWITCH
 --// =========================================================
-local function setCategory(
+function DEADEYE_FN_setCategory(
     category
 )
     currentCategory =
@@ -9971,48 +9971,48 @@ local function setCategory(
         end
     end)
 end
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     mainCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
                 setMainMinimized(false)
             end
-            setCategory(
+            DEADEYE_FN_setCategory(
                 "Main"
             )
         end
     )
 )
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     emoteCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
                 setMainMinimized(false)
             end
-            setCategory(
+            DEADEYE_FN_setCategory(
                 "Emotes"
             )
         end
     )
 )
-addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
+DEADEYE_FN_addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
                 setMainMinimized(false)
             end
-            setCategory(
+            DEADEYE_FN_setCategory(
                 "Unusual"
             )
         end
     )
 )
-addUnusualConnection(
+DEADEYE_FN_addUnusualConnection(
     othersCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
                 setMainMinimized(false)
             end
-            setCategory(
+            DEADEYE_FN_setCategory(
                 "Others"
             )
         end
@@ -10021,7 +10021,7 @@ addUnusualConnection(
 --// =========================================================
 --// EXTERNAL CLEANUP
 --// =========================================================
-local function cleanupUnusual()
+function DEADEYE_FN_cleanupUnusual()
     if unusualDestroyed then
         return
     end
@@ -10029,7 +10029,7 @@ local function cleanupUnusual()
         true
     if unusualActive then
         pcall(function()
-            restoreUnusual()
+            DEADEYE_FN_restoreUnusual()
         end)
     end
     pcall(function()
@@ -10041,16 +10041,16 @@ local function cleanupUnusual()
     unusualRuntime.appliedRig = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
-    disconnectUnusualConnections()
+    DEADEYE_FN_disconnectUnusualConnections()
     pcall(function()
-        removeOurUnusualFX()
+        DEADEYE_FN_removeOurUnusualFX()
     end)
     genv.DEADEYE_MAIN_RUNNING = false
     pcall(function()
         if mainPage then
             mainPage.Visible = false
         end
-        mainDisconnect()
+        DEADEYE_FN_mainDisconnect()
         if unusualPicker then
             unusualPicker:Destroy()
         end
@@ -10071,7 +10071,7 @@ local function cleanupUnusual()
         nil
     end
 genv.UNUSUAL_SWAPPER_CLEANUP =
-    cleanupUnusual
+    DEADEYE_FN_cleanupUnusual
 --// =========================================================
 --// REPLACE EXISTING TOGGLE BEHAVIOUR
 --// =========================================================
@@ -10772,7 +10772,7 @@ __UI.PickerGrid.Parent =
 --// EMOTE VIEWPORT PREVIEW
 --// Локальная копия native preview без CreateViewport()
 --// =========================================================
-local function createEmotePreview(
+function DEADEYE_FN_createEmotePreview(
     itemModule,
     viewport
 )
@@ -11371,7 +11371,7 @@ end
 --// The native UI can recreate Emote1..Emote6. Therefore state
 --// is stored by logical position (Wheel:1 / Wheel2:4), while
 --// the current GUI Instance is tracked separately.
-local function getNativeEmoteWheels()
+function DEADEYE_FN_getNativeEmoteWheels()
     local playerGui =
         LocalPlayer:FindFirstChild(
             "PlayerGui"
@@ -11539,7 +11539,7 @@ local function restoreNativeEmoteSlot(
         and originalModule
     then
         pcall(function()
-            createEmotePreview(
+            DEADEYE_FN_createEmotePreview(
                 originalModule,
                 viewport
             )
@@ -11572,7 +11572,7 @@ local function restoreNativeEmoteWheel(
     end
 
     local wheels =
-        getNativeEmoteWheels()
+        DEADEYE_FN_getNativeEmoteWheels()
 
     for _, wheel in ipairs(
         wheels
@@ -11667,7 +11667,7 @@ local function applyNativeEmoteSlot(
     local success =
         pcall(function()
             previewOk =
-                createEmotePreview(
+                DEADEYE_FN_createEmotePreview(
                     replaceModule,
                     viewport
                 )
@@ -11689,7 +11689,7 @@ end
 
 local function syncNativeEmoteWheel()
     local wheels =
-        getNativeEmoteWheels()
+        DEADEYE_FN_getNativeEmoteWheels()
 
     if #wheels == 0 then
         return
@@ -11894,7 +11894,7 @@ end
 --// =========================================================
 --// REBUILD PICKER
 --// =========================================================
-local function rebuildPicker()
+function DEADEYE_FN_rebuildPicker()
     for _, button in ipairs(
         pickerButtons
     ) do
@@ -11980,7 +11980,7 @@ local function rebuildPicker()
                         and not slot.originalId
                     )
                 then
-                    stopCustomEmote()
+                    DEADEYE_FN_stopCustomEmote()
                 end
 
                 Status.Text =
@@ -12108,7 +12108,7 @@ local function rebuildPicker()
             viewportCorner.Parent =
                 viewport
 
-            createEmotePreview(
+            DEADEYE_FN_createEmotePreview(
                 data.module,
                 viewport
             )
@@ -12313,7 +12313,7 @@ local function rebuildPicker()
                     --// со следующего heartbeat.
                     if currentOriginalId
                         == slot.originalId then
-                        stopCustomEmote()
+                        DEADEYE_FN_stopCustomEmote()
                     end
                     Status.Text =
                         "Slot "
@@ -12343,7 +12343,7 @@ end
 --// =========================================================
 --// OPEN PICKER
 --// =========================================================
-local function openPicker(
+function DEADEYE_FN_openPicker(
     slotIndex,
     side
 )
@@ -12368,14 +12368,14 @@ local function openPicker(
     end
     PickerSearch.Text =
         ""
-    rebuildPicker()
+    DEADEYE_FN_rebuildPicker()
     Picker.Visible =
         true
 end
 --// =========================================================
 --// CLOSE PICKER
 --// =========================================================
-local function closePicker()
+function DEADEYE_FN_closePicker()
     Picker.Visible =
         false
     activePickerSlot =
@@ -12391,7 +12391,7 @@ for slotIndex = 1, SLOT_COUNT do
         slotIndex
     ].MouseButton1Click:Connect(
         function()
-            openPicker(
+            DEADEYE_FN_openPicker(
                 slotIndex,
                 "Original"
             )
@@ -12401,7 +12401,7 @@ for slotIndex = 1, SLOT_COUNT do
         slotIndex
     ].MouseButton1Click:Connect(
         function()
-            openPicker(
+            DEADEYE_FN_openPicker(
                 slotIndex,
                 "Replace"
             )
@@ -12411,26 +12411,26 @@ end
 --// =========================================================
 --// SEARCH
 --// =========================================================
-addConnection(
+DEADEYE_FN_addConnection(
     PickerSearch:GetPropertyChangedSignal(
         "Text"
     ):Connect(
         function()
             if Picker.Visible then
-                rebuildPicker()
+                DEADEYE_FN_rebuildPicker()
             end
         end
     )
 )
 PickerClose.MouseButton1Click:Connect(
     function()
-        closePicker()
+        DEADEYE_FN_closePicker()
     end
 )
 --// =========================================================
 --// TOGGLE
 --// =========================================================
-addConnection(
+DEADEYE_FN_addConnection(
     Toggle.MouseButton1Click:Connect(
         function()
             if currentCategory == "Unusual" then
@@ -12439,7 +12439,7 @@ addConnection(
                         false
                     genv.UNUSUAL_SWAPPER_ENABLED =
                         false
-                    restoreUnusual()
+                    DEADEYE_FN_restoreUnusual()
                 else
                     if not unusualSlot.originalId
                         or not unusualSlot.replaceId
@@ -12448,11 +12448,11 @@ addConnection(
                             "Select both Unusuals first"
                         return
                     end
-                    if activateUnusual() then
+                    if DEADEYE_FN_activateUnusual() then
                         unusualEnabled =
                             true
                         unusualRuntime.appliedRig =
-                            getUnusualVisualRig()
+                            DEADEYE_FN_getUnusualVisualRig()
                         genv.UNUSUAL_SWAPPER_ENABLED =
                             true
                     end
@@ -12463,7 +12463,7 @@ addConnection(
             --// EXISTING EMOTE TOGGLE
             if enabled then
                 enabled = false
-                stopCustomEmote()
+                DEADEYE_FN_stopCustomEmote()
                 restoreNativeEmoteWheel()
                 updateGUI()
                 Status.Text =
@@ -12644,7 +12644,7 @@ end
 --// =========================================================
 --// MINIMIZE BUTTON CONNECTION
 --// =========================================================
-addConnection(
+DEADEYE_FN_addConnection(
     Minimize.MouseButton1Click:Connect(
         function()
             setMainMinimized(
@@ -12680,14 +12680,14 @@ end
 --// =========================================================
 --// WATCHER
 --// =========================================================
-addConnection(
+DEADEYE_FN_addConnection(
     RunService.Heartbeat:Connect(
         function()
             if not genv.EMOTE_SWAPPER_RUNNING then
                 return
             end
             syncNativeEmoteWheel()
-            checkState()
+            DEADEYE_FN_checkState()
         end
     )
 )
@@ -12846,7 +12846,7 @@ local function setMainSize(
 end
 
 --// Drag the title bar.
-local function beginWindowDrag(input)
+function DEADEYE_FN_beginWindowDrag(input)
     if input.UserInputType ==
             Enum.UserInputType.MouseButton1
         or input.UserInputType ==
@@ -12860,23 +12860,23 @@ local function beginWindowDrag(input)
     end
 end
 
-addConnection(
+DEADEYE_FN_addConnection(
     DragHandle.InputBegan:Connect(
         function(input)
-            beginWindowDrag(input)
+            DEADEYE_FN_beginWindowDrag(input)
         end
     )
 )
 
-addConnection(
+DEADEYE_FN_addConnection(
     MainTitle.InputBegan:Connect(
         function(input)
-            beginWindowDrag(input)
+            DEADEYE_FN_beginWindowDrag(input)
         end
     )
 )
 
-addConnection(
+DEADEYE_FN_addConnection(
     UserInputService.InputChanged:Connect(
         function(input)
             if not dragging then
@@ -12956,7 +12956,7 @@ ResizeRight.Active =
 ResizeRight.Parent =
     Main
 
-addConnection(
+DEADEYE_FN_addConnection(
     ResizeRight.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
@@ -13003,7 +13003,7 @@ ResizeBottom.Active =
 ResizeBottom.Parent =
     Main
 
-addConnection(
+DEADEYE_FN_addConnection(
     ResizeBottom.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
@@ -13094,7 +13094,7 @@ ResizeCorner.AutoButtonColor =
 ResizeCorner.Parent =
     Main
 
-addConnection(
+DEADEYE_FN_addConnection(
     ResizeCorner.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
@@ -13111,7 +13111,7 @@ addConnection(
     )
 )
 
-addConnection(
+DEADEYE_FN_addConnection(
     UserInputService.InputChanged:Connect(
         function(input)
             if not resizing then
@@ -13160,7 +13160,7 @@ addConnection(
     )
 )
 
-addConnection(
+DEADEYE_FN_addConnection(
     UserInputService.InputEnded:Connect(
         function(input)
             if input.UserInputType ==
@@ -13185,7 +13185,7 @@ addConnection(
 
 --// CLEANUP
 --// =========================================================
-local function cleanup()
+function DEADEYE_FN_cleanup()
     if cleaned then
         return
     end
@@ -13227,13 +13227,13 @@ local function cleanup()
 
     if emoteToStop then
         task.spawn(function()
-            stopEmoteObject(
+            DEADEYE_FN_stopEmoteObject(
                 emoteToStop
             )
         end)
     end
 
-    disconnectAll()
+    DEADEYE_FN_disconnectAll()
 
     pcall(function()
         if genv.UNUSUAL_SWAPPER_CLEANUP then
@@ -13267,14 +13267,14 @@ local function cleanup()
         nil
 end
 genv.EMOTE_SWAPPER_CLEANUP =
-    cleanup
+    DEADEYE_FN_cleanup
 --// =========================================================
 --// CLOSE
 --// =========================================================
-addConnection(
+DEADEYE_FN_addConnection(
     Close.MouseButton1Click:Connect(
         function()
-            cleanup()
+            DEADEYE_FN_cleanup()
         end
     )
 )
@@ -13350,6 +13350,6 @@ saveSavedConfig()
 setMainMinimized(false)
 updateGUI()
 pcall(function()
-    setCategory("Emotes")
+    DEADEYE_FN_setCategory("Emotes")
 end)
 portrait.start()
