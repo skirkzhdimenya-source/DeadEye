@@ -2592,6 +2592,41 @@ unusualRuntime.installCirclingEclipse = function(
         return false
     end
 
+    local staleFolder =
+        workspace:FindFirstChild(
+            "DeadEyeUnusualVisuals"
+        )
+
+    if staleFolder then
+
+        for _, object in ipairs(
+            staleFolder:GetChildren()
+        ) do
+
+            if string.find(
+                object.Name,
+                "DeadEyeUnusualCircling_",
+                1,
+                true
+            )
+            or string.find(
+                object.Name,
+                "DeadEyeUnusualMirror_",
+                1,
+                true
+            )
+            then
+
+                pcall(function()
+                    object:Destroy()
+                end)
+
+            end
+
+        end
+
+    end
+
     local clone
 
     local ok =
@@ -4523,7 +4558,16 @@ local function reapplyUnusual()
                 then
 
                     local expected =
-                        hasOurUnusualFX(
+                        (
+                            unusualRuntime.specialCircling
+                            and unusualRuntime.specialCircling.model
+                            and unusualRuntime.specialCircling.model.Parent
+                            ~= nil
+                            and tonumber(
+                                unusualSlot.replaceId
+                            ) == 1266
+                        )
+                        or hasOurUnusualFX(
                             visualRig,
                             unusualSlot.replaceId
                         )
@@ -4807,7 +4851,16 @@ addUnusualConnection(
                 if rig then
 
                     local expected =
-                        hasOurUnusualFX(
+                        (
+                            unusualRuntime.specialCircling
+                            and unusualRuntime.specialCircling.model
+                            and unusualRuntime.specialCircling.model.Parent
+                            ~= nil
+                            and tonumber(
+                                unusualSlot.replaceId
+                            ) == 1266
+                        )
+                        or hasOurUnusualFX(
                             rig,
                             unusualSlot.replaceId
                         )
