@@ -2137,26 +2137,59 @@ local function preloadNativeUnusualIcons()
         return
     end
 
+    local restoreStates = {}
+    local node = scroll
+
+    -- The inventory selector may be completely hidden when the
+    -- player's normal menu is closed. Temporarily reveal only
+    -- the existing UI hierarchy so its virtualized slots can load.
+    while node
+        and node ~= playerGui
+    do
+        if node:IsA("GuiObject") then
+            table.insert(
+                restoreStates,
+                {
+                    object = node,
+                    kind = "Visible",
+                    value = node.Visible
+                }
+            )
+            node.Visible = true
+        elseif node:IsA("LayerCollector") then
+            table.insert(
+                restoreStates,
+                {
+                    object = node,
+                    kind = "Enabled",
+                    value = node.Enabled
+                }
+            )
+            node.Enabled = true
+        end
+
+        node = node.Parent
+    end
+
+    task.wait(0.10)
+
     local oldPosition =
         scroll.CanvasPosition
 
-    local oldVisible =
-        scroll.Visible
-
-    local maxY =
-        math.max(
-            0,
-            scroll.AbsoluteCanvasSize.Y
-                - scroll.AbsoluteWindowSize.Y
-        )
+    local steps = 48
 
     -- The native list is virtualized/recycled.
-    -- Walk through it so every batch of slots gets instantiated.
-    local steps = 32
-
+    -- Walk through the whole canvas so every batch of slots
+    -- gets instantiated and its IconIMG enters our cache.
     for i = 0, steps do
+        local maxY =
+            math.max(
+                0,
+                scroll.AbsoluteCanvasSize.Y
+                    - scroll.AbsoluteWindowSize.Y
+            )
+
         pcall(function()
-            scroll.Visible = true
             scroll.CanvasPosition =
                 Vector2.new(
                     oldPosition.X,
@@ -2170,22 +2203,27 @@ local function preloadNativeUnusualIcons()
         collectCurrentUnusualIcons(
             playerGui
         )
-
-        -- CanvasSize can change while the list recycles slots.
-        maxY =
-            math.max(
-                maxY,
-                scroll.AbsoluteCanvasSize.Y
-                    - scroll.AbsoluteWindowSize.Y
-            )
     end
 
     pcall(function()
         scroll.CanvasPosition =
             oldPosition
-        scroll.Visible =
-            oldVisible
     end)
+
+    for i = #restoreStates, 1, -1 do
+        local state =
+            restoreStates[i]
+
+        pcall(function()
+            if state.kind == "Visible" then
+                state.object.Visible =
+                    state.value
+            elseif state.kind == "Enabled" then
+                state.object.Enabled =
+                    state.value
+            end
+        end)
+    end
 
     collectCurrentUnusualIcons(
         playerGui
@@ -6622,17 +6660,21 @@ addUnusualConnection(
                     obj
                 )
 
-                if unusualPicker.Visible then
-                    task.defer(function()
-                        if unusualPicker.Visible then
-                            rebuildUnusualPicker()
+                addUnusualConnection(
+                    obj:GetPropertyChangedSignal(
+                        "Image"
+                    ):Connect(
+                        function()
+                            cacheUnusualIconFromObject(
+                                obj
+                            )
                         end
-                    end)
-                end
+                    )
+                )
             end
         end
     )
-)
+))
 
 --// =========================================================
 --// UNUSUAL STATUS + TOGGLE USE EXISTING GUI
