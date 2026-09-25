@@ -49,6 +49,11 @@ if genv.DEADEYE_PORTRAIT_CLEANUP then
         genv.DEADEYE_PORTRAIT_CLEANUP()
     end)
 end
+if genv.DEADEYE_COSMETIC_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_COSMETIC_CLEANUP()
+    end)
+end
 if genv.EMOTE_SWAPPER_CLEANUP then
     pcall(function()
         genv.EMOTE_SWAPPER_CLEANUP()
@@ -82,6 +87,10 @@ local savedConfig = {
     version = 1,
     emotes = {},
     unusual = {},
+    cosmetic = {
+        slot1 = {},
+        slot2 = {}
+    },
     others = {},
     main = {
         jumpDelay = 0.01,
@@ -142,6 +151,10 @@ function loadSavedConfig()
     if type(decoded.unusual) == "table" then
         savedConfig.unusual =
             decoded.unusual
+    end
+    if type(decoded.cosmetic) == "table" then
+        savedConfig.cosmetic =
+            decoded.cosmetic
     end
     if type(decoded.others) == "table" then
         savedConfig.others =
@@ -1078,6 +1091,39 @@ local unusualPickerSide = nil
 local unusualIconCache = {}
 local unusualIconIdCache = {}
 
+--// =========================================================
+--// COSMETIC CATEGORY
+--// TWO LOCAL REPLACEMENT SLOTS
+--// [Original] -> [Replace]
+--// =========================================================
+local cosmetic = {
+    slots = {
+        [1] = {
+            originalId = nil,
+            replaceId = nil,
+            originalName = nil,
+            replaceName = nil
+        },
+        [2] = {
+            originalId = nil,
+            replaceId = nil,
+            originalName = nil,
+            replaceName = nil
+        }
+    },
+    list = {},
+    enabled = false,
+    hooked = false,
+    targetSetRig = nil,
+    originalSetRig = nil,
+    lastSetRigArgs = nil,
+    page = nil,
+    pageStatus = nil,
+    picking = false,
+    pickerSide = nil,
+    categoryButton = nil
+}
+
 local function normalizeUnusualIconKey(value)
     value = tostring(value or "")
     value = string.lower(value)
@@ -1753,6 +1799,1289 @@ UnusualFns.buildUnusualList()
 --// =========================================================
 --// GET UNUSUAL NAME
 --// =========================================================
+--// =========================================================
+--// COSMETIC HELPERS
+--// =========================================================
+function cosmetic.getName(id)
+    id = tonumber(id)
+    if not id then
+        return nil
+    end
+
+    local name
+    pcall(function()
+        local entry = Registry.GetById(id)
+        local module =
+            entry
+            and entry.Module
+        if module then
+            name = module.Name
+        end
+    end)
+    return name
+end
+
+function cosmetic.getEquippedId(slot)
+    local value = 0
+    pcall(function()
+        value =
+            require(
+                ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild("useLoadout")
+            ).GetEquippedFromSlot(
+                "CosmeticSlot_"
+                    .. tostring(slot)
+            )
+    end)
+    return tonumber(value) or 0
+end
+
+function cosmetic.loadState()
+    local saved =
+        type(savedConfig.cosmetic) == "table"
+        and savedConfig.cosmetic
+        or {}
+
+    for index = 1, 2 do
+        local state =
+            cosmetic.slots[index]
+        local savedSlot =
+            saved[
+                "slot"
+                    .. tostring(index)
+            ]
+
+        local equipped =
+            cosmetic.getEquippedId(index)
+
+        if equipped ~= 0 then
+            state.originalId =
+                equipped
+            state.originalName =
+                cosmetic.getName(
+                    equipped
+                )
+        end
+
+        if type(savedSlot) == "table" then
+            local savedOriginal =
+                tonumber(
+                    savedSlot.originalId
+                )
+            local savedReplace =
+                tonumber(
+                    savedSlot.replaceId
+                )
+
+            if savedOriginal then
+                state.originalId =
+                    savedOriginal
+                state.originalName =
+                    cosmetic.getName(
+                        savedOriginal
+                    )
+            end
+
+            if savedReplace then
+                state.replaceId =
+                    savedReplace
+                state.replaceName =
+                    cosmetic.getName(
+                        savedReplace
+                    )
+            end
+        end
+    end
+end
+
+function cosmetic.saveState()
+    savedConfig.cosmetic = {
+        slot1 = {
+            originalId =
+                cosmetic.slots[1].originalId,
+            replaceId =
+                cosmetic.slots[1].replaceId
+        },
+        slot2 = {
+            originalId =
+                cosmetic.slots[2].originalId,
+            replaceId =
+                cosmetic.slots[2].replaceId
+        }
+    }
+end
+
+function cosmetic.buildList()
+    table.clear(
+        cosmetic.list
+    )
+
+    local success, all =
+        pcall(function()
+            return Registry.GetAll()
+        end)
+
+    if not success
+        or type(all) ~= "table"
+    then
+        warn(
+            "[DeadEye] Cosmetic Registry.GetAll error:",
+            all
+        )
+        return
+    end
+
+    local seen = {}
+
+    for id, data in pairs(all) do
+        local numericId =
+            tonumber(id)
+
+        if numericId
+            and not seen[numericId]
+        then
+            local config
+            pcall(function()
+                config =
+                    Registry.GetConfig(
+                        numericId
+                    )
+            end)
+
+            local equipInfo =
+                type(config) == "table"
+                and config.EquipInfo
+                or nil
+
+            if type(equipInfo) == "table"
+                and equipInfo.SlotType == "Cosmetic"
+            then
+                local module =
+                    data
+                    and data.Module
+
+                if not module then
+                    pcall(function()
+                        local entry =
+                            Registry.GetById(
+                                numericId
+                            )
+                        module =
+                            entry
+                            and entry.Module
+                    end)
+                end
+
+                if module then
+                    seen[numericId] = true
+
+                    local icon
+                    pcall(function()
+                        icon =
+                            getUnusualIconFromData(
+                                numericId,
+                                data,
+                                module
+                            )
+                    end)
+
+                    table.insert(
+                        cosmetic.list,
+                        {
+                            id = numericId,
+                            name = module.Name,
+                            icon = icon
+                        }
+                    )
+                end
+            end
+        end
+    end
+
+    table.sort(
+        cosmetic.list,
+        function(a, b)
+            return a.id < b.id
+        end
+    )
+
+    warn(
+        "[DeadEye] Cosmetics:",
+        tostring(
+            #cosmetic.list
+        )
+    )
+end
+
+function cosmetic.replaceArray(cosmetics)
+    if not cosmetic.enabled
+        or type(cosmetics) ~= "table"
+    then
+        return cosmetics
+    end
+
+    local result
+    local used1 = false
+    local used2 = false
+
+    for index, id in ipairs(cosmetics) do
+        local numericId =
+            tonumber(id)
+
+        for slotIndex = 1, 2 do
+            local state =
+                cosmetic.slots[slotIndex]
+            local used =
+                slotIndex == 1
+                and used1
+                or used2
+
+            if not used
+                and state.originalId
+                and state.replaceId
+                and state.originalId
+                    ~= state.replaceId
+                and numericId
+                    == tonumber(
+                        state.originalId
+                    )
+            then
+                if not result then
+                    result =
+                        table.clone(
+                            cosmetics
+                        )
+                end
+
+                result[index] =
+                    state.replaceId
+
+                if slotIndex == 1 then
+                    used1 = true
+                else
+                    used2 = true
+                end
+
+                break
+            end
+        end
+    end
+
+    return result or cosmetics
+end
+
+function cosmetic.refreshRig()
+    local args =
+        cosmetic.lastSetRigArgs
+
+    if not args
+        or not cosmetic.originalSetRig
+    then
+        return false
+    end
+
+    local cosmetics =
+        args.cosmetics
+
+    if cosmetic.enabled then
+        cosmetics =
+            cosmetic.replaceArray(
+                cosmetics
+            )
+    end
+
+    return pcall(function()
+        cosmetic.originalSetRig(
+            args.self,
+            args.character,
+            args.rigType,
+            cosmetics,
+            args.gear,
+            args.boombox
+        )
+    end)
+end
+
+function cosmetic.installHook()
+    if cosmetic.hooked
+        or type(hookfunction) ~= "function"
+    then
+        return false
+    end
+
+    local rigService
+    pcall(function()
+        rigService =
+            require(
+                ReplicatedStorage.Services.Asset.RigService
+            )
+    end)
+
+    local target =
+        rigService
+        and rigService.SetRig
+
+    if type(target) ~= "function" then
+        return false
+    end
+
+    local original
+    local ok =
+        pcall(function()
+            original =
+                hookfunction(
+                    target,
+                    function(
+                        self,
+                        character,
+                        rigType,
+                        cosmetics,
+                        gear,
+                        boombox
+                    )
+                        cosmetic.lastSetRigArgs = {
+                            self = self,
+                            character = character,
+                            rigType = rigType,
+                            cosmetics = cosmetics,
+                            gear = gear,
+                            boombox = boombox
+                        }
+
+                        return original(
+                            self,
+                            character,
+                            rigType,
+                            cosmetic.replaceArray(
+                                cosmetics
+                            ),
+                            gear,
+                            boombox
+                        )
+                    end
+                )
+        end)
+
+    if not ok
+        or type(original) ~= "function"
+    then
+        return false
+    end
+
+    cosmetic.targetSetRig =
+        target
+    cosmetic.originalSetRig =
+        original
+    cosmetic.hooked = true
+    return true
+end
+
+function cosmetic.removeHook()
+    if not cosmetic.hooked then
+        return
+    end
+
+    pcall(function()
+        hookfunction(
+            cosmetic.targetSetRig,
+            cosmetic.originalSetRig
+        )
+    end)
+
+    cosmetic.targetSetRig = nil
+    cosmetic.originalSetRig = nil
+    cosmetic.lastSetRigArgs = nil
+    cosmetic.hooked = false
+end
+
+function cosmetic.updateToggle()
+    pcall(function()
+        if cosmetic.enabled then
+            Toggle.Text =
+                "SWAP: ON"
+            Toggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            Toggle.Text =
+                "SWAP: OFF"
+            Toggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end)
+end
+
+function cosmetic.closePicker()
+    cosmetic.picking = false
+    cosmetic.pickerSide = nil
+    if unusualPicker then
+        unusualPicker.Visible = false
+    end
+end
+
+function cosmetic.select(
+    slotIndex,
+    side,
+    id,
+    name
+)
+    local state =
+        cosmetic.slots[slotIndex]
+
+    if not state then
+        return
+    end
+
+    if side == "Original" then
+        state.originalId = id
+        state.originalName = name
+    elseif side == "Replace" then
+        state.replaceId = id
+        state.replaceName = name
+    else
+        return
+    end
+
+    if cosmetic.enabled then
+        cosmetic.enabled = false
+        cosmetic.updateToggle()
+        cosmetic.refreshRig()
+    end
+
+    cosmetic.saveState()
+
+    local row =
+        cosmetic.page
+        and cosmetic.page:FindFirstChild(
+            "CosmeticRow_"
+                .. tostring(slotIndex)
+        )
+
+    if row then
+        local a =
+            row:FindFirstChild(
+                "OriginalButton"
+            )
+        local b =
+            row:FindFirstChild(
+                "ReplaceButton"
+            )
+
+        if a then
+            a.Text =
+                state.originalName
+                or "Select"
+        end
+
+        if b then
+            b.Text =
+                state.replaceName
+                or "NONE"
+        end
+    end
+
+    cosmetic.closePicker()
+    pcall(saveSavedConfig)
+end
+
+function cosmetic.rebuildPicker()
+    for _, button in ipairs(
+        unusualPickerButtons
+    ) do
+        pcall(function()
+            button:Destroy()
+        end)
+    end
+    table.clear(
+        unusualPickerButtons
+    )
+
+    local query =
+        string.lower(
+            unusualPickerSearch.Text
+            or ""
+        )
+    local shown = 0
+
+    do
+        local button =
+            Instance.new(
+                "TextButton"
+            )
+        button.Name =
+            "Cosmetic_None"
+        button.BackgroundColor3 =
+            Color3.fromRGB(
+                55,
+                58,
+                68
+            )
+        button.BackgroundTransparency = 0.12
+        button.BorderSizePixel = 0
+        button.ClipsDescendants = true
+        button.Text = "NONE"
+        button.TextSize = 11
+        button.Font =
+            Enum.Font.GothamBold
+        button.TextColor3 =
+            Color3.fromRGB(
+                255,
+                255,
+                255
+            )
+        button.TextTruncate =
+            Enum.TextTruncate.AtEnd
+        button.LayoutOrder = 0
+        button.ZIndex = 32
+        button.Parent =
+            unusualPickerScroll
+
+        local corner =
+            Instance.new(
+                "UICorner"
+            )
+        corner.CornerRadius =
+            UDim.new(0, 5)
+        corner.Parent =
+            button
+
+        table.insert(
+            unusualPickerButtons,
+            button
+        )
+
+        UnusualFns.addUnusualConnection(
+            button.MouseButton1Click:Connect(
+                function()
+                    local slotIndex =
+                        tonumber(
+                            string.match(
+                                cosmetic.pickerSide
+                                    or "",
+                                "^(%d+):"
+                            )
+                        )
+                    local side =
+                        string.match(
+                            cosmetic.pickerSide
+                                or "",
+                            "^%d+:(.+)$"
+                        )
+
+                    if slotIndex and side then
+                        cosmetic.select(
+                            slotIndex,
+                            side,
+                            nil,
+                            nil
+                        )
+                    end
+                end
+            )
+        )
+        shown += 1
+    end
+
+    for index, data in ipairs(
+        cosmetic.list
+    ) do
+        local name =
+            tostring(
+                data.name
+                or data.id
+            )
+        local lower =
+            string.lower(name)
+        local idText =
+            tostring(data.id)
+
+        if query == ""
+            or string.find(
+                lower,
+                query,
+                1,
+                true
+            )
+            or string.find(
+                idText,
+                query,
+                1,
+                true
+            )
+        then
+            shown += 1
+
+            local button =
+                Instance.new(
+                    "TextButton"
+                )
+            button.Name =
+                "Cosmetic_"
+                    .. tostring(
+                        data.id
+                    )
+            button.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    50
+                )
+            button.BackgroundTransparency = 0.05
+            button.BorderSizePixel = 0
+            button.ClipsDescendants = true
+            button.Text = ""
+            button.ZIndex = 32
+            button.LayoutOrder = index
+            button.Parent =
+                unusualPickerScroll
+
+            local icon =
+                Instance.new(
+                    "ImageLabel"
+                )
+            icon.Name =
+                "EffectIcon"
+            icon.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+            icon.BackgroundTransparency = 1
+            icon.Image =
+                data.icon
+                or unusualIconCache[
+                    normalizeUnusualIconKey(
+                        name
+                    )
+                ]
+                or ""
+            icon.ScaleType =
+                Enum.ScaleType.Crop
+            icon.ZIndex = 33
+            icon.Parent =
+                button
+
+            local corner =
+                Instance.new(
+                    "UICorner"
+                )
+            corner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            corner.Parent =
+                icon
+
+            local glass =
+                Instance.new(
+                    "Frame"
+                )
+            glass.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+            glass.BackgroundColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            glass.BackgroundTransparency = 0.95
+            glass.BorderSizePixel = 0
+            glass.ZIndex = 34
+            glass.Parent =
+                button
+
+            local glassCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            glassCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            glassCorner.Parent =
+                glass
+
+            local shade =
+                Instance.new(
+                    "Frame"
+                )
+            shade.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    0,
+                    36
+                )
+            shade.Position =
+                UDim2.new(
+                    0,
+                    0,
+                    1,
+                    -36
+                )
+            shade.BackgroundColor3 =
+                Color3.fromRGB(
+                    0,
+                    0,
+                    0
+                )
+            shade.BackgroundTransparency = 0.42
+            shade.BorderSizePixel = 0
+            shade.ZIndex = 35
+            shade.Parent =
+                button
+
+            local shadeCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            shadeCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            shadeCorner.Parent =
+                shade
+
+            local nameLabel =
+                Instance.new(
+                    "TextLabel"
+                )
+            nameLabel.Size =
+                UDim2.new(
+                    1,
+                    -12,
+                    0,
+                    30
+                )
+            nameLabel.Position =
+                UDim2.new(
+                    0,
+                    6,
+                    1,
+                    -33
+                )
+            nameLabel.BackgroundTransparency = 1
+            nameLabel.Text = name
+            nameLabel.TextSize = 11
+            nameLabel.Font =
+                Enum.Font.GothamMedium
+            nameLabel.TextColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            nameLabel.TextXAlignment =
+                Enum.TextXAlignment.Left
+            nameLabel.TextYAlignment =
+                Enum.TextYAlignment.Center
+            nameLabel.TextTruncate =
+                Enum.TextTruncate.AtEnd
+            nameLabel.ZIndex = 36
+            nameLabel.Parent =
+                button
+
+            local buttonCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            buttonCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    7
+                )
+            buttonCorner.Parent =
+                button
+
+            table.insert(
+                unusualPickerButtons,
+                button
+            )
+
+            UnusualFns.addUnusualConnection(
+                button.MouseButton1Click:Connect(
+                    function()
+                        local slotIndex =
+                            tonumber(
+                                string.match(
+                                    cosmetic.pickerSide
+                                        or "",
+                                    "^(%d+):"
+                                )
+                            )
+                        local side =
+                            string.match(
+                                cosmetic.pickerSide
+                                    or "",
+                                "^%d+:(.+)$"
+                            )
+
+                        if slotIndex and side then
+                            cosmetic.select(
+                                slotIndex,
+                                side,
+                                data.id,
+                                data.name
+                            )
+                        end
+                    end
+                )
+            )
+        end
+    end
+
+    unusualPickerScroll.CanvasPosition =
+        Vector2.new(
+            0,
+            0
+        )
+
+    if unusualStatus then
+        unusualStatus.Text =
+            "Cosmetics: "
+                .. tostring(
+                    #cosmetic.list
+                )
+                .. " • "
+                .. tostring(
+                    shown
+                )
+                .. " found"
+    end
+end
+
+function cosmetic.openPicker(
+    slotIndex,
+    side
+)
+    cosmetic.picking = true
+    cosmetic.pickerSide =
+        tostring(slotIndex)
+        .. ":"
+        .. side
+
+    unusualPickerTitle.Text =
+        side == "Original"
+        and "Select Original"
+        or "Select Replacement"
+    unusualPickerSearch.Text = ""
+    unusualPicker.Visible = true
+    cosmetic.rebuildPicker()
+end
+
+function cosmetic.buildUI()
+    cosmetic.page =
+        Instance.new(
+            "ScrollingFrame"
+        )
+    cosmetic.page.Name =
+        "CosmeticPage"
+    cosmetic.page.Size =
+        UDim2.new(
+            1,
+            -92,
+            1,
+            -56
+        )
+    cosmetic.page.Position =
+        UDim2.new(
+            0,
+            82,
+            0,
+            48
+        )
+    cosmetic.page.BackgroundColor3 =
+        Color3.fromRGB(
+            32,
+            32,
+            32
+        )
+    cosmetic.page.BorderSizePixel = 0
+    cosmetic.page.ScrollBarThickness = 6
+    cosmetic.page.CanvasSize =
+        UDim2.new(
+            0,
+            0,
+            0,
+            0
+        )
+    cosmetic.page.AutomaticCanvasSize =
+        Enum.AutomaticSize.Y
+    cosmetic.page.Visible = false
+    cosmetic.page.Parent =
+        Main
+
+    local corner =
+        Instance.new(
+            "UICorner"
+        )
+    corner.CornerRadius =
+        UDim.new(
+            0,
+            9
+        )
+    corner.Parent =
+        cosmetic.page
+
+    local padding =
+        Instance.new(
+            "UIPadding"
+        )
+    padding.PaddingTop =
+        UDim.new(
+            0,
+            8
+        )
+    padding.PaddingBottom =
+        UDim.new(
+            0,
+            8
+        )
+    padding.PaddingLeft =
+        UDim.new(
+            0,
+            8
+        )
+    padding.PaddingRight =
+        UDim.new(
+            0,
+            8
+        )
+    padding.Parent =
+        cosmetic.page
+
+    local layout =
+        Instance.new(
+            "UIListLayout"
+        )
+    layout.Padding =
+        UDim.new(
+            0,
+            7
+        )
+    layout.SortOrder =
+        Enum.SortOrder.LayoutOrder
+    layout.Parent =
+        cosmetic.page
+
+    cosmetic.pageStatus =
+        Instance.new(
+            "TextLabel"
+        )
+    cosmetic.pageStatus.Name =
+        "CosmeticStatus"
+    cosmetic.pageStatus.Size =
+        UDim2.new(
+            1,
+            -4,
+            0,
+            18
+        )
+    cosmetic.pageStatus.BackgroundTransparency = 1
+    cosmetic.pageStatus.Text =
+        "Cosmetics: "
+            .. tostring(
+                #cosmetic.list
+            )
+    cosmetic.pageStatus.TextSize = 11
+    cosmetic.pageStatus.Font =
+        Enum.Font.Gotham
+    cosmetic.pageStatus.TextColor3 =
+        Color3.fromRGB(
+            145,
+            145,
+            145
+        )
+    cosmetic.pageStatus.TextXAlignment =
+        Enum.TextXAlignment.Left
+    cosmetic.pageStatus.LayoutOrder = 1
+    cosmetic.pageStatus.Parent =
+        cosmetic.page
+
+    Toggle.Parent =
+        cosmetic.page
+    Toggle.LayoutOrder = 0
+
+    for slotIndex = 1, 2 do
+        local state =
+            cosmetic.slots[slotIndex]
+
+        local row =
+            Instance.new(
+                "Frame"
+            )
+        row.Name =
+            "CosmeticRow_"
+                .. tostring(
+                    slotIndex
+                )
+        row.Size =
+            UDim2.new(
+                1,
+                -4,
+                0,
+                48
+            )
+        row.BackgroundColor3 =
+            Color3.fromRGB(
+                40,
+                40,
+                40
+            )
+        row.BorderSizePixel = 0
+        row.LayoutOrder =
+            slotIndex + 1
+        row.Parent =
+            cosmetic.page
+
+        local rowCorner =
+            Instance.new(
+                "UICorner"
+            )
+        rowCorner.CornerRadius =
+            UDim.new(
+                0,
+                7
+            )
+        rowCorner.Parent =
+            row
+
+        local label =
+            Instance.new(
+                "TextLabel"
+            )
+        label.Size =
+            UDim2.new(
+                0,
+                72,
+                1,
+                0
+            )
+        label.Position =
+            UDim2.new(
+                0,
+                8,
+                0,
+                0
+            )
+        label.BackgroundTransparency = 1
+        label.Text =
+            "COSMETIC "
+                .. tostring(
+                    slotIndex
+                )
+        label.TextSize = 10
+        label.Font =
+            Enum.Font.GothamBold
+        label.TextColor3 =
+            Color3.fromRGB(
+                210,
+                210,
+                210
+            )
+        label.TextXAlignment =
+            Enum.TextXAlignment.Left
+        label.Parent =
+            row
+
+        local a =
+            Instance.new(
+                "TextButton"
+            )
+        a.Name =
+            "OriginalButton"
+        a.Size =
+            UDim2.new(
+                0,
+                125,
+                0,
+                32
+            )
+        a.Position =
+            UDim2.new(
+                0,
+                76,
+                0.5,
+                -16
+            )
+        a.BackgroundColor3 =
+            Color3.fromRGB(
+                52,
+                52,
+                52
+            )
+        a.BorderSizePixel = 0
+        a.Text =
+            state.originalName
+            or "Select"
+        a.TextSize = 11
+        a.Font =
+            Enum.Font.Gotham
+        a.TextColor3 =
+            Color3.fromRGB(
+                255,
+                255,
+                255
+            )
+        a.TextTruncate =
+            Enum.TextTruncate.AtEnd
+        a.Parent =
+            row
+
+        local ac =
+            Instance.new(
+                "UICorner"
+            )
+        ac.CornerRadius =
+            UDim.new(
+                0,
+                7
+            )
+        ac.Parent =
+            a
+
+        local arrow =
+            Instance.new(
+                "TextLabel"
+            )
+        arrow.Size =
+            UDim2.new(
+                0,
+                24,
+                0,
+                32
+            )
+        arrow.Position =
+            UDim2.new(
+                0,
+                206,
+                0.5,
+                -16
+            )
+        arrow.BackgroundTransparency = 1
+        arrow.Text = "→"
+        arrow.TextSize = 22
+        arrow.Font =
+            Enum.Font.GothamBold
+        arrow.TextColor3 =
+            Color3.fromRGB(
+                180,
+                180,
+                180
+            )
+        arrow.Parent =
+            row
+
+        local b =
+            Instance.new(
+                "TextButton"
+            )
+        b.Name =
+            "ReplaceButton"
+        b.Size =
+            UDim2.new(
+                0,
+                125,
+                0,
+                32
+            )
+        b.Position =
+            UDim2.new(
+                0,
+                230,
+                0.5,
+                -16
+            )
+        b.BackgroundColor3 =
+            Color3.fromRGB(
+                52,
+                52,
+                52
+            )
+        b.BorderSizePixel = 0
+        b.Text =
+            state.replaceName
+            or "NONE"
+        b.TextSize = 11
+        b.Font =
+            Enum.Font.Gotham
+        b.TextColor3 =
+            Color3.fromRGB(
+                255,
+                255,
+                255
+            )
+        b.TextTruncate =
+            Enum.TextTruncate.AtEnd
+        b.Parent =
+            row
+
+        local bc =
+            Instance.new(
+                "UICorner"
+            )
+        bc.CornerRadius =
+            UDim.new(
+                0,
+                7
+            )
+        bc.Parent =
+            b
+
+        UnusualFns.addUnusualConnection(
+            a.MouseButton1Click:Connect(
+                function()
+                    cosmetic.openPicker(
+                        slotIndex,
+                        "Original"
+                    )
+                end
+            )
+        )
+        UnusualFns.addUnusualConnection(
+            b.MouseButton1Click:Connect(
+                function()
+                    cosmetic.openPicker(
+                        slotIndex,
+                        "Replace"
+                    )
+                end
+            )
+        )
+    end
+end
+
+function cosmetic.cleanup()
+    cosmetic.enabled = false
+    cosmetic.closePicker()
+    cosmetic.removeHook()
+
+    pcall(function()
+        if cosmetic.page then
+            cosmetic.page:Destroy()
+        end
+    end)
+
+    cosmetic.page = nil
+    cosmetic.pageStatus = nil
+end
+
 function UnusualFns.getUnusualName(id)
     id =
         tonumber(id)
@@ -6090,6 +7419,8 @@ function UnusualFns.closeUnusualPicker()
         false
     unusualPickerSide =
         nil
+    cosmetic.picking = false
+    cosmetic.pickerSide = nil
 end
 UnusualFns.addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
         function()
@@ -6121,7 +7452,11 @@ UnusualFns.addUnusualConnection(
     ):Connect(
         function()
             if unusualPicker.Visible then
-                UnusualFns.rebuildUnusualPicker()
+                if cosmetic.picking then
+                    cosmetic.rebuildPicker()
+                else
+                    UnusualFns.rebuildUnusualPicker()
+                end
             end
         end
     )
@@ -9096,6 +10431,11 @@ othersCategoryButton =
         "OTHERS",
         111
     )
+cosmetic.categoryButton =
+    makeCategoryButton(
+        "COSMETIC",
+        146
+    )
 --// =========================================================
 --// CATEGORY SWITCH
 --// =========================================================
@@ -9104,10 +10444,10 @@ local function setCategory(
 )
     currentCategory =
         category
+
     pcall(function()
         if category == "Main" then
-            MainTitle.Text =
-                "DeadEyes v1"
+            MainTitle.Text = "DeadEyes v1"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -9116,172 +10456,118 @@ local function setCategory(
             unusualStatus.Visible = false
             unusualPicker.Visible = false
             others.page.Visible = false
+            cosmetic.page.Visible = false
             mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    65,
-                    65,
-                    65
-                )
+                Color3.fromRGB(65, 65, 65)
             emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
+            cosmetic.categoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
+
         elseif category == "Unusual" then
-            MainTitle.Text =
-                "DeadEyes v1"
-            Status.Visible =
-                false
-            Toggle.Visible =
-                true
-            Toggle.Parent =
-                unusualPage
-            Toggle.LayoutOrder =
-                0
-            SlotsScroll.Visible =
-                false
-            mainPage.Visible =
-                false
-            unusualPage.Visible =
-                true
-            unusualStatus.Visible =
-                false
-            unusualPicker.Visible =
-                false
-            others.page.Visible =
-                false
+            MainTitle.Text = "DeadEyes v1"
+            Status.Visible = false
+            Toggle.Visible = true
+            Toggle.Parent = unusualPage
+            Toggle.LayoutOrder = 0
+            SlotsScroll.Visible = false
+            mainPage.Visible = false
+            unusualPage.Visible = true
+            unusualStatus.Visible = false
+            unusualPicker.Visible = false
+            others.page.Visible = false
+            cosmetic.page.Visible = false
             mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    65,
-                    65,
-                    65
-                )
+                Color3.fromRGB(65, 65, 65)
             othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
+            cosmetic.categoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
             updateUnusualToggle()
+
         elseif category == "Others" then
-            MainTitle.Text =
-                "DeadEyes v1"
-            Status.Visible =
-                false
-            Toggle.Visible =
-                false
-            SlotsScroll.Visible =
-                false
-            unusualPage.Visible =
-                false
-            unusualStatus.Visible =
-                false
-            mainPage.Visible =
-                false
-            unusualPicker.Visible =
-                false
-            others.page.Visible =
-                true
+            MainTitle.Text = "DeadEyes v1"
+            Status.Visible = false
+            Toggle.Visible = false
+            SlotsScroll.Visible = false
+            unusualPage.Visible = false
+            unusualStatus.Visible = false
+            mainPage.Visible = false
+            unusualPicker.Visible = false
+            others.page.Visible = true
+            cosmetic.page.Visible = false
             mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    65,
-                    65,
-                    65
-                )
+                Color3.fromRGB(65, 65, 65)
+            cosmetic.categoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
+
+        elseif category == "Cosmetic" then
+            MainTitle.Text = "DeadEyes v1"
+            Status.Visible = false
+            Toggle.Visible = true
+            Toggle.Parent = cosmetic.page
+            Toggle.LayoutOrder = 0
+            SlotsScroll.Visible = false
+            mainPage.Visible = false
+            unusualPage.Visible = false
+            unusualStatus.Visible = false
+            unusualPicker.Visible = false
+            others.page.Visible = false
+            cosmetic.page.Visible = true
+            mainCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
+            emoteCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
+            unusualCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
+            othersCategoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
+            cosmetic.categoryButton.BackgroundColor3 =
+                Color3.fromRGB(65, 65, 65)
+            cosmetic.updateToggle()
+
         else
-            MainTitle.Text =
-                "DeadEyes v1"
-            Status.Visible =
-                false
-            Toggle.Visible =
-                true
-            Toggle.Parent =
-                SlotsScroll
-            Toggle.LayoutOrder =
-                0
-            SlotsScroll.Visible =
-                true
-            mainPage.Visible =
-                false
-            unusualPage.Visible =
-                false
-            unusualStatus.Visible =
-                false
-            unusualPicker.Visible =
-                false
-            others.page.Visible =
-                false
+            MainTitle.Text = "DeadEyes v1"
+            Status.Visible = false
+            Toggle.Visible = true
+            Toggle.Parent = SlotsScroll
+            Toggle.LayoutOrder = 0
+            SlotsScroll.Visible = true
+            mainPage.Visible = false
+            unusualPage.Visible = false
+            unusualStatus.Visible = false
+            unusualPicker.Visible = false
+            others.page.Visible = false
+            cosmetic.page.Visible = false
             mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
             othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    45,
-                    45,
-                    45
-                )
+                Color3.fromRGB(45, 45, 45)
+            cosmetic.categoryButton.BackgroundColor3 =
+                Color3.fromRGB(45, 45, 45)
             emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(
-                    65,
-                    65,
-                    65
-                )
+                Color3.fromRGB(65, 65, 65)
             updateGUI()
         end
     end)
 end
+
 UnusualFns.addUnusualConnection(
     mainCategoryButton.MouseButton1Click:Connect(
         function()
@@ -9329,6 +10615,18 @@ UnusualFns.addUnusualConnection(
         end
     )
 )
+UnusualFns.addUnusualConnection(
+    cosmetic.categoryButton.MouseButton1Click:Connect(
+        function()
+            if mainMinimized then
+                setMainMinimized(false)
+            end
+            setCategory(
+                "Cosmetic"
+            )
+        end
+    )
+)
 --// =========================================================
 --// EXTERNAL CLEANUP
 --// =========================================================
@@ -9346,6 +10644,11 @@ local function cleanupUnusual()
     pcall(function()
         others.restore(false)
     end)
+    pcall(function()
+        cosmetic.cleanup()
+    end)
+    genv.DEADEYE_COSMETIC_CLEANUP =
+        nil
     unusualEnabled =
         false
     unusualRuntime.reapplyGeneration += 1
@@ -9755,6 +11058,13 @@ for slotIndex = 1, SLOT_COUNT do
     ] =
         replaceButton
 end
+cosmetic.loadState()
+cosmetic.buildList()
+cosmetic.installHook()
+cosmetic.buildUI()
+genv.DEADEYE_COSMETIC_CLEANUP =
+    cosmetic.cleanup
+
 --// =========================================================
 --// PICKER
 --// =========================================================
@@ -11251,6 +12561,35 @@ PickerClose.MouseButton1Click:Connect(
 addConnection(
     Toggle.MouseButton1Click:Connect(
         function()
+            if currentCategory == "Cosmetic" then
+                local valid = false
+
+                for index = 1, 2 do
+                    local state =
+                        cosmetic.slots[index]
+
+                    if state.originalId
+                        and state.replaceId
+                        and state.originalId
+                            ~= state.replaceId
+                    then
+                        valid = true
+                        break
+                    end
+                end
+
+                if valid then
+                    cosmetic.enabled =
+                        not cosmetic.enabled
+                    cosmetic.refreshRig()
+                else
+                    cosmetic.enabled = false
+                end
+
+                cosmetic.updateToggle()
+                return
+            end
+
             if currentCategory == "Unusual" then
                 if unusualEnabled then
                     unusualEnabled =
@@ -11435,6 +12774,20 @@ setMainMinimized = function(state)
                 unusualPage.Visible = false
                 unusualStatus.Visible = false
                 others.page.Visible = true
+                cosmetic.page.Visible = false
+            elseif currentCategory == "Cosmetic" then
+                Status.Visible = false
+                Toggle.Visible = true
+                Toggle.Parent = cosmetic.page
+                Toggle.LayoutOrder = 0
+                SlotsScroll.Visible = false
+                mainPage.Visible = false
+                unusualPage.Visible = false
+                unusualStatus.Visible = false
+                others.page.Visible = false
+                cosmetic.page.Visible = true
+                unusualPicker.Visible = false
+                cosmetic.updateToggle()
             else
                 mainPage.Visible = false
                 unusualPage.Visible = false
@@ -12131,6 +13484,7 @@ savedConfig.unusual = {
     replaceId =
         unusualSlot.replaceId
 }
+cosmetic.saveState()
 saveSavedConfig()
 setMainMinimized(false)
 updateGUI()
