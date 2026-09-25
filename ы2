@@ -1,6 +1,9 @@
-loadstring(
-    game:HttpGet(
-        "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/deadeeye.lua"
-    ),
-    "@DeadEye"
-)()
+local source = game:HttpGet("https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/deadeeye.lua")
+local fn, err = loadstring(source)
+if not fn then
+    error("[DeadEye] compile error: " .. tostring(err))
+end
+local ok, runErr = pcall(fn)
+if not ok then
+    error("[DeadEye] runtime error: " .. tostring(runErr))
+end
