@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1"
+    "DeadEyes v1.1"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1950,6 +1950,22 @@ function cosmetic.loadState()
                     )
             end
         end
+
+        -- Only auto-detect the currently equipped item when
+        -- this slot has no saved Original mapping.
+        if not state.originalId then
+            local equipped =
+                cosmetic.getEquippedId(index)
+
+            if equipped ~= 0 then
+                state.originalId =
+                    equipped
+                state.originalName =
+                    cosmetic.getName(
+                        equipped
+                    )
+            end
+        end
     end
 end
 
@@ -2129,36 +2145,24 @@ function cosmetic.replaceArray(cosmetics)
 end
 
 function cosmetic.refreshRig()
-    local args =
-        cosmetic.lastSetRigArgs
+    local success = false
 
-    if not args
-        or not cosmetic.originalSetRig
-    then
-        return false
-    end
-
-    local cosmetics =
-        args.cosmetics
-
-    if cosmetic.enabled then
-        cosmetics =
-            cosmetic.replaceArray(
-                cosmetics
+    pcall(function()
+        local loadout =
+            require(
+                ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild(
+                    "useLoadout"
+                )
             )
-    end
 
-    local success =
-        pcall(function()
-            cosmetic.originalSetRig(
-                args.self,
-                args.character,
-                args.rigType,
-                cosmetics,
-                args.gear,
-                args.boombox
-            )
-        end)
+        if loadout
+            and loadout.Changed
+            and loadout.Changed.Fire
+        then
+            loadout.Changed:Fire()
+            success = true
+        end
+    end)
 
     return success
 end
@@ -10502,7 +10506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1"
+            MainTitle.Text = "DeadEyes v1.1"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10524,7 +10528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1"
+            MainTitle.Text = "DeadEyes v1.1"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -10549,7 +10553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1"
+            MainTitle.Text = "DeadEyes v1.1"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10571,7 +10575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1"
+            MainTitle.Text = "DeadEyes v1.1"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -10596,7 +10600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1"
+            MainTitle.Text = "DeadEyes v1.1"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12673,23 +12677,21 @@ addConnection(
                     cosmetic.enabled =
                         not cosmetic.enabled
 
-                    -- Update the button immediately.
                     pcall(
                         cosmetic.updateToggle
                     )
 
-                    -- Do not block the input callback on SetRig.
-                    if cosmetic.lastSetRigArgs
-                        and cosmetic.originalSetRig
-                    then
-                        task.spawn(function()
-                            pcall(
-                                cosmetic.refreshRig
-                            )
-                        end)
-                    end
+                    -- Ask the game's own loadout listeners to
+                    -- rebuild the rig. SetRig is then called
+                    -- naturally and our hook swaps the IDs.
+                    task.spawn(function()
+                        pcall(
+                            cosmetic.refreshRig
+                        )
+                    end)
                 else
                     cosmetic.enabled = false
+
                     pcall(
                         cosmetic.updateToggle
                     )
