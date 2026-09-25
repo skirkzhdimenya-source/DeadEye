@@ -1705,6 +1705,7 @@ others.fieldButtons = {}
 others.fieldBoxes = {}
 local unusualConnections = {}
 local unusualDestroyed = false
+local unusualReapplyBusy = false
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
 --// =========================================================
@@ -1725,6 +1726,8 @@ local function disconnectUnusualConnections()
     table.clear(
         unusualConnections
     )
+
+    unusualReapplyBusy = false
 end
 --// =========================================================
 --// UNUSUAL LIST
@@ -2023,6 +2026,69 @@ end
 --// =========================================================
 --// APPLY UNUSUAL FX ONLY
 -- =========================================================
+local function startUnusualAnimations(
+    root
+)
+    if not root then
+        return
+    end
+
+    for _, controller in ipairs(
+        root:GetDescendants()
+    ) do
+
+        if controller:IsA(
+            "AnimationController"
+        ) then
+
+            local animator =
+                controller:FindFirstChildOfClass(
+                    "Animator"
+                )
+
+            if not animator then
+                pcall(function()
+                    animator =
+                        Instance.new(
+                            "Animator"
+                        )
+                    animator.Parent =
+                        controller
+                end)
+            end
+
+            if animator then
+
+                for _, animation in ipairs(
+                    controller:GetDescendants()
+                ) do
+
+                    if animation:IsA(
+                        "Animation"
+                    ) then
+
+                        pcall(function()
+                            local track =
+                                animator:LoadAnimation(
+                                    animation
+                                )
+
+                            if track then
+                                track:Play(0)
+                            end
+                        end)
+
+                    end
+
+                end
+
+            end
+
+        end
+
+    end
+end
+
 local function applyUnusualFX(
     id,
     visualRig,
@@ -2210,6 +2276,10 @@ local function applyUnusualFX(
     tagUnusualFX(
         clone,
         id
+    )
+
+    startUnusualAnimations(
+        clone
     )
 
     return true
@@ -2624,14 +2694,40 @@ local function activateUnusual()
     return true
 end
 local function reapplyUnusual()
-    if not unusualEnabled then
+    if not unusualEnabled
+        or unusualReapplyBusy
+    then
         return
     end
-    if unusualActive then
-        restoreUnusual()
-        task.wait()
-    end
-    activateUnusual()
+
+    unusualReapplyBusy = true
+
+    task.spawn(function()
+
+        if not unusualEnabled
+            or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
+        then
+            unusualReapplyBusy = false
+            return
+        end
+
+        if unusualActive then
+            restoreUnusual()
+            task.wait()
+        end
+
+        local ok =
+            pcall(function()
+                activateUnusual()
+            end)
+
+        if not ok then
+            unusualActive = false
+        end
+
+        unusualReapplyBusy = false
+
+    end)
 end
 --// =========================================================
 --// FIRST PERSON / VIEWMODEL SYNC
@@ -2872,9 +2968,39 @@ end
 addUnusualConnection(
     RunService.Heartbeat:Connect(
         function()
-            if genv.DEADEYE_UNUSUAL_POV_RUNNING then
-                updateUnusualPOV()
+
+            if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
+                return
             end
+
+            updateUnusualPOV()
+
+            if unusualEnabled
+                and unusualActive
+                and not unusualReapplyBusy
+            then
+
+                local rig =
+                    getUnusualVisualRig()
+
+                if rig then
+
+                    local expected =
+                        rig:FindFirstChild(
+                            "DeadEyeUnusual_" ..
+                            tostring(
+                                unusualSlot.replaceId
+                            )
+                        )
+
+                    if not expected then
+                        reapplyUnusual()
+                    end
+
+                end
+
+            end
+
         end
     )
 )
