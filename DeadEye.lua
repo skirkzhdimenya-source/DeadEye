@@ -888,7 +888,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.2"
+    "DeadEyes v1.3"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -2256,109 +2256,19 @@ function cosmetic.installHook()
                             boombox = boombox
                         }
 
-                        --// Preserve the non-accessory part of a custom
-                        --// HumanoidDescription. The game's SetRig rebuild
-                        --// otherwise restores its own skin whenever an
-                        --// accessory/cosmetic causes a rig rebuild.
-                        if cosmetic.enabled
-                            and character
-                            and character:IsA("Model")
-                        then
-                            pcall(function()
-                                local humanoid =
-                                    character:FindFirstChildOfClass(
-                                        "Humanoid"
-                                    )
-
-                                if humanoid then
-                                    cosmetic.skinDescription =
-                                        humanoid:GetAppliedDescription()
-                                    cosmetic.skinCharacter =
-                                        character
-                                end
-                            end)
-                        end
-
-                        local result =
-                            original(
-                                self,
-                                character,
-                                rigType,
-                                cosmetic.replaceArray(
-                                    cosmetics
-                                ),
-                                gear,
-                                boombox
-                            )
-
-                        if cosmetic.enabled
-                            and cosmetic.skinDescription
-                            and result
-                            and result:IsA("Model")
-                        then
-                            task.spawn(function()
-                                pcall(function()
-                                    local humanoid =
-                                        result:FindFirstChildOfClass(
-                                            "Humanoid"
-                                        )
-
-                                    if not humanoid then
-                                        return
-                                    end
-
-                                    local description =
-                                        humanoid:GetAppliedDescription()
-
-                                    --// Keep the new rig's accessory fields
-                                    --// intact so the cosmetic replacement is
-                                    --// not removed by the skin restoration.
-                                    local properties = {
-                                        "Face",
-                                        "Head",
-                                        "Torso",
-                                        "LeftArm",
-                                        "RightArm",
-                                        "LeftLeg",
-                                        "RightLeg",
-                                        "HeadColor",
-                                        "TorsoColor",
-                                        "LeftArmColor",
-                                        "RightArmColor",
-                                        "LeftLegColor",
-                                        "RightLegColor",
-                                        "Shirt",
-                                        "Pants",
-                                        "GraphicTShirt",
-                                        "BodyTypeScale",
-                                        "DepthScale",
-                                        "HeadScale",
-                                        "HeightScale",
-                                        "ProportionScale",
-                                        "WidthScale",
-                                        "ClimbAnimation",
-                                        "FallAnimation",
-                                        "IdleAnimation",
-                                        "JumpAnimation",
-                                        "RunAnimation",
-                                        "SwimAnimation"
-                                    }
-
-                                    for _, property in ipairs(properties) do
-                                        pcall(function()
-                                            description[property] =
-                                                cosmetic.skinDescription[property]
-                                        end)
-                                    end
-
-                                    humanoid:ApplyDescriptionAsync(
-                                        description
-                                    )
-                                end)
-                            end)
-                        end
-
-                        return result
+                        -- SetRig receives the game's character wrapper
+                        -- (a table), not necessarily a Roblox Model.
+                        -- Never call Instance methods on it here.
+                        return original(
+                            self,
+                            character,
+                            rigType,
+                            cosmetic.replaceArray(
+                                cosmetics
+                            ),
+                            gear,
+                            boombox
+                        )
                     end
                 )
         end)
@@ -10645,7 +10555,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.2"
+            MainTitle.Text = "DeadEyes v1.3"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10667,7 +10577,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.2"
+            MainTitle.Text = "DeadEyes v1.3"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -10692,7 +10602,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.2"
+            MainTitle.Text = "DeadEyes v1.3"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -10714,7 +10624,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.2"
+            MainTitle.Text = "DeadEyes v1.3"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -10739,7 +10649,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.2"
+            MainTitle.Text = "DeadEyes v1.3"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
