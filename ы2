@@ -2636,13 +2636,6 @@ local function buildUnusualList()
     )
     end
 buildUnusualList()
-
--- Icons are read directly from AppearanceInfo.Icon,
--- so the picker starts with its icons already populated.
-task.spawn(function()
-    pcall(preloadNativeUnusualIcons)
-end)
-
 --// =========================================================
 --// GET UNUSUAL NAME
 --// =========================================================
@@ -6286,12 +6279,12 @@ unusualPicker.Position =
     )
 unusualPicker.BackgroundColor3 =
     Color3.fromRGB(
-        24,
-        24,
-        28
+        31,
+        35,
+        42
     )
 unusualPicker.BackgroundTransparency =
-    0.12
+    0.10
 unusualPicker.BorderSizePixel =
     0
 unusualPicker.ClipsDescendants =
@@ -6316,44 +6309,43 @@ __UI.unusualPickerStroke =
 __UI.unusualPickerStroke.Thickness =
     1
 __UI.unusualPickerStroke.Transparency =
-    0.4
+    0.66
 __UI.unusualPickerStroke.Parent =
     unusualPicker
 
 __UI.unusualPickerGlass =
     Instance.new("UIGradient")
 __UI.unusualPickerGlass.Rotation =
-    90
+    115
 __UI.unusualPickerGlass.Color =
     ColorSequence.new({
         ColorSequenceKeypoint.new(
             0,
-            Color3.fromRGB(255, 255, 255)
+            Color3.fromRGB(
+                55,
+                61,
+                72
+            )
         ),
         ColorSequenceKeypoint.new(
-            0.5,
-            Color3.fromRGB(170, 180, 200)
+            0.42,
+            Color3.fromRGB(
+                38,
+                43,
+                51
+            )
         ),
         ColorSequenceKeypoint.new(
             1,
-            Color3.fromRGB(80, 85, 100)
+            Color3.fromRGB(
+                24,
+                28,
+                34
+            )
         )
     })
 __UI.unusualPickerGlass.Transparency =
-    NumberSequence.new({
-        NumberSequenceKeypoint.new(
-            0,
-            0.92
-        ),
-        NumberSequenceKeypoint.new(
-            0.5,
-            0.97
-        ),
-        NumberSequenceKeypoint.new(
-            1,
-            0.9
-        )
-    })
+    NumberSequence.new(0.20)
 __UI.unusualPickerGlass.Parent =
     unusualPicker
 
@@ -6445,12 +6437,12 @@ unusualPickerSearch.Position =
     )
 unusualPickerSearch.BackgroundColor3 =
     Color3.fromRGB(
-        55,
-        58,
-        68
+        40,
+        45,
+        53
     )
 unusualPickerSearch.BackgroundTransparency =
-    0.28
+    0.20
 unusualPickerSearch.BorderSizePixel =
     0
 unusualPickerSearch.ClearTextOnFocus =
@@ -6506,12 +6498,12 @@ unusualPickerScroll.Position =
     )
 unusualPickerScroll.BackgroundColor3 =
     Color3.fromRGB(
+        32,
         35,
-        37,
-        45
+        42
     )
 unusualPickerScroll.BackgroundTransparency =
-    0.32
+    0.20
 unusualPickerScroll.BorderSizePixel =
     0
 unusualPickerScroll.ScrollBarThickness =
@@ -6555,14 +6547,14 @@ local unusualPickerGrid =
 unusualPickerGrid.CellSize =
     UDim2.new(
         0,
-        172,
+        170,
         0,
         92
     )
 unusualPickerGrid.CellPadding =
     UDim2.new(
         0,
-        7,
+        6,
         0,
         8
     )
@@ -6817,7 +6809,7 @@ local function rebuildUnusualPicker()
                     255
                 )
             glass.BackgroundTransparency =
-                0.91
+                0.95
             glass.BorderSizePixel =
                 0
             glass.ZIndex =
@@ -7003,9 +6995,7 @@ local function rebuildUnusualPicker()
 end
 --// =========================================================
 --// OPEN / CLOSE PICKER
---// =========================================================
-local unusualIconPreloadGeneration = 0
-
+-- =========================================================
 local function openUnusualPicker(
     side
 )
@@ -7022,26 +7012,10 @@ local function openUnusualPicker(
 
     unusualPickerSearch.Text =
         ""
-
     unusualPicker.Visible =
         true
 
-    unusualIconPreloadGeneration += 1
-    local generation =
-        unusualIconPreloadGeneration
-
     rebuildUnusualPicker()
-
-    task.spawn(function()
-        preloadNativeUnusualIcons()
-
-        if generation
-            == unusualIconPreloadGeneration
-            and unusualPicker.Visible
-        then
-            rebuildUnusualPicker()
-        end
-    end)
 end
 local function closeUnusualPicker()
     unusualPicker.Visible =
