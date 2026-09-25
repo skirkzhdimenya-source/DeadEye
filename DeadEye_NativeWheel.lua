@@ -15,6 +15,7 @@ local prepareOriginalModule = __ctx.prepareOriginalModule
 local prepareReplaceModule = __ctx.prepareReplaceModule
 local getEmoteName = __ctx.getEmoteName
 local createEmotePreview = __ctx.createEmotePreview
+local isEnabled = __ctx.isEnabled
 
 local nativeWheelStates = {}
 local nativeWheelRestoreDone = false
@@ -354,8 +355,8 @@ local function syncNativeEmoteWheel()
     end
 
     -- OFF = restore from the persistent logical snapshots.
-    if not __ctx.genv.EMOTE_SWAPPER_RUNNING
-        or not enabled
+    if not genv.EMOTE_SWAPPER_RUNNING
+        or not (isEnabled and isEnabled())
     then
         restoreNativeEmoteWheel()
         return
