@@ -8596,13 +8596,43 @@ mainConnect(
                 return
             end
 
-            pcall(function()
-                mainJump.humanoid.Jump = true
+            local humanoid = mainJump.humanoid
 
-                if mainJump.canJump() then
-                    mainJump.humanoid:ChangeState(
-                        Enum.HumanoidStateType.Jumping
-                    )
+            pcall(function()
+                humanoid:SetStateEnabled(
+                    Enum.HumanoidStateType.Jumping,
+                    true
+                )
+                humanoid.Jump = true
+                humanoid:ChangeState(
+                    Enum.HumanoidStateType.Jumping
+                )
+            end)
+
+            --// The game can disable Jumping again during the same
+            --// input cycle. Re-apply the native jump for a few
+            --// frames so the first Space press is not consumed.
+            task.defer(function()
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or mainJump.enabled
+                    or not humanoid.Parent
+                then
+                    return
+                end
+
+                for _ = 1, 3 do
+                    pcall(function()
+                        humanoid:SetStateEnabled(
+                            Enum.HumanoidStateType.Jumping,
+                            true
+                        )
+                        humanoid.Jump = true
+                        humanoid:ChangeState(
+                            Enum.HumanoidStateType.Jumping
+                        )
+                    end)
+
+                    task.wait()
                 end
             end)
         end
