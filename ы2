@@ -1535,6 +1535,71 @@ Main.ClipsDescendants =
 Main.Parent =
     ScreenGui
 
+local MainSurface =
+    Instance.new("Frame")
+
+MainSurface.Name =
+    "MainSurface"
+
+MainSurface.Size =
+    UDim2.new(
+        1,
+        0,
+        1,
+        0
+    )
+
+MainSurface.Position =
+    UDim2.new(
+        0,
+        0,
+        0,
+        0
+    )
+
+MainSurface.BackgroundColor3 =
+    Color3.fromRGB(
+        18,
+        20,
+        24
+    )
+
+MainSurface.BackgroundTransparency =
+    0
+
+MainSurface.BorderSizePixel =
+    0
+
+MainSurface.ZIndex =
+    0
+
+MainSurface.Parent =
+    Main
+
+local MainSurfaceCorner =
+    Instance.new("UICorner")
+
+MainSurfaceCorner.CornerRadius =
+    UDim.new(
+        0,
+        10
+    )
+
+MainSurfaceCorner.Parent =
+    Main
+
+local MainSurfaceStroke =
+    Instance.new("UIStroke")
+
+MainSurfaceStroke.Thickness =
+    1
+
+MainSurfaceStroke.Transparency =
+    0.72
+
+MainSurfaceStroke.Parent =
+    MainSurface
+
 __UI.MainGradient =
     Instance.new("UIGradient")
 __UI.MainGradient.Rotation =
@@ -1569,7 +1634,7 @@ __UI.MainGradient.Color =
 __UI.MainGradient.Transparency =
     NumberSequence.new(1)
 __UI.MainGradient.Parent =
-    Main
+    MainSurface
 
 __UI.MainCorner =
     Instance.new("UICorner")
@@ -1618,25 +1683,47 @@ MainHeader.BackgroundTransparency =
 MainHeader.BorderSizePixel =
     0
 MainHeader.ZIndex =
-    0
+    1
 MainHeader.Parent =
     Main
+
+local MainHeaderCorner =
+    Instance.new("UICorner")
+
+MainHeaderCorner.CornerRadius =
+    UDim.new(
+        0,
+        10
+    )
+
+MainHeaderCorner.Parent =
+    MainHeader
 
 __UI.MainHeaderGradient =
     Instance.new("UIGradient")
 __UI.MainHeaderGradient.Rotation =
     90
-__UI.MainHeaderGradient.Transparency =
-    NumberSequence.new({
-        NumberSequenceKeypoint.new(
+__UI.MainHeaderGradient.Color =
+    ColorSequence.new({
+        ColorSequenceKeypoint.new(
             0,
-            0
+            Color3.fromRGB(
+                29,
+                32,
+                38
+            )
         ),
-        NumberSequenceKeypoint.new(
+        ColorSequenceKeypoint.new(
             1,
-            0.35
+            Color3.fromRGB(
+                24,
+                27,
+                33
+            )
         )
     })
+__UI.MainHeaderGradient.Transparency =
+    NumberSequence.new(0)
 __UI.MainHeaderGradient.Parent =
     MainHeader
 
@@ -1660,6 +1747,8 @@ __UI.MainHeaderLine.Position =
     )
 __UI.MainHeaderLine.BackgroundTransparency =
     1
+__UI.MainHeaderLine.Visible =
+    false
 __UI.MainHeaderLine.BorderSizePixel =
     0
 __UI.MainHeaderLine.ZIndex =
@@ -5372,9 +5461,9 @@ unusualPage.Position =
     )
 unusualPage.BackgroundColor3 =
     Color3.fromRGB(
-        21,
-        24,
-        29
+        23,
+        27,
+        33
     )
 unusualPage.BorderSizePixel =
     0
@@ -7149,9 +7238,9 @@ mainPage.Position =
     )
 mainPage.BackgroundColor3 =
     Color3.fromRGB(
-        21,
-        24,
-        29
+        23,
+        27,
+        33
     )
 mainPage.BorderSizePixel = 0
 mainPage.ScrollBarThickness = 6
@@ -7668,9 +7757,9 @@ others.page.Position =
     )
 others.page.BackgroundColor3 =
     Color3.fromRGB(
-        21,
-        24,
-        29
+        23,
+        27,
+        33
     )
 others.page.BorderSizePixel =
     0
@@ -8694,9 +8783,9 @@ categoryBar.Position =
     )
 categoryBar.BackgroundColor3 =
     Color3.fromRGB(
-        23,
         26,
-        31
+        30,
+        36
     )
 categoryBar.BorderSizePixel =
     0
@@ -8726,7 +8815,7 @@ __UI.categoryStroke =
 __UI.categoryStroke.Thickness =
     1
 __UI.categoryStroke.Transparency =
-    0.72
+    0.55
 __UI.categoryStroke.Parent =
     categoryBar
 
