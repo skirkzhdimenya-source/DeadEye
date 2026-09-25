@@ -1527,7 +1527,7 @@ Main.BackgroundColor3 =
         24
     )
 Main.BackgroundTransparency =
-    0
+    1
 Main.BorderSizePixel =
     0
 Main.ClipsDescendants =
@@ -1565,7 +1565,7 @@ MainSurface.BackgroundColor3 =
     )
 
 MainSurface.BackgroundTransparency =
-    0
+    0.08
 
 MainSurface.BorderSizePixel =
     0
@@ -1632,7 +1632,7 @@ __UI.MainGradient.Color =
         )
     })
 __UI.MainGradient.Transparency =
-    NumberSequence.new(1)
+    NumberSequence.new(0.08)
 __UI.MainGradient.Parent =
     MainSurface
 
@@ -1663,7 +1663,7 @@ MainHeader.Size =
         1,
         -2,
         0,
-        46
+        39
     )
 MainHeader.Position =
     UDim2.new(
@@ -1679,7 +1679,7 @@ MainHeader.BackgroundColor3 =
         33
     )
 MainHeader.BackgroundTransparency =
-    0
+    0.04
 MainHeader.BorderSizePixel =
     0
 MainHeader.ZIndex =
@@ -1723,7 +1723,7 @@ __UI.MainHeaderGradient.Color =
         )
     })
 __UI.MainHeaderGradient.Transparency =
-    NumberSequence.new(0)
+    NumberSequence.new(0.05)
 __UI.MainHeaderGradient.Parent =
     MainHeader
 
@@ -1933,7 +1933,7 @@ Status.Position =
         0,
         10,
         0,
-        37
+        43
     )
 Status.BackgroundTransparency =
     1
@@ -6287,7 +6287,7 @@ unusualStatusText.Position =
         0,
         82,
         0,
-        37
+        43
     )
 unusualStatusText.BackgroundTransparency =
     1
@@ -9215,7 +9215,7 @@ Toggle.Position =
         1,
         -130,
         0,
-        35
+        42
     )
 Toggle.BackgroundColor3 =
     Color3.fromRGB(
@@ -10311,6 +10311,18 @@ local function setMainMinimized(state)
             others.page.Visible = false
         end)
         Minimize.Text = "+"
+
+        for _, name in ipairs({
+            "ResizeRight",
+            "ResizeBottom",
+            "ResizeCorner"
+        }) do
+            local handle =
+                Main:FindFirstChild(name)
+            if handle then
+                handle.Visible = false
+            end
+        end
     else
         Main.Size =
             UDim2.new(
@@ -10369,6 +10381,18 @@ local function setMainMinimized(state)
             end
         end)
         Minimize.Text = "−"
+
+        for _, name in ipairs({
+            "ResizeRight",
+            "ResizeBottom",
+            "ResizeCorner"
+        }) do
+            local handle =
+                Main:FindFirstChild(name)
+            if handle then
+                handle.Visible = true
+            end
+        end
     end
 end
 --// =========================================================
@@ -10429,7 +10453,7 @@ DragHandle.Size =
         1,
         -105,
         0,
-        46
+        39
     )
 DragHandle.Position =
     UDim2.new(
