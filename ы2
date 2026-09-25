@@ -2148,20 +2148,46 @@ local function applyUnusualFX(
         "DeadEyeUnusual_" ..
         tostring(id)
 
-    --// Remove executable code, but keep the complete
-    --// visual/animation structure of the cosmetic rig.
+    --// Keep the complete runtime structure of the cosmetic rig.
+    --// Some Unusuals animate through embedded client drivers,
+    --// while others use AnimationController/Animation objects.
+    ////
+    --// Client drivers are temporarily disabled while the clone
+    --// is assembled, then enabled after it is parented.
+    local clientDrivers = {}
+    local hasClientDriver = false
+
     for _, object in ipairs(
         clone:GetDescendants()
     ) do
 
-        if object:IsA("Script")
-            or object:IsA("LocalScript")
-            or object:IsA("ModuleScript")
+        if object:IsA("LocalScript")
+            or object:IsA("Script")
         then
 
-            pcall(function()
-                object:Destroy()
-            end)
+            local isClientDriver =
+                object:IsA("LocalScript")
+
+            if object:IsA("Script") then
+                pcall(function()
+                    isClientDriver =
+                        object.RunContext ==
+                        Enum.RunContext.Client
+                end)
+            end
+
+            if isClientDriver then
+                hasClientDriver = true
+
+                pcall(function()
+                    object.Disabled = true
+                end)
+
+                table.insert(
+                    clientDrivers,
+                    object
+                )
+            end
 
         elseif object:IsA("BasePart") then
 
@@ -2246,8 +2272,22 @@ local function applyUnusualFX(
             sourcePivot
         )
 
-    clone.Parent =
+    local driverParent =
         visualRig
+
+    if hasClientDriver
+        and playerCharacter
+    then
+        --// LocalScripts execute reliably from the real
+        --// character hierarchy. The visual root is still
+        --// used as the physical anchor, so appearance remains
+        --// synchronized with the game's Rigs model.
+        driverParent =
+            playerCharacter
+    end
+
+    clone.Parent =
+        driverParent
 
     pcall(function()
         clone:PivotTo(
@@ -2281,6 +2321,17 @@ local function applyUnusualFX(
     startUnusualAnimations(
         clone
     )
+
+    for _, driver in ipairs(
+        clientDrivers
+    ) do
+        pcall(function()
+            if driver.Parent then
+                driver.Disabled =
+                    false
+            end
+        end)
+    end
 
     return true
 end
@@ -2992,6 +3043,21 @@ addUnusualConnection(
                                 unusualSlot.replaceId
                             )
                         )
+
+                    if not expected then
+                        local playerCharacter =
+                            getUnusualPlayerCharacter()
+
+                        if playerCharacter then
+                            expected =
+                                playerCharacter:FindFirstChild(
+                                    "DeadEyeUnusual_" ..
+                                    tostring(
+                                        unusualSlot.replaceId
+                                    )
+                                )
+                        end
+                    end
 
                     if not expected then
                         reapplyUnusual()
