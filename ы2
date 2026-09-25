@@ -2151,7 +2151,7 @@ local function applyUnusualFX(
     --// Keep the complete runtime structure of the cosmetic rig.
     --// Some Unusuals animate through embedded client drivers,
     --// while others use AnimationController/Animation objects.
-    ////
+    --//
     --// Client drivers are temporarily disabled while the clone
     --// is assembled, then enabled after it is parented.
     local clientDrivers = {}
