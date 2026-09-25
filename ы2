@@ -2781,6 +2781,12 @@ unusualRuntime.installAnimatedNestedModels = function(
                             object.CanQuery = false
                             object.Massless = true
                             object.CastShadow = false
+
+                            --// Registry mini-rigs may inherit a local
+                            --// transparency flag from another visual
+                            --// context. The cloned animated visual must
+                            --// be actually renderable.
+                            object.LocalTransparencyModifier = 0
                         end)
 
                     elseif object:IsA("Script")
@@ -2863,9 +2869,23 @@ unusualRuntime.installAnimatedNestedModels = function(
                         )
                 end
 
-                root.CFrame =
-                    targetHost.CFrame *
-                    relative
+                --// Move the complete Model, not only its helper
+                --// root. This preserves every internal offset exactly
+                --// as authored in the registry.
+                local modelRelative =
+                    hostPart
+                    and hostPart:IsA("BasePart")
+                    and hostPart.CFrame:ToObjectSpace(
+                        sourceModel:GetPivot()
+                    )
+                    or relative
+
+                pcall(function()
+                    clone:PivotTo(
+                        targetHost.CFrame *
+                        modelRelative
+                    )
+                end)
 
                 local folder =
                     workspace:FindFirstChild(
@@ -5863,7 +5883,6 @@ local function rebuildUnusualPicker()
                             false
                         unusualPickerSide =
                             nil
-                        closeUnusualPicker()
                         if unusualEnabled then
                             task.spawn(
                                 reapplyUnusual
