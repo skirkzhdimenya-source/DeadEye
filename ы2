@@ -1527,8 +1527,45 @@ Main.BackgroundColor3 =
     )
 Main.BorderSizePixel =
     0
+Main.ClipsDescendants =
+    true
 Main.Parent =
     ScreenGui
+
+local MainGradient =
+    Instance.new("UIGradient")
+MainGradient.Rotation =
+    115
+MainGradient.Color =
+    ColorSequence.new({
+        ColorSequenceKeypoint.new(
+            0,
+            Color3.fromRGB(
+                28,
+                29,
+                34
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            0.55,
+            Color3.fromRGB(
+                23,
+                24,
+                29
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            1,
+            Color3.fromRGB(
+                19,
+                20,
+                24
+            )
+        )
+    })
+MainGradient.Parent =
+    Main
+
 local MainCorner =
     Instance.new("UICorner")
 MainCorner.CornerRadius =
@@ -7184,6 +7221,16 @@ local function mainRow(labelText, order)
     row.BorderSizePixel = 0
     row.LayoutOrder = order
     row.Parent = mainPage
+
+    local rowStroke =
+        Instance.new("UIStroke")
+    rowStroke.Thickness =
+        1
+    rowStroke.Transparency =
+        0.88
+    rowStroke.Parent =
+        row
+
     local rowCorner =
         Instance.new("UICorner")
     rowCorner.CornerRadius =
@@ -8723,6 +8770,8 @@ local function makeCategoryButton(
         10
     button.Font =
         Enum.Font.GothamBold
+    button.AutoButtonColor =
+        true
     button.TextColor3 =
         Color3.fromRGB(
             255,
@@ -8742,6 +8791,16 @@ local function makeCategoryButton(
         )
     corner.Parent =
         button
+
+    local stroke =
+        Instance.new("UIStroke")
+    stroke.Thickness =
+        1
+    stroke.Transparency =
+        0.82
+    stroke.Parent =
+        button
+
     return button
 end
 mainCategoryButton =
@@ -10296,17 +10355,19 @@ local function saveWindowState()
             + 0.5
         )
 
-    savedConfig.gui.width =
-        math.floor(
-            Main.AbsoluteSize.X
-            + 0.5
-        )
+    if not mainMinimized then
+        savedConfig.gui.width =
+            math.floor(
+                Main.AbsoluteSize.X
+                + 0.5
+            )
 
-    savedConfig.gui.height =
-        math.floor(
-            Main.AbsoluteSize.Y
-            + 0.5
-        )
+        savedConfig.gui.height =
+            math.floor(
+                Main.AbsoluteSize.Y
+                + 0.5
+            )
+    end
 
     pcall(function()
         saveSavedConfig()
