@@ -1835,6 +1835,73 @@ function cosmetic.getEquippedId(slot)
     return tonumber(value) or 0
 end
 
+function cosmetic.updateRow(slotIndex)
+    local state =
+        cosmetic.slots[slotIndex]
+
+    if not state then
+        return
+    end
+
+    local row =
+        cosmetic.page
+        and cosmetic.page:FindFirstChild(
+            "CosmeticRow_"
+                .. tostring(slotIndex)
+        )
+
+    if not row then
+        return
+    end
+
+    local original =
+        row:FindFirstChild("OriginalButton")
+    local replace =
+        row:FindFirstChild("ReplaceButton")
+
+    if original then
+        original.Text =
+            state.originalName
+            or "Select"
+    end
+
+    if replace then
+        replace.Text =
+            state.replaceName
+            or "NONE"
+    end
+end
+
+function cosmetic.setInitialOriginal(
+    slotIndex,
+    id
+)
+    id = tonumber(id)
+
+    if not id
+        or id == 0
+    then
+        return
+    end
+
+    local state =
+        cosmetic.slots[slotIndex]
+
+    if not state
+        or state.originalId
+    then
+        return
+    end
+
+    state.originalId =
+        id
+    state.originalName =
+        cosmetic.getName(id)
+
+    cosmetic.saveState()
+    cosmetic.updateRow(slotIndex)
+end
+
 function cosmetic.loadState()
     local saved =
         type(savedConfig.cosmetic) == "table"
@@ -1844,23 +1911,12 @@ function cosmetic.loadState()
     for index = 1, 2 do
         local state =
             cosmetic.slots[index]
+
         local savedSlot =
             saved[
                 "slot"
                     .. tostring(index)
             ]
-
-        local equipped =
-            cosmetic.getEquippedId(index)
-
-        if equipped ~= 0 then
-            state.originalId =
-                equipped
-            state.originalName =
-                cosmetic.getName(
-                    equipped
-                )
-        end
 
         if type(savedSlot) == "table" then
             local savedOriginal =
@@ -1872,7 +1928,9 @@ function cosmetic.loadState()
                     savedSlot.replaceId
                 )
 
-            if savedOriginal then
+            if savedOriginal
+                and savedOriginal ~= 0
+            then
                 state.originalId =
                     savedOriginal
                 state.originalName =
@@ -1881,7 +1939,9 @@ function cosmetic.loadState()
                     )
             end
 
-            if savedReplace then
+            if savedReplace
+                and savedReplace ~= 0
+            then
                 state.replaceId =
                     savedReplace
                 state.replaceName =
@@ -2020,48 +2080,47 @@ function cosmetic.replaceArray(cosmetics)
     end
 
     local result
-    local used1 = false
-    local used2 = false
+    local replaced = {}
 
     for index, id in ipairs(cosmetics) do
         local numericId =
             tonumber(id)
 
-        for slotIndex = 1, 2 do
-            local state =
-                cosmetic.slots[slotIndex]
-            local used =
-                slotIndex == 1
-                and used1
-                or used2
+        if numericId then
+            for slotIndex = 1, 2 do
+                if not replaced[slotIndex] then
+                    local state =
+                        cosmetic.slots[slotIndex]
 
-            if not used
-                and state.originalId
-                and state.replaceId
-                and state.originalId
-                    ~= state.replaceId
-                and numericId
-                    == tonumber(
-                        state.originalId
-                    )
-            then
-                if not result then
-                    result =
-                        table.clone(
-                            cosmetics
+                    if state
+                        and state.originalId
+                        and state.replaceId
+                        and tonumber(
+                            state.originalId
+                        ) ~= tonumber(
+                            state.replaceId
                         )
+                        and numericId
+                            == tonumber(
+                                state.originalId
+                            )
+                    then
+                        if not result then
+                            result =
+                                table.clone(
+                                    cosmetics
+                                )
+                        end
+
+                        result[index] =
+                            tonumber(
+                                state.replaceId
+                            )
+
+                        replaced[slotIndex] = true
+                        break
+                    end
                 end
-
-                result[index] =
-                    state.replaceId
-
-                if slotIndex == 1 then
-                    used1 = true
-                else
-                    used2 = true
-                end
-
-                break
             end
         end
     end
@@ -2089,16 +2148,19 @@ function cosmetic.refreshRig()
             )
     end
 
-    return pcall(function()
-        cosmetic.originalSetRig(
-            args.self,
-            args.character,
-            args.rigType,
-            cosmetics,
-            args.gear,
-            args.boombox
-        )
-    end)
+    local success =
+        pcall(function()
+            cosmetic.originalSetRig(
+                args.self,
+                args.character,
+                args.rigType,
+                cosmetics,
+                args.gear,
+                args.boombox
+            )
+        end)
+
+    return success
 end
 
 function cosmetic.installHook()
@@ -2172,25 +2234,8 @@ function cosmetic.installHook()
     cosmetic.originalSetRig =
         original
     cosmetic.hooked = true
+
     return true
-end
-
-function cosmetic.removeHook()
-    if not cosmetic.hooked then
-        return
-    end
-
-    pcall(function()
-        hookfunction(
-            cosmetic.targetSetRig,
-            cosmetic.originalSetRig
-        )
-    end)
-
-    cosmetic.targetSetRig = nil
-    cosmetic.originalSetRig = nil
-    cosmetic.lastSetRigArgs = nil
-    cosmetic.hooked = false
 end
 
 function cosmetic.updateToggle()
@@ -11062,6 +11107,42 @@ cosmetic.loadState()
 cosmetic.buildList()
 cosmetic.installHook()
 cosmetic.buildUI()
+
+pcall(function()
+    local loadoutChannel =
+        ReplicatedStorage.Shared.UserData.Events.Remotes.Channels.Loadout
+
+    UnusualFns.addUnusualConnection(
+        loadoutChannel.OnClientEvent:Connect(
+            function(kind, data)
+                if kind == "sync"
+                    and type(data) == "table"
+                then
+                    cosmetic.setInitialOriginal(
+                        1,
+                        data.CosmeticSlot_1
+                    )
+                    cosmetic.setInitialOriginal(
+                        2,
+                        data.CosmeticSlot_2
+                    )
+                elseif kind == "patch"
+                    and type(data) == "table"
+                then
+                    cosmetic.setInitialOriginal(
+                        1,
+                        data.CosmeticSlot_1
+                    )
+                    cosmetic.setInitialOriginal(
+                        2,
+                        data.CosmeticSlot_2
+                    )
+                end
+            end
+        )
+    )
+end)
+
 genv.DEADEYE_COSMETIC_CLEANUP =
     cosmetic.cleanup
 
