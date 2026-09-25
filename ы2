@@ -2487,6 +2487,9 @@ local othersCategoryButton
 local currentCategory = "Emotes"
 local mainPage
 local others = {}
+local mainMinimized = false
+local setMainMinimized
+local updateUnusualToggle
 others.originalDescription = nil
 others.targetHumanoid = nil
 others.page = nil
@@ -7131,7 +7134,7 @@ unusualStatusText.Parent =
     Main
 unusualStatus =
     unusualStatusText
-local function updateUnusualToggle()
+updateUnusualToggle = function()
     pcall(function()
         if unusualEnabled then
             Toggle.Text =
@@ -11937,8 +11940,7 @@ local RESIZE_EDGE = 8
 --// =========================================================
 --// MINIMIZE STATE
 --// =========================================================
-local mainMinimized = false
-local function setMainMinimized(state)
+setMainMinimized = function(state)
     mainMinimized = state
     if mainMinimized then
         Main.Size =
