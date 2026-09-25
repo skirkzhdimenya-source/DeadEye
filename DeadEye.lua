@@ -3426,13 +3426,17 @@ function cosmetic.buildUI()
 end
 
 function cosmetic.cleanup()
+    local wasEnabled =
+        cosmetic.enabled
+
+    cosmetic.enabled = false
+
     pcall(function()
-        if cosmetic.enabled then
+        if wasEnabled then
             cosmetic.refreshRig()
         end
     end)
 
-    cosmetic.enabled = false
     cosmetic.closePicker()
     cosmetic.refreshBusy = false
     cosmetic.skinDescription = nil
