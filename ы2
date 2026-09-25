@@ -2448,7 +2448,8 @@ end
 
 unusualRuntime.createAnimationSource = function(
     cosmeticRig,
-    id
+    id,
+    playerCharacter
 )
     unusualRuntime.destroyAnimationSource()
 
@@ -2470,71 +2471,121 @@ unusualRuntime.createAnimationSource = function(
     end
 
     source.Name =
-        "DeadEyeUnusualAnimation_" ..
+        "DeadEyeUnusualRuntime_" ..
         tostring(id)
 
-    for _, object in ipairs(
-        source:GetDescendants()
-    ) do
-        if object:IsA("Humanoid") then
-            pcall(function()
-                object:Destroy()
-            end)
-        elseif object:IsA("Script")
-            or object:IsA("LocalScript")
-            or object:IsA("ModuleScript")
-        then
-            pcall(function()
-                object:Destroy()
-            end)
-        elseif object:IsA("BasePart") then
-            pcall(function()
-                object.CanCollide = false
-                object.CanTouch = false
-                object.CanQuery = false
-                object.Massless = true
-                object.Transparency = 1
-                object.CastShadow = false
-                object.LocalTransparencyModifier = 1
-            end)
-        end
-    end
-
+    local hasClientDriver = false
     local controllerCount = 0
 
     for _, object in ipairs(
         source:GetDescendants()
     ) do
-        if object:IsA(
-            "AnimationController"
-        ) then
+
+        if object:IsA("Humanoid") then
+
+            pcall(function()
+                object:Destroy()
+            end)
+
+        elseif object:IsA("LocalScript")
+            or object:IsA("Script")
+        then
+
+            local isClientDriver =
+                object:IsA("LocalScript")
+
+            if object:IsA("Script") then
+                pcall(function()
+                    isClientDriver =
+                        object.RunContext ==
+                        Enum.RunContext.Client
+                end)
+            end
+
+            if isClientDriver then
+                hasClientDriver = true
+
+                pcall(function()
+                    object.Disabled = true
+                end)
+            else
+                pcall(function()
+                    object:Destroy()
+                end)
+            end
+
+        elseif object:IsA("AnimationController") then
+
             controllerCount += 1
+
+        elseif object:IsA("BasePart") then
+
+            pcall(function()
+                object.CanCollide = false
+                object.CanTouch = false
+                object.CanQuery = false
+                object.Massless = true
+                object.CastShadow = false
+            end)
+
         end
+
     end
 
-    if controllerCount == 0 then
-        source:Destroy()
+    if not hasClientDriver
+        and controllerCount == 0
+    then
+        pcall(function()
+            source:Destroy()
+        end)
         return nil
     end
 
-    local folder =
-        workspace:FindFirstChild(
-            "DeadEyeUnusualAnimationSources"
-        )
+    local bodyNames = {
+        Head = true,
+        Torso = true,
+        ["Left Arm"] = true,
+        ["Right Arm"] = true,
+        ["Left Leg"] = true,
+        ["Right Leg"] = true,
+        HumanoidRootPart = true
+    }
 
-    if not folder then
-        folder =
-            Instance.new("Folder")
+    for _, object in ipairs(
+        source:GetChildren()
+    ) do
 
-        folder.Name =
-            "DeadEyeUnusualAnimationSources"
+        if object:IsA("BasePart")
+            and bodyNames[object.Name]
+        then
 
-        folder.Parent =
-            workspace
+            pcall(function()
+                object.Transparency = 1
+                object.CastShadow = false
+                object.CanCollide = false
+                object.CanTouch = false
+                object.CanQuery = false
+                object.Massless = true
+                object.LocalTransparencyModifier = 1
+            end)
+
+            for _, child in ipairs(
+                object:GetChildren()
+            ) do
+
+                if child:IsA("Decal")
+                    or child:IsA("Texture")
+                then
+                    pcall(function()
+                        child.Transparency = 1
+                    end)
+                end
+
+            end
+
+        end
+
     end
-
-    source.Parent =
-        folder
 
     local root =
         source:FindFirstChild(
@@ -2544,15 +2595,130 @@ unusualRuntime.createAnimationSource = function(
     if not root
         or not root:IsA("BasePart")
     then
-        source:Destroy()
+        pcall(function()
+            source:Destroy()
+        end)
         return nil
     end
+
+    local targetRoot
+
+    if playerCharacter then
+        targetRoot =
+            playerCharacter:FindFirstChild(
+                "HumanoidRootPart"
+            )
+    end
+
+    if not targetRoot then
+        local rig =
+            getUnusualVisualRig()
+
+        if rig then
+            targetRoot =
+                rig:FindFirstChild(
+                    "HumanoidRootPart"
+                )
+        end
+    end
+
+    if not targetRoot
+        or not targetRoot:IsA("BasePart")
+    then
+        pcall(function()
+            source:Destroy()
+        end)
+        return nil
+    end
+
+    local pivotOffset =
+        root.CFrame:ToObjectSpace(
+            source:GetPivot()
+        )
+
+    if hasClientDriver
+        and playerCharacter
+    then
+
+        --// Client driver scripts need a
+        --// Character descendant in order to run.
+        --// Keep the clone visual-only: remove all
+        --// character joints so ragdoll cannot bind
+        --// to this copied Unusual.
+        for _, object in ipairs(
+            source:GetDescendants()
+        ) do
+
+            if object:IsA("Weld")
+                or object:IsA("WeldConstraint")
+                or object:IsA("Motor6D")
+                or object:IsA("Motor")
+            then
+
+                pcall(function()
+                    object:Destroy()
+                end)
+
+            end
+
+        end
+
+        source.Parent =
+            playerCharacter
+
+    else
+
+        local folder =
+            workspace:FindFirstChild(
+                "DeadEyeUnusualAnimationSources"
+            )
+
+        if not folder then
+            folder =
+                Instance.new("Folder")
+
+            folder.Name =
+                "DeadEyeUnusualAnimationSources"
+
+            folder.Parent =
+                workspace
+        end
+
+        source.Parent =
+            folder
+
+    end
+
+    pcall(function()
+        source:PivotTo(
+            targetRoot.CFrame *
+            pivotOffset
+        )
+    end)
 
     root.Anchored = true
 
     unusualRuntime.startAnimations(
         source
     )
+
+    if hasClientDriver then
+        for _, object in ipairs(
+            source:GetDescendants()
+        ) do
+
+            if object:IsA("LocalScript")
+                or object:IsA("Script")
+            then
+
+                pcall(function()
+                    object.Disabled = false
+                end)
+
+            end
+
+        end
+    end
 
     unusualRuntime.animationSource =
         source
@@ -3074,7 +3240,8 @@ local function applyUnusualFX(
     local animatedSource =
         unusualRuntime.createAnimationSource(
             cosmeticRig,
-            id
+            id,
+            playerCharacter
         )
 
     for _, sourcePart in ipairs(
