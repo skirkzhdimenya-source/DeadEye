@@ -1526,6 +1526,7 @@ Status.Parent =
 --//
 --// FX-only local replacement.
 --// =========================================================
+local UnusualFns = {}
 local unusualSlot = {
     originalId = nil,
     replaceId = 200,
@@ -2088,13 +2089,13 @@ local unusualRuntime = {
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
 --// =========================================================
-local function addUnusualConnection(connection)
+function UnusualFns.addUnusualConnection(connection)
     table.insert(
         unusualConnections,
         connection
     )
 end
-local function disconnectUnusualConnections()
+function UnusualFns.disconnectUnusualConnections()
     for _, connection in ipairs(
         unusualConnections
     ) do
@@ -2111,7 +2112,7 @@ end
 --// =========================================================
 --// UNUSUAL LIST
 --// =========================================================
-local function buildUnusualList()
+function UnusualFns.buildUnusualList()
     table.clear(
         unusualList
     )
@@ -2215,11 +2216,11 @@ local function buildUnusualList()
         tostring(#unusualList)
     )
     end
-buildUnusualList()
+UnusualFns.buildUnusualList()
 --// =========================================================
 --// GET UNUSUAL NAME
 --// =========================================================
-local function getUnusualName(id)
+function UnusualFns.getUnusualName(id)
     id =
         tonumber(id)
     if not id then
@@ -2242,7 +2243,7 @@ end
 --// =========================================================
 --// CURRENT EQUIPPED UNUSUAL
 --// =========================================================
-local function getEquippedUnusualId()
+function UnusualFns.getEquippedUnusualId()
     local value = 0
     pcall(function()
         value =
@@ -2257,12 +2258,12 @@ end
 --// First run: original = actual equipped Unusual.
 do
     local equipped =
-        getEquippedUnusualId()
+        UnusualFns.getEquippedUnusualId()
     if equipped ~= 0 then
         unusualSlot.originalId =
             equipped
         unusualSlot.originalName =
-            getUnusualName(
+            UnusualFns.getUnusualName(
                 equipped
             )
     end
@@ -2281,7 +2282,7 @@ do
             unusualSlot.originalId =
                 savedOriginal
             unusualSlot.originalName =
-                getUnusualName(
+                UnusualFns.getUnusualName(
                     savedOriginal
                 )
         end
@@ -2291,14 +2292,14 @@ do
         end
     end
     unusualSlot.replaceName =
-        getUnusualName(
+        UnusualFns.getUnusualName(
             unusualSlot.replaceId
         )
 end
 --// =========================================================
 --// GET REAL PLAYER CHARACTER
 --// =========================================================
-local function getUnusualPlayerCharacter()
+function UnusualFns.getUnusualPlayerCharacter()
     local folder =
         workspace:FindFirstChild(
             "Players"
@@ -2317,7 +2318,7 @@ end
 --// =========================================================
 --// GET VISUAL RIG
 --// =========================================================
-local function getUnusualVisualRig()
+function UnusualFns.getUnusualVisualRig()
     local folder =
         workspace:FindFirstChild(
             "Rigs"
@@ -2385,7 +2386,7 @@ end
 --// =========================================================
 --// GET COSMETIC RIG
 --// =========================================================
-local function getUnusualCosmeticRig(
+function UnusualFns.getUnusualCosmeticRig(
     id,
     visualRig
 )
@@ -2436,18 +2437,18 @@ local UNUSUAL_FX_CLASSES = {
     SurfaceLight = true,
     BillboardGui = true
 }
-local function isUnusualFX(object)
+function UnusualFns.isUnusualFX(object)
     return UNUSUAL_FX_CLASSES[
         object.ClassName
     ] == true
 end
-local function unusualAttachmentHasFX(
+function UnusualFns.unusualAttachmentHasFX(
     attachment
 )
     for _, descendant in ipairs(
         attachment:GetDescendants()
     ) do
-        if isUnusualFX(descendant) then
+        if UnusualFns.isUnusualFX(descendant) then
             return true
         end
     end
@@ -2457,7 +2458,7 @@ end
 --// =========================================================
 --// TAG OUR FX
 --// =========================================================
-local function tagUnusualFX(
+function UnusualFns.tagUnusualFX(
     object,
     id
 )
@@ -2619,7 +2620,7 @@ local function getNeededUnusualAttachments(
                 object,
                 sourcePart
             )
-            and unusualAttachmentHasFX(
+            and UnusualFns.unusualAttachmentHasFX(
                 object
             )
         then
@@ -2728,12 +2729,12 @@ local function unusualBasePartHasContent(
             sourcePart
         ) then
 
-            if isUnusualFX(object) then
+            if UnusualFns.isUnusualFX(object) then
                 return true
             end
 
             if object:IsA("Attachment")
-                and unusualAttachmentHasFX(
+                and UnusualFns.unusualAttachmentHasFX(
                     object
                 )
             then
@@ -3331,7 +3332,7 @@ unusualRuntime.installAnimatedNestedModels = function(
                 weld.Parent =
                     root
 
-                tagUnusualFX(
+                UnusualFns.tagUnusualFX(
                     clone,
                     id
                 )
@@ -3535,7 +3536,7 @@ unusualRuntime.createAnimationSource = function(
 
     if not targetRoot then
         local rig =
-            getUnusualVisualRig()
+            UnusualFns.getUnusualVisualRig()
 
         if rig then
             targetRoot =
@@ -3907,7 +3908,7 @@ unusualRuntime.updateAnimatedParts = function()
     end
 
     local targetRig =
-        getUnusualVisualRig()
+        UnusualFns.getUnusualVisualRig()
 
     local targetRoot
 
@@ -3920,7 +3921,7 @@ unusualRuntime.updateAnimatedParts = function()
 
     if not targetRoot then
         local character =
-            getUnusualPlayerCharacter()
+            UnusualFns.getUnusualPlayerCharacter()
 
         if character then
             targetRoot =
@@ -4198,7 +4199,7 @@ local function createUnusualAnchor(
     weld.Parent =
         anchor
 
-    tagUnusualFX(
+    UnusualFns.tagUnusualFX(
         anchor,
         id
     )
@@ -4410,7 +4411,7 @@ local function installUnusualPartFX(
                     clone.Parent =
                         currentTargetPart
 
-                    tagUnusualFX(
+                    UnusualFns.tagUnusualFX(
                         clone,
                         id
                     )
@@ -4447,7 +4448,7 @@ local function installUnusualPartFX(
                 currentSourcePart:GetDescendants()
             ) do
 
-                if isUnusualFX(
+                if UnusualFns.isUnusualFX(
                     sourceObject
                 )
                 and unusualObjectBelongsToPart(
@@ -4524,7 +4525,7 @@ local function installUnusualPartFX(
                         clone.Parent =
                             currentTargetPart
 
-                        tagUnusualFX(
+                        UnusualFns.tagUnusualFX(
                             clone,
                             id
                         )
@@ -4552,7 +4553,7 @@ local function applyUnusualFX(
 )
 
     local cosmeticRig =
-        getUnusualCosmeticRig(
+        UnusualFns.getUnusualCosmeticRig(
             id,
             visualRig
         )
@@ -4673,13 +4674,13 @@ end
 --// =========================================================
 --// REMOVE OUR FX
 -- =========================================================
-local function removeOurUnusualFX()
+function UnusualFns.removeOurUnusualFX()
     unusualRuntime.destroyAnimationSource()
 
     local removed = 0
     local roots = {
-        getUnusualVisualRig(),
-        getUnusualPlayerCharacter()
+        UnusualFns.getUnusualVisualRig(),
+        UnusualFns.getUnusualPlayerCharacter()
     }
     local seen = {}
     for _, root in ipairs(
@@ -4716,7 +4717,7 @@ end
 --// =========================================================
 --// CHECK OUR INSTALLED FX
 --// =========================================================
-local function hasOurUnusualFX(
+function UnusualFns.hasOurUnusualFX(
     root,
     id
 )
@@ -4762,12 +4763,12 @@ end
 --// =========================================================
 --// ORIGINAL SIGNATURE
 -- =========================================================
-local function buildOriginalUnusualSignature(
+function UnusualFns.buildOriginalUnusualSignature(
     id,
     visualRig
 )
     local cosmeticRig =
-        getUnusualCosmeticRig(
+        UnusualFns.getUnusualCosmeticRig(
             id,
             visualRig
         )
@@ -4781,7 +4782,7 @@ local function buildOriginalUnusualSignature(
     local function hasEffectContent(
         object
     )
-        if isUnusualFX(object) then
+        if UnusualFns.isUnusualFX(object) then
             return true
         end
 
@@ -4792,7 +4793,7 @@ local function buildOriginalUnusualSignature(
         for _, descendant in ipairs(
             object:GetDescendants()
         ) do
-            if isUnusualFX(descendant)
+            if UnusualFns.isUnusualFX(descendant)
                 or descendant:IsA("BasePart")
             then
                 return true
@@ -4865,13 +4866,13 @@ end
 --// =========================================================
 --// REMOVE ORIGINAL FX
 -- =========================================================
-local function removeOriginalUnusualFX(
+function UnusualFns.removeOriginalUnusualFX(
     id,
     visualRig,
     playerCharacter
 )
     local signature =
-        buildOriginalUnusualSignature(
+        UnusualFns.buildOriginalUnusualSignature(
             id,
             visualRig
         )
@@ -5058,18 +5059,18 @@ end
 --// =========================================================
 --// RESTORE UNUSUAL
 -- =========================================================
-local function restoreUnusual()
+function UnusualFns.restoreUnusual()
     if not unusualActive then
         return
     end
     local visualRig =
-        getUnusualVisualRig()
+        UnusualFns.getUnusualVisualRig()
     local playerCharacter =
-        getUnusualPlayerCharacter()
+        UnusualFns.getUnusualPlayerCharacter()
     if visualRig
         and unusualSlot.originalId
     then
-        removeOurUnusualFX()
+        UnusualFns.removeOurUnusualFX()
         task.wait()
         applyUnusualFX(
             unusualSlot.originalId,
@@ -5085,7 +5086,7 @@ end
 --// =========================================================
 --// ACTIVATE UNUSUAL
 -- =========================================================
-local function activateUnusual()
+function UnusualFns.activateUnusual()
     if not unusualSlot.originalId
         or not unusualSlot.replaceId
     then
@@ -5097,15 +5098,15 @@ local function activateUnusual()
         return false
     end
     local visualRig =
-        getUnusualVisualRig()
+        UnusualFns.getUnusualVisualRig()
     local playerCharacter =
-        getUnusualPlayerCharacter()
+        UnusualFns.getUnusualPlayerCharacter()
     if not visualRig then
         return false
     end
-                            removeOurUnusualFX()
+                            UnusualFns.removeOurUnusualFX()
     task.wait()
-    removeOriginalUnusualFX(
+    UnusualFns.removeOriginalUnusualFX(
         unusualSlot.originalId,
         visualRig,
         playerCharacter
@@ -5130,7 +5131,7 @@ local function activateUnusual()
         visualRig
     return true
 end
-local function reapplyUnusual()
+function UnusualFns.reapplyUnusual()
     if not unusualEnabled
         or unusualReapplyBusy
     then
@@ -5155,10 +5156,10 @@ local function reapplyUnusual()
             end
 
             local visualRig =
-                getUnusualVisualRig()
+                UnusualFns.getUnusualVisualRig()
 
             local playerCharacter =
-                getUnusualPlayerCharacter()
+                UnusualFns.getUnusualPlayerCharacter()
 
             local root =
                 visualRig
@@ -5180,11 +5181,11 @@ local function reapplyUnusual()
                 task.wait(0.2)
 
                 unusualActive = false
-                removeOurUnusualFX()
+                UnusualFns.removeOurUnusualFX()
 
                 local ok, result =
                     pcall(function()
-                        return activateUnusual()
+                        return UnusualFns.activateUnusual()
                     end)
 
                 if ok
@@ -5195,11 +5196,11 @@ local function reapplyUnusual()
                         (
                             #unusualRuntime.animatedNestedVisuals > 0
                         )
-                        or hasOurUnusualFX(
+                        or UnusualFns.hasOurUnusualFX(
                             visualRig,
                             unusualSlot.replaceId
                         )
-                        or hasOurUnusualFX(
+                        or UnusualFns.hasOurUnusualFX(
                             playerCharacter,
                             unusualSlot.replaceId
                         )
@@ -5231,7 +5232,7 @@ end
 --// =========================================================
 genv.DEADEYE_UNUSUAL_POV_RUNNING = true
 local lastUnusualPOVState = nil
-local function getUnusualViewmodel()
+function UnusualFns.getUnusualViewmodel()
     local camera =
         workspace.CurrentCamera
     if not camera then
@@ -5246,9 +5247,9 @@ local function getUnusualViewmodel()
     end
     return viewmodel
 end
-local function isUnusualFirstPerson()
+function UnusualFns.isUnusualFirstPerson()
     local visualRig =
-        getUnusualVisualRig()
+        UnusualFns.getUnusualVisualRig()
     if not visualRig then
         return false
     end
@@ -5309,14 +5310,14 @@ local function isUnusualFirstPerson()
     end
     return false
 end
-local function syncUnusualViewmodelAppearance()
+function UnusualFns.syncUnusualViewmodelAppearance()
     local visualRig =
-        getUnusualVisualRig()
+        UnusualFns.getUnusualVisualRig()
     if not visualRig then
         return
     end
     local viewmodel =
-        getUnusualViewmodel()
+        UnusualFns.getUnusualViewmodel()
     if not viewmodel then
         return
     end
@@ -5379,12 +5380,12 @@ local function syncUnusualViewmodelAppearance()
         end
     end
 end
-local function setUnusualFXForPOV(
+function UnusualFns.setUnusualFXForPOV(
     firstPerson
 )
     local roots = {
-        getUnusualVisualRig(),
-        getUnusualPlayerCharacter()
+        UnusualFns.getUnusualVisualRig(),
+        UnusualFns.getUnusualPlayerCharacter()
     }
     local seen = {}
     for _, root in ipairs(
@@ -5435,30 +5436,30 @@ local function setUnusualFXForPOV(
         end
     end
 end
-local function updateUnusualPOV()
+function UnusualFns.updateUnusualPOV()
     if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
         return
     end
-    syncUnusualViewmodelAppearance()
+    UnusualFns.syncUnusualViewmodelAppearance()
     local firstPerson =
-        isUnusualFirstPerson()
+        UnusualFns.isUnusualFirstPerson()
     if firstPerson
         ~= lastUnusualPOVState
     then
         lastUnusualPOVState =
             firstPerson
-        setUnusualFXForPOV(
+        UnusualFns.setUnusualFXForPOV(
             firstPerson
         )
     elseif unusualActive then
         --// Re-apply the state when the game recreates
         --// one of the tagged FX while staying in the same POV.
-        setUnusualFXForPOV(
+        UnusualFns.setUnusualFXForPOV(
             firstPerson
         )
     end
 end
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     RunService.Heartbeat:Connect(
         function()
 
@@ -5467,14 +5468,14 @@ addUnusualConnection(
             end
 
             unusualRuntime.updateAnimatedParts()
-            updateUnusualPOV()
+            UnusualFns.updateUnusualPOV()
 
             if unusualEnabled
                 and not unusualReapplyBusy
             then
 
                 local rig =
-                    getUnusualVisualRig()
+                    UnusualFns.getUnusualVisualRig()
 
                 if rig then
 
@@ -5482,19 +5483,19 @@ addUnusualConnection(
                         (
                             #unusualRuntime.animatedNestedVisuals > 0
                         )
-                        or hasOurUnusualFX(
+                        or UnusualFns.hasOurUnusualFX(
                             rig,
                             unusualSlot.replaceId
                         )
-                        or hasOurUnusualFX(
-                            getUnusualPlayerCharacter(),
+                        or UnusualFns.hasOurUnusualFX(
+                            UnusualFns.getUnusualPlayerCharacter(),
                             unusualSlot.replaceId
                         )
 
                     if unusualRuntime.appliedRig ~= rig
                         or not expected
                     then
-                        reapplyUnusual()
+                        UnusualFns.reapplyUnusual()
                     end
 
                 end
@@ -6099,7 +6100,7 @@ unusualPickerGrid.Parent =
 --// =========================================================
 --// REBUILD UNUSUAL PICKER
 --// =========================================================
-local function rebuildUnusualPicker()
+function UnusualFns.rebuildUnusualPicker()
 
     pcall(function()
         collectCurrentUnusualIcons(
@@ -6156,7 +6157,7 @@ local function rebuildUnusualPicker()
             button
         )
 
-        addUnusualConnection(
+        UnusualFns.addUnusualConnection(
             button.MouseButton1Click:Connect(
                 function()
                     if unusualPickerSide == "Original" then
@@ -6181,7 +6182,7 @@ local function rebuildUnusualPicker()
                     if unusualEnabled then
                         unusualEnabled = false
                         genv.UNUSUAL_SWAPPER_ENABLED = false
-                        restoreUnusual()
+                        UnusualFns.restoreUnusual()
                         updateUnusualToggle()
                     end
 
@@ -6464,7 +6465,7 @@ local function rebuildUnusualPicker()
                 unusualPickerButtons,
                 button
             )
-            addUnusualConnection(
+            UnusualFns.addUnusualConnection(
                 button.MouseButton1Click:Connect(
                     function()
                         if unusualPickerSide
@@ -6499,7 +6500,7 @@ local function rebuildUnusualPicker()
                             nil
                         if unusualEnabled then
                             task.spawn(
-                                reapplyUnusual
+                                UnusualFns.reapplyUnusual
                             )
                         end
                     end
@@ -6530,7 +6531,7 @@ end
 --// =========================================================
 --// OPEN / CLOSE PICKER
 -- =========================================================
-local function openUnusualPicker(
+function UnusualFns.openUnusualPicker(
     side
 )
     unusualPickerSide =
@@ -6549,51 +6550,51 @@ local function openUnusualPicker(
     unusualPicker.Visible =
         true
 
-    rebuildUnusualPicker()
+    UnusualFns.rebuildUnusualPicker()
 end
-local function closeUnusualPicker()
+function UnusualFns.closeUnusualPicker()
     unusualPicker.Visible =
         false
     unusualPickerSide =
         nil
 end
-addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
+UnusualFns.addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
         function()
-            openUnusualPicker(
+            UnusualFns.openUnusualPicker(
                 "Original"
             )
         end
     )
 )
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     unusualReplaceButton.MouseButton1Click:Connect(
         function()
-            openUnusualPicker(
+            UnusualFns.openUnusualPicker(
                 "Replace"
             )
         end
     )
 )
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     unusualPickerClose.MouseButton1Click:Connect(
         function()
-            closeUnusualPicker()
+            UnusualFns.closeUnusualPicker()
         end
     )
 )
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     unusualPickerSearch:GetPropertyChangedSignal(
         "Text"
     ):Connect(
         function()
             if unusualPicker.Visible then
-                rebuildUnusualPicker()
+                UnusualFns.rebuildUnusualPicker()
             end
         end
     )
 )
 
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     LocalPlayer:WaitForChild(
         "PlayerGui"
     ).DescendantAdded:Connect(
@@ -6605,7 +6606,7 @@ addUnusualConnection(
                     obj
                 )
 
-                addUnusualConnection(
+                UnusualFns.addUnusualConnection(
                     obj:GetPropertyChangedSignal(
                         "Image"
                     ):Connect(
@@ -6846,7 +6847,7 @@ function others.getHumanoids()
         end
     end
     local rig =
-        getUnusualVisualRig()
+        UnusualFns.getUnusualVisualRig()
     if rig then
         add(
             rig:FindFirstChildOfClass(
@@ -6855,7 +6856,7 @@ function others.getHumanoids()
         )
     end
     local character =
-        getUnusualPlayerCharacter()
+        UnusualFns.getUnusualPlayerCharacter()
     if character then
         add(
             character:FindFirstChildOfClass(
@@ -8469,7 +8470,7 @@ function others.row(
         slot.property
     ] =
         box
-    addUnusualConnection(
+    UnusualFns.addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
                 if others.applyField(
@@ -8494,7 +8495,7 @@ function others.row(
             end
         )
     )
-    addUnusualConnection(
+    UnusualFns.addUnusualConnection(
         box.FocusLost:Connect(
             function(enterPressed)
                 if enterPressed then
@@ -8625,7 +8626,7 @@ function others.quickRow(
         )
     applyCorner.Parent =
         apply
-    addUnusualConnection(
+    UnusualFns.addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
                 if others.applyBodyPart(
@@ -8853,7 +8854,7 @@ others.applyAllButtonCorner.CornerRadius =
     )
 others.applyAllButtonCorner.Parent =
     others.applyAllButton
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     others.applyAllButton.MouseButton1Click:Connect(
         function()
             if others.applyAll() then
@@ -9152,14 +9153,14 @@ others.resetCorner.CornerRadius =
     )
 others.resetCorner.Parent =
     others.resetButton
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     others.scanButton.MouseButton1Click:Connect(
         function()
             others.scan()
         end
     )
 )
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     others.clearButton.MouseButton1Click:Connect(
         function()
             if others.clearAccessories() then
@@ -9173,7 +9174,7 @@ addUnusualConnection(
         end
     )
 )
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     others.resetButton.MouseButton1Click:Connect(
         function()
             others.ensureSnapshot()
@@ -9530,7 +9531,7 @@ local function setCategory(
         end
     end)
 end
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     mainCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
@@ -9542,7 +9543,7 @@ addUnusualConnection(
         end
     )
 )
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     emoteCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
@@ -9554,7 +9555,7 @@ addUnusualConnection(
         end
     )
 )
-addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
+UnusualFns.addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
                 setMainMinimized(false)
@@ -9565,7 +9566,7 @@ addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
         end
     )
 )
-addUnusualConnection(
+UnusualFns.addUnusualConnection(
     othersCategoryButton.MouseButton1Click:Connect(
         function()
             if mainMinimized then
@@ -9588,7 +9589,7 @@ local function cleanupUnusual()
         true
     if unusualActive then
         pcall(function()
-            restoreUnusual()
+            UnusualFns.restoreUnusual()
         end)
     end
     pcall(function()
@@ -9600,9 +9601,9 @@ local function cleanupUnusual()
     unusualRuntime.appliedRig = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
-    disconnectUnusualConnections()
+    UnusualFns.disconnectUnusualConnections()
     pcall(function()
-        removeOurUnusualFX()
+        UnusualFns.removeOurUnusualFX()
     end)
     genv.DEADEYE_MAIN_RUNNING = false
     pcall(function()
@@ -11487,7 +11488,7 @@ addConnection(
                         false
                     genv.UNUSUAL_SWAPPER_ENABLED =
                         false
-                    restoreUnusual()
+                    UnusualFns.restoreUnusual()
                 else
                     if not unusualSlot.originalId
                         or not unusualSlot.replaceId
@@ -11496,11 +11497,11 @@ addConnection(
                             "Select both Unusuals first"
                         return
                     end
-                    if activateUnusual() then
+                    if UnusualFns.activateUnusual() then
                         unusualEnabled =
                             true
                         unusualRuntime.appliedRig =
-                            getUnusualVisualRig()
+                            UnusualFns.getUnusualVisualRig()
                         genv.UNUSUAL_SWAPPER_ENABLED =
                             true
                     end
