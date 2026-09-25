@@ -554,10 +554,13 @@ end
 local EmoteRuntime =
     loadstring(
         game:HttpGet(
-            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_EmoteRuntime.lua"
+            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/a424881ee7e4e542b46a543aaf489734afd102ea/DeadEye_EmoteRuntime.lua"
         ),
         "@DeadEye_EmoteRuntime"
-    )(
+    )()
+
+if type(EmoteRuntime) == "function" then
+    EmoteRuntime = EmoteRuntime(
         {
             genv = genv,
             isEnabled = function()
@@ -567,6 +570,13 @@ local EmoteRuntime =
             originalAnimationIds = originalAnimationIds
         }
     )
+end
+
+if type(EmoteRuntime) ~= "table" then
+    error(
+        "[DeadEye] EmoteRuntime module did not return an API table"
+    )
+end
 --// GUI PARENT
 --// =========================================================
 local guiParent
