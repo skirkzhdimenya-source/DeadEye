@@ -8595,6 +8595,19 @@ mainConnect(
             then
                 return
             end
+
+            local humanoid = mainJump.humanoid
+
+            pcall(function()
+                humanoid:SetStateEnabled(
+                    Enum.HumanoidStateType.Jumping,
+                    true
+                )
+                humanoid.Jump = true
+                humanoid:ChangeState(
+                    Enum.HumanoidStateType.Jumping
+                )
+            end)
         end
     )
 )
