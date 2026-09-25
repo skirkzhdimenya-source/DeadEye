@@ -24,61 +24,60 @@
 --//   drag
 --//   close button
 --// =========================================================
-local D = {}
-D.ReplicatedStorage = game:GetService("ReplicatedStorage")
-D.__UI = {}
-D.Players = game:GetService("Players")
-D.UserInputService = game:GetService("UserInputService")
-D.RunService = game:GetService("RunService")
-local LocalPlayer = D.Players.LocalPlayer
-D.genv = getgenv and getgenv() or _G
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local __UI = {}
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local genv = getgenv and getgenv() or _G
 --// =========================================================
 --// PREVIOUS INSTANCE CLEANUP
 --// =========================================================
-if D.genv.UNUSUAL_SWAPPER_CLEANUP then
+if genv.UNUSUAL_SWAPPER_CLEANUP then
     pcall(function()
-        D.genv.UNUSUAL_SWAPPER_CLEANUP()
+        genv.UNUSUAL_SWAPPER_CLEANUP()
     end)
 end
-if D.genv.DEADEYE_PORTRAIT_CLEANUP then
+if genv.DEADEYE_PORTRAIT_CLEANUP then
     pcall(function()
-        D.genv.DEADEYE_PORTRAIT_CLEANUP()
+        genv.DEADEYE_PORTRAIT_CLEANUP()
     end)
 end
-if D.genv.EMOTE_SWAPPER_CLEANUP then
+if genv.EMOTE_SWAPPER_CLEANUP then
     pcall(function()
-        D.genv.EMOTE_SWAPPER_CLEANUP()
+        genv.EMOTE_SWAPPER_CLEANUP()
     end)
 end
-D.genv.DEADEYE_MAIN_RUNNING = true
-D.genv.EMOTE_SWAPPER_RUNNING = true
-D.genv.DEADEYE_PORTRAIT_RUNNING = true
+genv.DEADEYE_MAIN_RUNNING = true
+genv.EMOTE_SWAPPER_RUNNING = true
+genv.DEADEYE_PORTRAIT_RUNNING = true
 --// =========================================================
 --// SERVICES
 --// =========================================================
-D.__UI.CharacterService = require(
-    D.ReplicatedStorage.Services.Asset.CharacterService
+__UI.CharacterService = require(
+    ReplicatedStorage.Services.Asset.CharacterService
 )
-D.__UI.ClientItemService = require(
-    D.ReplicatedStorage.Services.Items.ClientItemService
+__UI.ClientItemService = require(
+    ReplicatedStorage.Services.Items.ClientItemService
 )
-D.__UI.EmoteService = require(
-    D.ReplicatedStorage.Services.Items.EmoteService
+__UI.EmoteService = require(
+    ReplicatedStorage.Services.Items.EmoteService
 )
-D.Registry = require(
-    D.ReplicatedStorage.Items.Registry
+local Registry = require(
+    ReplicatedStorage.Items.Registry
 )
-D.HttpService = game:GetService("HttpService")
+local HttpService = game:GetService("HttpService")
 --// =========================================================
 --// SETTINGS
 --// =========================================================
-D.SLOT_COUNT = 12
-D.CONFIG_FILE = "DeadEye_Config.json"
-D.savedConfig = {
+local SLOT_COUNT = 12
+local CONFIG_FILE = "DeadEye_Config.json"
+local savedConfig = {
     version = 1,
     emotes = {},
     unusual = {},
-    D.others = {},
+    others = {},
     main = {
         jumpDelay = 0.01,
         hotkey = "Z",
@@ -99,7 +98,7 @@ function loadSavedConfig()
     if type(isfile) == "function" then
         local exists = false
         pcall(function()
-            exists = isfile(D.CONFIG_FILE)
+            exists = isfile(CONFIG_FILE)
         end)
         if not exists then
             return
@@ -108,7 +107,7 @@ function loadSavedConfig()
     success, raw =
         pcall(function()
             return readfile(
-                D.CONFIG_FILE
+                CONFIG_FILE
             )
         end)
     if not success
@@ -119,7 +118,7 @@ function loadSavedConfig()
     end
     local decodeSuccess, decoded =
         pcall(function()
-            return D.HttpService:JSONDecode(
+            return HttpService:JSONDecode(
                 raw
             )
         end)
@@ -132,59 +131,59 @@ function loadSavedConfig()
         return
     end
     if type(decoded.emotes) == "table" then
-        D.savedConfig.emotes =
+        savedConfig.emotes =
             decoded.emotes
     end
     if type(decoded.unusual) == "table" then
-        D.savedConfig.unusual =
+        savedConfig.unusual =
             decoded.unusual
     end
     if type(decoded.others) == "table" then
-        D.savedConfig.others =
+        savedConfig.others =
             decoded.others
     end
     if type(decoded.main) == "table" then
-        D.savedConfig.main =
+        savedConfig.main =
             decoded.main
     end
-    D.savedConfig.main.hideUIHotkey =
-        D.savedConfig.main.hideUIHotkey
+    savedConfig.main.hideUIHotkey =
+        savedConfig.main.hideUIHotkey
         or "H"
 
     if type(decoded.gui) == "table" then
-        D.savedConfig.gui = D.savedConfig.gui or {}
+        savedConfig.gui = savedConfig.gui or {}
 
-        D.savedConfig.gui.x =
+        savedConfig.gui.x =
             tonumber(decoded.gui.x)
-            or D.savedConfig.gui.x
+            or savedConfig.gui.x
             or 35
 
-        D.savedConfig.gui.y =
+        savedConfig.gui.y =
             tonumber(decoded.gui.y)
-            or D.savedConfig.gui.y
+            or savedConfig.gui.y
             or 80
 
-        D.savedConfig.gui.width =
+        savedConfig.gui.width =
             tonumber(decoded.gui.width)
-            or D.savedConfig.gui.width
+            or savedConfig.gui.width
             or 455
 
-        D.savedConfig.gui.height =
+        savedConfig.gui.height =
             tonumber(decoded.gui.height)
-            or D.savedConfig.gui.height
+            or savedConfig.gui.height
             or 320
     end
 
-    D.savedConfig.gui.x =
-        tonumber(D.savedConfig.gui.x) or 35
-    D.savedConfig.gui.y =
-        tonumber(D.savedConfig.gui.y) or 80
-    D.savedConfig.gui.width =
-        tonumber(D.savedConfig.gui.width) or 455
-    D.savedConfig.gui.height =
-        tonumber(D.savedConfig.gui.height) or 320
+    savedConfig.gui.x =
+        tonumber(savedConfig.gui.x) or 35
+    savedConfig.gui.y =
+        tonumber(savedConfig.gui.y) or 80
+    savedConfig.gui.width =
+        tonumber(savedConfig.gui.width) or 455
+    savedConfig.gui.height =
+        tonumber(savedConfig.gui.height) or 320
 
-    D.savedConfig.version =
+    savedConfig.version =
         tonumber(decoded.version)
         or 1
 end
@@ -194,8 +193,8 @@ function saveSavedConfig()
     end
     local success, raw =
         pcall(function()
-            return D.HttpService:JSONEncode(
-                D.savedConfig
+            return HttpService:JSONEncode(
+                savedConfig
             )
         end)
     if not success
@@ -210,7 +209,7 @@ function saveSavedConfig()
     local writeSuccess, writeError =
         pcall(function()
             writefile(
-                D.CONFIG_FILE,
+                CONFIG_FILE,
                 raw
             )
         end)
@@ -230,7 +229,7 @@ loadSavedConfig()
 
 local portrait = {
     state = {},
-    D.connections = {},
+    connections = {},
     watched = {},
     rigSignature = "",
     refreshQueued = false
@@ -496,7 +495,7 @@ function portrait.watch(source)
     table.insert(
         portrait.connections,
         source:GetPropertyChangedSignal("Image"):Connect(function()
-            if D.genv.DEADEYE_PORTRAIT_RUNNING then
+            if genv.DEADEYE_PORTRAIT_RUNNING then
                 portrait.apply(source)
             end
         end)
@@ -604,7 +603,7 @@ function portrait.start()
     table.insert(
         portrait.connections,
         playerGui.DescendantAdded:Connect(function(obj)
-            if D.genv.DEADEYE_PORTRAIT_RUNNING then
+            if genv.DEADEYE_PORTRAIT_RUNNING then
                 portrait.watch(obj)
             end
         end)
@@ -612,9 +611,9 @@ function portrait.start()
 
     table.insert(
         portrait.connections,
-        D.RunService.Heartbeat:Connect(function()
+        RunService.Heartbeat:Connect(function()
 
-            if not D.genv.DEADEYE_PORTRAIT_RUNNING then
+            if not genv.DEADEYE_PORTRAIT_RUNNING then
                 return
             end
 
@@ -629,7 +628,7 @@ function portrait.start()
                     task.defer(function()
                         portrait.refreshQueued = false
 
-                        if D.genv.DEADEYE_PORTRAIT_RUNNING then
+                        if genv.DEADEYE_PORTRAIT_RUNNING then
                             portrait.refresh()
                         end
                     end)
@@ -646,7 +645,7 @@ end
 
 function portrait.cleanup()
 
-    D.genv.DEADEYE_PORTRAIT_RUNNING = false
+    genv.DEADEYE_PORTRAIT_RUNNING = false
 
     for _, connection in ipairs(portrait.connections) do
         pcall(function()
@@ -668,14 +667,14 @@ function portrait.cleanup()
 
 end
 
-D.genv.DEADEYE_PORTRAIT_CLEANUP = portrait.cleanup
+genv.DEADEYE_PORTRAIT_CLEANUP = portrait.cleanup
 
 --// =========================================================
 --// SLOTS
 --// =========================================================
-D.slots = {}
-for i = 1, D.SLOT_COUNT do
-    D.slots[i] = {
+local slots = {}
+for i = 1, SLOT_COUNT do
+    slots[i] = {
         originalId = nil,
         replaceId = nil,
         originalName = nil,
@@ -683,25 +682,25 @@ for i = 1, D.SLOT_COUNT do
     }
 end
 --// DEFAULT SLOT
-D.slots[1].originalId = 1631
-D.slots[1].replaceId = 51
-D.slots[1].originalName = "Banger"
-D.slots[1].replaceName = "RockinStride"
+slots[1].originalId = 1631
+slots[1].replaceId = 51
+slots[1].originalName = "Banger"
+slots[1].replaceName = "RockinStride"
 --// Load saved Emote mappings.
-for i = 1, D.SLOT_COUNT do
+for i = 1, SLOT_COUNT do
     local saved =
-        D.savedConfig.emotes[i]
+        savedConfig.emotes[i]
     if type(saved) == "table" then
         local originalId =
             tonumber(saved.originalId)
         local replaceId =
             tonumber(saved.replaceId)
         if originalId then
-            D.slots[i].originalId =
+            slots[i].originalId =
                 originalId
         end
         if replaceId then
-            D.slots[i].replaceId =
+            slots[i].replaceId =
                 replaceId
         end
     end
@@ -709,61 +708,61 @@ end
 --// =========================================================
 --// RUNTIME STATE
 --// =========================================================
-D.enabled = false
-D.currentCustomEmote = nil
-D.currentOriginalId = nil
-D.currentReplaceId = nil
-D.replacementRunning = false
-D.replacementGeneration = 0
-D.lastRegistryEmote = 0
-D.cleaned = false
-D.connections = {}
+local enabled = false
+local currentCustomEmote = nil
+local currentOriginalId = nil
+local currentReplaceId = nil
+local replacementRunning = false
+local replacementGeneration = 0
+local lastRegistryEmote = 0
+local cleaned = false
+local connections = {}
 
 --// Native wheel visual state.
 --// Keys are logical wheel positions ("Wheel:1", "Wheel2:4"),
 --// not GUI Instances. The game can recreate Emote1..Emote6;
 --// logical state survives those recreations and repeated ON/OFF.
-D.nativeWheelStates = {}
-D.nativeWheelRestoreDone = false
+local nativeWheelStates = {}
+local nativeWheelRestoreDone = false
 --// =========================================================
 --// CACHE
 --// =========================================================
-D.originalModules = {}
-D.replaceModules = {}
+local originalModules = {}
+local replaceModules = {}
 -- [originalId] = { [animationId] = true }
-D.originalAnimationIds = {}
-D.emoteList = {}
+local originalAnimationIds = {}
+local emoteList = {}
 --// =========================================================
 --// GUI STATE
 --// =========================================================
-D.ScreenGui
-D.Main
-D.SlotsScroll
-D.Picker
-D.PickerScroll
-D.PickerSearch
-D.PickerTitle
-D.PickerClose
-D.Status
-D.Toggle
-D.activePickerSlot = nil
-D.activePickerSide = nil
-D.slotOriginalButtons = {}
-D.slotReplaceButtons = {}
-D.pickerButtons = {}
+local ScreenGui
+local Main
+local SlotsScroll
+local Picker
+local PickerScroll
+local PickerSearch
+local PickerTitle
+local PickerClose
+local Status
+local Toggle
+local activePickerSlot = nil
+local activePickerSide = nil
+local slotOriginalButtons = {}
+local slotReplaceButtons = {}
+local pickerButtons = {}
 --// =========================================================
 --// CONNECTION HELPER
 --// =========================================================
 function DEADEYE_FN_addConnection(connection)
-    table.insert(D.connections, connection)
+    table.insert(connections, connection)
 end
 function DEADEYE_FN_disconnectAll()
-    for _, connection in ipairs(D.connections) do
+    for _, connection in ipairs(connections) do
         pcall(function()
             connection:Disconnect()
         end)
     end
-    table.clear(D.connections)
+    table.clear(connections)
 end
 --// =========================================================
 --// NORMALIZE ANIMATION ID
@@ -788,7 +787,7 @@ function getItemModule(id)
         return nil
     end
     local success, result = pcall(function()
-        return D.__UI.ClientItemService:GetItemFromID(id)
+        return __UI.ClientItemService:GetItemFromID(id)
     end)
     if success then
         return result
@@ -799,10 +798,10 @@ end
 --// BUILD EMOTE LIST
 --// =========================================================
 function buildEmoteList()
-    table.clear(D.emoteList)
+    table.clear(emoteList)
     local all
     local success, result = pcall(function()
-        return D.Registry.GetAll()
+        return Registry.GetAll()
     end)
     if not success then
         warn(
@@ -830,7 +829,7 @@ function buildEmoteList()
                     tonumber(id)
                 if numericId then
                     table.insert(
-                        D.emoteList,
+                        emoteList,
                         {
                             id = numericId,
                             name = data.Module.Name,
@@ -842,7 +841,7 @@ function buildEmoteList()
         end
     end
     table.sort(
-        D.emoteList,
+        emoteList,
         function(a, b)
             return a.id < b.id
         end
@@ -857,15 +856,15 @@ function prepareOriginalModule(id)
     if not id then
         return nil
     end
-    if D.originalModules[id] then
-        return D.originalModules[id]
+    if originalModules[id] then
+        return originalModules[id]
     end
     local module =
         getItemModule(id)
     if not module then
         return nil
     end
-    D.originalModules[id] =
+    originalModules[id] =
         module
     local animationSet = {}
     for _, object in ipairs(
@@ -881,7 +880,7 @@ function prepareOriginalModule(id)
             end
         end
     end
-    D.originalAnimationIds[id] =
+    originalAnimationIds[id] =
         animationSet
     return module
 end
@@ -893,15 +892,15 @@ function prepareReplaceModule(id)
     if not id then
         return nil
     end
-    if D.replaceModules[id] then
-        return D.replaceModules[id]
+    if replaceModules[id] then
+        return replaceModules[id]
     end
     local module =
         getItemModule(id)
     if not module then
         return nil
     end
-    D.replaceModules[id] =
+    replaceModules[id] =
         module
     return module
 end
@@ -914,7 +913,7 @@ function getEmoteName(id)
         return nil
     end
     for _, data in ipairs(
-        D.emoteList
+        emoteList
     ) do
         if data.id == id then
             return data.name
@@ -931,9 +930,9 @@ end
 --// PREPARE ALL CONFIGURED SLOTS
 --// =========================================================
 function prepareSlots()
-    for i = 1, D.SLOT_COUNT do
+    for i = 1, SLOT_COUNT do
         local slot =
-            D.slots[i]
+            slots[i]
         if slot.originalId then
             local module =
                 prepareOriginalModule(
@@ -964,7 +963,7 @@ function getCharacterObject()
     local object
     local success = pcall(function()
         object =
-            D.__UI.CharacterService:GetLocalCharacter()
+            __UI.CharacterService:GetLocalCharacter()
     end)
     if not success or not object then
         return nil
@@ -1100,15 +1099,15 @@ function DEADEYE_FN_stopOriginalTracks(
         return
     end
     local animationSet =
-        D.originalAnimationIds[
+        originalAnimationIds[
             originalId
         ]
     local replacementAnimationIds = {}
     --// Не убивать наши replacement tracks.
-    if D.currentCustomEmote
-        and D.currentCustomEmote.Animations then
+    if currentCustomEmote
+        and currentCustomEmote.Animations then
         for _, track in pairs(
-            D.currentCustomEmote.Animations
+            currentCustomEmote.Animations
         ) do
             if typeof(track) == "Instance"
                 and track:IsA(
@@ -1168,10 +1167,10 @@ function DEADEYE_FN_stopOriginalSounds(object)
         return
     end
     local keepSound = nil
-    if D.currentCustomEmote
-        and D.currentCustomEmote.EmoteSound then
+    if currentCustomEmote
+        and currentCustomEmote.EmoteSound then
         keepSound =
-            D.currentCustomEmote.EmoteSound
+            currentCustomEmote.EmoteSound
     end
     local seen = {}
     local roots = {
@@ -1212,31 +1211,31 @@ end
 --// STOP CUSTOM
 -- =========================================================
 function DEADEYE_FN_stopCustomEmote()
-    D.replacementGeneration =
-        D.replacementGeneration + 1
-    D.replacementRunning = false
+    replacementGeneration =
+        replacementGeneration + 1
+    replacementRunning = false
 
     local object =
         getCharacterObject()
 
-    if D.currentCustomEmote then
+    if currentCustomEmote then
         if object
             and object.Emote
-            == D.currentCustomEmote
+            == currentCustomEmote
         then
             object.Emote = nil
         end
 
         DEADEYE_FN_stopEmoteObject(
-            D.currentCustomEmote
+            currentCustomEmote
         )
 
-        D.currentCustomEmote =
+        currentCustomEmote =
             nil
     end
 
-    D.currentOriginalId = nil
-    D.currentReplaceId = nil
+    currentOriginalId = nil
+    currentReplaceId = nil
 end
 --// =========================================================
 --// CREATE REPLACEMENT
@@ -1266,7 +1265,7 @@ function DEADEYE_FN_createReplacement(
     end
     local success, result =
         pcall(function()
-            return D.__UI.EmoteService:SetEmote(
+            return __UI.EmoteService:SetEmote(
                 character,
                 replaceModule,
                 false,
@@ -1291,7 +1290,7 @@ function DEADEYE_FN_startReplacement(
     object,
     slot
 )
-    if D.replacementRunning then
+    if replacementRunning then
         return
     end
     if not slot then
@@ -1301,11 +1300,11 @@ function DEADEYE_FN_startReplacement(
         or not slot.replaceId then
         return
     end
-    D.replacementRunning = true
-    D.replacementGeneration =
-        D.replacementGeneration + 1
+    replacementRunning = true
+    replacementGeneration =
+        replacementGeneration + 1
     local myGeneration =
-        D.replacementGeneration
+        replacementGeneration
     local originalId =
         slot.originalId
     local replaceId =
@@ -1313,26 +1312,26 @@ function DEADEYE_FN_startReplacement(
     task.spawn(function()
         --// Даём штатному коду игры создать оригинал
         task.wait()
-        if not D.genv.EMOTE_SWAPPER_RUNNING
-            or not D.enabled then
-            D.replacementRunning = false
+        if not genv.EMOTE_SWAPPER_RUNNING
+            or not enabled then
+            replacementRunning = false
             return
         end
         if myGeneration ~=
-            D.replacementGeneration then
-            D.replacementRunning = false
+            replacementGeneration then
+            replacementRunning = false
             return
         end
         if DEADEYE_FN_getCurrentEmoteId(object)
             ~= originalId then
-            D.replacementRunning = false
+            replacementRunning = false
             return
         end
         --// =================================================
         --// ГАСИМ ОРИГИНАЛ
         --// =================================================
         if object.Emote
-            and object.Emote ~= D.currentCustomEmote then
+            and object.Emote ~= currentCustomEmote then
             DEADEYE_FN_stopEmoteObject(
                 object.Emote
             )
@@ -1357,23 +1356,23 @@ function DEADEYE_FN_startReplacement(
                 replaceId
             )
         if not replacement then
-            D.replacementRunning = false
+            replacementRunning = false
             return
         end
         if myGeneration ~=
-            D.replacementGeneration
-            or not D.enabled then
+            replacementGeneration
+            or not enabled then
             DEADEYE_FN_stopEmoteObject(
                 replacement
             )
-            D.replacementRunning = false
+            replacementRunning = false
             return
         end
-        D.currentCustomEmote =
+        currentCustomEmote =
             replacement
-        D.currentOriginalId =
+        currentOriginalId =
             originalId
-        D.currentReplaceId =
+        currentReplaceId =
             replaceId
         object.Emote =
             replacement
@@ -1386,14 +1385,14 @@ function DEADEYE_FN_startReplacement(
                 "State"
             )
         end)
-                D.replacementRunning = false
+                replacementRunning = false
     end)
 end
 --// =========================================================
 --// MAIN STATE WATCHER
 -- =========================================================
 function DEADEYE_FN_checkState()
-    if not D.genv.EMOTE_SWAPPER_RUNNING then
+    if not genv.EMOTE_SWAPPER_RUNNING then
         return
     end
     local object =
@@ -1408,10 +1407,10 @@ function DEADEYE_FN_checkState()
     --// =====================================================
     if not emoteId
         or emoteId == 0 then
-        if D.currentCustomEmote then
+        if currentCustomEmote then
                     end
         DEADEYE_FN_stopCustomEmote()
-        D.lastRegistryEmote = 0
+        lastRegistryEmote = 0
         return
     end
     --// =====================================================
@@ -1425,10 +1424,10 @@ function DEADEYE_FN_checkState()
     --// NO SLOT
     --// =====================================================
     if not slot then
-        if D.currentCustomEmote then
+        if currentCustomEmote then
             DEADEYE_FN_stopCustomEmote()
         end
-        D.lastRegistryEmote =
+        lastRegistryEmote =
             emoteId
         return
     end
@@ -1437,13 +1436,13 @@ function DEADEYE_FN_checkState()
     --// ЕСЛИ ORIGINAL АКТИВНА, НО REPLACEMENT ПОЧЕМУ-ТО
     --// ПРОПАЛ - ЗАПУСКАЕМ ЕГО СНОВА.
     --// =====================================================
-    if not D.currentCustomEmote
-        and not D.replacementRunning then
+    if not currentCustomEmote
+        and not replacementRunning then
         DEADEYE_FN_startReplacement(
             object,
             slot
         )
-        D.lastRegistryEmote =
+        lastRegistryEmote =
             emoteId
         return
     end
@@ -1451,7 +1450,7 @@ function DEADEYE_FN_checkState()
     --// WHILE ACTIVE:
     --// CONTINUOUSLY SUPPRESS ORIGINAL
     --// =====================================================
-    if D.currentCustomEmote then
+    if currentCustomEmote then
         DEADEYE_FN_stopOriginalTracks(
             object,
             emoteId
@@ -1462,15 +1461,15 @@ function DEADEYE_FN_checkState()
         --// Если штатная система снова создала
         --// оригинальный Emote object.
         if object.Emote
-            and object.Emote ~= D.currentCustomEmote then
+            and object.Emote ~= currentCustomEmote then
             DEADEYE_FN_stopEmoteObject(
                 object.Emote
             )
             object.Emote =
-                D.currentCustomEmote
+                currentCustomEmote
         end
     end
-    D.lastRegistryEmote =
+    lastRegistryEmote =
         emoteId
 end
 --// =========================================================
@@ -1481,9 +1480,9 @@ function getSlotByOriginalId(id)
     if not id then
         return nil
     end
-    for i = 1, D.SLOT_COUNT do
+    for i = 1, SLOT_COUNT do
         local slot =
-            D.slots[i]
+            slots[i]
         if slot.originalId == id
             and slot.replaceId then
             return slot, i
@@ -1494,66 +1493,66 @@ end
 --// =========================================================
 --// GUI PARENT
 --// =========================================================
-D.guiParent
+local guiParent
 pcall(function()
-    D.guiParent = gethui()
+    guiParent = gethui()
 end)
-if not D.guiParent then
-    D.guiParent =
+if not guiParent then
+    guiParent =
         game:GetService("CoreGui")
 end
 --// =========================================================
 --// SCREEN GUI
 --// =========================================================
-D.ScreenGui =
+ScreenGui =
     Instance.new("ScreenGui")
-D.ScreenGui.Name =
+ScreenGui.Name =
     "EmoteSwapperGUI"
-D.ScreenGui.ResetOnSpawn =
+ScreenGui.ResetOnSpawn =
     false
-D.ScreenGui.ZIndexBehavior =
+ScreenGui.ZIndexBehavior =
     Enum.ZIndexBehavior.Sibling
-D.ScreenGui.Parent =
-    D.guiParent
+ScreenGui.Parent =
+    guiParent
 --// =========================================================
 --// MAIN
 --// =========================================================
-D.Main =
+Main =
     Instance.new("Frame")
-D.Main.Size =
+Main.Size =
     UDim2.new(
         0,
         math.max(
             455,
-            D.savedConfig.gui.width
+            savedConfig.gui.width
         ),
         0,
         math.max(
             285,
-            D.savedConfig.gui.height
+            savedConfig.gui.height
         )
     )
-D.Main.Position =
+Main.Position =
     UDim2.new(
         0,
-        D.savedConfig.gui.x,
+        savedConfig.gui.x,
         0,
-        D.savedConfig.gui.y
+        savedConfig.gui.y
     )
-D.Main.BackgroundColor3 =
+Main.BackgroundColor3 =
     Color3.fromRGB(
         18,
         20,
         24
     )
-D.Main.BackgroundTransparency =
+Main.BackgroundTransparency =
     1
-D.Main.BorderSizePixel =
+Main.BorderSizePixel =
     0
-D.Main.ClipsDescendants =
+Main.ClipsDescendants =
     true
-D.Main.Parent =
-    D.ScreenGui
+Main.Parent =
+    ScreenGui
 
 local MainSurface =
     Instance.new("Frame")
@@ -1597,7 +1596,7 @@ MainSurface.ClipsDescendants =
     true
 
 MainSurface.Parent =
-    D.Main
+    Main
 
 local MainSurfaceCorner =
     Instance.new("UICorner")
@@ -1623,11 +1622,11 @@ MainSurfaceStroke.Transparency =
 MainSurfaceStroke.Parent =
     MainSurface
 
-D.__UI.MainGradient =
+__UI.MainGradient =
     Instance.new("UIGradient")
-D.__UI.MainGradient.Rotation =
+__UI.MainGradient.Rotation =
     115
-D.__UI.MainGradient.Color =
+__UI.MainGradient.Color =
     ColorSequence.new({
         ColorSequenceKeypoint.new(
             0,
@@ -1654,9 +1653,9 @@ D.__UI.MainGradient.Color =
             )
         )
     })
-D.__UI.MainGradient.Transparency =
+__UI.MainGradient.Transparency =
     NumberSequence.new(0.20)
-D.__UI.MainGradient.Parent =
+__UI.MainGradient.Parent =
     MainSurface
 
 --// MainSurface owns the outer rounded shell; keep Main itself fully transparent.
@@ -1692,7 +1691,7 @@ MainHeader.BorderSizePixel =
 MainHeader.ZIndex =
     1
 MainHeader.Parent =
-    D.Main
+    Main
 
 local MainHeaderCorner =
     Instance.new("UICorner")
@@ -1706,11 +1705,11 @@ MainHeaderCorner.CornerRadius =
 MainHeaderCorner.Parent =
     MainHeader
 
-D.__UI.MainHeaderGradient =
+__UI.MainHeaderGradient =
     Instance.new("UIGradient")
-D.__UI.MainHeaderGradient.Rotation =
+__UI.MainHeaderGradient.Rotation =
     90
-D.__UI.MainHeaderGradient.Color =
+__UI.MainHeaderGradient.Color =
     ColorSequence.new({
         ColorSequenceKeypoint.new(
             0,
@@ -1729,237 +1728,237 @@ D.__UI.MainHeaderGradient.Color =
             )
         )
     })
-D.__UI.MainHeaderGradient.Transparency =
+__UI.MainHeaderGradient.Transparency =
     NumberSequence.new(0.18)
-D.__UI.MainHeaderGradient.Parent =
+__UI.MainHeaderGradient.Parent =
     MainHeader
 
-D.__UI.MainHeaderLine =
+__UI.MainHeaderLine =
     Instance.new("Frame")
-D.__UI.MainHeaderLine.Name =
+__UI.MainHeaderLine.Name =
     "HeaderAccent"
-D.__UI.MainHeaderLine.Size =
+__UI.MainHeaderLine.Size =
     UDim2.new(
         1,
         -24,
         0,
         1
     )
-D.__UI.MainHeaderLine.Position =
+__UI.MainHeaderLine.Position =
     UDim2.new(
         0,
         12,
         1,
         -1
     )
-D.__UI.MainHeaderLine.BackgroundTransparency =
+__UI.MainHeaderLine.BackgroundTransparency =
     1
-D.__UI.MainHeaderLine.Visible =
+__UI.MainHeaderLine.Visible =
     false
-D.__UI.MainHeaderLine.BorderSizePixel =
+__UI.MainHeaderLine.BorderSizePixel =
     0
-D.__UI.MainHeaderLine.ZIndex =
+__UI.MainHeaderLine.ZIndex =
     1
-D.__UI.MainHeaderLine.Parent =
-    D.Main
+__UI.MainHeaderLine.Parent =
+    Main
 
 --// =========================================================
 --// TITLE
 --// =========================================================
-D.MainTitle =
+local MainTitle =
     Instance.new("TextLabel")
-D.MainTitle.Size =
+MainTitle.Size =
     UDim2.new(
         1,
         -105,
         0,
         36
     )
-D.MainTitle.Position =
+MainTitle.Position =
     UDim2.new(
         0,
         12,
         0,
         2
     )
-D.MainTitle.BackgroundTransparency =
+MainTitle.BackgroundTransparency =
     1
-D.MainTitle.Text =
+MainTitle.Text =
     "DeadEyes v1"
-D.MainTitle.TextSize =
+MainTitle.TextSize =
     18
-D.MainTitle.Font =
+MainTitle.Font =
     Enum.Font.GothamBold
-D.MainTitle.ZIndex =
+MainTitle.ZIndex =
     2
-D.MainTitle.TextColor3 =
+MainTitle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.MainTitle.TextXAlignment =
+MainTitle.TextXAlignment =
     Enum.TextXAlignment.Left
-D.MainTitle.Parent =
-    D.Main
+MainTitle.Parent =
+    Main
 --// =========================================================
 --// MINIMIZE
 --// =========================================================
-D.Minimize =
+local Minimize =
     Instance.new("TextButton")
-D.Minimize.Size =
+Minimize.Size =
     UDim2.new(
         0,
         27,
         0,
         27
     )
-D.Minimize.Position =
+Minimize.Position =
     UDim2.new(
         1,
         -65,
         0,
         6
     )
-D.Minimize.BackgroundColor3 =
+Minimize.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-D.Minimize.BorderSizePixel =
+Minimize.BorderSizePixel =
     0
-D.Minimize.Text =
+Minimize.Text =
     "−"
-D.Minimize.TextSize =
+Minimize.TextSize =
     20
-D.Minimize.AutoButtonColor =
+Minimize.AutoButtonColor =
     true
-D.Minimize.ZIndex =
+Minimize.ZIndex =
     5
-D.Minimize.BackgroundTransparency =
+Minimize.BackgroundTransparency =
     0.05
-D.Minimize.Font =
+Minimize.Font =
     Enum.Font.GothamBold
-D.Minimize.TextColor3 =
+Minimize.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.Minimize.Parent =
-    D.Main
-D.__UI.MinimizeCorner =
+Minimize.Parent =
+    Main
+__UI.MinimizeCorner =
     Instance.new("UICorner")
-D.__UI.MinimizeCorner.CornerRadius =
+__UI.MinimizeCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-D.__UI.MinimizeCorner.Parent =
-    D.Minimize
+__UI.MinimizeCorner.Parent =
+    Minimize
 --// =========================================================
 --// CLOSE
 --// =========================================================
-D.Close =
+local Close =
     Instance.new("TextButton")
-D.Close.Size =
+Close.Size =
     UDim2.new(
         0,
         27,
         0,
         27
     )
-D.Close.Position =
+Close.Position =
     UDim2.new(
         1,
         -32,
         0,
         6
     )
-D.Close.BackgroundColor3 =
+Close.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         50
     )
-D.Close.BackgroundTransparency =
+Close.BackgroundTransparency =
     0.05
-D.Close.BorderSizePixel =
+Close.BorderSizePixel =
     0
-D.Close.ZIndex =
+Close.ZIndex =
     5
-D.Close.Text =
+Close.Text =
     "×"
-D.Close.TextSize =
+Close.TextSize =
     27
-D.Close.Font =
+Close.Font =
     Enum.Font.GothamBold
-D.Close.TextColor3 =
+Close.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.Close.Parent =
-    D.Main
+Close.Parent =
+    Main
 
-D.__UI.CloseCorner =
+__UI.CloseCorner =
     Instance.new("UICorner")
-D.__UI.CloseCorner.CornerRadius =
+__UI.CloseCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-D.__UI.CloseCorner.Parent =
-    D.Close
+__UI.CloseCorner.Parent =
+    Close
 
-D.__UI.CloseStroke =
+__UI.CloseStroke =
     Instance.new("UIStroke")
-D.__UI.CloseStroke.Thickness =
+__UI.CloseStroke.Thickness =
     1
-D.__UI.CloseStroke.Transparency =
+__UI.CloseStroke.Transparency =
     0.65
-D.__UI.CloseStroke.Parent =
-    D.Close
+__UI.CloseStroke.Parent =
+    Close
 
 --// =========================================================
 --// STATUS
 --// =========================================================
-D.Status =
+Status =
     Instance.new("TextLabel")
-D.Status.Size =
+Status.Size =
     UDim2.new(
         0,
         190,
         0,
         20
     )
-D.Status.Position =
+Status.Position =
     UDim2.new(
         0,
         10,
         0,
         43
     )
-D.Status.BackgroundTransparency =
+Status.BackgroundTransparency =
     1
-D.Status.Text =
+Status.Text =
     ""
-D.Status.TextSize =
+Status.TextSize =
     12
-D.Status.Font =
+Status.Font =
     Enum.Font.Gotham
-D.Status.TextColor3 =
+Status.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
-D.Status.TextXAlignment =
+Status.TextXAlignment =
     Enum.TextXAlignment.Left
-D.Status.Parent =
-    D.Main
+Status.Parent =
+    Main
 --// =========================================================
 --// UNUSUAL CATEGORY
 --// ONE SLOT
@@ -1968,24 +1967,24 @@ D.Status.Parent =
 --//
 --// FX-only local replacement.
 --// =========================================================
-D.unusualSlot = {
+local unusualSlot = {
     originalId = nil,
     replaceId = 200,
     originalName = nil,
     replaceName = nil
 }
-D.unusualList = {}
-D.unusualEnabled = false
-D.unusualActive = false
-D.unusualPicker
-D.unusualPickerScroll
-D.unusualPickerSearch
-D.unusualPickerTitle
-D.unusualPickerClose
-D.unusualPickerButtons = {}
-D.unusualPickerSide = nil
-D.unusualIconCache = {}
-D.unusualIconIdCache = {}
+local unusualList = {}
+local unusualEnabled = false
+local unusualActive = false
+local unusualPicker
+local unusualPickerScroll
+local unusualPickerSearch
+local unusualPickerTitle
+local unusualPickerClose
+local unusualPickerButtons = {}
+local unusualPickerSide = nil
+local unusualIconCache = {}
+local unusualIconIdCache = {}
 
 local function normalizeUnusualIconKey(value)
     value = tostring(value or "")
@@ -2129,7 +2128,7 @@ local function getUnusualIconFromData(
     local config
     pcall(function()
         config =
-            D.Registry.GetConfig(
+            Registry.GetConfig(
                 numericId
             )
     end)
@@ -2302,7 +2301,7 @@ local function cacheUnusualIconFromObject(icon)
         if key ~= ""
             and #key >= 3
         then
-            D.unusualIconCache[key] = image
+            unusualIconCache[key] = image
         end
     end
 end
@@ -2464,8 +2463,8 @@ local function preloadNativeUnusualIcons()
                 )
         end)
 
-        D.RunService.Heartbeat:Wait()
-        D.RunService.Heartbeat:Wait()
+        RunService.Heartbeat:Wait()
+        RunService.Heartbeat:Wait()
 
         collectCurrentUnusualIcons(
             playerGui
@@ -2496,29 +2495,29 @@ local function preloadNativeUnusualIcons()
         playerGui
     )
 end
-D.unusualPage
-D.unusualStatus
-D.categoryBar
-D.mainCategoryButton
-D.emoteCategoryButton
-D.unusualCategoryButton
-D.othersCategoryButton
-D.currentCategory = "Emotes"
-D.mainPage
-D.others = {}
-D.mainMinimized = false
-D.setMainMinimized
-D.updateUnusualToggle
-D.others.originalDescription = nil
-D.others.targetHumanoid = nil
-D.others.page = nil
-D.others.status = nil
-D.others.fieldButtons = {}
-D.others.fieldBoxes = {}
-D.unusualConnections = {}
-D.unusualDestroyed = false
-D.unusualReapplyBusy = false
-D.unusualRuntime = {
+local unusualPage
+local unusualStatus
+local categoryBar
+local mainCategoryButton
+local emoteCategoryButton
+local unusualCategoryButton
+local othersCategoryButton
+local currentCategory = "Emotes"
+local mainPage
+local others = {}
+local mainMinimized = false
+local setMainMinimized
+local updateUnusualToggle
+others.originalDescription = nil
+others.targetHumanoid = nil
+others.page = nil
+others.status = nil
+others.fieldButtons = {}
+others.fieldBoxes = {}
+local unusualConnections = {}
+local unusualDestroyed = false
+local unusualReapplyBusy = false
+local unusualRuntime = {
     appliedRig = nil,
     reapplyGeneration = 0,
     animationSource = nil,
@@ -2532,33 +2531,33 @@ D.unusualRuntime = {
 --// =========================================================
 function DEADEYE_FN_addUnusualConnection(connection)
     table.insert(
-        D.unusualConnections,
+        unusualConnections,
         connection
     )
 end
 function DEADEYE_FN_disconnectUnusualConnections()
     for _, connection in ipairs(
-        D.unusualConnections
+        unusualConnections
     ) do
         pcall(function()
             connection:Disconnect()
         end)
     end
     table.clear(
-        D.unusualConnections
+        unusualConnections
     )
 
-    D.unusualReapplyBusy = false
+    unusualReapplyBusy = false
 end
 --// =========================================================
 --// UNUSUAL LIST
 --// =========================================================
 function DEADEYE_FN_buildUnusualList()
     table.clear(
-        D.unusualList
+        unusualList
     )
     local success, all = pcall(function()
-        return D.Registry.GetAll()
+        return Registry.GetAll()
     end)
     if not success
         or not all
@@ -2579,7 +2578,7 @@ function DEADEYE_FN_buildUnusualList()
             local config
             pcall(function()
                 config =
-                    D.Registry.GetConfig(
+                    Registry.GetConfig(
                         numericId
                     )
             end)
@@ -2596,7 +2595,7 @@ function DEADEYE_FN_buildUnusualList()
                 if not module then
                     pcall(function()
                         local entry =
-                            D.Registry.GetById(
+                            Registry.GetById(
                                 numericId
                             )
                         if entry then
@@ -2615,13 +2614,13 @@ function DEADEYE_FN_buildUnusualList()
                         )
 
                     if icon then
-                        D.unusualIconIdCache[
+                        unusualIconIdCache[
                             numericId
                         ] = icon
                     end
 
                     table.insert(
-                        D.unusualList,
+                        unusualList,
                         {
                             id = numericId,
                             name = module.Name,
@@ -2634,7 +2633,7 @@ function DEADEYE_FN_buildUnusualList()
         end
     end
     table.sort(
-        D.unusualList,
+        unusualList,
         function(a, b)
             return a.id < b.id
         end
@@ -2643,7 +2642,7 @@ function DEADEYE_FN_buildUnusualList()
     local iconCount = 0
 
     for _, data in ipairs(
-        D.unusualList
+        unusualList
     ) do
         if data.icon then
             iconCount += 1
@@ -2654,7 +2653,7 @@ function DEADEYE_FN_buildUnusualList()
         "[DeadEye] Native Unusual icons:",
         tostring(iconCount),
         "/",
-        tostring(#D.unusualList)
+        tostring(#unusualList)
     )
     end
 DEADEYE_FN_buildUnusualList()
@@ -2668,7 +2667,7 @@ function DEADEYE_FN_getUnusualName(id)
         return nil
     end
     for _, data in ipairs(
-        D.unusualList
+        unusualList
     ) do
         if data.id == id then
             return data.name
@@ -2689,7 +2688,7 @@ function DEADEYE_FN_getEquippedUnusualId()
     pcall(function()
         value =
             require(
-                D.ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild("useLoadout")
+                ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild("useLoadout")
             ).GetEquippedFromSlot(
                 "UnusualSlot"
             )
@@ -2701,15 +2700,15 @@ do
     local equipped =
         DEADEYE_FN_getEquippedUnusualId()
     if equipped ~= 0 then
-        D.unusualSlot.originalId =
+        unusualSlot.originalId =
             equipped
-        D.unusualSlot.originalName =
+        unusualSlot.originalName =
             DEADEYE_FN_getUnusualName(
                 equipped
             )
     end
     local savedUnusual =
-        D.savedConfig.unusual
+        savedConfig.unusual
     if type(savedUnusual) == "table" then
         local savedOriginal =
             tonumber(
@@ -2720,21 +2719,21 @@ do
                 savedUnusual.replaceId
             )
         if savedOriginal then
-            D.unusualSlot.originalId =
+            unusualSlot.originalId =
                 savedOriginal
-            D.unusualSlot.originalName =
+            unusualSlot.originalName =
                 DEADEYE_FN_getUnusualName(
                     savedOriginal
                 )
         end
         if savedReplace then
-            D.unusualSlot.replaceId =
+            unusualSlot.replaceId =
                 savedReplace
         end
     end
-    D.unusualSlot.replaceName =
+    unusualSlot.replaceName =
         DEADEYE_FN_getUnusualName(
-            D.unusualSlot.replaceId
+            unusualSlot.replaceId
         )
 end
 --// =========================================================
@@ -2865,7 +2864,7 @@ end
 --// =========================================================
 --// FX CLASSES
 --// =========================================================
-D.UNUSUAL_FX_CLASSES = {
+local UNUSUAL_FX_CLASSES = {
     ParticleEmitter = true,
     Trail = true,
     Beam = true,
@@ -2879,7 +2878,7 @@ D.UNUSUAL_FX_CLASSES = {
     BillboardGui = true
 }
 function DEADEYE_FN_isUnusualFX(object)
-    return D.UNUSUAL_FX_CLASSES[
+    return UNUSUAL_FX_CLASSES[
         object.ClassName
     ] == true
 end
@@ -3193,20 +3192,20 @@ end
 --// =========================================================
 --// UNUSUAL ANIMATION SOURCE
 --// =========================================================
-D.unusualRuntime.destroyAnimationSource = function()
-    if D.unusualRuntime.animationSource then
+unusualRuntime.destroyAnimationSource = function()
+    if unusualRuntime.animationSource then
         pcall(function()
-            D.unusualRuntime.animationSource:Destroy()
+            unusualRuntime.animationSource:Destroy()
         end)
     end
 
-    D.unusualRuntime.animationSource = nil
+    unusualRuntime.animationSource = nil
     table.clear(
-        D.unusualRuntime.animationLinks
+        unusualRuntime.animationLinks
     )
 
     for _, mirror in ipairs(
-        D.unusualRuntime.visualMirrors
+        unusualRuntime.visualMirrors
     ) do
         if mirror.model then
             pcall(function()
@@ -3216,21 +3215,21 @@ D.unusualRuntime.destroyAnimationSource = function()
     end
 
     table.clear(
-        D.unusualRuntime.visualMirrors
+        unusualRuntime.visualMirrors
     )
 
-    if D.unusualRuntime.specialCircling
-        and D.unusualRuntime.specialCircling.model
+    if unusualRuntime.specialCircling
+        and unusualRuntime.specialCircling.model
     then
         pcall(function()
-            D.unusualRuntime.specialCircling.model:Destroy()
+            unusualRuntime.specialCircling.model:Destroy()
         end)
     end
 
-    D.unusualRuntime.specialCircling = nil
+    unusualRuntime.specialCircling = nil
 
     for _, item in ipairs(
-        D.unusualRuntime.animatedNestedVisuals
+        unusualRuntime.animatedNestedVisuals
     ) do
         if item.model then
             pcall(function()
@@ -3240,11 +3239,11 @@ D.unusualRuntime.destroyAnimationSource = function()
     end
 
     table.clear(
-        D.unusualRuntime.animatedNestedVisuals
+        unusualRuntime.animatedNestedVisuals
     )
 end
 
-D.unusualRuntime.findRelative = function(
+unusualRuntime.findRelative = function(
     root,
     object
 )
@@ -3290,7 +3289,7 @@ D.unusualRuntime.findRelative = function(
     return current
 end
 
-D.unusualRuntime.startAnimations = function(
+unusualRuntime.startAnimations = function(
     root
 )
     if not root then
@@ -3410,7 +3409,7 @@ D.unusualRuntime.startAnimations = function(
     return started
 end
 
-D.unusualRuntime.installAnimatedNestedModels = function(
+unusualRuntime.installAnimatedNestedModels = function(
     cosmeticRig,
     id,
     targetRig,
@@ -3780,12 +3779,12 @@ D.unusualRuntime.installAnimatedNestedModels = function(
 
                 --// Start the same AnimationController
                 --// animation that the source effect uses.
-                D.unusualRuntime.startAnimations(
+                unusualRuntime.startAnimations(
                     clone
                 )
 
                 table.insert(
-                    D.unusualRuntime.animatedNestedVisuals,
+                    unusualRuntime.animatedNestedVisuals,
                     {
                         model = clone,
                         root = root
@@ -3810,12 +3809,12 @@ D.unusualRuntime.installAnimatedNestedModels = function(
 end
 
 
-D.unusualRuntime.createAnimationSource = function(
+unusualRuntime.createAnimationSource = function(
     cosmeticRig,
     id,
     playerCharacter
 )
-    D.unusualRuntime.destroyAnimationSource()
+    unusualRuntime.destroyAnimationSource()
 
     if not cosmeticRig then
         return nil
@@ -4087,7 +4086,7 @@ D.unusualRuntime.createAnimationSource = function(
     if not hasClientDriver then
         root.Anchored = true
 
-        D.unusualRuntime.startAnimations(
+        unusualRuntime.startAnimations(
             source
         )
     end
@@ -4112,13 +4111,13 @@ D.unusualRuntime.createAnimationSource = function(
 
     end
 
-    D.unusualRuntime.animationSource =
+    unusualRuntime.animationSource =
         source
 
     return source
 end
 
-D.unusualRuntime.createVisualMirror = function(
+unusualRuntime.createVisualMirror = function(
     sourceModel,
     id
 )
@@ -4163,7 +4162,7 @@ D.unusualRuntime.createVisualMirror = function(
         tostring(id) ..
         "_" ..
         tostring(
-            #D.unusualRuntime.visualMirrors + 1
+            #unusualRuntime.visualMirrors + 1
         )
 
     for _, object in ipairs(
@@ -4279,7 +4278,7 @@ D.unusualRuntime.createVisualMirror = function(
     end
 
     table.insert(
-        D.unusualRuntime.visualMirrors,
+        unusualRuntime.visualMirrors,
         {
             model = clone,
             links = links
@@ -4289,7 +4288,7 @@ D.unusualRuntime.createVisualMirror = function(
     return true
 end
 
-D.unusualRuntime.addAnimationLink = function(
+unusualRuntime.addAnimationLink = function(
     sourcePart,
     nested,
     targetPart,
@@ -4300,13 +4299,13 @@ D.unusualRuntime.addAnimationLink = function(
     end
 
     local animatedPart =
-        D.unusualRuntime.findRelative(
+        unusualRuntime.findRelative(
             animatedSource,
             nested
         )
 
     local animatedRoot =
-        D.unusualRuntime.findRelative(
+        unusualRuntime.findRelative(
             animatedSource,
             sourcePart
         )
@@ -4326,7 +4325,7 @@ D.unusualRuntime.addAnimationLink = function(
     end
 
     table.insert(
-        D.unusualRuntime.animationLinks,
+        unusualRuntime.animationLinks,
         {
             sourceRoot = animatedRoot,
             sourcePart = animatedPart,
@@ -4338,9 +4337,9 @@ D.unusualRuntime.addAnimationLink = function(
     return true
 end
 
-D.unusualRuntime.updateAnimatedParts = function()
+unusualRuntime.updateAnimatedParts = function()
     local source =
-        D.unusualRuntime.animationSource
+        unusualRuntime.animationSource
 
     if not source
         or not source.Parent
@@ -4372,16 +4371,16 @@ D.unusualRuntime.updateAnimatedParts = function()
         end
     end
 
-    if D.unusualRuntime.specialCircling
-        and D.unusualRuntime.specialCircling.root
-        and D.unusualRuntime.specialCircling.root.Parent
+    if unusualRuntime.specialCircling
+        and unusualRuntime.specialCircling.root
+        and unusualRuntime.specialCircling.root.Parent
         and targetRoot
     then
 
         pcall(function()
-            D.unusualRuntime.specialCircling.root.CFrame =
+            unusualRuntime.specialCircling.root.CFrame =
                 targetRoot.CFrame *
-                D.unusualRuntime.specialCircling.offset
+                unusualRuntime.specialCircling.offset
         end)
 
     end
@@ -4417,7 +4416,7 @@ D.unusualRuntime.updateAnimatedParts = function()
     end
 
     for _, mirror in ipairs(
-        D.unusualRuntime.visualMirrors
+        unusualRuntime.visualMirrors
     ) do
 
         if mirror.model
@@ -4448,7 +4447,7 @@ D.unusualRuntime.updateAnimatedParts = function()
     end
 
     for _, link in ipairs(
-        D.unusualRuntime.animationLinks
+        unusualRuntime.animationLinks
     ) do
 
         local sourceRootPart =
@@ -4723,7 +4722,7 @@ local function installUnusualPartFX(
                     and hasAnimation
                 )
             then
-                D.unusualRuntime.createVisualMirror(
+                unusualRuntime.createVisualMirror(
                     child,
                     id
                 )
@@ -4761,7 +4760,7 @@ local function installUnusualPartFX(
                     anchor
 
                 local animated =
-                    D.unusualRuntime.addAnimationLink(
+                    unusualRuntime.addAnimationLink(
                         sourcePart,
                         nested,
                         targetPart,
@@ -4790,8 +4789,8 @@ local function installUnusualPartFX(
 
                     anchor.Anchored = true
 
-                    D.unusualRuntime.animationLinks[
-                        #D.unusualRuntime.animationLinks
+                    unusualRuntime.animationLinks[
+                        #unusualRuntime.animationLinks
                     ].anchor =
                         anchor
                 end
@@ -5013,14 +5012,14 @@ local function applyUnusualFX(
     --// routine destroys previous runtime/animated visuals,
     --// so the visible animated mini-rig must be installed after it.
     local animatedSource =
-        D.unusualRuntime.createAnimationSource(
+        unusualRuntime.createAnimationSource(
             cosmeticRig,
             id,
             playerCharacter
         )
 
     local animatedNestedInstalled =
-        D.unusualRuntime.installAnimatedNestedModels(
+        unusualRuntime.installAnimatedNestedModels(
             cosmeticRig,
             id,
             visualRig,
@@ -5116,7 +5115,7 @@ end
 --// REMOVE OUR FX
 -- =========================================================
 function DEADEYE_FN_removeOurUnusualFX()
-    D.unusualRuntime.destroyAnimationSource()
+    unusualRuntime.destroyAnimationSource()
 
     local removed = 0
     local roots = {
@@ -5501,7 +5500,7 @@ end
 --// RESTORE UNUSUAL
 -- =========================================================
 function DEADEYE_FN_restoreUnusual()
-    if not D.unusualActive then
+    if not unusualActive then
         return
     end
     local visualRig =
@@ -5509,32 +5508,32 @@ function DEADEYE_FN_restoreUnusual()
     local playerCharacter =
         DEADEYE_FN_getUnusualPlayerCharacter()
     if visualRig
-        and D.unusualSlot.originalId
+        and unusualSlot.originalId
     then
         DEADEYE_FN_removeOurUnusualFX()
         task.wait()
         applyUnusualFX(
-            D.unusualSlot.originalId,
+            unusualSlot.originalId,
             visualRig,
             playerCharacter
         )
     end
-    D.unusualActive =
+    unusualActive =
         false
-    D.unusualRuntime.appliedRig =
+    unusualRuntime.appliedRig =
         nil
 end
 --// =========================================================
 --// ACTIVATE UNUSUAL
 -- =========================================================
 function DEADEYE_FN_activateUnusual()
-    if not D.unusualSlot.originalId
-        or not D.unusualSlot.replaceId
+    if not unusualSlot.originalId
+        or not unusualSlot.replaceId
     then
         return false
     end
-    if D.unusualSlot.originalId
-        == D.unusualSlot.replaceId
+    if unusualSlot.originalId
+        == unusualSlot.replaceId
     then
         return false
     end
@@ -5548,50 +5547,50 @@ function DEADEYE_FN_activateUnusual()
                             DEADEYE_FN_removeOurUnusualFX()
     task.wait()
     DEADEYE_FN_removeOriginalUnusualFX(
-        D.unusualSlot.originalId,
+        unusualSlot.originalId,
         visualRig,
         playerCharacter
     )
     task.wait()
     if not applyUnusualFX(
-        D.unusualSlot.replaceId,
+        unusualSlot.replaceId,
         visualRig,
         playerCharacter
     ) then
         task.wait()
         applyUnusualFX(
-            D.unusualSlot.originalId,
+            unusualSlot.originalId,
             visualRig,
             playerCharacter
         )
         return false
     end
-    D.unusualActive =
+    unusualActive =
         true
-    D.unusualRuntime.appliedRig =
+    unusualRuntime.appliedRig =
         visualRig
     return true
 end
 function DEADEYE_FN_reapplyUnusual()
-    if not D.unusualEnabled
-        or D.unusualReapplyBusy
+    if not unusualEnabled
+        or unusualReapplyBusy
     then
         return
     end
 
-    D.unusualReapplyBusy = true
-    D.unusualRuntime.reapplyGeneration += 1
+    unusualReapplyBusy = true
+    unusualRuntime.reapplyGeneration += 1
 
     local generation =
-        D.unusualRuntime.reapplyGeneration
+        unusualRuntime.reapplyGeneration
 
     task.spawn(function()
 
         for attempt = 1, 20 do
 
-            if not D.unusualEnabled
-                or D.genv.DEADEYE_UNUSUAL_POV_RUNNING == false
-                or generation ~= D.unusualRuntime.reapplyGeneration
+            if not unusualEnabled
+                or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
+                or generation ~= unusualRuntime.reapplyGeneration
             then
                 break
             end
@@ -5621,7 +5620,7 @@ function DEADEYE_FN_reapplyUnusual()
 
                 task.wait(0.2)
 
-                D.unusualActive = false
+                unusualActive = false
                 DEADEYE_FN_removeOurUnusualFX()
 
                 local ok, result =
@@ -5635,19 +5634,19 @@ function DEADEYE_FN_reapplyUnusual()
 
                     local expected =
                         (
-                            #D.unusualRuntime.animatedNestedVisuals > 0
+                            #unusualRuntime.animatedNestedVisuals > 0
                         )
                         or DEADEYE_FN_hasOurUnusualFX(
                             visualRig,
-                            D.unusualSlot.replaceId
+                            unusualSlot.replaceId
                         )
                         or DEADEYE_FN_hasOurUnusualFX(
                             playerCharacter,
-                            D.unusualSlot.replaceId
+                            unusualSlot.replaceId
                         )
 
                     if expected then
-                        D.unusualRuntime.appliedRig =
+                        unusualRuntime.appliedRig =
                             visualRig
                         break
                     end
@@ -5660,7 +5659,7 @@ function DEADEYE_FN_reapplyUnusual()
 
         end
 
-        D.unusualReapplyBusy = false
+        unusualReapplyBusy = false
 
     end)
 end
@@ -5671,8 +5670,8 @@ end
 --// 1P uses workspace.Camera.Viewmodel.Clothing.
 --// In 1P the game hides the 3P rig with LocalTransparencyModifier.
 --// =========================================================
-D.genv.DEADEYE_UNUSUAL_POV_RUNNING = true
-D.lastUnusualPOVState = nil
+genv.DEADEYE_UNUSUAL_POV_RUNNING = true
+local lastUnusualPOVState = nil
 function DEADEYE_FN_getUnusualViewmodel()
     local camera =
         workspace.CurrentCamera
@@ -5878,21 +5877,21 @@ function DEADEYE_FN_setUnusualFXForPOV(
     end
 end
 function DEADEYE_FN_updateUnusualPOV()
-    if not D.genv.DEADEYE_UNUSUAL_POV_RUNNING then
+    if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
         return
     end
     DEADEYE_FN_syncUnusualViewmodelAppearance()
     local firstPerson =
         DEADEYE_FN_isUnusualFirstPerson()
     if firstPerson
-        ~= D.lastUnusualPOVState
+        ~= lastUnusualPOVState
     then
-        D.lastUnusualPOVState =
+        lastUnusualPOVState =
             firstPerson
         DEADEYE_FN_setUnusualFXForPOV(
             firstPerson
         )
-    elseif D.unusualActive then
+    elseif unusualActive then
         --// Re-apply the state when the game recreates
         --// one of the tagged FX while staying in the same POV.
         DEADEYE_FN_setUnusualFXForPOV(
@@ -5901,18 +5900,18 @@ function DEADEYE_FN_updateUnusualPOV()
     end
 end
 DEADEYE_FN_addUnusualConnection(
-    D.RunService.Heartbeat:Connect(
+    RunService.Heartbeat:Connect(
         function()
 
-            if not D.genv.DEADEYE_UNUSUAL_POV_RUNNING then
+            if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
                 return
             end
 
-            D.unusualRuntime.updateAnimatedParts()
+            unusualRuntime.updateAnimatedParts()
             DEADEYE_FN_updateUnusualPOV()
 
-            if D.unusualEnabled
-                and not D.unusualReapplyBusy
+            if unusualEnabled
+                and not unusualReapplyBusy
             then
 
                 local rig =
@@ -5922,18 +5921,18 @@ DEADEYE_FN_addUnusualConnection(
 
                     local expected =
                         (
-                            #D.unusualRuntime.animatedNestedVisuals > 0
+                            #unusualRuntime.animatedNestedVisuals > 0
                         )
                         or DEADEYE_FN_hasOurUnusualFX(
                             rig,
-                            D.unusualSlot.replaceId
+                            unusualSlot.replaceId
                         )
                         or DEADEYE_FN_hasOurUnusualFX(
                             DEADEYE_FN_getUnusualPlayerCharacter(),
-                            D.unusualSlot.replaceId
+                            unusualSlot.replaceId
                         )
 
-                    if D.unusualRuntime.appliedRig ~= rig
+                    if unusualRuntime.appliedRig ~= rig
                         or not expected
                     then
                         DEADEYE_FN_reapplyUnusual()
@@ -5949,57 +5948,57 @@ DEADEYE_FN_addUnusualConnection(
 --// =========================================================
 --// UNUSUAL PAGE
 --// =========================================================
-D.unusualPage =
+unusualPage =
     Instance.new("ScrollingFrame")
-D.unusualPage.Name =
+unusualPage.Name =
     "UnusualPage"
-D.unusualPage.Size =
+unusualPage.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-D.unusualPage.Position =
+unusualPage.Position =
     UDim2.new(
         0,
         82,
         0,
         48
     )
-D.unusualPage.BackgroundColor3 =
+unusualPage.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-D.unusualPage.BorderSizePixel =
+unusualPage.BorderSizePixel =
     0
-D.unusualPage.ScrollBarThickness =
+unusualPage.ScrollBarThickness =
     6
-D.unusualPage.CanvasSize =
+unusualPage.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-D.unusualPage.AutomaticCanvasSize =
+unusualPage.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-D.unusualPage.ScrollingDirection =
+unusualPage.ScrollingDirection =
     Enum.ScrollingDirection.Y
-D.unusualPage.Visible =
+unusualPage.Visible =
     false
-D.unusualPage.Parent =
-    D.Main
-D.__UI.unusualPageCorner =
+unusualPage.Parent =
+    Main
+__UI.unusualPageCorner =
     Instance.new("UICorner")
-D.__UI.unusualPageCorner.CornerRadius =
+__UI.unusualPageCorner.CornerRadius =
     UDim.new(
         0,
         9
     )
-D.__UI.unusualPageCorner.Parent =
+__UI.unusualPageCorner.Parent =
     unusualPagelocal unusualPadding =
     Instance.new("UIPadding")
 unusualPadding.PaddingTop =
@@ -6023,82 +6022,82 @@ unusualPadding.PaddingRight =
         8
     )
 unusualPadding.Parent =
-    D.unusualPage
-D.unusualLayout =
+    unusualPage
+local unusualLayout =
     Instance.new("UIListLayout")
-D.unusualLayout.Padding =
+unusualLayout.Padding =
     UDim.new(
         0,
         7
     )
-D.unusualLayout.SortOrder =
+unusualLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
-D.unusualLayout.Parent =
-    D.unusualPage
-D.unusualRow =
+unusualLayout.Parent =
+    unusualPage
+local unusualRow =
     Instance.new("Frame")
-D.unusualRow.Size =
+unusualRow.Size =
     UDim2.new(
         1,
         -4,
         0,
         48
     )
-D.unusualRow.BackgroundColor3 =
+unusualRow.BackgroundColor3 =
     Color3.fromRGB(
         40,
         40,
         40
     )
-D.unusualRow.BorderSizePixel =
+unusualRow.BorderSizePixel =
     0
-D.unusualRow.LayoutOrder =
+unusualRow.LayoutOrder =
     1
-D.unusualRow.Parent =
-    D.unusualPage
-D.__UI.unusualRowCorner =
+unusualRow.Parent =
+    unusualPage
+__UI.unusualRowCorner =
     Instance.new("UICorner")
-D.__UI.unusualRowCorner.CornerRadius =
+__UI.unusualRowCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-D.__UI.unusualRowCorner.Parent =
-    D.unusualRow
-D.unusualRowLabel =
+__UI.unusualRowCorner.Parent =
+    unusualRow
+local unusualRowLabel =
     Instance.new("TextLabel")
-D.unusualRowLabel.Size =
+unusualRowLabel.Size =
     UDim2.new(
         0,
         60,
         1,
         0
     )
-D.unusualRowLabel.Position =
+unusualRowLabel.Position =
     UDim2.new(
         0,
         8,
         0,
         0
     )
-D.unusualRowLabel.BackgroundTransparency =
+unusualRowLabel.BackgroundTransparency =
     1
-D.unusualRowLabel.Text =
+unusualRowLabel.Text =
     "UNUSUAL"
-D.unusualRowLabel.TextSize =
+unusualRowLabel.TextSize =
     10
-D.unusualRowLabel.Font =
+unusualRowLabel.Font =
     Enum.Font.GothamBold
-D.unusualRowLabel.TextColor3 =
+unusualRowLabel.TextColor3 =
     Color3.fromRGB(
         210,
         210,
         210
     )
-D.unusualRowLabel.TextXAlignment =
+unusualRowLabel.TextXAlignment =
     Enum.TextXAlignment.Left
-D.unusualRowLabel.Parent =
-    D.unusualRow
+unusualRowLabel.Parent =
+    unusualRow
 --// ORIGINAL
 unusualOriginalButton =
     Instance.new("TextButton")
@@ -6125,7 +6124,7 @@ unusualOriginalButton.BackgroundColor3 =
 unusualOriginalButton.BorderSizePixel =
     0
 unusualOriginalButton.Text =
-    D.unusualSlot.originalName
+    unusualSlot.originalName
     or "Select"
 unusualOriginalButton.TextSize =
     11
@@ -6140,160 +6139,160 @@ unusualOriginalButton.TextColor3 =
 unusualOriginalButton.TextTruncate =
     Enum.TextTruncate.AtEnd
 unusualOriginalButton.Parent =
-    D.unusualRow
-D.__UI.unusualOriginalCorner =
+    unusualRow
+__UI.unusualOriginalCorner =
     Instance.new("UICorner")
-D.__UI.unusualOriginalCorner.CornerRadius =
+__UI.unusualOriginalCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-D.__UI.unusualOriginalCorner.Parent =
+__UI.unusualOriginalCorner.Parent =
     unusualOriginalButton
 --// ARROW
-D.unusualArrow =
+local unusualArrow =
     Instance.new("TextLabel")
-D.unusualArrow.Size =
+unusualArrow.Size =
     UDim2.new(
         0,
         24,
         0,
         32
     )
-D.unusualArrow.Position =
+unusualArrow.Position =
     UDim2.new(
         0,
         202,
         0.5,
         -16
     )
-D.unusualArrow.BackgroundTransparency =
+unusualArrow.BackgroundTransparency =
     1
-D.unusualArrow.Text =
+unusualArrow.Text =
     "→"
-D.unusualArrow.TextSize =
+unusualArrow.TextSize =
     22
-D.unusualArrow.Font =
+unusualArrow.Font =
     Enum.Font.GothamBold
-D.unusualArrow.TextColor3 =
+unusualArrow.TextColor3 =
     Color3.fromRGB(
         180,
         180,
         180
     )
-D.unusualArrow.Parent =
-    D.unusualRow
+unusualArrow.Parent =
+    unusualRow
 --// REPLACE
-D.unusualReplaceButton =
+local unusualReplaceButton =
     Instance.new("TextButton")
-D.unusualReplaceButton.Size =
+unusualReplaceButton.Size =
     UDim2.new(
         0,
         125,
         0,
         32
     )
-D.unusualReplaceButton.Position =
+unusualReplaceButton.Position =
     UDim2.new(
         0,
         226,
         0.5,
         -16
     )
-D.unusualReplaceButton.BackgroundColor3 =
+unusualReplaceButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-D.unusualReplaceButton.BorderSizePixel =
+unusualReplaceButton.BorderSizePixel =
     0
-D.unusualReplaceButton.Text =
-    D.unusualSlot.replaceName
+unusualReplaceButton.Text =
+    unusualSlot.replaceName
     or "NONE"
-D.unusualReplaceButton.TextSize =
+unusualReplaceButton.TextSize =
     11
-D.unusualReplaceButton.Font =
+unusualReplaceButton.Font =
     Enum.Font.Gotham
-D.unusualReplaceButton.TextColor3 =
+unusualReplaceButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.unusualReplaceButton.TextTruncate =
+unusualReplaceButton.TextTruncate =
     Enum.TextTruncate.AtEnd
-D.unusualReplaceButton.Parent =
-    D.unusualRow
-D.__UI.unusualReplaceCorner =
+unusualReplaceButton.Parent =
+    unusualRow
+__UI.unusualReplaceCorner =
     Instance.new("UICorner")
-D.__UI.unusualReplaceCorner.CornerRadius =
+__UI.unusualReplaceCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-D.__UI.unusualReplaceCorner.Parent =
-    D.unusualReplaceButton
+__UI.unusualReplaceCorner.Parent =
+    unusualReplaceButton
 --// =========================================================
 --// UNUSUAL PICKER
 -- =========================================================
-D.unusualPicker =
+unusualPicker =
     Instance.new("Frame")
-D.unusualPicker.Size =
+unusualPicker.Size =
     UDim2.new(
         0,
         560,
         0,
         450
     )
-D.unusualPicker.Position =
+unusualPicker.Position =
     UDim2.new(
         0.5,
         -280,
         0.5,
         -225
     )
-D.unusualPicker.BackgroundColor3 =
+unusualPicker.BackgroundColor3 =
     Color3.fromRGB(
         31,
         35,
         42
     )
-D.unusualPicker.BackgroundTransparency =
+unusualPicker.BackgroundTransparency =
     0.10
-D.unusualPicker.BorderSizePixel =
+unusualPicker.BorderSizePixel =
     0
-D.unusualPicker.ClipsDescendants =
+unusualPicker.ClipsDescendants =
     true
-D.unusualPicker.Visible =
+unusualPicker.Visible =
     false
-D.unusualPicker.ZIndex =
+unusualPicker.ZIndex =
     30
-D.unusualPicker.Parent =
-    D.ScreenGui
-D.__UI.unusualPickerCorner =
+unusualPicker.Parent =
+    ScreenGui
+__UI.unusualPickerCorner =
     Instance.new("UICorner")
-D.__UI.unusualPickerCorner.CornerRadius =
+__UI.unusualPickerCorner.CornerRadius =
     UDim.new(
         0,
         8
     )
-D.__UI.unusualPickerCorner.Parent =
-    D.unusualPicker
-D.__UI.unusualPickerStroke =
+__UI.unusualPickerCorner.Parent =
+    unusualPicker
+__UI.unusualPickerStroke =
     Instance.new("UIStroke")
-D.__UI.unusualPickerStroke.Thickness =
+__UI.unusualPickerStroke.Thickness =
     1
-D.__UI.unusualPickerStroke.Transparency =
+__UI.unusualPickerStroke.Transparency =
     0.66
-D.__UI.unusualPickerStroke.Parent =
-    D.unusualPicker
+__UI.unusualPickerStroke.Parent =
+    unusualPicker
 
-D.__UI.unusualPickerGlass =
+__UI.unusualPickerGlass =
     Instance.new("UIGradient")
-D.__UI.unusualPickerGlass.Rotation =
+__UI.unusualPickerGlass.Rotation =
     115
-D.__UI.unusualPickerGlass.Color =
+__UI.unusualPickerGlass.Color =
     ColorSequence.new({
         ColorSequenceKeypoint.new(
             0,
@@ -6320,224 +6319,224 @@ D.__UI.unusualPickerGlass.Color =
             )
         )
     })
-D.__UI.unusualPickerGlass.Transparency =
+__UI.unusualPickerGlass.Transparency =
     NumberSequence.new(0.20)
-D.__UI.unusualPickerGlass.Parent =
-    D.unusualPicker
+__UI.unusualPickerGlass.Parent =
+    unusualPicker
 
-D.unusualPickerTitle =
+unusualPickerTitle =
     Instance.new("TextLabel")
-D.unusualPickerTitle.Size =
+unusualPickerTitle.Size =
     UDim2.new(
         1,
         -45,
         0,
         32
     )
-D.unusualPickerTitle.Position =
+unusualPickerTitle.Position =
     UDim2.new(
         0,
         12,
         0,
         2
     )
-D.unusualPickerTitle.BackgroundTransparency =
+unusualPickerTitle.BackgroundTransparency =
     1
-D.unusualPickerTitle.Text =
+unusualPickerTitle.Text =
     "Unusual Selector"
-D.unusualPickerTitle.TextSize =
+unusualPickerTitle.TextSize =
     16
-D.unusualPickerTitle.Font =
+unusualPickerTitle.Font =
     Enum.Font.GothamBold
-D.unusualPickerTitle.TextColor3 =
+unusualPickerTitle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.unusualPickerTitle.TextXAlignment =
+unusualPickerTitle.TextXAlignment =
     Enum.TextXAlignment.Left
-D.unusualPickerTitle.ZIndex =
+unusualPickerTitle.ZIndex =
     31
-D.unusualPickerTitle.Parent =
-    D.unusualPicker
-D.unusualPickerClose =
+unusualPickerTitle.Parent =
+    unusualPicker
+unusualPickerClose =
     Instance.new("TextButton")
-D.unusualPickerClose.Size =
+unusualPickerClose.Size =
     UDim2.new(
         0,
         30,
         0,
         30
     )
-D.unusualPickerClose.Position =
+unusualPickerClose.Position =
     UDim2.new(
         1,
         -35,
         0,
         4
     )
-D.unusualPickerClose.BackgroundTransparency =
+unusualPickerClose.BackgroundTransparency =
     1
-D.unusualPickerClose.Text =
+unusualPickerClose.Text =
     "×"
-D.unusualPickerClose.TextSize =
+unusualPickerClose.TextSize =
     25
-D.unusualPickerClose.Font =
+unusualPickerClose.Font =
     Enum.Font.GothamBold
-D.unusualPickerClose.TextColor3 =
+unusualPickerClose.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.unusualPickerClose.ZIndex =
+unusualPickerClose.ZIndex =
     31
-D.unusualPickerClose.Parent =
-    D.unusualPicker
-D.unusualPickerSearch =
+unusualPickerClose.Parent =
+    unusualPicker
+unusualPickerSearch =
     Instance.new("TextBox")
-D.unusualPickerSearch.Size =
+unusualPickerSearch.Size =
     UDim2.new(
         1,
         -20,
         0,
         30
     )
-D.unusualPickerSearch.Position =
+unusualPickerSearch.Position =
     UDim2.new(
         0,
         10,
         0,
         36
     )
-D.unusualPickerSearch.BackgroundColor3 =
+unusualPickerSearch.BackgroundColor3 =
     Color3.fromRGB(
         40,
         45,
         53
     )
-D.unusualPickerSearch.BackgroundTransparency =
+unusualPickerSearch.BackgroundTransparency =
     0.20
-D.unusualPickerSearch.BorderSizePixel =
+unusualPickerSearch.BorderSizePixel =
     0
-D.unusualPickerSearch.ClearTextOnFocus =
+unusualPickerSearch.ClearTextOnFocus =
     false
-D.unusualPickerSearch.PlaceholderText =
+unusualPickerSearch.PlaceholderText =
     "Search by name or ID..."
-D.unusualPickerSearch.PlaceholderColor3 =
+unusualPickerSearch.PlaceholderColor3 =
     Color3.fromRGB(
         120,
         120,
         120
     )
-D.unusualPickerSearch.Text =
+unusualPickerSearch.Text =
     ""
-D.unusualPickerSearch.TextSize =
+unusualPickerSearch.TextSize =
     12
-D.unusualPickerSearch.Font =
+unusualPickerSearch.Font =
     Enum.Font.Gotham
-D.unusualPickerSearch.TextColor3 =
+unusualPickerSearch.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.unusualPickerSearch.ZIndex =
+unusualPickerSearch.ZIndex =
     32
-D.unusualPickerSearch.Parent =
-    D.unusualPicker
-D.__UI.unusualSearchCorner =
+unusualPickerSearch.Parent =
+    unusualPicker
+__UI.unusualSearchCorner =
     Instance.new("UICorner")
-D.__UI.unusualSearchCorner.CornerRadius =
+__UI.unusualSearchCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-D.__UI.unusualSearchCorner.Parent =
-    D.unusualPickerSearch
-D.unusualPickerScroll =
+__UI.unusualSearchCorner.Parent =
+    unusualPickerSearch
+unusualPickerScroll =
     Instance.new("ScrollingFrame")
-D.unusualPickerScroll.Size =
+unusualPickerScroll.Size =
     UDim2.new(
         1,
         -16,
         1,
         -74
     )
-D.unusualPickerScroll.Position =
+unusualPickerScroll.Position =
     UDim2.new(
         0,
         8,
         0,
         70
     )
-D.unusualPickerScroll.BackgroundColor3 =
+unusualPickerScroll.BackgroundColor3 =
     Color3.fromRGB(
         32,
         35,
         42
     )
-D.unusualPickerScroll.BackgroundTransparency =
+unusualPickerScroll.BackgroundTransparency =
     0.20
-D.unusualPickerScroll.BorderSizePixel =
+unusualPickerScroll.BorderSizePixel =
     0
-D.unusualPickerScroll.ScrollBarThickness =
+unusualPickerScroll.ScrollBarThickness =
     6
-D.unusualPickerScroll.CanvasSize =
+unusualPickerScroll.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-D.unusualPickerScroll.AutomaticCanvasSize =
+unusualPickerScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-D.unusualPickerScroll.ZIndex =
+unusualPickerScroll.ZIndex =
     31
-D.unusualPickerScroll.Parent =
-    D.unusualPicker
-D.__UI.unusualPickerScrollCorner =
+unusualPickerScroll.Parent =
+    unusualPicker
+__UI.unusualPickerScrollCorner =
     Instance.new("UICorner")
-D.__UI.unusualPickerScrollCorner.CornerRadius =
+__UI.unusualPickerScrollCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-D.__UI.unusualPickerScrollCorner.Parent =
-    D.unusualPickerScroll
-D.unusualPickerPadding =
+__UI.unusualPickerScrollCorner.Parent =
+    unusualPickerScroll
+local unusualPickerPadding =
     Instance.new("UIPadding")
-D.unusualPickerPadding.PaddingTop =
+unusualPickerPadding.PaddingTop =
     UDim.new(0, 8)
-D.unusualPickerPadding.PaddingBottom =
+unusualPickerPadding.PaddingBottom =
     UDim.new(0, 8)
-D.unusualPickerPadding.PaddingLeft =
+unusualPickerPadding.PaddingLeft =
     UDim.new(0, 8)
-D.unusualPickerPadding.PaddingRight =
+unusualPickerPadding.PaddingRight =
     UDim.new(0, 8)
-D.unusualPickerPadding.Parent =
-    D.unusualPickerScroll
-D.unusualPickerGrid =
+unusualPickerPadding.Parent =
+    unusualPickerScroll
+local unusualPickerGrid =
     Instance.new("UIGridLayout")
-D.unusualPickerGrid.CellSize =
+unusualPickerGrid.CellSize =
     UDim2.new(
         0,
         170,
         0,
         92
     )
-D.unusualPickerGrid.CellPadding =
+unusualPickerGrid.CellPadding =
     UDim2.new(
         0,
         6,
         0,
         8
     )
-D.unusualPickerGrid.SortOrder =
+unusualPickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
-D.unusualPickerGrid.Parent =
-    D.unusualPickerScroll
+unusualPickerGrid.Parent =
+    unusualPickerScroll
 --// =========================================================
 --// REBUILD UNUSUAL PICKER
 --// =========================================================
@@ -6552,18 +6551,18 @@ function DEADEYE_FN_rebuildUnusualPicker()
     end)
 
     for _, button in ipairs(
-        D.unusualPickerButtons
+        unusualPickerButtons
     ) do
         pcall(function()
             button:Destroy()
         end)
     end
     table.clear(
-        D.unusualPickerButtons
+        unusualPickerButtons
     )
     local query =
         string.lower(
-            D.unusualPickerSearch.Text
+            unusualPickerSearch.Text
                 or ""
         )
     local shown = 0
@@ -6584,7 +6583,7 @@ function DEADEYE_FN_rebuildUnusualPicker()
         button.TextTruncate = Enum.TextTruncate.AtEnd
         button.LayoutOrder = 0
         button.ZIndex = 32
-        button.Parent = D.unusualPickerScroll
+        button.Parent = unusualPickerScroll
 
         local corner =
             Instance.new("UICorner")
@@ -6594,41 +6593,41 @@ function DEADEYE_FN_rebuildUnusualPicker()
         corner.Parent = button
 
         table.insert(
-            D.unusualPickerButtons,
+            unusualPickerButtons,
             button
         )
 
         DEADEYE_FN_addUnusualConnection(
             button.MouseButton1Click:Connect(
                 function()
-                    if D.unusualPickerSide == "Original" then
-                        D.unusualSlot.originalId = nil
-                        D.unusualSlot.originalName = nil
+                    if unusualPickerSide == "Original" then
+                        unusualSlot.originalId = nil
+                        unusualSlot.originalName = nil
                         unusualOriginalButton.Text = "Select"
-                    elseif D.unusualPickerSide == "Replace" then
-                        D.unusualSlot.replaceId = nil
-                        D.unusualSlot.replaceName = nil
-                        D.unusualReplaceButton.Text = "Select"
+                    elseif unusualPickerSide == "Replace" then
+                        unusualSlot.replaceId = nil
+                        unusualSlot.replaceName = nil
+                        unusualReplaceButton.Text = "Select"
                     else
                         return
                     end
 
-                    D.savedConfig.unusual = {
-                        originalId = D.unusualSlot.originalId,
-                        replaceId = D.unusualSlot.replaceId
+                    savedConfig.unusual = {
+                        originalId = unusualSlot.originalId,
+                        replaceId = unusualSlot.replaceId
                     }
 
                     saveSavedConfig()
 
-                    if D.unusualEnabled then
-                        D.unusualEnabled = false
-                        D.genv.UNUSUAL_SWAPPER_ENABLED = false
+                    if unusualEnabled then
+                        unusualEnabled = false
+                        genv.UNUSUAL_SWAPPER_ENABLED = false
                         DEADEYE_FN_restoreUnusual()
-                        D.updateUnusualToggle()
+                        updateUnusualToggle()
                     end
 
-                    D.unusualPicker.Visible = false
-                    D.unusualPickerSide = nil
+                    unusualPicker.Visible = false
+                    unusualPickerSide = nil
                 end
             )
         )
@@ -6637,7 +6636,7 @@ function DEADEYE_FN_rebuildUnusualPicker()
     end
 
     for index, data in ipairs(
-        D.unusualList
+        unusualList
     ) do
         local nameLower =
             string.lower(
@@ -6702,7 +6701,7 @@ function DEADEYE_FN_rebuildUnusualPicker()
             button.ZIndex =
                 32
             button.Parent =
-                D.unusualPickerScroll
+                unusualPickerScroll
 
             local icon =
                 Instance.new("ImageLabel")
@@ -6734,10 +6733,10 @@ function DEADEYE_FN_rebuildUnusualPicker()
                 false
             icon.Image =
                 data.icon
-                or D.unusualIconIdCache[
+                or unusualIconIdCache[
                     data.id
                 ]
-                or D.unusualIconCache[
+                or unusualIconCache[
                     normalizeUnusualIconKey(
                         data.name
                     )
@@ -6903,43 +6902,43 @@ function DEADEYE_FN_rebuildUnusualPicker()
             corner.Parent =
                 button
             table.insert(
-                D.unusualPickerButtons,
+                unusualPickerButtons,
                 button
             )
             DEADEYE_FN_addUnusualConnection(
                 button.MouseButton1Click:Connect(
                     function()
-                        if D.unusualPickerSide
+                        if unusualPickerSide
                             == "Original"
                         then
-                            D.unusualSlot.originalId =
+                            unusualSlot.originalId =
                                 data.id
-                            D.unusualSlot.originalName =
+                            unusualSlot.originalName =
                                 data.name
                             unusualOriginalButton.Text =
                                 data.name
-                        elseif D.unusualPickerSide
+                        elseif unusualPickerSide
                             == "Replace"
                         then
-                            D.unusualSlot.replaceId =
+                            unusualSlot.replaceId =
                                 data.id
-                            D.unusualSlot.replaceName =
+                            unusualSlot.replaceName =
                                 data.name
-                            D.unusualReplaceButton.Text =
+                            unusualReplaceButton.Text =
                                 data.name
                         end
-                        D.savedConfig.unusual = {
+                        savedConfig.unusual = {
                             originalId =
-                                D.unusualSlot.originalId,
+                                unusualSlot.originalId,
                             replaceId =
-                                D.unusualSlot.replaceId
+                                unusualSlot.replaceId
                         }
                         saveSavedConfig()
-                        D.unusualPicker.Visible =
+                        unusualPicker.Visible =
                             false
-                        D.unusualPickerSide =
+                        unusualPickerSide =
                             nil
-                        if D.unusualEnabled then
+                        if unusualEnabled then
                             task.spawn(
                                 DEADEYE_FN_reapplyUnusual
                             )
@@ -6950,11 +6949,11 @@ function DEADEYE_FN_rebuildUnusualPicker()
         end
     end
     pcall(function()
-        if D.unusualStatus then
-            D.unusualStatus.Text =
+        if unusualStatus then
+            unusualStatus.Text =
                 "Unusuals: "
                 .. tostring(
-                    #D.unusualList
+                    #unusualList
                 )
                 .. " • "
                 .. tostring(
@@ -6963,7 +6962,7 @@ function DEADEYE_FN_rebuildUnusualPicker()
                 .. " found"
         end
     end)
-    D.unusualPickerScroll.CanvasPosition =
+    unusualPickerScroll.CanvasPosition =
         Vector2.new(
             0,
             0
@@ -6975,28 +6974,28 @@ end
 function DEADEYE_FN_openUnusualPicker(
     side
 )
-    D.unusualPickerSide =
+    unusualPickerSide =
         side
 
     if side == "Original" then
-        D.unusualPickerTitle.Text =
+        unusualPickerTitle.Text =
             "Select Original"
     else
-        D.unusualPickerTitle.Text =
+        unusualPickerTitle.Text =
             "Select Replacement"
     end
 
-    D.unusualPickerSearch.Text =
+    unusualPickerSearch.Text =
         ""
-    D.unusualPicker.Visible =
+    unusualPicker.Visible =
         true
 
     DEADEYE_FN_rebuildUnusualPicker()
 end
 function DEADEYE_FN_closeUnusualPicker()
-    D.unusualPicker.Visible =
+    unusualPicker.Visible =
         false
-    D.unusualPickerSide =
+    unusualPickerSide =
         nil
 end
 DEADEYE_FN_addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
@@ -7008,7 +7007,7 @@ DEADEYE_FN_addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Conn
     )
 )
 DEADEYE_FN_addUnusualConnection(
-    D.unusualReplaceButton.MouseButton1Click:Connect(
+    unusualReplaceButton.MouseButton1Click:Connect(
         function()
             DEADEYE_FN_openUnusualPicker(
                 "Replace"
@@ -7017,18 +7016,18 @@ DEADEYE_FN_addUnusualConnection(
     )
 )
 DEADEYE_FN_addUnusualConnection(
-    D.unusualPickerClose.MouseButton1Click:Connect(
+    unusualPickerClose.MouseButton1Click:Connect(
         function()
             DEADEYE_FN_closeUnusualPicker()
         end
     )
 )
 DEADEYE_FN_addUnusualConnection(
-    D.unusualPickerSearch:GetPropertyChangedSignal(
+    unusualPickerSearch:GetPropertyChangedSignal(
         "Text"
     ):Connect(
         function()
-            if D.unusualPicker.Visible then
+            if unusualPicker.Visible then
                 DEADEYE_FN_rebuildUnusualPicker()
             end
         end
@@ -7066,61 +7065,61 @@ DEADEYE_FN_addUnusualConnection(
 --// =========================================================
 --// UNUSUAL STATUS + TOGGLE USE EXISTING GUI
 -- =================================================
-D.unusualStatusText =
+local unusualStatusText =
     Instance.new("TextLabel")
-D.unusualStatusText.Name =
+unusualStatusText.Name =
     "UnusualStatus"
-D.unusualStatusText.Size =
+unusualStatusText.Size =
     UDim2.new(
         0,
         260,
         0,
         20
     )
-D.unusualStatusText.Position =
+unusualStatusText.Position =
     UDim2.new(
         0,
         82,
         0,
         43
     )
-D.unusualStatusText.BackgroundTransparency =
+unusualStatusText.BackgroundTransparency =
     1
-D.unusualStatusText.Text =
+unusualStatusText.Text =
     ""
-D.unusualStatusText.TextSize =
+unusualStatusText.TextSize =
     12
-D.unusualStatusText.Font =
+unusualStatusText.Font =
     Enum.Font.Gotham
-D.unusualStatusText.TextColor3 =
+unusualStatusText.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
-D.unusualStatusText.TextXAlignment =
+unusualStatusText.TextXAlignment =
     Enum.TextXAlignment.Left
-D.unusualStatusText.Visible =
+unusualStatusText.Visible =
     false
-D.unusualStatusText.Parent =
-    D.Main
-D.unusualStatus =
-    D.unusualStatusText
-D.updateUnusualToggle = function()
+unusualStatusText.Parent =
+    Main
+unusualStatus =
+    unusualStatusText
+updateUnusualToggle = function()
     pcall(function()
-        if D.unusualEnabled then
-            D.Toggle.Text =
+        if unusualEnabled then
+            Toggle.Text =
                 "SWAP: ON"
-            D.Toggle.BackgroundColor3 =
+            Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            D.Toggle.Text =
+            Toggle.Text =
                 "SWAP: OFF"
-            D.Toggle.BackgroundColor3 =
+            Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -7133,19 +7132,19 @@ end
 --// OTHERS
 --// R6 AVATAR SCANNER / EDITOR
 --// =========================================================
-function D.others.saveConfig()
-    D.savedConfig.others =
-        D.savedConfig.others
+function others.saveConfig()
+    savedConfig.others =
+        savedConfig.others
         or {}
     for _, slot in ipairs(
-        D.others.ACCESSORY_SLOTS or {}
+        others.ACCESSORY_SLOTS or {}
     ) do
         local box =
-            D.others.fieldBoxes[
+            others.fieldBoxes[
                 slot.property
             ]
         if box then
-            D.savedConfig.others[
+            savedConfig.others[
                 slot.property
             ] =
                 tostring(
@@ -7155,14 +7154,14 @@ function D.others.saveConfig()
         end
     end
     for _, slot in ipairs(
-        D.others.CLOTHING_SLOTS or {}
+        others.CLOTHING_SLOTS or {}
     ) do
         local box =
-            D.others.fieldBoxes[
+            others.fieldBoxes[
                 slot.property
             ]
         if box then
-            D.savedConfig.others[
+            savedConfig.others[
                 slot.property
             ] =
                 tostring(
@@ -7172,14 +7171,14 @@ function D.others.saveConfig()
         end
     end
     for _, slot in ipairs(
-        D.others.BODY_SLOTS or {}
+        others.BODY_SLOTS or {}
     ) do
         local box =
-            D.others.fieldBoxes[
+            others.fieldBoxes[
                 slot.property
             ]
         if box then
-            D.savedConfig.others[
+            savedConfig.others[
                 slot.property
             ] =
                 tostring(
@@ -7188,36 +7187,36 @@ function D.others.saveConfig()
                 )
         end
     end
-    D.savedConfig.others._Headless =
+    savedConfig.others._Headless =
         tostring(
-            D.savedConfig.others._Headless
+            savedConfig.others._Headless
             or ""
         )
-    D.savedConfig.others._Korblox =
+    savedConfig.others._Korblox =
         tostring(
-            D.savedConfig.others._Korblox
+            savedConfig.others._Korblox
             or ""
         )
     pcall(function()
         saveSavedConfig()
     end)
 end
-function D.others.loadConfig()
+function others.loadConfig()
     local saved =
-        D.savedConfig.others
+        savedConfig.others
     if type(saved) ~= "table" then
         return
     end
     for _, group in ipairs({
-        D.others.ACCESSORY_SLOTS,
-        D.others.CLOTHING_SLOTS,
-        D.others.BODY_SLOTS
+        others.ACCESSORY_SLOTS,
+        others.CLOTHING_SLOTS,
+        others.BODY_SLOTS
     }) do
         for _, slot in ipairs(
             group
         ) do
             local box =
-                D.others.fieldBoxes[
+                others.fieldBoxes[
                     slot.property
                 ]
             local value =
@@ -7235,9 +7234,9 @@ function D.others.loadConfig()
         end
     end
 end
-D.others.HEADLESS_ID = 134082579
-D.others.KORBLOX_ID = 139607718
-D.others.ACCESSORY_SLOTS = {
+others.HEADLESS_ID = 134082579
+others.KORBLOX_ID = 139607718
+others.ACCESSORY_SLOTS = {
     {label = "Hats", property = "HatAccessory", multi = true},
     {label = "Hair", property = "HairAccessory", multi = true},
     {label = "Face Accessory", property = "FaceAccessory", multi = true},
@@ -7247,12 +7246,12 @@ D.others.ACCESSORY_SLOTS = {
     {label = "Back", property = "BackAccessory", multi = true},
     {label = "Waist", property = "WaistAccessory", multi = true}
 }
-D.others.CLOTHING_SLOTS = {
+others.CLOTHING_SLOTS = {
     {label = "Shirt", property = "Shirt"},
     {label = "Pants", property = "Pants"},
     {label = "T-Shirt", property = "GraphicTShirt"}
 }
-D.others.BODY_SLOTS = {
+others.BODY_SLOTS = {
     {label = "Head", property = "Head"},
     {label = "Torso", property = "Torso"},
     {label = "Left Arm", property = "LeftArm"},
@@ -7260,7 +7259,7 @@ D.others.BODY_SLOTS = {
     {label = "Left Leg", property = "LeftLeg"},
     {label = "Right Leg", property = "RightLeg"}
 }
-D.others.ACCESSORY_PROPERTIES = {
+others.ACCESSORY_PROPERTIES = {
     "HatAccessory",
     "HairAccessory",
     "FaceAccessory",
@@ -7270,12 +7269,12 @@ D.others.ACCESSORY_PROPERTIES = {
     "BackAccessory",
     "WaistAccessory"
 }
-D.others.page = nil
-D.others.status = nil
-D.others.originalDescription = nil
-D.others.targetHumanoid = nil
-D.others.fieldBoxes = {}
-function D.others.getHumanoids()
+others.page = nil
+others.status = nil
+others.originalDescription = nil
+others.targetHumanoid = nil
+others.fieldBoxes = {}
+function others.getHumanoids()
     local result = {}
     local seen = {}
     local function add(h)
@@ -7307,15 +7306,15 @@ function D.others.getHumanoids()
     end
     return result
 end
-function D.others.getHumanoid()
-    return D.others.getHumanoids()[1]
+function others.getHumanoid()
+    return others.getHumanoids()[1]
 end
-function D.others.ensureSnapshot()
-    if D.others.originalDescription then
+function others.ensureSnapshot()
+    if others.originalDescription then
         return true
     end
     local humanoid =
-        D.others.getHumanoid()
+        others.getHumanoid()
     if not humanoid then
         return false
     end
@@ -7333,32 +7332,32 @@ function D.others.ensureSnapshot()
     if not cloneOk or not clone then
         return false
     end
-    D.others.targetHumanoid =
+    others.targetHumanoid =
         humanoid
-    D.others.originalDescription =
+    others.originalDescription =
         clone
     return true
 end
-function D.others.isR6()
+function others.isR6()
     local humanoid =
-        D.others.getHumanoid()
+        others.getHumanoid()
     return humanoid
         and humanoid.RigType
             == Enum.HumanoidRigType.R6
 end
-function D.others.getDescription()
-    if not D.others.isR6() then
-        if D.others.status then
-            D.others.status.Text =
+function others.getDescription()
+    if not others.isR6() then
+        if others.status then
+            others.status.Text =
                 "R6 only"
         end
         return nil
     end
-    if not D.others.ensureSnapshot() then
+    if not others.ensureSnapshot() then
         return nil
     end
     local humanoid =
-        D.others.getHumanoid()
+        others.getHumanoid()
     if not humanoid then
         return nil
     end
@@ -7371,7 +7370,7 @@ function D.others.getDescription()
     end
     return nil
 end
-function D.others.propertyText(
+function others.propertyText(
     description,
     slot
 )
@@ -7394,26 +7393,26 @@ function D.others.propertyText(
     end
     return tostring(number)
 end
-function D.others.refresh()
+function others.refresh()
     local description =
-        D.others.getDescription()
+        others.getDescription()
     if not description then
         return
     end
     local groups = {
-        D.others.ACCESSORY_SLOTS,
-        D.others.CLOTHING_SLOTS,
-        D.others.BODY_SLOTS
+        others.ACCESSORY_SLOTS,
+        others.CLOTHING_SLOTS,
+        others.BODY_SLOTS
     }
     for _, group in ipairs(groups) do
         for _, slot in ipairs(group) do
             local box =
-                D.others.fieldBoxes[
+                others.fieldBoxes[
                     slot.property
                 ]
             if box then
                 box.Text =
-                    D.others.propertyText(
+                    others.propertyText(
                         description,
                         slot
                     )
@@ -7421,12 +7420,12 @@ function D.others.refresh()
         end
     end
 end
-function D.others.applyDescription(
+function others.applyDescription(
     description
 )
-    if not D.others.isR6() then
-        if D.others.status then
-            D.others.status.Text =
+    if not others.isR6() then
+        if others.status then
+            others.status.Text =
                 "R6 only"
         end
         return false
@@ -7434,7 +7433,7 @@ function D.others.applyDescription(
     local applied = 0
     local lastError
     for _, humanoid in ipairs(
-        D.others.getHumanoids()
+        others.getHumanoids()
     ) do
         local ok, err =
             pcall(function()
@@ -7464,7 +7463,7 @@ function D.others.applyDescription(
     if applied == 0 then
         --// Last compatibility fallback.
         for _, humanoid in ipairs(
-            D.others.getHumanoids()
+            others.getHumanoids()
         ) do
             local ok =
                 pcall(function()
@@ -7482,24 +7481,24 @@ function D.others.applyDescription(
             "[Others] Apply failed:",
             lastError
         )
-        if D.others.status then
-            D.others.status.Text =
+        if others.status then
+            others.status.Text =
                 "Apply Error"
         end
         return false
     end
-    if D.others.status then
-        D.others.status.Text =
+    if others.status then
+        others.status.Text =
             "Applied"
     end
     return true
 end
-function D.others.applyField(
+function others.applyField(
     slot,
     textValue
 )
     local description =
-        D.others.getDescription()
+        others.getDescription()
     if not description then
         return false
     end
@@ -7558,31 +7557,31 @@ function D.others.applyField(
     if not ok then
         return false
     end
-    return D.others.applyDescription(
+    return others.applyDescription(
         description
     )
 end
-function D.others.scan()
+function others.scan()
     local description =
-        D.others.getDescription()
+        others.getDescription()
     if not description then
         return false
     end
-    D.others.refresh()
-    if D.others.status then
-        D.others.status.Text =
+    others.refresh()
+    if others.status then
+        others.status.Text =
             "Scanned • R6"
     end
     return true
 end
-function D.others.clearAccessories()
+function others.clearAccessories()
     local description =
-        D.others.getDescription()
+        others.getDescription()
     if not description then
         return false
     end
     for _, property in ipairs(
-        D.others.ACCESSORY_PROPERTIES
+        others.ACCESSORY_PROPERTIES
     ) do
         pcall(function()
             description[property] = ""
@@ -7591,24 +7590,24 @@ function D.others.clearAccessories()
     pcall(function()
         description.Face = 0
     end)
-    return D.others.applyDescription(
+    return others.applyDescription(
         description
     )
 end
-function D.others.restore(
+function others.restore(
     keepSnapshot
 )
-    if not D.others.originalDescription then
+    if not others.originalDescription then
         return false
     end
     local result =
-        D.others.applyDescription(
-            D.others.originalDescription
+        others.applyDescription(
+            others.originalDescription
         )
     if not keepSnapshot then
-        D.others.originalDescription =
+        others.originalDescription =
             nil
-        D.others.targetHumanoid =
+        others.targetHumanoid =
             nil
     end
     return result
@@ -7617,7 +7616,7 @@ end
 --// MAIN / AUTOJUMP
 --// =========================================================
 local mainJump = {
-    D.enabled = false,
+    enabled = false,
     jumpDelay = 0.01,
     hotkeyName = "Z",
     hideUIHotkeyName = "H",
@@ -7630,27 +7629,27 @@ local mainJump = {
     frontSensorPart = nil,
     sensorTouchConnection = nil,
     frontSensorTouchConnection = nil,
-    D.connections = {}
+    connections = {}
 }
 mainJump.jumpDelay =
     math.clamp(
         tonumber(
-            D.savedConfig.main
-            and D.savedConfig.main.jumpDelay
+            savedConfig.main
+            and savedConfig.main.jumpDelay
         ) or 0.01,
         0,
         5
     )
 mainJump.hotkeyName =
     tostring(
-        D.savedConfig.main
-        and D.savedConfig.main.hotkey
+        savedConfig.main
+        and savedConfig.main.hotkey
         or "Z"
     )
 mainJump.hideUIHotkeyName =
     tostring(
-        D.savedConfig.main
-        and D.savedConfig.main.hideUIHotkey
+        savedConfig.main
+        and savedConfig.main.hideUIHotkey
         or "H"
     )
 function DEADEYE_FN_mainConnect(connection)
@@ -7672,7 +7671,7 @@ function DEADEYE_FN_mainDisconnect()
     )
 end
 function mainJump.saveConfig()
-    D.savedConfig.main = {
+    savedConfig.main = {
         jumpDelay = mainJump.jumpDelay,
         hotkey = mainJump.hotkeyName,
         hideUIHotkey =
@@ -7722,7 +7721,7 @@ function mainJump.setEnabled(state)
             end)
 
             task.defer(function()
-                if not D.genv.DEADEYE_MAIN_RUNNING
+                if not genv.DEADEYE_MAIN_RUNNING
                     or not mainJump.enabled
                     or not mainJump.humanoid
                     or not mainJump.humanoid.Parent
@@ -7795,23 +7794,23 @@ function DEADEYE_FN_mainFindKeyCode(value)
     end
     return nil
 end
-D.jumpKey =
+local jumpKey =
     DEADEYE_FN_mainFindKeyCode(
         mainJump.hotkeyName
     )
-if D.jumpKey then
+if jumpKey then
     mainJump.hotkeyName =
-        D.jumpKey.Name
+        jumpKey.Name
 else
     mainJump.hotkeyName = "Z"
 end
-D.hideKey =
+local hideKey =
     DEADEYE_FN_mainFindKeyCode(
         mainJump.hideUIHotkeyName
     )
-if D.hideKey then
+if hideKey then
     mainJump.hideUIHotkeyName =
-        D.hideKey.Name
+        hideKey.Name
 else
     mainJump.hideUIHotkeyName = "H"
 end
@@ -7883,7 +7882,7 @@ function mainJump.destroySensors()
     end
 end
 function mainJump.canJump()
-    if not D.genv.DEADEYE_MAIN_RUNNING
+    if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
         or not mainJump.humanoid
         or mainJump.humanoid.Health <= 0
@@ -7917,7 +7916,7 @@ function mainJump.jump(hit)
     end)
 end
 function mainJump.contact(hit)
-    if not D.genv.DEADEYE_MAIN_RUNNING
+    if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
         or not hit
     then
@@ -7933,7 +7932,7 @@ function mainJump.contact(hit)
     task.wait(
         mainJump.jumpDelay
     )
-    if not D.genv.DEADEYE_MAIN_RUNNING
+    if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
     then
         return
@@ -8043,83 +8042,83 @@ function mainJump.createSensors(char)
             end
         )
 end
-D.genv.DEADEYE_MAIN_RUNNING = true
-D.mainPage =
+genv.DEADEYE_MAIN_RUNNING = true
+mainPage =
     Instance.new("ScrollingFrame")
-D.mainPage.Name =
+mainPage.Name =
     "MainPage"
-D.mainPage.Size =
+mainPage.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-D.mainPage.Position =
+mainPage.Position =
     UDim2.new(
         0,
         82,
         0,
         48
     )
-D.mainPage.BackgroundColor3 =
+mainPage.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-D.mainPage.BorderSizePixel = 0
-D.mainPage.ScrollBarThickness = 6
-D.mainPage.AutomaticCanvasSize =
+mainPage.BorderSizePixel = 0
+mainPage.ScrollBarThickness = 6
+mainPage.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-D.mainPage.ScrollingDirection =
+mainPage.ScrollingDirection =
     Enum.ScrollingDirection.Y
-D.mainPage.Visible = false
-D.mainPage.Parent = D.Main
-D.__UI.mainCorner =
+mainPage.Visible = false
+mainPage.Parent = Main
+__UI.mainCorner =
     Instance.new("UICorner")
-D.__UI.mainCorner.CornerRadius =
+__UI.mainCorner.CornerRadius =
     UDim.new(
         0,
         9
     )
-D.__UI.mainCorner.Parent =
-    D.mainPage
-D.mainPadding =
+__UI.mainCorner.Parent =
+    mainPage
+local mainPadding =
     Instance.new("UIPadding")
-D.mainPadding.PaddingTop =
+mainPadding.PaddingTop =
     UDim.new(
         0,
         8
     )
-D.mainPadding.PaddingBottom =
+mainPadding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-D.mainPadding.PaddingLeft =
+mainPadding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-D.mainPadding.PaddingRight =
+mainPadding.PaddingRight =
     UDim.new(
         0,
         8
     )
-D.mainPadding.Parent =
-    D.mainPage
-D.__UI.mainLayout =
+mainPadding.Parent =
+    mainPage
+__UI.mainLayout =
     Instance.new("UIListLayout")
-D.__UI.mainLayout.Padding =
+__UI.mainLayout.Padding =
     UDim.new(
         0,
         6
     )
-D.__UI.mainLayout.SortOrder =
+__UI.mainLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
-D.__UI.mainLayout.Parent =
-    D.mainPage
+__UI.mainLayout.Parent =
+    mainPage
 function DEADEYE_FN_mainRow(labelText, order)
     local row =
         Instance.new("Frame")
@@ -8138,7 +8137,7 @@ function DEADEYE_FN_mainRow(labelText, order)
         )
     row.BorderSizePixel = 0
     row.LayoutOrder = order
-    row.Parent = D.mainPage
+    row.Parent = mainPage
 
     local rowStroke =
         Instance.new("UIStroke")
@@ -8160,40 +8159,40 @@ function DEADEYE_FN_mainRow(labelText, order)
         row
     return row
 end
-D.__UI.autoRow =
+__UI.autoRow =
     DEADEYE_FN_mainRow(
         "AUTOJUMP",
         1
     )
-D.autoLabel =
+local autoLabel =
     Instance.new("TextLabel")
-D.autoLabel.Size =
+autoLabel.Size =
     UDim2.new(
         0.7,
         0,
         1,
         0
     )
-D.autoLabel.Position =
+autoLabel.Position =
     UDim2.new(
         0,
         10,
         0,
         0
     )
-D.autoLabel.BackgroundTransparency = 1
-D.autoLabel.Text = "AUTOJUMP"
-D.autoLabel.TextSize = 11
-D.autoLabel.Font = Enum.Font.GothamBold
-D.autoLabel.TextColor3 =
+autoLabel.BackgroundTransparency = 1
+autoLabel.Text = "AUTOJUMP"
+autoLabel.TextSize = 11
+autoLabel.Font = Enum.Font.GothamBold
+autoLabel.TextColor3 =
     Color3.fromRGB(
         215,
         215,
         215
     )
-D.autoLabel.TextXAlignment =
+autoLabel.TextXAlignment =
     Enum.TextXAlignment.Left
-D.autoLabel.Parent = D.__UI.autoRow
+autoLabel.Parent = __UI.autoRow
 mainJump.toggle =
     Instance.new("TextButton")
 mainJump.toggle.Size =
@@ -8221,15 +8220,15 @@ mainJump.toggle.TextColor3 =
         255
     )
 mainJump.toggle.Parent =
-    D.__UI.autoRow
-D.__UI.toggleCorner =
+    __UI.autoRow
+__UI.toggleCorner =
     Instance.new("UICorner")
-D.__UI.toggleCorner.CornerRadius =
+__UI.toggleCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-D.__UI.toggleCorner.Parent =
+__UI.toggleCorner.Parent =
     mainJump.toggle
 DEADEYE_FN_mainConnect(
     mainJump.toggle.MouseButton1Click:Connect(
@@ -8240,17 +8239,17 @@ DEADEYE_FN_mainConnect(
         end
     )
 )
-D.__UI.delayRow =
+__UI.delayRow =
     DEADEYE_FN_mainRow(
         "DELAY",
         2
     )
-D.__UI.delayLabel =
-    D.autoLabel:Clone()
-D.__UI.delayLabel.Text =
+__UI.delayLabel =
+    autoLabel:Clone()
+__UI.delayLabel.Text =
     "DELAY"
-D.__UI.delayLabel.Parent =
-    D.__UI.delayRow
+__UI.delayLabel.Parent =
+    __UI.delayRow
 mainJump.delayBox =
     Instance.new("TextBox")
 mainJump.delayBox.Size =
@@ -8289,62 +8288,62 @@ mainJump.delayBox.TextColor3 =
         255
     )
 mainJump.delayBox.Parent =
-    D.__UI.delayRow
-D.__UI.delayCorner =
+    __UI.delayRow
+__UI.delayCorner =
     Instance.new("UICorner")
-D.__UI.delayCorner.CornerRadius =
+__UI.delayCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-D.__UI.delayCorner.Parent =
+__UI.delayCorner.Parent =
     mainJump.delayBox
-D.delaySet =
+local delaySet =
     Instance.new("TextButton")
-D.delaySet.Size =
+delaySet.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-D.delaySet.Position =
+delaySet.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-D.delaySet.BackgroundColor3 =
+delaySet.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-D.delaySet.BorderSizePixel = 0
-D.delaySet.Text = "SET"
-D.delaySet.TextSize = 9
-D.delaySet.Font =
+delaySet.BorderSizePixel = 0
+delaySet.Text = "SET"
+delaySet.TextSize = 9
+delaySet.Font =
     Enum.Font.GothamBold
-D.delaySet.TextColor3 =
+delaySet.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.delaySet.Parent =
-    D.__UI.delayRow
-D.__UI.delaySetCorner =
+delaySet.Parent =
+    __UI.delayRow
+__UI.delaySetCorner =
     Instance.new("UICorner")
-D.__UI.delaySetCorner.CornerRadius =
+__UI.delaySetCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-D.__UI.delaySetCorner.Parent =
-    D.delaySet
+__UI.delaySetCorner.Parent =
+    delaySet
 DEADEYE_FN_mainConnect(
-    D.delaySet.MouseButton1Click:Connect(
+    delaySet.MouseButton1Click:Connect(
         function()
             mainJump.setDelay(
                 mainJump.delayBox.Text
@@ -8363,17 +8362,17 @@ DEADEYE_FN_mainConnect(
         end
     )
 )
-D.__UI.hotkeyRow =
+__UI.hotkeyRow =
     DEADEYE_FN_mainRow(
         "HOTKEY",
         3
     )
-D.__UI.hotkeyLabel =
-    D.autoLabel:Clone()
-D.__UI.hotkeyLabel.Text =
+__UI.hotkeyLabel =
+    autoLabel:Clone()
+__UI.hotkeyLabel.Text =
     "HOTKEY"
-D.__UI.hotkeyLabel.Parent =
-    D.__UI.hotkeyRow
+__UI.hotkeyLabel.Parent =
+    __UI.hotkeyRow
 mainJump.hotkeyBox =
     Instance.new("TextButton")
 mainJump.hotkeyBox.Size =
@@ -8409,15 +8408,15 @@ mainJump.hotkeyBox.TextColor3 =
         255
     )
 mainJump.hotkeyBox.Parent =
-    D.__UI.hotkeyRow
-D.__UI.hotkeyCorner =
+    __UI.hotkeyRow
+__UI.hotkeyCorner =
     Instance.new("UICorner")
-D.__UI.hotkeyCorner.CornerRadius =
+__UI.hotkeyCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-D.__UI.hotkeyCorner.Parent =
+__UI.hotkeyCorner.Parent =
     mainJump.hotkeyBox
 DEADEYE_FN_mainConnect(
     mainJump.hotkeyBox.MouseButton1Click:Connect(
@@ -8428,17 +8427,17 @@ DEADEYE_FN_mainConnect(
         end
     )
 )
-D.__UI.hideRow =
+__UI.hideRow =
     DEADEYE_FN_mainRow(
         "HIDE UI",
         4
     )
-D.__UI.hideLabel =
-    D.autoLabel:Clone()
-D.__UI.hideLabel.Text =
+__UI.hideLabel =
+    autoLabel:Clone()
+__UI.hideLabel.Text =
     "HIDE UI"
-D.__UI.hideLabel.Parent =
-    D.__UI.hideRow
+__UI.hideLabel.Parent =
+    __UI.hideRow
 mainJump.hideUIHotkeyBox =
     Instance.new("TextButton")
 mainJump.hideUIHotkeyBox.Size =
@@ -8474,15 +8473,15 @@ mainJump.hideUIHotkeyBox.TextColor3 =
         255
     )
 mainJump.hideUIHotkeyBox.Parent =
-    D.__UI.hideRow
-D.__UI.hideCorner =
+    __UI.hideRow
+__UI.hideCorner =
     Instance.new("UICorner")
-D.__UI.hideCorner.CornerRadius =
+__UI.hideCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-D.__UI.hideCorner.Parent =
+__UI.hideCorner.Parent =
     mainJump.hideUIHotkeyBox
 DEADEYE_FN_mainConnect(
     mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
@@ -8494,7 +8493,7 @@ DEADEYE_FN_mainConnect(
     )
 )
 DEADEYE_FN_mainConnect(
-    D.UserInputService.InputBegan:Connect(
+    UserInputService.InputBegan:Connect(
         function(input)
             if mainJump.capturing then
                 local keyCode =
@@ -8533,17 +8532,17 @@ DEADEYE_FN_mainConnect(
                     mainJump.hideUIHotkeyName
                 )
             then
-                D.ScreenGui.Enabled =
-                    not D.ScreenGui.Enabled
+                ScreenGui.Enabled =
+                    not ScreenGui.Enabled
             end
         end
     )
 )
 DEADEYE_FN_mainConnect(
-    D.UserInputService.JumpRequest:Connect(
+    UserInputService.JumpRequest:Connect(
         function()
             if mainJump.enabled
-                or not D.genv.DEADEYE_MAIN_RUNNING
+                or not genv.DEADEYE_MAIN_RUNNING
                 or not mainJump.humanoid
                 or not mainJump.humanoid.Parent
             then
@@ -8588,14 +8587,14 @@ DEADEYE_FN_mainConnect(
     LocalPlayer.CharacterAdded:Connect(
         function(char)
             task.wait(0.2)
-            if D.genv.DEADEYE_MAIN_RUNNING then
+            if genv.DEADEYE_MAIN_RUNNING then
                 mainJump.createSensors(char)
             end
         end
     )
 )
 if LocalPlayer.Character
-    and D.genv.DEADEYE_MAIN_RUNNING
+    and genv.DEADEYE_MAIN_RUNNING
 then
     task.spawn(
         function()
@@ -8609,94 +8608,94 @@ mainJump.update()
 --// =========================================================
 --// OTHERS PAGE
 --// =========================================================
-D.others.page =
+others.page =
     Instance.new("ScrollingFrame")
-D.others.page.Name =
+others.page.Name =
     "OthersPage"
-D.others.page.Size =
+others.page.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-D.others.page.Position =
+others.page.Position =
     UDim2.new(
         0,
         82,
         0,
         48
     )
-D.others.page.BackgroundColor3 =
+others.page.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-D.others.page.BorderSizePixel =
+others.page.BorderSizePixel =
     0
-D.others.page.ScrollBarThickness =
+others.page.ScrollBarThickness =
     6
-D.others.page.CanvasSize =
+others.page.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-D.others.page.AutomaticCanvasSize =
+others.page.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-D.others.page.ScrollingDirection =
+others.page.ScrollingDirection =
     Enum.ScrollingDirection.Y
-D.others.page.Visible =
+others.page.Visible =
     false
-D.others.page.Parent =
-    D.Main
-D.others.pageCorner =
+others.page.Parent =
+    Main
+others.pageCorner =
     Instance.new("UICorner")
-D.others.pageCorner.CornerRadius =
+others.pageCorner.CornerRadius =
     UDim.new(
         0,
         9
     )
-D.others.pageCorner.Parent =
-    D.others.page
-D.others.padding =
+others.pageCorner.Parent =
+    others.page
+others.padding =
     Instance.new("UIPadding")
-D.others.padding.PaddingTop =
+others.padding.PaddingTop =
     UDim.new(
         0,
         8
     )
-D.others.padding.PaddingBottom =
+others.padding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-D.others.padding.PaddingLeft =
+others.padding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-D.others.padding.PaddingRight =
+others.padding.PaddingRight =
     UDim.new(
         0,
         8
     )
-D.others.padding.Parent =
-    D.others.page
-D.others.layout =
+others.padding.Parent =
+    others.page
+others.layout =
     Instance.new("UIListLayout")
-D.others.layout.Padding =
+others.layout.Padding =
     UDim.new(
         0,
         6
     )
-D.others.layout.SortOrder =
+others.layout.SortOrder =
     Enum.SortOrder.LayoutOrder
-D.others.layout.Parent =
-    D.others.page
-function D.others.header(
+others.layout.Parent =
+    others.page
+function others.header(
     textValue,
     orderValue
 )
@@ -8728,9 +8727,9 @@ function D.others.header(
     header.LayoutOrder =
         orderValue
     header.Parent =
-        D.others.page
+        others.page
 end
-function D.others.row(
+function others.row(
     slot,
     orderValue
 )
@@ -8757,7 +8756,7 @@ function D.others.row(
     row.LayoutOrder =
         orderValue
     row.Parent =
-        D.others.page
+        others.page
     local corner =
         Instance.new("UICorner")
     corner.CornerRadius =
@@ -8907,18 +8906,18 @@ function D.others.row(
         )
     applyCorner.Parent =
         apply
-    D.others.fieldBoxes[
+    others.fieldBoxes[
         slot.property
     ] =
         box
     DEADEYE_FN_addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
-                if D.others.applyField(
+                if others.applyField(
                     slot,
                     box.Text
                 ) then
-                    D.others.saveConfig()
+                    others.saveConfig()
                     apply.Text =
                         "OK"
                     task.delay(
@@ -8940,18 +8939,18 @@ function D.others.row(
         box.FocusLost:Connect(
             function(enterPressed)
                 if enterPressed then
-                    if D.others.applyField(
+                    if others.applyField(
                         slot,
                         box.Text
                     ) then
-                        D.others.saveConfig()
+                        others.saveConfig()
                     end
                 end
             end
         )
     )
 end
-function D.others.quickRow(
+function others.quickRow(
     labelText,
     property,
     assetId,
@@ -8977,7 +8976,7 @@ function D.others.quickRow(
     row.LayoutOrder =
         orderValue
     row.Parent =
-        D.others.page
+        others.page
     local corner =
         Instance.new("UICorner")
     corner.CornerRadius =
@@ -9070,17 +9069,17 @@ function D.others.quickRow(
     DEADEYE_FN_addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
-                if D.others.applyBodyPart(
+                if others.applyBodyPart(
                     property,
                     assetId
                 ) then
                     if property == "Head" then
-                        D.savedConfig.others._Headless =
+                        savedConfig.others._Headless =
                             tostring(
                                 assetId
                             )
                     elseif property == "RightLeg" then
-                        D.savedConfig.others._Korblox =
+                        savedConfig.others._Korblox =
                             tostring(
                                 assetId
                             )
@@ -9104,12 +9103,12 @@ function D.others.quickRow(
         )
     )
 end
-function D.others.applyBodyPart(
+function others.applyBodyPart(
     property,
     assetId
 )
     local description =
-        D.others.getDescription()
+        others.getDescription()
     if not description then
         return false
     end
@@ -9117,7 +9116,7 @@ function D.others.applyBodyPart(
         description[property] =
             assetId
     end)
-    return D.others.applyDescription(
+    return others.applyDescription(
         description
     )
 end
@@ -9125,16 +9124,16 @@ end
 --// APPLY ALL OTHERS
 --// Applies every current field in one HumanoidDescription call.
 --// =========================================================
-function D.others.applyAll()
+function others.applyAll()
     local description =
-        D.others.getDescription()
+        others.getDescription()
     if not description then
         return false
     end
     local groups = {
-        D.others.ACCESSORY_SLOTS,
-        D.others.CLOTHING_SLOTS,
-        D.others.BODY_SLOTS
+        others.ACCESSORY_SLOTS,
+        others.CLOTHING_SLOTS,
+        others.BODY_SLOTS
     }
     local changed = 0
     for _, group in ipairs(
@@ -9144,7 +9143,7 @@ function D.others.applyAll()
             group
         ) do
             local box =
-                D.others.fieldBoxes[
+                others.fieldBoxes[
                     slot.property
                 ]
             if box then
@@ -9214,100 +9213,100 @@ function D.others.applyAll()
     if changed == 0 then
         return false
     end
-    return D.others.applyDescription(
+    return others.applyDescription(
         description
     )
 end
-D.others.applyAllRow =
+others.applyAllRow =
     Instance.new("Frame")
-D.others.applyAllRow.Size =
+others.applyAllRow.Size =
     UDim2.new(
         1,
         -4,
         0,
         42
     )
-D.others.applyAllRow.BackgroundColor3 =
+others.applyAllRow.BackgroundColor3 =
     Color3.fromRGB(
         40,
         40,
         40
     )
-D.others.applyAllRow.BorderSizePixel =
+others.applyAllRow.BorderSizePixel =
     0
-D.others.applyAllRow.LayoutOrder =
+others.applyAllRow.LayoutOrder =
     0
-D.others.applyAllRow.Parent =
-    D.others.page
-D.others.applyAllCorner =
+others.applyAllRow.Parent =
+    others.page
+others.applyAllCorner =
     Instance.new("UICorner")
-D.others.applyAllCorner.CornerRadius =
+others.applyAllCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-D.others.applyAllCorner.Parent =
-    D.others.applyAllRow
-D.others.applyAllButton =
+others.applyAllCorner.Parent =
+    others.applyAllRow
+others.applyAllButton =
     Instance.new("TextButton")
-D.others.applyAllButton.Size =
+others.applyAllButton.Size =
     UDim2.new(
         1,
         -12,
         0,
         30
     )
-D.others.applyAllButton.Position =
+others.applyAllButton.Position =
     UDim2.new(
         0,
         6,
         0.5,
         -15
     )
-D.others.applyAllButton.BackgroundColor3 =
+others.applyAllButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-D.others.applyAllButton.BorderSizePixel =
+others.applyAllButton.BorderSizePixel =
     0
-D.others.applyAllButton.Text =
+others.applyAllButton.Text =
     "APPLY ALL"
-D.others.applyAllButton.TextSize =
+others.applyAllButton.TextSize =
     10
-D.others.applyAllButton.Font =
+others.applyAllButton.Font =
     Enum.Font.GothamBold
-D.others.applyAllButton.TextColor3 =
+others.applyAllButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.others.applyAllButton.Parent =
-    D.others.applyAllRow
-D.others.applyAllButtonCorner =
+others.applyAllButton.Parent =
+    others.applyAllRow
+others.applyAllButtonCorner =
     Instance.new("UICorner")
-D.others.applyAllButtonCorner.CornerRadius =
+others.applyAllButtonCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-D.others.applyAllButtonCorner.Parent =
-    D.others.applyAllButton
+others.applyAllButtonCorner.Parent =
+    others.applyAllButton
 DEADEYE_FN_addUnusualConnection(
-    D.others.applyAllButton.MouseButton1Click:Connect(
+    others.applyAllButton.MouseButton1Click:Connect(
         function()
-            if D.others.applyAll() then
-                D.others.saveConfig()
-                D.others.applyAllButton.Text =
+            if others.applyAll() then
+                others.saveConfig()
+                others.applyAllButton.Text =
                     "APPLIED"
                 task.delay(
                     0.8,
                     function()
                         pcall(function()
-                            if D.others.applyAllButton.Parent then
-                                D.others.applyAllButton.Text =
+                            if others.applyAllButton.Parent then
+                                others.applyAllButton.Text =
                                     "APPLY ALL"
                             end
                         end)
@@ -9317,298 +9316,298 @@ DEADEYE_FN_addUnusualConnection(
         end
     )
 )
-D.others.header(
+others.header(
     "QUICK BODY",
     1
 )
-D.others.quickRow(
+others.quickRow(
     "HEADLESS",
     "Head",
-    D.others.HEADLESS_ID,
+    others.HEADLESS_ID,
     2
 )
-D.others.quickRow(
+others.quickRow(
     "KORBLOX",
     "RightLeg",
-    D.others.KORBLOX_ID,
+    others.KORBLOX_ID,
     3
 )
-D.others.header(
+others.header(
     "ACCESSORIES",
     4
 )
-D.nextOrder =
+local nextOrder =
     5
 for _, slot in ipairs(
-    D.others.ACCESSORY_SLOTS
+    others.ACCESSORY_SLOTS
 ) do
-    D.others.row(
+    others.row(
         slot,
-        D.nextOrder
+        nextOrder
     )
-    D.nextOrder += 1
+    nextOrder += 1
 end
-D.others.header(
+others.header(
     "2D CLOTHING",
-    D.nextOrder
+    nextOrder
 )
-D.nextOrder += 1
+nextOrder += 1
 for _, slot in ipairs(
-    D.others.CLOTHING_SLOTS
+    others.CLOTHING_SLOTS
 ) do
-    D.others.row(
+    others.row(
         slot,
-        D.nextOrder
+        nextOrder
     )
-    D.nextOrder += 1
+    nextOrder += 1
 end
-D.others.header(
+others.header(
     "BODY BUNDLES",
-    D.nextOrder
+    nextOrder
 )
-D.nextOrder += 1
+nextOrder += 1
 for _, slot in ipairs(
-    D.others.BODY_SLOTS
+    others.BODY_SLOTS
 ) do
-    D.others.row(
+    others.row(
         slot,
-        D.nextOrder
+        nextOrder
     )
-    D.nextOrder += 1
+    nextOrder += 1
 end
 --// =========================================================
 --// FULL SCAN / CLEAR / RESET
 --// =========================================================
-D.others.scanRow =
+others.scanRow =
     Instance.new("Frame")
-D.others.scanRow.Size =
+others.scanRow.Size =
     UDim2.new(
         1,
         -4,
         0,
         40
     )
-D.others.scanRow.BackgroundColor3 =
+others.scanRow.BackgroundColor3 =
     Color3.fromRGB(
         40,
         40,
         40
     )
-D.others.scanRow.BorderSizePixel =
+others.scanRow.BorderSizePixel =
     0
-D.others.scanRow.LayoutOrder =
-    D.nextOrder + 1
-D.others.scanRow.Parent =
-    D.others.page
-D.others.scanButton =
+others.scanRow.LayoutOrder =
+    nextOrder + 1
+others.scanRow.Parent =
+    others.page
+others.scanButton =
     Instance.new("TextButton")
-D.others.scanButton.Size =
+others.scanButton.Size =
     UDim2.new(
         0,
         100,
         0,
         28
     )
-D.others.scanButton.Position =
+others.scanButton.Position =
     UDim2.new(
         0,
         8,
         0.5,
         -14
     )
-D.others.scanButton.BackgroundColor3 =
+others.scanButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-D.others.scanButton.BorderSizePixel =
+others.scanButton.BorderSizePixel =
     0
-D.others.scanButton.Text =
+others.scanButton.Text =
     "FULL SCAN"
-D.others.scanButton.TextSize =
+others.scanButton.TextSize =
     9
-D.others.scanButton.Font =
+others.scanButton.Font =
     Enum.Font.GothamBold
-D.others.scanButton.TextColor3 =
+others.scanButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.others.scanButton.Parent =
-    D.others.scanRow
-D.others.scanButtonCorner =
+others.scanButton.Parent =
+    others.scanRow
+others.scanButtonCorner =
     Instance.new("UICorner")
-D.others.scanButtonCorner.CornerRadius =
+others.scanButtonCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-D.others.scanButtonCorner.Parent =
-    D.others.scanButton
-D.others.status =
+others.scanButtonCorner.Parent =
+    others.scanButton
+others.status =
     Instance.new("TextLabel")
-D.others.status.Size =
+others.status.Size =
     UDim2.new(
         1,
         -122,
         1,
         0
     )
-D.others.status.Position =
+others.status.Position =
     UDim2.new(
         0,
         118,
         0,
         0
     )
-D.others.status.BackgroundTransparency =
+others.status.BackgroundTransparency =
     1
-D.others.status.Text =
+others.status.Text =
     "Click FULL SCAN"
-D.others.status.TextSize =
+others.status.TextSize =
     10
-D.others.status.Font =
+others.status.Font =
     Enum.Font.Gotham
-D.others.status.TextColor3 =
+others.status.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
-D.others.status.TextXAlignment =
+others.status.TextXAlignment =
     Enum.TextXAlignment.Left
-D.others.status.Parent =
-    D.others.scanRow
-D.others.header(
+others.status.Parent =
+    others.scanRow
+others.header(
     "TOOLS",
-    D.nextOrder + 2
+    nextOrder + 2
 )
-D.others.toolsFrame =
+others.toolsFrame =
     Instance.new("Frame")
-D.others.toolsFrame.Size =
+others.toolsFrame.Size =
     UDim2.new(
         1,
         -4,
         0,
         80
     )
-D.others.toolsFrame.BackgroundTransparency =
+others.toolsFrame.BackgroundTransparency =
     1
-D.others.toolsFrame.LayoutOrder =
-    D.nextOrder + 3
-D.others.toolsFrame.Parent =
-    D.others.page
-D.others.clearButton =
+others.toolsFrame.LayoutOrder =
+    nextOrder + 3
+others.toolsFrame.Parent =
+    others.page
+others.clearButton =
     Instance.new("TextButton")
-D.others.clearButton.Size =
+others.clearButton.Size =
     UDim2.new(
         1,
         0,
         0,
         34
     )
-D.others.clearButton.Position =
+others.clearButton.Position =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-D.others.clearButton.BackgroundColor3 =
+others.clearButton.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-D.others.clearButton.BorderSizePixel =
+others.clearButton.BorderSizePixel =
     0
-D.others.clearButton.Text =
+others.clearButton.Text =
     "REMOVE EVERYTHING EXCEPT 2D CLOTHES + BODY"
-D.others.clearButton.TextSize =
+others.clearButton.TextSize =
     9
-D.others.clearButton.Font =
+others.clearButton.Font =
     Enum.Font.GothamBold
-D.others.clearButton.TextColor3 =
+others.clearButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.others.clearButton.Parent =
-    D.others.toolsFrame
-D.others.clearCorner =
+others.clearButton.Parent =
+    others.toolsFrame
+others.clearCorner =
     Instance.new("UICorner")
-D.others.clearCorner.CornerRadius =
+others.clearCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-D.others.clearCorner.Parent =
-    D.others.clearButton
-D.others.resetButton =
+others.clearCorner.Parent =
+    others.clearButton
+others.resetButton =
     Instance.new("TextButton")
-D.others.resetButton.Size =
+others.resetButton.Size =
     UDim2.new(
         1,
         0,
         0,
         34
     )
-D.others.resetButton.Position =
+others.resetButton.Position =
     UDim2.new(
         0,
         0,
         0,
         40
     )
-D.others.resetButton.BackgroundColor3 =
+others.resetButton.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-D.others.resetButton.BorderSizePixel =
+others.resetButton.BorderSizePixel =
     0
-D.others.resetButton.Text =
+others.resetButton.Text =
     "RESET TO INITIAL AVATAR"
-D.others.resetButton.TextSize =
+others.resetButton.TextSize =
     9
-D.others.resetButton.Font =
+others.resetButton.Font =
     Enum.Font.GothamBold
-D.others.resetButton.TextColor3 =
+others.resetButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.others.resetButton.Parent =
-    D.others.toolsFrame
-D.others.resetCorner =
+others.resetButton.Parent =
+    others.toolsFrame
+others.resetCorner =
     Instance.new("UICorner")
-D.others.resetCorner.CornerRadius =
+others.resetCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-D.others.resetCorner.Parent =
-    D.others.resetButton
+others.resetCorner.Parent =
+    others.resetButton
 DEADEYE_FN_addUnusualConnection(
-    D.others.scanButton.MouseButton1Click:Connect(
+    others.scanButton.MouseButton1Click:Connect(
         function()
-            D.others.scan()
+            others.scan()
         end
     )
 )
 DEADEYE_FN_addUnusualConnection(
-    D.others.clearButton.MouseButton1Click:Connect(
+    others.clearButton.MouseButton1Click:Connect(
         function()
-            if D.others.clearAccessories() then
+            if others.clearAccessories() then
                 task.delay(
                     0.3,
                     function()
-                        D.others.saveConfig()
+                        others.saveConfig()
                     end
                 )
             end
@@ -9616,11 +9615,11 @@ DEADEYE_FN_addUnusualConnection(
     )
 )
 DEADEYE_FN_addUnusualConnection(
-    D.others.resetButton.MouseButton1Click:Connect(
+    others.resetButton.MouseButton1Click:Connect(
         function()
-            D.others.ensureSnapshot()
-            if D.others.restore(true) then
-                D.others.scan()
+            others.ensureSnapshot()
+            if others.restore(true) then
+                others.scan()
             end
         end
     )
@@ -9628,46 +9627,46 @@ DEADEYE_FN_addUnusualConnection(
 task.defer(
     function()
         pcall(function()
-            D.others.loadConfig()
+            others.loadConfig()
         end)
     end
 )
 --// CATEGORY BAR
 -- =========================================================
-D.categoryBar =
+categoryBar =
     Instance.new("Frame")
-D.categoryBar.Name =
+categoryBar.Name =
     "CategoryBar"
-D.categoryBar.Size =
+categoryBar.Size =
     UDim2.new(
         0,
         66,
         1,
         -56
     )
-D.categoryBar.Position =
+categoryBar.Position =
     UDim2.new(
         0,
         8,
         0,
         48
     )
-D.categoryBar.BackgroundColor3 =
+categoryBar.BackgroundColor3 =
     Color3.fromRGB(
         26,
         30,
         36
     )
-D.categoryBar.BorderSizePixel =
+categoryBar.BorderSizePixel =
     0
-D.categoryBar.Parent =
-    D.Main
+categoryBar.Parent =
+    Main
 
-D.__UI.categoryGradient =
+__UI.categoryGradient =
     Instance.new("UIGradient")
-D.__UI.categoryGradient.Rotation =
+__UI.categoryGradient.Rotation =
     90
-D.__UI.categoryGradient.Transparency =
+__UI.categoryGradient.Transparency =
     NumberSequence.new({
         NumberSequenceKeypoint.new(
             0,
@@ -9678,27 +9677,27 @@ D.__UI.categoryGradient.Transparency =
             0.2
         )
     })
-D.__UI.categoryGradient.Parent =
-    D.categoryBar
+__UI.categoryGradient.Parent =
+    categoryBar
 
-D.__UI.categoryStroke =
+__UI.categoryStroke =
     Instance.new("UIStroke")
-D.__UI.categoryStroke.Thickness =
+__UI.categoryStroke.Thickness =
     1
-D.__UI.categoryStroke.Transparency =
+__UI.categoryStroke.Transparency =
     0.55
-D.__UI.categoryStroke.Parent =
-    D.categoryBar
+__UI.categoryStroke.Parent =
+    categoryBar
 
-D.__UI.categoryCorner =
+__UI.categoryCorner =
     Instance.new("UICorner")
-D.__UI.categoryCorner.CornerRadius =
+__UI.categoryCorner.CornerRadius =
     UDim.new(
         0,
         9
     )
-D.__UI.categoryCorner.Parent =
-    D.categoryBar
+__UI.categoryCorner.Parent =
+    categoryBar
 function DEADEYE_FN_makeCategoryButton(
     text,
     y
@@ -9744,7 +9743,7 @@ function DEADEYE_FN_makeCategoryButton(
     button.TextWrapped =
         true
     button.Parent =
-        D.categoryBar
+        categoryBar
     local corner =
         Instance.new("UICorner")
     corner.CornerRadius =
@@ -9766,22 +9765,22 @@ function DEADEYE_FN_makeCategoryButton(
 
     return button
 end
-D.mainCategoryButton =
+mainCategoryButton =
     DEADEYE_FN_makeCategoryButton(
         "MAIN",
         6
     )
-D.emoteCategoryButton =
+emoteCategoryButton =
     DEADEYE_FN_makeCategoryButton(
         "EMOTES",
         41
     )
-D.unusualCategoryButton =
+unusualCategoryButton =
     DEADEYE_FN_makeCategoryButton(
         "UNUSUAL",
         76
     )
-D.othersCategoryButton =
+othersCategoryButton =
     DEADEYE_FN_makeCategoryButton(
         "OTHERS",
         111
@@ -9792,177 +9791,177 @@ D.othersCategoryButton =
 function DEADEYE_FN_setCategory(
     category
 )
-    D.currentCategory =
+    currentCategory =
         category
     pcall(function()
         if category == "Main" then
-            D.MainTitle.Text =
+            MainTitle.Text =
                 "DeadEyes v1"
-            D.Status.Visible = false
-            D.Toggle.Visible = false
-            D.SlotsScroll.Visible = false
-            D.mainPage.Visible = true
-            D.unusualPage.Visible = false
-            D.unusualStatus.Visible = false
-            D.unusualPicker.Visible = false
-            D.others.page.Visible = false
-            D.mainCategoryButton.BackgroundColor3 =
+            Status.Visible = false
+            Toggle.Visible = false
+            SlotsScroll.Visible = false
+            mainPage.Visible = true
+            unusualPage.Visible = false
+            unusualStatus.Visible = false
+            unusualPicker.Visible = false
+            others.page.Visible = false
+            mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     65,
                     65,
                     65
                 )
-            D.emoteCategoryButton.BackgroundColor3 =
+            emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.unusualCategoryButton.BackgroundColor3 =
+            unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.othersCategoryButton.BackgroundColor3 =
+            othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
         elseif category == "Unusual" then
-            D.MainTitle.Text =
+            MainTitle.Text =
                 "DeadEyes v1"
-            D.Status.Visible =
+            Status.Visible =
                 false
-            D.Toggle.Visible =
+            Toggle.Visible =
                 true
-            D.Toggle.Parent =
-                D.unusualPage
-            D.Toggle.LayoutOrder =
+            Toggle.Parent =
+                unusualPage
+            Toggle.LayoutOrder =
                 0
-            D.SlotsScroll.Visible =
+            SlotsScroll.Visible =
                 false
-            D.mainPage.Visible =
+            mainPage.Visible =
                 false
-            D.unusualPage.Visible =
+            unusualPage.Visible =
                 true
-            D.unusualStatus.Visible =
+            unusualStatus.Visible =
                 false
-            D.unusualPicker.Visible =
+            unusualPicker.Visible =
                 false
-            D.others.page.Visible =
+            others.page.Visible =
                 false
-            D.mainCategoryButton.BackgroundColor3 =
+            mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.emoteCategoryButton.BackgroundColor3 =
+            emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.unusualCategoryButton.BackgroundColor3 =
+            unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     65,
                     65,
                     65
                 )
-            D.othersCategoryButton.BackgroundColor3 =
+            othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.updateUnusualToggle()
+            updateUnusualToggle()
         elseif category == "Others" then
-            D.MainTitle.Text =
+            MainTitle.Text =
                 "DeadEyes v1"
-            D.Status.Visible =
+            Status.Visible =
                 false
-            D.Toggle.Visible =
+            Toggle.Visible =
                 false
-            D.SlotsScroll.Visible =
+            SlotsScroll.Visible =
                 false
-            D.unusualPage.Visible =
+            unusualPage.Visible =
                 false
-            D.unusualStatus.Visible =
+            unusualStatus.Visible =
                 false
-            D.mainPage.Visible =
+            mainPage.Visible =
                 false
-            D.unusualPicker.Visible =
+            unusualPicker.Visible =
                 false
-            D.others.page.Visible =
+            others.page.Visible =
                 true
-            D.mainCategoryButton.BackgroundColor3 =
+            mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.emoteCategoryButton.BackgroundColor3 =
+            emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.unusualCategoryButton.BackgroundColor3 =
+            unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.othersCategoryButton.BackgroundColor3 =
+            othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     65,
                     65,
                     65
                 )
         else
-            D.MainTitle.Text =
+            MainTitle.Text =
                 "DeadEyes v1"
-            D.Status.Visible =
+            Status.Visible =
                 false
-            D.Toggle.Visible =
+            Toggle.Visible =
                 true
-            D.Toggle.Parent =
-                D.SlotsScroll
-            D.Toggle.LayoutOrder =
+            Toggle.Parent =
+                SlotsScroll
+            Toggle.LayoutOrder =
                 0
-            D.SlotsScroll.Visible =
+            SlotsScroll.Visible =
                 true
-            D.mainPage.Visible =
+            mainPage.Visible =
                 false
-            D.unusualPage.Visible =
+            unusualPage.Visible =
                 false
-            D.unusualStatus.Visible =
+            unusualStatus.Visible =
                 false
-            D.unusualPicker.Visible =
+            unusualPicker.Visible =
                 false
-            D.others.page.Visible =
+            others.page.Visible =
                 false
-            D.mainCategoryButton.BackgroundColor3 =
+            mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.unusualCategoryButton.BackgroundColor3 =
+            unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.othersCategoryButton.BackgroundColor3 =
+            othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
                     45,
                     45
                 )
-            D.emoteCategoryButton.BackgroundColor3 =
+            emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(
                     65,
                     65,
@@ -9973,10 +9972,10 @@ function DEADEYE_FN_setCategory(
     end)
 end
 DEADEYE_FN_addUnusualConnection(
-    D.mainCategoryButton.MouseButton1Click:Connect(
+    mainCategoryButton.MouseButton1Click:Connect(
         function()
-            if D.mainMinimized then
-                D.setMainMinimized(false)
+            if mainMinimized then
+                setMainMinimized(false)
             end
             DEADEYE_FN_setCategory(
                 "Main"
@@ -9985,10 +9984,10 @@ DEADEYE_FN_addUnusualConnection(
     )
 )
 DEADEYE_FN_addUnusualConnection(
-    D.emoteCategoryButton.MouseButton1Click:Connect(
+    emoteCategoryButton.MouseButton1Click:Connect(
         function()
-            if D.mainMinimized then
-                D.setMainMinimized(false)
+            if mainMinimized then
+                setMainMinimized(false)
             end
             DEADEYE_FN_setCategory(
                 "Emotes"
@@ -9996,10 +9995,10 @@ DEADEYE_FN_addUnusualConnection(
         end
     )
 )
-DEADEYE_FN_addUnusualConnection(    D.unusualCategoryButton.MouseButton1Click:Connect(
+DEADEYE_FN_addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
         function()
-            if D.mainMinimized then
-                D.setMainMinimized(false)
+            if mainMinimized then
+                setMainMinimized(false)
             end
             DEADEYE_FN_setCategory(
                 "Unusual"
@@ -10008,10 +10007,10 @@ DEADEYE_FN_addUnusualConnection(    D.unusualCategoryButton.MouseButton1Click:Co
     )
 )
 DEADEYE_FN_addUnusualConnection(
-    D.othersCategoryButton.MouseButton1Click:Connect(
+    othersCategoryButton.MouseButton1Click:Connect(
         function()
-            if D.mainMinimized then
-                D.setMainMinimized(false)
+            if mainMinimized then
+                setMainMinimized(false)
             end
             DEADEYE_FN_setCategory(
                 "Others"
@@ -10023,55 +10022,55 @@ DEADEYE_FN_addUnusualConnection(
 --// EXTERNAL CLEANUP
 --// =========================================================
 function DEADEYE_FN_cleanupUnusual()
-    if D.unusualDestroyed then
+    if unusualDestroyed then
         return
     end
-    D.unusualDestroyed =
+    unusualDestroyed =
         true
-    if D.unusualActive then
+    if unusualActive then
         pcall(function()
             DEADEYE_FN_restoreUnusual()
         end)
     end
     pcall(function()
-        D.others.restore(false)
+        others.restore(false)
     end)
-    D.unusualEnabled =
+    unusualEnabled =
         false
-    D.unusualRuntime.reapplyGeneration += 1
-    D.unusualRuntime.appliedRig = nil
-    D.genv.UNUSUAL_SWAPPER_ENABLED =
+    unusualRuntime.reapplyGeneration += 1
+    unusualRuntime.appliedRig = nil
+    genv.UNUSUAL_SWAPPER_ENABLED =
         false
     DEADEYE_FN_disconnectUnusualConnections()
     pcall(function()
         DEADEYE_FN_removeOurUnusualFX()
     end)
-    D.genv.DEADEYE_MAIN_RUNNING = false
+    genv.DEADEYE_MAIN_RUNNING = false
     pcall(function()
-        if D.mainPage then
-            D.mainPage.Visible = false
+        if mainPage then
+            mainPage.Visible = false
         end
         DEADEYE_FN_mainDisconnect()
-        if D.unusualPicker then
-            D.unusualPicker:Destroy()
+        if unusualPicker then
+            unusualPicker:Destroy()
         end
-        if D.unusualPage then
-            D.unusualPage:Destroy()
+        if unusualPage then
+            unusualPage:Destroy()
         end
-        if D.others.page then
-            D.others.page:Destroy()
+        if others.page then
+            others.page:Destroy()
         end
-        if D.unusualStatus then
-            D.unusualStatus:Destroy()
+        if unusualStatus then
+            unusualStatus:Destroy()
         end
-        if D.categoryBar then
-            D.categoryBar:Destroy()
+        if categoryBar then
+            categoryBar:Destroy()
         end
     end)
-    D.genv.UNUSUAL_SWAPPER_CLEANUP =
+    genv.UNUSUAL_SWAPPER_CLEANUP =
         nil
     end
-D.genv.UNUSUAL_SWAPPER_CLEANUP =
+genv.UNUSUAL_SWAPPER_CLEANUP =
     DEADEYE_FN_cleanupUnusual
 --// =========================================================
 --// REPLACE EXISTING TOGGLE BEHAVIOUR
@@ -10079,160 +10078,160 @@ D.genv.UNUSUAL_SWAPPER_CLEANUP =
 --// =========================================================
 --// TOGGLE
 --// =========================================================
-D.Toggle =
+Toggle =
     Instance.new("TextButton")
-D.Toggle.Size =
+Toggle.Size =
     UDim2.new(
         1,
         -12,
         0,
         36
     )
-D.Toggle.Position =
+Toggle.Position =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-D.Toggle.LayoutOrder =
+Toggle.LayoutOrder =
     0
-D.Toggle.BackgroundColor3 =
+Toggle.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-D.Toggle.BorderSizePixel =
+Toggle.BorderSizePixel =
     0
-D.Toggle.Text =
+Toggle.Text =
     "SWAP: OFF"
-D.Toggle.TextSize =
+Toggle.TextSize =
     11
-D.Toggle.Font =
+Toggle.Font =
     Enum.Font.GothamBold
-D.Toggle.TextColor3 =
+Toggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.Toggle.Parent =
-    D.SlotsScroll
-D.__UI.ToggleCorner =
+Toggle.Parent =
+    SlotsScroll
+__UI.ToggleCorner =
     Instance.new("UICorner")
-D.__UI.ToggleCorner.CornerRadius =
+__UI.ToggleCorner.CornerRadius =
     UDim.new(
         0,
         8
     )
-D.__UI.ToggleCorner.Parent =
-    D.Toggle
+__UI.ToggleCorner.Parent =
+    Toggle
 --// =========================================================
 --// SLOTS SCROLL
 --// =========================================================
-D.SlotsScroll =
+SlotsScroll =
     Instance.new("ScrollingFrame")
-D.SlotsScroll.Name =
+SlotsScroll.Name =
     "Slots"
-D.SlotsScroll.Size =
+SlotsScroll.Size =
     UDim2.new(
         1,
         -16,
         1,
         -76
     )
-D.SlotsScroll.Position =
+SlotsScroll.Position =
     UDim2.new(
         0,
         8,
         0,
         68
     )
-D.SlotsScroll.BackgroundColor3 =
+SlotsScroll.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-D.SlotsScroll.BorderSizePixel =
+SlotsScroll.BorderSizePixel =
     0
-D.SlotsScroll.ScrollBarThickness =
+SlotsScroll.ScrollBarThickness =
     6
-D.SlotsScroll.CanvasSize =
+SlotsScroll.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-D.SlotsScroll.AutomaticCanvasSize =
+SlotsScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-D.SlotsScroll.Parent =
-    D.Main
+SlotsScroll.Parent =
+    Main
 --// Existing Emote content moves right of the category rail.
-D.SlotsScroll.Size =
+SlotsScroll.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-D.SlotsScroll.Position =
+SlotsScroll.Position =
     UDim2.new(
         0,
         82,
         0,
         48
     )
-D.__UI.SlotsCorner =
+__UI.SlotsCorner =
     Instance.new("UICorner")
-D.__UI.SlotsCorner.CornerRadius =
+__UI.SlotsCorner.CornerRadius =
     UDim.new(
         0,
         9
     )
-D.__UI.SlotsCorner.Parent =
-    D.SlotsScroll
-D.__UI.SlotsPadding =
+__UI.SlotsCorner.Parent =
+    SlotsScroll
+__UI.SlotsPadding =
     Instance.new("UIPadding")
-D.__UI.SlotsPadding.PaddingTop =
+__UI.SlotsPadding.PaddingTop =
     UDim.new(
         0,
         8
     )
-D.__UI.SlotsPadding.PaddingBottom =
+__UI.SlotsPadding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-D.__UI.SlotsPadding.PaddingLeft =
+__UI.SlotsPadding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-D.__UI.SlotsPadding.PaddingRight =
+__UI.SlotsPadding.PaddingRight =
     UDim.new(
         0,
         8
     )
-D.__UI.SlotsPadding.Parent =
-    D.SlotsScroll
-D.__UI.SlotsLayout =
+__UI.SlotsPadding.Parent =
+    SlotsScroll
+__UI.SlotsLayout =
     Instance.new("UIListLayout")
-D.__UI.SlotsLayout.Padding =
+__UI.SlotsLayout.Padding =
     UDim.new(
         0,
         7
     )
-D.__UI.SlotsLayout.SortOrder =
+__UI.SlotsLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
-D.__UI.SlotsLayout.Parent =
-    D.SlotsScroll
+__UI.SlotsLayout.Parent =
+    SlotsScroll
 --// =========================================================
 --// CREATE SLOT ROWS
 --// =========================================================
-for slotIndex = 1, D.SLOT_COUNT do
+for slotIndex = 1, SLOT_COUNT do
     local row =
         Instance.new("Frame")
     row.Name =
@@ -10255,7 +10254,7 @@ for slotIndex = 1, D.SLOT_COUNT do
     row.LayoutOrder =
         slotIndex
     row.Parent =
-        D.SlotsScroll
+        SlotsScroll
     local rowCorner =
         Instance.new("UICorner")
     rowCorner.CornerRadius =
@@ -10327,7 +10326,7 @@ for slotIndex = 1, D.SLOT_COUNT do
     originalButton.BorderSizePixel =
         0
     originalButton.Text =
-        D.slots[slotIndex].originalName
+        slots[slotIndex].originalName
         or "Select"
     originalButton.TextSize =
         11
@@ -10352,7 +10351,7 @@ for slotIndex = 1, D.SLOT_COUNT do
         )
     originalCorner.Parent =
         originalButton
-    D.slotOriginalButtons[
+    slotOriginalButtons[
         slotIndex
     ] =
         originalButton
@@ -10415,7 +10414,7 @@ for slotIndex = 1, D.SLOT_COUNT do
     replaceButton.BorderSizePixel =
         0
     replaceButton.Text =
-        D.slots[slotIndex].replaceName
+        slots[slotIndex].replaceName
         or "Select"
     replaceButton.TextSize =
         11
@@ -10440,7 +10439,7 @@ for slotIndex = 1, D.SLOT_COUNT do
         )
     replaceCorner.Parent =
         replaceButton
-    D.slotReplaceButtons[
+    slotReplaceButtons[
         slotIndex
     ] =
         replaceButton
@@ -10448,62 +10447,62 @@ end
 --// =========================================================
 --// PICKER
 --// =========================================================
-D.Picker =
+Picker =
     Instance.new("Frame")
-D.Picker.Size =
+Picker.Size =
     UDim2.new(
         0,
         560,
         0,
         450
     )
-D.Picker.Position =
+Picker.Position =
     UDim2.new(
         0.5,
         -280,
         0.5,
         -225
     )
-D.Picker.BackgroundColor3 =
+Picker.BackgroundColor3 =
     Color3.fromRGB(
         31,
         35,
         42
     )
-D.Picker.BackgroundTransparency =
+Picker.BackgroundTransparency =
     0.10
-D.Picker.BorderSizePixel =
+Picker.BorderSizePixel =
     0
-D.Picker.ClipsDescendants =
+Picker.ClipsDescendants =
     true
-D.Picker.Visible =
+Picker.Visible =
     false
-D.Picker.ZIndex =
+Picker.ZIndex =
     30
-D.Picker.Parent =
-    D.ScreenGui
-D.__UI.PickerCorner =
+Picker.Parent =
+    ScreenGui
+__UI.PickerCorner =
     Instance.new("UICorner")
-D.__UI.PickerCorner.CornerRadius =
+__UI.PickerCorner.CornerRadius =
     UDim.new(
         0,
         8
     )
-D.__UI.PickerCorner.Parent =
-    D.Picker
-D.__UI.PickerStroke =
+__UI.PickerCorner.Parent =
+    Picker
+__UI.PickerStroke =
     Instance.new("UIStroke")
-D.__UI.PickerStroke.Thickness =
+__UI.PickerStroke.Thickness =
     1
-D.__UI.PickerStroke.Transparency =
+__UI.PickerStroke.Transparency =
     0.66
-D.__UI.PickerStroke.Parent =
-    D.Picker
-D.__UI.PickerGlass =
+__UI.PickerStroke.Parent =
+    Picker
+__UI.PickerGlass =
     Instance.new("UIGradient")
-D.__UI.PickerGlass.Rotation =
+__UI.PickerGlass.Rotation =
     115
-D.__UI.PickerGlass.Color =
+__UI.PickerGlass.Color =
     ColorSequence.new({
         ColorSequenceKeypoint.new(
             0,
@@ -10530,245 +10529,245 @@ D.__UI.PickerGlass.Color =
             )
         )
     })
-D.__UI.PickerGlass.Transparency =
+__UI.PickerGlass.Transparency =
     NumberSequence.new(0.20)
-D.__UI.PickerGlass.Parent =
-    D.Picker
+__UI.PickerGlass.Parent =
+    Picker
 --// PICKER TITLE
-D.PickerTitle =
+PickerTitle =
     Instance.new("TextLabel")
-D.PickerTitle.Size =
+PickerTitle.Size =
     UDim2.new(
         1,
         -45,
         0,
         32
     )
-D.PickerTitle.Position =
+PickerTitle.Position =
     UDim2.new(
         0,
         12,
         0,
         2
     )
-D.PickerTitle.BackgroundTransparency =
+PickerTitle.BackgroundTransparency =
     1
-D.PickerTitle.Text =
+PickerTitle.Text =
     "Select Emote"
-D.PickerTitle.TextSize =
+PickerTitle.TextSize =
     16
-D.PickerTitle.Font =
+PickerTitle.Font =
     Enum.Font.GothamBold
-D.PickerTitle.TextColor3 =
+PickerTitle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.PickerTitle.TextXAlignment =
+PickerTitle.TextXAlignment =
     Enum.TextXAlignment.Left
-D.PickerTitle.ZIndex =
+PickerTitle.ZIndex =
     31
-D.PickerTitle.Parent =
-    D.Picker
+PickerTitle.Parent =
+    Picker
 --// =========================================================
 --// PICKER CLOSE
 --// =========================================================
-D.PickerClose =
+PickerClose =
     Instance.new("TextButton")
-D.PickerClose.Size =
+PickerClose.Size =
     UDim2.new(
         0,
         30,
         0,
         30
     )
-D.PickerClose.Position =
+PickerClose.Position =
     UDim2.new(
         1,
         -35,
         0,
         4
     )
-D.PickerClose.BackgroundTransparency =
+PickerClose.BackgroundTransparency =
     1
-D.PickerClose.Text =
+PickerClose.Text =
     "×"
-D.PickerClose.TextSize =
+PickerClose.TextSize =
     25
-D.PickerClose.Font =
+PickerClose.Font =
     Enum.Font.GothamBold
-D.PickerClose.TextColor3 =
+PickerClose.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.PickerClose.ZIndex =
+PickerClose.ZIndex =
     31
-D.PickerClose.Parent =
-    D.Picker
+PickerClose.Parent =
+    Picker
 --// =========================================================
 --// PICKER SEARCH
 --// =========================================================
-D.PickerSearch =
+PickerSearch =
     Instance.new("TextBox")
-D.PickerSearch.Size =
+PickerSearch.Size =
     UDim2.new(
         1,
         -20,
         0,
         30
     )
-D.PickerSearch.Position =
+PickerSearch.Position =
     UDim2.new(
         0,
         10,
         0,
         36
     )
-D.PickerSearch.BackgroundColor3 =
+PickerSearch.BackgroundColor3 =
     Color3.fromRGB(
         40,
         45,
         53
     )
-D.PickerSearch.BackgroundTransparency =
+PickerSearch.BackgroundTransparency =
     0.20
-D.PickerSearch.BorderSizePixel =
+PickerSearch.BorderSizePixel =
     0
-D.PickerSearch.ClearTextOnFocus =
+PickerSearch.ClearTextOnFocus =
     false
-D.PickerSearch.PlaceholderText =
+PickerSearch.PlaceholderText =
     "Search by name..."
-D.PickerSearch.PlaceholderColor3 =
+PickerSearch.PlaceholderColor3 =
     Color3.fromRGB(
         120,
         120,
         120
     )
-D.PickerSearch.Text =
+PickerSearch.Text =
     ""
-D.PickerSearch.TextSize =
+PickerSearch.TextSize =
     12
-D.PickerSearch.Font =
+PickerSearch.Font =
     Enum.Font.Gotham
-D.PickerSearch.TextColor3 =
+PickerSearch.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-D.PickerSearch.ZIndex =
+PickerSearch.ZIndex =
     32
-D.PickerSearch.Parent =
-    D.Picker
-D.__UI.SearchCorner =
+PickerSearch.Parent =
+    Picker
+__UI.SearchCorner =
     Instance.new("UICorner")
-D.__UI.SearchCorner.CornerRadius =
+__UI.SearchCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-D.__UI.SearchCorner.Parent =
-    D.PickerSearch
+__UI.SearchCorner.Parent =
+    PickerSearch
 --// =========================================================
 --// PICKER SCROLL
 --// =========================================================
-D.PickerScroll =
+PickerScroll =
     Instance.new("ScrollingFrame")
-D.PickerScroll.Size =
+PickerScroll.Size =
     UDim2.new(
         1,
         -16,
         1,
         -74
     )
-D.PickerScroll.Position =
+PickerScroll.Position =
     UDim2.new(
         0,
         8,
         0,
         70
     )
-D.PickerScroll.BackgroundColor3 =
+PickerScroll.BackgroundColor3 =
     Color3.fromRGB(
         32,
         35,
         42
     )
-D.PickerScroll.BackgroundTransparency =
+PickerScroll.BackgroundTransparency =
     0.20
-D.PickerScroll.BorderSizePixel =
+PickerScroll.BorderSizePixel =
     0
-D.PickerScroll.ScrollBarThickness =
+PickerScroll.ScrollBarThickness =
     6
-D.PickerScroll.CanvasSize =
+PickerScroll.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-D.PickerScroll.AutomaticCanvasSize =
+PickerScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-D.PickerScroll.ZIndex =
+PickerScroll.ZIndex =
     31
-D.PickerScroll.Parent =
-    D.Picker
-D.__UI.PickerScrollCorner =
+PickerScroll.Parent =
+    Picker
+__UI.PickerScrollCorner =
     Instance.new("UICorner")
-D.__UI.PickerScrollCorner.CornerRadius =
+__UI.PickerScrollCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
-D.__UI.PickerScrollCorner.Parent =
-    D.PickerScroll
-D.__UI.PickerPadding =
+__UI.PickerScrollCorner.Parent =
+    PickerScroll
+__UI.PickerPadding =
     Instance.new("UIPadding")
-D.__UI.PickerPadding.PaddingTop =
+__UI.PickerPadding.PaddingTop =
     UDim.new(
         0,
         8
     )
-D.__UI.PickerPadding.PaddingBottom =
+__UI.PickerPadding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-D.__UI.PickerPadding.PaddingLeft =
+__UI.PickerPadding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-D.__UI.PickerPadding.PaddingRight =
+__UI.PickerPadding.PaddingRight =
     UDim.new(
         0,
         8
     )
-D.__UI.PickerPadding.Parent =
-    D.PickerScroll
-D.__UI.PickerGrid =
+__UI.PickerPadding.Parent =
+    PickerScroll
+__UI.PickerGrid =
     Instance.new("UIGridLayout")
-D.__UI.PickerGrid.CellSize =
+__UI.PickerGrid.CellSize =
     UDim2.new(
         0,
         170,
         0,
         92
     )
-D.__UI.PickerGrid.CellPadding =
+__UI.PickerGrid.CellPadding =
     UDim2.new(
         0,
         6,
         0,
         8
     )
-D.__UI.PickerGrid.SortOrder =
+__UI.PickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
-D.__UI.PickerGrid.Parent =
-    D.PickerScroll
+__UI.PickerGrid.Parent =
+    PickerScroll
 --// =========================================================
 --// EMOTE VIEWPORT PREVIEW
 --// Локальная копия native preview без CreateViewport()
@@ -10833,7 +10832,7 @@ function DEADEYE_FN_createEmotePreview(
             end)
 
             local assets =
-                D.ReplicatedStorage:FindFirstChild(
+                ReplicatedStorage:FindFirstChild(
                     "Assets"
                 )
 
@@ -11487,9 +11486,9 @@ local function getConfiguredSlotByOriginalName(
         return nil
     end
 
-    for i = 1, D.SLOT_COUNT do
+    for i = 1, SLOT_COUNT do
         local slot =
-            D.slots[i]
+            slots[i]
 
         if slot
             and slot.originalId
@@ -11566,7 +11565,7 @@ end
 local function restoreNativeEmoteWheel(
     force
 )
-    if D.nativeWheelRestoreDone
+    if nativeWheelRestoreDone
         and not force
     then
         return
@@ -11586,7 +11585,7 @@ local function restoreNativeEmoteWheel(
                 )
 
             local state =
-                D.nativeWheelStates[
+                nativeWheelStates[
                     key
                 ]
 
@@ -11609,7 +11608,7 @@ local function restoreNativeEmoteWheel(
         end
     end
 
-    D.nativeWheelRestoreDone = true
+    nativeWheelRestoreDone = true
 end
 
 
@@ -11617,7 +11616,7 @@ local function applyNativeEmoteSlot(
     nativeSlot,
     slot
 )
-    D.nativeWheelRestoreDone = false
+    nativeWheelRestoreDone = false
 
     if not nativeSlot
         or not slot
@@ -11697,8 +11696,8 @@ local function syncNativeEmoteWheel()
     end
 
     -- OFF = restore from the persistent logical snapshots.
-    if not D.genv.EMOTE_SWAPPER_RUNNING
-        or not D.enabled
+    if not genv.EMOTE_SWAPPER_RUNNING
+        or not enabled
     then
         restoreNativeEmoteWheel()
         return
@@ -11741,7 +11740,7 @@ local function syncNativeEmoteWheel()
                 )
 
             local state =
-                D.nativeWheelStates[
+                nativeWheelStates[
                     key
                 ]
 
@@ -11751,9 +11750,9 @@ local function syncNativeEmoteWheel()
             -- Existing logical snapshot tells us exactly which
             -- original belongs to this position.
             if state then
-                for slotIndex = 1, D.SLOT_COUNT do
+                for slotIndex = 1, SLOT_COUNT do
                     local configured =
-                        D.slots[slotIndex]
+                        slots[slotIndex]
 
                     if configured
                         and configured.originalId
@@ -11788,7 +11787,7 @@ local function syncNativeEmoteWheel()
                             nil
                     }
 
-                    D.nativeWheelStates[
+                    nativeWheelStates[
                         key
                     ] = state
                 end
@@ -11825,9 +11824,9 @@ local function syncNativeEmoteWheel()
             if state
                 and not configuredSlot
             then
-                for slotIndex = 1, D.SLOT_COUNT do
+                for slotIndex = 1, SLOT_COUNT do
                     local configured =
-                        D.slots[slotIndex]
+                        slots[slotIndex]
 
                     if configured
                         and configured.originalId
@@ -11897,18 +11896,18 @@ end
 --// =========================================================
 function DEADEYE_FN_rebuildPicker()
     for _, button in ipairs(
-        D.pickerButtons
+        pickerButtons
     ) do
         pcall(function()
             button:Destroy()
         end)
     end
     table.clear(
-        D.pickerButtons
+        pickerButtons
     )
     local query =
         string.lower(
-            D.PickerSearch.Text
+            PickerSearch.Text
                 or ""
         )
     local shown = 0
@@ -11928,7 +11927,7 @@ function DEADEYE_FN_rebuildPicker()
         button.TextTruncate = Enum.TextTruncate.AtEnd
         button.LayoutOrder = 0
         button.ZIndex = 22
-        button.Parent = D.PickerScroll
+        button.Parent = PickerScroll
 
         local corner =
             Instance.new("UICorner")
@@ -11938,36 +11937,36 @@ function DEADEYE_FN_rebuildPicker()
         corner.Parent = button
 
         table.insert(
-            D.pickerButtons,
+            pickerButtons,
             button
         )
 
         button.MouseButton1Click:Connect(
             function()
-                if not D.activePickerSlot
-                    or not D.activePickerSide then
+                if not activePickerSlot
+                    or not activePickerSide then
                     return
                 end
 
                 local slot =
-                    D.slots[D.activePickerSlot]
+                    slots[activePickerSlot]
 
-                if D.activePickerSide == "Original" then
+                if activePickerSide == "Original" then
                     slot.originalId = nil
                     slot.originalName = nil
-                    D.slotOriginalButtons[
-                        D.activePickerSlot
+                    slotOriginalButtons[
+                        activePickerSlot
                     ].Text = "Select"
                 else
                     slot.replaceId = nil
                     slot.replaceName = nil
-                    D.slotReplaceButtons[
-                        D.activePickerSlot
+                    slotReplaceButtons[
+                        activePickerSlot
                     ].Text = "Select"
                 end
 
-                D.savedConfig.emotes[
-                    D.activePickerSlot
+                savedConfig.emotes[
+                    activePickerSlot
                 ] = {
                     originalId = slot.originalId,
                     replaceId = slot.replaceId
@@ -11975,23 +11974,23 @@ function DEADEYE_FN_rebuildPicker()
 
                 saveSavedConfig()
 
-                if D.currentOriginalId == slot.originalId
+                if currentOriginalId == slot.originalId
                     or (
-                        D.currentOriginalId
+                        currentOriginalId
                         and not slot.originalId
                     )
                 then
                     DEADEYE_FN_stopCustomEmote()
                 end
 
-                D.Status.Text =
+                Status.Text =
                     "Slot "
-                    .. tostring(D.activePickerSlot)
+                    .. tostring(activePickerSlot)
                     .. " cleared"
 
-                D.Picker.Visible = false
-                D.activePickerSlot = nil
-                D.activePickerSide = nil
+                Picker.Visible = false
+                activePickerSlot = nil
+                activePickerSide = nil
             end
         )
 
@@ -11999,7 +11998,7 @@ function DEADEYE_FN_rebuildPicker()
     end
 
     for index, data in ipairs(
-        D.emoteList
+        emoteList
     ) do
         local nameLower =
             string.lower(
@@ -12054,7 +12053,7 @@ function DEADEYE_FN_rebuildPicker()
             button.ZIndex =
                 32
             button.Parent =
-                D.PickerScroll
+                PickerScroll
 
 
             --// NATIVE EMOTE PREVIEW
@@ -12260,20 +12259,20 @@ function DEADEYE_FN_rebuildPicker()
             buttonCorner.Parent =
                 button
             table.insert(
-                D.pickerButtons,
+                pickerButtons,
                 button
             )
             button.MouseButton1Click:Connect(
                 function()
-                    if not D.activePickerSlot
-                        or not D.activePickerSide then
+                    if not activePickerSlot
+                        or not activePickerSide then
                         return
                     end
                     local slot =
-                        D.slots[
-                            D.activePickerSlot
+                        slots[
+                            activePickerSlot
                         ]
-                    if D.activePickerSide ==
+                    if activePickerSide ==
                         "Original" then
                         slot.originalId =
                             data.id
@@ -12282,8 +12281,8 @@ function DEADEYE_FN_rebuildPicker()
                         prepareOriginalModule(
                             data.id
                         )
-                        D.slotOriginalButtons[
-                            D.activePickerSlot
+                        slotOriginalButtons[
+                            activePickerSlot
                         ].Text =
                             data.name
                     else
@@ -12294,13 +12293,13 @@ function DEADEYE_FN_rebuildPicker()
                         prepareReplaceModule(
                             data.id
                         )
-                        D.slotReplaceButtons[
-                            D.activePickerSlot
+                        slotReplaceButtons[
+                            activePickerSlot
                         ].Text =
                             data.name
                     end
-                    D.savedConfig.emotes[
-                        D.activePickerSlot
+                    savedConfig.emotes[
+                        activePickerSlot
                     ] = {
                         originalId =
                             slot.originalId,
@@ -12312,30 +12311,30 @@ function DEADEYE_FN_rebuildPicker()
                     --// относится к изменённому слоту,
                     --// заставляем его пересоздаться
                     --// со следующего heartbeat.
-                    if D.currentOriginalId
+                    if currentOriginalId
                         == slot.originalId then
                         DEADEYE_FN_stopCustomEmote()
                     end
-                    D.Status.Text =
+                    Status.Text =
                         "Slot "
                         .. tostring(
-                            D.activePickerSlot
+                            activePickerSlot
                         )
                         .. " configured"
-                    D.Picker.Visible =
+                    Picker.Visible =
                         false
-                    D.activePickerSlot =
+                    activePickerSlot =
                         nil
-                    D.activePickerSide =
+                    activePickerSide =
                         nil
                 end
             )
         end
     end
-    D.Status.Text =
+    Status.Text =
         "Found: "
         .. tostring(shown)
-    D.PickerScroll.CanvasPosition =
+    PickerScroll.CanvasPosition =
         Vector2.new(
             0,
             0
@@ -12348,47 +12347,47 @@ function DEADEYE_FN_openPicker(
     slotIndex,
     side
 )
-    D.activePickerSlot =
+    activePickerSlot =
         slotIndex
-    D.activePickerSide =
+    activePickerSide =
         side
     if side == "Original" then
-        D.PickerTitle.Text =
+        PickerTitle.Text =
             "Slot "
             .. tostring(
                 slotIndex
             )
             .. " • Original"
     else
-        D.PickerTitle.Text =
+        PickerTitle.Text =
             "Slot "
             .. tostring(
                 slotIndex
             )
             .. " • Replace"
     end
-    D.PickerSearch.Text =
+    PickerSearch.Text =
         ""
     DEADEYE_FN_rebuildPicker()
-    D.Picker.Visible =
+    Picker.Visible =
         true
 end
 --// =========================================================
 --// CLOSE PICKER
 --// =========================================================
 function DEADEYE_FN_closePicker()
-    D.Picker.Visible =
+    Picker.Visible =
         false
-    D.activePickerSlot =
+    activePickerSlot =
         nil
-    D.activePickerSide =
+    activePickerSide =
         nil
 end
 --// =========================================================
 --// CONNECT SLOT BUTTONS
 --// =========================================================
-for slotIndex = 1, D.SLOT_COUNT do
-    D.slotOriginalButtons[
+for slotIndex = 1, SLOT_COUNT do
+    slotOriginalButtons[
         slotIndex
     ].MouseButton1Click:Connect(
         function()
@@ -12398,7 +12397,7 @@ for slotIndex = 1, D.SLOT_COUNT do
             )
         end
     )
-    D.slotReplaceButtons[
+    slotReplaceButtons[
         slotIndex
     ].MouseButton1Click:Connect(
         function()
@@ -12413,17 +12412,17 @@ end
 --// SEARCH
 --// =========================================================
 DEADEYE_FN_addConnection(
-    D.PickerSearch:GetPropertyChangedSignal(
+    PickerSearch:GetPropertyChangedSignal(
         "Text"
     ):Connect(
         function()
-            if D.Picker.Visible then
+            if Picker.Visible then
                 DEADEYE_FN_rebuildPicker()
             end
         end
     )
 )
-D.PickerClose.MouseButton1Click:Connect(
+PickerClose.MouseButton1Click:Connect(
     function()
         DEADEYE_FN_closePicker()
     end
@@ -12432,49 +12431,49 @@ D.PickerClose.MouseButton1Click:Connect(
 --// TOGGLE
 --// =========================================================
 DEADEYE_FN_addConnection(
-    D.Toggle.MouseButton1Click:Connect(
+    Toggle.MouseButton1Click:Connect(
         function()
-            if D.currentCategory == "Unusual" then
-                if D.unusualEnabled then
-                    D.unusualEnabled =
+            if currentCategory == "Unusual" then
+                if unusualEnabled then
+                    unusualEnabled =
                         false
-                    D.genv.UNUSUAL_SWAPPER_ENABLED =
+                    genv.UNUSUAL_SWAPPER_ENABLED =
                         false
                     DEADEYE_FN_restoreUnusual()
                 else
-                    if not D.unusualSlot.originalId
-                        or not D.unusualSlot.replaceId
+                    if not unusualSlot.originalId
+                        or not unusualSlot.replaceId
                     then
-                        D.unusualStatus.Text =
+                        unusualStatus.Text =
                             "Select both Unusuals first"
                         return
                     end
                     if DEADEYE_FN_activateUnusual() then
-                        D.unusualEnabled =
+                        unusualEnabled =
                             true
-                        D.unusualRuntime.appliedRig =
+                        unusualRuntime.appliedRig =
                             DEADEYE_FN_getUnusualVisualRig()
-                        D.genv.UNUSUAL_SWAPPER_ENABLED =
+                        genv.UNUSUAL_SWAPPER_ENABLED =
                             true
                     end
                 end
-                D.updateUnusualToggle()
+                updateUnusualToggle()
                 return
             end
             --// EXISTING EMOTE TOGGLE
-            if D.enabled then
-                D.enabled = false
+            if enabled then
+                enabled = false
                 DEADEYE_FN_stopCustomEmote()
                 restoreNativeEmoteWheel()
                 updateGUI()
-                D.Status.Text =
+                Status.Text =
                     "Swap disabled"
                                 return
             end
             local validSlots = 0
-            for i = 1, D.SLOT_COUNT do
+            for i = 1, SLOT_COUNT do
                 local slot =
-                    D.slots[i]
+                    slots[i]
                 if slot.originalId
                     and slot.replaceId
                 then
@@ -12493,19 +12492,19 @@ DEADEYE_FN_addConnection(
                 end
             end
             if validSlots == 0 then
-                D.Status.Text =
+                Status.Text =
                     "No configured slots"
                 return
             end
-            D.enabled =
+            enabled =
                 true
-            D.nativeWheelRestoreDone =
+            nativeWheelRestoreDone =
                 false
-            D.lastRegistryEmote =
+            lastRegistryEmote =
                 0
             syncNativeEmoteWheel()
             updateGUI()
-            D.Status.Text =
+            Status.Text =
                 "Active • "
                 .. tostring(
                     validSlots
@@ -12517,43 +12516,43 @@ DEADEYE_FN_addConnection(
 --// =========================================================
 --// WINDOW SIZE LIMITS
 --// =========================================================
-D.MIN_WINDOW_WIDTH = 455
-D.MIN_WINDOW_HEIGHT = 285
-D.RESIZE_EDGE = 8
+local MIN_WINDOW_WIDTH = 455
+local MIN_WINDOW_HEIGHT = 285
+local RESIZE_EDGE = 8
 
 --// =========================================================
 --// MINIMIZE STATE
 --// =========================================================
-D.setMainMinimized = function(state)
-    D.mainMinimized = state
-    if D.mainMinimized then
-        D.Main.Size =
+setMainMinimized = function(state)
+    mainMinimized = state
+    if mainMinimized then
+        Main.Size =
             UDim2.new(
                 0,                245,
                 0,
                 40
             )
-        D.MainTitle.Size =
+        MainTitle.Size =
             UDim2.new(
                 0,
                 155,
                 0,
                 36
             )
-        D.Status.Visible = false
-        D.Toggle.Visible = false
-        D.SlotsScroll.Visible = false
-        if D.Picker then
-            D.Picker.Visible = false
+        Status.Visible = false
+        Toggle.Visible = false
+        SlotsScroll.Visible = false
+        if Picker then
+            Picker.Visible = false
         end
         pcall(function()
-            D.categoryBar.Visible = false
-            D.mainPage.Visible = false
-            D.unusualPage.Visible = false
-            D.unusualStatus.Visible = false
-            D.others.page.Visible = false
+            categoryBar.Visible = false
+            mainPage.Visible = false
+            unusualPage.Visible = false
+            unusualStatus.Visible = false
+            others.page.Visible = false
         end)
-        D.Minimize.Text = "+"
+        Minimize.Text = "+"
 
         for _, name in ipairs({
             "ResizeRight",
@@ -12561,73 +12560,73 @@ D.setMainMinimized = function(state)
             "ResizeCorner"
         }) do
             local handle =
-                D.Main:FindFirstChild(name)
+                Main:FindFirstChild(name)
             if handle then
                 handle.Visible = false
             end
         end
     else
-        D.Main.Size =
+        Main.Size =
             UDim2.new(
                 0,
                 math.max(
-                    D.MIN_WINDOW_WIDTH,
-                    D.savedConfig.gui.width
+                    MIN_WINDOW_WIDTH,
+                    savedConfig.gui.width
                 ),
                 0,
                 math.max(
-                    D.MIN_WINDOW_HEIGHT,
-                    D.savedConfig.gui.height
+                    MIN_WINDOW_HEIGHT,
+                    savedConfig.gui.height
                 )
             )
-        D.MainTitle.Size =
+        MainTitle.Size =
             UDim2.new(
                 1,
                 -105,
                 0,
                 36
             )
-        D.Status.Visible = true
-        D.Toggle.Visible = true
-        D.SlotsScroll.Visible = true
+        Status.Visible = true
+        Toggle.Visible = true
+        SlotsScroll.Visible = true
         pcall(function()
-            D.categoryBar.Visible = true
-            if D.currentCategory == "Main" then
-                D.Status.Visible = false
-                D.Toggle.Visible = false
-                D.SlotsScroll.Visible = false
-                D.mainPage.Visible = true
-                D.unusualPage.Visible = false
-                D.unusualStatus.Visible = false
-                D.others.page.Visible = false
-            elseif D.currentCategory == "Unusual" then
-                D.Status.Visible = false
-                D.Toggle.Visible = true
-                D.Toggle.Parent =
-                    D.unusualPage
-                D.Toggle.LayoutOrder =
+            categoryBar.Visible = true
+            if currentCategory == "Main" then
+                Status.Visible = false
+                Toggle.Visible = false
+                SlotsScroll.Visible = false
+                mainPage.Visible = true
+                unusualPage.Visible = false
+                unusualStatus.Visible = false
+                others.page.Visible = false
+            elseif currentCategory == "Unusual" then
+                Status.Visible = false
+                Toggle.Visible = true
+                Toggle.Parent =
+                    unusualPage
+                Toggle.LayoutOrder =
                     0
-                D.SlotsScroll.Visible = false
-                D.mainPage.Visible = false
-                D.unusualPage.Visible = true
-                D.unusualStatus.Visible = false
-                D.others.page.Visible = false
-            elseif D.currentCategory == "Others" then
-                D.Status.Visible = false
-                D.Toggle.Visible = false
-                D.SlotsScroll.Visible = false
-                D.mainPage.Visible = false
-                D.unusualPage.Visible = false
-                D.unusualStatus.Visible = false
-                D.others.page.Visible = true
+                SlotsScroll.Visible = false
+                mainPage.Visible = false
+                unusualPage.Visible = true
+                unusualStatus.Visible = false
+                others.page.Visible = false
+            elseif currentCategory == "Others" then
+                Status.Visible = false
+                Toggle.Visible = false
+                SlotsScroll.Visible = false
+                mainPage.Visible = false
+                unusualPage.Visible = false
+                unusualStatus.Visible = false
+                others.page.Visible = true
             else
-                D.mainPage.Visible = false
-                D.unusualPage.Visible = false
-                D.unusualStatus.Visible = false
-                D.others.page.Visible = false
+                mainPage.Visible = false
+                unusualPage.Visible = false
+                unusualStatus.Visible = false
+                others.page.Visible = false
             end
         end)
-        D.Minimize.Text = "−"
+        Minimize.Text = "−"
 
         for _, name in ipairs({
             "ResizeRight",
@@ -12635,7 +12634,7 @@ D.setMainMinimized = function(state)
             "ResizeCorner"
         }) do
             local handle =
-                D.Main:FindFirstChild(name)
+                Main:FindFirstChild(name)
             if handle then
                 handle.Visible = true
             end
@@ -12646,10 +12645,10 @@ end
 --// MINIMIZE BUTTON CONNECTION
 --// =========================================================
 DEADEYE_FN_addConnection(
-    D.Minimize.MouseButton1Click:Connect(
+    Minimize.MouseButton1Click:Connect(
         function()
-            D.setMainMinimized(
-                not D.mainMinimized
+            setMainMinimized(
+                not mainMinimized
             )
         end
     )
@@ -12658,19 +12657,19 @@ DEADEYE_FN_addConnection(
 --// GUI UPDATE
 --// =========================================================
 function updateGUI()
-    if D.enabled then
-        D.Toggle.Text =
+    if enabled then
+        Toggle.Text =
             "SWAP: ON"
-        D.Toggle.BackgroundColor3 =
+        Toggle.BackgroundColor3 =
             Color3.fromRGB(
                 68,
                 74,
                 84
             )
     else
-        D.Toggle.Text =
+        Toggle.Text =
             "SWAP: OFF"
-        D.Toggle.BackgroundColor3 =
+        Toggle.BackgroundColor3 =
             Color3.fromRGB(
                 47,
                 52,
@@ -12682,9 +12681,9 @@ end
 --// WATCHER
 --// =========================================================
 DEADEYE_FN_addConnection(
-    D.RunService.Heartbeat:Connect(
+    RunService.Heartbeat:Connect(
         function()
-            if not D.genv.EMOTE_SWAPPER_RUNNING then
+            if not genv.EMOTE_SWAPPER_RUNNING then
                 return
             end
             syncNativeEmoteWheel()
@@ -12692,74 +12691,74 @@ DEADEYE_FN_addConnection(
         end
     )
 )
-D.DragHandle =
+local DragHandle =
     Instance.new("Frame")
-D.DragHandle.Name =
+DragHandle.Name =
     "DragHandle"
-D.DragHandle.Size =
+DragHandle.Size =
     UDim2.new(
         1,
         -105,
         0,
         39
     )
-D.DragHandle.Position =
+DragHandle.Position =
     UDim2.new(
         0,
         1,
         0,
         1
     )
-D.DragHandle.BackgroundTransparency =
+DragHandle.BackgroundTransparency =
     1
-D.DragHandle.BorderSizePixel =
+DragHandle.BorderSizePixel =
     0
-D.DragHandle.Active =
+DragHandle.Active =
     true
-D.DragHandle.ZIndex =
+DragHandle.ZIndex =
     4
-D.DragHandle.Parent =
-    D.Main
+DragHandle.Parent =
+    Main
 
 --// =========================================================
 --// WINDOW GEOMETRY / DRAG / RESIZE
 -- =========================================================
-D.dragging = false
-D.dragStart
-D.startPosition
+local dragging = false
+local dragStart
+local startPosition
 
 local resizing = false
-D.resizeMode = nil
-D.resizeStart
-D.resizeStartSize
+local resizeMode = nil
+local resizeStart
+local resizeStartSize
 
 local function saveWindowState()
-    D.savedConfig.gui =
-        D.savedConfig.gui
+    savedConfig.gui =
+        savedConfig.gui
         or {}
 
-    D.savedConfig.gui.x =
+    savedConfig.gui.x =
         math.floor(
-            D.Main.Position.X.Offset
+            Main.Position.X.Offset
             + 0.5
         )
 
-    D.savedConfig.gui.y =
+    savedConfig.gui.y =
         math.floor(
-            D.Main.Position.Y.Offset
+            Main.Position.Y.Offset
             + 0.5
         )
 
-    if not D.mainMinimized then
-        D.savedConfig.gui.width =
+    if not mainMinimized then
+        savedConfig.gui.width =
             math.floor(
-                D.Main.AbsoluteSize.X
+                Main.AbsoluteSize.X
                 + 0.5
             )
 
-        D.savedConfig.gui.height =
+        savedConfig.gui.height =
             math.floor(
-                D.Main.AbsoluteSize.Y
+                Main.AbsoluteSize.Y
                 + 0.5
             )
     end
@@ -12781,16 +12780,16 @@ local function clampWindowPosition()
         camera.ViewportSize
 
     local width =
-        D.Main.AbsoluteSize.X
+        Main.AbsoluteSize.X
 
     local height =
-        D.Main.AbsoluteSize.Y
+        Main.AbsoluteSize.Y
 
     local x =
-        D.Main.Position.X.Offset
+        Main.Position.X.Offset
 
     local y =
-        D.Main.Position.Y.Offset
+        Main.Position.Y.Offset
 
     local maxX =
         math.max(
@@ -12804,7 +12803,7 @@ local function clampWindowPosition()
             viewport.Y - height - 8
         )
 
-    D.Main.Position =
+    Main.Position =
         UDim2.new(
             0,
             math.clamp(
@@ -12825,18 +12824,18 @@ local function setMainSize(
     width,
     height
 )
-    D.Main.Size =
+    Main.Size =
         UDim2.new(
             0,
             math.max(
-                D.MIN_WINDOW_WIDTH,
+                MIN_WINDOW_WIDTH,
                 math.floor(
                     width + 0.5
                 )
             ),
             0,
             math.max(
-                D.MIN_WINDOW_HEIGHT,
+                MIN_WINDOW_HEIGHT,
                 math.floor(
                     height + 0.5
                 )
@@ -12853,16 +12852,16 @@ function DEADEYE_FN_beginWindowDrag(input)
         or input.UserInputType ==
             Enum.UserInputType.Touch
     then
-        D.dragging = true
-        D.dragStart =
+        dragging = true
+        dragStart =
             input.Position
-        D.startPosition =
-            D.Main.Position
+        startPosition =
+            Main.Position
     end
 end
 
 DEADEYE_FN_addConnection(
-    D.DragHandle.InputBegan:Connect(
+    DragHandle.InputBegan:Connect(
         function(input)
             DEADEYE_FN_beginWindowDrag(input)
         end
@@ -12870,7 +12869,7 @@ DEADEYE_FN_addConnection(
 )
 
 DEADEYE_FN_addConnection(
-    D.MainTitle.InputBegan:Connect(
+    MainTitle.InputBegan:Connect(
         function(input)
             DEADEYE_FN_beginWindowDrag(input)
         end
@@ -12878,9 +12877,9 @@ DEADEYE_FN_addConnection(
 )
 
 DEADEYE_FN_addConnection(
-    D.UserInputService.InputChanged:Connect(
+    UserInputService.InputChanged:Connect(
         function(input)
-            if not D.dragging then
+            if not dragging then
                 return
             end
 
@@ -12894,15 +12893,15 @@ DEADEYE_FN_addConnection(
 
             local delta =
                 input.Position -
-                D.dragStart
+                dragStart
 
-            D.Main.Position =
+            Main.Position =
                 UDim2.new(
-                    D.startPosition.X.Scale,
-                    D.startPosition.X.Offset
+                    startPosition.X.Scale,
+                    startPosition.X.Offset
                         + delta.X,
-                    D.startPosition.Y.Scale,
-                    D.startPosition.Y.Offset
+                    startPosition.Y.Scale,
+                    startPosition.Y.Offset
                         + delta.Y
                 )
 
@@ -12915,50 +12914,50 @@ local function beginResize(
     position,
     mode
 )
-    if D.mainMinimized then
+    if mainMinimized then
         return
     end
 
     resizing = true
-    D.resizeMode = mode
-    D.resizeStart =
+    resizeMode = mode
+    resizeStart =
         position
-    D.resizeStartSize =
-        D.Main.AbsoluteSize
+    resizeStartSize =
+        Main.AbsoluteSize
 end
 
 --// Invisible right-edge resize target.
-D.ResizeRight =
+local ResizeRight =
     Instance.new("Frame")
-D.ResizeRight.Name =
+ResizeRight.Name =
     "ResizeRight"
-D.ResizeRight.Size =
+ResizeRight.Size =
     UDim2.new(
         0,
-        D.RESIZE_EDGE,
+        RESIZE_EDGE,
         1,
         -54
     )
-D.ResizeRight.Position =
+ResizeRight.Position =
     UDim2.new(
         1,
-        -D.RESIZE_EDGE,
+        -RESIZE_EDGE,
         0,
         48
     )
-D.ResizeRight.BackgroundTransparency =
+ResizeRight.BackgroundTransparency =
     1
-D.ResizeRight.BorderSizePixel =
+ResizeRight.BorderSizePixel =
     0
-D.ResizeRight.ZIndex =
+ResizeRight.ZIndex =
     20
-D.ResizeRight.Active =
+ResizeRight.Active =
     true
-D.ResizeRight.Parent =
-    D.Main
+ResizeRight.Parent =
+    Main
 
 DEADEYE_FN_addConnection(
-    D.ResizeRight.InputBegan:Connect(
+    ResizeRight.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
@@ -12975,37 +12974,37 @@ DEADEYE_FN_addConnection(
 )
 
 --// Bottom-edge resize target.
-D.ResizeBottom =
+local ResizeBottom =
     Instance.new("Frame")
-D.ResizeBottom.Name =
+ResizeBottom.Name =
     "ResizeBottom"
-D.ResizeBottom.Size =
+ResizeBottom.Size =
     UDim2.new(
         1,
         -54,
         0,
-        D.RESIZE_EDGE
+        RESIZE_EDGE
     )
-D.ResizeBottom.Position =
+ResizeBottom.Position =
     UDim2.new(
         0,
         8,
         1,
-        -D.RESIZE_EDGE
+        -RESIZE_EDGE
     )
-D.ResizeBottom.BackgroundTransparency =
+ResizeBottom.BackgroundTransparency =
     1
-D.ResizeBottom.BorderSizePixel =
+ResizeBottom.BorderSizePixel =
     0
-D.ResizeBottom.ZIndex =
+ResizeBottom.ZIndex =
     20
-D.ResizeBottom.Active =
+ResizeBottom.Active =
     true
-D.ResizeBottom.Parent =
-    D.Main
+ResizeBottom.Parent =
+    Main
 
 DEADEYE_FN_addConnection(
-    D.ResizeBottom.InputBegan:Connect(
+    ResizeBottom.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
@@ -13022,33 +13021,33 @@ DEADEYE_FN_addConnection(
 )
 
 --// Bottom-right corner: width + height together.
-D.ResizeCorner =
+local ResizeCorner =
     Instance.new("TextButton")
-D.ResizeCorner.Name =
+ResizeCorner.Name =
     "ResizeCorner"
-D.ResizeCorner.Size =
+ResizeCorner.Size =
     UDim2.new(
         0,
         24,
         0,
         24
     )
-D.ResizeCorner.Position =
+ResizeCorner.Position =
     UDim2.new(
         1,
         -24,
         1,
         -24
     )
-D.ResizeCorner.BackgroundTransparency =
+ResizeCorner.BackgroundTransparency =
     1
-D.ResizeCorner.BorderSizePixel =
+ResizeCorner.BorderSizePixel =
     0
-D.ResizeCorner.Text =
+ResizeCorner.Text =
     ""
-D.ResizeCorner.TextSize =
+ResizeCorner.TextSize =
     1
-D.ResizeCorner.ZIndex =
+ResizeCorner.ZIndex =
     21
 
 for i = 1, 3 do
@@ -13088,15 +13087,15 @@ for i = 1, 3 do
         22
 
     grip.Parent =
-        D.ResizeCorner
+        ResizeCorner
 end
-D.ResizeCorner.AutoButtonColor =
+ResizeCorner.AutoButtonColor =
     false
-D.ResizeCorner.Parent =
-    D.Main
+ResizeCorner.Parent =
+    Main
 
 DEADEYE_FN_addConnection(
-    D.ResizeCorner.InputBegan:Connect(
+    ResizeCorner.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
@@ -13113,7 +13112,7 @@ DEADEYE_FN_addConnection(
 )
 
 DEADEYE_FN_addConnection(
-    D.UserInputService.InputChanged:Connect(
+    UserInputService.InputChanged:Connect(
         function(input)
             if not resizing then
                 return
@@ -13129,27 +13128,27 @@ DEADEYE_FN_addConnection(
 
             local delta =
                 input.Position -
-                D.resizeStart
+                resizeStart
 
             local width =
-                D.resizeStartSize.X
+                resizeStartSize.X
 
             local height =
-                D.resizeStartSize.Y
+                resizeStartSize.Y
 
-            if D.resizeMode == "right"
-                or D.resizeMode == "corner"
+            if resizeMode == "right"
+                or resizeMode == "corner"
             then
                 width =
-                    D.resizeStartSize.X +
+                    resizeStartSize.X +
                     delta.X
             end
 
-            if D.resizeMode == "bottom"
-                or D.resizeMode == "corner"
+            if resizeMode == "bottom"
+                or resizeMode == "corner"
             then
                 height =
-                    D.resizeStartSize.Y +
+                    resizeStartSize.Y +
                     delta.Y
             end
 
@@ -13162,21 +13161,21 @@ DEADEYE_FN_addConnection(
 )
 
 DEADEYE_FN_addConnection(
-    D.UserInputService.InputEnded:Connect(
+    UserInputService.InputEnded:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
                 or input.UserInputType ==
                     Enum.UserInputType.Touch
             then
-                if D.dragging then
-                    D.dragging = false
+                if dragging then
+                    dragging = false
                     saveWindowState()
                 end
 
                 if resizing then
                     resizing = false
-                    D.resizeMode = nil
+                    resizeMode = nil
                     saveWindowState()
                 end
             end
@@ -13187,32 +13186,32 @@ DEADEYE_FN_addConnection(
 --// CLEANUP
 --// =========================================================
 function DEADEYE_FN_cleanup()
-    if D.cleaned then
+    if cleaned then
         return
     end
 
     restoreNativeEmoteWheel(true)
 
     --// Stop every active loop before doing any cleanup that may yield.
-    D.cleaned = true
-    D.genv.EMOTE_SWAPPER_RUNNING = false
-    D.genv.DEADEYE_MAIN_RUNNING = false
-    D.genv.DEADEYE_UNUSUAL_POV_RUNNING = false
-    D.genv.DEADEYE_PORTRAIT_RUNNING = false
+    cleaned = true
+    genv.EMOTE_SWAPPER_RUNNING = false
+    genv.DEADEYE_MAIN_RUNNING = false
+    genv.DEADEYE_UNUSUAL_POV_RUNNING = false
+    genv.DEADEYE_PORTRAIT_RUNNING = false
 
-    D.enabled = false
-    D.replacementGeneration =
-        D.replacementGeneration + 1
-    D.replacementRunning =
+    enabled = false
+    replacementGeneration =
+        replacementGeneration + 1
+    replacementRunning =
         false
 
     local activeObject =
         getCharacterObject()
 
     if activeObject
-        and D.currentCustomEmote
+        and currentCustomEmote
         and activeObject.Emote
-            == D.currentCustomEmote
+            == currentCustomEmote
     then
         pcall(function()
             activeObject.Emote = nil
@@ -13220,11 +13219,11 @@ function DEADEYE_FN_cleanup()
     end
 
     local emoteToStop =
-        D.currentCustomEmote
+        currentCustomEmote
 
-    D.currentCustomEmote = nil
-    D.currentOriginalId = nil
-    D.currentReplaceId = nil
+    currentCustomEmote = nil
+    currentOriginalId = nil
+    currentReplaceId = nil
 
     if emoteToStop then
         task.spawn(function()
@@ -13237,14 +13236,14 @@ function DEADEYE_FN_cleanup()
     DEADEYE_FN_disconnectAll()
 
     pcall(function()
-        if D.genv.UNUSUAL_SWAPPER_CLEANUP then
-            D.genv.UNUSUAL_SWAPPER_CLEANUP()
+        if genv.UNUSUAL_SWAPPER_CLEANUP then
+            genv.UNUSUAL_SWAPPER_CLEANUP()
         end
     end)
 
     pcall(function()
-        if D.genv.DEADEYE_PORTRAIT_CLEANUP then
-            D.genv.DEADEYE_PORTRAIT_CLEANUP()
+        if genv.DEADEYE_PORTRAIT_CLEANUP then
+            genv.DEADEYE_PORTRAIT_CLEANUP()
         end
     end)
 
@@ -13253,27 +13252,27 @@ function DEADEYE_FN_cleanup()
     end)
 
     pcall(function()
-        if D.Picker then
-            D.Picker.Visible = false
+        if Picker then
+            Picker.Visible = false
         end
     end)
 
     pcall(function()
-        if D.ScreenGui then
-            D.ScreenGui:Destroy()
+        if ScreenGui then
+            ScreenGui:Destroy()
         end
     end)
 
-    D.genv.EMOTE_SWAPPER_CLEANUP =
+    genv.EMOTE_SWAPPER_CLEANUP =
         nil
 end
-D.genv.EMOTE_SWAPPER_CLEANUP =
+genv.EMOTE_SWAPPER_CLEANUP =
     DEADEYE_FN_cleanup
 --// =========================================================
 --// CLOSE
 --// =========================================================
 DEADEYE_FN_addConnection(
-    D.Close.MouseButton1Click:Connect(
+    Close.MouseButton1Click:Connect(
         function()
             DEADEYE_FN_cleanup()
         end
@@ -13284,7 +13283,7 @@ DEADEYE_FN_addConnection(
 --// GLASS SURFACE FINISH
 --// =========================================================
 for _, object in ipairs(
-    D.Main:GetDescendants()
+    Main:GetDescendants()
 ) do
     if object:IsA("TextButton") then
         pcall(function()
@@ -13330,25 +13329,25 @@ pcall(function()
     clampWindowPosition()
 end)
 prepareSlots()
-D.savedConfig.emotes =
-    D.savedConfig.emotes
+savedConfig.emotes =
+    savedConfig.emotes
     or {}
-for i = 1, D.SLOT_COUNT do
-    D.savedConfig.emotes[i] = {
+for i = 1, SLOT_COUNT do
+    savedConfig.emotes[i] = {
         originalId =
-            D.slots[i].originalId,
+            slots[i].originalId,
         replaceId =
-            D.slots[i].replaceId
+            slots[i].replaceId
     }
 end
-D.savedConfig.unusual = {
+savedConfig.unusual = {
     originalId =
-        D.unusualSlot.originalId,
+        unusualSlot.originalId,
     replaceId =
-        D.unusualSlot.replaceId
+        unusualSlot.replaceId
 }
 saveSavedConfig()
-D.setMainMinimized(false)
+setMainMinimized(false)
 updateGUI()
 pcall(function()
     DEADEYE_FN_setCategory("Emotes")
