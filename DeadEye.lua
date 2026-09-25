@@ -1,3 +1,3462 @@
+--// =========================================================
+--// EMOTE SWAPPER - 12 SLOTS + SEARCH
+--//
+--// Каждый слот:
+--//   ORIGINAL -> REPLACE
+--//
+--// По умолчанию:
+--//   Slot 1 = Banger (1631) -> RockinStride (51)
+--//
+--// Основная логика:
+--//   1. Нажимаешь оригинальную эмоцию в обычном колесе.
+--//   2. Игра сама обрабатывает DataRegistry.Emote.
+--//   3. Игра сама включает штатный State/Inert/Weaponless.
+--//   4. Скрипт гасит локальную оригинальную анимацию.
+--//   5. Локально запускает выбранную эмоцию.
+--//   6. Когда оригинальная заканчивается -
+--//      replacement тоже заканчивается.
+--//
+--// GUI:
+--//   12 слотов
+--//   3 эмоции в ряд в picker
+--//   поиск по названию
+--//   вертикальный scroll
+--//   drag
+--//   close button
+--// =========================================================
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local __UI = {}
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local genv = getgenv and getgenv() or _G
+if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP()
+    end)
+end
+--// =========================================================
+--// PREVIOUS INSTANCE CLEANUP
+--// =========================================================
+if genv.UNUSUAL_SWAPPER_CLEANUP then
+    pcall(function()
+        genv.UNUSUAL_SWAPPER_CLEANUP()
+    end)
+end
+if genv.DEADEYE_PORTRAIT_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_PORTRAIT_CLEANUP()
+    end)
+end
+if genv.DEADEYE_COSMETIC_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_COSMETIC_CLEANUP()
+    end)
+end
+if genv.EMOTE_SWAPPER_CLEANUP then
+    pcall(function()
+        genv.EMOTE_SWAPPER_CLEANUP()
+    end)
+end
+genv.DEADEYE_MAIN_RUNNING = true
+genv.EMOTE_SWAPPER_RUNNING = true
+genv.DEADEYE_PORTRAIT_RUNNING = true
+--// =========================================================
+--// SERVICES
+--// =========================================================
+__UI.CharacterService = require(
+    ReplicatedStorage.Services.Asset.CharacterService
+)
+__UI.ClientItemService = require(
+    ReplicatedStorage.Services.Items.ClientItemService
+)
+__UI.EmoteService = require(
+    ReplicatedStorage.Services.Items.EmoteService
+)
+local Registry = require(
+    ReplicatedStorage.Items.Registry
+)
+local HttpService = game:GetService("HttpService")
+--// =========================================================
+--// SETTINGS
+--// =========================================================
+local SLOT_COUNT = 12
+local CONFIG_FILE = "DeadEye_Config.json"
+local savedConfig = {
+    version = 1,
+    emotes = {},
+    unusual = {},
+    cosmetic = {
+        slot1 = {},
+        slot2 = {}
+    },
+    others = {},
+    main = {
+        jumpDelay = 0.01,
+        hotkey = "Z",
+        hideUIHotkey = "H"
+    },
+    gui = {
+        x = 35,
+        y = 80,
+        width = 455,
+        height = 320
+    }
+}
+function loadSavedConfig()
+    if type(readfile) ~= "function" then
+        return
+    end
+    local success, raw
+    if type(isfile) == "function" then
+        local exists = false
+        pcall(function()
+            exists = isfile(CONFIG_FILE)
+        end)
+        if not exists then
+            return
+        end
+    end
+    success, raw =
+        pcall(function()
+            return readfile(
+                CONFIG_FILE
+            )
+        end)
+    if not success
+        or type(raw) ~= "string"
+        or raw == ""
+    then
+        return
+    end
+    local decodeSuccess, decoded =
+        pcall(function()
+            return HttpService:JSONDecode(
+                raw
+            )
+        end)
+    if not decodeSuccess
+        or type(decoded) ~= "table"
+    then
+        warn(
+            "[DeadEye] Invalid config file, using defaults"
+        )
+        return
+    end
+    if type(decoded.emotes) == "table" then
+        savedConfig.emotes =
+            decoded.emotes
+    end
+    if type(decoded.unusual) == "table" then
+        savedConfig.unusual =
+            decoded.unusual
+    end
+    if type(decoded.cosmetic) == "table" then
+        savedConfig.cosmetic =
+            decoded.cosmetic
+    end
+    if type(decoded.others) == "table" then
+        savedConfig.others =
+            decoded.others
+    end
+    if type(decoded.main) == "table" then
+        savedConfig.main =
+            decoded.main
+    end
+    savedConfig.main.hideUIHotkey =
+        savedConfig.main.hideUIHotkey
+        or "H"
+
+    if type(decoded.gui) == "table" then
+        savedConfig.gui = savedConfig.gui or {}
+
+        savedConfig.gui.x =
+            tonumber(decoded.gui.x)
+            or savedConfig.gui.x
+            or 35
+
+        savedConfig.gui.y =
+            tonumber(decoded.gui.y)
+            or savedConfig.gui.y
+            or 80
+
+        savedConfig.gui.width =
+            tonumber(decoded.gui.width)
+            or savedConfig.gui.width
+            or 455
+
+        savedConfig.gui.height =
+            tonumber(decoded.gui.height)
+            or savedConfig.gui.height
+            or 320
+    end
+
+    savedConfig.gui.x =
+        tonumber(savedConfig.gui.x) or 35
+    savedConfig.gui.y =
+        tonumber(savedConfig.gui.y) or 80
+    savedConfig.gui.width =
+        tonumber(savedConfig.gui.width) or 455
+    savedConfig.gui.height =
+        tonumber(savedConfig.gui.height) or 320
+
+    savedConfig.version =
+        tonumber(decoded.version)
+        or 1
+end
+function saveSavedConfig()
+    if type(writefile) ~= "function" then
+        return false
+    end
+    local success, raw =
+        pcall(function()
+            return HttpService:JSONEncode(
+                savedConfig
+            )
+        end)
+    if not success
+        or type(raw) ~= "string"
+    then
+        warn(
+            "[DeadEye] Config encode failed:",
+            raw
+        )
+        return false
+    end
+    local writeSuccess, writeError =
+        pcall(function()
+            writefile(
+                CONFIG_FILE,
+                raw
+            )
+        end)
+    if not writeSuccess then
+        warn(
+            "[DeadEye] Config save failed:",
+            writeError
+        )
+        return false
+    end
+    return true
+end
+loadSavedConfig()
+--// =========================================================
+--// =========================================================
+--// LOCAL PORTRAIT OVERRIDE MODULE
+--// =========================================================
+--// Portrait module is loaded at the original final initialization point.
+
+--// =========================================================
+--// SLOTS
+--// =========================================================
+local slots = {}
+for i = 1, SLOT_COUNT do
+    slots[i] = {
+        originalId = nil,
+        replaceId = nil,
+        originalName = nil,
+        replaceName = nil
+    }
+end
+--// DEFAULT SLOT
+slots[1].originalId = 1631
+slots[1].replaceId = 51
+slots[1].originalName = "Banger"
+slots[1].replaceName = "RockinStride"
+--// Load saved Emote mappings.
+for i = 1, SLOT_COUNT do
+    local saved =
+        savedConfig.emotes[i]
+    if type(saved) == "table" then
+        local originalId =
+            tonumber(saved.originalId)
+        local replaceId =
+            tonumber(saved.replaceId)
+        if originalId then
+            slots[i].originalId =
+                originalId
+        end
+        if replaceId then
+            slots[i].replaceId =
+                replaceId
+        end
+    end
+end
+--// =========================================================
+--// RUNTIME STATE
+--// =========================================================
+local enabled = false
+local cleaned = false
+local connections = {}
+
+--// Native wheel visual state.
+--// Keys are logical wheel positions ("Wheel:1", "Wheel2:4"),
+--// not GUI Instances. The game can recreate Emote1..Emote6;
+--// logical state survives those recreations and repeated ON/OFF.
+
+--// =========================================================
+--// CACHE
+--// =========================================================
+local originalModules = {}
+local replaceModules = {}
+-- [originalId] = { [animationId] = true }
+local originalAnimationIds = {}
+local emoteList = {}
+--// =========================================================
+--// GUI STATE
+--// =========================================================
+local ScreenGui
+local Main
+local SlotsScroll
+local Picker
+local PickerScroll
+local PickerSearch
+local PickerTitle
+local PickerClose
+local Status
+local Toggle
+local activePickerSlot = nil
+local activePickerSide = nil
+local slotOriginalButtons = {}
+local slotReplaceButtons = {}
+local pickerButtons = {}
+--// =========================================================
+--// CONNECTION HELPER
+--// =========================================================
+local function addConnection(connection)
+    table.insert(connections, connection)
+end
+local function disconnectAll()
+    for _, connection in ipairs(connections) do
+        pcall(function()
+            connection:Disconnect()
+        end)
+    end
+    table.clear(connections)
+end
+--// =========================================================
+--// NORMALIZE ANIMATION ID
+--// =========================================================
+function normalizeAnimationId(id)
+    if not id then
+        return nil
+    end
+    local text = tostring(id)
+    local number = string.match(
+        text,
+        "%d+"
+    )
+    return number or text
+end
+--// =========================================================
+--// GET ITEM MODULE
+--// =========================================================
+function getItemModule(id)
+    id = tonumber(id)
+    if not id then
+        return nil
+    end
+    local success, result = pcall(function()
+        return __UI.ClientItemService:GetItemFromID(id)
+    end)
+    if success then
+        return result
+    end
+    return nil
+end
+--// =========================================================
+--// BUILD EMOTE LIST
+--// =========================================================
+function buildEmoteList()
+    table.clear(emoteList)
+    local all
+    local success, result = pcall(function()
+        return Registry.GetAll()
+    end)
+    if not success then
+        warn(
+            "[EmoteSwapper] Registry.GetAll error:",
+            result
+        )
+        return
+    end
+    all = result
+    for id, data in pairs(all) do
+        if data
+            and data.Module
+            and data.Categories then
+            local isEmote = false
+            for _, category in ipairs(
+                data.Categories
+            ) do
+                if category == "Emotes" then
+                    isEmote = true
+                    break
+                end
+            end
+            if isEmote then
+                local numericId =
+                    tonumber(id)
+                if numericId then
+                    table.insert(
+                        emoteList,
+                        {
+                            id = numericId,
+                            name = data.Module.Name,
+                            module = data.Module
+                        }
+                    )
+                end
+            end
+        end
+    end
+    table.sort(
+        emoteList,
+        function(a, b)
+            return a.id < b.id
+        end
+    )
+    end
+buildEmoteList()
+--// =========================================================
+--// PREPARE ORIGINAL MODULE
+--// =========================================================
+function prepareOriginalModule(id)
+    id = tonumber(id)
+    if not id then
+        return nil
+    end
+    if originalModules[id] then
+        return originalModules[id]
+    end
+    local module =
+        getItemModule(id)
+    if not module then
+        return nil
+    end
+    originalModules[id] =
+        module
+    local animationSet = {}
+    for _, object in ipairs(
+        module:GetDescendants()
+    ) do
+        if object:IsA("Animation") then
+            local animationId =
+                normalizeAnimationId(
+                    object.AnimationId
+                )
+            if animationId then
+                animationSet[animationId] = true
+            end
+        end
+    end
+    originalAnimationIds[id] =
+        animationSet
+    return module
+end
+--// =========================================================
+--// PREPARE REPLACE MODULE
+--// =========================================================
+function prepareReplaceModule(id)
+    id = tonumber(id)
+    if not id then
+        return nil
+    end
+    if replaceModules[id] then
+        return replaceModules[id]
+    end
+    local module =
+        getItemModule(id)
+    if not module then
+        return nil
+    end
+    replaceModules[id] =
+        module
+    return module
+end
+--// =========================================================
+--// FIND EMOTE NAME
+--// =========================================================
+function getEmoteName(id)
+    id = tonumber(id)
+    if not id then
+        return nil
+    end
+    for _, data in ipairs(
+        emoteList
+    ) do
+        if data.id == id then
+            return data.name
+        end
+    end
+    local module =
+        getItemModule(id)
+    if module then
+        return module.Name
+    end
+    return nil
+end
+--// =========================================================
+--// PREPARE ALL CONFIGURED SLOTS
+--// =========================================================
+function prepareSlots()
+    for i = 1, SLOT_COUNT do
+        local slot =
+            slots[i]
+        if slot.originalId then
+            local module =
+                prepareOriginalModule(
+                    slot.originalId
+                )
+            if module then
+                slot.originalName =
+                    module.Name
+            end
+        end
+        if slot.replaceId then
+            local module =
+                prepareReplaceModule(
+                    slot.replaceId
+                )
+            if module then
+                slot.replaceName =
+                    module.Name
+            end
+        end
+    end
+end
+prepareSlots()
+--// =========================================================
+--// CHARACTER OBJECT
+--// =========================================================
+function getCharacterObject()
+    local object
+    local success = pcall(function()
+        object =
+            __UI.CharacterService:GetLocalCharacter()
+    end)
+    if not success or not object then
+        return nil
+    end
+    if not object.Model then
+        return nil
+    end
+    if not object.Rig then
+        return nil
+    end
+    return object
+end
+--// =========================================================
+--// HELPER: SLOT BY ORIGINAL ID
+--// =========================================================
+function getSlotByOriginalId(id)
+    id = tonumber(id)
+    if not id then
+        return nil
+    end
+    for i = 1, SLOT_COUNT do
+        local slot =
+            slots[i]
+        if slot.originalId == id
+            and slot.replaceId then
+            return slot, i
+        end
+    end
+    return nil
+end
+--// =========================================================
+--// =========================================================
+--// EMOTE RUNTIME MODULE
+--// =========================================================
+local EmoteRuntime =
+    loadstring(
+        game:HttpGet(
+            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/a424881ee7e4e542b46a543aaf489734afd102ea/DeadEye_EmoteRuntime.lua"
+        ),
+        "@DeadEye_EmoteRuntime"
+    )()
+
+if type(EmoteRuntime) == "function" then
+    EmoteRuntime = EmoteRuntime(
+        {
+            genv = genv,
+            isEnabled = function()
+                return enabled
+            end,
+            EmoteService = __UI.EmoteService,
+            originalAnimationIds = originalAnimationIds
+        }
+    )
+end
+
+if type(EmoteRuntime) ~= "table" then
+    error(
+        "[DeadEye] EmoteRuntime module did not return an API table"
+    )
+end
+--// GUI PARENT
+--// =========================================================
+local guiParent
+pcall(function()
+    guiParent = gethui()
+end)
+if not guiParent then
+    guiParent =
+        game:GetService("CoreGui")
+end
+--// =========================================================
+--// SCREEN GUI
+--// =========================================================
+ScreenGui =
+    Instance.new("ScreenGui")
+ScreenGui.Name =
+    "EmoteSwapperGUI"
+ScreenGui.ResetOnSpawn =
+    false
+ScreenGui.ZIndexBehavior =
+    Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent =
+    guiParent
+--// =========================================================
+--// MAIN
+--// =========================================================
+Main =
+    Instance.new("Frame")
+Main.Size =
+    UDim2.new(
+        0,
+        math.max(
+            455,
+            savedConfig.gui.width
+        ),
+        0,
+        math.max(
+            285,
+            savedConfig.gui.height
+        )
+    )
+Main.Position =
+    UDim2.new(
+        0,
+        savedConfig.gui.x,
+        0,
+        savedConfig.gui.y
+    )
+Main.BackgroundColor3 =
+    Color3.fromRGB(
+        18,
+        20,
+        24
+    )
+Main.BackgroundTransparency =
+    1
+Main.BorderSizePixel =
+    0
+Main.ClipsDescendants =
+    true
+Main.Parent =
+    ScreenGui
+
+local MainSurface =
+    Instance.new("Frame")
+
+MainSurface.Name =
+    "MainSurface"
+
+MainSurface.Size =
+    UDim2.new(
+        1,
+        -2,
+        1,
+        -2
+    )
+
+MainSurface.Position =
+    UDim2.new(
+        0,
+        1,
+        0,
+        1
+    )
+
+MainSurface.BackgroundColor3 =
+    Color3.fromRGB(
+        31,
+        35,
+        42
+    )
+
+MainSurface.BackgroundTransparency =
+    0.10
+
+MainSurface.BorderSizePixel =
+    0
+
+MainSurface.ZIndex =
+    0
+
+MainSurface.ClipsDescendants =
+    true
+
+MainSurface.Parent =
+    Main
+
+local MainSurfaceCorner =
+    Instance.new("UICorner")
+
+MainSurfaceCorner.CornerRadius =
+    UDim.new(
+        0,
+        12
+    )
+
+MainSurfaceCorner.Parent =
+    MainSurface
+
+local MainSurfaceStroke =
+    Instance.new("UIStroke")
+
+MainSurfaceStroke.Thickness =
+    1
+
+MainSurfaceStroke.Transparency =
+    0.66
+
+MainSurfaceStroke.Parent =
+    MainSurface
+
+__UI.MainGradient =
+    Instance.new("UIGradient")
+__UI.MainGradient.Rotation =
+    115
+__UI.MainGradient.Color =
+    ColorSequence.new({
+        ColorSequenceKeypoint.new(
+            0,
+            Color3.fromRGB(
+                55,
+                61,
+                72
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            0.42,
+            Color3.fromRGB(
+                38,
+                43,
+                51
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            1,
+            Color3.fromRGB(
+                24,
+                28,
+                34
+            )
+        )
+    })
+__UI.MainGradient.Transparency =
+    NumberSequence.new(0.20)
+__UI.MainGradient.Parent =
+    MainSurface
+
+--// MainSurface owns the outer rounded shell; keep Main itself fully transparent.
+
+local MainHeader =
+    Instance.new("Frame")
+MainHeader.Name =
+    "MainHeader"
+MainHeader.Size =
+    UDim2.new(
+        1,
+        -2,
+        0,
+        39
+    )
+MainHeader.Position =
+    UDim2.new(
+        0,
+        1,
+        0,
+        1
+    )
+MainHeader.BackgroundColor3 =
+    Color3.fromRGB(
+        40,
+        45,
+        53
+    )
+MainHeader.BackgroundTransparency =
+    0.20
+MainHeader.BorderSizePixel =
+    0
+MainHeader.ZIndex =
+    1
+MainHeader.Parent =
+    Main
+
+local MainHeaderCorner =
+    Instance.new("UICorner")
+
+MainHeaderCorner.CornerRadius =
+    UDim.new(
+        0,
+        11
+    )
+
+MainHeaderCorner.Parent =
+    MainHeader
+
+__UI.MainHeaderGradient =
+    Instance.new("UIGradient")
+__UI.MainHeaderGradient.Rotation =
+    90
+__UI.MainHeaderGradient.Color =
+    ColorSequence.new({
+        ColorSequenceKeypoint.new(
+            0,
+            Color3.fromRGB(
+                52,
+                57,
+                67
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            1,
+            Color3.fromRGB(
+                34,
+                39,
+                47
+            )
+        )
+    })
+__UI.MainHeaderGradient.Transparency =
+    NumberSequence.new(0.18)
+__UI.MainHeaderGradient.Parent =
+    MainHeader
+
+__UI.MainHeaderLine =
+    Instance.new("Frame")
+__UI.MainHeaderLine.Name =
+    "HeaderAccent"
+__UI.MainHeaderLine.Size =
+    UDim2.new(
+        1,
+        -24,
+        0,
+        1
+    )
+__UI.MainHeaderLine.Position =
+    UDim2.new(
+        0,
+        12,
+        1,
+        -1
+    )
+__UI.MainHeaderLine.BackgroundTransparency =
+    1
+__UI.MainHeaderLine.Visible =
+    false
+__UI.MainHeaderLine.BorderSizePixel =
+    0
+__UI.MainHeaderLine.ZIndex =
+    1
+__UI.MainHeaderLine.Parent =
+    Main
+
+--// =========================================================
+--// TITLE
+--// =========================================================
+local MainTitle =
+    Instance.new("TextLabel")
+MainTitle.Size =
+    UDim2.new(
+        1,
+        -105,
+        0,
+        36
+    )
+MainTitle.Position =
+    UDim2.new(
+        0,
+        12,
+        0,
+        2
+    )
+MainTitle.BackgroundTransparency =
+    1
+MainTitle.Text =
+    "DeadEyes v1.9"
+MainTitle.TextSize =
+    18
+MainTitle.Font =
+    Enum.Font.GothamBold
+MainTitle.ZIndex =
+    2
+MainTitle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+MainTitle.TextXAlignment =
+    Enum.TextXAlignment.Left
+MainTitle.Parent =
+    Main
+--// =========================================================
+--// MINIMIZE
+--// =========================================================
+local Minimize =
+    Instance.new("TextButton")
+Minimize.Size =
+    UDim2.new(
+        0,
+        27,
+        0,
+        27
+    )
+Minimize.Position =
+    UDim2.new(
+        1,
+        -65,
+        0,
+        6
+    )
+Minimize.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+Minimize.BorderSizePixel =
+    0
+Minimize.Text =
+    "−"
+Minimize.TextSize =
+    20
+Minimize.AutoButtonColor =
+    true
+Minimize.ZIndex =
+    5
+Minimize.BackgroundTransparency =
+    0.05
+Minimize.Font =
+    Enum.Font.GothamBold
+Minimize.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+Minimize.Parent =
+    Main
+__UI.MinimizeCorner =
+    Instance.new("UICorner")
+__UI.MinimizeCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+__UI.MinimizeCorner.Parent =
+    Minimize
+--// =========================================================
+--// CLOSE
+--// =========================================================
+local Close =
+    Instance.new("TextButton")
+Close.Size =
+    UDim2.new(
+        0,
+        27,
+        0,
+        27
+    )
+Close.Position =
+    UDim2.new(
+        1,
+        -32,
+        0,
+        6
+    )
+Close.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        50
+    )
+Close.BackgroundTransparency =
+    0.05
+Close.BorderSizePixel =
+    0
+Close.ZIndex =
+    5
+Close.Text =
+    "×"
+Close.TextSize =
+    27
+Close.Font =
+    Enum.Font.GothamBold
+Close.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+Close.Parent =
+    Main
+
+__UI.CloseCorner =
+    Instance.new("UICorner")
+__UI.CloseCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+__UI.CloseCorner.Parent =
+    Close
+
+__UI.CloseStroke =
+    Instance.new("UIStroke")
+__UI.CloseStroke.Thickness =
+    1
+__UI.CloseStroke.Transparency =
+    0.65
+__UI.CloseStroke.Parent =
+    Close
+
+--// =========================================================
+--// STATUS
+--// =========================================================
+Status =
+    Instance.new("TextLabel")
+Status.Size =
+    UDim2.new(
+        0,
+        190,
+        0,
+        20
+    )
+Status.Position =
+    UDim2.new(
+        0,
+        10,
+        0,
+        43
+    )
+Status.BackgroundTransparency =
+    1
+Status.Text =
+    ""
+Status.TextSize =
+    12
+Status.Font =
+    Enum.Font.Gotham
+Status.TextColor3 =
+    Color3.fromRGB(
+        150,
+        150,
+        150
+    )
+Status.TextXAlignment =
+    Enum.TextXAlignment.Left
+Status.Parent =
+    Main
+--// =========================================================
+--// UNUSUAL CATEGORY
+--// ONE SLOT
+--//
+--// [Original] -> [Replace]
+--//
+--// FX-only local replacement.
+--// =========================================================
+local UnusualFns = {}
+local unusualSlot = {
+    originalId = nil,
+    replaceId = 200,
+    originalName = nil,
+    replaceName = nil
+}
+local unusualList = {}
+local unusualEnabled = false
+local unusualActive = false
+local unusualPicker
+local unusualPickerScroll
+local unusualPickerSearch
+local unusualPickerTitle
+local unusualPickerClose
+local unusualPickerButtons = {}
+local unusualPickerSide = nil
+local unusualIconCache = {}
+local unusualIconIdCache = {}
+
+--// =========================================================
+--// COSMETIC CATEGORY
+--// TWO LOCAL REPLACEMENT SLOTS
+--// [Original] -> [Replace]
+--// =========================================================
+local cosmetic = {
+    slots = {
+        [1] = {
+            originalId = nil,
+            replaceId = nil,
+            originalName = nil,
+            replaceName = nil
+        },
+        [2] = {
+            originalId = nil,
+            replaceId = nil,
+            originalName = nil,
+            replaceName = nil
+        }
+    },
+    list = {},
+    enabled = false,
+    hooked = false,
+    targetSetRig = nil,
+    originalSetRig = nil,
+    lastSetRigArgs = nil,
+    page = nil,
+    pageStatus = nil,
+    picking = false,
+    pickerSide = nil,
+    categoryButton = nil,
+    skinDescription = nil,
+    skinCharacter = nil,
+    refreshBusy = false,
+    directAction = {
+        [1] = nil,
+        [2] = nil
+    }
+}
+
+local function normalizeUnusualIconKey(value)
+    value = tostring(value or "")
+    value = string.lower(value)
+    value = string.gsub(value, "[^%w]", "")
+    return value
+end
+
+local function isLikelyImageKey(key)
+    key = string.lower(
+        tostring(key or "")
+    )
+
+    return string.find(key, "icon", 1, true)
+        or string.find(key, "image", 1, true)
+        or string.find(key, "thumbnail", 1, true)
+        or string.find(key, "thumb", 1, true)
+        or string.find(key, "preview", 1, true)
+        or string.find(key, "sprite", 1, true)end
+
+local function extractAssetId(value)
+    if type(value) == "number" then
+        if value ~= 0 then
+            return "rbxassetid://" .. tostring(math.floor(value))
+        end
+        return nil
+    end
+
+    if type(value) ~= "string" then
+        return nil
+    end
+
+    local text = value
+
+    if string.find(
+        text,
+        "rbxassetid://",
+        1,
+        true
+    )
+    or string.find(
+        text,
+        "rbxthumb://",
+        1,
+        true
+    )
+    then
+        return text
+    end
+
+    local id =
+        string.match(
+            text,
+            "^%s*(%d+)%s*$"
+        )
+
+    if id and id ~= "0" then
+        return "rbxassetid://" .. id
+    end
+
+    return nil
+end
+
+local function scanIconValue(
+    value,
+    preferred,
+    depth,
+    seen
+)
+    if depth > 5 then
+        return nil
+    end
+
+    local direct =
+        extractAssetId(
+            value
+        )
+
+    if direct then
+        return direct
+    end
+
+    if type(value) ~= "table" then
+        return nil
+    end
+
+    if seen[value] then
+        return nil
+    end
+
+    seen[value] = true
+
+    local fallback = nil
+
+    for key, child in pairs(value) do
+        local keyString =
+            tostring(key)
+
+        if isLikelyImageKey(
+            keyString
+        )
+        then
+            local found =
+                scanIconValue(
+                    child,
+                    true,
+                    depth + 1,
+                    seen
+                )
+
+            if found then
+                return found
+            end
+        elseif not preferred then
+            local found =
+                scanIconValue(
+                    child,
+                    false,
+                    depth + 1,
+                    seen
+                )
+
+            if found
+                and not fallback
+            then
+                fallback = found
+            end
+        end
+    end
+
+    return fallback
+end
+
+local function getUnusualIconFromData(
+    numericId,
+    registryData,
+    module
+)
+    local candidates = {}
+
+    local config
+    pcall(function()
+        config =
+            Registry.GetConfig(
+                numericId
+            )
+    end)
+
+    if config then
+        table.insert(
+            candidates,
+            config
+        )
+    end
+
+    if registryData then
+        table.insert(
+            candidates,
+            registryData
+        )
+    end
+
+    if module then
+        pcall(function()
+            local attributes =
+                module:GetAttributes()
+
+            if type(attributes) == "table" then
+                table.insert(
+                    candidates,
+                    attributes
+                )
+            end
+        end)
+
+        -- Some item ModuleScripts return a metadata table.
+        pcall(function()
+            local required =
+                require(module)
+
+            if type(required) == "table" then
+                table.insert(
+                    candidates,
+                    required
+                )
+            end
+        end)
+    end
+
+    for _, candidate in ipairs(
+        candidates
+    ) do
+        local found =
+            scanIconValue(
+                candidate,
+                false,
+                0,
+                {}
+            )
+
+        if found then
+            return found
+        end
+    end
+
+    -- Last direct-object fallback: attributes / StringValue descendants.
+    if module then
+        for _, obj in ipairs(
+            module:GetDescendants()
+        ) do
+            if obj:IsA("StringValue") then
+                local key =
+                    obj.Name
+
+                if isLikelyImageKey(
+                    key
+                )
+                then
+                    local found =
+                        extractAssetId(
+                            obj.Value
+                        )
+
+                    if found then
+                        return found
+                    end
+                end
+            end
+
+            if obj:IsA("IntValue")
+                or obj:IsA("NumberValue")
+            then
+                if isLikelyImageKey(
+                    obj.Name
+                )
+                then
+                    local found =
+                        extractAssetId(
+                            tostring(
+                                obj.Value
+                            )
+                        )
+
+                    if found then
+                        return found
+                    end
+                end
+            end
+        end
+    end
+
+    return nil
+end
+
+local function cacheUnusualIconFromObject(icon)
+    if not icon
+        or not icon:IsA("ImageLabel")
+        or icon.Name ~= "IconIMG"
+    then
+        return
+    end
+
+    local image = icon.Image
+
+    if type(image) ~= "string"
+        or image == ""
+    then
+        return
+    end
+
+    local node = icon
+    local depth = 0
+    local names = {}
+
+    while node
+        and depth < 10
+    do
+        if node.Name == "Slot"
+            or node.Name == "Button"
+            or node.Name == "Slots"
+        then
+            for _, child in ipairs(
+                node:GetDescendants()
+            ) do
+                if child:IsA("TextLabel")
+                    or child:IsA("TextButton")
+                then
+                    local text =
+                        tostring(
+                            child.Text
+                                or ""
+                        )
+
+                    if text ~= "" then
+                        table.insert(
+                            names,
+                            text
+                        )
+                    end
+                end
+            end
+        end
+
+        node = node.Parent
+        depth += 1
+    end
+
+    for _, name in ipairs(names) do
+        local key =
+            normalizeUnusualIconKey(
+                name
+            )
+
+        if key ~= ""
+            and #key >= 3
+        then
+            unusualIconCache[key] = image
+        end
+    end
+end
+
+local function collectCurrentUnusualIcons(playerGui)
+    if not playerGui then
+        return
+    end
+
+    for _, obj in ipairs(
+        playerGui:GetDescendants()
+    ) do
+        if obj:IsA("ImageLabel")
+            and obj.Name == "IconIMG"
+        then
+            cacheUnusualIconFromObject(obj)
+        end
+    end
+end
+
+local function findNativeUnusualScroll(playerGui)
+    local menu =
+        playerGui
+        and playerGui:FindFirstChild(
+            "Menu"
+        )
+
+    local views =
+        menu
+        and menu:FindFirstChild(
+            "Views"
+        )
+
+    local inventory =
+        views
+        and views:FindFirstChild(
+            "Inventory"
+        )
+
+    local selectView =
+        inventory
+        and inventory:FindFirstChild(
+            "Select"
+        )
+
+    local center =
+        selectView
+        and selectView:FindFirstChild(
+            "Center"
+        )
+
+    local frame =
+        center
+        and center:FindFirstChild(
+            "Frame"
+        )
+
+    local list =
+        frame
+        and frame:FindFirstChild(
+            "List"
+        )
+
+    local scroll =
+        list
+        and list:FindFirstChild(
+            "ScrollingFrame"
+        )
+
+    if scroll
+        and scroll:IsA("ScrollingFrame")
+    then
+        return scroll
+    end
+
+    return nil
+end
+
+local function preloadNativeUnusualIcons()
+    local playerGui =
+        LocalPlayer:FindFirstChild(
+            "PlayerGui"
+        )
+
+    if not playerGui then
+        return
+    end
+
+    collectCurrentUnusualIcons(
+        playerGui
+    )
+
+    local scroll =
+        findNativeUnusualScroll(
+            playerGui
+        )
+
+    if not scroll then
+        return
+    end
+
+    local restoreStates = {}
+    local node = scroll
+
+    -- The inventory selector may be completely hidden when the
+    -- player's normal menu is closed. Temporarily reveal only
+    -- the existing UI hierarchy so its virtualized slots can load.
+    while node
+        and node ~= playerGui
+    do
+        if node:IsA("GuiObject") then
+            table.insert(
+                restoreStates,
+                {
+                    object = node,
+                    kind = "Visible",
+                    value = node.Visible
+                }
+            )
+            node.Visible = true
+        elseif node:IsA("LayerCollector") then
+            table.insert(
+                restoreStates,
+                {
+                    object = node,
+                    kind = "Enabled",
+                    value = node.Enabled
+                }
+            )
+            node.Enabled = true
+        end
+
+        node = node.Parent
+    end
+
+    task.wait(0.10)
+
+    local oldPosition =
+        scroll.CanvasPosition
+
+    local steps = 48
+
+    -- The native list is virtualized/recycled.
+    -- Walk through the whole canvas so every batch of slots
+    -- gets instantiated and its IconIMG enters our cache.
+    for i = 0, steps do
+        local maxY =
+            math.max(
+                0,
+                scroll.AbsoluteCanvasSize.Y
+                    - scroll.AbsoluteWindowSize.Y
+            )
+
+        pcall(function()
+            scroll.CanvasPosition =
+                Vector2.new(
+                    oldPosition.X,
+                    maxY * (i / steps)
+                )
+        end)
+
+        RunService.Heartbeat:Wait()
+        RunService.Heartbeat:Wait()
+
+        collectCurrentUnusualIcons(
+            playerGui
+        )
+    end
+
+    pcall(function()
+        scroll.CanvasPosition =
+            oldPosition
+    end)
+
+    for i = #restoreStates, 1, -1 do
+        local state =
+            restoreStates[i]
+
+        pcall(function()
+            if state.kind == "Visible" then
+                state.object.Visible =
+                    state.value
+            elseif state.kind == "Enabled" then
+                state.object.Enabled =
+                    state.value
+            end
+        end)
+    end
+
+    collectCurrentUnusualIcons(
+        playerGui
+    )
+end
+local unusualPage
+local unusualStatus
+local categoryBar
+local mainCategoryButton
+local emoteCategoryButton
+local unusualCategoryButton
+local othersCategoryButton
+local currentCategory = "Emotes"
+local mainPage
+local others = {}
+local mainMinimized = false
+local setMainMinimized
+local updateUnusualToggle
+others.originalDescription = nil
+others.targetHumanoid = nil
+others.page = nil
+others.status = nil
+others.fieldButtons = {}
+others.fieldBoxes = {}
+others.firstPersonTransparency = {}
+local unusualConnections = {}
+local unusualDestroyed = false
+local unusualReapplyBusy = false
+local unusualRuntime = {
+    appliedRig = nil,
+    reapplyGeneration = 0,
+    animationSource = nil,
+    animationLinks = {},
+    visualMirrors = {},
+    specialCircling = nil,
+    animatedNestedVisuals = {}
+}
+--// =========================================================
+--// UNUSUAL CONNECTION HELPER
+--// =========================================================
+function UnusualFns.addUnusualConnection(connection)
+    table.insert(
+        unusualConnections,
+        connection
+    )
+end
+function UnusualFns.disconnectUnusualConnections()
+    for _, connection in ipairs(
+        unusualConnections
+    ) do
+        pcall(function()
+            connection:Disconnect()
+        end)
+    end
+    table.clear(
+        unusualConnections
+    )
+
+    unusualReapplyBusy = false
+end
+--// =========================================================
+--// UNUSUAL LIST
+--// =========================================================
+function UnusualFns.buildUnusualList()
+    table.clear(
+        unusualList
+    )
+    local success, all = pcall(function()
+        return Registry.GetAll()
+    end)
+    if not success
+        or not all
+    then
+        warn(
+            "[UnusualSwapper] Registry.GetAll error:",
+            all
+        )
+        return
+    end
+    local seen = {}
+    for id, data in pairs(all) do
+        local numericId =
+            tonumber(id)
+        if numericId
+            and not seen[numericId]
+        then
+            local config
+            pcall(function()
+                config =
+                    Registry.GetConfig(
+                        numericId
+                    )
+            end)
+            local equipInfo =
+                type(config) == "table"
+                and config.EquipInfo
+                or nil
+            if type(equipInfo) == "table"
+                and equipInfo.SlotType == "Unusual"
+            then
+                local module =
+                    data
+                    and data.Module
+                if not module then
+                    pcall(function()
+                        local entry =
+                            Registry.GetById(
+                                numericId
+                            )
+                        if entry then
+                            module =
+                                entry.Module
+                        end
+                    end)
+                end
+                if module then
+                    seen[numericId] = true
+                    local icon =
+                        getUnusualIconFromData(
+                            numericId,
+                            data,
+                            module
+                        )
+
+                    if icon then
+                        unusualIconIdCache[
+                            numericId
+                        ] = icon
+                    end
+
+                    table.insert(
+                        unusualList,
+                        {
+                            id = numericId,
+                            name = module.Name,
+                            module = module,
+                            icon = icon
+                        }
+                    )
+                end
+            end
+        end
+    end
+    table.sort(
+        unusualList,
+        function(a, b)
+            return a.id < b.id
+        end
+    )
+
+    local iconCount = 0
+
+    for _, data in ipairs(
+        unusualList
+    ) do
+        if data.icon then
+            iconCount += 1
+        end
+    end
+
+    warn(
+        "[DeadEye] Native Unusual icons:",
+        tostring(iconCount),
+        "/",
+        tostring(#unusualList)
+    )
+    end
+UnusualFns.buildUnusualList()
+--// =========================================================
+--// GET UNUSUAL NAME
+--// =========================================================
+--// =========================================================
+--// COSMETIC HELPERS
+--// =========================================================
+function cosmetic.getName(id)
+    id = tonumber(id)
+    if not id then
+        return nil
+    end
+
+    local name
+    pcall(function()
+        local entry = Registry.GetById(id)
+        local module =
+            entry
+            and entry.Module
+        if module then
+            name = module.Name
+        end
+    end)
+    return name
+end
+
+function cosmetic.getEquippedId(slot)
+    local value = 0
+    pcall(function()
+        value =
+            require(
+                ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild("useLoadout")
+            ).GetEquippedFromSlot(
+                "CosmeticSlot_"
+                    .. tostring(slot)
+            )
+    end)
+    return tonumber(value) or 0
+end
+
+function cosmetic.updateRow(slotIndex)
+    local state =
+        cosmetic.slots[slotIndex]
+
+    if not state then
+        return
+    end
+
+    local row =
+        cosmetic.page
+        and cosmetic.page:FindFirstChild(
+            "CosmeticRow_"
+                .. tostring(slotIndex)
+        )
+
+    if not row then
+        return
+    end
+
+    local original =
+        row:FindFirstChild("OriginalButton")
+    local replace =
+        row:FindFirstChild("ReplaceButton")
+
+    if original then
+        original.Text =
+            state.originalName
+            or "Select"
+    end
+
+    if replace then
+        replace.Text =
+            state.replaceName
+            or "NONE"
+    end
+end
+
+function cosmetic.setInitialOriginal(
+    slotIndex,
+    id
+)
+    id = tonumber(id)
+
+    if not id
+        or id == 0
+    then
+        return
+    end
+
+    local state =
+        cosmetic.slots[slotIndex]
+
+    if not state
+        or state.originalId
+    then
+        return
+    end
+
+    state.originalId =
+        id
+    state.originalName =
+        cosmetic.getName(id)
+
+    cosmetic.saveState()
+    cosmetic.updateRow(slotIndex)
+end
+
+function cosmetic.loadState()
+    local saved =
+        type(savedConfig.cosmetic) == "table"
+        and savedConfig.cosmetic
+        or {}
+
+    for index = 1, 2 do
+        local state =
+            cosmetic.slots[index]
+
+        local savedSlot =
+            saved[
+                "slot"
+                    .. tostring(index)
+            ]
+
+        if type(savedSlot) == "table" then
+            local savedOriginal =
+                tonumber(
+                    savedSlot.originalId
+                )
+            local savedReplace =
+                tonumber(
+                    savedSlot.replaceId
+                )
+
+            if savedOriginal
+                and savedOriginal ~= 0
+            then
+                state.originalId =
+                    savedOriginal
+                state.originalName =
+                    cosmetic.getName(
+                        savedOriginal
+                    )
+            end
+
+            if savedReplace
+                and savedReplace ~= 0
+            then
+                state.replaceId =
+                    savedReplace
+                state.replaceName =
+                    cosmetic.getName(
+                        savedReplace
+                    )
+            end
+        end
+
+        -- Only auto-detect the currently equipped item when
+        -- this slot has no saved Original mapping.
+        if not state.originalId then
+            local equipped =
+                cosmetic.getEquippedId(index)
+
+            if equipped ~= 0 then
+                state.originalId =
+                    equipped
+                state.originalName =
+                    cosmetic.getName(
+                        equipped
+                    )
+            end
+        end
+    end
+end
+
+function cosmetic.saveState()
+    savedConfig.cosmetic = {
+        slot1 = {
+            originalId =
+                cosmetic.slots[1].originalId,
+            replaceId =
+                cosmetic.slots[1].replaceId
+        },
+        slot2 = {
+            originalId =
+                cosmetic.slots[2].originalId,
+            replaceId =
+                cosmetic.slots[2].replaceId
+        }
+    }
+end
+
+function cosmetic.buildList()
+    table.clear(
+        cosmetic.list
+    )
+
+    local success, all =
+        pcall(function()
+            return Registry.GetAll()
+        end)
+
+    if not success
+        or type(all) ~= "table"
+    then
+        warn(
+            "[DeadEye] Cosmetic Registry.GetAll error:",
+            all
+        )
+        return
+    end
+
+    local seen = {}
+
+    for id, data in pairs(all) do
+        local numericId =
+            tonumber(id)
+
+        if numericId
+            and not seen[numericId]
+        then
+            local config
+            pcall(function()
+                config =
+                    Registry.GetConfig(
+                        numericId
+                    )
+            end)
+
+            local equipInfo =
+                type(config) == "table"
+                and config.EquipInfo
+                or nil
+
+            if type(equipInfo) == "table"
+                and equipInfo.SlotType == "Cosmetic"
+            then
+                local module =
+                    data
+                    and data.Module
+
+                if not module then
+                    pcall(function()
+                        local entry =
+                            Registry.GetById(
+                                numericId
+                            )
+                        module =
+                            entry
+                            and entry.Module
+                    end)
+                end
+
+                if module then
+                    seen[numericId] = true
+
+                    local icon
+                    pcall(function()
+                        icon =
+                            getUnusualIconFromData(
+                                numericId,
+                                data,
+                                module
+                            )
+                    end)
+
+                    table.insert(
+                        cosmetic.list,
+                        {
+                            id = numericId,
+                            name = module.Name,
+                            icon = icon
+                        }
+                    )
+                end
+            end
+        end
+    end
+
+    table.sort(
+        cosmetic.list,
+        function(a, b)
+            return a.id < b.id
+        end
+    )
+
+    warn(
+        "[DeadEye] Cosmetics:",
+        tostring(
+            #cosmetic.list
+        )
+    )
+end
+
+function cosmetic.replaceArray(cosmetics)
+    if not cosmetic.enabled
+        or type(cosmetics) ~= "table"
+    then
+        return cosmetics
+    end
+
+    local result
+    local replaced = {}
+
+    for index, id in ipairs(cosmetics) do
+        local numericId =
+            tonumber(id)
+
+        if numericId then
+            for slotIndex = 1, 2 do
+                if not replaced[slotIndex] then
+                    local state =
+                        cosmetic.slots[slotIndex]
+
+                    if state
+                        and state.originalId
+                        and state.replaceId
+                        and tonumber(
+                            state.originalId
+                        ) ~= tonumber(
+                            state.replaceId
+                        )
+                        and numericId
+                            == tonumber(
+                                state.originalId
+                            )
+                    then
+                        if not result then
+                            result =
+                                table.clone(
+                                    cosmetics
+                                )
+                        end
+
+                        result[index] =
+                            tonumber(
+                                state.replaceId
+                            )
+
+                        replaced[slotIndex] = true
+                        break
+                    end
+                end
+            end
+        end
+    end
+
+    return result or cosmetics
+end
+
+function cosmetic.getLiveRig()
+    local characterObject
+    local model
+
+    pcall(function()
+        characterObject =
+            __UI.CharacterService:GetLocalCharacter()
+    end)
+
+    if not characterObject
+        or not characterObject.Rig
+    then
+        return nil
+    end
+
+    model =
+        characterObject.Model
+
+    if not model
+        or not model.Parent
+    then
+        return nil
+    end
+
+    local rigs =
+        workspace:FindFirstChild("Rigs")
+
+    if rigs
+        and not model:IsDescendantOf(rigs)
+    then
+        return nil
+    end
+
+    return characterObject.Rig
+end
+
+function cosmetic.refreshRig()
+    if cosmetic.refreshBusy then
+        return false
+    end
+
+    local live =
+        workspace:FindFirstChild("Rigs")
+        and workspace.Rigs:FindFirstChild(
+            LocalPlayer.Name
+        )
+
+    if not live
+        or not live:IsA("Model")
+    then
+        return false
+    end
+
+    local humanoid =
+        live:FindFirstChildOfClass(
+            "Humanoid"
+        )
+
+    if not humanoid then
+        return false
+    end
+
+    --// The live rig can have a custom skin applied locally.
+    --// PlayerCache is only the game's clean base and must not
+    --// be treated as the player's actual visual skin.
+    --// Preserve the current custom skin on the same live rig.
+    --// When a new rig appears, keep the saved description instead
+    --// of replacing it with the game's default cache description.
+    if not cosmetic.skinDescription
+        or cosmetic.skinCharacter == live
+    then
+        local description
+
+        local descriptionOK =
+            pcall(function()
+                description =
+                    humanoid:GetAppliedDescription()
+            end)
+
+        if not descriptionOK
+            or not description
+        then
+            return false
+        end
+
+        local clone
+
+        local cloneOK =
+            pcall(function()
+                clone =
+                    description:Clone()
+            end)
+
+        if not cloneOK
+            or not clone
+        then
+            return false
+        end
+
+        cosmetic.skinDescription =
+            clone
+        cosmetic.skinCharacter =
+            live
+    end
+
+    local cache =
+        workspace:FindFirstChild(
+            "PlayerCache"
+        )
+
+    local playerCache =
+        cache
+        and cache:FindFirstChild(
+            LocalPlayer.Name
+        )
+
+    local baseName =
+        humanoid.RigType
+        == Enum.HumanoidRigType.R6
+        and "R6"
+        or "Player"
+
+    local base =
+        playerCache
+        and playerCache:FindFirstChild(
+            baseName
+        )
+
+    if not base then
+        return false
+    end
+
+    local restoreUnusual =
+        unusualEnabled
+        and unusualActive
+
+    if restoreUnusual then
+        pcall(function()
+            UnusualFns.removeOurUnusualFX()
+        end)
+    end
+
+    cosmetic.refreshBusy = true
+
+    local success =
+        pcall(function()
+
+            --// Strip only the visual contents of the body parts
+            --// back to the game's clean merge base.
+            for _, basePart in ipairs(
+                base:GetChildren()
+            ) do
+
+                if basePart:IsA("BasePart")
+                    and basePart.Name
+                        ~= "HumanoidRootPart"
+                then
+
+                    local livePart =
+                        live:FindFirstChild(
+                            basePart.Name
+                        )
+
+                    if livePart
+                        and livePart:IsA("BasePart")
+                    then
+
+                        for _, child in ipairs(
+                            livePart:GetChildren()
+                        ) do
+                            pcall(function()
+                                child:Destroy()
+                            end)
+                        end
+
+                        for _, child in ipairs(
+                            basePart:GetChildren()
+                        ) do
+                            pcall(function()
+                                child:Clone().Parent =
+                                    livePart
+                            end)
+                        end
+                    end
+                end
+            end
+
+            --// Restore the actual skin captured from the live
+            --// Humanoid, instead of leaving the PlayerCache skin.
+            local restoredSkin = false
+
+            pcall(function()
+                humanoid:ApplyDescriptionResetAsync(
+                    cosmetic.skinDescription
+                )
+
+                restoredSkin = true
+            end)
+
+            if not restoredSkin then
+                pcall(function()
+                    humanoid:ApplyDescriptionReset(
+                        cosmetic.skinDescription
+                    )
+
+                    restoredSkin = true
+                end)
+            end
+
+            if not restoredSkin then
+                pcall(function()
+                    humanoid:ApplyDescriptionAsync(
+                        cosmetic.skinDescription
+                    )
+
+                    restoredSkin = true
+                end)
+            end
+
+            if not restoredSkin then
+                error(
+                    "Failed to restore saved skin"
+                )
+            end
+
+            local useLoadout =
+                require(
+                    ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild(
+                        "useLoadout"
+                    )
+                )
+
+            local equipped = {}
+
+            local function containsCosmetic(id)
+                id = tonumber(id)
+
+                if not id then
+                    return false
+                end
+
+                for _, existing in ipairs(equipped) do
+                    if tonumber(existing) == id then
+                        return true
+                    end
+                end
+
+                return false
+            end
+
+            for slotIndex = 1, 2 do
+                local id =
+                    tonumber(
+                        useLoadout.GetEquippedFromSlot(
+                            "CosmeticSlot_"
+                                .. tostring(slotIndex)
+                        )
+                    )
+
+                local state =
+                    cosmetic.slots[
+                        slotIndex
+                    ]
+
+                local directAction =
+                    cosmetic.directAction[
+                        slotIndex
+                    ]
+
+                if directAction == "remove" then
+                elseif id
+                    and id ~= 0
+                then
+                    local effectiveId =
+                        id
+
+                    if cosmetic.enabled then
+                        if state
+                            and state.originalId
+                            and state.replaceId
+                            and tonumber(
+                                state.originalId
+                            ) == id
+                            and tonumber(
+                                state.originalId
+                            )
+                                ~= tonumber(
+                                    state.replaceId
+                                )
+                        then
+                            effectiveId =
+                                tonumber(
+                                    state.replaceId
+                                )
+                        end
+                    end
+
+                    table.insert(
+                        equipped,
+                        effectiveId
+                    )
+                end
+
+                if directAction == "add" then
+                    local replaceId =
+                        state
+                        and tonumber(
+                            state.replaceId
+                        )
+
+                    if replaceId
+                        and replaceId ~= 0
+                        and not containsCosmetic(
+                            replaceId
+                        )
+                    then
+                        table.insert(
+                            equipped,
+                            replaceId
+                        )
+                    end
+                end
+            end
+            local AddCosmetics =
+                require(
+                    ReplicatedStorage.Services.Asset.RigService:WaitForChild(
+                        "AddCosmetics"
+                    )
+                )
+
+            AddCosmetics(
+                live,
+                equipped
+            )
+
+            if restoreUnusual then
+                unusualActive = false
+
+                pcall(function()
+                    if UnusualFns.activateUnusual() then
+                        unusualEnabled = true
+                        unusualActive = true
+                        unusualRuntime.appliedRig =
+                            UnusualFns.getUnusualVisualRig()
+                    end
+                end)
+            end
+        end)
+
+    cosmetic.skinCharacter =
+        live
+
+    cosmetic.refreshBusy = false
+
+    return success
+end
+
+function cosmetic.installHook()
+    if cosmetic.hooked
+        or type(hookfunction) ~= "function"
+    then
+        return false
+    end
+
+    local rigService
+    pcall(function()
+        rigService =
+            require(
+                ReplicatedStorage.Services.Asset.RigService
+            )
+    end)
+
+    local target =
+        rigService
+        and rigService.SetRig
+
+    if type(target) ~= "function" then
+        return false
+    end
+
+    local original
+    local ok =
+        pcall(function()
+            original =
+                hookfunction(
+                    target,
+                    function(
+                        self,
+                        character,
+                        rigType,
+                        cosmetics,
+                        gear,
+                        boombox
+                    )
+                        cosmetic.lastSetRigArgs = {
+                            self = self,
+                            character = character,
+                            rigType = rigType,
+                            cosmetics = cosmetics,
+                            gear = gear,
+                            boombox = boombox
+                        }
+
+                        local liveBefore =
+                            workspace:FindFirstChild("Rigs")
+                            and workspace.Rigs:FindFirstChild(
+                                LocalPlayer.Name
+                            )
+
+                        if liveBefore
+                            and liveBefore:IsA("Model")
+                            and (
+                                not cosmetic.skinDescription
+                                or cosmetic.skinCharacter == liveBefore
+                            )
+                        then
+                            local beforeHumanoid =
+                                liveBefore:FindFirstChildOfClass(
+                                    "Humanoid"
+                                )
+
+                            if beforeHumanoid then
+                                pcall(function()
+                                    local description =
+                                        beforeHumanoid:GetAppliedDescription()
+
+                                    local clone =
+                                        description:Clone()
+
+                                    cosmetic.skinDescription =
+                                        clone
+                                    cosmetic.skinCharacter =
+                                        liveBefore
+                                end)
+                            end
+                        end
+
+                        -- SetRig receives the game's character wrapper
+                        -- (a table), not necessarily a Roblox Model.
+                        -- Never call Instance methods on it here.
+                        local result =
+                            original(
+                                self,
+                                character,
+                                rigType,
+                                cosmetic.replaceArray(
+                                    cosmetics
+                                ),
+                                gear,
+                                boombox
+                            )
+
+                        if cosmetic.skinDescription
+                            and type(result) == "table"
+                            and result.Model
+                            and result.Model:IsA("Model")
+                            and result.Model.Parent
+                                == workspace:FindFirstChild("Rigs")
+                            and result.Model.Name
+                                == LocalPlayer.Name
+                        then
+                            task.defer(function()
+                                if genv.DEADEYE_MAIN_RUNNING
+                                    and not cosmetic.refreshBusy
+                                then
+                                    pcall(
+                                        cosmetic.refreshRig
+                                    )
+                                end
+                            end)
+                        end
+
+                        return result
+                    end
+                )
+        end)
+
+    if not ok
+        or type(original) ~= "function"
+    then
+        return false
+    end
+
+    cosmetic.targetSetRig =
+        target
+    cosmetic.originalSetRig =
+        original
+    cosmetic.hooked = true
+
+    return true
+end
+
+function cosmetic.removeHook()
+    if not cosmetic.hooked
+        or type(hookfunction) ~= "function"
+    then
+        return
+    end
+
+    pcall(function()
+        if cosmetic.targetSetRig
+            and cosmetic.originalSetRig
+        then
+            hookfunction(
+                cosmetic.targetSetRig,
+                cosmetic.originalSetRig
+            )
+        end
+    end)
+
+    cosmetic.hooked = false
+    cosmetic.targetSetRig = nil
+    cosmetic.originalSetRig = nil
+    cosmetic.lastSetRigArgs = nil
+end
+
+function cosmetic.updateToggle()
+    pcall(function()
+        if cosmetic.enabled then
+            Toggle.Text =
+                "SWAP: ON"
+            Toggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            Toggle.Text =
+                "SWAP: OFF"
+            Toggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end)
+end
+
+function cosmetic.closePicker()
+    cosmetic.picking = false
+    cosmetic.pickerSide = nil
+    if unusualPicker then
+        unusualPicker.Visible = false
+    end
+end
+
+function cosmetic.select(
+    slotIndex,
+    side,
+    id,
+    name
+)
+    local state =
+        cosmetic.slots[slotIndex]
+
+    if not state then
+        return
+    end
+
+    if side == "Original" then
+        state.originalId = id
+        state.originalName = name
+    elseif side == "Replace" then
+        state.replaceId = id
+        state.replaceName = name
+    else
+        return
+    end
+
+    cosmetic.directAction[slotIndex] = nil
+
+    cosmetic.saveState()
+    pcall(saveSavedConfig)
+
+    if cosmetic.enabled then
+        cosmetic.enabled = false
+        pcall(cosmetic.updateToggle)
+
+        task.spawn(function()
+            pcall(cosmetic.refreshRig)
+        end)
+    end
+
+    -- The executor may invoke this picker callback from a
+    -- thread without Instance access. Never let GUI access
+    -- prevent the actual selection from being saved.
+    pcall(function()
+        cosmetic.closePicker()
+    end)
+
+    pcall(function()
+        local row =
+            cosmetic.page
+            and cosmetic.page:FindFirstChild(
+                "CosmeticRow_"
+                    .. tostring(slotIndex)
+            )
+
+        if row then
+            local a =
+                row:FindFirstChild(
+                    "OriginalButton"
+                )
+            local b =
+                row:FindFirstChild(
+                    "ReplaceButton"
+                )
+
+            if a then
+                a.Text =
+                    state.originalName
+                    or "Select"
+            end
+
+            if b then
+                b.Text =
+                    state.replaceName
+                    or "NONE"
+            end
+        end
+    end)
+
+    -- The new mapping is kept disabled until the user
+    -- explicitly turns Cosmetic Swap back on.
+end
+
+--// =========================================================
+--// COSMETIC NATIVE VIEWPORT PREVIEW
+--// Mirrors ClientItemService:GetVisualModel/CreateViewport.
+--// =========================================================
+function cosmetic.createPreview(
+    id,
+    viewport
+)
+    if not viewport then
+        return false
+    end
+
+    local module
+    local moduleOK =
+        pcall(function()
+            local entry =
+                Registry.GetById(
+                    tonumber(id)
+                )
+            module =
+                entry
+                and entry.Module
+        end)
+
+    if not moduleOK
+        or not module
+    then
+        return false
+    end
+
+    local data
+    local dataOK =
+        pcall(function()
+            data = require(module)
+        end)
+
+    if not dataOK
+        or type(data) ~= "table"
+    then
+        return false
+    end
+
+    local appearance =
+        type(data.AppearanceInfo) == "table"
+        and data.AppearanceInfo
+        or {}
+
+    local isR15 = false
+
+    pcall(function()
+        local character =
+            LocalPlayer.Character
+
+        local humanoid =
+            character
+            and character:FindFirstChildOfClass(
+                "Humanoid"
+            )
+
+        if humanoid then
+            isR15 =
+                humanoid.RigType
+                == Enum.HumanoidRigType.R15
+        end
+    end)
+
+    local source
+
+    if isR15
+        and module:FindFirstChild("Character")
+    then
+        source =
+            module:FindFirstChild(
+                "Character"
+            )
+    elseif not module:FindFirstChild(
+        "CharacterClassic"
+    )
+        and module:FindFirstChild(
+            "Character"
+        )
+    then
+        source =
+            module:FindFirstChild(
+                "Character"
+            )
+    else
+        source =
+            module:FindFirstChild(
+                "CharacterClassic"
+            )
+    end
+
+    if not source
+        or not source:IsA("Model")
+    then
+        return false
+    end
+
+    local visual
+
+    local cloneOK =
+        pcall(function()
+            visual =
+                source:Clone()
+        end)
+
+    if not cloneOK
+        or not visual
+    then
+        return false
+    end
+
+    if appearance.CameraType == "Back" then
+        pcall(function()
+            if isR15 then
+                local lowerTorso =
+                    visual:FindFirstChild(
+                        "LowerTorso"
+                    )
+
+                local root =
+                    lowerTorso
+                    and lowerTorso:FindFirstChild(
+                        "Root"
+                    )
+
+                if root
+                    and root:IsA("Motor6D")
+                then
+                    root.C0 =
+                        CFrame.Angles(
+                            0,
+                            math.pi,
+                            0
+                        )
+                        * root.C0
+                end
+            else
+                local humanoidRootPart =
+                    visual:FindFirstChild(
+                        "HumanoidRootPart"
+                    )
+
+                local torsoRot =
+                    humanoidRootPart
+                    and humanoidRootPart:FindFirstChild(
+                        "TorsoRot"
+                    )
+
+                if torsoRot
+                    and torsoRot:IsA("Motor6D")
+                then
+                    torsoRot.C0 =
+                        CFrame.Angles(
+                            0,
+                            math.pi,
+                            0
+                        )
+                        * torsoRot.C0
+                end
+            end
+        end)
+    end
+
+    if not visual.PrimaryPart then
+        visual.PrimaryPart =
+            visual:FindFirstChild(
+                "HumanoidRootPart"
+            )
+    end
+
+    if not visual.PrimaryPart then
+        visual:Destroy()
+        return false
+    end
+
+    for _, child in ipairs(
+        viewport:GetChildren()
+    ) do
+        pcall(function()
+            child:Destroy()
+        end)
+    end
+
+    local worldModel =
+        Instance.new(
+            "WorldModel"
+        )
+
+    local camera =
+        Instance.new(
+            "Camera"
+        )
+
+    local rootCFrame =
+        visual.PrimaryPart.CFrame
+
+    local cameraCFrame
+
+    if appearance.CameraType == "Head" then
+        cameraCFrame =
+            CFrame.new(
+                0,
+                1.65,
+                0
+            )
+            * CFrame.new(
+                (
+                    rootCFrame
+                    * CFrame.new(
+                        0.85,
+                        -0.51,
+                        -5.1
+                    )
+                ).Position,
+                rootCFrame.Position
+            )
+    elseif appearance.CameraType == "Back" then
+        cameraCFrame =
+            CFrame.new(
+                0,
+                0.34,
+                0
+            )
+            * CFrame.new(
+                (
+                    rootCFrame
+                    * CFrame.new(
+                        4.25,
+                        1.7,
+                        8.5
+                    )
+                ).Position,
+                rootCFrame.Position
+            )
+    else
+        cameraCFrame =
+            CFrame.new(
+                0,
+                0.34,
+                0
+            )
+            * CFrame.new(
+                (
+                    rootCFrame
+                    * CFrame.new(
+                        4.25,
+                        1.7,
+                        -8.5
+                    )
+                ).Position,
+                rootCFrame.Position
+            )
+    end
+
+    visual.Parent =
+        worldModel
+
+    camera.CFrame =
+        cameraCFrame
+
+    camera.FieldOfView =
+        30
+
+    worldModel.Parent =
+        viewport
+
+    camera.Parent =
+        worldModel
+
+    viewport.CurrentCamera =
+        camera
+
+    return true
+end
+
+function cosmetic.rebuildPicker()
+    for _, button in ipairs(
+        unusualPickerButtons
+    ) do
+        pcall(function()
+            button:Destroy()
+        end)
+    end
+    table.clear(
+        unusualPickerButtons
+    )
+
+    local query =
+        string.lower(
+            unusualPickerSearch.Text
+            or ""
+        )
+    local shown = 0
+
+    do
+        local button =
+            Instance.new(
+                "TextButton"
+            )
+        button.Name =
+            "Cosmetic_None"
+        button.BackgroundColor3 =
+            Color3.fromRGB(
+                55,
+                58,
+                68
+            )
+        button.BackgroundTransparency = 0.12
+        button.BorderSizePixel = 0
+        button.ClipsDescendants = true
+        button.Text = "NONE"
+        button.TextSize = 11
+        button.Font =
+            Enum.Font.GothamBold
+        button.TextColor3 =
+            Color3.fromRGB(
+                255,
+                255,
+                255
+            )
+        button.TextTruncate =
+            Enum.TextTruncate.AtEnd
+        button.LayoutOrder = 0
+        button.ZIndex = 32
+        button.Parent =
+            unusualPickerScroll
+
+        local corner =
+            Instance.new(
+                "UICorner"
+            )
+        corner.CornerRadius =
+            UDim.new(0, 5)
+        corner.Parent =
+            button
+
+        table.insert(
+            unusualPickerButtons,
+            button
+        )
+
+        UnusualFns.addUnusualConnection(
+            button.MouseButton1Click:Connect(
+                function()
+                    local slotIndex =
+                        tonumber(
+                            string.match(
+                                cosmetic.pickerSide
+                                    or "",
+                                "^(%d+):"
+                            )
+                        )
+                    local side =
+                        string.match(
+                            cosmetic.pickerSide
+                                or "",
+                            "^%d+:(.+)$"
+                        )
+
+                    if slotIndex and side then
+                        cosmetic.select(
+                            slotIndex,
+                            side,
+                            nil,
+                            nil
+                        )
+                    end
+                end
+            )
+        )
+        shown += 1
+    end
+
+    for index, data in ipairs(
+        cosmetic.list
+    ) do
+        local name =
+            tostring(
+                data.name
+                or data.id
+            )
+        local lower =
+            string.lower(name)
+        local idText =
+            tostring(data.id)
+
+        if query == ""
+            or string.find(
+                lower,
+                query,
+                1,
+                true
+            )
+            or string.find(
+                idText,
+                query,
+                1,
+                true
+            )
+        then
+            shown += 1
+
+            local button =
+                Instance.new(
+                    "TextButton"
+                )
+            button.Name =
+                "Cosmetic_"
+                    .. tostring(
+                        data.id
+                    )
+            button.BackgroundColor3 =
+                Color3.fromRGB(
+                    45,
+                    45,
+                    50
+                )
+            button.BackgroundTransparency = 0.05
+            button.BorderSizePixel = 0
+            button.ClipsDescendants = true
+            button.Text = ""
+            button.ZIndex = 32
+            button.LayoutOrder = index
+            button.Parent =
+                unusualPickerScroll
+
+            local preview =
+                Instance.new(
+                    "ViewportFrame"
+                )
+            preview.Name =
+                "CosmeticPreview"
+            preview.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+            preview.BackgroundColor3 =
+                Color3.fromRGB(
+                    31,
+                    35,
+                    42
+                )
+            preview.BackgroundTransparency =
+                0
+            preview.BorderSizePixel =
+                0
+            preview.Active =
+                false
+            preview.ZIndex =
+                33
+            preview.Parent =
+                button
+
+            local previewCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            previewCorner.CornerRadius =
+                UDim.new(0, 10)
+            previewCorner.Parent =
+                preview
+
+            pcall(function()
+                cosmetic.createPreview(
+                    data.id,
+                    preview
+                )
+            end)
+
+            local glass =
+                Instance.new(
+                    "Frame"
+                )
+            glass.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+            glass.BackgroundColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            glass.BackgroundTransparency = 0.95
+            glass.BorderSizePixel = 0
+            glass.ZIndex = 34
+            glass.Parent =
+                button
+
+            local glassCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            glassCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            glassCorner.Parent =
+                glass
+
+            local shade =
+                Instance.new(
+                    "Frame"
+                )
+            shade.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    0,
+                    36
+                )
+            shade.Position =
+                UDim2.new(
+                    0,
+                    0,
+                    1,
+                    -36
+                )
+            shade.BackgroundColor3 =
+                Color3.fromRGB(
+                    0,
+                    0,
+                    0
+                )
+            shade.BackgroundTransparency = 0.42
+            shade.BorderSizePixel = 0
+            shade.ZIndex = 35
+            shade.Parent =
+                button
+
+            local shadeCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            shadeCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            shadeCorner.Parent =
+                shade
+
+            local nameLabel =
+                Instance.new(
+                    "TextLabel"
+                )
+            nameLabel.Size =
+                UDim2.new(
+                    1,
+                    -12,
+                    0,
+                    30
+                )
+            nameLabel.Position =
+                UDim2.new(
+                    0,
+                    6,
+                    1,
+                    -33
+                )
+            nameLabel.BackgroundTransparency = 1
+            nameLabel.Text = name
+            nameLabel.TextSize = 11
+            nameLabel.Font =
+                Enum.Font.GothamMedium
+            nameLabel.TextColor3 =
+                Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+            nameLabel.TextXAlignment =
+                Enum.TextXAlignment.Left
+            nameLabel.TextYAlignment =
+                Enum.TextYAlignment.Center
+            nameLabel.TextTruncate =
+                Enum.TextTruncate.AtEnd
+            nameLabel.ZIndex = 36
+            nameLabel.Parent =
+                button
+
+            local buttonCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            buttonCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    7
+                )
+            buttonCorner.Parent =
+                button
+
+            table.insert(
+                unusualPickerButtons,
+                button
+            )
+
+            UnusualFns.addUnusualConnection(
+                button.MouseButton1Click:Connect(
+                    function()
+                        local slotIndex =
+                            tonumber(
+                                string.match(
+                                    cosmetic.pickerSide
+                                        or "",
+                                    "^(%d+):"
+                                )
+                            )
+                        local side =
+                            string.match(
+                                cosmetic.pickerSide
+                                    or "",
+                                "^%d+:(.+)$"
+                            )
+
+                        if slotIndex and side then
+                            cosmetic.select(
+                                slotIndex,
+                                side,
+                                data.id,
+                                data.name
+                            )
+                        end
+                    end
+                )
+            )
+        end
+    end
+
+    unusualPickerScroll.CanvasPosition =
+        Vector2.new(
+            0,
+            0
+        )
+
+    if unusualStatus then
+        unusualStatus.Text =
+            "Cosmetics: "
+                .. tostring(
+                    #cosmetic.list
+                )
+                .. " • "
+                .. tostring(
+                    shown
+                )
+                .. " found"
+    end
+end
+
+function cosmetic.openPicker(
+    slotIndex,
+    side
+)
+    cosmetic.picking = true
+    cosmetic.pickerSide =
+        tostring(slotIndex)
+        .. ":"
+        .. side
+
+    unusualPickerTitle.Text =
+        side == "Original"
+        and "Select Original"
+        or "Select Replacement"
+    unusualPickerSearch.Text = ""
+    unusualPicker.Visible = true
+    cosmetic.rebuildPicker()
+end
+
 function cosmetic.buildUI()
     cosmetic.page =
         Instance.new(
@@ -7940,7 +11399,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.8"
+            MainTitle.Text = "DeadEyes v1.9"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -7962,7 +11421,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.8"
+            MainTitle.Text = "DeadEyes v1.9"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -7987,7 +11446,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.8"
+            MainTitle.Text = "DeadEyes v1.9"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -8009,7 +11468,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.8"
+            MainTitle.Text = "DeadEyes v1.9"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -8034,7 +11493,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.8"
+            MainTitle.Text = "DeadEyes v1.9"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
