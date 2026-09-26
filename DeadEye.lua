@@ -5,7 +5,7 @@
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.84"
+local SCRIPT_VERSION = "1.85"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3356,6 +3356,23 @@ function cosmetic.rebuildPicker()
             button.Text = ""
             button.ZIndex = 32
             button.LayoutOrder = index
+
+            --// Create the button's rounded corner BEFORE parenting it.
+            --// Cosmetic preview creation can yield while loading its module;
+            --// the hover UIShadow must see UICorner from the start or it can
+            --// initialize as a square shadow and stay that way.
+            local buttonCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            buttonCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    7
+                )
+            buttonCorner.Parent =
+                button
+
             button.Parent =
                 unusualPickerScroll
 
@@ -3531,18 +3548,6 @@ function cosmetic.rebuildPicker()
                 Enum.TextTruncate.AtEnd
             nameLabel.ZIndex = 36
             nameLabel.Parent =
-                button
-
-            local buttonCorner =
-                Instance.new(
-                    "UICorner"
-                )
-            buttonCorner.CornerRadius =
-                UDim.new(
-                    0,
-                    7
-                )
-            buttonCorner.Parent =
                 button
 
             table.insert(
