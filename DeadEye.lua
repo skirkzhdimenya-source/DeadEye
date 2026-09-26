@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.40"
+    "DeadEyes v1.41"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11506,7 +11506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.40"
+            MainTitle.Text = "DeadEyes v1.41"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11528,7 +11528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.40"
+            MainTitle.Text = "DeadEyes v1.41"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11553,7 +11553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.40"
+            MainTitle.Text = "DeadEyes v1.41"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11575,7 +11575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.40"
+            MainTitle.Text = "DeadEyes v1.41"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11600,7 +11600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.40"
+            MainTitle.Text = "DeadEyes v1.41"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13585,10 +13585,15 @@ end
 --// =========================================================
 --// =========================================================
 --// =========================================================
+--// =========================================================
+--// =========================================================
+--// =========================================================
+--// =========================================================
+--// =========================================================
 --// PICKER APPEARANCE
---// 2-second synchronized fade + scale-in from the center.
---// The popup remains its normal colors; only transparency and
---// the whole-window scale are animated.
+--// 2.2-second fade + size-in from the center.
+--// Uses the popup Size instead of UIScale, so Roblox does not
+--// resample the text while the window is opening.
 --// =========================================================
 __UI.PickerAppearTweens =
     __UI.PickerAppearTweens or {}
@@ -13606,47 +13611,45 @@ function __UI.animatePickerAppear(
         __UI.PickerAppearTweens[picker]
 
     if type(oldTweens) == "table" then
-        for _, tween in ipairs(oldTweens) do
+        for _, tween in ipairs(
+            oldTweens
+        ) do
             pcall(function()
                 tween:Cancel()
             end)
         end
     end
 
-    --// Make the popup scale around its visual center while
-    --// preserving its original on-screen position.
-    local scale =
-        picker:FindFirstChild(
-            "DeadEyePickerAppearScale"
+    picker.AnchorPoint =
+        Vector2.new(
+            0.5,
+            0.5
         )
 
-    if not scale then
-        scale =
-            Instance.new("UIScale")
+    picker.Position =
+        UDim2.new(
+            0.5,
+            0,
+            0.5,
+            0
+        )
 
-        scale.Name =
-            "DeadEyePickerAppearScale"
+    local finalSize =
+        picker.Size
 
-        scale.Scale =
-            1
-
-        scale.Parent =
-            picker
-
-        picker.AnchorPoint =
-            Vector2.new(
-                0.5,
-                0.5
+    local startSize =
+        UDim2.new(
+            finalSize.X.Scale * 0.90,
+            math.floor(
+                finalSize.X.Offset * 0.90
+                + 0.5
+            ),
+            finalSize.Y.Scale * 0.90,
+            math.floor(
+                finalSize.Y.Offset * 0.90
+                + 0.5
             )
-
-        picker.Position =
-            UDim2.new(
-                0.5,
-                0,
-                0.5,
-                0
-            )
-    end
+        )
 
     local targets = {}
 
@@ -13728,11 +13731,11 @@ function __UI.animatePickerAppear(
         end
     end
 
+    picker.Size =
+        startSize
+
     picker.Visible =
         true
-
-    scale.Scale =
-        0.90
 
     local tweens = {}
 
@@ -13743,8 +13746,6 @@ function __UI.animatePickerAppear(
             Enum.EasingDirection.Out
         )
 
-    --// Text becomes fully readable early, so it never spends
-    --// most of the scale animation looking artificially thin.
     local textInfo =
         TweenInfo.new(
             0.55,
@@ -13753,21 +13754,21 @@ function __UI.animatePickerAppear(
         )
 
     pcall(function()
-        local scaleTween =
+        local sizeTween =
             __UI.TweenService:Create(
-                scale,
+                picker,
                 info,
                 {
-                    Scale = 1
+                    Size = finalSize
                 }
             )
 
         table.insert(
             tweens,
-            scaleTween
+            sizeTween
         )
 
-        scaleTween:Play()
+        sizeTween:Play()
     end)
 
     for object, state in pairs(
