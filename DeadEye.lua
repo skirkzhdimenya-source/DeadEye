@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.16"
+    "DeadEyes v1.17"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.16"
+            MainTitle.Text = "DeadEyes v1.17"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.16"
+            MainTitle.Text = "DeadEyes v1.17"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.16"
+            MainTitle.Text = "DeadEyes v1.17"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.16"
+            MainTitle.Text = "DeadEyes v1.17"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.16"
+            MainTitle.Text = "DeadEyes v1.17"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14618,9 +14618,38 @@ function __UI.styleButtonMotion(button)
         true
     )
 
-    --// Keep the visual center fixed while UIScale changes.
-    --// AnchorPoint is intentionally changed only for buttons
-    --// whose position is not controlled by a layout object.
+    --// UIScale normally grows from the object's top-left anchor.
+    --// Move the anchor to the center and compensate the position
+    --// so the button keeps its exact original location at rest.
+    local baseAnchorPoint =
+        button.AnchorPoint
+    local basePosition =
+        button.Position
+
+    local absoluteSize =
+        button.AbsoluteSize
+
+    if absoluteSize.X > 0
+        and absoluteSize.Y > 0
+        and baseAnchorPoint == Vector2.zero
+    then
+        button.AnchorPoint =
+            Vector2.new(
+                0.5,
+                0.5
+            )
+
+        button.Position =
+            UDim2.new(
+                basePosition.X.Scale,
+                basePosition.X.Offset
+                    + (absoluteSize.X * 0.5),
+                basePosition.Y.Scale,
+                basePosition.Y.Offset
+                    + (absoluteSize.Y * 0.5)
+            )
+    end
+
     local scale =
         button:FindFirstChild(
             "DeadEyeHoverScale"
@@ -14637,8 +14666,9 @@ function __UI.styleButtonMotion(button)
             button
     end
 
-    --// Soft light under the button. Several transparent rounded
-    --// layers create a diffuse halo without touching the text.
+    --// Soft light underneath the button. No UIStroke is used:
+    --// layered transparent shapes create a diffuse halo instead
+    --// of a visible border around the text or button edge.
     local glow =
         button:FindFirstChild(
             "DeadEyeHoverGlow"
@@ -14652,22 +14682,22 @@ function __UI.styleButtonMotion(button)
         glow.Size =
             UDim2.new(
                 1,
-                18,
+                10,
                 1,
-                18
+                10
             )
         glow.Position =
             UDim2.new(
                 0,
-                -9,
+                -5,
                 0,
-                -9
+                -5
             )
         glow.BackgroundColor3 =
             Color3.fromRGB(
-                190,
-                205,
-                225
+                185,
+                200,
+                222
             )
         glow.BackgroundTransparency =
             1
@@ -14688,79 +14718,105 @@ function __UI.styleButtonMotion(button)
         glowCorner.CornerRadius =
             UDim.new(
                 0,
-                12
+                10
             )
         glowCorner.Parent =
             glow
 
-        for index = 1, 2 do
-            local layer =
-                Instance.new("Frame")
+        local middle =
+            Instance.new("Frame")
+        middle.Name =
+            "Middle"
+        middle.Size =
+            UDim2.new(
+                1,
+                12,
+                1,
+                12
+            )
+        middle.Position =
+            UDim2.new(
+                0,
+                -6,
+                0,
+                -6
+            )
+        middle.BackgroundColor3 =
+            Color3.fromRGB(
+                185,
+                200,
+                222
+            )
+        middle.BackgroundTransparency =
+            1
+        middle.BorderSizePixel =
+            0
+        middle.Active =
+            false
+        middle.ZIndex =
+            glow.ZIndex
+        middle.Parent =
+            glow
 
-            layer.Name =
-                "Layer" ..
-                tostring(index)
+        local middleCorner =
+            Instance.new("UICorner")
+        middleCorner.CornerRadius =
+            UDim.new(
+                0,
+                11
+            )
+        middleCorner.Parent =
+            middle
 
-            local extra =
-                index * 6
+        local outer =
+            Instance.new("Frame")
+        outer.Name =
+            "Outer"
+        outer.Size =
+            UDim2.new(
+                1,
+                20,
+                1,
+                20
+            )
+        outer.Position =
+            UDim2.new(
+                0,
+                -10,
+                0,
+                -10
+            )
+        outer.BackgroundColor3 =
+            Color3.fromRGB(
+                185,
+                200,
+                222
+            )
+        outer.BackgroundTransparency =
+            1
+        outer.BorderSizePixel =
+            0
+        outer.Active =
+            false
+        outer.ZIndex =
+            glow.ZIndex
+        outer.Parent =
+            glow
 
-            layer.Size =
-                UDim2.new(
-                    1,
-                    18 + extra,
-                    1,
-                    18 + extra
-                )
-
-            layer.Position =
-                UDim2.new(
-                    0,
-                    -(9 + math.floor(extra / 2)),
-                    0,
-                    -(9 + math.floor(extra / 2))
-                )
-
-            layer.BackgroundColor3 =
-                Color3.fromRGB(
-                    190,
-                    205,
-                    225
-                )
-
-            layer.BackgroundTransparency =
-                1
-
-            layer.BorderSizePixel =
-                0
-
-            layer.Active =
-                false
-
-            layer.ZIndex =
-                math.max(
-                    0,
-                    button.ZIndex - 1
-                )
-
-            layer.Parent =
-                button
-
-            local layerCorner =
-                Instance.new("UICorner")
-            layerCorner.CornerRadius =
-                UDim.new(
-                    0,
-                    14 + (index * 2)
-                )
-            layerCorner.Parent =
-                layer
-        end
+        local outerCorner =
+            Instance.new("UICorner")
+        outerCorner.CornerRadius =
+            UDim.new(
+                0,
+                13
+            )
+        outerCorner.Parent =
+            outer
     end
 
     local hovered = false
     local scaleTween
-    local glowTween
-    local layerTweens = {}
+    local glowTweens = {}
 
     local baseScale =
         scale.Scale
@@ -14794,52 +14850,62 @@ function __UI.styleButtonMotion(button)
             scaleTween = nil
         end
 
-        if glowTween then
-            pcall(function()
-                glowTween:Cancel()
-            end)
-            glowTween = nil
-        end
-
-        for _, tween in ipairs(layerTweens) do
+        for _, tween in ipairs(glowTweens) do
             pcall(function()
                 tween:Cancel()
             end)
         end
 
-        table.clear(layerTweens)
+        table.clear(glowTweens)
     end
 
     local function tweenGlow(
-        firstTransparency,
-        secondTransparency,
-        info
+        info,
+        innerTransparency,
+        middleTransparency,
+        outerTransparency
     )
-        for index, layer in ipairs({
-            glow,
-            glow:FindFirstChild("Layer1"),
-            glow:FindFirstChild("Layer2")
-        }) do
-            if layer then
-                local target =
-                    index == 1
-                    and firstTransparency
-                    or secondTransparency
+        cancelTweens()
 
-                local tween
+        for _, data in ipairs({
+            {
+                glow,
+                innerTransparency
+            },
+            {
+                glow
+                    and glow:FindFirstChild(
+                        "Middle"
+                    ),
+                middleTransparency
+            },
+            {
+                glow
+                    and glow:FindFirstChild(
+                        "Outer"
+                    ),
+                outerTransparency
+            }
+        }) do
+            local layer =
+                data[1]
+
+            if layer then
                 pcall(function()
-                    tween =
+                    local tween =
                         __UI.TweenService:Create(
                             layer,
                             info,
                             {
                                 BackgroundTransparency =
-                                    target
+                                    data[2]
                             }
                         )
+
                     tween:Play()
+
                     table.insert(
-                        layerTweens,
+                        glowTweens,
                         tween
                     )
                 end)
@@ -14850,10 +14916,17 @@ function __UI.styleButtonMotion(button)
     local function tweenTo(
         targetScale,
         info,
-        firstGlow,
-        secondGlow
+        innerTransparency,
+        middleTransparency,
+        outerTransparency
     )
-        cancelTweens()
+        if scaleTween then
+            pcall(function()
+                scaleTween:Cancel()
+            end)
+        end
+
+        glowTweens = glowTweens or {}
 
         pcall(function()
             scaleTween =
@@ -14865,13 +14938,15 @@ function __UI.styleButtonMotion(button)
                             targetScale
                     }
                 )
+
             scaleTween:Play()
         end)
 
         tweenGlow(
-            firstGlow,
-            secondGlow,
-            info
+            info,
+            innerTransparency,
+            middleTransparency,
+            outerTransparency
         )
     end
 
@@ -14887,8 +14962,9 @@ function __UI.styleButtonMotion(button)
                 tweenTo(
                     baseScale * 1.012,
                     enterInfo,
-                    0.76,
-                    0.90
+                    0.82,
+                    0.91,
+                    0.96
                 )
             end
         )
@@ -14907,6 +14983,7 @@ function __UI.styleButtonMotion(button)
                     baseScale,
                     leaveInfo,
                     1,
+                    1,
                     1
                 )
             end
@@ -14923,8 +15000,9 @@ function __UI.styleButtonMotion(button)
                 tweenTo(
                     baseScale * 0.994,
                     pressInfo,
-                    0.84,
-                    0.94
+                    0.88,
+                    0.94,
+                    0.98
                 )
             end
         )
@@ -14941,13 +15019,15 @@ function __UI.styleButtonMotion(button)
                     tweenTo(
                         baseScale * 1.012,
                         enterInfo,
-                        0.76,
-                        0.90
+                        0.82,
+                        0.91,
+                        0.96
                     )
                 else
                     tweenTo(
                         baseScale,
                         leaveInfo,
+                        1,
                         1,
                         1
                     )
