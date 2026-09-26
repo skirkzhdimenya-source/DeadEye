@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.15"
+    "DeadEyes v1.16"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.15"
+            MainTitle.Text = "DeadEyes v1.16"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.15"
+            MainTitle.Text = "DeadEyes v1.16"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.15"
+            MainTitle.Text = "DeadEyes v1.16"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.15"
+            MainTitle.Text = "DeadEyes v1.16"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.15"
+            MainTitle.Text = "DeadEyes v1.16"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14618,6 +14618,9 @@ function __UI.styleButtonMotion(button)
         true
     )
 
+    --// Keep the visual center fixed while UIScale changes.
+    --// AnchorPoint is intentionally changed only for buttons
+    --// whose position is not controlled by a layout object.
     local scale =
         button:FindFirstChild(
             "DeadEyeHoverScale"
@@ -14634,56 +14637,144 @@ function __UI.styleButtonMotion(button)
             button
     end
 
-    local stroke =
+    --// Soft light under the button. Several transparent rounded
+    --// layers create a diffuse halo without touching the text.
+    local glow =
         button:FindFirstChild(
-            "DeadEyeHoverStroke"
+            "DeadEyeHoverGlow"
         )
 
-    if not stroke then
-        stroke =
-            Instance.new("UIStroke")
-        stroke.Name =
-            "DeadEyeHoverStroke"
-        stroke.Thickness =
-            1
-        stroke.Transparency =
-            1
-        stroke.Color =
-            Color3.fromRGB(
-                205,
-                215,
-                230
+    if not glow then
+        glow =
+            Instance.new("Frame")
+        glow.Name =
+            "DeadEyeHoverGlow"
+        glow.Size =
+            UDim2.new(
+                1,
+                18,
+                1,
+                18
             )
-        stroke.ApplyStrokeMode =
-            Enum.ApplyStrokeMode.Border
-        stroke.Parent =
+        glow.Position =
+            UDim2.new(
+                0,
+                -9,
+                0,
+                -9
+            )
+        glow.BackgroundColor3 =
+            Color3.fromRGB(
+                190,
+                205,
+                225
+            )
+        glow.BackgroundTransparency =
+            1
+        glow.BorderSizePixel =
+            0
+        glow.Active =
+            false
+        glow.ZIndex =
+            math.max(
+                0,
+                button.ZIndex - 1
+            )
+        glow.Parent =
             button
-    else
-        pcall(function()
-            stroke.ApplyStrokeMode =
-                Enum.ApplyStrokeMode.Border
-        end)
-    end
 
-    local baseScale =
-        scale.Scale
-    local baseStrokeThickness =
-        stroke.Thickness
+        local glowCorner =
+            Instance.new("UICorner")
+        glowCorner.CornerRadius =
+            UDim.new(
+                0,
+                12
+            )
+        glowCorner.Parent =
+            glow
+
+        for index = 1, 2 do
+            local layer =
+                Instance.new("Frame")
+
+            layer.Name =
+                "Layer" ..
+                tostring(index)
+
+            local extra =
+                index * 6
+
+            layer.Size =
+                UDim2.new(
+                    1,
+                    18 + extra,
+                    1,
+                    18 + extra
+                )
+
+            layer.Position =
+                UDim2.new(
+                    0,
+                    -(9 + math.floor(extra / 2)),
+                    0,
+                    -(9 + math.floor(extra / 2))
+                )
+
+            layer.BackgroundColor3 =
+                Color3.fromRGB(
+                    190,
+                    205,
+                    225
+                )
+
+            layer.BackgroundTransparency =
+                1
+
+            layer.BorderSizePixel =
+                0
+
+            layer.Active =
+                false
+
+            layer.ZIndex =
+                math.max(
+                    0,
+                    button.ZIndex - 1
+                )
+
+            layer.Parent =
+                button
+
+            local layerCorner =
+                Instance.new("UICorner")
+            layerCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    14 + (index * 2)
+                )
+            layerCorner.Parent =
+                layer
+        end
+    end
 
     local hovered = false
     local scaleTween
     local glowTween
+    local layerTweens = {}
+
+    local baseScale =
+        scale.Scale
 
     local enterInfo =
         TweenInfo.new(
-            0.16,
+            0.18,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
 
     local leaveInfo =
         TweenInfo.new(
-            0.20,
+            0.22,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
@@ -14709,13 +14800,58 @@ function __UI.styleButtonMotion(button)
             end)
             glowTween = nil
         end
+
+        for _, tween in ipairs(layerTweens) do
+            pcall(function()
+                tween:Cancel()
+            end)
+        end
+
+        table.clear(layerTweens)
+    end
+
+    local function tweenGlow(
+        firstTransparency,
+        secondTransparency,
+        info
+    )
+        for index, layer in ipairs({
+            glow,
+            glow:FindFirstChild("Layer1"),
+            glow:FindFirstChild("Layer2")
+        }) do
+            if layer then
+                local target =
+                    index == 1
+                    and firstTransparency
+                    or secondTransparency
+
+                local tween
+                pcall(function()
+                    tween =
+                        __UI.TweenService:Create(
+                            layer,
+                            info,
+                            {
+                                BackgroundTransparency =
+                                    target
+                            }
+                        )
+                    tween:Play()
+                    table.insert(
+                        layerTweens,
+                        tween
+                    )
+                end)
+            end
+        end
     end
 
     local function tweenTo(
         targetScale,
-        targetStrokeTransparency,
-        targetStrokeThickness,
-        info
+        info,
+        firstGlow,
+        secondGlow
     )
         cancelTweens()
 
@@ -14725,26 +14861,18 @@ function __UI.styleButtonMotion(button)
                     scale,
                     info,
                     {
-                        Scale = targetScale
+                        Scale =
+                            targetScale
                     }
                 )
             scaleTween:Play()
         end)
 
-        pcall(function()
-            glowTween =
-                __UI.TweenService:Create(
-                    stroke,
-                    info,
-                    {
-                        Transparency =
-                            targetStrokeTransparency,
-                        Thickness =
-                            targetStrokeThickness
-                    }
-                )
-            glowTween:Play()
-        end)
+        tweenGlow(
+            firstGlow,
+            secondGlow,
+            info
+        )
     end
 
     addConnection(
@@ -14758,9 +14886,9 @@ function __UI.styleButtonMotion(button)
 
                 tweenTo(
                     baseScale * 1.012,
-                    0.38,
-                    1.30,
-                    enterInfo
+                    enterInfo,
+                    0.76,
+                    0.90
                 )
             end
         )
@@ -14777,9 +14905,9 @@ function __UI.styleButtonMotion(button)
 
                 tweenTo(
                     baseScale,
+                    leaveInfo,
                     1,
-                    baseStrokeThickness,
-                    leaveInfo
+                    1
                 )
             end
         )
@@ -14794,9 +14922,9 @@ function __UI.styleButtonMotion(button)
 
                 tweenTo(
                     baseScale * 0.994,
-                    0.56,
-                    1.10,
-                    pressInfo
+                    pressInfo,
+                    0.84,
+                    0.94
                 )
             end
         )
@@ -14812,16 +14940,16 @@ function __UI.styleButtonMotion(button)
                 if hovered then
                     tweenTo(
                         baseScale * 1.012,
-                        0.38,
-                        1.30,
-                        enterInfo
+                        enterInfo,
+                        0.76,
+                        0.90
                     )
                 else
                     tweenTo(
                         baseScale,
+                        leaveInfo,
                         1,
-                        baseStrokeThickness,
-                        leaveInfo
+                        1
                     )
                 end
             end
