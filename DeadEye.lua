@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.66"
+    "DeadEyes v1.67"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -10481,6 +10481,73 @@ function mainJump.jump(hit)
         end
     end)
 end
+function mainJump.updateEmoteAutoJump()
+    if not mainJump.enabled
+        or not mainJump.humanoid
+        or not mainJump.humanoid.Parent
+    then
+        return
+    end
+
+    local object =
+        getCharacterObject()
+
+    if not object
+        or not object.DataRegistry
+    then
+        return
+    end
+
+    local ok, emoteId =
+        pcall(function()
+            return object.DataRegistry:Get(
+                "Emote"
+            )
+        end)
+
+    if not ok
+        or not tonumber(emoteId)
+        or tonumber(emoteId) == 0
+    then
+        return
+    end
+
+    if tick() - mainJump.lastJump <
+        math.max(
+            mainJump.jumpDelay,
+            0.12
+        )
+    then
+        return
+    end
+
+    if mainJump.humanoid.Health <= 0
+        or mainJump.humanoid.FloorMaterial
+            == Enum.Material.Air
+        or mainJump.humanoid.PlatformStand
+        or mainJump.humanoid.Sit
+        or mainJump.humanoid.SeatPart
+    then
+        return
+    end
+
+    local state =
+        mainJump.humanoid:GetState()
+
+    if state
+            ~= Enum.HumanoidStateType.Running
+        and state
+            ~= Enum.HumanoidStateType.RunningNoPhysics
+    then
+        return
+    end
+
+    --// In an emote the normal Touched sensor can stay in contact
+    --// with the floor and stop producing a new event after landing.
+    --// Use the game's native Jump property here so an emote that
+    --// forbids jumping still remains unable to jump.
+    mainJump.jump()
+end
 function mainJump.contact(hit)
     if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
@@ -11055,6 +11122,13 @@ mainConnect(
             mainJump.startCapture(
                 "hide"
             )
+        end
+    )
+)
+mainConnect(
+    RunService.Heartbeat:Connect(
+        function()
+            mainJump.updateEmoteAutoJump()
         end
     )
 )
@@ -12465,7 +12539,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.66"
+            MainTitle.Text = "DeadEyes v1.67"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12487,7 +12561,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.66"
+            MainTitle.Text = "DeadEyes v1.67"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12512,7 +12586,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.66"
+            MainTitle.Text = "DeadEyes v1.67"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12534,7 +12608,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.66"
+            MainTitle.Text = "DeadEyes v1.67"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12559,7 +12633,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.66"
+            MainTitle.Text = "DeadEyes v1.67"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
