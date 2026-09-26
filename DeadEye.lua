@@ -8090,13 +8090,53 @@ function UnusualFns.rebuildUnusualPicker()
         )
     end)
 
+    local cosmeticButtonsWereRemoved = false
+
     for _, button in ipairs(
         unusualPickerButtons
     ) do
         pcall(function()
+            if string.sub(
+                tostring(button.Name),
+                1,
+                9
+            ) == "Cosmetic_"
+            then
+                local preview =
+                    button:FindFirstChild(
+                        "CosmeticPreview"
+                    )
+
+                if preview then
+                    local id =
+                        tonumber(
+                            string.match(
+                                button.Name,
+                                "^Cosmetic_(%d+)$"
+                            )
+                        )
+
+                    if id then
+                        cosmeticPreviewCache[id] =
+                            preview
+                        preview.Parent =
+                            cosmeticPreviewCacheHolder
+                    end
+                end
+
+                cosmeticButtonsWereRemoved = true
+            end
+        end)
+
+        pcall(function()
             button:Destroy()
         end)
     end
+
+    if cosmeticButtonsWereRemoved then
+        cosmeticPickerPreloaded = false
+    end
+
     table.clear(
         unusualPickerButtons
     )
