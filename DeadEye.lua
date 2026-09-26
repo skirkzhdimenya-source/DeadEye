@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.71"
+    "DeadEyes v1.72"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -9720,6 +9720,10 @@ function mainJump.destroySensors()
     end
 end
 function mainJump.getEmoteJumpPermission()
+    if not mainJump.emoteJumpPermissionCache then
+        mainJump.emoteJumpPermissionCache = {}
+    end
+
     local object =
         getCharacterObject()
 
@@ -9746,104 +9750,173 @@ function mainJump.getEmoteJumpPermission()
         return nil
     end
 
-    local module =
-        getItemModule(
-            emoteId
-        )
+    if mainJump.emoteJumpPermissionCache[emoteId] ~= nil then
+        return mainJump.emoteJumpPermissionCache[emoteId]
+    end
 
-    if not module then
+    local function normalizeName(name)
+        return tostring(name or ""):lower():gsub(
+            "[^%w]",
+            ""
+        )
+    end
+
+    local function scanTable(value, seen, depth)
+        if type(value) ~= "table"
+            or depth > 6
+            or seen[value]
+        then
+            return nil
+        end
+
+        seen[value] = true
+
+        for key, item in pairs(value) do
+            local name =
+                normalizeName(key)
+
+            if type(item) == "boolean" then
+                if name == "canjump"
+                    or name == "jumpallowed"
+                    or name == "jumpenabled"
+                then
+                    return item
+                end
+
+                if name == "nojump"
+                    or name == "jumpdisabled"
+                then
+                    return not item
+                end
+            end
+        end
+
+        for _, item in pairs(value) do
+            local result =
+                scanTable(
+                    item,
+                    seen,
+                    depth + 1
+                )
+
+            if result ~= nil then
+                return result
+            end
+        end
+
         return nil
     end
 
-    local function readBoolean(instance, name)
-        local value = nil
+    local function scanInstance(instance)
+        if not instance then
+            return nil
+        end
+
+        local result = nil
 
         pcall(function()
-            local attribute =
-                instance:GetAttribute(
-                    name
-                )
+            for name, value in pairs(
+                instance:GetAttributes()
+            ) do
+                local normalized =
+                    normalizeName(
+                        name
+                    )
 
-            if type(attribute) == "boolean" then
-                value = attribute
-                return
+                if type(value) == "boolean" then
+                    if normalized == "canjump"
+                        or normalized == "jumpallowed"
+                        or normalized == "jumpenabled"
+                    then
+                        result = value
+                        return
+                    end
+
+                    if normalized == "nojump"
+                        or normalized == "jumpdisabled"
+                    then
+                        result = not value
+                        return
+                    end
+                end
             end
 
-            local child =
-                instance:FindFirstChild(
-                    name,
-                    true
-                )
+            for _, descendant in ipairs(
+                instance:GetDescendants()
+            ) do
+                local normalized =
+                    normalizeName(
+                        descendant.Name
+                    )
 
-            if child
-                and child:IsA("BoolValue")
-            then
-                value = child.Value
+                if descendant:IsA("BoolValue") then
+                    if normalized == "canjump"
+                        or normalized == "jumpallowed"
+                        or normalized == "jumpenabled"
+                    then
+                        result = descendant.Value
+                        return
+                    end
+
+                    if normalized == "nojump"
+                        or normalized == "jumpdisabled"
+                    then
+                        result = not descendant.Value
+                        return
+                    end
+                end
             end
         end)
 
-        return value
+        return result
     end
 
-    for _, name in ipairs({
-        "CanJump",
-        "JumpAllowed",
-        "JumpEnabled"
-    }) do
-        local value =
-            readBoolean(
-                module,
-                name
+    local registryData = nil
+
+    pcall(function()
+        local all =
+            Registry.GetAll()
+
+        if type(all) == "table" then
+            registryData =
+                all[emoteId]
+        end
+    end)
+
+    local result =
+        scanTable(
+            registryData,
+            {},
+            0
+        )
+
+    if result == nil then
+        local module =
+            getItemModule(
+                emoteId
             )
 
-        if value ~= nil then
-            return value
-        end
-    end
-
-    for _, name in ipairs({
-        "NoJump",
-        "JumpDisabled"
-    }) do
-        local value =
-            readBoolean(
-                module,
-                name
+        result =
+            scanInstance(
+                module
             )
-
-        if value ~= nil then
-            return not value
-        end
     end
 
-    for _, descendant in ipairs(
-        module:GetDescendants()
-    ) do
-        if descendant:IsA("BoolValue") then
-            local name =
-                tostring(
-                    descendant.Name
-                ):lower():gsub(
-                    "[^%w]",
-                    ""
-                )
-
-            if name == "canjump"
-                or name == "jumpallowed"
-                or name == "jumpenabled"
-            then
-                return descendant.Value
-            end
-
-            if name == "nojump"
-                or name == "jumpdisabled"
-            then
-                return not descendant.Value
-            end
-        end
+    if result == nil
+        and object.Emote
+    then
+        result =
+            scanInstance(
+                object.Emote
+            )
     end
 
-    return nil
+    if result ~= nil then
+        mainJump.emoteJumpPermissionCache[emoteId] =
+            result
+    end
+
+    return result
 end
 
 function mainJump.hasActiveEmote()
@@ -11943,7 +12016,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.71"
+            MainTitle.Text = "DeadEyes v1.72"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11965,7 +12038,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.71"
+            MainTitle.Text = "DeadEyes v1.72"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11990,7 +12063,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.71"
+            MainTitle.Text = "DeadEyes v1.72"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12012,7 +12085,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.71"
+            MainTitle.Text = "DeadEyes v1.72"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12037,7 +12110,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.71"
+            MainTitle.Text = "DeadEyes v1.72"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
