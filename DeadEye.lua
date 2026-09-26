@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.53"
+    "DeadEyes v1.54"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -10377,22 +10377,6 @@ mainConnect(
     )
 )
 mainConnect(
-    UserInputService.InputEnded:Connect(
-        function(input)
-            if input.KeyCode
-                == Enum.KeyCode.Space
-                and not mainJump.enabled
-                and mainJump.humanoid
-                and mainJump.humanoid.Parent
-            then
-                pcall(function()
-                    mainJump.humanoid.Jump = false
-                end)
-            end
-        end
-    )
-)
-mainConnect(
     UserInputService.JumpRequest:Connect(
         function()
             if mainJump.enabled
@@ -10410,6 +10394,9 @@ mainConnect(
             if humanoid.Health <= 0
                 or humanoid.FloorMaterial
                     == Enum.Material.Air
+                or humanoid.PlatformStand
+                or humanoid.Sit
+                or humanoid.SeatPart
             then
                 return
             end
@@ -10427,8 +10414,6 @@ mainConnect(
                 return
             end
 
-            --// Do not consume the rearm while the character is
-            --// occupied by an active game/custom emote.
             local object =
                 getCharacterObject()
 
@@ -10438,10 +10423,91 @@ mainConnect(
                 return
             end
 
+            --// The first Space after AutoJump is disabled can be
+            --// consumed by the game's jump-state transition.
+            --// Re-arm it using the same mechanism that fixed the
+            --// original first-jump loss, but never override a game
+            --// restriction that already disabled Jumping.
+            local jumpingWasEnabled =
+                true
+
+            pcall(function()
+                jumpingWasEnabled =
+                    humanoid:GetStateEnabled(
+                        Enum.HumanoidStateType.Jumping
+                    )
+            end)
+
+            if not jumpingWasEnabled then
+                return
+            end
+
             mainJump.needsInputRearm = false
 
             pcall(function()
+                humanoid:SetStateEnabled(
+                    Enum.HumanoidStateType.Jumping,
+                    true
+                )
                 humanoid.Jump = true
+                humanoid:ChangeState(
+                    Enum.HumanoidStateType.Jumping
+                )
+            end)
+
+            task.defer(function()
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or mainJump.enabled
+                    or not humanoid.Parent
+                then
+                    return
+                end
+
+                for _ = 1, 3 do
+                    local canRearm =
+                        true
+
+                    pcall(function()
+                        if humanoid.Health <= 0
+                            or humanoid.PlatformStand
+                            or humanoid.Sit
+                            or humanoid.SeatPart
+                            or humanoid.FloorMaterial
+                                == Enum.Material.Air
+                            or not humanoid:GetStateEnabled(
+                                Enum.HumanoidStateType.Jumping
+                            )
+                        then
+                            canRearm = false
+                        end
+                    end)
+
+                    local currentObject =
+                        getCharacterObject()
+
+                    if currentObject
+                        and currentObject.Emote
+                    then
+                        canRearm = false
+                    end
+
+                    if not canRearm then
+                        return
+                    end
+
+                    pcall(function()
+                        humanoid:SetStateEnabled(
+                            Enum.HumanoidStateType.Jumping,
+                            true
+                        )
+                        humanoid.Jump = true
+                        humanoid:ChangeState(
+                            Enum.HumanoidStateType.Jumping
+                        )
+                    end)
+
+                    task.wait()
+                end
             end)
         end
     )
@@ -11680,7 +11746,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.53"
+            MainTitle.Text = "DeadEyes v1.54"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11702,7 +11768,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.53"
+            MainTitle.Text = "DeadEyes v1.54"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11727,7 +11793,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.53"
+            MainTitle.Text = "DeadEyes v1.54"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11749,7 +11815,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.53"
+            MainTitle.Text = "DeadEyes v1.54"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11774,7 +11840,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.53"
+            MainTitle.Text = "DeadEyes v1.54"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
