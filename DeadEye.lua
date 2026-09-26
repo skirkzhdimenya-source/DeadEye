@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.23"
+    "DeadEyes v1.24"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.23"
+            MainTitle.Text = "DeadEyes v1.24"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.23"
+            MainTitle.Text = "DeadEyes v1.24"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.23"
+            MainTitle.Text = "DeadEyes v1.24"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.23"
+            MainTitle.Text = "DeadEyes v1.24"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.23"
+            MainTitle.Text = "DeadEyes v1.24"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14625,8 +14625,6 @@ function __UI.styleButtonMotion(button)
         return
     end
 
-    --// Never interfere with buttons whose size/position is owned
-    --// by a layout. We still give them the hover glow.
     local hasLayout = false
 
     for _, child in ipairs(
@@ -14643,115 +14641,95 @@ function __UI.styleButtonMotion(button)
     end
 
     pcall(function()
-        button.AutoButtonColor = false
+        button.AutoButtonColor =
+            false
     end)
 
-    local baseSize =
-        button.Size
+    local scale
 
-    local basePosition =
-        button.Position
-
-    local canScale =
-        not hasLayout
-
-    local hoverSize =
-        baseSize
-
-    local hoverPosition =
-        basePosition
-
-    local pressSize =
-        baseSize
-
-    local pressPosition =
-        basePosition
-
-    if canScale then
-        local hoverFactor = 1.012
-        local pressFactor = 0.994
-
-        hoverSize =
-            UDim2.new(
-                baseSize.X.Scale * hoverFactor,
-                baseSize.X.Offset * hoverFactor,
-                baseSize.Y.Scale * hoverFactor,
-                baseSize.Y.Offset * hoverFactor
+    if not hasLayout then
+        scale =
+            button:FindFirstChild(
+                "DeadEyeHoverScale"
             )
 
-        hoverPosition =
-            UDim2.new(
-                basePosition.X.Scale
-                    - (
-                        baseSize.X.Scale
-                        * (hoverFactor - 1)
-                        * 0.5
-                    ),
-                basePosition.X.Offset
-                    - (
-                        baseSize.X.Offset
-                        * (hoverFactor - 1)
-                        * 0.5
-                    ),
-                basePosition.Y.Scale
-                    - (
-                        baseSize.Y.Scale
-                        * (hoverFactor - 1)
-                        * 0.5
-                    ),
-                basePosition.Y.Offset
-                    - (
-                        baseSize.Y.Offset
-                        * (hoverFactor - 1)
-                        * 0.5
-                    )
-            )
+        if not scale then
+            scale =
+                Instance.new("UIScale")
+            scale.Name =
+                "DeadEyeHoverScale"
+            scale.Scale =
+                1
+            scale.Parent =
+                button
+        end
 
-        pressSize =
-            UDim2.new(
-                baseSize.X.Scale * pressFactor,
-                baseSize.X.Offset * pressFactor,
-                baseSize.Y.Scale * pressFactor,
-                baseSize.Y.Offset * pressFactor
-            )
+        local oldAnchor =
+            button.AnchorPoint
 
-        pressPosition =
-            UDim2.new(
-                basePosition.X.Scale
-                    - (
-                        baseSize.X.Scale
-                        * (pressFactor - 1)
-                        * 0.5
-                    ),
-                basePosition.X.Offset
-                    - (
-                        baseSize.X.Offset
-                        * (pressFactor - 1)
-                        * 0.5
-                    ),
-                basePosition.Y.Scale
-                    - (
-                        baseSize.Y.Scale
-                        * (pressFactor - 1)
-                        * 0.5
-                    ),
-                basePosition.Y.Offset
-                    - (
-                        baseSize.Y.Offset
-                        * (pressFactor - 1)
-                        * 0.5
-                    )
-            )
+        if oldAnchor ~= Vector2.new(
+            0.5,
+            0.5
+        ) then
+            local oldPosition =
+                button.Position
+
+            local size =
+                button.Size
+
+            local deltaX =
+                0.5
+                - oldAnchor.X
+
+            local deltaY =
+                0.5
+                - oldAnchor.Y
+
+            button.AnchorPoint =
+                Vector2.new(
+                    0.5,
+                    0.5
+                )
+
+            button.Position =
+                UDim2.new(
+                    oldPosition.X.Scale
+                        + (
+                            size.X.Scale
+                            * deltaX
+                        ),
+                    oldPosition.X.Offset
+                        + (
+                            size.X.Offset
+                            * deltaX
+                        ),
+                    oldPosition.Y.Scale
+                        + (
+                            size.Y.Scale
+                            * deltaY
+                        ),
+                    oldPosition.Y.Offset
+                        + (
+                            size.Y.Offset
+                            * deltaY
+                        )
+                )
+        end
     end
 
-    --// One global glow is used so it never becomes part of a
-    --// UIGrid/UIList and can never change layout dimensions.
-    if not __UI.HoverGlow then
+    if not __UI.DeadEyeHoverGlow then
         local glow =
             Instance.new("Frame")
 
         glow.Name =
             "DeadEyeHoverGlow"
+
+        glow.BackgroundColor3 =
+            Color3.fromRGB(
+                185,
+                201,
+                226
+            )
 
         glow.BackgroundTransparency =
             1
@@ -14759,10 +14737,13 @@ function __UI.styleButtonMotion(button)
         glow.BorderSizePixel =
             0
 
+        glow.Visible =
+            false
+
         glow.Active =
             false
 
-        glow.Visible =
+        glow.ClipsDescendants =
             false
 
         glow.ZIndex =
@@ -14771,219 +14752,121 @@ function __UI.styleButtonMotion(button)
         glow.Parent =
             ScreenGui
 
-        local parts = {
-            {
-                "TopSoft",
-                UDim2.new(1, -2, 0, 3),
-                UDim2.new(0, 1, 0, -3),
-                0.95
-            },
-            {
-                "BottomSoft",
-                UDim2.new(1, -2, 0, 3),
-                UDim2.new(0, 1, 1, 0),
-                0.95
-            },
-            {
-                "LeftSoft",
-                UDim2.new(0, 3, 1, -2),
-                UDim2.new(0, -3, 0, 1),
-                0.95
-            },
-            {
-                "RightSoft",
-                UDim2.new(0, 3, 1, -2),
-                UDim2.new(1, 0, 0, 1),
-                0.95
-            },
-            {
-                "TopCore",
-                UDim2.new(1, -4, 0, 2),
-                UDim2.new(0, 2, 0, -2),
-                0.91
-            },
-            {
-                "BottomCore",
-                UDim2.new(1, -4, 0, 2),
-                UDim2.new(0, 2, 1, 0),
-                0.91
-            },
-            {
-                "LeftCore",
-                UDim2.new(0, 2, 1, -4),
-                UDim2.new(0, -2, 0, 2),
-                0.91
-            },
-            {
-                "RightCore",
-                UDim2.new(0, 2, 1, -4),
-                UDim2.new(1, 0, 0, 2),
-                0.91
-            }
-        }
+        local gradient =
+            Instance.new("UIGradient")
 
-        for _, data in ipairs(parts) do
-            local part =
-                Instance.new("Frame")
+        gradient.Name =
+            "SoftRadial"
 
-            part.Name =
-                data[1]
+        gradient.Type =
+            Enum.GradientType.Radial
 
-            part.Size =
-                data[2]
-
-            part.Position =
-                data[3]
-
-            part.BackgroundColor3 =
-                Color3.fromRGB(
-                    190,
-                    204,
-                    226
-                )
-
-            part.BackgroundTransparency =
-                1
-
-            part.BorderSizePixel =
-                0
-
-            part.Active =
-                false
-
-            part.Parent =
-                glow
-
-            local corner =
-                Instance.new("UICorner")
-
-            corner.CornerRadius =
-                UDim.new(
+        gradient.Transparency =
+            NumberSequence.new({
+                NumberSequenceKeypoint.new(
                     0,
-                    5
+                    0.48
+                ),
+                NumberSequenceKeypoint.new(
+                    0.28,
+                    0.66
+                ),
+                NumberSequenceKeypoint.new(
+                    0.55,
+                    0.84
+                ),
+                NumberSequenceKeypoint.new(
+                    0.78,
+                    0.95
+                ),
+                NumberSequenceKeypoint.new(
+                    1,
+                    1
                 )
+            })
 
-            corner.Parent =
-                part
-        end
+        gradient.Parent =
+            glow
 
-        local dotData = {
-            {
-                0.12,
-                -1,
+        local corner =
+            Instance.new("UICorner")
+
+        corner.CornerRadius =
+            UDim.new(
                 0,
-                -3,
-                2
-            },
-            {
-                0.34,
-                -1,
-                0,
-                -2,
-                2
-            },
-            {
-                0.66,
-                -1,
-                0,
-                -2,
-                2
-            },
-            {
-                0.88,
-                -1,
-                0,
-                -3,
-                2
-            },
-            {
-                0.12,
-                -1,
-                1,
-                1,
-                2
-            },
-            {
-                0.34,
-                -1,
-                1,
-                0,
-                2
-            },
-            {
-                0.66,
-                -1,
-                1,
-                0,
-                2
-            },
-            {
-                0.88,
-                -1,
-                1,
-                1,
-                2
-            },
-            {
-                0,
-                -3,
-                0.28,
-                -1,
-                2
-            },
-            {
-                0,
-                -2,
-                0.72,
-                -1,
-                2
-            },
-            {
-                1,
-                1,
-                0.28,
-                -1,
-                2
-            },
-            {
-                1,
-                1,
-                0.72,
-                -1,
-                2
-            }
+                10
+            )
+
+        corner.Parent =
+            glow
+
+        local sprayData = {
+            {0.10, -3, 2},
+            {0.34, -2, 2},
+            {0.68, -2, 2},
+            {0.90, -3, 2},
+            {0.10, 1, 2},
+            {0.38, 1, 2},
+            {0.72, 1, 2},
+            {0.90, 1, 2},
+            {-3, 0.28, 2},
+            {-2, 0.70, 2},
+            {1, 0.30, 2},
+            {1, 0.70, 2}
         }
 
-        for index, data in ipairs(dotData) do
+        for index, data in ipairs(
+            sprayData
+        ) do
             local dot =
                 Instance.new("Frame")
 
             dot.Name =
-                "Dot" ..
+                "Spray" ..
                 tostring(index)
 
             dot.Size =
-                UDim2.new(
-                    0,
-                    data[5],
-                    0,
-                    data[5]
+                UDim2.fromOffset(
+                    data[3],
+                    data[3]
                 )
 
-            dot.Position =
-                UDim2.new(
-                    data[1],
-                    data[2],
-                    data[3],
-                    data[4]
-                )
+            if data[1] == -3 then
+                dot.Position =
+                    UDim2.new(
+                        0,
+                        data[1],
+                        data[2],
+                        -data[3] * 0.5
+                    )
+            elseif data[1] == 1 then
+                dot.Position =
+                    UDim2.new(
+                        1,
+                        data[1] - 1,
+                        data[2],
+                        -data[3] * 0.5
+                    )
+            elseif data[2] < 0 then
+                dot.Position =
+                    UDim2.new(
+                        data[1],
+                        -data[3] * 0.5,
+                        0,
+                        data[2]
+                    )
+            else
+                dot.Position =
+                    UDim2.new(
+                        data[1],
+                        -data[3] * 0.5,
+                        1,
+                        data[2] - 1
+                    )
+            end
 
             dot.BackgroundColor3 =
-                Color3.fromRGB(
-                    190,
-                    204,
-                    226
-                )
+                glow.BackgroundColor3
 
             dot.BackgroundTransparency =
                 1
@@ -14996,6 +14879,31 @@ function __UI.styleButtonMotion(button)
 
             dot.Parent =
                 glow
+
+            local dotGradient =
+                Instance.new("UIGradient")
+
+            dotGradient.Type =
+                Enum.GradientType.Radial
+
+            dotGradient.Transparency =
+                NumberSequence.new({
+                    NumberSequenceKeypoint.new(
+                        0,
+                        0.18
+                    ),
+                    NumberSequenceKeypoint.new(
+                        0.45,
+                        0.75
+                    ),
+                    NumberSequenceKeypoint.new(
+                        1,
+                        1
+                    )
+                })
+
+            dotGradient.Parent =
+                dot
 
             local dotCorner =
                 Instance.new("UICorner")
@@ -15010,81 +14918,82 @@ function __UI.styleButtonMotion(button)
                 dot
         end
 
-        __UI.HoverGlow =
+        __UI.DeadEyeHoverGlow =
             glow
 
-        __UI.HoverGlowTarget =
+        __UI.DeadEyeHoverGlowTarget =
             nil
-
-        __UI.HoverGlowUpdateBound =
-            true
 
         addConnection(
             RunService.RenderStepped:Connect(
                 function()
                     local target =
-                        __UI.HoverGlowTarget
-
-                    local currentGlow =
-                        __UI.HoverGlow
+                        __UI.DeadEyeHoverGlowTarget
 
                     if not target
-                        or not currentGlow
                         or not target.Parent
                     then
-                        if currentGlow then
-                            currentGlow.Visible =
-                                false
-                        end
+                        glow.Visible =
+                            false
                         return
                     end
 
-                    local position =
+                    local absolutePosition =
                         target.AbsolutePosition
 
-                    local size =
+                    local absoluteSize =
                         target.AbsoluteSize
 
                     local margin =
-                        5
+                        6
 
-                    currentGlow.Position =
+                    glow.Position =
                         UDim2.fromOffset(
-                            position.X - margin,
-                            position.Y - margin
+                            absolutePosition.X
+                                - margin,
+                            absolutePosition.Y
+                                - margin
                         )
 
-                    currentGlow.Size =
+                    glow.Size =
                         UDim2.fromOffset(
-                            size.X + (margin * 2),
-                            size.Y + (margin * 2)
+                            absoluteSize.X
+                                + (
+                                    margin * 2
+                                ),
+                            absoluteSize.Y
+                                + (
+                                    margin * 2
+                                )
                         )
 
-                    currentGlow.ZIndex =
-                        target.ZIndex
+                    glow.ZIndex =
+                        math.max(
+                            0,
+                            target.ZIndex - 1
+                        )
+
+                    glow.Visible =
+                        true
                 end
             )
         )
     end
 
-    local glow =
-        __UI.HoverGlow
-
     local hovered = false
-    local sizeTween
-    local positionTween
-    local glowTweens = {}
+    local scaleTween
+    local glowTween
 
     local enterInfo =
         TweenInfo.new(
-            0.18,
+            0.16,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
 
     local leaveInfo =
         TweenInfo.new(
-            0.22,
+            0.20,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
@@ -15097,216 +15006,110 @@ function __UI.styleButtonMotion(button)
         )
 
     local function cancelTweens()
-        if sizeTween then
+        if scaleTween then
             pcall(function()
-                sizeTween:Cancel()
+                scaleTween:Cancel()
             end)
-            sizeTween = nil
+            scaleTween = nil
         end
 
-        if positionTween then
+        if glowTween then
             pcall(function()
-                positionTween:Cancel()
+                glowTween:Cancel()
             end)
-            positionTween = nil
+            glowTween = nil
         end
-
-        for _, tween in ipairs(
-            glowTweens
-        ) do
-            pcall(function()
-                tween:Cancel()
-            end)
-        end
-
-        table.clear(
-            glowTweens
-        )
     end
 
     local function tweenGlow(
         info,
-        coreTransparency,
-        softTransparency,
-        showDots
+        transparency
     )
-        for _, tween in ipairs(
-            glowTweens
-        ) do
-            pcall(function()
-                tween:Cancel()
-            end)
-        end
+        local glowObject =
+            __UI.DeadEyeHoverGlow
 
-        table.clear(
-            glowTweens
-        )
-
-        if not glow then
+        if not glowObject then
             return
         end
 
-        glow.Visible =
-            true
-
-        local targets = {
-            {
-                glow:FindFirstChild(
-                    "TopCore"
-                ),
-                coreTransparency
-            },
-            {
-                glow:FindFirstChild(
-                    "BottomCore"
-                ),
-                coreTransparency
-            },
-            {
-                glow:FindFirstChild(
-                    "LeftCore"
-                ),
-                coreTransparency
-            },
-            {
-                glow:FindFirstChild(
-                    "RightCore"
-                ),
-                coreTransparency
-            },
-            {
-                glow:FindFirstChild(
-                    "TopSoft"
-                ),
-                softTransparency
-            },
-            {
-                glow:FindFirstChild(
-                    "BottomSoft"
-                ),
-                softTransparency
-            },
-            {
-                glow:FindFirstChild(
-                    "LeftSoft"
-                ),
-                softTransparency
-            },
-            {
-                glow:FindFirstChild(
-                    "RightSoft"
-                ),
-                softTransparency
-            }
-        }
-
-        for _, data in ipairs(
-            targets
-        ) do
-            if data[1] then
-                pcall(function()
-                    local tween =
-                        __UI.TweenService:Create(
-                            data[1],
-                            info,
-                            {
-                                BackgroundTransparency =
-                                    data[2]
-                            }
-                        )
-
-                    tween:Play()
-
-                    table.insert(
-                        glowTweens,
-                        tween
-                    )
-                end)
-            end
+        if glowTween then
+            pcall(function()
+                glowTween:Cancel()
+            end)
         end
 
-        for _, dot in ipairs(
-            glow:GetChildren()
+        pcall(function()
+            glowTween =
+                __UI.TweenService:Create(
+                    glowObject,
+                    info,
+                    {
+                        BackgroundTransparency =
+                            transparency
+                    }
+                )
+
+            glowTween:Play()
+        end)
+
+        for _, object in ipairs(
+            glowObject:GetChildren()
         ) do
-            if string.sub(
-                dot.Name,
-                1,
-                3
-            ) == "Dot"
+            if object:IsA("Frame")
+                and string.sub(
+                    object.Name,
+                    1,
+                    5
+                ) == "Spray"
             then
-                local target =
-                    showDots
-                    and 0.90
-                    or 1
-
                 pcall(function()
-                    local tween =
-                        __UI.TweenService:Create(
-                            dot,
-                            info,
-                            {
-                                BackgroundTransparency =
-                                    target
-                            }
-                        )
-
-                    tween:Play()
-
-                    table.insert(
-                        glowTweens,
-                        tween
-                    )
+                    __UI.TweenService:Create(
+                        object,
+                        info,
+                        {
+                            BackgroundTransparency =
+                                math.min(
+                                    1,
+                                    transparency
+                                        + 0.10
+                                )
+                        }
+                    ):Play()
                 end)
             end
         end
+
+        __UI.DeadEyeHoverGlowTarget =
+            button
     end
 
-    local function tweenTo(
-        targetSize,
-        targetPosition,
-        info,
-        coreTransparency,
-        softTransparency,
-        showDots
+    local function tweenScale(
+        target,
+        info
     )
-        cancelTweens()
+        if not scale then
+            return
+        end
 
-        if canScale then
+        if scaleTween then
             pcall(function()
-                sizeTween =
-                    __UI.TweenService:Create(
-                        button,
-                        info,
-                        {
-                            Size =
-                                targetSize
-                        }
-                    )
-
-                sizeTween:Play()
-            end)
-
-            pcall(function()
-                positionTween =
-                    __UI.TweenService:Create(
-                        button,
-                        info,
-                        {
-                            Position =
-                                targetPosition
-                        }
-                    )
-
-                positionTween:Play()
+                scaleTween:Cancel()
             end)
         end
 
-        tweenGlow(
-            info,
-            coreTransparency,
-            softTransparency,
-            showDots
-        )
+        pcall(function()
+            scaleTween =
+                __UI.TweenService:Create(
+                    scale,
+                    info,
+                    {
+                        Scale =
+                            target
+                    }
+                )
+
+            scaleTween:Play()
+        end)
     end
 
     addConnection(
@@ -15317,16 +15120,15 @@ function __UI.styleButtonMotion(button)
                 end
 
                 hovered = true
-                __UI.HoverGlowTarget =
-                    button
 
-                tweenTo(
-                    hoverSize,
-                    hoverPosition,
+                tweenScale(
+                    1.018,
+                    enterInfo
+                )
+
+                tweenGlow(
                     enterInfo,
-                    0.90,
-                    0.96,
-                    true
+                    0.66
                 )
             end
         )
@@ -15341,29 +15143,30 @@ function __UI.styleButtonMotion(button)
 
                 hovered = false
 
-                if __UI.HoverGlowTarget ==
+                tweenScale(
+                    1,
+                    leaveInfo
+                )
+
+                if __UI.DeadEyeHoverGlowTarget ==
                     button
                 then
-                    __UI.HoverGlowTarget =
+                    __UI.DeadEyeHoverGlowTarget =
                         nil
                 end
 
-                tweenTo(
-                    baseSize,
-                    basePosition,
+                tweenGlow(
                     leaveInfo,
-                    1,
-                    1,
-                    false
+                    1
                 )
 
                 task.delay(
                     0.23,
                     function()
-                        if __UI.HoverGlowTarget == nil
-                            and __UI.HoverGlow
+                        if __UI.DeadEyeHoverGlowTarget == nil
+                            and __UI.DeadEyeHoverGlow
                         then
-                            __UI.HoverGlow.Visible =
+                            __UI.DeadEyeHoverGlow.Visible =
                                 false
                         end
                     end
@@ -15379,13 +15182,14 @@ function __UI.styleButtonMotion(button)
                     return
                 end
 
-                tweenTo(
-                    pressSize,
-                    pressPosition,
+                tweenScale(
+                    0.994,
+                    pressInfo
+                )
+
+                tweenGlow(
                     pressInfo,
-                    0.94,
-                    0.98,
-                    false
+                    0.76
                 )
             end
         )
@@ -15399,36 +15203,25 @@ function __UI.styleButtonMotion(button)
                 end
 
                 if hovered then
-                    tweenTo(
-                        hoverSize,
-                        hoverPosition,
+                    tweenScale(
+                        1.018,
+                        enterInfo
+                    )
+
+                    tweenGlow(
                         enterInfo,
-                        0.90,
-                        0.96,
-                        true
+                        0.66
                     )
                 else
-                    tweenTo(
-                        baseSize,
-                        basePosition,
-                        leaveInfo,
+                    tweenScale(
                         1,
-                        1,
-                        false
+                        leaveInfo
                     )
-                end
-            end
-        )
-    )
 
-    addConnection(
-        button.Destroying:Connect(
-            function()
-                if __UI.HoverGlowTarget ==
-                    button
-                then
-                    __UI.HoverGlowTarget =
-                        nil
+                    tweenGlow(
+                        leaveInfo,
+                        1
+                    )
                 end
             end
         )
