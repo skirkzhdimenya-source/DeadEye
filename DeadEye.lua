@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.75"
+    "DeadEyes v1.80"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7427,6 +7427,7 @@ function UnusualFns.activateUnusual()
         or tonumber(
             unusualRuntime.originalId
         ) ~= tonumber(equippedId)
+        or unusualRuntime.appliedRig ~= visualRig
     then
         unusualRuntime.nativeSnapshot =
             UnusualFns.captureNativeUnusualSnapshot(
@@ -7519,6 +7520,13 @@ function UnusualFns.reapplyUnusual()
             then
 
                 task.wait(0.2)
+
+                if not unusualEnabled
+                    or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
+                    or generation ~= unusualRuntime.reapplyGeneration
+                then
+                    break
+                end
 
                 local equippedId =
                     UnusualFns.getEquippedUnusualId()
@@ -12469,7 +12477,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.75"
+            MainTitle.Text = "DeadEyes v1.80"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12491,7 +12499,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.75"
+            MainTitle.Text = "DeadEyes v1.80"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12516,7 +12524,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.75"
+            MainTitle.Text = "DeadEyes v1.80"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12538,7 +12546,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.75"
+            MainTitle.Text = "DeadEyes v1.80"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12563,7 +12571,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.75"
+            MainTitle.Text = "DeadEyes v1.80"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12678,6 +12686,66 @@ local function cleanupUnusual()
     local runtimeSnapshot =
         unusualRuntime.nativeSnapshot
 
+    local runtimeSnapshotRig =
+        unusualRuntime.appliedRig
+
+    --// Invalidate reapply work BEFORE restoring the live effect.
+    unusualEnabled =
+        false
+    genv.UNUSUAL_SWAPPER_ENABLED =
+        false
+    unusualRuntime.reapplyGeneration += 1
+
+    --// Wait for a reapply already inside activation so it cannot write
+    --// the replacement after cleanup has restored the native effect.
+    local reapplyDeadline =
+        tick() + 1
+
+    while unusualReapplyBusy
+        and tick() < reapplyDeadline
+    do
+        task.wait()
+    end
+
+    local currentVisualRig =
+        UnusualFns.getUnusualVisualRig()
+
+    local currentPlayerCharacter =
+        UnusualFns.getUnusualPlayerCharacter()
+
+    --// Snapshot is only valid for the rig it was captured from.
+    --// Prefer the snapshot from a completed reapply on this rig.
+    --// Otherwise capture the native effect if the new rig still has it.
+    if currentVisualRig
+        and runtimeOriginalId
+        and runtimeOriginalId ~= 0
+    then
+        if unusualRuntime.appliedRig == currentVisualRig
+            and unusualRuntime.nativeSnapshot
+        then
+            runtimeSnapshot =
+                unusualRuntime.nativeSnapshot
+            runtimeSnapshotRig =
+                currentVisualRig
+        elseif runtimeSnapshotRig
+            ~= currentVisualRig
+        then
+            local freshSnapshot =
+                UnusualFns.captureNativeUnusualSnapshot(
+                    runtimeOriginalId,
+                    currentVisualRig,
+                    currentPlayerCharacter
+                )
+
+            if freshSnapshot then
+                runtimeSnapshot =
+                    freshSnapshot
+                runtimeSnapshotRig =
+                    currentVisualRig
+            end
+        end
+    end
+
     if restoreNativeUnusual
         and runtimeOriginalId
         and runtimeOriginalId ~= 0
@@ -12692,7 +12760,9 @@ local function cleanupUnusual()
                 UnusualFns.removeOurUnusualFX()
                 task.wait()
 
-                if runtimeSnapshot then
+                if runtimeSnapshot
+                    and runtimeSnapshotRig == visualRig
+                then
                     UnusualFns.restoreNativeUnusualSnapshot(
                         runtimeSnapshot,
                         visualRig,
@@ -12716,8 +12786,6 @@ local function cleanupUnusual()
         end)
     end
 
-    unusualEnabled =
-        false
     unusualActive =
         false
 
