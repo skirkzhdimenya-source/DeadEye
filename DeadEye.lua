@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.69"
+    "DeadEyes v1.70"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -10134,6 +10134,11 @@ function mainJump.isGameJumpBlocked()
                     )
                 end)
 
+            emoteActive =
+                emoteOk
+                and tonumber(emoteId)
+                and tonumber(emoteId) ~= 0
+
             for _, key in ipairs({
                 "CanJump",
                 "JumpAllowed",
@@ -10147,17 +10152,19 @@ function mainJump.isGameJumpBlocked()
                     end)
 
                 if ok
+                    and not (
+                        emoteActive
+                        and (
+                            key == "CanJump"
+                            or key == "JumpAllowed"
+                            or key == "JumpEnabled"
+                        )
+                    )
                     and value == false
-                    and not emoteActive
                 then
                     return true
                 end
             end
-
-            emoteActive =
-                emoteOk
-                and tonumber(emoteId)
-                and tonumber(emoteId) ~= 0
 
             for _, key in ipairs({
                 "NoJump",
@@ -10317,11 +10324,6 @@ function mainJump.isGameJumpBlocked()
 
     local contextJumpBlocked =
         false
-
-    local emoteActive =
-        emoteOk
-        and tonumber(emoteId)
-        and tonumber(emoteId) ~= 0
 
     if not emoteActive then
         pcall(function()
@@ -12559,7 +12561,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.69"
+            MainTitle.Text = "DeadEyes v1.70"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12581,7 +12583,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.69"
+            MainTitle.Text = "DeadEyes v1.70"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12606,7 +12608,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.69"
+            MainTitle.Text = "DeadEyes v1.70"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12628,7 +12630,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.69"
+            MainTitle.Text = "DeadEyes v1.70"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12653,7 +12655,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.69"
+            MainTitle.Text = "DeadEyes v1.70"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
