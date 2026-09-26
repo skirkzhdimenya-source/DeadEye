@@ -321,6 +321,12 @@ local activePickerSide = nil
 local slotOriginalButtons = {}
 local slotReplaceButtons = {}
 local pickerButtons = {}
+local emotePreviewCache = {}
+local cosmeticPreviewCache = {}
+local emotePreviewCacheHolder
+local cosmeticPreviewCacheHolder
+local emotePickerPreloaded = false
+local cosmeticPickerPreloaded = false
 --// =========================================================
 --// CONNECTION HELPER
 --// =========================================================
@@ -624,6 +630,27 @@ ScreenGui.ZIndexBehavior =
     Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent =
     guiParent
+
+emotePreviewCacheHolder =
+    Instance.new("Frame")
+emotePreviewCacheHolder.Name = "DeadEyeEmotePreviewCache"
+emotePreviewCacheHolder.Size = UDim2.new(0, 1, 0, 1)
+emotePreviewCacheHolder.Position = UDim2.new(0, -10000, 0, -10000)
+emotePreviewCacheHolder.BackgroundTransparency = 1
+emotePreviewCacheHolder.BorderSizePixel = 0
+emotePreviewCacheHolder.Visible = false
+emotePreviewCacheHolder.Parent = ScreenGui
+
+cosmeticPreviewCacheHolder =
+    Instance.new("Frame")
+cosmeticPreviewCacheHolder.Name = "DeadEyeCosmeticPreviewCache"
+cosmeticPreviewCacheHolder.Size = UDim2.new(0, 1, 0, 1)
+cosmeticPreviewCacheHolder.Position = UDim2.new(0, -10000, 0, -10000)
+cosmeticPreviewCacheHolder.BackgroundTransparency = 1
+cosmeticPreviewCacheHolder.BorderSizePixel = 0
+cosmeticPreviewCacheHolder.Visible = false
+cosmeticPreviewCacheHolder.Parent = ScreenGui
+
 --// =========================================================
 --// MAIN
 --// =========================================================
@@ -894,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.49"
+    "DeadEyes v1.50"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -3106,6 +3133,16 @@ function cosmetic.rebuildPicker()
         unusualPickerButtons
     ) do
         pcall(function()
+            local preview = button:FindFirstChild("CosmeticPreview")
+            if preview then
+                local id = tonumber(string.match(button.Name, "^Cosmetic_(%d+)$"))
+                if id then
+                    cosmeticPreviewCache[id] = preview
+                    preview.Parent = cosmeticPreviewCacheHolder
+                end
+            end
+        end)
+        pcall(function()
             button:Destroy()
         end)
     end
@@ -3127,6 +3164,7 @@ function cosmetic.rebuildPicker()
             )
         button.Name =
             "Cosmetic_None"
+        button:SetAttribute("DeadEyePickerSearch", "none")
         button.BackgroundColor3 =
             Color3.fromRGB(
                 55,
@@ -3237,6 +3275,10 @@ function cosmetic.rebuildPicker()
                     .. tostring(
                         data.id
                     )
+            button:SetAttribute(
+                "DeadEyePickerSearch",
+                lower
+            )
             button.BackgroundColor3 =
                 Color3.fromRGB(
                     45,
@@ -3291,12 +3333,21 @@ function cosmetic.rebuildPicker()
             previewCorner.Parent =
                 preview
 
-            pcall(function()
-                cosmetic.createPreview(
-                    data.id,
-                    preview
-                )
-            end)
+            local cachedPreview =
+                cosmeticPreviewCache[data.id]
+
+            if cachedPreview then
+                cachedPreview.Parent = button
+                preview = cachedPreview
+            else
+                pcall(function()
+                    cosmetic.createPreview(
+                        data.id,
+                        preview
+                    )
+                end)
+                cosmeticPreviewCache[data.id] = preview
+            end
 
             local glass =
                 Instance.new(
@@ -3481,6 +3532,7 @@ function cosmetic.rebuildPicker()
                 )
                 .. " found"
     end
+    cosmeticPickerPreloaded = true
 end
 
 function cosmetic.openPicker(
@@ -3499,7 +3551,9 @@ function cosmetic.openPicker(
         or "Select Replacement"
     unusualPickerSearch.Text = ""
     unusualPicker.Visible = true
-    cosmetic.rebuildPicker()
+    if not cosmeticPickerPreloaded then
+        cosmetic.rebuildPicker()
+    end
 end
 
 function cosmetic.buildUI()
@@ -11539,7 +11593,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.49"
+            MainTitle.Text = "DeadEyes v1.50"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11561,7 +11615,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.49"
+            MainTitle.Text = "DeadEyes v1.50"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11586,7 +11640,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.49"
+            MainTitle.Text = "DeadEyes v1.50"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11608,7 +11662,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.49"
+            MainTitle.Text = "DeadEyes v1.50"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11633,7 +11687,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.49"
+            MainTitle.Text = "DeadEyes v1.50"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13205,6 +13259,16 @@ local function rebuildPicker()
         pickerButtons
     ) do
         pcall(function()
+            local preview = button:FindFirstChild("EmotePreview")
+            if preview then
+                local id = tonumber(string.match(button.Name, "^Emote_(%d+)$"))
+                if id then
+                    emotePreviewCache[id] = preview
+                    preview.Parent = emotePreviewCacheHolder
+                end
+            end
+        end)
+        pcall(function()
             button:Destroy()
         end)
     end
@@ -13223,6 +13287,7 @@ local function rebuildPicker()
             Instance.new("TextButton")
 
         button.Name = "Emote_None"
+        button:SetAttribute("DeadEyePickerSearch", "none")
         button.Size = UDim2.new(0, 150, 0, 34)
         button.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
         button.BorderSizePixel = 0
@@ -13325,6 +13390,10 @@ local function rebuildPicker()
                 tostring(
                     data.id
                 )
+            button:SetAttribute(
+                "DeadEyePickerSearch",
+                nameLower
+            )
             button.Size =
                 UDim2.new(
                     1,
@@ -13414,10 +13483,19 @@ local function rebuildPicker()
             viewportCorner.Parent =
                 viewport
 
-            createEmotePreview(
-                data.module,
-                viewport
-            )
+            local cachedPreview =
+                emotePreviewCache[data.id]
+
+            if cachedPreview then
+                cachedPreview.Parent = button
+                viewport = cachedPreview
+            else
+                createEmotePreview(
+                    data.module,
+                    viewport
+                )
+                emotePreviewCache[data.id] = viewport
+            end
 
             --// GLASS OVERLAY
             local glass =
@@ -13645,6 +13723,7 @@ local function rebuildPicker()
             0,
             0
         )
+    emotePickerPreloaded = true
 end
 --// =========================================================
 --// =========================================================
@@ -13933,7 +14012,9 @@ local function openPicker(
     PickerSearch.Text =
         ""
 
-    rebuildPicker()
+    if not emotePickerPreloaded then
+        rebuildPicker()
+    end
 
     __UI.animatePickerAppear(
         Picker
@@ -15410,6 +15491,17 @@ savedConfig.unusual = {
 }
 cosmetic.saveState()
 saveSavedConfig()
+
+--// PRELOAD PICKER 3D PREVIEWS ON SCRIPT START.
+--// Opening the picker later only reuses these ready ViewportFrames.
+pcall(function()
+    rebuildPicker()
+end)
+
+pcall(function()
+    cosmetic.rebuildPicker()
+end)
+
 setMainMinimized(false)
 updateGUI()
 pcall(function()
