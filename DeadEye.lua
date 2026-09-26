@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.51"
+    "DeadEyes v1.52"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -9457,6 +9457,7 @@ local mainJump = {
     hideUIHotkeyName = "H",
     lastJump = 0,
     capturing = nil,
+    needsInputRearm = false,
     character = nil,
     humanoid = nil,
     root = nil,
@@ -9545,6 +9546,7 @@ function mainJump.setEnabled(state)
         state and true or false
 
     if mainJump.enabled then
+        mainJump.needsInputRearm = false
         if mainJump.character
             and mainJump.humanoid
             and mainJump.humanoid.Parent
@@ -9569,6 +9571,7 @@ function mainJump.setEnabled(state)
             end)
         end
     else
+        mainJump.needsInputRearm = true
         mainJump.destroySensors()
 
         if mainJump.humanoid
@@ -10354,6 +10357,33 @@ mainConnect(
             end
 
             if input.KeyCode
+                == Enum.KeyCode.Space
+                and not mainJump.enabled
+                and mainJump.needsInputRearm
+            then
+                mainJump.needsInputRearm = false
+
+                if mainJump.humanoid
+                    and mainJump.humanoid.Parent
+                then
+                    pcall(function()
+                        mainJump.humanoid.Jump = false
+                    end)
+
+                    task.defer(function()
+                        if mainJump.humanoid
+                            and mainJump.humanoid.Parent
+                            and not mainJump.enabled
+                        then
+                            pcall(function()
+                                mainJump.humanoid.Jump = true
+                            end)
+                        end
+                    end)
+                end
+            end
+
+            if input.KeyCode
                 == mainFindKeyCode(
                     mainJump.hotkeyName
                 )
@@ -10369,6 +10399,22 @@ mainConnect(
             then
                 ScreenGui.Enabled =
                     not ScreenGui.Enabled
+            end
+        end
+    )
+)
+mainConnect(
+    UserInputService.InputEnded:Connect(
+        function(input)
+            if input.KeyCode
+                == Enum.KeyCode.Space
+                and not mainJump.enabled
+                and mainJump.humanoid
+                and mainJump.humanoid.Parent
+            then
+                pcall(function()
+                    mainJump.humanoid.Jump = false
+                end)
             end
         end
     )
@@ -11591,7 +11637,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.51"
+            MainTitle.Text = "DeadEyes v1.52"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11613,7 +11659,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.51"
+            MainTitle.Text = "DeadEyes v1.52"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11638,7 +11684,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.51"
+            MainTitle.Text = "DeadEyes v1.52"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11660,7 +11706,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.51"
+            MainTitle.Text = "DeadEyes v1.52"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11685,7 +11731,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.51"
+            MainTitle.Text = "DeadEyes v1.52"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
