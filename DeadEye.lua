@@ -10396,8 +10396,24 @@ function mainJump.canJump()
             and tonumber(emoteId)
             and tonumber(emoteId) ~= 0
 
-        --// Native Movement:Jump() restrictions that are independent
-        --// of emote-specific jumping behavior.
+        --// Native Movement:Jump() blocks jumping when the current
+        --// MoveStats speed is exactly 0. This is also what makes
+        --// non-jumpable emotes such as DogParty refuse the jump.
+        local speedOk, moveSpeed =
+            pcall(function()
+                return object.Movement
+                    and object.Movement.MoveStats
+                    and object.Movement.MoveStats.MoveStats
+                    and object.Movement.MoveStats.MoveStats.Speed
+            end)
+
+        if speedOk
+            and tonumber(moveSpeed) == 0
+        then
+            return false
+        end
+
+        --// Native Movement:Jump() restrictions independent of emotes.
         local downedOk, downed =
             pcall(function()
                 return registry:Get("Downed")
@@ -10435,24 +10451,17 @@ function mainJump.canJump()
             return false
         end
 
-        if emoteActive then
-            --// Keep the confirmed working native-emote behavior:
-            --// the game disables Jumping for emotes that cannot jump.
-            local stateOK, jumpingEnabled =
-                pcall(function()
-                    return mainJump.humanoid:
-                        GetStateEnabled(
-                            Enum.HumanoidStateType.Jumping
-                        )
-                end)
-
-            return stateOK
-                and jumpingEnabled == true
+        if not emoteActive then
+            --// Keep the existing generic game-level checks for
+            --// non-emote states such as special-round restrictions.
+            if mainJump.isGameJumpBlocked() then
+                return false
+            end
         end
-    end
-
-    if mainJump.isGameJumpBlocked() then
-        return false
+    else
+        if mainJump.isGameJumpBlocked() then
+            return false
+        end
     end
 
     local state =
