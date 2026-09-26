@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.46"
+    "DeadEyes v1.47"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7818,65 +7818,44 @@ unusualPickerClose =
 unusualPickerClose.Size =
     UDim2.new(
         0,
-        30,
+        26,
         0,
-        30
+        28
     )
 unusualPickerClose.Position =
     UDim2.new(
         1,
-        -35,
+        -31,
         0,
-        4
+        5
     )
 unusualPickerClose.BackgroundTransparency =
     1
 unusualPickerClose.Text =
-    ""
-unusualPickerClose.ZIndex =
-    31
-
-__UI.UnusualPickerCloseGlyph =
-    Instance.new("TextLabel")
-__UI.UnusualPickerCloseGlyph.Name =
-    "DeadEyePickerCloseGlyph"
-__UI.UnusualPickerCloseGlyph.Size =
-    UDim2.new(
-        0,
-        24,
-        0,
-        28
-    )
-__UI.UnusualPickerCloseGlyph.Position =
-    UDim2.new(
-        1,
-        -32,
-        0,
-        5
-    )
-__UI.UnusualPickerCloseGlyph.BackgroundTransparency =
-    1
-__UI.UnusualPickerCloseGlyph.Text =
     "×"
-__UI.UnusualPickerCloseGlyph.TextSize =
+unusualPickerClose.TextSize =
     25
-__UI.UnusualPickerCloseGlyph.Font =
+unusualPickerClose.Font =
     Enum.Font.GothamBold
-__UI.UnusualPickerCloseGlyph.TextColor3 =
+unusualPickerClose.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-__UI.UnusualPickerCloseGlyph.TextXAlignment =
+unusualPickerClose.TextXAlignment =
     Enum.TextXAlignment.Center
-__UI.UnusualPickerCloseGlyph.TextYAlignment =
+unusualPickerClose.TextYAlignment =
     Enum.TextYAlignment.Center
-__UI.UnusualPickerCloseGlyph.Active =
+unusualPickerClose.AutoButtonColor =
     false
-__UI.UnusualPickerCloseGlyph.ZIndex =
-    30
-__UI.UnusualPickerCloseGlyph.Parent =
+unusualPickerClose.Active =
+    true
+unusualPickerClose.Selectable =
+    false
+unusualPickerClose.ZIndex =
+    40
+unusualPickerClose.Parent =
     unusualPicker
 unusualPickerSearch =
     Instance.new("TextBox")
@@ -11537,7 +11516,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.46"
+            MainTitle.Text = "DeadEyes v1.47"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11559,7 +11538,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.46"
+            MainTitle.Text = "DeadEyes v1.47"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11584,7 +11563,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.46"
+            MainTitle.Text = "DeadEyes v1.47"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11606,7 +11585,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.46"
+            MainTitle.Text = "DeadEyes v1.47"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11631,7 +11610,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.46"
+            MainTitle.Text = "DeadEyes v1.47"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12342,65 +12321,44 @@ PickerClose =
 PickerClose.Size =
     UDim2.new(
         0,
-        30,
+        26,
         0,
-        30
+        28
     )
 PickerClose.Position =
     UDim2.new(
         1,
-        -35,
+        -31,
         0,
-        4
+        5
     )
 PickerClose.BackgroundTransparency =
     1
 PickerClose.Text =
-    ""
-PickerClose.ZIndex =
-    31
-
-__UI.PickerCloseGlyph =
-    Instance.new("TextLabel")
-__UI.PickerCloseGlyph.Name =
-    "DeadEyePickerCloseGlyph"
-__UI.PickerCloseGlyph.Size =
-    UDim2.new(
-        0,
-        24,
-        0,
-        28
-    )
-__UI.PickerCloseGlyph.Position =
-    UDim2.new(
-        1,
-        -32,
-        0,
-        5
-    )
-__UI.PickerCloseGlyph.BackgroundTransparency =
-    1
-__UI.PickerCloseGlyph.Text =
     "×"
-__UI.PickerCloseGlyph.TextSize =
+PickerClose.TextSize =
     25
-__UI.PickerCloseGlyph.Font =
+PickerClose.Font =
     Enum.Font.GothamBold
-__UI.PickerCloseGlyph.TextColor3 =
+PickerClose.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-__UI.PickerCloseGlyph.TextXAlignment =
+PickerClose.TextXAlignment =
     Enum.TextXAlignment.Center
-__UI.PickerCloseGlyph.TextYAlignment =
+PickerClose.TextYAlignment =
     Enum.TextYAlignment.Center
-__UI.PickerCloseGlyph.Active =
+PickerClose.AutoButtonColor =
     false
-__UI.PickerCloseGlyph.ZIndex =
-    30
-__UI.PickerCloseGlyph.Parent =
+PickerClose.Active =
+    true
+PickerClose.Selectable =
+    false
+PickerClose.ZIndex =
+    40
+PickerClose.Parent =
     Picker
 --// =========================================================
 --// PICKER SEARCH
@@ -15063,18 +15021,7 @@ function __UI.styleButtonMotion(button)
     local shadowTarget =
         button
 
-    if pickerClose then
-        shadowTarget =
-            button.Parent
-            and button.Parent:FindFirstChild(
-                "DeadEyePickerCloseGlyph"
-            )
-            or button
-    end
-
     --// One shadow per button.
-    --// Picker close uses a tiny glyph target so the glow follows
-    --// the X itself instead of the larger invisible hitbox.
     local shadow =
         shadowTarget:FindFirstChild(
             "DeadEyeHoverGlow"
@@ -15127,14 +15074,14 @@ function __UI.styleButtonMotion(button)
             elseif pickerClose then
                 shadow.Spread =
                     UDim2.fromOffset(
-                        8,
-                        8
+                        3,
+                        3
                     )
 
                 shadow.BlurRadius =
                     UDim.new(
                         0,
-                        7
+                        5
                     )
             else
                 shadow.Spread =
