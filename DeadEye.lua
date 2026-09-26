@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.48"
+    "DeadEyes v1.49"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7818,23 +7818,33 @@ unusualPickerClose =
 unusualPickerClose.Size =
     UDim2.new(
         0,
-        26,
+        27,
         0,
-        28
+        27
     )
 unusualPickerClose.Position =
     UDim2.new(
         1,
-        -31,
+        -32,
         0,
-        5
+        6
+    )
+unusualPickerClose.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        50
     )
 unusualPickerClose.BackgroundTransparency =
-    1
+    0.05
+unusualPickerClose.BorderSizePixel =
+    0
+unusualPickerClose.ZIndex =
+    31
 unusualPickerClose.Text =
     "×"
 unusualPickerClose.TextSize =
-    25
+    27
 unusualPickerClose.Font =
     Enum.Font.GothamBold
 unusualPickerClose.TextColor3 =
@@ -7843,20 +7853,33 @@ unusualPickerClose.TextColor3 =
         255,
         255
     )
-unusualPickerClose.TextXAlignment =
-    Enum.TextXAlignment.Center
-unusualPickerClose.TextYAlignment =
-    Enum.TextYAlignment.Center
 unusualPickerClose.AutoButtonColor =
     false
 unusualPickerClose.Active =
     true
 unusualPickerClose.Selectable =
     false
-unusualPickerClose.ZIndex =
-    40
 unusualPickerClose.Parent =
     unusualPicker
+
+__UI.UnusualPickerCloseCorner =
+    Instance.new("UICorner")
+__UI.UnusualPickerCloseCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+__UI.UnusualPickerCloseCorner.Parent =
+    unusualPickerClose
+
+__UI.UnusualPickerCloseStroke =
+    Instance.new("UIStroke")
+__UI.UnusualPickerCloseStroke.Thickness =
+    1
+__UI.UnusualPickerCloseStroke.Transparency =
+    0.65
+__UI.UnusualPickerCloseStroke.Parent =
+    unusualPickerClose
 unusualPickerSearch =
     Instance.new("TextBox")
 unusualPickerSearch.Size =
@@ -11516,7 +11539,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.48"
+            MainTitle.Text = "DeadEyes v1.49"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11538,7 +11561,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.48"
+            MainTitle.Text = "DeadEyes v1.49"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11563,7 +11586,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.48"
+            MainTitle.Text = "DeadEyes v1.49"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11585,7 +11608,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.48"
+            MainTitle.Text = "DeadEyes v1.49"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11610,7 +11633,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.48"
+            MainTitle.Text = "DeadEyes v1.49"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12321,23 +12344,33 @@ PickerClose =
 PickerClose.Size =
     UDim2.new(
         0,
-        26,
+        27,
         0,
-        28
+        27
     )
 PickerClose.Position =
     UDim2.new(
         1,
-        -31,
+        -32,
         0,
-        5
+        6
+    )
+PickerClose.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        50
     )
 PickerClose.BackgroundTransparency =
-    1
+    0.05
+PickerClose.BorderSizePixel =
+    0
+PickerClose.ZIndex =
+    31
 PickerClose.Text =
     "×"
 PickerClose.TextSize =
-    25
+    27
 PickerClose.Font =
     Enum.Font.GothamBold
 PickerClose.TextColor3 =
@@ -12346,20 +12379,33 @@ PickerClose.TextColor3 =
         255,
         255
     )
-PickerClose.TextXAlignment =
-    Enum.TextXAlignment.Center
-PickerClose.TextYAlignment =
-    Enum.TextYAlignment.Center
 PickerClose.AutoButtonColor =
     false
 PickerClose.Active =
     true
 PickerClose.Selectable =
     false
-PickerClose.ZIndex =
-    40
 PickerClose.Parent =
     Picker
+
+__UI.PickerCloseCorner =
+    Instance.new("UICorner")
+__UI.PickerCloseCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+__UI.PickerCloseCorner.Parent =
+    PickerClose
+
+__UI.PickerCloseStroke =
+    Instance.new("UIStroke")
+__UI.PickerCloseStroke.Thickness =
+    1
+__UI.PickerCloseStroke.Transparency =
+    0.65
+__UI.PickerCloseStroke.Parent =
+    PickerClose
 --// =========================================================
 --// PICKER SEARCH
 --// =========================================================
@@ -15010,183 +15056,90 @@ function __UI.styleButtonMotion(button)
         end
     end
 
-    local compact =
-        button == Minimize
-        or button == Close
-
     local pickerClose =
         button == PickerClose
         or button == unusualPickerClose
 
-    local shadow = nil
-    local textGlow = nil
-    local textGlowOuter = nil
+    local compact =
+        button == Minimize
+        or button == Close
+        or pickerClose
 
-    if pickerClose then
-        textGlow =
-            button:FindFirstChild(
-                "DeadEyePickerCloseGlow"
-            )
+    local shadow =
+        button:FindFirstChild(
+            "DeadEyeHoverGlow"
+        )
 
-        if not textGlow then
-            local success, result =
-                pcall(function()
-                    return Instance.new("UIStroke")
-                end)
+    if not shadow then
+        local success, result =
+            pcall(function()
+                return Instance.new("UIShadow")
+            end)
 
-            if success
-                and result
-            then
-                textGlow =
-                    result
+        if success
+            and result
+        then
+            shadow =
+                result
 
-                textGlow.Name =
-                    "DeadEyePickerCloseGlow"
-
-                textGlow.ApplyStrokeMode =
-                    Enum.ApplyStrokeMode.Contextual
-
-                textGlow.Thickness =
-                    1.5
-
-                textGlow.Color =
-                    Color3.fromRGB(
-                        190,
-                        204,
-                        226
-                    )
-
-                textGlow.Transparency =
-                    1
-
-                textGlow.ZIndex =
-                    -1
-
-                textGlow.Parent =
-                    button
-            end
-        end
-
-        textGlowOuter =
-            button:FindFirstChild(
-                "DeadEyePickerCloseGlowOuter"
-            )
-
-        if not textGlowOuter then
-            local success, result =
-                pcall(function()
-                    return Instance.new("UIStroke")
-                end)
-
-            if success
-                and result
-            then
-                textGlowOuter =
-                    result
-
-                textGlowOuter.Name =
-                    "DeadEyePickerCloseGlowOuter"
-
-                textGlowOuter.ApplyStrokeMode =
-                    Enum.ApplyStrokeMode.Contextual
-
-                textGlowOuter.Thickness =
-                    4
-
-                textGlowOuter.Color =
-                    Color3.fromRGB(
-                        190,
-                        204,
-                        226
-                    )
-
-                textGlowOuter.Transparency =
-                    1
-
-                textGlowOuter.ZIndex =
-                    -2
-
-                textGlowOuter.Parent =
-                    button
-            end
-        end
-    else
-        shadow =
-            button:FindFirstChild(
+            shadow.Name =
                 "DeadEyeHoverGlow"
-            )
 
-        if not shadow then
-            local success, result =
-                pcall(function()
-                    return Instance.new("UIShadow")
-                end)
+            shadow.Color =
+                Color3.fromRGB(
+                    190,
+                    204,
+                    226
+                )
 
-            if success
-                and result
-            then
-                shadow =
-                    result
+            shadow.Offset =
+                UDim2.new(
+                    0,
+                    0,
+                    0,
+                    0
+                )
 
-                shadow.Name =
-                    "DeadEyeHoverGlow"
-
-                shadow.Color =
-                    Color3.fromRGB(
-                        190,
-                        204,
-                        226
+            if compact then
+                shadow.Spread =
+                    UDim2.fromOffset(
+                        2,
+                        2
                     )
 
-                shadow.Offset =
-                    UDim2.new(
+                shadow.BlurRadius =
+                    UDim.new(
                         0,
-                        0,
-                        0,
-                        0
+                        4
+                    )
+            else
+                shadow.Spread =
+                    UDim2.fromOffset(
+                        7,
+                        7
                     )
 
-                if compact then
-                    shadow.Spread =
-                        UDim2.fromOffset(
-                            2,
-                            2
-                        )
-
-                    shadow.BlurRadius =
-                        UDim.new(
-                            0,
-                            4
-                        )
-                else
-                    shadow.Spread =
-                        UDim2.fromOffset(
-                            7,
-                            7
-                        )
-
-                    shadow.BlurRadius =
-                        UDim.new(
-                            0,
-                            6
-                        )
-                end
-
-                shadow.Transparency =
-                    1
-
-                shadow.Enabled =
-                    true
-
-                shadow.ZIndex =
-                    -1
-
-                shadow.Parent =
-                    button
-
-                __UI.DeadEyeHoverShadows[button] =
-                    shadow
+                shadow.BlurRadius =
+                    UDim.new(
+                        0,
+                        6
+                    )
             end
+
+            shadow.Transparency =
+                1
+
+            shadow.Enabled =
+                true
+
+            shadow.ZIndex =
+                -1
+
+            shadow.Parent =
+                button
+
+            __UI.DeadEyeHoverShadows[button] =
+                shadow
         end
     end
 
@@ -15262,81 +15215,6 @@ function __UI.styleButtonMotion(button)
         end)
     end
 
-    local glowTween
-    local glowOuterTween
-
-    local function cancelGlowTweens()
-        if glowTween then
-            pcall(function()
-                glowTween:Cancel()
-            end)
-
-            glowTween =
-                nil
-        end
-
-        if glowOuterTween then
-            pcall(function()
-                glowOuterTween:Cancel()
-            end)
-
-            glowOuterTween =
-                nil
-        end
-    end
-
-    local function tweenTextGlow(
-        info,
-        transparency
-    )
-        if not pickerClose
-            or (
-                not textGlow
-                and not textGlowOuter
-            )
-        then
-            return
-        end
-
-        cancelGlowTweens()
-
-        if textGlow then
-            pcall(function()
-                glowTween =
-                    __UI.TweenService:Create(
-                        textGlow,
-                        info,
-                        {
-                            Transparency =
-                                transparency
-                        }
-                    )
-
-                glowTween:Play()
-            end)
-        end
-
-        if textGlowOuter then
-            pcall(function()
-                glowOuterTween =
-                    __UI.TweenService:Create(
-                        textGlowOuter,
-                        info,
-                        {
-                            Transparency =
-                                math.min(
-                                    1,
-                                    transparency
-                                    + 0.28
-                                )
-                        }
-                    )
-
-                glowOuterTween:Play()
-            end)
-        end
-    end
-
     local function tweenScale(
         target,
         info
@@ -15380,18 +15258,9 @@ function __UI.styleButtonMotion(button)
                 --// then softly spreads outward from its edges.
                 tweenShadow(
                     enterInfo,
-                    pickerClose
-                    and 1
-                    or (
-                        compact
-                        and 0.66
-                        or 0.58
-                    )
-                )
-
-                tweenTextGlow(
-                    enterInfo,
-                    0.28
+                    compact
+                    and 0.66
+                    or 0.58
                 )
             end
         )
@@ -15415,11 +15284,6 @@ function __UI.styleButtonMotion(button)
                     leaveInfo,
                     1
                 )
-
-                tweenTextGlow(
-                    leaveInfo,
-                    1
-                )
             end
         )
     )
@@ -15438,18 +15302,9 @@ function __UI.styleButtonMotion(button)
 
                 tweenShadow(
                     pressInfo,
-                    pickerClose
-                    and 1
-                    or (
-                        compact
-                        and 0.74
-                        or 0.70
-                    )
-                )
-
-                tweenTextGlow(
-                    pressInfo,
-                    0.16
+                    compact
+                    and 0.74
+                    or 0.70
                 )
             end
         )
@@ -15478,11 +15333,6 @@ function __UI.styleButtonMotion(button)
                             or 0.58
                         )
                     )
-
-                    tweenTextGlow(
-                        enterInfo,
-                        0.28
-                    )
                 else
                     tweenScale(
                         1,
@@ -15490,11 +15340,6 @@ function __UI.styleButtonMotion(button)
                     )
 
                     tweenShadow(
-                        leaveInfo,
-                        1
-                    )
-
-                    tweenTextGlow(
                         leaveInfo,
                         1
                     )
@@ -15507,7 +15352,6 @@ function __UI.styleButtonMotion(button)
         button.Destroying:Connect(
             function()
                 cancelShadowTween()
-                cancelGlowTweens()
                 cancelScaleTween()
 
                 if __UI.DeadEyeHoverShadows then
