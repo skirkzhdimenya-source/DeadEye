@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.17"
+    "DeadEyes v1.18"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.17"
+            MainTitle.Text = "DeadEyes v1.18"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.17"
+            MainTitle.Text = "DeadEyes v1.18"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.17"
+            MainTitle.Text = "DeadEyes v1.18"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.17"
+            MainTitle.Text = "DeadEyes v1.18"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.17"
+            MainTitle.Text = "DeadEyes v1.18"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14865,7 +14865,13 @@ function __UI.styleButtonMotion(button)
         middleTransparency,
         outerTransparency
     )
-        cancelTweens()
+        for _, tween in ipairs(glowTweens) do
+            pcall(function()
+                tween:Cancel()
+            end)
+        end
+
+        table.clear(glowTweens)
 
         for _, data in ipairs({
             {
