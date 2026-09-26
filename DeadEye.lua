@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.98"
+local SCRIPT_VERSION = "1.99"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3198,15 +3198,33 @@ function cosmetic.rebuildPicker()
         unusualPickerButtons
     ) do
         pcall(function()
-            local preview = button:FindFirstChild("CosmeticPreview")
-            if preview then
-                local id = tonumber(string.match(button.Name, "^Cosmetic_(%d+)$"))
+            local preview =
+                button:FindFirstChild(
+                    "CosmeticPreview",
+                    true
+                )
+
+            if preview
+                and preview.Parent
+            then
+                local id =
+                    tonumber(
+                        string.match(
+                            button.Name,
+                            "^Cosmetic_(%d+)$"
+                        )
+                    )
+
                 if id then
-                    cosmeticPreviewCache[id] = preview
-                    preview.Parent = cosmeticPreviewCacheHolder
+                    cosmeticPreviewCache[id] =
+                        preview
+
+                    preview.Parent =
+                        cosmeticPreviewCacheHolder
                 end
             end
         end)
+
         pcall(function()
             button:Destroy()
         end)
@@ -3466,20 +3484,94 @@ function cosmetic.rebuildPicker()
             local cachedPreview =
                 cosmeticPreviewCache[data.id]
 
-            if cachedPreview then
+            if cachedPreview
+                and cachedPreview.Parent
+            then
                 pcall(function()
                     preview:Destroy()
                 end)
-                cachedPreview.Parent = cardGroup
-                preview = cachedPreview
+
+                local reparentOK =
+                    pcall(function()
+                        cachedPreview.Parent =
+                            cardGroup
+                    end)
+
+                if reparentOK then
+                    preview =
+                        cachedPreview
+                else
+                    cosmeticPreviewCache[data.id] =
+                        nil
+
+                    preview =
+                        Instance.new(
+                            "ViewportFrame"
+                        )
+
+                    preview.Name =
+                        "CosmeticPreview"
+
+                    preview.Size =
+                        UDim2.new(
+                            1,
+                            0,
+                            1,
+                            0
+                        )
+
+                    preview.BackgroundColor3 =
+                        Color3.fromRGB(
+                            31,
+                            35,
+                            42
+                        )
+
+                    preview.BackgroundTransparency =
+                        0
+
+                    preview.BorderSizePixel =
+                        0
+
+                    preview.ClipsDescendants =
+                        true
+
+                    preview.Active =
+                        false
+
+                    preview.ZIndex =
+                        33
+
+                    preview.Parent =
+                        cardGroup
+
+                    pcall(function()
+                        cosmetic.createPreview(
+                            data.id,
+                            preview
+                        )
+                    end)
+
+                    cosmeticPreviewCache[
+                        data.id
+                    ] = preview
+                end
             else
+                if cachedPreview then
+                    cosmeticPreviewCache[
+                        data.id
+                    ] = nil
+                end
+
                 pcall(function()
                     cosmetic.createPreview(
                         data.id,
                         preview
                     )
                 end)
-                cosmeticPreviewCache[data.id] = preview
+
+                cosmeticPreviewCache[data.id] =
+                    preview
             end
 
             local glass =
