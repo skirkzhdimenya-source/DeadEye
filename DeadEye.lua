@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.72"
+    "DeadEyes v1.73"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -9719,227 +9719,249 @@ function mainJump.destroySensors()
         mainJump.frontSensorPart = nil
     end
 end
-function mainJump.getEmoteJumpPermission()
-    if not mainJump.emoteJumpPermissionCache then
-        mainJump.emoteJumpPermissionCache = {}
-    end
-
+function mainJump.isGameJumpBlocked()
     local object =
         getCharacterObject()
 
-    if not object
-        or not object.DataRegistry
+    local emoteActive =
+        false
+
+    if object
+        and object.DataRegistry
     then
-        return nil
-    end
+        local registry =
+            object.DataRegistry
 
-    local ok, emoteId =
-        pcall(function()
-            return object.DataRegistry:Get(
-                "Emote"
-            )
-        end)
-
-    emoteId =
-        tonumber(emoteId)
-
-    if not ok
-        or not emoteId
-        or emoteId == 0
-    then
-        return nil
-    end
-
-    if mainJump.emoteJumpPermissionCache[emoteId] ~= nil then
-        return mainJump.emoteJumpPermissionCache[emoteId]
-    end
-
-    local function normalizeName(name)
-        return tostring(name or ""):lower():gsub(
-            "[^%w]",
-            ""
-        )
-    end
-
-    local function scanTable(value, seen, depth)
-        if type(value) ~= "table"
-            or depth > 6
-            or seen[value]
-        then
-            return nil
-        end
-
-        seen[value] = true
-
-        for key, item in pairs(value) do
-            local name =
-                normalizeName(key)
-
-            if type(item) == "boolean" then
-                if name == "canjump"
-                    or name == "jumpallowed"
-                    or name == "jumpenabled"
-                then
-                    return item
-                end
-
-                if name == "nojump"
-                    or name == "jumpdisabled"
-                then
-                    return not item
-                end
-            end
-        end
-
-        for _, item in pairs(value) do
-            local result =
-                scanTable(
-                    item,
-                    seen,
-                    depth + 1
+        local emoteOk, emoteId =
+            pcall(function()
+                return registry:Get(
+                    "Emote"
                 )
+            end)
 
-            if result ~= nil then
-                return result
+        emoteActive =
+            emoteOk
+            and tonumber(emoteId)
+            and tonumber(emoteId) ~= 0
+
+        if not emoteActive then
+            for _, key in ipairs({
+                "CanJump",
+                "JumpAllowed",
+                "JumpEnabled"
+            }) do
+                local ok, value =
+                    pcall(function()
+                        return registry:Get(
+                            key
+                        )
+                    end)
+
+                if ok
+                    and value == false
+                then
+                    return true
+                end
             end
         end
 
-        return nil
+        for _, key in ipairs({
+            "NoJump",
+            "JumpDisabled",
+            "IsCarried",
+            "IsCarrying"
+        }) do
+            local ok, value =
+                pcall(function()
+                    return registry:Get(
+                        key
+                    )
+                end)
+
+            if ok
+                and value == true
+            then
+                return true
+            end
+        end
     end
 
-    local function scanInstance(instance)
-        if not instance then
-            return nil
-        end
+    for _, root in ipairs({
+        mainJump.character,
+        LocalPlayer,
+        workspace
+    }) do
+        if root then
+            local attributes =
+                root:GetAttributes()
 
-        local result = nil
-
-        pcall(function()
             for name, value in pairs(
-                instance:GetAttributes()
+                attributes
             ) do
-                local normalized =
-                    normalizeName(
-                        name
+                local attributeName =
+                    string.lower(
+                        tostring(name)
                     )
 
-                if type(value) == "boolean" then
-                    if normalized == "canjump"
-                        or normalized == "jumpallowed"
-                        or normalized == "jumpenabled"
-                    then
-                        result = value
-                        return
-                    end
-
-                    if normalized == "nojump"
-                        or normalized == "jumpdisabled"
-                    then
-                        result = not value
-                        return
-                    end
-                end
-            end
-
-            for _, descendant in ipairs(
-                instance:GetDescendants()
-            ) do
-                local normalized =
-                    normalizeName(
-                        descendant.Name
+                if not emoteActive
+                    and value == false
+                    and (
+                        string.find(
+                            attributeName,
+                            "canjump",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "jumpallowed",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "jumpenabled",
+                            1,
+                            true
+                        )
                     )
+                then
+                    return true
+                end
 
-                if descendant:IsA("BoolValue") then
-                    if normalized == "canjump"
-                        or normalized == "jumpallowed"
-                        or normalized == "jumpenabled"
-                    then
-                        result = descendant.Value
-                        return
-                    end
-
-                    if normalized == "nojump"
-                        or normalized == "jumpdisabled"
-                    then
-                        result = not descendant.Value
-                        return
-                    end
+                if value == true
+                    and (
+                        string.find(
+                            attributeName,
+                            "nojump",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "jumpdisabled",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "carried",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "carrying",
+                            1,
+                            true
+                        )
+                    )
+                then
+                    return true
                 end
             end
-        end)
-
-        return result
+        end
     end
 
-    local registryData = nil
+    --// Match Roblox's actual ContextActionService ordering.
+    --// Same-priority actions are ordered by stackOrder, so an
+    --// emote can block JumpAction without using a higher priority.
+    local blockedByContext =
+        false
 
     pcall(function()
-        local all =
-            Registry.GetAll()
+        local ContextActionService =
+            game:GetService(
+                "ContextActionService"
+            )
 
-        if type(all) == "table" then
-            registryData =
-                all[emoteId]
+        local actions =
+            ContextActionService:
+                GetAllBoundActionInfo()
+
+        local jumpPriority =
+            2000
+        local jumpStackOrder =
+            -math.huge
+
+        for name, info in pairs(
+            actions
+        ) do
+            if type(info) == "table"
+                and string.lower(
+                    tostring(name)
+                ) == "jumpaction"
+            then
+                jumpPriority =
+                    tonumber(
+                        info.priorityLevel
+                    )
+                    or jumpPriority
+
+                jumpStackOrder =
+                    tonumber(
+                        info.stackOrder
+                    )
+                    or jumpStackOrder
+
+                break
+            end
+        end
+
+        for name, info in pairs(
+            actions
+        ) do
+            if type(info) == "table"
+                and string.lower(
+                    tostring(name)
+                ) ~= "jumpaction"
+            then
+                local priority =
+                    tonumber(
+                        info.priorityLevel
+                    )
+                    or 0
+
+                local stackOrder =
+                    tonumber(
+                        info.stackOrder
+                    )
+                    or 0
+
+                local takesJumpInput =
+                    false
+
+                for _, inputType in ipairs(
+                    info.inputTypes
+                        or {}
+                ) do
+                    if inputType
+                            == Enum.PlayerActions.CharacterJump
+                        or inputType
+                            == Enum.KeyCode.Space
+                    then
+                        takesJumpInput = true
+                        break
+                    end
+                end
+
+                if takesJumpInput
+                    and (
+                        priority > jumpPriority
+                        or (
+                            priority == jumpPriority
+                            and stackOrder > jumpStackOrder
+                        )
+                    )
+                then
+                    blockedByContext = true
+                    break
+                end
+            end
         end
     end)
 
-    local result =
-        scanTable(
-            registryData,
-            {},
-            0
-        )
-
-    if result == nil then
-        local module =
-            getItemModule(
-                emoteId
-            )
-
-        result =
-            scanInstance(
-                module
-            )
-    end
-
-    if result == nil
-        and object.Emote
-    then
-        result =
-            scanInstance(
-                object.Emote
-            )
-    end
-
-    if result ~= nil then
-        mainJump.emoteJumpPermissionCache[emoteId] =
-            result
-    end
-
-    return result
-end
-
-function mainJump.hasActiveEmote()
-    local object =
-        getCharacterObject()
-
-    if not object
-        or not object.DataRegistry
-    then
-        return false
-    end
-
-    local ok, emoteId =
-        pcall(function()
-            return object.DataRegistry:Get(
-                "Emote"
-            )
-        end)
-
-    return ok
-        and tonumber(emoteId)
-        and tonumber(emoteId) ~= 0
-        or false
+    return blockedByContext
 end
 
 function mainJump.canJump()
@@ -9957,17 +9979,8 @@ function mainJump.canJump()
         return false
     end
 
-    local permission =
-        mainJump.getEmoteJumpPermission()
-
-    if permission == false then
+    if mainJump.isGameJumpBlocked() then
         return false
-    end
-
-    if permission == true
-        and mainJump.hasActiveEmote()
-    then
-        return true
     end
 
     local state =
@@ -9980,6 +9993,7 @@ function mainJump.canJump()
         and state
             ~= Enum.HumanoidStateType.FallingDown
 end
+
 function mainJump.jump(hit)
     if not mainJump.canJump() then
         return
@@ -9987,20 +10001,6 @@ function mainJump.jump(hit)
 
     mainJump.lastJump =
         tick()
-
-    if mainJump.hasActiveEmote() then
-        pcall(function()
-            mainJump.humanoid:SetStateEnabled(
-                Enum.HumanoidStateType.Jumping,
-                true
-            )
-            mainJump.humanoid.Jump = true
-            mainJump.humanoid:ChangeState(
-                Enum.HumanoidStateType.Jumping
-            )
-        end)
-        return
-    end
 
     mainJump.humanoid.Jump = true
 
@@ -10631,55 +10631,6 @@ mainConnect(
                 ScreenGui.Enabled =
                     not ScreenGui.Enabled
             end
-        end
-    )
-)
-mainConnect(
-    RunService.Heartbeat:Connect(
-        function()
-            if not mainJump.enabled
-                or not mainJump.humanoid
-                or not mainJump.humanoid.Parent
-                or not mainJump.hasActiveEmote()
-            then
-                return
-            end
-
-            if mainJump.getEmoteJumpPermission() ~= true then
-                return
-            end
-
-            if tick() - mainJump.lastJump <
-                math.max(
-                    mainJump.jumpDelay,
-                    0.12
-                )
-            then
-                return
-            end
-
-            if mainJump.humanoid.Health <= 0
-                or mainJump.humanoid.FloorMaterial
-                    == Enum.Material.Air
-                or mainJump.humanoid.PlatformStand
-                or mainJump.humanoid.Sit
-                or mainJump.humanoid.SeatPart
-            then
-                return
-            end
-
-            local state =
-                mainJump.humanoid:GetState()
-
-            if state
-                    ~= Enum.HumanoidStateType.Running
-                and state
-                    ~= Enum.HumanoidStateType.RunningNoPhysics
-            then
-                return
-            end
-
-            mainJump.jump()
         end
     )
 )
@@ -12016,7 +11967,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.72"
+            MainTitle.Text = "DeadEyes v1.73"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12038,7 +11989,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.72"
+            MainTitle.Text = "DeadEyes v1.73"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12063,7 +12014,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.72"
+            MainTitle.Text = "DeadEyes v1.73"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12085,7 +12036,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.72"
+            MainTitle.Text = "DeadEyes v1.73"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12110,7 +12061,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.72"
+            MainTitle.Text = "DeadEyes v1.73"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
