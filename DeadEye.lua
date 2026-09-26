@@ -10392,23 +10392,80 @@ function mainJump.canJump()
                 )
             end)
 
+        local speedOk, moveSpeed =
+            pcall(function()
+                return object.Movement
+                    and object.Movement.MoveStats
+                    and object.Movement.MoveStats.MoveStats
+                    and object.Movement.MoveStats.MoveStats.Speed
+            end)
+
+        --// Mirror the game's native Movement:Jump() guards.
+        if speedOk
+            and tonumber(moveSpeed) == 0
+        then
+            return true
+        end
+
+        local downedOk, downed =
+            pcall(function()
+                return registry:Get("Downed")
+            end)
+
+        if downedOk
+            and downed == true
+        then
+            return true
+        end
+
+        local carryingOk, carrying =
+            pcall(function()
+                return registry:Get("Carrying")
+            end)
+
+        if carryingOk
+            and carrying
+            and carrying ~= false
+            and carrying ~= 0
+        then
+            return true
+        end
+
+        local carriedOk, carried =
+            pcall(function()
+                return registry:Get("Carried")
+            end)
+
+        if carriedOk
+            and carried
+            and carried ~= false
+            and carried ~= 0
+        then
+            return true
+        end
+
+        --// Mirror AttemptJump() -> GetStateInfo().Movement.CanJump.
+        local stateInfoOk, stateInfo =
+            pcall(function()
+                return object.Movement
+                    and object.Movement:GetStateInfo()
+            end)
+
+        if stateInfoOk
+            and stateInfo
+            and stateInfo.Movement
+            and stateInfo.Movement.CanJump == false
+        then
+            return true
+        end
+
         if ok
             and tonumber(emoteId)
             and tonumber(emoteId) ~= 0
+            and speedOk
+            and tonumber(moveSpeed) == 0
         then
-            local speedOk, moveSpeed =
-                pcall(function()
-                    return object.Movement
-                        and object.Movement.MoveStats
-                        and object.Movement.MoveStats.MoveStats
-                        and object.Movement.MoveStats.MoveStats.Speed
-                end)
-
-            if speedOk
-                and tonumber(moveSpeed) == 0
-            then
-                return false
-            end
+            return true
         end
     end
 
