@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.97"
+local SCRIPT_VERSION = "1.98"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -9360,6 +9360,13 @@ function others.saveConfig()
             savedConfig.others._Korblox
             or ""
         )
+    if others.avatarImportBox then
+        savedConfig.others._AvatarImport =
+            tostring(
+                others.avatarImportBox.Text
+                or ""
+            )
+    end
     pcall(function()
         saveSavedConfig()
     end)
@@ -11947,6 +11954,457 @@ end
 --// APPLY ALL OTHERS
 --// Applies every current field in one HumanoidDescription call.
 --// =========================================================
+--// =========================================================
+--// AVATAR DUMP IMPORT
+--// Accepts the JSON copied from the DeadEye avatar dumper.
+--// Applies items, body colors, body scales and accessory
+--// adjustment data through the existing HumanoidDescription
+--// pipeline used by the Others tab.
+--// =========================================================
+function others.avatarImportVector3(value)
+    if type(value) ~= "table" then
+        return nil
+    end
+
+    local x = tonumber(value[1])
+    local y = tonumber(value[2])
+    local z = tonumber(value[3])
+
+    if not x or not y or not z then
+        return nil
+    end
+
+    return Vector3.new(x, y, z)
+end
+
+function others.avatarImportColor3(value)
+    if type(value) ~= "table" then
+        return nil
+    end
+
+    local r = tonumber(value[1])
+    local g = tonumber(value[2])
+    local b = tonumber(value[3])
+
+    if not r or not g or not b then
+        return nil
+    end
+
+    return Color3.new(
+        math.clamp(r, 0, 1),
+        math.clamp(g, 0, 1),
+        math.clamp(b, 0, 1)
+    )
+end
+
+function others.avatarImportAccessoryType(name)
+    if type(name) ~= "string" or name == "" then
+        return nil
+    end
+
+    name = string.match(
+        name,
+        "([^%.]+)$"
+    ) or name
+
+    local result
+
+    pcall(function()
+        result = Enum.AccessoryType[name]
+    end)
+
+    return result
+end
+
+function others.parseAvatarDump(raw)
+    if type(raw) ~= "string" then
+        return nil, "EMPTY"
+    end
+
+    raw =
+        string.gsub(
+            raw,
+            "^%s+",
+            ""
+        )
+
+    raw =
+        string.gsub(
+            raw,
+            "%s+$",
+            ""
+        )
+
+    if raw == "" then
+        return nil, "EMPTY"
+    end
+
+    local decodeOK, data =
+        pcall(function()
+            return HttpService:JSONDecode(raw)
+        end)
+
+    if not decodeOK
+        or type(data) ~= "table"
+    then
+        return nil, "INVALID JSON"
+    end
+
+    if type(data.items) ~= "table" then
+        return nil, "NO ITEMS"
+    end
+
+    local current =
+        others.getDescription()
+
+    if not current then
+        return nil, "NO HUMANOID"
+    end
+
+    local cloneOK, description =
+        pcall(function()
+            return current:Clone()
+        end)
+
+    if not cloneOK
+        or not description
+    then
+        return nil, "DESCRIPTION CLONE FAILED"
+    end
+
+    local multiProperties = {
+        HatAccessory = true,
+        HairAccessory = true,
+        FaceAccessory = true,
+        NeckAccessory = true,
+        ShouldersAccessory = true,
+        FrontAccessory = true,
+        BackAccessory = true,
+        WaistAccessory = true
+    }
+
+    local singleProperties = {
+        Shirt = true,
+        Pants = true,
+        GraphicTShirt = true,
+        Face = true,
+        Head = true,
+        Torso = true,
+        LeftArm = true,
+        RightArm = true,
+        LeftLeg = true,
+        RightLeg = true
+    }
+
+    local appliedFields = 0
+
+    for property, rawValue in pairs(data.items) do
+        if multiProperties[property] then
+            local value =
+                tostring(
+                    rawValue or ""
+                )
+
+            value =
+                string.gsub(
+                    value,
+                    "%s+",
+                    ""
+                )
+
+            value =
+                string.gsub(
+                    value,
+                    "[^%d,]",
+                    ""
+                )
+
+            value =
+                string.gsub(
+                    value,
+                    ",+",
+                    ","
+                )
+
+            value =
+                string.gsub(
+                    value,
+                    "^,",
+                    ""
+                )
+
+            value =
+                string.gsub(
+                    value,
+                    ",$",
+                    ""
+                )
+
+            local ok =
+                pcall(function()
+                    description[property] =
+                        value
+                end)
+
+            if ok then
+                appliedFields += 1
+            end
+        elseif singleProperties[property] then
+            local value =
+                tonumber(rawValue)
+
+            if not value then
+                value =
+                    tonumber(
+                        string.match(
+                            tostring(
+                                rawValue or ""
+                            ),
+                            "%d+"
+                        )
+                    )
+            end
+
+            if value then
+                local ok =
+                    pcall(function()
+                        description[property] =
+                            value
+                    end)
+
+                if ok then
+                    appliedFields += 1
+                end
+            end
+        end
+    end
+
+    local colorProperties = {
+        HeadColor = true,
+        TorsoColor = true,
+        LeftArmColor = true,
+        RightArmColor = true,
+        LeftLegColor = true,
+        RightLegColor = true
+    }
+
+    if type(data.colors) == "table" then
+        for property, value in pairs(
+            data.colors
+        ) do
+            if colorProperties[property] then
+                local color =
+                    others.avatarImportColor3(
+                        value
+                    )
+
+                if color then
+                    local ok =
+                        pcall(function()
+                            description[property] =
+                                color
+                        end)
+
+                    if ok then
+                        appliedFields += 1
+                    end
+                end
+            end
+        end
+    end
+
+    local scaleProperties = {
+        HeightScale = true,
+        WidthScale = true,
+        DepthScale = true,
+        HeadScale = true,
+        BodyTypeScale = true,
+        ProportionScale = true
+    }
+
+    if type(data.scales) == "table" then
+        for property, value in pairs(
+            data.scales
+        ) do
+            if scaleProperties[property] then
+                local number =
+                    tonumber(value)
+
+                if number then
+                    local ok =
+                        pcall(function()
+                            description[property] =
+                                number
+                        end)
+
+                    if ok then
+                        appliedFields += 1
+                    end
+                end
+            end
+        end
+    end
+
+    local accessoryInfo = {}
+
+    if type(data.accessories) == "table" then
+        for _, source in ipairs(
+            data.accessories
+        ) do
+            if type(source) == "table" then
+                local assetId =
+                    tonumber(
+                        source.AssetId
+                    )
+
+                local accessoryType =
+                    others.avatarImportAccessoryType(
+                        source.AccessoryType
+                    )
+
+                if assetId
+                    and accessoryType
+                then
+                    local info = {
+                        AssetId = assetId,
+                        AccessoryType =
+                            accessoryType
+                    }
+
+                    if source.IsLayered ~= nil then
+                        info.IsLayered =
+                            source.IsLayered == true
+                            or tostring(
+                                source.IsLayered
+                            ) == "true"
+                    end
+
+                    if source.Order ~= nil then
+                        local order =
+                            tonumber(
+                                source.Order
+                            )
+
+                        if order then
+                            info.Order = order
+                        end
+                    end
+
+                    if source.Puffiness ~= nil then
+                        local puffiness =
+                            tonumber(
+                                source.Puffiness
+                            )
+
+                        if puffiness then
+                            info.Puffiness =
+                                puffiness
+                        end
+                    end
+
+                    local position =
+                        others.avatarImportVector3(
+                            source.Position
+                        )
+
+                    local rotation =
+                        others.avatarImportVector3(
+                            source.Rotation
+                        )
+
+                    local scale =
+                        others.avatarImportVector3(
+                            source.Scale
+                        )
+
+                    if position then
+                        info.Position =
+                            position
+                    end
+
+                    if rotation then
+                        info.Rotation =
+                            rotation
+                    end
+
+                    if scale then
+                        info.Scale =
+                            scale
+                    end
+
+                    table.insert(
+                        accessoryInfo,
+                        info
+                    )
+                end
+            end
+        end
+    end
+
+    if #accessoryInfo > 0 then
+        local accessoriesOK =
+            pcall(function()
+                description:SetAccessories(
+                    accessoryInfo,
+                    true
+                )
+            end)
+
+        if accessoriesOK then
+            appliedFields +=
+                #accessoryInfo
+        else
+            warn(
+                "[Others] Avatar import: SetAccessories failed"
+            )
+        end
+    end
+
+    if appliedFields == 0 then
+        return nil, "NOTHING TO APPLY"
+    end
+
+    return description, data
+end
+
+function others.applyAvatarDump(raw)
+    local description, data =
+        others.parseAvatarDump(raw)
+
+    if not description then
+        if others.status then
+            others.status.Text =
+                "Import failed"
+        end
+        return false
+    end
+
+    local ok =
+        others.applyDescription(
+            description
+        )
+
+    if not ok then
+        return false
+    end
+
+    others.importedDescription =
+        description:Clone()
+
+    if others.status then
+        local version =
+            tostring(
+                data.version or "?"
+            )
+
+        others.status.Text =
+            "Avatar imported • v"
+            .. version
+    end
+
+    return true
+end
+
 function others.applyAll()
     local description =
         others.getDescription()
@@ -12407,6 +12865,273 @@ others.resetButton.TextColor3 =
     )
 others.resetButton.Parent =
     others.toolsFrame
+--// =========================================================
+--// AVATAR IMPORT UI
+--// =========================================================
+others.avatarImportHeader =
+    Instance.new("TextLabel")
+others.avatarImportHeader.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        24
+    )
+others.avatarImportHeader.BackgroundTransparency =
+    1
+others.avatarImportHeader.Text =
+    "AVATAR IMPORT"
+others.avatarImportHeader.TextSize =
+    10
+others.avatarImportHeader.Font =
+    Enum.Font.GothamBold
+others.avatarImportHeader.TextColor3 =
+    Color3.fromRGB(
+        150,
+        150,
+        150
+    )
+others.avatarImportHeader.TextXAlignment =
+    Enum.TextXAlignment.Left
+others.avatarImportHeader.LayoutOrder =
+    nextOrder + 4
+others.avatarImportHeader.Parent =
+    others.page
+
+others.avatarImportFrame =
+    Instance.new("Frame")
+others.avatarImportFrame.Size =
+    UDim2.new(
+        1,
+        -4,
+        0,
+        118
+    )
+others.avatarImportFrame.BackgroundColor3 =
+    Color3.fromRGB(
+        40,
+        40,
+        40
+    )
+others.avatarImportFrame.BorderSizePixel =
+    0
+others.avatarImportFrame.LayoutOrder =
+    nextOrder + 5
+others.avatarImportFrame.Parent =
+    others.page
+
+local avatarImportCorner =
+    Instance.new("UICorner")
+avatarImportCorner.CornerRadius =
+    UDim.new(
+        0,
+        6
+    )
+avatarImportCorner.Parent =
+    others.avatarImportFrame
+
+others.avatarImportBox =
+    Instance.new("TextBox")
+others.avatarImportBox.Size =
+    UDim2.new(
+        1,
+        -92,
+        0,
+        72
+    )
+others.avatarImportBox.Position =
+    UDim2.new(
+        0,
+        8,
+        0,
+        8
+    )
+others.avatarImportBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+others.avatarImportBox.BorderSizePixel =
+    0
+others.avatarImportBox.ClearTextOnFocus =
+    false
+others.avatarImportBox.MultiLine =
+    true
+others.avatarImportBox.TextWrapped =
+    false
+others.avatarImportBox.PlaceholderText =
+    "Paste avatar JSON here"
+others.avatarImportBox.TextSize =
+    10
+others.avatarImportBox.Font =
+    Enum.Font.Code
+others.avatarImportBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+others.avatarImportBox.PlaceholderColor3 =
+    Color3.fromRGB(
+        105,
+        105,
+        105
+    )
+others.avatarImportBox.TextXAlignment =
+    Enum.TextXAlignment.Left
+others.avatarImportBox.TextYAlignment =
+    Enum.TextYAlignment.Top
+others.avatarImportBox.Parent =
+    others.avatarImportFrame
+
+local avatarImportBoxCorner =
+    Instance.new("UICorner")
+avatarImportBoxCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+avatarImportBoxCorner.Parent =
+    others.avatarImportBox
+
+others.avatarImportButton =
+    Instance.new("TextButton")
+others.avatarImportButton.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+others.avatarImportButton.Position =
+    UDim2.new(
+        1,
+        -80,
+        0,
+        30
+    )
+others.avatarImportButton.BackgroundColor3 =
+    Color3.fromRGB(
+        52,
+        52,
+        52
+    )
+others.avatarImportButton.BorderSizePixel =
+    0
+others.avatarImportButton.Text =
+    "IMPORT"
+others.avatarImportButton.TextSize =
+    9
+others.avatarImportButton.Font =
+    Enum.Font.GothamBold
+others.avatarImportButton.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+others.avatarImportButton.Parent =
+    others.avatarImportFrame
+
+local avatarImportButtonCorner =
+    Instance.new("UICorner")
+avatarImportButtonCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+avatarImportButtonCorner.Parent =
+    others.avatarImportButton
+
+others.avatarImportClear =
+    Instance.new("TextButton")
+others.avatarImportClear.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        24
+    )
+others.avatarImportClear.Position =
+    UDim2.new(
+        1,
+        -80,
+        0,
+        62
+    )
+others.avatarImportClear.BackgroundColor3 =
+    Color3.fromRGB(
+        45,
+        45,
+        45
+    )
+others.avatarImportClear.BorderSizePixel =
+    0
+others.avatarImportClear.Text =
+    "CLEAR"
+others.avatarImportClear.TextSize =
+    8
+others.avatarImportClear.Font =
+    Enum.Font.GothamBold
+others.avatarImportClear.TextColor3 =
+    Color3.fromRGB(
+        215,
+        215,
+        215
+    )
+others.avatarImportClear.Parent =
+    others.avatarImportFrame
+
+local avatarImportClearCorner =
+    Instance.new("UICorner")
+avatarImportClearCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+avatarImportClearCorner.Parent =
+    others.avatarImportClear
+
+UnusualFns.addUnusualConnection(
+    others.avatarImportButton.MouseButton1Click:Connect(
+        function()
+            local imported =
+                others.applyAvatarDump(
+                    others.avatarImportBox.Text
+                )
+
+            if imported then
+                others.avatarImportButton.Text =
+                    "APPLIED"
+            else
+                others.avatarImportButton.Text =
+                    "ERROR"
+            end
+
+            task.delay(
+                0.8,
+                function()
+                    pcall(function()
+                        if others.avatarImportButton.Parent then
+                            others.avatarImportButton.Text =
+                                "IMPORT"
+                        end
+                    end)
+                end
+            )
+        end
+    )
+)
+
+UnusualFns.addUnusualConnection(
+    others.avatarImportClear.MouseButton1Click:Connect(
+        function()
+            others.avatarImportBox.Text =
+                ""
+        end
+    )
+)
 others.resetCorner =
     Instance.new("UICorner")
 others.resetCorner.CornerRadius =
@@ -12451,6 +13176,13 @@ task.defer(
     function()
         pcall(function()
             others.loadConfig()
+            if others.avatarImportBox then
+                others.avatarImportBox.Text =
+                    tostring(
+                        savedConfig.others._AvatarImport
+                        or ""
+                    )
+            end
         end)
     end
 )
