@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.93
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.94
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.93"
+local SCRIPT_VERSION = "1.94"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3356,11 +3356,7 @@ function cosmetic.rebuildPicker()
                     0
                 )
             button.BackgroundColor3 =
-                Color3.fromRGB(
-                    31,
-                    35,
-                    42
-                )
+                Color3.fromRGB(255, 0, 0)
             button.BackgroundTransparency = 0
             button.BorderSizePixel = 0
             --// Match the working Emote/Unusual cards.
@@ -3403,11 +3399,7 @@ function cosmetic.rebuildPicker()
                     0
                 )
             preview.BackgroundColor3 =
-                Color3.fromRGB(
-                    31,
-                    35,
-                    42
-                )
+                Color3.fromRGB(0, 255, 0)
             preview.BackgroundTransparency =
                 0
             preview.BorderSizePixel =
@@ -3468,7 +3460,7 @@ function cosmetic.rebuildPicker()
                     255,
                     255
                 )
-            glass.BackgroundTransparency = 0.95
+            glass.BackgroundTransparency = 1
             glass.BorderSizePixel = 0
             glass.ZIndex = 34
             glass.Parent =
@@ -3510,7 +3502,7 @@ function cosmetic.rebuildPicker()
                     0,
                     0
                 )
-            shade.BackgroundTransparency = 0.42
+            shade.BackgroundTransparency = 1
             shade.BorderSizePixel = 0
             shade.ZIndex = 35
             shade.Parent =
