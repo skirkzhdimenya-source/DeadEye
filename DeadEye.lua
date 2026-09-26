@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.27"
+    "DeadEyes v1.28"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1032,68 +1032,8 @@ __UI.CloseStroke.Transparency =
 __UI.CloseStroke.Parent =
     Close
 
---// Small radial surface gradients for the two header buttons.
---// This replaces the visible left-to-right bleed from MainHeader.
-__UI.MinimizeGradient =
-    Instance.new("UIGradient")
-__UI.MinimizeGradient.Name =
-    "RadialSurface"
-__UI.MinimizeGradient.Type =
-    Enum.GradientType.Radial
-__UI.MinimizeGradient.Scale =
-    0.78
-__UI.MinimizeGradient.Color =
-    ColorSequence.new({
-        ColorSequenceKeypoint.new(
-            0,
-            Color3.fromRGB(
-                64,
-                68,
-                78
-            )
-        ),
-        ColorSequenceKeypoint.new(
-            1,
-            Color3.fromRGB(
-                45,
-                45,
-                45
-            )
-        )
-    })
-__UI.MinimizeGradient.Parent =
-    Minimize
-
-__UI.CloseGradient =
-    Instance.new("UIGradient")
-__UI.CloseGradient.Name =
-    "RadialSurface"
-__UI.CloseGradient.Type =
-    Enum.GradientType.Radial
-__UI.CloseGradient.Scale =
-    0.78
-__UI.CloseGradient.Color =
-    ColorSequence.new({
-        ColorSequenceKeypoint.new(
-            0,
-            Color3.fromRGB(
-                66,
-                70,
-                80
-            )
-        ),
-        ColorSequenceKeypoint.new(
-            1,
-            Color3.fromRGB(
-                45,
-                45,
-                50
-            )
-        )
-    })
-__UI.CloseGradient.Parent =
-    Close
-
+--// Header button surfaces stay solid.
+--// Their hover light is the centered UIShadow created below.
 --// =========================================================
 --// STATUS
 --// =========================================================
@@ -11564,7 +11504,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.27"
+            MainTitle.Text = "DeadEyes v1.28"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11586,7 +11526,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.27"
+            MainTitle.Text = "DeadEyes v1.28"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11611,7 +11551,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.27"
+            MainTitle.Text = "DeadEyes v1.28"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11633,7 +11573,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.27"
+            MainTitle.Text = "DeadEyes v1.28"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11658,7 +11598,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.27"
+            MainTitle.Text = "DeadEyes v1.28"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14650,14 +14590,16 @@ end
 
 --// =========================================================
 --// =========================================================
+--// =========================================================
 --// GUI BUTTON MOTION
 --// Soft centered hover light + press animation.
+--// Uses UIShadow so the light is always rendered BELOW the button.
 --// =========================================================
 __UI.TweenService =
     game:GetService("TweenService")
 
-__UI.DeadEyeHoverGlows =
-    __UI.DeadEyeHoverGlows or {}
+__UI.DeadEyeHoverShadows =
+    __UI.DeadEyeHoverShadows or {}
 
 function __UI.styleButtonMotion(button)
     if not button
@@ -14689,7 +14631,7 @@ function __UI.styleButtonMotion(button)
         return
     end
 
-    --// Keep the existing centered enlargement exactly as it is.
+    --// Keep the existing centered enlargement unchanged.
     local hasLayout = false
 
     for _, child in ipairs(
@@ -14785,110 +14727,98 @@ function __UI.styleButtonMotion(button)
         end
     end
 
-    --// Every button gets its own halo.
-    --// It is slightly larger than the button so only the soft
-    --// outer part remains visible around the button itself.
-    local glow =
-        Instance.new("Frame")
-
-    glow.Name =
-        "DeadEyeHoverGlow"
-
-    glow.BackgroundColor3 =
-        Color3.fromRGB(
-            190,
-            204,
-            226
+    --// One shadow per button.
+    --// UIShadow is rendered underneath its parent, so it cannot
+    --// cover the button itself.
+    local shadow =
+        button:FindFirstChild(
+            "DeadEyeHoverGlow"
         )
 
-    glow.BackgroundTransparency =
-        1
+    if not shadow then
+        local success, result =
+            pcall(function()
+                return Instance.new("UIShadow")
+            end)
 
-    glow.BorderSizePixel =
-        0
+        if success
+            and result
+        then
+            shadow =
+                result
 
-    glow.Visible =
-        false
+            shadow.Name =
+                "DeadEyeHoverGlow"
 
-    glow.Active =
-        false
+            shadow.Color =
+                Color3.fromRGB(
+                    190,
+                    204,
+                    226
+                )
 
-    glow.ZIndex =
-        0
+            shadow.Offset =
+                UDim2.new(
+                    0,
+                    0,
+                    0,
+                    0
+                )
 
-    glow.Parent =
-        ScreenGui
+            --// Compact halo for the two header buttons so they
+            --// do not run into each other.
+            if button == Minimize
+                or button == Close
+            then
+                shadow.Spread =
+                    UDim2.fromOffset(
+                        2,
+                        2
+                    )
 
-    local gradient =
-        Instance.new("UIGradient")
+                shadow.BlurRadius =
+                    UDim.new(
+                        0,
+                        4
+                    )
+            else
+                shadow.Spread =
+                    UDim2.fromOffset(
+                        8,
+                        8
+                    )
 
-    gradient.Name =
-        "SoftRadial"
+                shadow.BlurRadius =
+                    UDim.new(
+                        0,
+                        7
+                    )
+            end
 
-    gradient.Type =
-        Enum.GradientType.Radial
-
-    gradient.Color =
-        ColorSequence.new(
-            glow.BackgroundColor3
-        )
-
-    gradient.Transparency =
-        NumberSequence.new({
-            NumberSequenceKeypoint.new(
-                0,
-                0.10
-            ),
-            NumberSequenceKeypoint.new(
-                0.28,
-                0.18
-            ),
-            NumberSequenceKeypoint.new(
-                0.48,
-                0.36
-            ),
-            NumberSequenceKeypoint.new(
-                0.66,
-                0.58
-            ),
-            NumberSequenceKeypoint.new(
-                0.80,
-                0.76
-            ),
-            NumberSequenceKeypoint.new(
-                0.91,
-                0.90
-            ),
-            NumberSequenceKeypoint.new(
-                0.98,
-                0.98
-            ),
-            NumberSequenceKeypoint.new(
-                1,
+            shadow.Transparency =
                 1
-            )
-        })
 
-    gradient.Parent =
-        glow
+            shadow.Enabled =
+                true
 
-    __UI.DeadEyeHoverGlows[button] =
-        glow
+            shadow.ZIndex =
+                -1
+
+            shadow.Parent =
+                button
+
+            __UI.DeadEyeHoverShadows[button] =
+                shadow
+        end
+    end
+
+    local hovered = false
+    local scaleTween
+    local shadowTween
 
     local compact =
         button == Minimize
         or button == Close
-
-    --// Minimize/Close are very close together, so their halo is
-    --// intentionally only 2px larger than the button.
-    local margin =
-        compact
-        and 2
-        or 8
-
-    local hovered = false
-    local scaleTween
-    local glowTween
 
     local enterInfo =
         TweenInfo.new(
@@ -14916,105 +14846,45 @@ function __UI.styleButtonMotion(button)
             pcall(function()
                 scaleTween:Cancel()
             end)
-            scaleTween = nil
+
+            scaleTween =
+                nil
         end
     end
 
-    local function cancelGlowTween()
-        if glowTween then
+    local function cancelShadowTween()
+        if shadowTween then
             pcall(function()
-                glowTween:Cancel()
+                shadowTween:Cancel()
             end)
-            glowTween = nil
+
+            shadowTween =
+                nil
         end
     end
 
-    local function updateGlow()
-        if not hovered
-            or not button.Parent
-        then
-            glow.Visible =
-                false
-            return
-        end
-
-        local position =
-            button.AbsolutePosition
-
-        local size =
-            button.AbsoluteSize
-
-        glow.Position =
-            UDim2.fromOffset(
-                position.X - margin,
-                position.Y - margin
-            )
-
-        glow.Size =
-            UDim2.fromOffset(
-                size.X + (margin * 2),
-                size.Y + (margin * 2)
-            )
-
-        local glowWidth =
-            glow.AbsoluteSize.X
-
-        local glowHeight =
-            glow.AbsoluteSize.Y
-
-        local average =
-            (
-                glowWidth
-                + glowHeight
-            ) * 0.5
-
-        local largest =
-            math.max(
-                glowWidth,
-                glowHeight
-            )
-
-        if average > 0 then
-            --// Radial radius follows the largest button dimension
-            --// while the halo still fades out at its own edge.
-            gradient.Scale =
-                math.max(
-                    1,
-                    (
-                        largest
-                        / average
-                    ) * 1.08
-                )
-        end
-
-        glow.ZIndex =
-            math.max(
-                0,
-                button.ZIndex - 1
-            )
-
-        glow.Visible =
-            true
-    end
-
-    local function tweenGlow(
+    local function tweenShadow(
         info,
         transparency
     )
-        cancelGlowTween()
+        if not shadow then
+            return
+        end
+
+        cancelShadowTween()
 
         pcall(function()
-            glowTween =
+            shadowTween =
                 __UI.TweenService:Create(
-                    glow,
+                    shadow,
                     info,
                     {
-                        BackgroundTransparency =
+                        Transparency =
                             transparency
                     }
                 )
 
-            glowTween:Play()
+            shadowTween:Play()
         end)
     end
 
@@ -15044,16 +14914,6 @@ function __UI.styleButtonMotion(button)
     end
 
     addConnection(
-        RunService.RenderStepped:Connect(
-            function()
-                if hovered then
-                    updateGlow()
-                end
-            end
-        )
-    )
-
-    addConnection(
         button.MouseEnter:Connect(
             function()
                 if not button.Parent then
@@ -15061,20 +14921,19 @@ function __UI.styleButtonMotion(button)
                 end
 
                 hovered = true
-                updateGlow()
 
                 tweenScale(
                     1.018,
                     enterInfo
                 )
 
-                --// The radial light is centered under the button;
-                --// the middle is hidden by the button itself.
-                tweenGlow(
+                --// The shadow is centered on the button itself,
+                --// then softly spreads outward from its edges.
+                tweenShadow(
                     enterInfo,
                     compact
-                    and 0.42
-                    or 0.35
+                    and 0.58
+                    or 0.48
                 )
             end
         )
@@ -15094,19 +14953,9 @@ function __UI.styleButtonMotion(button)
                     leaveInfo
                 )
 
-                tweenGlow(
+                tweenShadow(
                     leaveInfo,
                     1
-                )
-
-                task.delay(
-                    0.23,
-                    function()
-                        if not hovered then
-                            glow.Visible =
-                                false
-                        end
-                    end
                 )
             end
         )
@@ -15124,11 +14973,11 @@ function __UI.styleButtonMotion(button)
                     pressInfo
                 )
 
-                tweenGlow(
+                tweenShadow(
                     pressInfo,
                     compact
-                    and 0.52
-                    or 0.46
+                    and 0.68
+                    or 0.60
                 )
             end
         )
@@ -15147,11 +14996,11 @@ function __UI.styleButtonMotion(button)
                         enterInfo
                     )
 
-                    tweenGlow(
+                    tweenShadow(
                         enterInfo,
                         compact
-                        and 0.42
-                        or 0.35
+                        and 0.58
+                        or 0.48
                     )
                 else
                     tweenScale(
@@ -15159,7 +15008,7 @@ function __UI.styleButtonMotion(button)
                         leaveInfo
                     )
 
-                    tweenGlow(
+                    tweenShadow(
                         leaveInfo,
                         1
                     )
@@ -15171,17 +15020,13 @@ function __UI.styleButtonMotion(button)
     addConnection(
         button.Destroying:Connect(
             function()
-                cancelGlowTween()
+                cancelShadowTween()
                 cancelScaleTween()
 
-                if __UI.DeadEyeHoverGlows then
-                    __UI.DeadEyeHoverGlows[button] =
+                if __UI.DeadEyeHoverShadows then
+                    __UI.DeadEyeHoverShadows[button] =
                         nil
                 end
-
-                pcall(function()
-                    glow:Destroy()
-                end)
             end
         )
     )
