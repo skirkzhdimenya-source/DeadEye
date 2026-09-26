@@ -1,4 +1,12 @@
 --// =========================================================
+--// DEADEYE VERSION
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.81
+--//
+--// ВАЖНО:
+--// После каждого полностью завершённого изменения скрипта
+--// обязательно повышать версию на 0.01.
+--// Пример: v1.80 -> v1.81 -> v1.82.
+--// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
 --// Каждый слот:
@@ -24,6 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
+local SCRIPT_VERSION = "1.81"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -921,7 +930,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.80"
+    "DeadEyes v" .. SCRIPT_VERSION
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1702,6 +1711,10 @@ local unusualRuntime = {
     appliedRig = nil,
     originalId = nil,
     replacementId = nil,
+    --// Rule state:
+    --// originalId/replacementId describe the configured swap only.
+    --// currentEquippedId describes what the player actually has equipped.
+    currentEquippedId = nil,
     nativeSnapshot = nil,
     reapplyGeneration = 0,
     animationSource = nil,
@@ -7385,6 +7398,8 @@ function UnusualFns.restoreUnusual()
         nil
     unusualRuntime.originalId =
         nil
+    unusualRuntime.currentEquippedId =
+        runtimeRestoreId
     unusualRuntime.replacementId =
         nil
     unusualRuntime.nativeSnapshot =
@@ -7468,6 +7483,8 @@ function UnusualFns.activateUnusual()
         visualRig
     unusualRuntime.originalId =
         equippedId
+    unusualRuntime.currentEquippedId =
+        equippedId
     unusualRuntime.replacementId =
         tonumber(unusualSlot.replaceId)
     return true
@@ -7537,19 +7554,45 @@ function UnusualFns.reapplyUnusual()
                             unusualSlot.originalId
                         )
                 then
-                    local hadActiveSwap =
-                        unusualActive
-                            or unusualRuntime.originalId
+                    --// The player changed the actually equipped Unusual.
+                    --// Do NOT restore unusualRuntime.originalId here:
+                    --// that is only the configured swap rule (for example 1 -> 2).
+                    --// The new equipped effect is now the real current state.
+                    unusualRuntime.currentEquippedId =
+                        tonumber(equippedId)
 
-                    if hadActiveSwap then
-                        unusualActive = true
+                    UnusualFns.removeOurUnusualFX()
+                    task.wait()
+
+                    if tonumber(equippedId)
+                        and tonumber(equippedId) ~= 0
+                    then
+                        pcall(function()
+                            UnusualFns.removeOriginalUnusualFX(
+                                unusualRuntime.originalId
+                                    or unusualSlot.originalId,
+                                visualRig,
+                                playerCharacter
+                            )
+                        end)
+
+                        task.wait()
 
                         pcall(function()
-                            UnusualFns.restoreUnusual()
+                            applyUnusualFX(
+                                tonumber(equippedId),
+                                visualRig,
+                                playerCharacter
+                            )
                         end)
                     end
 
+                    unusualActive = false
                     unusualEnabled = false
+                    unusualRuntime.appliedRig = visualRig
+                    unusualRuntime.originalId = nil
+                    unusualRuntime.replacementId = nil
+                    unusualRuntime.nativeSnapshot = nil
                     genv.UNUSUAL_SWAPPER_ENABLED =
                         false
                     break
@@ -12477,7 +12520,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.80"
+            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12499,7 +12542,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.80"
+            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12524,7 +12567,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.80"
+            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12546,7 +12589,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.80"
+            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12571,7 +12614,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.80"
+            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12667,24 +12710,50 @@ local function cleanupUnusual()
     unusualDestroyed =
         true
 
-    local restoreNativeUnusual =
-        unusualActive
-        or unusualRuntime.originalId
+    --// originalId is the configured swap source, not necessarily
+    --// the effect the player currently has equipped.
+    local runtimeCurrentEquippedId =
+        tonumber(
+            UnusualFns.getEquippedUnusualId()
+        )
+
+    unusualRuntime.currentEquippedId =
+        runtimeCurrentEquippedId
 
     local runtimeOriginalId =
         tonumber(
             unusualRuntime.originalId
         )
 
-    if not runtimeOriginalId
-        or runtimeOriginalId == 0
+    --// Prefer the real current loadout. This is what must remain
+    --// after DeadEye closes, even if the player changed Unusuals
+    --// after enabling the swap.
+    local runtimeRestoreId =
+        runtimeCurrentEquippedId
+
+    if not runtimeRestoreId
+        or runtimeRestoreId == 0
     then
-        runtimeOriginalId =
-            UnusualFns.getEquippedUnusualId()
+        runtimeRestoreId =
+            runtimeOriginalId
     end
+
+    local restoreNativeUnusual =
+        unusualActive
+        or runtimeOriginalId
 
     local runtimeSnapshot =
         unusualRuntime.nativeSnapshot
+
+    --// A snapshot captured for the old mapped Unusual cannot be
+    --// used after the player has manually equipped another one.
+    if runtimeRestoreId
+        and runtimeOriginalId
+        and tonumber(runtimeRestoreId)
+            ~= tonumber(runtimeOriginalId)
+    then
+        runtimeSnapshot = nil
+    end
 
     local runtimeSnapshotRig =
         unusualRuntime.appliedRig
@@ -12747,8 +12816,8 @@ local function cleanupUnusual()
     end
 
     if restoreNativeUnusual
-        and runtimeOriginalId
-        and runtimeOriginalId ~= 0
+        and runtimeRestoreId
+        and runtimeRestoreId ~= 0
     then
         pcall(function()
             local visualRig =
@@ -12770,14 +12839,14 @@ local function cleanupUnusual()
                     )
                 else
                     UnusualFns.removeOriginalUnusualFX(
-                        runtimeOriginalId,
+                        runtimeRestoreId,
                         visualRig,
                         playerCharacter
                     )
                     task.wait()
 
                     applyUnusualFX(
-                        runtimeOriginalId,
+                        runtimeRestoreId,
                         visualRig,
                         playerCharacter
                     )
@@ -12807,8 +12876,8 @@ local function cleanupUnusual()
             UnusualFns.getUnusualPlayerCharacter()
 
         if finalVisualRig
-            and runtimeOriginalId
-            and runtimeOriginalId ~= 0
+            and runtimeRestoreId
+            and runtimeRestoreId ~= 0
         then
             UnusualFns.removeOurUnusualFX()
 
@@ -12825,14 +12894,14 @@ local function cleanupUnusual()
 
             if not restoredFinal then
                 UnusualFns.removeOriginalUnusualFX(
-                    runtimeOriginalId,
+                    runtimeRestoreId,
                     finalVisualRig,
                     finalPlayerCharacter
                 )
                 task.wait()
 
                 applyUnusualFX(
-                    runtimeOriginalId,
+                    runtimeRestoreId,
                     finalVisualRig,
                     finalPlayerCharacter
                 )
