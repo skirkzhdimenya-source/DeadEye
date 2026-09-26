@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.28"
+    "DeadEyes v1.29"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -3686,7 +3686,7 @@ function cosmetic.buildUI()
         label.Size =
             UDim2.new(
                 0,
-                72,
+                64,
                 1,
                 0
             )
@@ -3733,7 +3733,7 @@ function cosmetic.buildUI()
         a.Position =
             UDim2.new(
                 0,
-                70,
+                78,
                 0.5,
                 -16
             )
@@ -3749,7 +3749,7 @@ function cosmetic.buildUI()
             or "Select"
         a.TextSize = 10
         a.Font =
-            Enum.Font.Gotham
+            Enum.Font.GothamBold
         a.TextColor3 =
             Color3.fromRGB(
                 255,
@@ -3780,14 +3780,14 @@ function cosmetic.buildUI()
         arrow.Size =
             UDim2.new(
                 0,
-                14,
+                12,
                 0,
                 32
             )
         arrow.Position =
             UDim2.new(
                 0,
-                152,
+                164,
                 0.5,
                 -16
             )
@@ -3821,7 +3821,7 @@ function cosmetic.buildUI()
         b.Position =
             UDim2.new(
                 0,
-                168,
+                182,
                 0.5,
                 -16
             )
@@ -3837,7 +3837,7 @@ function cosmetic.buildUI()
             or "NONE"
         b.TextSize = 10
         b.Font =
-            Enum.Font.Gotham
+            Enum.Font.GothamBold
         b.TextColor3 =
             Color3.fromRGB(
                 255,
@@ -3877,7 +3877,7 @@ function cosmetic.buildUI()
         addButton.Position =
             UDim2.new(
                 0,
-                254,
+                270,
                 0.5,
                 -16
             )
@@ -3923,14 +3923,14 @@ function cosmetic.buildUI()
         removeButton.Size =
             UDim2.new(
                 0,
-                45,
+                42,
                 0,
                 32
             )
         removeButton.Position =
             UDim2.new(
                 0,
-                307,
+                326,
                 0.5,
                 -16
             )
@@ -7582,7 +7582,7 @@ unusualOriginalButton.Text =
 unusualOriginalButton.TextSize =
     11
 unusualOriginalButton.Font =
-    Enum.Font.Gotham
+            Enum.Font.GothamBold
 unusualOriginalButton.TextColor3 =
     Color3.fromRGB(
         255,
@@ -7666,7 +7666,7 @@ unusualReplaceButton.Text =
 unusualReplaceButton.TextSize =
     11
 unusualReplaceButton.Font =
-    Enum.Font.Gotham
+            Enum.Font.GothamBold
 unusualReplaceButton.TextColor3 =
     Color3.fromRGB(
         255,
@@ -7888,7 +7888,7 @@ unusualPickerSearch.Text =
 unusualPickerSearch.TextSize =
     12
 unusualPickerSearch.Font =
-    Enum.Font.Gotham
+            Enum.Font.GothamBold
 unusualPickerSearch.TextColor3 =
     Color3.fromRGB(
         255,
@@ -8140,7 +8140,7 @@ function UnusualFns.rebuildUnusualPicker()
             button.TextSize =
                 11
             button.Font =
-                Enum.Font.Gotham
+        Enum.Font.GothamBold
             button.TextColor3 =
                 Color3.fromRGB(
                     255,
@@ -9983,7 +9983,7 @@ mainJump.delayBox.Text =
     )
 mainJump.delayBox.TextSize = 11
 mainJump.delayBox.Font =
-    Enum.Font.Gotham
+            Enum.Font.GothamBold
 mainJump.delayBox.TextColor3 =
     Color3.fromRGB(
         255,
@@ -10103,7 +10103,7 @@ mainJump.hotkeyBox.Text =
     mainJump.hotkeyName
 mainJump.hotkeyBox.TextSize = 11
 mainJump.hotkeyBox.Font =
-    Enum.Font.Gotham
+            Enum.Font.GothamBold
 mainJump.hotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
@@ -10168,7 +10168,7 @@ mainJump.hideUIHotkeyBox.Text =
     mainJump.hideUIHotkeyName
 mainJump.hideUIHotkeyBox.TextSize = 11
 mainJump.hideUIHotkeyBox.Font =
-    Enum.Font.Gotham
+            Enum.Font.GothamBold
 mainJump.hideUIHotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
@@ -10536,7 +10536,7 @@ function others.row(
     box.TextSize =
         11
     box.Font =
-        Enum.Font.Gotham
+            Enum.Font.GothamBold
     box.TextColor3 =
         Color3.fromRGB(
             255,
@@ -11504,7 +11504,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.28"
+            MainTitle.Text = "DeadEyes v1.29"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11526,7 +11526,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.28"
+            MainTitle.Text = "DeadEyes v1.29"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11551,7 +11551,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.28"
+            MainTitle.Text = "DeadEyes v1.29"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11573,7 +11573,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.28"
+            MainTitle.Text = "DeadEyes v1.29"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11598,7 +11598,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.28"
+            MainTitle.Text = "DeadEyes v1.29"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12019,7 +12019,7 @@ for slotIndex = 1, SLOT_COUNT do
     originalButton.TextSize =
         11
     originalButton.Font =
-        Enum.Font.Gotham
+            Enum.Font.GothamBold
     originalButton.TextColor3 =
         Color3.fromRGB(
             255,
@@ -12107,7 +12107,7 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.TextSize =
         11
     replaceButton.Font =
-        Enum.Font.Gotham
+            Enum.Font.GothamBold
     replaceButton.TextColor3 =
         Color3.fromRGB(
             255,
@@ -12382,7 +12382,7 @@ PickerSearch.Text =
 PickerSearch.TextSize =
     12
 PickerSearch.Font =
-    Enum.Font.Gotham
+            Enum.Font.GothamBold
 PickerSearch.TextColor3 =
     Color3.fromRGB(
         255,
@@ -13277,7 +13277,7 @@ local function rebuildPicker()
             button.TextSize =
                 11
             button.Font =
-                Enum.Font.Gotham
+        Enum.Font.GothamBold
             button.TextColor3 =
                 Color3.fromRGB(
                     255,
@@ -14784,14 +14784,14 @@ function __UI.styleButtonMotion(button)
             else
                 shadow.Spread =
                     UDim2.fromOffset(
-                        8,
-                        8
+                        7,
+                        7
                     )
 
                 shadow.BlurRadius =
                     UDim.new(
                         0,
-                        7
+                        6
                     )
             end
 
@@ -14932,8 +14932,8 @@ function __UI.styleButtonMotion(button)
                 tweenShadow(
                     enterInfo,
                     compact
-                    and 0.58
-                    or 0.48
+                    and 0.66
+                    or 0.58
                 )
             end
         )
@@ -14976,8 +14976,8 @@ function __UI.styleButtonMotion(button)
                 tweenShadow(
                     pressInfo,
                     compact
-                    and 0.68
-                    or 0.60
+                    and 0.74
+                    or 0.70
                 )
             end
         )
