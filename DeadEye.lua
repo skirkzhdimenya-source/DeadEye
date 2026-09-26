@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.67"
+    "DeadEyes v1.68"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -10314,78 +10314,85 @@ function mainJump.isGameJumpBlocked()
     local contextJumpBlocked =
         false
 
-    pcall(function()
-        local ContextActionService =
-            game:GetService(
-                "ContextActionService"
-            )
+    local emoteActive =
+        emoteOk
+        and tonumber(emoteId)
+        and tonumber(emoteId) ~= 0
 
-        local actions =
-            ContextActionService:
-                GetAllBoundActionInfo()
-
-        local jumpPriority = 2000
-
-        for name, info in pairs(
-            actions
-        ) do
-            local actionName =
-                string.lower(
-                    tostring(name)
+    if not emoteActive then
+        pcall(function()
+            local ContextActionService =
+                game:GetService(
+                    "ContextActionService"
                 )
 
-            if actionName == "jumpaction"
-                and type(info) == "table"
-            then
-                jumpPriority =
-                    tonumber(
-                        info.priorityLevel
-                    )
-                    or jumpPriority
-            end
-        end
+            local actions =
+                ContextActionService:
+                    GetAllBoundActionInfo()
 
-        for name, info in pairs(
-            actions
-        ) do
-            if type(info) == "table"
-                and not contextJumpBlocked
-            then
+            local jumpPriority = 2000
+
+            for name, info in pairs(
+                actions
+            ) do
                 local actionName =
                     string.lower(
                         tostring(name)
                     )
 
-                if actionName
-                    ~= "jumpaction"
+                if actionName == "jumpaction"
+                    and type(info) == "table"
                 then
-                    local priority =
+                    jumpPriority =
                         tonumber(
                             info.priorityLevel
                         )
-                        or 0
+                        or jumpPriority
+                end
+            end
 
-                    if priority
-                        > jumpPriority
+            for name, info in pairs(
+                actions
+            ) do
+                if type(info) == "table"
+                    and not contextJumpBlocked
+                then
+                    local actionName =
+                        string.lower(
+                            tostring(name)
+                        )
+
+                    if actionName
+                        ~= "jumpaction"
                     then
-                        for _, inputType in ipairs(
-                            info.inputTypes
-                                or {}
-                        ) do
-                            if inputType
-                                    == Enum.PlayerActions.CharacterJump
-                                or inputType
-                                    == Enum.KeyCode.Space
-                            then
-                                contextJumpBlocked = true
-                                break
+                        local priority =
+                            tonumber(
+                                info.priorityLevel
+                            )
+                            or 0
+
+                        if priority
+                            > jumpPriority
+                        then
+                            for _, inputType in ipairs(
+                                info.inputTypes
+                                    or {}
+                            ) do
+                                if inputType
+                                        == Enum.PlayerActions.CharacterJump
+                                    or inputType
+                                        == Enum.KeyCode.Space
+                                then
+                                    contextJumpBlocked = true
+                                    break
+                                end
                             end
                         end
                     end
                 end
             end
-        end
-    end)
+        end)
+    end
 
     return contextJumpBlocked
 end
@@ -10402,30 +10409,6 @@ function mainJump.canJump()
         == Enum.Material.Air
     then
         return false
-    end
-
-    local emoteActive =
-        false
-
-    do
-        local object =
-            getCharacterObject()
-
-        if object
-            and object.DataRegistry
-        then
-            local ok, emoteId =
-                pcall(function()
-                    return object.DataRegistry:Get(
-                        "Emote"
-                    )
-                end)
-
-            emoteActive =
-                ok
-                and tonumber(emoteId)
-                and tonumber(emoteId) ~= 0
-        end
     end
 
     if mainJump.isGameJumpBlocked() then
@@ -12539,7 +12522,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.67"
+            MainTitle.Text = "DeadEyes v1.68"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12561,7 +12544,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.67"
+            MainTitle.Text = "DeadEyes v1.68"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12586,7 +12569,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.67"
+            MainTitle.Text = "DeadEyes v1.68"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12608,7 +12591,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.67"
+            MainTitle.Text = "DeadEyes v1.68"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12633,7 +12616,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.67"
+            MainTitle.Text = "DeadEyes v1.68"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
