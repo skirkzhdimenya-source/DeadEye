@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.60"
+    "DeadEyes v1.61"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1702,6 +1702,7 @@ local unusualRuntime = {
     appliedRig = nil,
     originalId = nil,
     replacementId = nil,
+    nativeSnapshot = nil,
     reapplyGeneration = 0,
     animationSource = nil,
     animationLinks = {},
@@ -2336,12 +2337,24 @@ function cosmetic.refreshRig()
     local restoreNativeUnusualId =
         nil
 
-    if equippedUnusualId
+    local cosmeticUnusualSnapshot =
+        nil
+
+    if restoreUnusualSwap then
+        cosmeticUnusualSnapshot =
+            unusualRuntime.nativeSnapshot
+    elseif equippedUnusualId
         and equippedUnusualId ~= 0
-        and not restoreUnusualSwap
     then
         restoreNativeUnusualId =
             tonumber(equippedUnusualId)
+
+        cosmeticUnusualSnapshot =
+            UnusualFns.captureNativeUnusualSnapshot(
+                equippedUnusualId,
+                UnusualFns.getUnusualVisualRig(),
+                UnusualFns.getUnusualPlayerCharacter()
+            )
     end
 
     if restoreUnusualSwap then
@@ -2591,23 +2604,23 @@ function cosmetic.refreshRig()
                     end
                 end)
             elseif restoreNativeUnusualId then
-                pcall(function()
-                    UnusualFns.removeOriginalUnusualFX(
-                        restoreNativeUnusualId,
-                        UnusualFns.getUnusualVisualRig(),
-                        UnusualFns.getUnusualPlayerCharacter()
-                    )
-                end)
-
-                task.wait()
-
-                pcall(function()
-                    applyUnusualFX(
-                        restoreNativeUnusualId,
-                        UnusualFns.getUnusualVisualRig(),
-                        UnusualFns.getUnusualPlayerCharacter()
-                    )
-                end)
+                if cosmeticUnusualSnapshot then
+                    pcall(function()
+                        UnusualFns.restoreNativeUnusualSnapshot(
+                            cosmeticUnusualSnapshot,
+                            UnusualFns.getUnusualVisualRig(),
+                            UnusualFns.getUnusualPlayerCharacter()
+                        )
+                    end)
+                else
+                    pcall(function()
+                        applyUnusualFX(
+                            restoreNativeUnusualId,
+                            UnusualFns.getUnusualVisualRig(),
+                            UnusualFns.getUnusualPlayerCharacter()
+                        )
+                    end)
+                end
             end
         end)
 
@@ -7048,6 +7061,249 @@ end
 --// =========================================================
 --// RESTORE UNUSUAL
 -- =========================================================
+function UnusualFns.captureNativeUnusualSnapshot(
+    id,
+    visualRig,
+    playerCharacter
+)
+    local signature =
+        UnusualFns.buildOriginalUnusualSignature(
+            id,
+            visualRig
+        )
+
+    if not signature then
+        return nil
+    end
+
+    local snapshot = {
+        parts = {}
+    }
+
+    local function getTargetPart(partName)
+        if partName == "HumanoidRootPart" then
+            return playerCharacter
+                and playerCharacter:FindFirstChild(
+                    "HumanoidRootPart"
+                )
+        end
+
+        return visualRig
+            and visualRig:FindFirstChild(
+                partName
+            )
+    end
+
+    local function matchesObject(object, info)
+        if object.ClassName ~= info.Class
+            or object.Name ~= info.Name
+        then
+            return false
+        end
+
+        if object:IsA("MeshPart")
+            and info.MeshId
+        then
+            return tostring(object.MeshId) == info.MeshId
+                and tostring(object.TextureID)
+                    == info.TextureId
+        end
+
+        return true
+    end
+
+    for partName, objects in pairs(signature) do
+        local targetPart =
+            getTargetPart(partName)
+
+        if targetPart
+            and targetPart:IsA("BasePart")
+        then
+            local partSnapshot = {
+                partName = partName,
+                objects = {},
+                joints = {}
+            }
+
+            for _, existing in ipairs(
+                targetPart:GetChildren()
+            ) do
+                local matched = false
+
+                for _, info in ipairs(objects) do
+                    if matchesObject(existing, info) then
+                        matched = true
+                        break
+                    end
+                end
+
+                if matched then
+                    local clone
+                    pcall(function()
+                        clone = existing:Clone()
+                    end)
+
+                    if clone then
+                        table.insert(
+                            partSnapshot.objects,
+                            clone
+                        )
+                    end
+                end
+            end
+
+            for _, joint in ipairs(
+                targetPart:GetChildren()
+            ) do
+                if joint:IsA("Weld")
+                    or joint:IsA("WeldConstraint")
+                    or joint:IsA("Motor6D")
+                    or joint:IsA("Motor")
+                then
+                    for _, info in ipairs(objects) do
+                        if joint.Name == info.Name then
+                            local clone
+                            pcall(function()
+                                clone = joint:Clone()
+                            end)
+
+                            if clone then
+                                table.insert(
+                                    partSnapshot.joints,
+                                    clone
+                                )
+                            end
+
+                            break
+                        end
+                    end
+                end
+            end
+
+            if #partSnapshot.objects > 0
+                or #partSnapshot.joints > 0
+            then
+                table.insert(
+                    snapshot.parts,
+                    partSnapshot
+                )
+            end
+        end
+    end
+
+    if #snapshot.parts == 0 then
+        return nil
+    end
+
+    return snapshot
+end
+
+function UnusualFns.restoreNativeUnusualSnapshot(
+    snapshot,
+    visualRig,
+    playerCharacter
+)
+    if not snapshot then
+        return false
+    end
+
+    local restored = false
+
+    for _, partSnapshot in ipairs(snapshot.parts) do
+        local targetPart
+
+        if partSnapshot.partName
+            == "HumanoidRootPart"
+        then
+            targetPart =
+                playerCharacter
+                and playerCharacter:FindFirstChild(
+                    "HumanoidRootPart"
+                )
+        else
+            targetPart =
+                visualRig
+                and visualRig:FindFirstChild(
+                    partSnapshot.partName
+                )
+        end
+
+        if targetPart
+            and targetPart:IsA("BasePart")
+        then
+            for _, savedObject in ipairs(
+                partSnapshot.objects
+            ) do
+                local exists = false
+
+                for _, current in ipairs(
+                    targetPart:GetChildren()
+                ) do
+                    if current.Name
+                        == savedObject.Name
+                        and current.ClassName
+                            == savedObject.ClassName
+                    then
+                        exists = true
+                        break
+                    end
+                end
+
+                if not exists then
+                    local clone
+
+                    pcall(function()
+                        clone =
+                            savedObject:Clone()
+                    end)
+
+                    if clone then
+                        clone.Parent =
+                            targetPart
+                        restored = true
+                    end
+                end
+            end
+
+            for _, savedJoint in ipairs(
+                partSnapshot.joints
+            ) do
+                local exists = false
+
+                for _, current in ipairs(
+                    targetPart:GetChildren()
+                ) do
+                    if current.Name
+                        == savedJoint.Name
+                        and current.ClassName
+                            == savedJoint.ClassName
+                    then
+                        exists = true
+                        break
+                    end
+                end
+
+                if not exists then
+                    local clone
+
+                    pcall(function()
+                        clone =
+                            savedJoint:Clone()
+                    end)
+
+                    if clone then
+                        clone.Parent =
+                            targetPart
+                        restored = true
+                    end
+                end
+            end
+        end
+    end
+
+    return restored
+end
+
 function UnusualFns.restoreUnusual()
     if not unusualActive
         and not unusualRuntime.originalId
@@ -7079,20 +7335,27 @@ function UnusualFns.restoreUnusual()
         UnusualFns.removeOurUnusualFX()
         task.wait()
 
-        --// Remove an already-present copy first so restoration is
-        --// idempotent after cosmetic rebuilds/cleanup.
-        UnusualFns.removeOriginalUnusualFX(
-            originalId,
-            visualRig,
-            playerCharacter
-        )
-        task.wait()
+        local restored =
+            UnusualFns.restoreNativeUnusualSnapshot(
+                unusualRuntime.nativeSnapshot,
+                visualRig,
+                playerCharacter
+            )
 
-        applyUnusualFX(
-            originalId,
-            visualRig,
-            playerCharacter
-        )
+        if not restored then
+            UnusualFns.removeOriginalUnusualFX(
+                originalId,
+                visualRig,
+                playerCharacter
+            )
+            task.wait()
+
+            applyUnusualFX(
+                originalId,
+                visualRig,
+                playerCharacter
+            )
+        end
     end
 
     unusualActive =
@@ -7102,6 +7365,8 @@ function UnusualFns.restoreUnusual()
     unusualRuntime.originalId =
         nil
     unusualRuntime.replacementId =
+        nil
+    unusualRuntime.nativeSnapshot =
         nil
 end
 --// =========================================================
@@ -7136,7 +7401,25 @@ function UnusualFns.activateUnusual()
     if not visualRig then
         return false
     end
-                            UnusualFns.removeOurUnusualFX()
+
+    if not unusualRuntime.nativeSnapshot
+        or tonumber(
+            unusualRuntime.originalId
+        ) ~= tonumber(equippedId)
+    then
+        unusualRuntime.nativeSnapshot =
+            UnusualFns.captureNativeUnusualSnapshot(
+                equippedId,
+                visualRig,
+                playerCharacter
+            )
+    end
+
+    if not unusualRuntime.nativeSnapshot then
+        return false
+    end
+
+    UnusualFns.removeOurUnusualFX()
     task.wait()
     UnusualFns.removeOriginalUnusualFX(
         unusualSlot.originalId,
@@ -12099,7 +12382,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.60"
+            MainTitle.Text = "DeadEyes v1.61"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12121,7 +12404,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.60"
+            MainTitle.Text = "DeadEyes v1.61"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12146,7 +12429,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.60"
+            MainTitle.Text = "DeadEyes v1.61"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12168,7 +12451,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.60"
+            MainTitle.Text = "DeadEyes v1.61"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12193,7 +12476,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.60"
+            MainTitle.Text = "DeadEyes v1.61"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12305,18 +12588,8 @@ local function cleanupUnusual()
             UnusualFns.getEquippedUnusualId()
     end
 
-    unusualEnabled =
-        false
-    unusualActive =
-        false
-
-    pcall(function()
-        others.restore(false)
-    end)
-
-    pcall(function()
-        cosmetic.cleanup()
-    end)
+    local runtimeSnapshot =
+        unusualRuntime.nativeSnapshot
 
     if restoreNativeUnusual
         and runtimeOriginalId
@@ -12330,29 +12603,50 @@ local function cleanupUnusual()
 
             if visualRig then
                 UnusualFns.removeOurUnusualFX()
-
                 task.wait()
 
-                UnusualFns.removeOriginalUnusualFX(
-                    runtimeOriginalId,
-                    visualRig,
-                    playerCharacter
-                )
+                if runtimeSnapshot then
+                    UnusualFns.restoreNativeUnusualSnapshot(
+                        runtimeSnapshot,
+                        visualRig,
+                        playerCharacter
+                    )
+                else
+                    UnusualFns.removeOriginalUnusualFX(
+                        runtimeOriginalId,
+                        visualRig,
+                        playerCharacter
+                    )
+                    task.wait()
 
-                task.wait()
-
-                applyUnusualFX(
-                    runtimeOriginalId,
-                    visualRig,
-                    playerCharacter
-                )
+                    applyUnusualFX(
+                        runtimeOriginalId,
+                        visualRig,
+                        playerCharacter
+                    )
+                end
             end
         end)
     end
 
+    unusualEnabled =
+        false
+    unusualActive =
+        false
+
+    pcall(function()
+        others.restore(false)
+    end)
+
+    pcall(function()
+        cosmetic.cleanup()
+    end)
+
     unusualRuntime.originalId =
         nil
     unusualRuntime.replacementId =
+        nil
+    unusualRuntime.nativeSnapshot =
         nil
 
     genv.DEADEYE_COSMETIC_CLEANUP =
