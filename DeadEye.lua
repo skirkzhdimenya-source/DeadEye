@@ -1032,6 +1032,68 @@ __UI.CloseStroke.Transparency =
 __UI.CloseStroke.Parent =
     Close
 
+--// Small radial surface gradients for the two header buttons.
+--// This replaces the visible left-to-right bleed from MainHeader.
+__UI.MinimizeGradient =
+    Instance.new("UIGradient")
+__UI.MinimizeGradient.Name =
+    "RadialSurface"
+__UI.MinimizeGradient.Type =
+    Enum.GradientType.Radial
+__UI.MinimizeGradient.Scale =
+    0.78
+__UI.MinimizeGradient.Color =
+    ColorSequence.new({
+        ColorSequenceKeypoint.new(
+            0,
+            Color3.fromRGB(
+                64,
+                68,
+                78
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            1,
+            Color3.fromRGB(
+                45,
+                45,
+                45
+            )
+        )
+    })
+__UI.MinimizeGradient.Parent =
+    Minimize
+
+__UI.CloseGradient =
+    Instance.new("UIGradient")
+__UI.CloseGradient.Name =
+    "RadialSurface"
+__UI.CloseGradient.Type =
+    Enum.GradientType.Radial
+__UI.CloseGradient.Scale =
+    0.78
+__UI.CloseGradient.Color =
+    ColorSequence.new({
+        ColorSequenceKeypoint.new(
+            0,
+            Color3.fromRGB(
+                66,
+                70,
+                80
+            )
+        ),
+        ColorSequenceKeypoint.new(
+            1,
+            Color3.fromRGB(
+                45,
+                45,
+                50
+            )
+        )
+    })
+__UI.CloseGradient.Parent =
+    Close
+
 --// =========================================================
 --// STATUS
 --// =========================================================
