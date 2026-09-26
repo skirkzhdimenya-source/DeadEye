@@ -5,7 +5,7 @@
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.83"
+local SCRIPT_VERSION = "1.84"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3618,10 +3618,13 @@ function cosmetic.openPicker(
         and "Select Original"
         or "Select Replacement"
     unusualPickerSearch.Text = ""
-    unusualPicker.Visible = true
     if not cosmeticPickerPreloaded then
         cosmetic.rebuildPicker()
     end
+
+    __UI.animatePickerAppear(
+        unusualPicker
+    )
 end
 
 function cosmetic.buildUI()
