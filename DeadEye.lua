@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.12"
+    "DeadEyes v1.13"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.12"
+            MainTitle.Text = "DeadEyes v1.13"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.12"
+            MainTitle.Text = "DeadEyes v1.13"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.12"
+            MainTitle.Text = "DeadEyes v1.13"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.12"
+            MainTitle.Text = "DeadEyes v1.13"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.12"
+            MainTitle.Text = "DeadEyes v1.13"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14585,6 +14585,333 @@ for _, object in ipairs(
         end)
     end
 end
+
+--// =========================================================
+--// GUI BUTTON MOTION
+--// Soft hover + press animation. This is intentionally kept
+--// separate from button state colors so ON/OFF/category colors
+--// continue to be controlled by the existing GUI logic.
+--// =========================================================
+__UI.TweenService =
+    game:GetService("TweenService")
+
+function __UI.styleButtonMotion(button)
+    if not button
+        or not button:IsA("TextButton")
+        or button:GetAttribute("DeadEyeHoverStyled")
+        or button.Name == "ResizeCorner"
+    then
+        return
+    end
+
+    if string.sub(
+        tostring(button.Name),
+        1,
+        6
+    ) == "Resize"
+    then
+        return
+    end
+
+    button:SetAttribute(
+        "DeadEyeHoverStyled",
+        true
+    )
+
+    local scale =
+        button:FindFirstChild(
+            "DeadEyeHoverScale"
+        )
+
+    if not scale then
+        scale =
+            Instance.new("UIScale")
+        scale.Name =
+            "DeadEyeHoverScale"
+        scale.Scale =
+            1
+        scale.Parent =
+            button
+    end
+
+    local stroke =
+        button:FindFirstChildOfClass(
+            "UIStroke"
+        )
+
+    if not stroke then
+        stroke =
+            Instance.new("UIStroke")
+        stroke.Name =
+            "DeadEyeHoverStroke"
+        stroke.Thickness =
+            1
+        stroke.Transparency =
+            0.92
+        stroke.Color =
+            Color3.fromRGB(
+                205,
+                215,
+                230
+            )
+        stroke.Parent =
+            button
+    end
+
+    local baseScale =
+        scale.Scale
+    local baseBackgroundTransparency =
+        button.BackgroundTransparency
+    local baseStrokeTransparency =
+        stroke.Transparency
+    local baseStrokeThickness =
+        stroke.Thickness
+    local baseTextColor =
+        button.TextColor3
+
+    local hovered = false
+    local scaleTween
+    local visualTween
+
+    local enterInfo =
+        TweenInfo.new(
+            0.14,
+            Enum.EasingStyle.Quint,
+            Enum.EasingDirection.Out
+        )
+
+    local leaveInfo =
+        TweenInfo.new(
+            0.18,
+            Enum.EasingStyle.Quint,
+            Enum.EasingDirection.Out
+        )
+
+    local pressInfo =
+        TweenInfo.new(
+            0.07,
+            Enum.EasingStyle.Quad,
+            Enum.EasingDirection.Out
+        )
+
+    local function cancelTweens()
+        if scaleTween then
+            pcall(function()
+                scaleTween:Cancel()
+            end)
+            scaleTween = nil
+        end
+
+        if visualTween then
+            pcall(function()
+                visualTween:Cancel()
+            end)
+            visualTween = nil
+        end
+    end
+
+    local function tweenTo(
+        targetScale,
+        targetTransparency,
+        targetStrokeTransparency,
+        targetStrokeThickness,
+        targetTextColor,
+        info
+    )
+        cancelTweens()
+
+        pcall(function()
+            scaleTween =
+                __UI.TweenService:Create(
+                    scale,
+                    info,
+                    {
+                        Scale = targetScale
+                    }
+                )
+            scaleTween:Play()
+        end)
+
+        pcall(function()
+            visualTween =
+                __UI.TweenService:Create(
+                    button,
+                    info,
+                    {
+                        BackgroundTransparency =
+                            targetTransparency
+                    }
+                )
+            visualTween:Play()
+        end)
+
+        pcall(function()
+            __UI.TweenService:Create(
+                stroke,
+                info,
+                {
+                    Transparency =
+                        targetStrokeTransparency,
+                    Thickness =
+                        targetStrokeThickness
+                }
+            ):Play()
+        end)
+
+        pcall(function()
+            __UI.TweenService:Create(
+                button,
+                info,
+                {
+                    TextColor3 =
+                        targetTextColor
+                }
+            ):Play()
+        end)
+    end
+
+    addConnection(
+        button.MouseEnter:Connect(
+            function()
+                if not button.Parent then
+                    return
+                end
+
+                hovered = true
+
+                tweenTo(
+                    baseScale * 1.025,
+                    math.max(
+                        0,
+                        baseBackgroundTransparency - 0.08
+                    ),
+                    math.max(
+                        0.42,
+                        baseStrokeTransparency - 0.34
+                    ),
+                    math.max(
+                        baseStrokeThickness,
+                        1.18
+                    ),
+                    Color3.fromRGB(
+                        255,
+                        255,
+                        255
+                    ),
+                    enterInfo
+                )
+            end
+        )
+    )
+
+    addConnection(
+        button.MouseLeave:Connect(
+            function()
+                if not button.Parent then
+                    return
+                end
+
+                hovered = false
+
+                tweenTo(
+                    baseScale,
+                    baseBackgroundTransparency,
+                    baseStrokeTransparency,
+                    baseStrokeThickness,
+                    baseTextColor,
+                    leaveInfo
+                )
+            end
+        )
+    )
+
+    addConnection(
+        button.MouseButton1Down:Connect(
+            function()
+                if not button.Parent then
+                    return
+                end
+
+                tweenTo(
+                    baseScale * 0.985,
+                    baseBackgroundTransparency + 0.015,
+                    math.min(
+                        1,
+                        baseStrokeTransparency + 0.05
+                    ),
+                    baseStrokeThickness,
+                    baseTextColor,
+                    pressInfo
+                )
+            end
+        )
+    )
+
+    addConnection(
+        button.MouseButton1Up:Connect(
+            function()
+                if not button.Parent then
+                    return
+                end
+
+                if hovered then
+                    tweenTo(
+                        baseScale * 1.025,
+                        math.max(
+                            0,
+                            baseBackgroundTransparency - 0.08
+                        ),
+                        math.max(
+                            0.42,
+                            baseStrokeTransparency - 0.34
+                        ),
+                        math.max(
+                            baseStrokeThickness,
+                            1.18
+                        ),
+                        Color3.fromRGB(
+                            255,
+                            255,
+                            255
+                        ),
+                        enterInfo
+                    )
+                else
+                    tweenTo(
+                        baseScale,
+                        baseBackgroundTransparency,
+                        baseStrokeTransparency,
+                        baseStrokeThickness,
+                        baseTextColor,
+                        leaveInfo
+                    )
+                end
+            end
+        )
+    )
+end
+
+for _, object in ipairs(
+    ScreenGui:GetDescendants()
+) do
+    if object:IsA("TextButton") then
+        __UI.styleButtonMotion(object)
+    end
+end
+
+addConnection(
+    ScreenGui.DescendantAdded:Connect(
+        function(object)
+            if object:IsA("TextButton") then
+                task.defer(function()
+                    __UI.styleButtonMotion(
+                        object
+                    )
+                end)
+            end
+        end
+    )
+)
 
 --// INIT
 --// =========================================================
