@@ -13789,6 +13789,14 @@ end
 __UI.PickerAppearTweens =
     __UI.PickerAppearTweens or {}
 
+--// Immutable appearance targets for each picker.
+--// Never use an in-progress tween value as the next final state.
+__UI.PickerAppearFinalSizes =
+    __UI.PickerAppearFinalSizes or {}
+
+__UI.PickerAppearBaseStates =
+    __UI.PickerAppearBaseStates or {}
+
 function __UI.animatePickerAppear(
     picker
 )
@@ -13826,7 +13834,15 @@ function __UI.animatePickerAppear(
         )
 
     local finalSize =
-        picker.Size
+        __UI.PickerAppearFinalSizes[picker]
+
+    if not finalSize then
+        finalSize =
+            picker.Size
+
+        __UI.PickerAppearFinalSizes[picker] =
+            finalSize
+    end
 
     local startSize =
         UDim2.new(
@@ -13858,67 +13874,78 @@ function __UI.animatePickerAppear(
         )
     end
 
-    local states = {}
+    local states =
+        __UI.PickerAppearBaseStates[picker]
+
+    if not states then
+        states = {}
+        __UI.PickerAppearBaseStates[picker] = states
+    end
 
     for _, object in ipairs(
         targets
     ) do
-        local state = {}
+        local state =
+            states[object]
 
-        if object:IsA("GuiObject") then
-            state.background =
-                object.BackgroundTransparency
+        if not state then
+            state = {}
 
-            object.BackgroundTransparency =
-                1
+            if object:IsA("GuiObject") then
+                state.background =
+                    object.BackgroundTransparency
+            end
+
+            if object:IsA("TextLabel")
+                or object:IsA("TextButton")
+                or object:IsA("TextBox")
+            then
+                state.text =
+                    object.TextTransparency
+
+                state.textStroke =
+                    object.TextStrokeTransparency
+            end
+
+            if object:IsA("ImageLabel")
+                or object:IsA("ImageButton")
+            then
+                state.image =
+                    object.ImageTransparency
+            end
+
+            if object:IsA("ScrollingFrame") then
+                state.scrollbar =
+                    object.ScrollBarImageTransparency
+            end
+
+            if object:IsA("UIStroke") then
+                state.stroke =
+                    object.Transparency
+            end
+
+            states[object] = state
         end
 
-        if object:IsA("TextLabel")
-            or object:IsA("TextButton")
-            or object:IsA("TextBox")
-        then
-            state.text =
-                object.TextTransparency
-
-            state.textStroke =
-                object.TextStrokeTransparency
-
-            object.TextTransparency =
-                1
-
-            object.TextStrokeTransparency =
-                1
+        if state.background ~= nil then
+            object.BackgroundTransparency = 1
         end
 
-        if object:IsA("ImageLabel")
-            or object:IsA("ImageButton")
-        then
-            state.image =
-                object.ImageTransparency
-
-            object.ImageTransparency =
-                1
+        if state.text ~= nil then
+            object.TextTransparency = 1
+            object.TextStrokeTransparency = 1
         end
 
-        if object:IsA("ScrollingFrame") then
-            state.scrollbar =
-                object.ScrollBarImageTransparency
-
-            object.ScrollBarImageTransparency =
-                1
+        if state.image ~= nil then
+            object.ImageTransparency = 1
         end
 
-        if object:IsA("UIStroke") then
-            state.stroke =
-                object.Transparency
-
-            object.Transparency =
-                1
+        if state.scrollbar ~= nil then
+            object.ScrollBarImageTransparency = 1
         end
 
-        if next(state) then
-            states[object] =
-                state
+        if state.stroke ~= nil then
+            object.Transparency = 1
         end
     end
 
