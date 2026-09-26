@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.44"
+    "DeadEyes v1.45"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7843,16 +7843,16 @@ __UI.UnusualPickerCloseGlyph.Name =
 __UI.UnusualPickerCloseGlyph.Size =
     UDim2.new(
         0,
-        18,
+        24,
         0,
-        22
+        28
     )
 __UI.UnusualPickerCloseGlyph.Position =
     UDim2.new(
-        0.5,
-        -9,
-        0.5,
-        -11
+        1,
+        -32,
+        0,
+        5
     )
 __UI.UnusualPickerCloseGlyph.BackgroundTransparency =
     1
@@ -7872,10 +7872,12 @@ __UI.UnusualPickerCloseGlyph.TextXAlignment =
     Enum.TextXAlignment.Center
 __UI.UnusualPickerCloseGlyph.TextYAlignment =
     Enum.TextYAlignment.Center
+__UI.UnusualPickerCloseGlyph.Active =
+    false
 __UI.UnusualPickerCloseGlyph.ZIndex =
     32
 __UI.UnusualPickerCloseGlyph.Parent =
-    unusualPickerClose
+    unusualPicker
 unusualPickerSearch =
     Instance.new("TextBox")
 unusualPickerSearch.Size =
@@ -11535,7 +11537,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.44"
+            MainTitle.Text = "DeadEyes v1.45"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11557,7 +11559,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.44"
+            MainTitle.Text = "DeadEyes v1.45"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11582,7 +11584,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.44"
+            MainTitle.Text = "DeadEyes v1.45"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11604,7 +11606,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.44"
+            MainTitle.Text = "DeadEyes v1.45"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11629,7 +11631,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.44"
+            MainTitle.Text = "DeadEyes v1.45"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12365,16 +12367,16 @@ __UI.PickerCloseGlyph.Name =
 __UI.PickerCloseGlyph.Size =
     UDim2.new(
         0,
-        18,
+        24,
         0,
-        22
+        28
     )
 __UI.PickerCloseGlyph.Position =
     UDim2.new(
-        0.5,
-        -9,
-        0.5,
-        -11
+        1,
+        -32,
+        0,
+        5
     )
 __UI.PickerCloseGlyph.BackgroundTransparency =
     1
@@ -12394,10 +12396,12 @@ __UI.PickerCloseGlyph.TextXAlignment =
     Enum.TextXAlignment.Center
 __UI.PickerCloseGlyph.TextYAlignment =
     Enum.TextYAlignment.Center
+__UI.PickerCloseGlyph.Active =
+    false
 __UI.PickerCloseGlyph.ZIndex =
     32
 __UI.PickerCloseGlyph.Parent =
-    PickerClose
+    Picker
 --// =========================================================
 --// PICKER SEARCH
 --// =========================================================
@@ -15061,7 +15065,8 @@ function __UI.styleButtonMotion(button)
 
     if pickerClose then
         shadowTarget =
-            button:FindFirstChild(
+            button.Parent
+            and button.Parent:FindFirstChild(
                 "DeadEyePickerCloseGlyph"
             )
             or button
