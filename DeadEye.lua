@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.57"
+    "DeadEyes v1.58"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -9719,6 +9719,268 @@ function mainJump.destroySensors()
         mainJump.frontSensorPart = nil
     end
 end
+function mainJump.isGameJumpBlocked()
+    local object =
+        getCharacterObject()
+
+    if object then
+        local registry =
+            object.DataRegistry
+
+        if registry then
+            local success, emoteId =
+                pcall(function()
+                    return registry:Get(
+                        "Emote"
+                    )
+                end)
+
+            if success
+                and tonumber(emoteId)
+                and tonumber(emoteId) ~= 0
+            then
+                return true
+            end
+
+            for _, key in ipairs({
+                "CanJump",
+                "JumpAllowed",
+                "JumpEnabled"
+            }) do
+                local ok, value =
+                    pcall(function()
+                        return registry:Get(
+                            key
+                        )
+                    end)
+
+                if ok
+                    and value == false
+                then
+                    return true
+                end
+            end
+
+            for _, key in ipairs({
+                "NoJump",
+                "JumpDisabled",
+                "IsCarried",
+                "IsCarrying",
+                "Inert"
+            }) do
+                local ok, value =
+                    pcall(function()
+                        return registry:Get(
+                            key
+                        )
+                    end)
+
+                if ok
+                    and value == true
+                then
+                    return true
+                end
+            end
+
+            local ok, state =
+                pcall(function()
+                    return registry:Get(
+                        "State"
+                    )
+                end)
+
+            if ok
+                and type(state) == "string"
+            then
+                local stateText =
+                    string.lower(state)
+
+                if string.find(
+                    stateText,
+                    "inert",
+                    1,
+                    true
+                )
+                    or string.find(
+                        stateText,
+                        "carried",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        stateText,
+                        "carrying",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        stateText,
+                        "nojump",
+                        1,
+                        true
+                    )
+                    or string.find(
+                        stateText,
+                        "disabled",
+                        1,
+                        true
+                    )
+                then
+                    return true
+                end
+            end
+        end
+    end
+
+    for _, root in ipairs({
+        mainJump.character,
+        LocalPlayer,
+        workspace
+    }) do
+        if root then
+            local attributes =
+                root:GetAttributes()
+
+            for name, value in pairs(
+                attributes
+            ) do
+                local attributeName =
+                    string.lower(
+                        tostring(name)
+                    )
+
+                if value == false
+                    and (
+                        string.find(
+                            attributeName,
+                            "canjump",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "jumpallowed",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "jumpenabled",
+                            1,
+                            true
+                        )
+                    )
+                then
+                    return true
+                end
+
+                if value == true
+                    and (
+                        string.find(
+                            attributeName,
+                            "nojump",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "jumpdisabled",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "carried",
+                            1,
+                            true
+                        )
+                        or string.find(
+                            attributeName,
+                            "carrying",
+                            1,
+                            true
+                        )
+                    )
+                then
+                    return true
+                end
+            end
+        end
+    end
+
+    pcall(function()
+        local ContextActionService =
+            game:GetService(
+                "ContextActionService"
+            )
+
+        local actions =
+            ContextActionService:
+                GetAllBoundActionInfo()
+
+        local jumpPriority = 2000
+
+        for name, info in pairs(
+            actions
+        ) do
+            local actionName =
+                string.lower(
+                    tostring(name)
+                )
+
+            if actionName == "jumpaction"
+                and type(info) == "table"
+            then
+                jumpPriority =
+                    tonumber(
+                        info.priorityLevel
+                    )
+                    or jumpPriority
+            end
+        end
+
+        for name, info in pairs(
+            actions
+        ) do
+            if type(info) == "table" then
+                local actionName =
+                    string.lower(
+                        tostring(name)
+                    )
+
+                if actionName
+                    ~= "jumpaction"
+                then
+                    local priority =
+                        tonumber(
+                            info.priorityLevel
+                        )
+                        or 0
+
+                    if priority
+                        > jumpPriority
+                    then
+                        for _, inputType in ipairs(
+                            info.inputTypes
+                                or {}
+                        ) do
+                            if inputType
+                                    == Enum.PlayerActions.CharacterJump
+                                or inputType
+                                    == Enum.KeyCode.Space
+                            then
+                                return true
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+
+    return false
+end
+
 function mainJump.canJump()
     if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
@@ -9732,6 +9994,11 @@ function mainJump.canJump()
     then
         return false
     end
+
+    if mainJump.isGameJumpBlocked() then
+        return false
+    end
+
     local state =
         mainJump.humanoid:GetState()
     return state
@@ -10391,6 +10658,10 @@ mainConnect(
             local humanoid =
                 mainJump.humanoid
 
+            if mainJump.isGameJumpBlocked() then
+                return
+            end
+
             if humanoid.Health <= 0
                 or humanoid.FloorMaterial
                     == Enum.Material.Air
@@ -10438,7 +10709,7 @@ mainConnect(
 
                 for _ = 1, 3 do
                     local canRearm =
-                        true
+                        not mainJump.isGameJumpBlocked()
 
                     pcall(function()
                         if humanoid.Health <= 0
@@ -11709,7 +11980,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11731,7 +12002,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11756,7 +12027,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11778,7 +12049,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11803,7 +12074,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
