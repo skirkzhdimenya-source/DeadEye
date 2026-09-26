@@ -5,7 +5,7 @@
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.87"
+local SCRIPT_VERSION = "1.88"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3440,6 +3440,8 @@ function cosmetic.rebuildPicker()
                 Instance.new(
                     "Frame"
                 )
+            glass.Name =
+                "GlassOverlay"
             glass.Size =
                 UDim2.new(
                     1,
@@ -16385,9 +16387,10 @@ function __UI.styleButtonMotion(button)
         or button == Close
         or pickerClose
 
-    --// Cosmetic picker cards contain a full-size ViewportFrame and several
-    --// overlays. Give UIShadow its own transparent rounded surface so the
-    --// hover glow follows the same rounded card shape as the Emote picker.
+    --// Cosmetic cards already have a full-size rounded GlassOverlay.
+    --// Use that real card surface as UIShadow's parent instead of creating
+    --// another transparent target. The existing overlay has UICorner(10),
+    --// so the hover glow follows the same rounded shape as the Emote cards.
     local shadowTarget = button
 
     if string.sub(
@@ -16400,50 +16403,9 @@ function __UI.styleButtonMotion(button)
     then
         shadowTarget =
             button:FindFirstChild(
-                "DeadEyeHoverTarget"
+                "GlassOverlay"
             )
-
-        if not shadowTarget then
-            shadowTarget =
-                Instance.new("Frame")
-            shadowTarget.Name =
-                "DeadEyeHoverTarget"
-            shadowTarget.Size =
-                UDim2.new(
-                    1,
-                    0,
-                    1,
-                    0
-                )
-            shadowTarget.Position =
-                UDim2.new(
-                    0,
-                    0,
-                    0,
-                    0
-                )
-            shadowTarget.BackgroundTransparency =
-                1
-            shadowTarget.BorderSizePixel =
-                0
-            shadowTarget.Active =
-                false
-            shadowTarget.ZIndex =
-                1
-
-            local targetCorner =
-                Instance.new("UICorner")
-            targetCorner.CornerRadius =
-                UDim.new(
-                    0,
-                    10
-                )
-            targetCorner.Parent =
-                shadowTarget
-
-            shadowTarget.Parent =
-                button
-        end
+            or button
     end
 
     local shadow =
