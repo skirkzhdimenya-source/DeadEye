@@ -2480,6 +2480,27 @@ function cosmetic.refreshRig()
                     end
                 end
             end
+            --// Remember which body geometry existed before AddCosmetics.
+            --// Everything newly created by AddCosmetics is one of our
+            --// cosmetic visuals and can be hidden with the first-person
+            --// transparency pass without touching the normal avatar.
+            local cosmeticPartsBeforeAdd = {}
+
+            for _, object in ipairs(
+                live:GetDescendants()
+            ) do
+                if object:IsA("BasePart") then
+                    cosmeticPartsBeforeAdd[object] = true
+
+                    pcall(function()
+                        object:SetAttribute(
+                            "DeadEyeFirstPersonCosmetic",
+                            nil
+                        )
+                    end)
+                end
+            end
+
             local AddCosmetics =
                 require(
                     ReplicatedStorage.Services.Asset.RigService:WaitForChild(
@@ -2491,6 +2512,23 @@ function cosmetic.refreshRig()
                 live,
                 equipped
             )
+
+            if cosmetic.enabled then
+                for _, object in ipairs(
+                    live:GetDescendants()
+                ) do
+                    if object:IsA("BasePart")
+                        and not cosmeticPartsBeforeAdd[object]
+                    then
+                        pcall(function()
+                            object:SetAttribute(
+                                "DeadEyeFirstPersonCosmetic",
+                                true
+                            )
+                        end)
+                    end
+                end
+            end
 
             if restoreUnusual then
                 unusualActive = false
@@ -9133,6 +9171,32 @@ function others.getFirstPersonParts()
                     end
                 end
             end
+        end
+    end
+
+    --// Cosmetic visuals added by DeadEye may be attached to
+    --// the torso/limbs, so they are not covered by the head pass.
+    --// Marked parts use the exact same LocalTransparencyModifier
+    --// mechanism as the head in first person.
+    for _, object in ipairs(
+        rig:GetDescendants()
+    ) do
+        local tagged = false
+
+        pcall(function()
+            tagged =
+                object:GetAttribute(
+                    "DeadEyeFirstPersonCosmetic"
+                ) == true
+        end)
+
+        if tagged
+            and object:IsA("BasePart")
+        then
+            table.insert(
+                result,
+                object
+            )
         end
     end
 
