@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.64"
+    "DeadEyes v1.65"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -10131,31 +10131,6 @@ function mainJump.isGameJumpBlocked()
                     )
                 end)
 
-            --// During an emote the game disables Humanoid.Jumping
-            --// when that specific emote forbids jumping.
-            --// Only use this check while an emote is actually active;
-            --// otherwise some normal ground states briefly report it
-            --// disabled and break ordinary jumps.
-            if emoteOk
-                and tonumber(emoteId)
-                and tonumber(emoteId) ~= 0
-                and mainJump.humanoid
-            then
-                local stateOk, jumpStateEnabled =
-                    pcall(function()
-                        return mainJump.humanoid:
-                            GetStateEnabled(
-                                Enum.HumanoidStateType.Jumping
-                            )
-                    end)
-
-                if stateOk
-                    and jumpStateEnabled == false
-                then
-                    return true
-                end
-            end
-
             for _, key in ipairs({
                 "CanJump",
                 "JumpAllowed",
@@ -10175,6 +10150,11 @@ function mainJump.isGameJumpBlocked()
                 end
             end
 
+            local emoteActive =
+                emoteOk
+                and tonumber(emoteId)
+                and tonumber(emoteId) ~= 0
+
             for _, key in ipairs({
                 "NoJump",
                 "JumpDisabled",
@@ -10191,6 +10171,10 @@ function mainJump.isGameJumpBlocked()
 
                 if ok
                     and value == true
+                    and (
+                        key ~= "Inert"
+                        or not emoteActive
+                    )
                 then
                     return true
                 end
@@ -10209,12 +10193,16 @@ function mainJump.isGameJumpBlocked()
                 local stateText =
                     string.lower(state)
 
-                if string.find(
-                    stateText,
-                    "inert",
-                    1,
-                    true
-                )
+                if (
+                    (
+                        not emoteActive
+                        and string.find(
+                            stateText,
+                            "inert",
+                            1,
+                            true
+                        )
+                    )
                     or string.find(
                         stateText,
                         "carried",
@@ -10239,6 +10227,7 @@ function mainJump.isGameJumpBlocked()
                         1,
                         true
                     )
+                )
                 then
                     return true
                 end
@@ -10415,7 +10404,33 @@ function mainJump.canJump()
         return false
     end
 
-    if mainJump.isGameJumpBlocked() then
+    local emoteActive =
+        false
+
+    do
+        local object =
+            getCharacterObject()
+
+        if object
+            and object.DataRegistry
+        then
+            local ok, emoteId =
+                pcall(function()
+                    return object.DataRegistry:Get(
+                        "Emote"
+                    )
+                end)
+
+            emoteActive =
+                ok
+                and tonumber(emoteId)
+                and tonumber(emoteId) ~= 0
+        end
+    end
+
+    if not emoteActive
+        and mainJump.isGameJumpBlocked()
+    then
         return false
     end
 
@@ -10432,12 +10447,40 @@ function mainJump.jump(hit)
     if not mainJump.canJump() then
         return
     end
+
     mainJump.lastJump = tick()
-    mainJump.humanoid.Jump = true
+    local emoteActive =
+        false
+
+    do
+        local object =
+            getCharacterObject()
+
+        if object
+            and object.DataRegistry
+        then
+            local ok, emoteId =
+                pcall(function()
+                    return object.DataRegistry:Get(
+                        "Emote"
+                    )
+                end)
+
+            emoteActive =
+                ok
+                and tonumber(emoteId)
+                and tonumber(emoteId) ~= 0
+        end
+    end
+
     pcall(function()
-        mainJump.humanoid:ChangeState(
-            Enum.HumanoidStateType.Jumping
-        )
+        mainJump.humanoid.Jump = true
+
+        if not emoteActive then
+            mainJump.humanoid:ChangeState(
+                Enum.HumanoidStateType.Jumping
+            )
+        end
     end)
 end
 function mainJump.contact(hit)
@@ -11077,6 +11120,30 @@ mainConnect(
 
             local humanoid =
                 mainJump.humanoid
+
+            local object =
+                getCharacterObject()
+
+            if object
+                and object.DataRegistry
+            then
+                local ok, emoteId =
+                    pcall(function()
+                        return object.DataRegistry:Get(
+                            "Emote"
+                        )
+                    end)
+
+                if ok
+                    and tonumber(emoteId)
+                    and tonumber(emoteId) ~= 0
+                then
+                    --// Let the game's native emote jump
+                    --// handling decide this. Never force
+                    --// Jumping/ChangeState from here.
+                    return
+                end
+            end
 
             if mainJump.isGameJumpBlocked() then
                 return
@@ -12400,7 +12467,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.64"
+            MainTitle.Text = "DeadEyes v1.65"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12422,7 +12489,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.64"
+            MainTitle.Text = "DeadEyes v1.65"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12447,7 +12514,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.64"
+            MainTitle.Text = "DeadEyes v1.65"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12469,7 +12536,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.64"
+            MainTitle.Text = "DeadEyes v1.65"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12494,7 +12561,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.64"
+            MainTitle.Text = "DeadEyes v1.65"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
