@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.29"
+    "DeadEyes v1.30"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -3703,7 +3703,7 @@ function cosmetic.buildUI()
                 .. tostring(
                     slotIndex
                 )
-        label.TextSize = 10
+        label.TextSize = 11
         label.Font =
             Enum.Font.GothamBold
         label.TextColor3 =
@@ -11504,7 +11504,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.29"
+            MainTitle.Text = "DeadEyes v1.30"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11526,7 +11526,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.29"
+            MainTitle.Text = "DeadEyes v1.30"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11551,7 +11551,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.29"
+            MainTitle.Text = "DeadEyes v1.30"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11573,7 +11573,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.29"
+            MainTitle.Text = "DeadEyes v1.30"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11598,7 +11598,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.29"
+            MainTitle.Text = "DeadEyes v1.30"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
