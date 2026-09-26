@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.74"
+    "DeadEyes v1.75"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -10375,6 +10375,40 @@ function mainJump.canJump()
         return false
     end
 
+    --// During an emote, the game explicitly exposes whether
+    --// jumping is allowed through Humanoid.Jumping.
+    --// This is the value confirmed by the diagnostic:
+    --// forbidden emote = false, allowed emote = true.
+    local object =
+        getCharacterObject()
+
+    if object
+        and object.DataRegistry
+    then
+        local ok, emoteId =
+            pcall(function()
+                return object.DataRegistry:Get(
+                    "Emote"
+                )
+            end)
+
+        if ok
+            and tonumber(emoteId)
+            and tonumber(emoteId) ~= 0
+        then
+            local stateOK, jumpingEnabled =
+                pcall(function()
+                    return mainJump.humanoid:
+                        GetStateEnabled(
+                            Enum.HumanoidStateType.Jumping
+                        )
+                end)
+
+            return stateOK
+                and jumpingEnabled == true
+        end
+    end
+
     if mainJump.isGameJumpBlocked() then
         return false
     end
@@ -12363,7 +12397,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.74"
+            MainTitle.Text = "DeadEyes v1.75"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12385,7 +12419,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.74"
+            MainTitle.Text = "DeadEyes v1.75"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12410,7 +12444,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.74"
+            MainTitle.Text = "DeadEyes v1.75"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12432,7 +12466,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.74"
+            MainTitle.Text = "DeadEyes v1.75"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12457,7 +12491,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.74"
+            MainTitle.Text = "DeadEyes v1.75"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
