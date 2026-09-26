@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.39"
+    "DeadEyes v1.40"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11506,7 +11506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.39"
+            MainTitle.Text = "DeadEyes v1.40"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11528,7 +11528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.39"
+            MainTitle.Text = "DeadEyes v1.40"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11553,7 +11553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.39"
+            MainTitle.Text = "DeadEyes v1.40"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11575,7 +11575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.39"
+            MainTitle.Text = "DeadEyes v1.40"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11600,7 +11600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.39"
+            MainTitle.Text = "DeadEyes v1.40"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13593,9 +13593,6 @@ end
 __UI.PickerAppearTweens =
     __UI.PickerAppearTweens or {}
 
-__UI.PickerAppearScales =
-    __UI.PickerAppearScales or {}
-
 function __UI.animatePickerAppear(
     picker
 )
@@ -13735,13 +13732,22 @@ function __UI.animatePickerAppear(
         true
 
     scale.Scale =
-        0.94
+        0.90
 
     local tweens = {}
 
     local info =
         TweenInfo.new(
-            2.00,
+            2.20,
+            Enum.EasingStyle.Quint,
+            Enum.EasingDirection.Out
+        )
+
+    --// Text becomes fully readable early, so it never spends
+    --// most of the scale animation looking artificially thin.
+    local textInfo =
+        TweenInfo.new(
+            0.55,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
@@ -13807,7 +13813,11 @@ function __UI.animatePickerAppear(
                     local tween =
                         __UI.TweenService:Create(
                             object,
-                            info,
+                            (
+                                state.text ~= nil
+                                and textInfo
+                                or info
+                            ),
                             goal
                         )
 
