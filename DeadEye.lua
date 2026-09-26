@@ -5,7 +5,7 @@
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.89"
+local SCRIPT_VERSION = "1.90"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3359,7 +3359,10 @@ function cosmetic.rebuildPicker()
             button.ZIndex = 32
             button.LayoutOrder = index
 
-            --// Same outer corner radius as the Emote picker card.
+            --// Match the actual visible Cosmetic card layers.
+            --// The preview/overlay are rounded to 10 px, so the outer
+            --// button must use the same radius for UIShadow to follow
+            --// the real card silhouette instead of appearing square.
             local buttonCorner =
                 Instance.new(
                     "UICorner"
@@ -3367,7 +3370,7 @@ function cosmetic.rebuildPicker()
             buttonCorner.CornerRadius =
                 UDim.new(
                     0,
-                    5
+                    10
                 )
             buttonCorner.Parent =
                 button
