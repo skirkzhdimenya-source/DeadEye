@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.38"
+    "DeadEyes v1.39"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11506,7 +11506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.38"
+            MainTitle.Text = "DeadEyes v1.39"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11528,7 +11528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.38"
+            MainTitle.Text = "DeadEyes v1.39"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11553,7 +11553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.38"
+            MainTitle.Text = "DeadEyes v1.39"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11575,7 +11575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.38"
+            MainTitle.Text = "DeadEyes v1.39"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11600,7 +11600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.38"
+            MainTitle.Text = "DeadEyes v1.39"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13584,13 +13584,17 @@ end
 --// =========================================================
 --// =========================================================
 --// =========================================================
+--// =========================================================
 --// PICKER APPEARANCE
---// Real fade-in: the popup and every visible child start fully
---// transparent, then tween back to their normal transparency.
---// No CanvasGroup and no scale animation.
+--// 2-second synchronized fade + scale-in from the center.
+--// The popup remains its normal colors; only transparency and
+--// the whole-window scale are animated.
 --// =========================================================
 __UI.PickerAppearTweens =
     __UI.PickerAppearTweens or {}
+
+__UI.PickerAppearScales =
+    __UI.PickerAppearScales or {}
 
 function __UI.animatePickerAppear(
     picker
@@ -13610,6 +13614,41 @@ function __UI.animatePickerAppear(
                 tween:Cancel()
             end)
         end
+    end
+
+    --// Make the popup scale around its visual center while
+    --// preserving its original on-screen position.
+    local scale =
+        picker:FindFirstChild(
+            "DeadEyePickerAppearScale"
+        )
+
+    if not scale then
+        scale =
+            Instance.new("UIScale")
+
+        scale.Name =
+            "DeadEyePickerAppearScale"
+
+        scale.Scale =
+            1
+
+        scale.Parent =
+            picker
+
+        picker.AnchorPoint =
+            Vector2.new(
+                0.5,
+                0.5
+            )
+
+        picker.Position =
+            UDim2.new(
+                0.5,
+                0,
+                0.5,
+                0
+            )
     end
 
     local targets = {}
@@ -13695,14 +13734,35 @@ function __UI.animatePickerAppear(
     picker.Visible =
         true
 
+    scale.Scale =
+        0.94
+
     local tweens = {}
 
     local info =
         TweenInfo.new(
-            1.70,
+            2.00,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
+
+    pcall(function()
+        local scaleTween =
+            __UI.TweenService:Create(
+                scale,
+                info,
+                {
+                    Scale = 1
+                }
+            )
+
+        table.insert(
+            tweens,
+            scaleTween
+        )
+
+        scaleTween:Play()
+    end)
 
     for object, state in pairs(
         states
@@ -13767,6 +13827,7 @@ function __UI.animatePickerAppear(
 end
 
 --// OPEN PICKER
+
 
 --// =========================================================
 local function openPicker(
