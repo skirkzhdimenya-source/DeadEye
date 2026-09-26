@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.81
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.82
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.81"
+local SCRIPT_VERSION = "1.82"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -7350,21 +7350,71 @@ function UnusualFns.restoreUnusual()
     local playerCharacter =
         UnusualFns.getUnusualPlayerCharacter()
 
+    --// Always inspect the real current loadout before restoring.
+    --// unusualRuntime.originalId is the configured swap source only.
+    local currentEquippedId =
+        tonumber(
+            UnusualFns.getEquippedUnusualId()
+        )
+
     local originalId =
         tonumber(
             unusualRuntime.originalId
         )
 
-    if not originalId
-        or originalId == 0
+    unusualRuntime.currentEquippedId =
+        currentEquippedId
+
+    --// If the player manually equipped another Unusual while the
+    --// swap was active (for example 1 -> 2, then equip 3), never
+    --// restore the old snapshot of 1. Remove only DeadEye's own FX
+    --// and leave the game's native effect 3 untouched.
+    local manuallyChanged =
+        currentEquippedId
+        and currentEquippedId ~= 0
+        and originalId
+        and currentEquippedId ~= originalId
+
+    if manuallyChanged then
+        if visualRig then
+            UnusualFns.removeOurUnusualFX()
+
+            pcall(function()
+                UnusualFns.removeOriginalUnusualFX(
+                    originalId,
+                    visualRig,
+                    playerCharacter
+                )
+            end)
+        end
+
+        unusualActive =
+            false
+        unusualRuntime.appliedRig =
+            visualRig
+        unusualRuntime.originalId =
+            nil
+        unusualRuntime.replacementId =
+            nil
+        unusualRuntime.nativeSnapshot =
+            nil
+        return
+    end
+
+    --// Normal case: the player still has the configured original
+    --// equipped, so restoring the saved native snapshot is correct.
+    if (
+        not currentEquippedId
+        or currentEquippedId == 0
+    )
     then
-        originalId =
-            UnusualFns.getEquippedUnusualId()
+        currentEquippedId =
+            originalId
     end
 
     if visualRig
-        and originalId
-        and originalId ~= 0
+        and currentEquippedId
+        and currentEquippedId ~= 0
     then
         UnusualFns.removeOurUnusualFX()
         task.wait()
@@ -7376,7 +7426,11 @@ function UnusualFns.restoreUnusual()
                 playerCharacter
             )
 
-        if not restored then
+        if not restored
+            and originalId
+            and tonumber(currentEquippedId)
+                == tonumber(originalId)
+        then
             UnusualFns.removeOriginalUnusualFX(
                 originalId,
                 visualRig,
@@ -7399,7 +7453,7 @@ function UnusualFns.restoreUnusual()
     unusualRuntime.originalId =
         nil
     unusualRuntime.currentEquippedId =
-        runtimeRestoreId
+        currentEquippedId
     unusualRuntime.replacementId =
         nil
     unusualRuntime.nativeSnapshot =
@@ -7561,31 +7615,23 @@ function UnusualFns.reapplyUnusual()
                     unusualRuntime.currentEquippedId =
                         tonumber(equippedId)
 
+                    --// The game already handles the newly equipped
+                    --// Unusual. DeadEye must only remove its own
+                    --// replacement FX and any leftover old original FX.
+                    --// Do NOT call applyUnusualFX here: that would mark
+                    --// the user's real effect as DeadEye-owned and cleanup
+                    --// would delete it.
                     UnusualFns.removeOurUnusualFX()
                     task.wait()
 
-                    if tonumber(equippedId)
-                        and tonumber(equippedId) ~= 0
-                    then
-                        pcall(function()
-                            UnusualFns.removeOriginalUnusualFX(
-                                unusualRuntime.originalId
-                                    or unusualSlot.originalId,
-                                visualRig,
-                                playerCharacter
-                            )
-                        end)
-
-                        task.wait()
-
-                        pcall(function()
-                            applyUnusualFX(
-                                tonumber(equippedId),
-                                visualRig,
-                                playerCharacter
-                            )
-                        end)
-                    end
+                    pcall(function()
+                        UnusualFns.removeOriginalUnusualFX(
+                            unusualRuntime.originalId
+                                or unusualSlot.originalId,
+                            visualRig,
+                            playerCharacter
+                        )
+                    end)
 
                     unusualActive = false
                     unusualEnabled = false
@@ -12788,6 +12834,10 @@ local function cleanupUnusual()
     if currentVisualRig
         and runtimeOriginalId
         and runtimeOriginalId ~= 0
+        and runtimeCurrentEquippedId
+        and runtimeCurrentEquippedId ~= 0
+        and tonumber(runtimeCurrentEquippedId)
+            == tonumber(runtimeOriginalId)
     then
         if unusualRuntime.appliedRig == currentVisualRig
             and unusualRuntime.nativeSnapshot
@@ -12829,7 +12879,23 @@ local function cleanupUnusual()
                 UnusualFns.removeOurUnusualFX()
                 task.wait()
 
-                if runtimeSnapshot
+                if runtimeCurrentEquippedId
+                    and runtimeOriginalId
+                    and tonumber(runtimeCurrentEquippedId)
+                        ~= tonumber(runtimeOriginalId)
+                then
+                    --// Player changed the equipped Unusual.
+                    --// Keep the game's current native effect; remove only
+                    --// the FX owned by DeadEye.
+                    UnusualFns.removeOurUnusualFX()
+                    pcall(function()
+                        UnusualFns.removeOriginalUnusualFX(
+                            runtimeOriginalId,
+                            visualRig,
+                            playerCharacter
+                        )
+                    end)
+                elseif runtimeSnapshot
                     and runtimeSnapshotRig == visualRig
                 then
                     UnusualFns.restoreNativeUnusualSnapshot(
@@ -12881,36 +12947,49 @@ local function cleanupUnusual()
         then
             UnusualFns.removeOurUnusualFX()
 
-            local restoredFinal = false
+            --// If the real equipped Unusual changed during the session,
+            --// do not recreate anything here. The game's native effect
+            --// is already the state we want to keep.
+            if not (
+                runtimeCurrentEquippedId
+                and runtimeOriginalId
+                and tonumber(runtimeCurrentEquippedId)
+                    ~= tonumber(runtimeOriginalId)
+            )
+            then
+                local restoredFinal = false
 
-            if runtimeSnapshot then
-                restoredFinal =
-                    UnusualFns.restoreNativeUnusualSnapshot(
-                        runtimeSnapshot,
+                if runtimeSnapshot then
+                    restoredFinal =
+                        UnusualFns.restoreNativeUnusualSnapshot(
+                            runtimeSnapshot,
+                            finalVisualRig,
+                            finalPlayerCharacter
+                        )
+                end
+
+                if not restoredFinal then
+                    UnusualFns.removeOriginalUnusualFX(
+                        runtimeRestoreId,
                         finalVisualRig,
                         finalPlayerCharacter
                     )
-            end
+                    task.wait()
 
-            if not restoredFinal then
-                UnusualFns.removeOriginalUnusualFX(
-                    runtimeRestoreId,
-                    finalVisualRig,
-                    finalPlayerCharacter
-                )
-                task.wait()
-
-                applyUnusualFX(
-                    runtimeRestoreId,
-                    finalVisualRig,
-                    finalPlayerCharacter
-                )
+                    applyUnusualFX(
+                        runtimeRestoreId,
+                        finalVisualRig,
+                        finalPlayerCharacter
+                    )
+                end
             end
         end
     end)
 
     unusualRuntime.originalId =
         nil
+    unusualRuntime.currentEquippedId =
+        runtimeRestoreId
     unusualRuntime.replacementId =
         nil
     unusualRuntime.nativeSnapshot =
