@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.95
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.96
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.95"
+local SCRIPT_VERSION = "1.96"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -16433,30 +16433,16 @@ function __UI.styleButtonMotion(button)
         or button == Close
         or pickerClose
 
-    --// Keep the hover shadow on the outer button itself, exactly like
-    --// the working Emote/Unusual picker cards. The inner ViewportFrame,
-    --// GlassOverlay and NameShade must never become the shadow surface.
+    --// Hover glow belongs to the outer clickable card.
+    --// Cosmetic visual contents are masked separately by CosmeticCard.
     local shadowTarget = button
 
-    local isCosmeticCard =
-        string.sub(
-            tostring(button.Name),
-            1,
-            9
-        ) == "Cosmetic_"
-
-    --// Cosmetic picker cards have their own rounded visual layers.
-    --// Do not attach UIShadow to them while testing the corner artifact.
     local shadow =
-        isCosmeticCard
-        and nil
-        or button:FindFirstChild(
+        button:FindFirstChild(
             "DeadEyeHoverGlow"
         )
 
-    if not shadow
-        and not isCosmeticCard
-    then
+    if not shadow then
         local success, result =
             pcall(function()
                 return Instance.new("UIShadow")
