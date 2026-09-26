@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.45"
+    "DeadEyes v1.46"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7875,7 +7875,7 @@ __UI.UnusualPickerCloseGlyph.TextYAlignment =
 __UI.UnusualPickerCloseGlyph.Active =
     false
 __UI.UnusualPickerCloseGlyph.ZIndex =
-    32
+    30
 __UI.UnusualPickerCloseGlyph.Parent =
     unusualPicker
 unusualPickerSearch =
@@ -11537,7 +11537,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.45"
+            MainTitle.Text = "DeadEyes v1.46"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11559,7 +11559,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.45"
+            MainTitle.Text = "DeadEyes v1.46"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11584,7 +11584,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.45"
+            MainTitle.Text = "DeadEyes v1.46"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11606,7 +11606,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.45"
+            MainTitle.Text = "DeadEyes v1.46"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11631,7 +11631,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.45"
+            MainTitle.Text = "DeadEyes v1.46"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12399,7 +12399,7 @@ __UI.PickerCloseGlyph.TextYAlignment =
 __UI.PickerCloseGlyph.Active =
     false
 __UI.PickerCloseGlyph.ZIndex =
-    32
+    30
 __UI.PickerCloseGlyph.Parent =
     Picker
 --// =========================================================
