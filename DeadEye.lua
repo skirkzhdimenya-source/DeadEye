@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.94
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.95
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.94"
+local SCRIPT_VERSION = "1.95"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3344,10 +3344,6 @@ function cosmetic.rebuildPicker()
                 "DeadEyePickerSearch",
                 lower
             )
-            --// The outer button is the rounded card surface.
-            --// It must cover the rectangular ScrollFrame behind the card,
-            --// while matching the ViewportFrame color so no darker square
-            --// layer can show through the rounded corners.
             button.Size =
                 UDim2.new(
                     1,
@@ -3356,8 +3352,12 @@ function cosmetic.rebuildPicker()
                     0
                 )
             button.BackgroundColor3 =
-                Color3.fromRGB(255, 0, 0)
-            button.BackgroundTransparency = 0
+                Color3.fromRGB(
+                    31,
+                    35,
+                    42
+                )
+            button.BackgroundTransparency = 1
             button.BorderSizePixel = 0
             --// Match the working Emote/Unusual cards.
             --// The rounded outer button clips the full-size card contents.
@@ -3385,6 +3385,43 @@ function cosmetic.rebuildPicker()
             button.Parent =
                 unusualPickerScroll
 
+            --// UICorner does not clip descendants. The cosmetic preview
+            --// contains a WorldModel, so use CanvasGroup as the rounded
+            --// render mask for the entire card.
+            local cardGroup =
+                Instance.new(
+                    "CanvasGroup"
+                )
+            cardGroup.Name =
+                "CosmeticCard"
+            cardGroup.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+            cardGroup.BackgroundTransparency =
+                1
+            cardGroup.BorderSizePixel =
+                0
+            cardGroup.ZIndex =
+                33
+            cardGroup.Parent =
+                button
+
+            local cardGroupCorner =
+                Instance.new(
+                    "UICorner"
+                )
+            cardGroupCorner.CornerRadius =
+                UDim.new(
+                    0,
+                    10
+                )
+            cardGroupCorner.Parent =
+                cardGroup
+
             local preview =
                 Instance.new(
                     "ViewportFrame"
@@ -3399,7 +3436,11 @@ function cosmetic.rebuildPicker()
                     0
                 )
             preview.BackgroundColor3 =
-                Color3.fromRGB(0, 255, 0)
+                Color3.fromRGB(
+                    31,
+                    35,
+                    42
+                )
             preview.BackgroundTransparency =
                 0
             preview.BorderSizePixel =
@@ -3411,7 +3452,7 @@ function cosmetic.rebuildPicker()
             preview.ZIndex =
                 33
             preview.Parent =
-                button
+                cardGroup
 
             local previewCorner =
                 Instance.new(
@@ -3429,7 +3470,7 @@ function cosmetic.rebuildPicker()
                 pcall(function()
                     preview:Destroy()
                 end)
-                cachedPreview.Parent = button
+                cachedPreview.Parent = cardGroup
                 preview = cachedPreview
             else
                 pcall(function()
@@ -3460,11 +3501,11 @@ function cosmetic.rebuildPicker()
                     255,
                     255
                 )
-            glass.BackgroundTransparency = 1
+            glass.BackgroundTransparency = 0.95
             glass.BorderSizePixel = 0
             glass.ZIndex = 34
             glass.Parent =
-                button
+                cardGroup
 
             local glassCorner =
                 Instance.new(
@@ -3502,11 +3543,11 @@ function cosmetic.rebuildPicker()
                     0,
                     0
                 )
-            shade.BackgroundTransparency = 1
+            shade.BackgroundTransparency = 0.42
             shade.BorderSizePixel = 0
             shade.ZIndex = 35
             shade.Parent =
-                button
+                cardGroup
 
             local shadeCorner =
                 Instance.new(
@@ -3557,7 +3598,7 @@ function cosmetic.rebuildPicker()
                 Enum.TextTruncate.AtEnd
             nameLabel.ZIndex = 36
             nameLabel.Parent =
-                button
+                cardGroup
 
             table.insert(
                 unusualPickerButtons,
