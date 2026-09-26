@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.21"
+    "DeadEyes v1.22"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.21"
+            MainTitle.Text = "DeadEyes v1.22"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.21"
+            MainTitle.Text = "DeadEyes v1.22"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.21"
+            MainTitle.Text = "DeadEyes v1.22"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.21"
+            MainTitle.Text = "DeadEyes v1.22"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.21"
+            MainTitle.Text = "DeadEyes v1.22"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14868,14 +14868,66 @@ function __UI.styleButtonMotion(button)
         end
 
         local dotData = {
-            {0.08, -3, 2},
-            {0.20, -2, 2},
-            {0.84, -2, 2},
-            {0.94, 0.20, 2},
-            {0.94, 0.78, 2},
-            {0.08, 0.80, 2},
-            {0.20, 0.94, 2},
-            {0.80, 0.94, 2}
+            {
+                0.12,
+                -3,
+                2
+            },
+            {
+                0.32,
+                -2,
+                2
+            },
+            {
+                0.68,
+                -2,
+                2
+            },
+            {
+                0.88,
+                -3,
+                2
+            },
+            {
+                0.12,
+                1,
+                2
+            },
+            {
+                0.34,
+                1,
+                2
+            },
+            {
+                0.66,
+                1,
+                2
+            },
+            {
+                0.88,
+                1,
+                2
+            },
+            {
+                0,
+                0.28,
+                2
+            },
+            {
+                0,
+                0.72,
+                2
+            },
+            {
+                1,
+                0.30,
+                2
+            },
+            {
+                1,
+                0.70,
+                2
+            }
         }
 
         for index, data in ipairs(dotData) do
@@ -14897,23 +14949,31 @@ function __UI.styleButtonMotion(button)
             local xScale =
                 data[1]
 
-            local yScale =
+            local position =
                 data[2]
 
-            if yScale < 0 then
+            if position < 0 then
                 dot.Position =
                     UDim2.new(
                         xScale,
                         -data[3] * 0.5,
                         0,
-                        yScale
+                        position
                     )
-            else
+            elseif position == 1 then
                 dot.Position =
                     UDim2.new(
                         xScale,
                         -data[3] * 0.5,
-                        yScale,
+                        1,
+                        0
+                    )
+            else
+                dot.Position =
+                    UDim2.new(
+                        xScale == 0 and 0 or 1,
+                        position,
+                        position,
                         -data[3] * 0.5
                     )
             end
