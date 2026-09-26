@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.52"
+    "DeadEyes v1.53"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -10357,33 +10357,6 @@ mainConnect(
             end
 
             if input.KeyCode
-                == Enum.KeyCode.Space
-                and not mainJump.enabled
-                and mainJump.needsInputRearm
-            then
-                mainJump.needsInputRearm = false
-
-                if mainJump.humanoid
-                    and mainJump.humanoid.Parent
-                then
-                    pcall(function()
-                        mainJump.humanoid.Jump = false
-                    end)
-
-                    task.defer(function()
-                        if mainJump.humanoid
-                            and mainJump.humanoid.Parent
-                            and not mainJump.enabled
-                        then
-                            pcall(function()
-                                mainJump.humanoid.Jump = true
-                            end)
-                        end
-                    end)
-                end
-            end
-
-            if input.KeyCode
                 == mainFindKeyCode(
                     mainJump.hotkeyName
                 )
@@ -10400,6 +10373,76 @@ mainConnect(
                 ScreenGui.Enabled =
                     not ScreenGui.Enabled
             end
+        end
+    )
+)
+mainConnect(
+    UserInputService.InputEnded:Connect(
+        function(input)
+            if input.KeyCode
+                == Enum.KeyCode.Space
+                and not mainJump.enabled
+                and mainJump.humanoid
+                and mainJump.humanoid.Parent
+            then
+                pcall(function()
+                    mainJump.humanoid.Jump = false
+                end)
+            end
+        end
+    )
+)
+mainConnect(
+    UserInputService.JumpRequest:Connect(
+        function()
+            if mainJump.enabled
+                or not genv.DEADEYE_MAIN_RUNNING
+                or not mainJump.needsInputRearm
+                or not mainJump.humanoid
+                or not mainJump.humanoid.Parent
+            then
+                return
+            end
+
+            local humanoid =
+                mainJump.humanoid
+
+            if humanoid.Health <= 0
+                or humanoid.FloorMaterial
+                    == Enum.Material.Air
+            then
+                return
+            end
+
+            local state =
+                humanoid:GetState()
+
+            if state
+                    == Enum.HumanoidStateType.Jumping
+                or state
+                    == Enum.HumanoidStateType.Freefall
+                or state
+                    == Enum.HumanoidStateType.FallingDown
+            then
+                return
+            end
+
+            --// Do not consume the rearm while the character is
+            --// occupied by an active game/custom emote.
+            local object =
+                getCharacterObject()
+
+            if object
+                and object.Emote
+            then
+                return
+            end
+
+            mainJump.needsInputRearm = false
+
+            pcall(function()
+                humanoid.Jump = true
+            end)
         end
     )
 )
@@ -11637,7 +11680,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.52"
+            MainTitle.Text = "DeadEyes v1.53"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11659,7 +11702,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.52"
+            MainTitle.Text = "DeadEyes v1.53"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11684,7 +11727,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.52"
+            MainTitle.Text = "DeadEyes v1.53"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11706,7 +11749,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.52"
+            MainTitle.Text = "DeadEyes v1.53"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11731,7 +11774,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.52"
+            MainTitle.Text = "DeadEyes v1.53"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
