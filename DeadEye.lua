@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.82"
+local SCRIPT_VERSION = "1.83"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12935,6 +12935,11 @@ local function cleanupUnusual()
     --// Cosmetic refresh can rebuild the live rig after the first
     --// Unusual restoration. Restore the exact native Unusual snapshot
     --// once more on the final live rig so no replacement FX survive.
+    --// If snapshot restoration is unavailable, the fallback applyUnusualFX()
+    --// creates the original visual as a live restore. Do NOT remove that
+    --// fallback in the final cleanup pass, or the restored Unusual vanishes.
+    local preserveFinalRestoredUnusualFX = false
+
     pcall(function()
         local finalVisualRig =
             UnusualFns.getUnusualVisualRig()
@@ -12976,11 +12981,16 @@ local function cleanupUnusual()
                     )
                     task.wait()
 
-                    applyUnusualFX(
-                        runtimeRestoreId,
-                        finalVisualRig,
-                        finalPlayerCharacter
-                    )
+                    local appliedFinal =
+                        applyUnusualFX(
+                            runtimeRestoreId,
+                            finalVisualRig,
+                            finalPlayerCharacter
+                        )
+
+                    if appliedFinal then
+                        preserveFinalRestoredUnusualFX = true
+                    end
                 end
             end
         end
@@ -13006,9 +13016,11 @@ local function cleanupUnusual()
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
     UnusualFns.disconnectUnusualConnections()
-    pcall(function()
-        UnusualFns.removeOurUnusualFX()
-    end)
+    if not preserveFinalRestoredUnusualFX then
+        pcall(function()
+            UnusualFns.removeOurUnusualFX()
+        end)
+    end
     genv.DEADEYE_MAIN_RUNNING = false
     pcall(function()
         if mainPage then
