@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.11"
+    "DeadEyes v1.12"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -2480,18 +2480,17 @@ function cosmetic.refreshRig()
                     end
                 end
             end
-            --// Remember which body geometry existed before AddCosmetics.
-            --// Everything newly created by AddCosmetics is one of our
-            --// cosmetic visuals and can be hidden with the first-person
-            --// transparency pass without touching the normal avatar.
-            local cosmeticPartsBeforeAdd = {}
+            --// Remember everything that exists before AddCosmetics.
+            --// Direct ADD works even when SWAP is OFF, so first-person
+            --// handling must not depend on cosmetic.enabled.
+            local cosmeticObjectsBeforeAdd = {}
 
             for _, object in ipairs(
                 live:GetDescendants()
             ) do
-                if object:IsA("BasePart") then
-                    cosmeticPartsBeforeAdd[object] = true
+                cosmeticObjectsBeforeAdd[object] = true
 
+                if object:IsA("BasePart") then
                     pcall(function()
                         object:SetAttribute(
                             "DeadEyeFirstPersonCosmetic",
@@ -2513,20 +2512,20 @@ function cosmetic.refreshRig()
                 equipped
             )
 
-            if cosmetic.enabled then
-                for _, object in ipairs(
-                    live:GetDescendants()
-                ) do
-                    if object:IsA("BasePart")
-                        and not cosmeticPartsBeforeAdd[object]
-                    then
-                        pcall(function()
-                            object:SetAttribute(
-                                "DeadEyeFirstPersonCosmetic",
-                                true
-                            )
-                        end)
-                    end
+            --// Mark every newly-created cosmetic visual, regardless of
+            --// whether SWAP is ON. This also covers direct ADD actions.
+            for _, object in ipairs(
+                live:GetDescendants()
+            ) do
+                if not cosmeticObjectsBeforeAdd[object]
+                    and object:IsA("BasePart")
+                then
+                    pcall(function()
+                        object:SetAttribute(
+                            "DeadEyeFirstPersonCosmetic",
+                            true
+                        )
+                    end)
                 end
             end
 
@@ -4074,13 +4073,27 @@ function cosmetic.cleanup()
     local wasEnabled =
         cosmetic.enabled
 
+    local hadDirectAdd = false
+
+    for slotIndex = 1, 2 do
+        if cosmetic.directAction[slotIndex] == "add" then
+            hadDirectAdd = true
+            cosmetic.directAction[slotIndex] = "remove"
+        end
+    end
+
     cosmetic.enabled = false
 
     pcall(function()
-        if wasEnabled then
+        if wasEnabled
+            or hadDirectAdd
+        then
             cosmetic.refreshRig()
         end
     end)
+
+    cosmetic.directAction[1] = nil
+    cosmetic.directAction[2] = nil
 
     cosmetic.closePicker()
     cosmetic.refreshBusy = false
@@ -11489,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.11"
+            MainTitle.Text = "DeadEyes v1.12"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11511,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.11"
+            MainTitle.Text = "DeadEyes v1.12"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11536,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.11"
+            MainTitle.Text = "DeadEyes v1.12"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11558,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.11"
+            MainTitle.Text = "DeadEyes v1.12"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11583,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.11"
+            MainTitle.Text = "DeadEyes v1.12"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
