@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.59"
+    "DeadEyes v1.60"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1700,6 +1700,8 @@ local unusualDestroyed = false
 local unusualReapplyBusy = false
 local unusualRuntime = {
     appliedRig = nil,
+    originalId = nil,
+    replacementId = nil,
     reapplyGeneration = 0,
     animationSource = nil,
     animationLinks = {},
@@ -2318,14 +2320,35 @@ function cosmetic.refreshRig()
         return false
     end
 
-    local restoreUnusual =
+    local equippedUnusualId =
+        UnusualFns.getEquippedUnusualId()
+
+    local restoreUnusualSwap =
         unusualEnabled
         and unusualActive
+        and unusualRuntime.originalId
+        and tonumber(
+            unusualRuntime.originalId
+        ) == tonumber(
+            equippedUnusualId
+        )
 
-    if restoreUnusual then
+    local restoreNativeUnusualId =
+        nil
+
+    if equippedUnusualId
+        and equippedUnusualId ~= 0
+        and not restoreUnusualSwap
+    then
+        restoreNativeUnusualId =
+            tonumber(equippedUnusualId)
+    end
+
+    if restoreUnusualSwap then
         pcall(function()
             UnusualFns.removeOurUnusualFX()
         end)
+        unusualActive = false
     end
 
     cosmetic.refreshBusy = true
@@ -2558,9 +2581,7 @@ function cosmetic.refreshRig()
                 end
             end
 
-            if restoreUnusual then
-                unusualActive = false
-
+            if restoreUnusualSwap then
                 pcall(function()
                     if UnusualFns.activateUnusual() then
                         unusualEnabled = true
@@ -2568,6 +2589,24 @@ function cosmetic.refreshRig()
                         unusualRuntime.appliedRig =
                             UnusualFns.getUnusualVisualRig()
                     end
+                end)
+            elseif restoreNativeUnusualId then
+                pcall(function()
+                    UnusualFns.removeOriginalUnusualFX(
+                        restoreNativeUnusualId,
+                        UnusualFns.getUnusualVisualRig(),
+                        UnusualFns.getUnusualPlayerCharacter()
+                    )
+                end)
+
+                task.wait()
+
+                pcall(function()
+                    applyUnusualFX(
+                        restoreNativeUnusualId,
+                        UnusualFns.getUnusualVisualRig(),
+                        UnusualFns.getUnusualPlayerCharacter()
+                    )
                 end)
             end
         end)
@@ -7010,27 +7049,59 @@ end
 --// RESTORE UNUSUAL
 -- =========================================================
 function UnusualFns.restoreUnusual()
-    if not unusualActive then
+    if not unusualActive
+        and not unusualRuntime.originalId
+    then
         return
     end
+
     local visualRig =
         UnusualFns.getUnusualVisualRig()
     local playerCharacter =
         UnusualFns.getUnusualPlayerCharacter()
+
+    local originalId =
+        tonumber(
+            unusualRuntime.originalId
+        )
+
+    if not originalId
+        or originalId == 0
+    then
+        originalId =
+            UnusualFns.getEquippedUnusualId()
+    end
+
     if visualRig
-        and unusualSlot.originalId
+        and originalId
+        and originalId ~= 0
     then
         UnusualFns.removeOurUnusualFX()
         task.wait()
+
+        --// Remove an already-present copy first so restoration is
+        --// idempotent after cosmetic rebuilds/cleanup.
+        UnusualFns.removeOriginalUnusualFX(
+            originalId,
+            visualRig,
+            playerCharacter
+        )
+        task.wait()
+
         applyUnusualFX(
-            unusualSlot.originalId,
+            originalId,
             visualRig,
             playerCharacter
         )
     end
+
     unusualActive =
         false
     unusualRuntime.appliedRig =
+        nil
+    unusualRuntime.originalId =
+        nil
+    unusualRuntime.replacementId =
         nil
 end
 --// =========================================================
@@ -7047,6 +7118,17 @@ function UnusualFns.activateUnusual()
     then
         return false
     end
+
+    local equippedId =
+        UnusualFns.getEquippedUnusualId()
+
+    if equippedId == 0
+        or tonumber(equippedId)
+            ~= tonumber(unusualSlot.originalId)
+    then
+        return false
+    end
+
     local visualRig =
         UnusualFns.getUnusualVisualRig()
     local playerCharacter =
@@ -7079,6 +7161,10 @@ function UnusualFns.activateUnusual()
         true
     unusualRuntime.appliedRig =
         visualRig
+    unusualRuntime.originalId =
+        equippedId
+    unusualRuntime.replacementId =
+        tonumber(unusualSlot.replaceId)
     return true
 end
 function UnusualFns.reapplyUnusual()
@@ -7129,6 +7215,33 @@ function UnusualFns.reapplyUnusual()
             then
 
                 task.wait(0.2)
+
+                local equippedId =
+                    UnusualFns.getEquippedUnusualId()
+
+                if equippedId == 0
+                    or tonumber(equippedId)
+                        ~= tonumber(
+                            unusualSlot.originalId
+                        )
+                then
+                    local hadActiveSwap =
+                        unusualActive
+                            or unusualRuntime.originalId
+
+                    if hadActiveSwap then
+                        unusualActive = true
+
+                        pcall(function()
+                            UnusualFns.restoreUnusual()
+                        end)
+                    end
+
+                    unusualEnabled = false
+                    genv.UNUSUAL_SWAPPER_ENABLED =
+                        false
+                    break
+                end
 
                 unusualActive = false
                 UnusualFns.removeOurUnusualFX()
@@ -11986,7 +12099,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.59"
+            MainTitle.Text = "DeadEyes v1.60"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12008,7 +12121,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.59"
+            MainTitle.Text = "DeadEyes v1.60"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12033,7 +12146,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.59"
+            MainTitle.Text = "DeadEyes v1.60"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12055,7 +12168,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.59"
+            MainTitle.Text = "DeadEyes v1.60"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12080,7 +12193,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.59"
+            MainTitle.Text = "DeadEyes v1.60"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12178,6 +12291,19 @@ local function cleanupUnusual()
 
     local restoreNativeUnusual =
         unusualActive
+        or unusualRuntime.originalId
+
+    local runtimeOriginalId =
+        tonumber(
+            unusualRuntime.originalId
+        )
+
+    if not runtimeOriginalId
+        or runtimeOriginalId == 0
+    then
+        runtimeOriginalId =
+            UnusualFns.getEquippedUnusualId()
+    end
 
     unusualEnabled =
         false
@@ -12192,14 +12318,42 @@ local function cleanupUnusual()
         cosmetic.cleanup()
     end)
 
-    if restoreNativeUnusual then
-        unusualActive =
-            true
-
+    if restoreNativeUnusual
+        and runtimeOriginalId
+        and runtimeOriginalId ~= 0
+    then
         pcall(function()
-            UnusualFns.restoreUnusual()
+            local visualRig =
+                UnusualFns.getUnusualVisualRig()
+            local playerCharacter =
+                UnusualFns.getUnusualPlayerCharacter()
+
+            if visualRig then
+                UnusualFns.removeOurUnusualFX()
+
+                task.wait()
+
+                UnusualFns.removeOriginalUnusualFX(
+                    runtimeOriginalId,
+                    visualRig,
+                    playerCharacter
+                )
+
+                task.wait()
+
+                applyUnusualFX(
+                    runtimeOriginalId,
+                    visualRig,
+                    playerCharacter
+                )
+            end
         end)
     end
+
+    unusualRuntime.originalId =
+        nil
+    unusualRuntime.replacementId =
+        nil
 
     genv.DEADEYE_COSMETIC_CLEANUP =
         nil
