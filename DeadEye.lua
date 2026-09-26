@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.47"
+    "DeadEyes v1.48"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11516,7 +11516,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.47"
+            MainTitle.Text = "DeadEyes v1.48"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11538,7 +11538,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.47"
+            MainTitle.Text = "DeadEyes v1.48"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11563,7 +11563,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.47"
+            MainTitle.Text = "DeadEyes v1.48"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11585,7 +11585,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.47"
+            MainTitle.Text = "DeadEyes v1.48"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11610,7 +11610,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.47"
+            MainTitle.Text = "DeadEyes v1.48"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -15018,99 +15018,175 @@ function __UI.styleButtonMotion(button)
         button == PickerClose
         or button == unusualPickerClose
 
-    local shadowTarget =
-        button
+    local shadow = nil
+    local textGlow = nil
+    local textGlowOuter = nil
 
-    --// One shadow per button.
-    local shadow =
-        shadowTarget:FindFirstChild(
-            "DeadEyeHoverGlow"
-        )
+    if pickerClose then
+        textGlow =
+            button:FindFirstChild(
+                "DeadEyePickerCloseGlow"
+            )
 
-    if not shadow then
-        local success, result =
-            pcall(function()
-                return Instance.new("UIShadow")
-            end)
+        if not textGlow then
+            local success, result =
+                pcall(function()
+                    return Instance.new("UIStroke")
+                end)
 
-        if success
-            and result
-        then
-            shadow =
-                result
+            if success
+                and result
+            then
+                textGlow =
+                    result
 
-            shadow.Name =
-                "DeadEyeHoverGlow"
+                textGlow.Name =
+                    "DeadEyePickerCloseGlow"
 
-            shadow.Color =
-                Color3.fromRGB(
-                    190,
-                    204,
-                    226
-                )
+                textGlow.ApplyStrokeMode =
+                    Enum.ApplyStrokeMode.Contextual
 
-            shadow.Offset =
-                UDim2.new(
-                    0,
-                    0,
-                    0,
-                    0
-                )
+                textGlow.Thickness =
+                    1.5
 
-            --// Header buttons stay compact; picker X keeps
-            --// the stronger original-style halo.
-            if compact then
-                shadow.Spread =
-                    UDim2.fromOffset(
-                        2,
-                        2
+                textGlow.Color =
+                    Color3.fromRGB(
+                        190,
+                        204,
+                        226
                     )
 
-                shadow.BlurRadius =
-                    UDim.new(
-                        0,
-                        4
-                    )
-            elseif pickerClose then
-                shadow.Spread =
-                    UDim2.fromOffset(
-                        3,
-                        3
-                    )
+                textGlow.Transparency =
+                    1
 
-                shadow.BlurRadius =
-                    UDim.new(
-                        0,
-                        5
-                    )
-            else
-                shadow.Spread =
-                    UDim2.fromOffset(
-                        7,
-                        7
-                    )
+                textGlow.ZIndex =
+                    -1
 
-                shadow.BlurRadius =
-                    UDim.new(
-                        0,
-                        6
-                    )
+                textGlow.Parent =
+                    button
             end
+        end
 
-            shadow.Transparency =
-                1
+        textGlowOuter =
+            button:FindFirstChild(
+                "DeadEyePickerCloseGlowOuter"
+            )
 
-            shadow.Enabled =
-                true
+        if not textGlowOuter then
+            local success, result =
+                pcall(function()
+                    return Instance.new("UIStroke")
+                end)
 
-            shadow.ZIndex =
-                -1
+            if success
+                and result
+            then
+                textGlowOuter =
+                    result
 
-            shadow.Parent =
-                shadowTarget
+                textGlowOuter.Name =
+                    "DeadEyePickerCloseGlowOuter"
 
-            __UI.DeadEyeHoverShadows[button] =
-                shadow
+                textGlowOuter.ApplyStrokeMode =
+                    Enum.ApplyStrokeMode.Contextual
+
+                textGlowOuter.Thickness =
+                    4
+
+                textGlowOuter.Color =
+                    Color3.fromRGB(
+                        190,
+                        204,
+                        226
+                    )
+
+                textGlowOuter.Transparency =
+                    1
+
+                textGlowOuter.ZIndex =
+                    -2
+
+                textGlowOuter.Parent =
+                    button
+            end
+        end
+    else
+        shadow =
+            button:FindFirstChild(
+                "DeadEyeHoverGlow"
+            )
+
+        if not shadow then
+            local success, result =
+                pcall(function()
+                    return Instance.new("UIShadow")
+                end)
+
+            if success
+                and result
+            then
+                shadow =
+                    result
+
+                shadow.Name =
+                    "DeadEyeHoverGlow"
+
+                shadow.Color =
+                    Color3.fromRGB(
+                        190,
+                        204,
+                        226
+                    )
+
+                shadow.Offset =
+                    UDim2.new(
+                        0,
+                        0,
+                        0,
+                        0
+                    )
+
+                if compact then
+                    shadow.Spread =
+                        UDim2.fromOffset(
+                            2,
+                            2
+                        )
+
+                    shadow.BlurRadius =
+                        UDim.new(
+                            0,
+                            4
+                        )
+                else
+                    shadow.Spread =
+                        UDim2.fromOffset(
+                            7,
+                            7
+                        )
+
+                    shadow.BlurRadius =
+                        UDim.new(
+                            0,
+                            6
+                        )
+                end
+
+                shadow.Transparency =
+                    1
+
+                shadow.Enabled =
+                    true
+
+                shadow.ZIndex =
+                    -1
+
+                shadow.Parent =
+                    button
+
+                __UI.DeadEyeHoverShadows[button] =
+                    shadow
+            end
         end
     end
 
@@ -15186,6 +15262,81 @@ function __UI.styleButtonMotion(button)
         end)
     end
 
+    local glowTween
+    local glowOuterTween
+
+    local function cancelGlowTweens()
+        if glowTween then
+            pcall(function()
+                glowTween:Cancel()
+            end)
+
+            glowTween =
+                nil
+        end
+
+        if glowOuterTween then
+            pcall(function()
+                glowOuterTween:Cancel()
+            end)
+
+            glowOuterTween =
+                nil
+        end
+    end
+
+    local function tweenTextGlow(
+        info,
+        transparency
+    )
+        if not pickerClose
+            or (
+                not textGlow
+                and not textGlowOuter
+            )
+        then
+            return
+        end
+
+        cancelGlowTweens()
+
+        if textGlow then
+            pcall(function()
+                glowTween =
+                    __UI.TweenService:Create(
+                        textGlow,
+                        info,
+                        {
+                            Transparency =
+                                transparency
+                        }
+                    )
+
+                glowTween:Play()
+            end)
+        end
+
+        if textGlowOuter then
+            pcall(function()
+                glowOuterTween =
+                    __UI.TweenService:Create(
+                        textGlowOuter,
+                        info,
+                        {
+                            Transparency =
+                                math.min(
+                                    1,
+                                    transparency
+                                    + 0.28
+                                )
+                        }
+                    )
+
+                glowOuterTween:Play()
+            end)
+        end
+    end
+
     local function tweenScale(
         target,
         info
@@ -15230,12 +15381,17 @@ function __UI.styleButtonMotion(button)
                 tweenShadow(
                     enterInfo,
                     pickerClose
-                    and 0.48
+                    and 1
                     or (
                         compact
                         and 0.66
                         or 0.58
                     )
+                )
+
+                tweenTextGlow(
+                    enterInfo,
+                    0.28
                 )
             end
         )
@@ -15259,6 +15415,11 @@ function __UI.styleButtonMotion(button)
                     leaveInfo,
                     1
                 )
+
+                tweenTextGlow(
+                    leaveInfo,
+                    1
+                )
             end
         )
     )
@@ -15278,12 +15439,17 @@ function __UI.styleButtonMotion(button)
                 tweenShadow(
                     pressInfo,
                     pickerClose
-                    and 0.58
+                    and 1
                     or (
                         compact
                         and 0.74
                         or 0.70
                     )
+                )
+
+                tweenTextGlow(
+                    pressInfo,
+                    0.16
                 )
             end
         )
@@ -15305,12 +15471,17 @@ function __UI.styleButtonMotion(button)
                     tweenShadow(
                         enterInfo,
                         pickerClose
-                        and 0.48
+                        and 1
                         or (
                             compact
                             and 0.66
                             or 0.58
                         )
+                    )
+
+                    tweenTextGlow(
+                        enterInfo,
+                        0.28
                     )
                 else
                     tweenScale(
@@ -15319,6 +15490,11 @@ function __UI.styleButtonMotion(button)
                     )
 
                     tweenShadow(
+                        leaveInfo,
+                        1
+                    )
+
+                    tweenTextGlow(
                         leaveInfo,
                         1
                     )
@@ -15331,6 +15507,7 @@ function __UI.styleButtonMotion(button)
         button.Destroying:Connect(
             function()
                 cancelShadowTween()
+                cancelGlowTweens()
                 cancelScaleTween()
 
                 if __UI.DeadEyeHoverShadows then
