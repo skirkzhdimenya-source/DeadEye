@@ -5,7 +5,7 @@
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.85"
+local SCRIPT_VERSION = "1.86"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3352,7 +3352,9 @@ function cosmetic.rebuildPicker()
                 )
             button.BackgroundTransparency = 0.05
             button.BorderSizePixel = 0
-            button.ClipsDescendants = true
+            --// Match the working Emote picker: the outer button must not
+            --// clip its UIShadow, otherwise the hover glow gets a square edge.
+            button.ClipsDescendants = false
             button.Text = ""
             button.ZIndex = 32
             button.LayoutOrder = index
