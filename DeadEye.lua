@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.43"
+    "DeadEyes v1.44"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7832,21 +7832,50 @@ unusualPickerClose.Position =
 unusualPickerClose.BackgroundTransparency =
     1
 unusualPickerClose.Text =
+    ""
+unusualPickerClose.ZIndex =
+    31
+
+__UI.UnusualPickerCloseGlyph =
+    Instance.new("TextLabel")
+__UI.UnusualPickerCloseGlyph.Name =
+    "DeadEyePickerCloseGlyph"
+__UI.UnusualPickerCloseGlyph.Size =
+    UDim2.new(
+        0,
+        18,
+        0,
+        22
+    )
+__UI.UnusualPickerCloseGlyph.Position =
+    UDim2.new(
+        0.5,
+        -9,
+        0.5,
+        -11
+    )
+__UI.UnusualPickerCloseGlyph.BackgroundTransparency =
+    1
+__UI.UnusualPickerCloseGlyph.Text =
     "×"
-unusualPickerClose.TextSize =
+__UI.UnusualPickerCloseGlyph.TextSize =
     25
-unusualPickerClose.Font =
+__UI.UnusualPickerCloseGlyph.Font =
     Enum.Font.GothamBold
-unusualPickerClose.TextColor3 =
+__UI.UnusualPickerCloseGlyph.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-unusualPickerClose.ZIndex =
-    31
-unusualPickerClose.Parent =
-    unusualPicker
+__UI.UnusualPickerCloseGlyph.TextXAlignment =
+    Enum.TextXAlignment.Center
+__UI.UnusualPickerCloseGlyph.TextYAlignment =
+    Enum.TextYAlignment.Center
+__UI.UnusualPickerCloseGlyph.ZIndex =
+    32
+__UI.UnusualPickerCloseGlyph.Parent =
+    unusualPickerClose
 unusualPickerSearch =
     Instance.new("TextBox")
 unusualPickerSearch.Size =
@@ -11506,7 +11535,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.43"
+            MainTitle.Text = "DeadEyes v1.44"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11528,7 +11557,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.43"
+            MainTitle.Text = "DeadEyes v1.44"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11553,7 +11582,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.43"
+            MainTitle.Text = "DeadEyes v1.44"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11575,7 +11604,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.43"
+            MainTitle.Text = "DeadEyes v1.44"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11600,7 +11629,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.43"
+            MainTitle.Text = "DeadEyes v1.44"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12325,21 +12354,50 @@ PickerClose.Position =
 PickerClose.BackgroundTransparency =
     1
 PickerClose.Text =
+    ""
+PickerClose.ZIndex =
+    31
+
+__UI.PickerCloseGlyph =
+    Instance.new("TextLabel")
+__UI.PickerCloseGlyph.Name =
+    "DeadEyePickerCloseGlyph"
+__UI.PickerCloseGlyph.Size =
+    UDim2.new(
+        0,
+        18,
+        0,
+        22
+    )
+__UI.PickerCloseGlyph.Position =
+    UDim2.new(
+        0.5,
+        -9,
+        0.5,
+        -11
+    )
+__UI.PickerCloseGlyph.BackgroundTransparency =
+    1
+__UI.PickerCloseGlyph.Text =
     "×"
-PickerClose.TextSize =
+__UI.PickerCloseGlyph.TextSize =
     25
-PickerClose.Font =
+__UI.PickerCloseGlyph.Font =
     Enum.Font.GothamBold
-PickerClose.TextColor3 =
+__UI.PickerCloseGlyph.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-PickerClose.ZIndex =
-    31
-PickerClose.Parent =
-    Picker
+__UI.PickerCloseGlyph.TextXAlignment =
+    Enum.TextXAlignment.Center
+__UI.PickerCloseGlyph.TextYAlignment =
+    Enum.TextYAlignment.Center
+__UI.PickerCloseGlyph.ZIndex =
+    32
+__UI.PickerCloseGlyph.Parent =
+    PickerClose
 --// =========================================================
 --// PICKER SEARCH
 --// =========================================================
@@ -14998,11 +15056,22 @@ function __UI.styleButtonMotion(button)
         button == PickerClose
         or button == unusualPickerClose
 
+    local shadowTarget =
+        button
+
+    if pickerClose then
+        shadowTarget =
+            button:FindFirstChild(
+                "DeadEyePickerCloseGlyph"
+            )
+            or button
+    end
+
     --// One shadow per button.
-    --// UIShadow is rendered underneath its parent, so it cannot
-    --// cover the button itself.
+    --// Picker close uses a tiny glyph target so the glow follows
+    --// the X itself instead of the larger invisible hitbox.
     local shadow =
-        button:FindFirstChild(
+        shadowTarget:FindFirstChild(
             "DeadEyeHoverGlow"
         )
 
@@ -15086,7 +15155,7 @@ function __UI.styleButtonMotion(button)
                 -1
 
             shadow.Parent =
-                button
+                shadowTarget
 
             __UI.DeadEyeHoverShadows[button] =
                 shadow
