@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.33"
+    "DeadEyes v1.34"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7690,7 +7690,7 @@ __UI.unusualReplaceCorner.Parent =
 --// UNUSUAL PICKER
 -- =========================================================
 unusualPicker =
-    Instance.new("CanvasGroup")
+    Instance.new("Frame")
 unusualPicker.Size =
     UDim2.new(
         0,
@@ -8440,11 +8440,6 @@ function UnusualFns.openUnusualPicker(
 
     unusualPickerSearch.Text =
         ""
-
-    __UI.animatePickerAppear(
-        unusualPicker,
-        true
-    )
 
     UnusualFns.rebuildUnusualPicker()
 
@@ -11511,7 +11506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.33"
+            MainTitle.Text = "DeadEyes v1.34"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11533,7 +11528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.33"
+            MainTitle.Text = "DeadEyes v1.34"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11558,7 +11553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.33"
+            MainTitle.Text = "DeadEyes v1.34"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11580,7 +11575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.33"
+            MainTitle.Text = "DeadEyes v1.34"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11605,7 +11600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.33"
+            MainTitle.Text = "DeadEyes v1.34"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12186,7 +12181,7 @@ genv.DEADEYE_COSMETIC_CLEANUP =
 --// PICKER
 --// =========================================================
 Picker =
-    Instance.new("CanvasGroup")
+    Instance.new("Frame")
 Picker.Size =
     UDim2.new(
         0,
@@ -13587,21 +13582,40 @@ local function rebuildPicker()
 end
 --// =========================================================
 --// =========================================================
+--// =========================================================
 --// PICKER APPEARANCE
---// Prepare popup invisibly, rebuild its contents, then fade
---// both the surface and the descendant content in together.
+--// Light scale-in only. The popup keeps its normal colors,
+--// opacity and contents; nothing is faded or darkened.
 --// =========================================================
 __UI.PickerAppearTweens =
     __UI.PickerAppearTweens or {}
 
 function __UI.animatePickerAppear(
-    picker,
-    prepareOnly
+    picker
 )
     if not picker
         or not picker.Parent
     then
         return
+    end
+
+    local scale =
+        picker:FindFirstChild(
+            "DeadEyePickerAppearScale"
+        )
+
+    if not scale then
+        scale =
+            Instance.new("UIScale")
+
+        scale.Name =
+            "DeadEyePickerAppearScale"
+
+        scale.Scale =
+            1
+
+        scale.Parent =
+            picker
     end
 
     local oldTween =
@@ -13613,41 +13627,22 @@ function __UI.animatePickerAppear(
         end)
     end
 
-    if prepareOnly then
-        picker.GroupTransparency =
-            1
-
-        --// CanvasGroup does not hide its own background through
-        --// GroupTransparency, so hide that surface explicitly.
-        picker.BackgroundTransparency =
-            1
-
-        picker.Visible =
-            true
-
-        return
-    end
-
-    picker.GroupTransparency =
-        1
-
-    picker.BackgroundTransparency =
-        1
-
     picker.Visible =
         true
 
+    scale.Scale =
+        0.96
+
     local tween =
         __UI.TweenService:Create(
-            picker,
+            scale,
             TweenInfo.new(
-                0.22,
+                0.16,
                 Enum.EasingStyle.Quint,
                 Enum.EasingDirection.Out
             ),
             {
-                GroupTransparency = 0,
-                BackgroundTransparency = 0.10
+                Scale = 1
             }
         )
 
@@ -13684,11 +13679,6 @@ local function openPicker(
     end
     PickerSearch.Text =
         ""
-
-    __UI.animatePickerAppear(
-        Picker,
-        true
-    )
 
     rebuildPicker()
 
