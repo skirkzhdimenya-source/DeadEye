@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.57"
+    "DeadEyes v1.58"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -9732,6 +9732,21 @@ function mainJump.canJump()
     then
         return false
     end
+
+    local jumpingEnabled =
+        true
+
+    pcall(function()
+        jumpingEnabled =
+            mainJump.humanoid:GetStateEnabled(
+                Enum.HumanoidStateType.Jumping
+            )
+    end)
+
+    if not jumpingEnabled then
+        return false
+    end
+
     local state =
         mainJump.humanoid:GetState()
     return state
@@ -11709,7 +11724,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11731,7 +11746,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11756,7 +11771,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11778,7 +11793,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11803,7 +11818,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.57"
+            MainTitle.Text = "DeadEyes v1.58"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
