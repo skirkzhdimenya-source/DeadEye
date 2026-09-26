@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.42"
+    "DeadEyes v1.43"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7974,8 +7974,8 @@ local unusualPickerGrid =
     Instance.new("UIGridLayout")
 unusualPickerGrid.CellSize =
     UDim2.new(
-        0,
-        170,
+        1 / 3,
+        -6,
         0,
         92
     )
@@ -11506,7 +11506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.42"
+            MainTitle.Text = "DeadEyes v1.43"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11528,7 +11528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.42"
+            MainTitle.Text = "DeadEyes v1.43"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11553,7 +11553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.42"
+            MainTitle.Text = "DeadEyes v1.43"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11575,7 +11575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.42"
+            MainTitle.Text = "DeadEyes v1.43"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11600,7 +11600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.42"
+            MainTitle.Text = "DeadEyes v1.43"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12485,8 +12485,8 @@ __UI.PickerGrid =
     Instance.new("UIGridLayout")
 __UI.PickerGrid.CellSize =
     UDim2.new(
-        0,
-        170,
+        1 / 3,
+        -6,
         0,
         92
     )
@@ -13637,38 +13637,6 @@ function __UI.animatePickerAppear(
     local finalSize =
         picker.Size
 
-    local grid
-    for _, object in ipairs(
-        picker:GetDescendants()
-    ) do
-        if object:IsA("UIGridLayout") then
-            grid = object
-            break
-        end
-    end
-
-    local finalCellSize =
-        grid
-        and grid.CellSize
-        or nil
-
-    local startCellSize
-    if finalCellSize then
-        startCellSize =
-            UDim2.new(
-                finalCellSize.X.Scale * 0.90,
-                math.floor(
-                    finalCellSize.X.Offset * 0.90
-                    + 0.5
-                ),
-                finalCellSize.Y.Scale * 0.90,
-                math.floor(
-                    finalCellSize.Y.Offset * 0.90
-                    + 0.5
-                )
-            )
-    end
-
     local startSize =
         UDim2.new(
             finalSize.X.Scale * 0.90,
@@ -13766,13 +13734,6 @@ function __UI.animatePickerAppear(
     picker.Size =
         startSize
 
-    if grid
-        and startCellSize
-    then
-        grid.CellSize =
-            startCellSize
-    end
-
     picker.Visible =
         true
 
@@ -13780,7 +13741,7 @@ function __UI.animatePickerAppear(
 
     local info =
         TweenInfo.new(
-            2.20,
+            3.20,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
@@ -13809,28 +13770,6 @@ function __UI.animatePickerAppear(
 
         sizeTween:Play()
     end)
-
-    if grid
-        and finalCellSize
-    then
-        pcall(function()
-            local gridTween =
-                __UI.TweenService:Create(
-                    grid,
-                    info,
-                    {
-                        CellSize = finalCellSize
-                    }
-                )
-
-            table.insert(
-                tweens,
-                gridTween
-            )
-
-            gridTween:Play()
-        end)
-    end
 
     for object, state in pairs(
         states
