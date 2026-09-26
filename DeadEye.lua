@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.14"
+    "DeadEyes v1.15"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.14"
+            MainTitle.Text = "DeadEyes v1.15"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.14"
+            MainTitle.Text = "DeadEyes v1.15"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.14"
+            MainTitle.Text = "DeadEyes v1.15"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.14"
+            MainTitle.Text = "DeadEyes v1.15"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.14"
+            MainTitle.Text = "DeadEyes v1.15"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14654,20 +14654,24 @@ function __UI.styleButtonMotion(button)
                 215,
                 230
             )
+        stroke.ApplyStrokeMode =
+            Enum.ApplyStrokeMode.Border
         stroke.Parent =
             button
+    else
+        pcall(function()
+            stroke.ApplyStrokeMode =
+                Enum.ApplyStrokeMode.Border
+        end)
     end
 
     local baseScale =
         scale.Scale
-    local baseBackgroundTransparency =
-        button.BackgroundTransparency
     local baseStrokeThickness =
         stroke.Thickness
 
     local hovered = false
     local scaleTween
-    local visualTween
     local glowTween
 
     local enterInfo =
@@ -14699,13 +14703,6 @@ function __UI.styleButtonMotion(button)
             scaleTween = nil
         end
 
-        if visualTween then
-            pcall(function()
-                visualTween:Cancel()
-            end)
-            visualTween = nil
-        end
-
         if glowTween then
             pcall(function()
                 glowTween:Cancel()
@@ -14716,7 +14713,6 @@ function __UI.styleButtonMotion(button)
 
     local function tweenTo(
         targetScale,
-        targetTransparency,
         targetStrokeTransparency,
         targetStrokeThickness,
         info
@@ -14733,19 +14729,6 @@ function __UI.styleButtonMotion(button)
                     }
                 )
             scaleTween:Play()
-        end)
-
-        pcall(function()
-            visualTween =
-                __UI.TweenService:Create(
-                    button,
-                    info,
-                    {
-                        BackgroundTransparency =
-                            targetTransparency
-                    }
-                )
-            visualTween:Play()
         end)
 
         pcall(function()
@@ -14774,13 +14757,9 @@ function __UI.styleButtonMotion(button)
                 hovered = true
 
                 tweenTo(
-                    baseScale * 1.025,
-                    math.max(
-                        0,
-                        baseBackgroundTransparency - 0.06
-                    ),
-                    0.34,
-                    1.35,
+                    baseScale * 1.012,
+                    0.38,
+                    1.30,
                     enterInfo
                 )
             end
@@ -14798,7 +14777,6 @@ function __UI.styleButtonMotion(button)
 
                 tweenTo(
                     baseScale,
-                    baseBackgroundTransparency,
                     1,
                     baseStrokeThickness,
                     leaveInfo
@@ -14815,13 +14793,9 @@ function __UI.styleButtonMotion(button)
                 end
 
                 tweenTo(
-                    baseScale * 0.985,
-                    math.min(
-                        1,
-                        baseBackgroundTransparency + 0.015
-                    ),
-                    0.52,
-                    1.15,
+                    baseScale * 0.994,
+                    0.56,
+                    1.10,
                     pressInfo
                 )
             end
@@ -14837,19 +14811,14 @@ function __UI.styleButtonMotion(button)
 
                 if hovered then
                     tweenTo(
-                        baseScale * 1.025,
-                        math.max(
-                            0,
-                            baseBackgroundTransparency - 0.06
-                        ),
-                        0.34,
-                        1.35,
+                        baseScale * 1.012,
+                        0.38,
+                        1.30,
                         enterInfo
                     )
                 else
                     tweenTo(
                         baseScale,
-                        baseBackgroundTransparency,
                         1,
                         baseStrokeThickness,
                         leaveInfo
