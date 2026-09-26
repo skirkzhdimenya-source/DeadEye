@@ -3337,6 +3337,9 @@ function cosmetic.rebuildPicker()
                 cosmeticPreviewCache[data.id]
 
             if cachedPreview then
+                pcall(function()
+                    preview:Destroy()
+                end)
                 cachedPreview.Parent = button
                 preview = cachedPreview
             else
@@ -13527,6 +13530,9 @@ local function rebuildPicker()
                 emotePreviewCache[data.id]
 
             if cachedPreview then
+                pcall(function()
+                    viewport:Destroy()
+                end)
                 cachedPreview.Parent = button
                 viewport = cachedPreview
             else
