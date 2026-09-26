@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.96
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.97
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.96"
+local SCRIPT_VERSION = "1.97"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12990,69 +12990,86 @@ local function cleanupUnusual()
         cosmetic.cleanup()
     end)
 
-    --// Cosmetic refresh can rebuild the live rig after the first
-    --// Unusual restoration. Restore the exact native Unusual snapshot
-    --// once more on the final live rig so no replacement FX survive.
-    --// If snapshot restoration is unavailable, the fallback applyUnusualFX()
-    --// creates the original visual as a live restore. Do NOT remove that
-    --// fallback in the final cleanup pass, or the restored Unusual vanishes.
+    --// Cosmetic cleanup can rebuild the live rig asynchronously after
+    --// ApplyDescriptionResetAsync(). Restore the native Unusual only after
+    --// that rebuild, and retry until the final rig actually contains it.
     local preserveFinalRestoredUnusualFX = false
 
-    pcall(function()
-        local finalVisualRig =
-            UnusualFns.getUnusualVisualRig()
-        local finalPlayerCharacter =
-            UnusualFns.getUnusualPlayerCharacter()
+    for attempt = 1, 8 do
+        if attempt > 1 then
+            task.wait(0.15)
+        end
 
-        if finalVisualRig
-            and runtimeRestoreId
-            and runtimeRestoreId ~= 0
-        then
+        pcall(function()
+            local finalVisualRig =
+                UnusualFns.getUnusualVisualRig()
+            local finalPlayerCharacter =
+                UnusualFns.getUnusualPlayerCharacter()
+
+            if not finalVisualRig
+                or not runtimeRestoreId
+                or runtimeRestoreId == 0
+            then
+                return
+            end
+
             UnusualFns.removeOurUnusualFX()
 
-            --// If the real equipped Unusual changed during the session,
-            --// do not recreate anything here. The game's native effect
-            --// is already the state we want to keep.
-            if not (
-                runtimeCurrentEquippedId
+            --// If the real equipped Unusual changed, never recreate the
+            --// old configured effect.
+            if runtimeCurrentEquippedId
                 and runtimeOriginalId
                 and tonumber(runtimeCurrentEquippedId)
                     ~= tonumber(runtimeOriginalId)
-            )
             then
-                local restoredFinal = false
+                return
+            end
 
-                if runtimeSnapshot then
-                    restoredFinal =
-                        UnusualFns.restoreNativeUnusualSnapshot(
-                            runtimeSnapshot,
-                            finalVisualRig,
-                            finalPlayerCharacter
-                        )
-                end
+            local nativePresent = false
 
-                if not restoredFinal then
-                    UnusualFns.removeOriginalUnusualFX(
+            --// First restore the exact native snapshot. Then verify the
+            --// current rig still contains matching native effect content.
+            if runtimeSnapshot then
+                UnusualFns.restoreNativeUnusualSnapshot(
+                    runtimeSnapshot,
+                    finalVisualRig,
+                    finalPlayerCharacter
+                )
+
+                local verify =
+                    UnusualFns.captureNativeUnusualSnapshot(
                         runtimeRestoreId,
                         finalVisualRig,
                         finalPlayerCharacter
                     )
-                    task.wait()
 
-                    local appliedFinal =
-                        applyUnusualFX(
-                            runtimeRestoreId,
-                            finalVisualRig,
-                            finalPlayerCharacter
-                        )
+                nativePresent =
+                    verify ~= nil
+            end
 
-                    if appliedFinal then
-                        preserveFinalRestoredUnusualFX = true
-                    end
+            if not nativePresent then
+                --// Snapshot may be unavailable after a round/skin rebuild.
+                --// Fall back to the registry's original Unusual visual.
+                UnusualFns.removeOriginalUnusualFX(
+                    runtimeRestoreId,
+                    finalVisualRig,
+                    finalPlayerCharacter
+                )
+                task.wait()
+
+                local appliedFinal =
+                    applyUnusualFX(
+                        runtimeRestoreId,
+                        finalVisualRig,
+                        finalPlayerCharacter
+                    )
+
+                if appliedFinal then
+                    preserveFinalRestoredUnusualFX = true
                 end
             end
-        end
-    end)
+        end)
+    end
 
     unusualRuntime.originalId =
         nil
