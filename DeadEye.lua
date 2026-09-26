@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.30"
+    "DeadEyes v1.31"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -7690,7 +7690,7 @@ __UI.unusualReplaceCorner.Parent =
 --// UNUSUAL PICKER
 -- =========================================================
 unusualPicker =
-    Instance.new("Frame")
+    Instance.new("CanvasGroup")
 unusualPicker.Size =
     UDim2.new(
         0,
@@ -8440,10 +8440,11 @@ function UnusualFns.openUnusualPicker(
 
     unusualPickerSearch.Text =
         ""
-    unusualPicker.Visible =
-        true
-
     UnusualFns.rebuildUnusualPicker()
+
+    __UI.animatePickerAppear(
+        unusualPicker
+    )
 end
 function UnusualFns.closeUnusualPicker()
     unusualPicker.Visible =
@@ -11504,7 +11505,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.30"
+            MainTitle.Text = "DeadEyes v1.31"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11526,7 +11527,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.30"
+            MainTitle.Text = "DeadEyes v1.31"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11551,7 +11552,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.30"
+            MainTitle.Text = "DeadEyes v1.31"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11573,7 +11574,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.30"
+            MainTitle.Text = "DeadEyes v1.31"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11598,7 +11599,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.30"
+            MainTitle.Text = "DeadEyes v1.31"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13579,6 +13580,56 @@ local function rebuildPicker()
         )
 end
 --// =========================================================
+--// PICKER APPEARANCE
+--// Whole popup fades in as one CanvasGroup.
+--// =========================================================
+__UI.PickerAppearTweens =
+    __UI.PickerAppearTweens or {}
+
+function __UI.animatePickerAppear(
+    picker
+)
+    if not picker
+        or not picker.Parent
+    then
+        return
+    end
+
+    local oldTween =
+        __UI.PickerAppearTweens[picker]
+
+    if oldTween then
+        pcall(function()
+            oldTween:Cancel()
+        end)
+    end
+
+    picker.GroupTransparency =
+        1
+
+    picker.Visible =
+        true
+
+    local tween =
+        __UI.TweenService:Create(
+            picker,
+            TweenInfo.new(
+                0.16,
+                Enum.EasingStyle.Quint,
+                Enum.EasingDirection.Out
+            ),
+            {
+                GroupTransparency = 0
+            }
+        )
+
+    __UI.PickerAppearTweens[picker] =
+        tween
+
+    tween:Play()
+end
+
+--// =========================================================
 --// OPEN PICKER
 --// =========================================================
 local function openPicker(
@@ -13607,8 +13658,9 @@ local function openPicker(
     PickerSearch.Text =
         ""
     rebuildPicker()
-    Picker.Visible =
-        true
+    __UI.animatePickerAppear(
+        Picker
+    )
 end
 --// =========================================================
 --// CLOSE PICKER
@@ -14765,11 +14817,9 @@ function __UI.styleButtonMotion(button)
                     0
                 )
 
-            --// Compact halo for the two header buttons so they
-            --// do not run into each other.
-            if button == Minimize
-                or button == Close
-            then
+            --// Header buttons stay compact; picker X keeps
+            --// the stronger original-style halo.
+            if compact then
                 shadow.Spread =
                     UDim2.fromOffset(
                         2,
@@ -14780,6 +14830,18 @@ function __UI.styleButtonMotion(button)
                     UDim.new(
                         0,
                         4
+                    )
+            elseif pickerClose then
+                shadow.Spread =
+                    UDim2.fromOffset(
+                        8,
+                        8
+                    )
+
+                shadow.BlurRadius =
+                    UDim.new(
+                        0,
+                        7
                     )
             else
                 shadow.Spread =
@@ -14819,6 +14881,10 @@ function __UI.styleButtonMotion(button)
     local compact =
         button == Minimize
         or button == Close
+
+    local pickerClose =
+        button == PickerClose
+        or button == unusualPickerClose
 
     local enterInfo =
         TweenInfo.new(
@@ -14931,9 +14997,17 @@ function __UI.styleButtonMotion(button)
                 --// then softly spreads outward from its edges.
                 tweenShadow(
                     enterInfo,
-                    compact
-                    and 0.66
-                    or 0.58
+                    pickerClose
+                    and 0.48
+                    or (
+                        pickerClose
+                        and 0.48
+                        or (
+                            compact
+                            and 0.66
+                            or 0.58
+                        )
+                    )
                 )
             end
         )
@@ -14975,9 +15049,17 @@ function __UI.styleButtonMotion(button)
 
                 tweenShadow(
                     pressInfo,
-                    compact
-                    and 0.74
-                    or 0.70
+                    pickerClose
+                    and 0.58
+                    or (
+                        pickerClose
+                        and 0.58
+                        or (
+                            compact
+                            and 0.74
+                            or 0.70
+                        )
+                    )
                 )
             end
         )
