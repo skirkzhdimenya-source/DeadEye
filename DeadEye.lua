@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.35"
+    "DeadEyes v1.36"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11506,7 +11506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.35"
+            MainTitle.Text = "DeadEyes v1.36"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11528,7 +11528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.35"
+            MainTitle.Text = "DeadEyes v1.36"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11553,7 +11553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.35"
+            MainTitle.Text = "DeadEyes v1.36"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11575,7 +11575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.35"
+            MainTitle.Text = "DeadEyes v1.36"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11600,7 +11600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.35"
+            MainTitle.Text = "DeadEyes v1.36"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13699,7 +13699,7 @@ function __UI.animatePickerAppear(
 
     local info =
         TweenInfo.new(
-            0.22,
+            0.45,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
