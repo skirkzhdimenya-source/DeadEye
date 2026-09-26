@@ -10375,10 +10375,10 @@ function mainJump.canJump()
         return false
     end
 
-    --// During an emote, the game explicitly exposes whether
-    --// jumping is allowed through Humanoid.Jumping.
-    --// This is the value confirmed by the diagnostic:
-    --// forbidden emote = false, allowed emote = true.
+    --// Native emote jumping is controlled by the emote's SpeedMult.
+    --// The game's Movement:Jump() refuses to jump when the current
+    --// MoveStats speed is exactly 0. DogParty uses SpeedMult = 0,
+    --// while jumpable emotes such as BoldMarch keep a non-zero speed.
     local object =
         getCharacterObject()
 
@@ -10396,16 +10396,19 @@ function mainJump.canJump()
             and tonumber(emoteId)
             and tonumber(emoteId) ~= 0
         then
-            local stateOK, jumpingEnabled =
+            local speedOk, moveSpeed =
                 pcall(function()
-                    return mainJump.humanoid:
-                        GetStateEnabled(
-                            Enum.HumanoidStateType.Jumping
-                        )
+                    return object.Movement
+                        and object.Movement.MoveStats
+                        and object.Movement.MoveStats.MoveStats
+                        and object.Movement.MoveStats.MoveStats.Speed
                 end)
 
-            return stateOK
-                and jumpingEnabled == true
+            if speedOk
+                and tonumber(moveSpeed) == 0
+            then
+                return false
+            end
         end
     end
 
