@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.91
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.92
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.91"
+local SCRIPT_VERSION = "1.92"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3344,16 +3344,24 @@ function cosmetic.rebuildPicker()
                 "DeadEyePickerSearch",
                 lower
             )
-            --// The ViewportFrame is the visible card surface.
-            --// Keep the outer button transparent so no darker rounded
-            --// backing layer peeks out around its corners.
+            --// The outer button is the rounded card surface.
+            --// It must cover the rectangular ScrollFrame behind the card,
+            --// while matching the ViewportFrame color so no darker square
+            --// layer can show through the rounded corners.
+            button.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
             button.BackgroundColor3 =
                 Color3.fromRGB(
-                    45,
-                    45,
-                    50
+                    31,
+                    35,
+                    42
                 )
-            button.BackgroundTransparency = 1
+            button.BackgroundTransparency = 0
             button.BorderSizePixel = 0
             --// Match the working Emote/Unusual cards.
             --// The rounded outer button clips the full-size card contents.
