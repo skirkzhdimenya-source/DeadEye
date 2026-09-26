@@ -5,7 +5,7 @@
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.88"
+local SCRIPT_VERSION = "1.89"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -3352,17 +3352,14 @@ function cosmetic.rebuildPicker()
                 )
             button.BackgroundTransparency = 0.05
             button.BorderSizePixel = 0
-            --// Match the working Emote picker: the outer button must not
-            --// clip its UIShadow, otherwise the hover glow gets a square edge.
-            button.ClipsDescendants = false
+            --// Match the working Emote/Unusual cards.
+            --// The rounded outer button clips the full-size card contents.
+            button.ClipsDescendants = true
             button.Text = ""
             button.ZIndex = 32
             button.LayoutOrder = index
 
-            --// Create the button's rounded corner BEFORE parenting it.
-            --// Cosmetic preview creation can yield while loading its module;
-            --// the hover UIShadow must see UICorner from the start or it can
-            --// initialize as a square shadow and stay that way.
+            --// Same outer corner radius as the Emote picker card.
             local buttonCorner =
                 Instance.new(
                     "UICorner"
@@ -3370,7 +3367,7 @@ function cosmetic.rebuildPicker()
             buttonCorner.CornerRadius =
                 UDim.new(
                     0,
-                    7
+                    5
                 )
             buttonCorner.Parent =
                 button
@@ -3401,6 +3398,8 @@ function cosmetic.rebuildPicker()
                 0
             preview.BorderSizePixel =
                 0
+            preview.ClipsDescendants =
+                true
             preview.Active =
                 false
             preview.ZIndex =
@@ -16387,29 +16386,13 @@ function __UI.styleButtonMotion(button)
         or button == Close
         or pickerClose
 
-    --// Cosmetic cards already have a full-size rounded GlassOverlay.
-    --// Use that real card surface as UIShadow's parent instead of creating
-    --// another transparent target. The existing overlay has UICorner(10),
-    --// so the hover glow follows the same rounded shape as the Emote cards.
+    --// Keep the hover shadow on the outer button itself, exactly like
+    --// the working Emote/Unusual picker cards. The inner ViewportFrame,
+    --// GlassOverlay and NameShade must never become the shadow surface.
     local shadowTarget = button
 
-    if string.sub(
-        tostring(button.Name),
-        1,
-        9
-    ) == "Cosmetic_"
-        and button ~= PickerClose
-        and button ~= unusualPickerClose
-    then
-        shadowTarget =
-            button:FindFirstChild(
-                "GlassOverlay"
-            )
-            or button
-    end
-
     local shadow =
-        shadowTarget:FindFirstChild(
+        button:FindFirstChild(
             "DeadEyeHoverGlow"
         )
 
