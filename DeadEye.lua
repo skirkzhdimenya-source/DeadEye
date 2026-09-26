@@ -921,7 +921,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.70"
+    "DeadEyes v1.71"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -1700,9 +1700,6 @@ local unusualDestroyed = false
 local unusualReapplyBusy = false
 local unusualRuntime = {
     appliedRig = nil,
-    originalId = nil,
-    replacementId = nil,
-    nativeSnapshot = nil,
     reapplyGeneration = 0,
     animationSource = nil,
     animationLinks = {},
@@ -2321,47 +2318,14 @@ function cosmetic.refreshRig()
         return false
     end
 
-    local equippedUnusualId =
-        UnusualFns.getEquippedUnusualId()
-
-    local restoreUnusualSwap =
+    local restoreUnusual =
         unusualEnabled
         and unusualActive
-        and unusualRuntime.originalId
-        and tonumber(
-            unusualRuntime.originalId
-        ) == tonumber(
-            equippedUnusualId
-        )
 
-    local restoreNativeUnusualId =
-        nil
-
-    local cosmeticUnusualSnapshot =
-        nil
-
-    if restoreUnusualSwap then
-        cosmeticUnusualSnapshot =
-            unusualRuntime.nativeSnapshot
-    elseif equippedUnusualId
-        and equippedUnusualId ~= 0
-    then
-        restoreNativeUnusualId =
-            tonumber(equippedUnusualId)
-
-        cosmeticUnusualSnapshot =
-            UnusualFns.captureNativeUnusualSnapshot(
-                equippedUnusualId,
-                UnusualFns.getUnusualVisualRig(),
-                UnusualFns.getUnusualPlayerCharacter()
-            )
-    end
-
-    if restoreUnusualSwap then
+    if restoreUnusual then
         pcall(function()
             UnusualFns.removeOurUnusualFX()
         end)
-        unusualActive = false
     end
 
     cosmetic.refreshBusy = true
@@ -2594,7 +2558,9 @@ function cosmetic.refreshRig()
                 end
             end
 
-            if restoreUnusualSwap then
+            if restoreUnusual then
+                unusualActive = false
+
                 pcall(function()
                     if UnusualFns.activateUnusual() then
                         unusualEnabled = true
@@ -2603,24 +2569,6 @@ function cosmetic.refreshRig()
                             UnusualFns.getUnusualVisualRig()
                     end
                 end)
-            elseif restoreNativeUnusualId then
-                if cosmeticUnusualSnapshot then
-                    pcall(function()
-                        UnusualFns.restoreNativeUnusualSnapshot(
-                            cosmeticUnusualSnapshot,
-                            UnusualFns.getUnusualVisualRig(),
-                            UnusualFns.getUnusualPlayerCharacter()
-                        )
-                    end)
-                else
-                    pcall(function()
-                        applyUnusualFX(
-                            restoreNativeUnusualId,
-                            UnusualFns.getUnusualVisualRig(),
-                            UnusualFns.getUnusualPlayerCharacter()
-                        )
-                    end)
-                end
             end
         end)
 
@@ -7061,312 +7009,28 @@ end
 --// =========================================================
 --// RESTORE UNUSUAL
 -- =========================================================
-function UnusualFns.captureNativeUnusualSnapshot(
-    id,
-    visualRig,
-    playerCharacter
-)
-    local signature =
-        UnusualFns.buildOriginalUnusualSignature(
-            id,
-            visualRig
-        )
-
-    if not signature then
-        return nil
-    end
-
-    local snapshot = {
-        parts = {}
-    }
-
-    local function getTargetPart(partName)
-        if partName == "HumanoidRootPart" then
-            return playerCharacter
-                and playerCharacter:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-        end
-
-        return visualRig
-            and visualRig:FindFirstChild(
-                partName
-            )
-    end
-
-    local function matchesObject(object, info)
-        if object.ClassName ~= info.Class
-            or object.Name ~= info.Name
-        then
-            return false
-        end
-
-        if object:IsA("MeshPart")
-            and info.MeshId
-        then
-            return tostring(object.MeshId) == info.MeshId
-                and tostring(object.TextureID)
-                    == info.TextureId
-        end
-
-        return true
-    end
-
-    for partName, objects in pairs(signature) do
-        local targetPart =
-            getTargetPart(partName)
-
-        if targetPart
-            and targetPart:IsA("BasePart")
-        then
-            local partSnapshot = {
-                partName = partName,
-                objects = {},
-                joints = {}
-            }
-
-            for _, existing in ipairs(
-                targetPart:GetChildren()
-            ) do
-                local matched = false
-
-                for _, info in ipairs(objects) do
-                    if matchesObject(existing, info) then
-                        matched = true
-                        break
-                    end
-                end
-
-                if matched then
-                    local clone
-                    pcall(function()
-                        clone = existing:Clone()
-                    end)
-
-                    if clone then
-                        table.insert(
-                            partSnapshot.objects,
-                            clone
-                        )
-                    end
-                end
-            end
-
-            for _, joint in ipairs(
-                targetPart:GetChildren()
-            ) do
-                if joint:IsA("Weld")
-                    or joint:IsA("WeldConstraint")
-                    or joint:IsA("Motor6D")
-                    or joint:IsA("Motor")
-                then
-                    for _, info in ipairs(objects) do
-                        if joint.Name == info.Name then
-                            local clone
-                            pcall(function()
-                                clone = joint:Clone()
-                            end)
-
-                            if clone then
-                                table.insert(
-                                    partSnapshot.joints,
-                                    clone
-                                )
-                            end
-
-                            break
-                        end
-                    end
-                end
-            end
-
-            if #partSnapshot.objects > 0
-                or #partSnapshot.joints > 0
-            then
-                table.insert(
-                    snapshot.parts,
-                    partSnapshot
-                )
-            end
-        end
-    end
-
-    if #snapshot.parts == 0 then
-        return nil
-    end
-
-    return snapshot
-end
-
-function UnusualFns.restoreNativeUnusualSnapshot(
-    snapshot,
-    visualRig,
-    playerCharacter
-)
-    if not snapshot then
-        return false
-    end
-
-    local restored = false
-
-    for _, partSnapshot in ipairs(snapshot.parts) do
-        local targetPart
-
-        if partSnapshot.partName
-            == "HumanoidRootPart"
-        then
-            targetPart =
-                playerCharacter
-                and playerCharacter:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-        else
-            targetPart =
-                visualRig
-                and visualRig:FindFirstChild(
-                    partSnapshot.partName
-                )
-        end
-
-        if targetPart
-            and targetPart:IsA("BasePart")
-        then
-            for _, savedObject in ipairs(
-                partSnapshot.objects
-            ) do
-                local exists = false
-
-                for _, current in ipairs(
-                    targetPart:GetChildren()
-                ) do
-                    if current.Name
-                        == savedObject.Name
-                        and current.ClassName
-                            == savedObject.ClassName
-                    then
-                        exists = true
-                        break
-                    end
-                end
-
-                if not exists then
-                    local clone
-
-                    pcall(function()
-                        clone =
-                            savedObject:Clone()
-                    end)
-
-                    if clone then
-                        clone.Parent =
-                            targetPart
-                        restored = true
-                    end
-                end
-            end
-
-            for _, savedJoint in ipairs(
-                partSnapshot.joints
-            ) do
-                local exists = false
-
-                for _, current in ipairs(
-                    targetPart:GetChildren()
-                ) do
-                    if current.Name
-                        == savedJoint.Name
-                        and current.ClassName
-                            == savedJoint.ClassName
-                    then
-                        exists = true
-                        break
-                    end
-                end
-
-                if not exists then
-                    local clone
-
-                    pcall(function()
-                        clone =
-                            savedJoint:Clone()
-                    end)
-
-                    if clone then
-                        clone.Parent =
-                            targetPart
-                        restored = true
-                    end
-                end
-            end
-        end
-    end
-
-    return restored
-end
-
 function UnusualFns.restoreUnusual()
-    if not unusualActive
-        and not unusualRuntime.originalId
-    then
+    if not unusualActive then
         return
     end
-
     local visualRig =
         UnusualFns.getUnusualVisualRig()
     local playerCharacter =
         UnusualFns.getUnusualPlayerCharacter()
-
-    local originalId =
-        tonumber(
-            unusualRuntime.originalId
-        )
-
-    if not originalId
-        or originalId == 0
-    then
-        originalId =
-            UnusualFns.getEquippedUnusualId()
-    end
-
     if visualRig
-        and originalId
-        and originalId ~= 0
+        and unusualSlot.originalId
     then
         UnusualFns.removeOurUnusualFX()
         task.wait()
-
-        local restored =
-            UnusualFns.restoreNativeUnusualSnapshot(
-                unusualRuntime.nativeSnapshot,
-                visualRig,
-                playerCharacter
-            )
-
-        if not restored then
-            UnusualFns.removeOriginalUnusualFX(
-                originalId,
-                visualRig,
-                playerCharacter
-            )
-            task.wait()
-
-            applyUnusualFX(
-                originalId,
-                visualRig,
-                playerCharacter
-            )
-        end
+        applyUnusualFX(
+            unusualSlot.originalId,
+            visualRig,
+            playerCharacter
+        )
     end
-
     unusualActive =
         false
     unusualRuntime.appliedRig =
-        nil
-    unusualRuntime.originalId =
-        nil
-    unusualRuntime.replacementId =
-        nil
-    unusualRuntime.nativeSnapshot =
         nil
 end
 --// =========================================================
@@ -7383,17 +7047,6 @@ function UnusualFns.activateUnusual()
     then
         return false
     end
-
-    local equippedId =
-        UnusualFns.getEquippedUnusualId()
-
-    if equippedId == 0
-        or tonumber(equippedId)
-            ~= tonumber(unusualSlot.originalId)
-    then
-        return false
-    end
-
     local visualRig =
         UnusualFns.getUnusualVisualRig()
     local playerCharacter =
@@ -7401,25 +7054,7 @@ function UnusualFns.activateUnusual()
     if not visualRig then
         return false
     end
-
-    if not unusualRuntime.nativeSnapshot
-        or tonumber(
-            unusualRuntime.originalId
-        ) ~= tonumber(equippedId)
-    then
-        unusualRuntime.nativeSnapshot =
-            UnusualFns.captureNativeUnusualSnapshot(
-                equippedId,
-                visualRig,
-                playerCharacter
-            )
-    end
-
-    if not unusualRuntime.nativeSnapshot then
-        return false
-    end
-
-    UnusualFns.removeOurUnusualFX()
+                            UnusualFns.removeOurUnusualFX()
     task.wait()
     UnusualFns.removeOriginalUnusualFX(
         unusualSlot.originalId,
@@ -7444,10 +7079,6 @@ function UnusualFns.activateUnusual()
         true
     unusualRuntime.appliedRig =
         visualRig
-    unusualRuntime.originalId =
-        equippedId
-    unusualRuntime.replacementId =
-        tonumber(unusualSlot.replaceId)
     return true
 end
 function UnusualFns.reapplyUnusual()
@@ -7498,33 +7129,6 @@ function UnusualFns.reapplyUnusual()
             then
 
                 task.wait(0.2)
-
-                local equippedId =
-                    UnusualFns.getEquippedUnusualId()
-
-                if equippedId == 0
-                    or tonumber(equippedId)
-                        ~= tonumber(
-                            unusualSlot.originalId
-                        )
-                then
-                    local hadActiveSwap =
-                        unusualActive
-                            or unusualRuntime.originalId
-
-                    if hadActiveSwap then
-                        unusualActive = true
-
-                        pcall(function()
-                            UnusualFns.restoreUnusual()
-                        end)
-                    end
-
-                    unusualEnabled = false
-                    genv.UNUSUAL_SWAPPER_ENABLED =
-                        false
-                    break
-                end
 
                 unusualActive = false
                 UnusualFns.removeOurUnusualFX()
@@ -10115,292 +9719,154 @@ function mainJump.destroySensors()
         mainJump.frontSensorPart = nil
     end
 end
-function mainJump.isGameJumpBlocked()
+function mainJump.getEmoteJumpPermission()
     local object =
         getCharacterObject()
 
-    local emoteActive =
-        false
-
-    if object then
-        local registry =
-            object.DataRegistry
-
-        if registry then
-            local emoteOk, emoteId =
-                pcall(function()
-                    return registry:Get(
-                        "Emote"
-                    )
-                end)
-
-            emoteActive =
-                emoteOk
-                and tonumber(emoteId)
-                and tonumber(emoteId) ~= 0
-
-            for _, key in ipairs({
-                "CanJump",
-                "JumpAllowed",
-                "JumpEnabled"
-            }) do
-                local ok, value =
-                    pcall(function()
-                        return registry:Get(
-                            key
-                        )
-                    end)
-
-                if ok
-                    and not (
-                        emoteActive
-                        and (
-                            key == "CanJump"
-                            or key == "JumpAllowed"
-                            or key == "JumpEnabled"
-                        )
-                    )
-                    and value == false
-                then
-                    return true
-                end
-            end
-
-            for _, key in ipairs({
-                "NoJump",
-                "JumpDisabled",
-                "IsCarried",
-                "IsCarrying",
-                "Inert"
-            }) do
-                local ok, value =
-                    pcall(function()
-                        return registry:Get(
-                            key
-                        )
-                    end)
-
-                if ok
-                    and value == true
-                    and (
-                        key ~= "Inert"
-                        or not emoteActive
-                    )
-                then
-                    return true
-                end
-            end
-
-            local ok, state =
-                pcall(function()
-                    return registry:Get(
-                        "State"
-                    )
-                end)
-
-            if ok
-                and type(state) == "string"
-            then
-                local stateText =
-                    string.lower(state)
-
-                if (
-                    (
-                        not emoteActive
-                        and string.find(
-                            stateText,
-                            "inert",
-                            1,
-                            true
-                        )
-                    )
-                    or string.find(
-                        stateText,
-                        "carried",
-                        1,
-                        true
-                    )
-                    or string.find(
-                        stateText,
-                        "carrying",
-                        1,
-                        true
-                    )
-                    or string.find(
-                        stateText,
-                        "nojump",
-                        1,
-                        true
-                    )
-                    or string.find(
-                        stateText,
-                        "disabled",
-                        1,
-                        true
-                    )
-                )
-                then
-                    return true
-                end
-            end
-        end
+    if not object
+        or not object.DataRegistry
+    then
+        return nil
     end
 
-    for _, root in ipairs({
-        mainJump.character,
-        LocalPlayer,
-        workspace
-    }) do
-        if root then
-            local attributes =
-                root:GetAttributes()
-
-            for name, value in pairs(
-                attributes
-            ) do
-                local attributeName =
-                    string.lower(
-                        tostring(name)
-                    )
-
-                if value == false
-                    and (
-                        string.find(
-                            attributeName,
-                            "canjump",
-                            1,
-                            true
-                        )
-                        or string.find(
-                            attributeName,
-                            "jumpallowed",
-                            1,
-                            true
-                        )
-                        or string.find(
-                            attributeName,
-                            "jumpenabled",
-                            1,
-                            true
-                        )
-                    )
-                then
-                    return true
-                end
-
-                if value == true
-                    and (
-                        string.find(
-                            attributeName,
-                            "nojump",
-                            1,
-                            true
-                        )
-                        or string.find(
-                            attributeName,
-                            "jumpdisabled",
-                            1,
-                            true
-                        )
-                        or string.find(
-                            attributeName,
-                            "carried",
-                            1,
-                            true
-                        )
-                        or string.find(
-                            attributeName,
-                            "carrying",
-                            1,
-                            true
-                        )
-                    )
-                then
-                    return true
-                end
-            end
-        end
-    end
-
-    local contextJumpBlocked =
-        false
-
-    if not emoteActive then
+    local ok, emoteId =
         pcall(function()
-            local ContextActionService =
-                game:GetService(
-                    "ContextActionService"
+            return object.DataRegistry:Get(
+                "Emote"
+            )
+        end)
+
+    emoteId =
+        tonumber(emoteId)
+
+    if not ok
+        or not emoteId
+        or emoteId == 0
+    then
+        return nil
+    end
+
+    local module =
+        getItemModule(
+            emoteId
+        )
+
+    if not module then
+        return nil
+    end
+
+    local function readBoolean(instance, name)
+        local value = nil
+
+        pcall(function()
+            local attribute =
+                instance:GetAttribute(
+                    name
                 )
 
-            local actions =
-                ContextActionService:
-                    GetAllBoundActionInfo()
-
-            local jumpPriority = 2000
-
-            for name, info in pairs(
-                actions
-            ) do
-                local actionName =
-                    string.lower(
-                        tostring(name)
-                    )
-
-                if actionName == "jumpaction"
-                    and type(info) == "table"
-                then
-                    jumpPriority =
-                        tonumber(
-                            info.priorityLevel
-                        )
-                        or jumpPriority
-                end
+            if type(attribute) == "boolean" then
+                value = attribute
+                return
             end
 
-            for name, info in pairs(
-                actions
-            ) do
-                if type(info) == "table"
-                    and not contextJumpBlocked
-                then
-                    local actionName =
-                        string.lower(
-                            tostring(name)
-                        )
+            local child =
+                instance:FindFirstChild(
+                    name,
+                    true
+                )
 
-                    if actionName
-                        ~= "jumpaction"
-                    then
-                        local priority =
-                            tonumber(
-                                info.priorityLevel
-                            )
-                            or 0
-
-                        if priority
-                            > jumpPriority
-                        then
-                            for _, inputType in ipairs(
-                                info.inputTypes
-                                    or {}
-                            ) do
-                                if inputType
-                                        == Enum.PlayerActions.CharacterJump
-                                    or inputType
-                                        == Enum.KeyCode.Space
-                                then
-                                    contextJumpBlocked = true
-                                    break
-                                end
-                            end
-                        end
-                    end
-                end
+            if child
+                and child:IsA("BoolValue")
+            then
+                value = child.Value
             end
         end)
+
+        return value
     end
 
-    return contextJumpBlocked
+    for _, name in ipairs({
+        "CanJump",
+        "JumpAllowed",
+        "JumpEnabled"
+    }) do
+        local value =
+            readBoolean(
+                module,
+                name
+            )
+
+        if value ~= nil then
+            return value
+        end
+    end
+
+    for _, name in ipairs({
+        "NoJump",
+        "JumpDisabled"
+    }) do
+        local value =
+            readBoolean(
+                module,
+                name
+            )
+
+        if value ~= nil then
+            return not value
+        end
+    end
+
+    for _, descendant in ipairs(
+        module:GetDescendants()
+    ) do
+        if descendant:IsA("BoolValue") then
+            local name =
+                tostring(
+                    descendant.Name
+                ):lower():gsub(
+                    "[^%w]",
+                    ""
+                )
+
+            if name == "canjump"
+                or name == "jumpallowed"
+                or name == "jumpenabled"
+            then
+                return descendant.Value
+            end
+
+            if name == "nojump"
+                or name == "jumpdisabled"
+            then
+                return not descendant.Value
+            end
+        end
+    end
+
+    return nil
+end
+
+function mainJump.hasActiveEmote()
+    local object =
+        getCharacterObject()
+
+    if not object
+        or not object.DataRegistry
+    then
+        return false
+    end
+
+    local ok, emoteId =
+        pcall(function()
+            return object.DataRegistry:Get(
+                "Emote"
+            )
+        end)
+
+    return ok
+        and tonumber(emoteId)
+        and tonumber(emoteId) ~= 0
+        or false
 end
 
 function mainJump.canJump()
@@ -10411,51 +9877,29 @@ function mainJump.canJump()
     then
         return false
     end
+
     if mainJump.humanoid.FloorMaterial
         == Enum.Material.Air
     then
         return false
     end
 
-    local emoteActive =
-        false
+    local permission =
+        mainJump.getEmoteJumpPermission()
 
-    do
-        local object =
-            getCharacterObject()
-
-        if object
-            and object.DataRegistry
-        then
-            local ok, emoteId =
-                pcall(function()
-                    return object.DataRegistry:Get(
-                        "Emote"
-                    )
-                end)
-
-            emoteActive =
-                ok
-                and tonumber(emoteId)
-                and tonumber(emoteId) ~= 0
-        end
-    end
-
-    if not emoteActive
-        and mainJump.isGameJumpBlocked()
-    then
+    if permission == false then
         return false
     end
 
-    if emoteActive then
-        --// During an emote the game decides whether Jump=true
-        --// is accepted. We only require the character to be
-        --// grounded and alive here.
+    if permission == true
+        and mainJump.hasActiveEmote()
+    then
         return true
     end
 
     local state =
         mainJump.humanoid:GetState()
+
     return state
         ~= Enum.HumanoidStateType.Jumping
         and state
@@ -10468,108 +9912,32 @@ function mainJump.jump(hit)
         return
     end
 
-    mainJump.lastJump = tick()
-    local emoteActive =
-        false
+    mainJump.lastJump =
+        tick()
 
-    do
-        local object =
-            getCharacterObject()
-
-        if object
-            and object.DataRegistry
-        then
-            local ok, emoteId =
-                pcall(function()
-                    return object.DataRegistry:Get(
-                        "Emote"
-                    )
-                end)
-
-            emoteActive =
-                ok
-                and tonumber(emoteId)
-                and tonumber(emoteId) ~= 0
-        end
-    end
-
-    pcall(function()
-        mainJump.humanoid.Jump = true
-
-        if not emoteActive then
+    if mainJump.hasActiveEmote() then
+        pcall(function()
+            mainJump.humanoid:SetStateEnabled(
+                Enum.HumanoidStateType.Jumping,
+                true
+            )
+            mainJump.humanoid.Jump = true
             mainJump.humanoid:ChangeState(
                 Enum.HumanoidStateType.Jumping
             )
-        end
+        end)
+        return
+    end
+
+    mainJump.humanoid.Jump = true
+
+    pcall(function()
+        mainJump.humanoid:ChangeState(
+            Enum.HumanoidStateType.Jumping
+        )
     end)
 end
-function mainJump.updateEmoteAutoJump()
-    if not mainJump.enabled
-        or not mainJump.humanoid
-        or not mainJump.humanoid.Parent
-    then
-        return
-    end
 
-    local object =
-        getCharacterObject()
-
-    if not object
-        or not object.DataRegistry
-    then
-        return
-    end
-
-    local ok, emoteId =
-        pcall(function()
-            return object.DataRegistry:Get(
-                "Emote"
-            )
-        end)
-
-    if not ok
-        or not tonumber(emoteId)
-        or tonumber(emoteId) == 0
-    then
-        return
-    end
-
-    if tick() - mainJump.lastJump <
-        math.max(
-            mainJump.jumpDelay,
-            0.12
-        )
-    then
-        return
-    end
-
-    if mainJump.humanoid.Health <= 0
-        or mainJump.humanoid.FloorMaterial
-            == Enum.Material.Air
-        or mainJump.humanoid.PlatformStand
-        or mainJump.humanoid.Sit
-        or mainJump.humanoid.SeatPart
-    then
-        return
-    end
-
-    local state =
-        mainJump.humanoid:GetState()
-
-    if state
-            ~= Enum.HumanoidStateType.Running
-        and state
-            ~= Enum.HumanoidStateType.RunningNoPhysics
-    then
-        return
-    end
-
-    --// In an emote the normal Touched sensor can stay in contact
-    --// with the floor and stop producing a new event after landing.
-    --// Use the game's native Jump property here so an emote that
-    --// forbids jumping still remains unable to jump.
-    mainJump.jump()
-end
 function mainJump.contact(hit)
     if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
@@ -11148,13 +10516,6 @@ mainConnect(
     )
 )
 mainConnect(
-    RunService.Heartbeat:Connect(
-        function()
-            mainJump.updateEmoteAutoJump()
-        end
-    )
-)
-mainConnect(
     UserInputService.InputBegan:Connect(
         function(input)
             if mainJump.capturing then
@@ -11201,6 +10562,55 @@ mainConnect(
     )
 )
 mainConnect(
+    RunService.Heartbeat:Connect(
+        function()
+            if not mainJump.enabled
+                or not mainJump.humanoid
+                or not mainJump.humanoid.Parent
+                or not mainJump.hasActiveEmote()
+            then
+                return
+            end
+
+            if mainJump.getEmoteJumpPermission() ~= true then
+                return
+            end
+
+            if tick() - mainJump.lastJump <
+                math.max(
+                    mainJump.jumpDelay,
+                    0.12
+                )
+            then
+                return
+            end
+
+            if mainJump.humanoid.Health <= 0
+                or mainJump.humanoid.FloorMaterial
+                    == Enum.Material.Air
+                or mainJump.humanoid.PlatformStand
+                or mainJump.humanoid.Sit
+                or mainJump.humanoid.SeatPart
+            then
+                return
+            end
+
+            local state =
+                mainJump.humanoid:GetState()
+
+            if state
+                    ~= Enum.HumanoidStateType.Running
+                and state
+                    ~= Enum.HumanoidStateType.RunningNoPhysics
+            then
+                return
+            end
+
+            mainJump.jump()
+        end
+    )
+)
+mainConnect(
     UserInputService.JumpRequest:Connect(
         function()
             if mainJump.enabled
@@ -11214,34 +10624,6 @@ mainConnect(
 
             local humanoid =
                 mainJump.humanoid
-
-            local object =
-                getCharacterObject()
-
-            if object
-                and object.DataRegistry
-            then
-                local ok, emoteId =
-                    pcall(function()
-                        return object.DataRegistry:Get(
-                            "Emote"
-                        )
-                    end)
-
-                if ok
-                    and tonumber(emoteId)
-                    and tonumber(emoteId) ~= 0
-                then
-                    --// Let the game's native emote jump
-                    --// handling decide this. Never force
-                    --// Jumping/ChangeState from here.
-                    return
-                end
-            end
-
-            if mainJump.isGameJumpBlocked() then
-                return
-            end
 
             if humanoid.Health <= 0
                 or humanoid.FloorMaterial
@@ -11290,7 +10672,7 @@ mainConnect(
 
                 for _ = 1, 3 do
                     local canRearm =
-                        not mainJump.isGameJumpBlocked()
+                        true
 
                     pcall(function()
                         if humanoid.Health <= 0
@@ -12561,7 +11943,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.70"
+            MainTitle.Text = "DeadEyes v1.71"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12583,7 +11965,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.70"
+            MainTitle.Text = "DeadEyes v1.71"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -12608,7 +11990,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.70"
+            MainTitle.Text = "DeadEyes v1.71"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -12630,7 +12012,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.70"
+            MainTitle.Text = "DeadEyes v1.71"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -12655,7 +12037,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.70"
+            MainTitle.Text = "DeadEyes v1.71"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -12753,60 +12135,6 @@ local function cleanupUnusual()
 
     local restoreNativeUnusual =
         unusualActive
-        or unusualRuntime.originalId
-
-    local runtimeOriginalId =
-        tonumber(
-            unusualRuntime.originalId
-        )
-
-    if not runtimeOriginalId
-        or runtimeOriginalId == 0
-    then
-        runtimeOriginalId =
-            UnusualFns.getEquippedUnusualId()
-    end
-
-    local runtimeSnapshot =
-        unusualRuntime.nativeSnapshot
-
-    if restoreNativeUnusual
-        and runtimeOriginalId
-        and runtimeOriginalId ~= 0
-    then
-        pcall(function()
-            local visualRig =
-                UnusualFns.getUnusualVisualRig()
-            local playerCharacter =
-                UnusualFns.getUnusualPlayerCharacter()
-
-            if visualRig then
-                UnusualFns.removeOurUnusualFX()
-                task.wait()
-
-                if runtimeSnapshot then
-                    UnusualFns.restoreNativeUnusualSnapshot(
-                        runtimeSnapshot,
-                        visualRig,
-                        playerCharacter
-                    )
-                else
-                    UnusualFns.removeOriginalUnusualFX(
-                        runtimeOriginalId,
-                        visualRig,
-                        playerCharacter
-                    )
-                    task.wait()
-
-                    applyUnusualFX(
-                        runtimeOriginalId,
-                        visualRig,
-                        playerCharacter
-                    )
-                end
-            end
-        end)
-    end
 
     unusualEnabled =
         false
@@ -12821,12 +12149,14 @@ local function cleanupUnusual()
         cosmetic.cleanup()
     end)
 
-    unusualRuntime.originalId =
-        nil
-    unusualRuntime.replacementId =
-        nil
-    unusualRuntime.nativeSnapshot =
-        nil
+    if restoreNativeUnusual then
+        unusualActive =
+            true
+
+        pcall(function()
+            UnusualFns.restoreUnusual()
+        end)
+    end
 
     genv.DEADEYE_COSMETIC_CLEANUP =
         nil
