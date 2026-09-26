@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.34"
+    "DeadEyes v1.35"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11506,7 +11506,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.34"
+            MainTitle.Text = "DeadEyes v1.35"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11528,7 +11528,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.34"
+            MainTitle.Text = "DeadEyes v1.35"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11553,7 +11553,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.34"
+            MainTitle.Text = "DeadEyes v1.35"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11575,7 +11575,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.34"
+            MainTitle.Text = "DeadEyes v1.35"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11600,7 +11600,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.34"
+            MainTitle.Text = "DeadEyes v1.35"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13583,9 +13583,11 @@ end
 --// =========================================================
 --// =========================================================
 --// =========================================================
+--// =========================================================
 --// PICKER APPEARANCE
---// Light scale-in only. The popup keeps its normal colors,
---// opacity and contents; nothing is faded or darkened.
+--// Real fade-in: the popup and every visible child start fully
+--// transparent, then tween back to their normal transparency.
+--// No CanvasGroup and no scale animation.
 --// =========================================================
 __UI.PickerAppearTweens =
     __UI.PickerAppearTweens or {}
@@ -13599,60 +13601,173 @@ function __UI.animatePickerAppear(
         return
     end
 
-    local scale =
-        picker:FindFirstChild(
-            "DeadEyePickerAppearScale"
-        )
-
-    if not scale then
-        scale =
-            Instance.new("UIScale")
-
-        scale.Name =
-            "DeadEyePickerAppearScale"
-
-        scale.Scale =
-            1
-
-        scale.Parent =
-            picker
-    end
-
-    local oldTween =
+    local oldTweens =
         __UI.PickerAppearTweens[picker]
 
-    if oldTween then
-        pcall(function()
-            oldTween:Cancel()
-        end)
+    if type(oldTweens) == "table" then
+        for _, tween in ipairs(oldTweens) do
+            pcall(function()
+                tween:Cancel()
+            end)
+        end
+    end
+
+    local targets = {}
+
+    table.insert(
+        targets,
+        picker
+    )
+
+    for _, object in ipairs(
+        picker:GetDescendants()
+    ) do
+        table.insert(
+            targets,
+            object
+        )
+    end
+
+    local states = {}
+
+    for _, object in ipairs(
+        targets
+    ) do
+        local state = {}
+
+        if object:IsA("GuiObject") then
+            state.background =
+                object.BackgroundTransparency
+
+            object.BackgroundTransparency =
+                1
+        end
+
+        if object:IsA("TextLabel")
+            or object:IsA("TextButton")
+            or object:IsA("TextBox")
+        then
+            state.text =
+                object.TextTransparency
+
+            state.textStroke =
+                object.TextStrokeTransparency
+
+            object.TextTransparency =
+                1
+
+            object.TextStrokeTransparency =
+                1
+        end
+
+        if object:IsA("ImageLabel")
+            or object:IsA("ImageButton")
+        then
+            state.image =
+                object.ImageTransparency
+
+            object.ImageTransparency =
+                1
+        end
+
+        if object:IsA("ScrollingFrame") then
+            state.scrollbar =
+                object.ScrollBarImageTransparency
+
+            object.ScrollBarImageTransparency =
+                1
+        end
+
+        if object:IsA("UIStroke") then
+            state.stroke =
+                object.Transparency
+
+            object.Transparency =
+                1
+        end
+
+        if next(state) then
+            states[object] =
+                state
+        end
     end
 
     picker.Visible =
         true
 
-    scale.Scale =
-        0.96
+    local tweens = {}
 
-    local tween =
-        __UI.TweenService:Create(
-            scale,
-            TweenInfo.new(
-                0.16,
-                Enum.EasingStyle.Quint,
-                Enum.EasingDirection.Out
-            ),
-            {
-                Scale = 1
-            }
+    local info =
+        TweenInfo.new(
+            0.22,
+            Enum.EasingStyle.Quint,
+            Enum.EasingDirection.Out
         )
 
-    __UI.PickerAppearTweens[picker] =
-        tween
+    for object, state in pairs(
+        states
+    ) do
+        if object
+            and object.Parent
+        then
+            local goal = {}
 
-    tween:Play()
+            if state.background ~= nil then
+                goal.BackgroundTransparency =
+                    state.background
+            end
+
+            if state.text ~= nil then
+                goal.TextTransparency =
+                    state.text
+            end
+
+            if state.textStroke ~= nil then
+                goal.TextStrokeTransparency =
+                    state.textStroke
+            end
+
+            if state.image ~= nil then
+                goal.ImageTransparency =
+                    state.image
+            end
+
+            if state.scrollbar ~= nil then
+                goal.ScrollBarImageTransparency =
+                    state.scrollbar
+            end
+
+            if state.stroke ~= nil then
+                goal.Transparency =
+                    state.stroke
+            end
+
+            if next(goal) then
+                pcall(function()
+                    local tween =
+                        __UI.TweenService:Create(
+                            object,
+                            info,
+                            goal
+                        )
+
+                    table.insert(
+                        tweens,
+                        tween
+                    )
+
+                    tween:Play()
+                end)
+            end
+        end
+    end
+
+    __UI.PickerAppearTweens[picker] =
+        tweens
 end
 
 --// OPEN PICKER
+
 --// =========================================================
 local function openPicker(
     slotIndex,
