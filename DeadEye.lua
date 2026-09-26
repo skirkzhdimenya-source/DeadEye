@@ -10375,38 +10375,29 @@ function mainJump.canJump()
         return false
     end
 
-    --// Native emote jumping is controlled by the emote's SpeedMult.
-    --// The game's Movement:Jump() refuses to jump when the current
-    --// MoveStats speed is exactly 0. DogParty uses SpeedMult = 0,
-    --// while jumpable emotes such as BoldMarch keep a non-zero speed.
     local object =
         getCharacterObject()
 
     if object
         and object.DataRegistry
     then
-        local ok, emoteId =
+        local registry =
+            object.DataRegistry
+
+        local emoteOk, emoteId =
             pcall(function()
-                return object.DataRegistry:Get(
+                return registry:Get(
                     "Emote"
                 )
             end)
 
-        local speedOk, moveSpeed =
-            pcall(function()
-                return object.Movement
-                    and object.Movement.MoveStats
-                    and object.Movement.MoveStats.MoveStats
-                    and object.Movement.MoveStats.MoveStats.Speed
-            end)
+        local emoteActive =
+            emoteOk
+            and tonumber(emoteId)
+            and tonumber(emoteId) ~= 0
 
-        --// Mirror the game's native Movement:Jump() guards.
-        if speedOk
-            and tonumber(moveSpeed) == 0
-        then
-            return true
-        end
-
+        --// Native Movement:Jump() restrictions that are independent
+        --// of emote-specific jumping behavior.
         local downedOk, downed =
             pcall(function()
                 return registry:Get("Downed")
@@ -10415,7 +10406,7 @@ function mainJump.canJump()
         if downedOk
             and downed == true
         then
-            return true
+            return false
         end
 
         local carryingOk, carrying =
@@ -10428,7 +10419,7 @@ function mainJump.canJump()
             and carrying ~= false
             and carrying ~= 0
         then
-            return true
+            return false
         end
 
         local carriedOk, carried =
@@ -10441,31 +10432,22 @@ function mainJump.canJump()
             and carried ~= false
             and carried ~= 0
         then
-            return true
+            return false
         end
 
-        --// Mirror AttemptJump() -> GetStateInfo().Movement.CanJump.
-        local stateInfoOk, stateInfo =
-            pcall(function()
-                return object.Movement
-                    and object.Movement:GetStateInfo()
-            end)
+        if emoteActive then
+            --// Keep the confirmed working native-emote behavior:
+            --// the game disables Jumping for emotes that cannot jump.
+            local stateOK, jumpingEnabled =
+                pcall(function()
+                    return mainJump.humanoid:
+                        GetStateEnabled(
+                            Enum.HumanoidStateType.Jumping
+                        )
+                end)
 
-        if stateInfoOk
-            and stateInfo
-            and stateInfo.Movement
-            and stateInfo.Movement.CanJump == false
-        then
-            return true
-        end
-
-        if ok
-            and tonumber(emoteId)
-            and tonumber(emoteId) ~= 0
-            and speedOk
-            and tonumber(moveSpeed) == 0
-        then
-            return true
+            return stateOK
+                and jumpingEnabled == true
         end
     end
 
