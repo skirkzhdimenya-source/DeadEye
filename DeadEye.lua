@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.32"
+    "DeadEyes v1.33"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -8440,6 +8440,12 @@ function UnusualFns.openUnusualPicker(
 
     unusualPickerSearch.Text =
         ""
+
+    __UI.animatePickerAppear(
+        unusualPicker,
+        true
+    )
+
     UnusualFns.rebuildUnusualPicker()
 
     __UI.animatePickerAppear(
@@ -11505,7 +11511,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.32"
+            MainTitle.Text = "DeadEyes v1.33"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11527,7 +11533,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.32"
+            MainTitle.Text = "DeadEyes v1.33"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11552,7 +11558,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.32"
+            MainTitle.Text = "DeadEyes v1.33"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11574,7 +11580,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.32"
+            MainTitle.Text = "DeadEyes v1.33"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11599,7 +11605,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.32"
+            MainTitle.Text = "DeadEyes v1.33"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -13580,14 +13586,17 @@ local function rebuildPicker()
         )
 end
 --// =========================================================
+--// =========================================================
 --// PICKER APPEARANCE
---// Whole popup fades in as one CanvasGroup.
+--// Prepare popup invisibly, rebuild its contents, then fade
+--// both the surface and the descendant content in together.
 --// =========================================================
 __UI.PickerAppearTweens =
     __UI.PickerAppearTweens or {}
 
 function __UI.animatePickerAppear(
-    picker
+    picker,
+    prepareOnly
 )
     if not picker
         or not picker.Parent
@@ -13604,7 +13613,25 @@ function __UI.animatePickerAppear(
         end)
     end
 
+    if prepareOnly then
+        picker.GroupTransparency =
+            1
+
+        --// CanvasGroup does not hide its own background through
+        --// GroupTransparency, so hide that surface explicitly.
+        picker.BackgroundTransparency =
+            1
+
+        picker.Visible =
+            true
+
+        return
+    end
+
     picker.GroupTransparency =
+        1
+
+    picker.BackgroundTransparency =
         1
 
     picker.Visible =
@@ -13614,12 +13641,13 @@ function __UI.animatePickerAppear(
         __UI.TweenService:Create(
             picker,
             TweenInfo.new(
-                0.18,
+                0.22,
                 Enum.EasingStyle.Quint,
                 Enum.EasingDirection.Out
             ),
             {
-                GroupTransparency = 0
+                GroupTransparency = 0,
+                BackgroundTransparency = 0.10
             }
         )
 
@@ -13629,7 +13657,6 @@ function __UI.animatePickerAppear(
     tween:Play()
 end
 
---// =========================================================
 --// OPEN PICKER
 --// =========================================================
 local function openPicker(
@@ -13657,7 +13684,14 @@ local function openPicker(
     end
     PickerSearch.Text =
         ""
+
+    __UI.animatePickerAppear(
+        Picker,
+        true
+    )
+
     rebuildPicker()
+
     __UI.animatePickerAppear(
         Picker
     )
