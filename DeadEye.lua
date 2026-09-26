@@ -894,7 +894,7 @@ MainTitle.Position =
 MainTitle.BackgroundTransparency =
     1
 MainTitle.Text =
-    "DeadEyes v1.13"
+    "DeadEyes v1.14"
 MainTitle.TextSize =
     18
 MainTitle.Font =
@@ -11502,7 +11502,7 @@ local function setCategory(
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v1.13"
+            MainTitle.Text = "DeadEyes v1.14"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11524,7 +11524,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v1.13"
+            MainTitle.Text = "DeadEyes v1.14"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
@@ -11549,7 +11549,7 @@ local function setCategory(
             updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v1.13"
+            MainTitle.Text = "DeadEyes v1.14"
             Status.Visible = false
             Toggle.Visible = false
             SlotsScroll.Visible = false
@@ -11571,7 +11571,7 @@ local function setCategory(
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v1.13"
+            MainTitle.Text = "DeadEyes v1.14"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
@@ -11596,7 +11596,7 @@ local function setCategory(
             cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v1.13"
+            MainTitle.Text = "DeadEyes v1.14"
             Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
@@ -14635,8 +14635,8 @@ function __UI.styleButtonMotion(button)
     end
 
     local stroke =
-        button:FindFirstChildOfClass(
-            "UIStroke"
+        button:FindFirstChild(
+            "DeadEyeHoverStroke"
         )
 
     if not stroke then
@@ -14647,7 +14647,7 @@ function __UI.styleButtonMotion(button)
         stroke.Thickness =
             1
         stroke.Transparency =
-            0.92
+            1
         stroke.Color =
             Color3.fromRGB(
                 205,
@@ -14662,27 +14662,24 @@ function __UI.styleButtonMotion(button)
         scale.Scale
     local baseBackgroundTransparency =
         button.BackgroundTransparency
-    local baseStrokeTransparency =
-        stroke.Transparency
     local baseStrokeThickness =
         stroke.Thickness
-    local baseTextColor =
-        button.TextColor3
 
     local hovered = false
     local scaleTween
     local visualTween
+    local glowTween
 
     local enterInfo =
         TweenInfo.new(
-            0.14,
+            0.16,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
 
     local leaveInfo =
         TweenInfo.new(
-            0.18,
+            0.20,
             Enum.EasingStyle.Quint,
             Enum.EasingDirection.Out
         )
@@ -14708,6 +14705,13 @@ function __UI.styleButtonMotion(button)
             end)
             visualTween = nil
         end
+
+        if glowTween then
+            pcall(function()
+                glowTween:Cancel()
+            end)
+            glowTween = nil
+        end
     end
 
     local function tweenTo(
@@ -14715,7 +14719,6 @@ function __UI.styleButtonMotion(button)
         targetTransparency,
         targetStrokeTransparency,
         targetStrokeThickness,
-        targetTextColor,
         info
     )
         cancelTweens()
@@ -14746,27 +14749,18 @@ function __UI.styleButtonMotion(button)
         end)
 
         pcall(function()
-            __UI.TweenService:Create(
-                stroke,
-                info,
-                {
-                    Transparency =
-                        targetStrokeTransparency,
-                    Thickness =
-                        targetStrokeThickness
-                }
-            ):Play()
-        end)
-
-        pcall(function()
-            __UI.TweenService:Create(
-                button,
-                info,
-                {
-                    TextColor3 =
-                        targetTextColor
-                }
-            ):Play()
+            glowTween =
+                __UI.TweenService:Create(
+                    stroke,
+                    info,
+                    {
+                        Transparency =
+                            targetStrokeTransparency,
+                        Thickness =
+                            targetStrokeThickness
+                    }
+                )
+            glowTween:Play()
         end)
     end
 
@@ -14783,21 +14777,10 @@ function __UI.styleButtonMotion(button)
                     baseScale * 1.025,
                     math.max(
                         0,
-                        baseBackgroundTransparency - 0.08
+                        baseBackgroundTransparency - 0.06
                     ),
-                    math.max(
-                        0.42,
-                        baseStrokeTransparency - 0.34
-                    ),
-                    math.max(
-                        baseStrokeThickness,
-                        1.18
-                    ),
-                    Color3.fromRGB(
-                        255,
-                        255,
-                        255
-                    ),
+                    0.34,
+                    1.35,
                     enterInfo
                 )
             end
@@ -14816,9 +14799,8 @@ function __UI.styleButtonMotion(button)
                 tweenTo(
                     baseScale,
                     baseBackgroundTransparency,
-                    baseStrokeTransparency,
+                    1,
                     baseStrokeThickness,
-                    baseTextColor,
                     leaveInfo
                 )
             end
@@ -14834,13 +14816,12 @@ function __UI.styleButtonMotion(button)
 
                 tweenTo(
                     baseScale * 0.985,
-                    baseBackgroundTransparency + 0.015,
                     math.min(
                         1,
-                        baseStrokeTransparency + 0.05
+                        baseBackgroundTransparency + 0.015
                     ),
-                    baseStrokeThickness,
-                    baseTextColor,
+                    0.52,
+                    1.15,
                     pressInfo
                 )
             end
@@ -14859,30 +14840,18 @@ function __UI.styleButtonMotion(button)
                         baseScale * 1.025,
                         math.max(
                             0,
-                            baseBackgroundTransparency - 0.08
+                            baseBackgroundTransparency - 0.06
                         ),
-                        math.max(
-                            0.42,
-                            baseStrokeTransparency - 0.34
-                        ),
-                        math.max(
-                            baseStrokeThickness,
-                            1.18
-                        ),
-                        Color3.fromRGB(
-                            255,
-                            255,
-                            255
-                        ),
+                        0.34,
+                        1.35,
                         enterInfo
                     )
                 else
                     tweenTo(
                         baseScale,
                         baseBackgroundTransparency,
-                        baseStrokeTransparency,
+                        1,
                         baseStrokeThickness,
-                        baseTextColor,
                         leaveInfo
                     )
                 end
