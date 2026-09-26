@@ -4195,22 +4195,43 @@ function cosmetic.cleanup()
 
     cosmetic.enabled = false
 
-    pcall(function()
-        if wasEnabled
-            or hadDirectAdd
-        then
+    --// A previous refresh can still be rebuilding the live rig.
+    --// Wait for it to finish so cleanup cannot leave the replacement
+    --// cosmetics behind.
+    local deadline =
+        tick() + 1
+
+    while cosmetic.refreshBusy
+        and tick() < deadline
+    do
+        task.wait()
+    end
+
+    if cosmetic.refreshBusy then
+        cosmetic.refreshBusy = false
+    end
+
+    --// Always refresh while a live skin snapshot exists. This makes
+    --// cleanup idempotent even when the swap was already disabled but
+    --// its visual result is still present on the rig.
+    if wasEnabled
+        or hadDirectAdd
+        or cosmetic.skinDescription
+    then
+        pcall(function()
             cosmetic.refreshRig()
-        end
-    end)
+        end)
+    end
 
     cosmetic.directAction[1] = nil
     cosmetic.directAction[2] = nil
 
     cosmetic.closePicker()
     cosmetic.refreshBusy = false
+    cosmetic.removeHook()
+
     cosmetic.skinDescription = nil
     cosmetic.skinCharacter = nil
-    cosmetic.removeHook()
 
     pcall(function()
         if cosmetic.page then
@@ -12706,6 +12727,49 @@ local function cleanupUnusual()
 
     pcall(function()
         cosmetic.cleanup()
+    end)
+
+    --// Cosmetic refresh can rebuild the live rig after the first
+    --// Unusual restoration. Restore the exact native Unusual snapshot
+    --// once more on the final live rig so no replacement FX survive.
+    pcall(function()
+        local finalVisualRig =
+            UnusualFns.getUnusualVisualRig()
+        local finalPlayerCharacter =
+            UnusualFns.getUnusualPlayerCharacter()
+
+        if finalVisualRig
+            and runtimeOriginalId
+            and runtimeOriginalId ~= 0
+        then
+            UnusualFns.removeOurUnusualFX()
+
+            local restoredFinal = false
+
+            if runtimeSnapshot then
+                restoredFinal =
+                    UnusualFns.restoreNativeUnusualSnapshot(
+                        runtimeSnapshot,
+                        finalVisualRig,
+                        finalPlayerCharacter
+                    )
+            end
+
+            if not restoredFinal then
+                UnusualFns.removeOriginalUnusualFX(
+                    runtimeOriginalId,
+                    finalVisualRig,
+                    finalPlayerCharacter
+                )
+                task.wait()
+
+                applyUnusualFX(
+                    runtimeOriginalId,
+                    finalVisualRig,
+                    finalPlayerCharacter
+                )
+            end
+        end
     end)
 
     unusualRuntime.originalId =
