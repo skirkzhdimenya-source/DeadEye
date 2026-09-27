@@ -1,0 +1,858 @@
+# DeadEye — Camera + Jump Physics Findings
+# Date: 2026-09-27
+#
+# Purpose:
+# This document records the confirmed internal camera and jump logic found during
+# reverse-engineering of the game client. It is a research/reference note.
+#
+# IMPORTANT:
+# Do not treat GC indexes as stable identifiers. GC indexes changed between scans.
+# Function/table addresses (0x...) also change between sessions. Use source/name
+# and structure to rediscover them.
+
+============================================================
+1. MOVEMENT BASE STATS
+============================================================
+
+Path found:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveStats.BaseStats
+
+Current BaseStats:
+
+return {
+    SprintAcceleration = 1,
+    SprintCap = 2,
+    RunAccel = 1,
+    Friction = 5,
+    RunDeaccel = 700,
+    AirStrafeAcceleration = 182,
+    AirAcceleration = 1,
+    Speed = 1500,
+    JumpHeight = 3,
+    JumpCap = 1,
+    WalkSpeedMultiplier = 1,
+    JumpSpeedMultiplier = 1.45,
+    BhopEnabled = false,
+    GroundedDistCheck = 2.9
+}
+
+Values directly relevant to the investigated jump-speed behavior:
+
+Speed = 1500
+JumpSpeedMultiplier = 1.45
+JumpHeight = 3
+SprintCap = 2
+BhopEnabled = false
+
+Other relevant movement constants:
+
+Friction = 5
+RunDeaccel = 700
+AirStrafeAcceleration = 182
+AirAcceleration = 1
+
+
+============================================================
+2. EXACT JUMP FUNCTION
+============================================================
+
+The movement jump function was found through getgc().
+
+Its decompiled logic was:
+
+if v_u_1.DataRegistry:Get("Downed") then
+    return
+else
+    local Carrying = v_u_1.DataRegistry:Get("Carrying")
+    local v2
+    if Carrying == nil or Carrying == false then
+        v2 = false
+    else
+        v2 = Carrying ~= 0
+    end
+
+    if v2 then
+        return
+    elseif v_u_1.MoveStats.MoveStats.Speed ~= 0 then
+
+        local v3 = v4 or v_u_1.MoveStats:GetMoveStats()
+        local Velocity = v_u_1.DataRegistry:Get("Velocity")
+        local Sprint = v_u_1.DataRegistry:Get("Sprint")
+
+        if Velocity ~= Vector3.new()
+            and (v_u_1.DataRegistry:Get("Crouching") ~= true and v9 == true)
+        then
+            local Speed = v3.Speed
+
+            local v5 =
+                v3.JumpSpeedMultiplier *
+                v_u_1.Character.HumanoidRootPart.CFrame.lookVector:Dot(Velocity.unit) ^ 2
+
+            local magnitude = Velocity.magnitude
+
+            if magnitude < Sprint * Speed * v5 then
+
+                local v6 = magnitude * v3.JumpSpeedMultiplier
+                local v7 = Sprint * Speed * v5
+                local v8 = math.min(v6, v7)
+
+                v_u_1.DataRegistry:Set(
+                    "Velocity",
+                    (v_u_1.DataRegistry:Get("Velocity") * Vector3.new(1, 0, 1)).unit * v8
+                )
+            end
+        end
+
+        v_u_1.Character.Humanoid.JumpHeight =
+            v10 or v3.JumpHeight
+
+        v_u_1.Character.Humanoid:ChangeState(
+            Enum.HumanoidStateType.Jumping
+        )
+
+        if v_u_1.State == "WallrunRight"
+            or v_u_1.State == "WallrunLeft"
+        then
+            v_u_1.DataRegistry:Set("IgnoreXMove", tick())
+
+            local Y =
+                v_u_1.Character.HumanoidRootPart.AssemblyLinearVelocity.Y
+
+            v_u_1.DataRegistry:Set(
+                "Velocity",
+                v_u_1.DataRegistry:Get("Velocity")
+                    + (v_u_1.DataRegistry:Get("WallrunDir") or Vector3.new())
+                    * 90 * 30
+            )
+
+            task.spawn(function()
+                task.wait()
+
+                local HumanoidRootPart =
+                    v_u_1.Character.HumanoidRootPart
+
+                local X =
+                    v_u_1.Character.HumanoidRootPart.AssemblyLinearVelocity.X
+
+                local v11 = Y * 0.1 + 10
+
+                local Z =
+                    v_u_1.Character.HumanoidRootPart.AssemblyLinearVelocity.Z
+
+                HumanoidRootPart.AssemblyLinearVelocity =
+                    Vector3.new(X, v11, Z)
+            end)
+        end
+    end
+end
+
+
+============================================================
+3. CONFIRMED CAUSE OF LOOKING DOWN REDUCING JUMP SPEED
+============================================================
+
+The critical expression is:
+
+local v5 =
+    JumpSpeedMultiplier *
+    HumanoidRootPart.CFrame.lookVector:Dot(Velocity.unit) ^ 2
+
+Then:
+
+local v7 = Sprint * Speed * v5
+
+and finally:
+
+local v8 = math.min(v6, v7)
+
+where:
+
+local v6 = magnitude * JumpSpeedMultiplier
+
+So the horizontal velocity used after the jump is capped by:
+
+min(
+    |Velocity| * JumpSpeedMultiplier,
+    Sprint * Speed * JumpSpeedMultiplier * (lookVector · Velocity.unit)^2
+)
+
+The important point:
+
+JumpHeight is NOT responsible for the observed speed reduction.
+
+The reduction comes from the camera/character look direction being used inside
+the dot product.
+
+When velocity is approximately horizontal, pitching the camera downward reduces
+the horizontal projection of lookVector.
+
+For a horizontal velocity aligned with the camera's horizontal facing direction:
+
+lookVector · Velocity.unit ~= cos(pitch)
+
+Therefore the squared factor is approximately:
+
+cos(pitch)^2
+
+Examples for a purely horizontal aligned velocity:
+
+pitch  0°  -> cos²(0°)    = 1
+pitch 30°  -> cos²(30°)   = 0.75
+pitch 45°  -> cos²(45°)   = 0.50
+pitch 60°  -> cos²(60°)   = 0.25
+pitch 75°  -> cos²(75°)   = 0.067
+pitch 90°  -> cos²(90°)   = 0
+
+Actual value can differ because the formula uses the full
+Velocity.unit vector, not an explicitly flattened horizontal vector.
+
+The final horizontal velocity is also normalized to horizontal:
+
+Velocity * Vector3.new(1, 0, 1)
+
+then normalized with .unit and multiplied by v8.
+
+
+============================================================
+4. WHAT THE JUMP FUNCTION DOES IN ORDER
+============================================================
+
+1. Reject jump if Downed.
+2. Reject jump while carrying a non-zero carried object/state.
+3. Reject movement logic if MoveStats.Speed == 0.
+4. Read:
+   - MoveStats
+   - DataRegistry Velocity
+   - DataRegistry Sprint
+5. If Velocity is non-zero and the required crouch/state condition passes:
+   - calculate JumpSpeedMultiplier * dot²
+   - calculate a target speed using Sprint * Speed * that factor
+   - compare current magnitude to that target
+   - if current magnitude is below the target, rewrite Velocity
+   - preserve only X/Z direction for that rewritten velocity
+6. Set Humanoid.JumpHeight.
+7. Trigger HumanoidStateType.Jumping.
+8. Wallrun jumps have a separate velocity/vertical-velocity modification.
+
+
+============================================================
+5. ACTIVE CAMERA SYSTEM FOUND
+============================================================
+
+The first path investigated was:
+
+Players.<player>.PlayerScripts.PlayerModule.CameraModule.VehicleCamera.VehicleCameraCore
+
+VehicleCameraCore contains rotation/spring functions such as:
+
+setGoal
+getCFrame
+step
+new
+
+However, no live VehicleCameraCore instance was found in the active camera state
+during the investigation.
+
+Therefore VehicleCameraCore is NOT the active path for ordinary camera movement
+in the tested state.
+
+The actual active camera path was found in:
+
+Players.DEN919191.PlayerScripts.PlayerModule.CameraModule.ClassicCamera
+
+
+============================================================
+6. LIVE CLASSIC CAMERA CONTROLLER
+============================================================
+
+ClassicCamera.Update was found with two important upvalues:
+
+upvalue[1] = live ClassicCamera controller table
+upvalue[4] = live CameraInput table
+
+The live ClassicCamera controller table contained:
+
+SetMaxDeadzone
+TweenOffset
+SetBaseFOV
+SetOffsets
+MaxY
+Settings
+FOVTweens
+ReturnCFrameAndFocusWithoutController
+SetCameraOffset
+ShiftLockCache
+BaseFOV
+FOVAdjusters
+SetCFrame
+SetDeadzonePart
+OriginOffsets
+CameraCFrame
+ShiftLockEnabled
+GetFocus
+SetMinDeadzone
+Update
+FOVAdjusting
+SetSubject
+Transition
+CameraCenterOffset
+minDeadzone
+MinY
+CameraFocus
+GetCFrame
+GetAdjustedFOV
+TweenFOV
+Overridden
+GetShiftLockOffset
+ReturnCFrameAndFocus
+SetShiftLockOffset
+SetMinY
+SetMaxY
+ToggleShiftLock
+AdjustFOV
+maxDeadzone
+UpdateCameraTransition
+TweenOriginOffset
+OffsetCFrames
+LimitByDeadzone
+KeyUsed
+SetFakeSubject
+
+The active controller had a live CameraCFrame field and CameraFocus field.
+
+Example observed CameraCFrame during a scan:
+
+-140.438446, 78.1099396, -77.6262131,
+-0.0867699236, -0.563256621, 0.821713507,
+0, 0.824824393, 0.565389037,
+-0.996228397, 0.0490587652, -0.0715699494
+
+Do NOT rely on that numeric CFrame; it was only the state at one moment.
+
+
+============================================================
+7. CAMERA INPUT OBJECT
+============================================================
+
+The active CameraInput table was found and contained:
+
+disableCameraToggleInput
+getTogglePan
+getHoldPan
+getRotation
+getZoomDelta
+getInputEnabled
+enableCameraToggleInput
+resetInputForFrameEnd
+getRotationActivated
+setTogglePan
+getPanning
+setInputEnabled
+gamepadZoomPress
+
+The key function:
+
+CameraInput.getRotation
+
+
+============================================================
+8. getRotation INTERNAL STATE
+============================================================
+
+getRotation had these upvalues:
+
+[1] GameSettings
+[2] table with:
+    I = 0
+    Left = 0
+    Right = 0
+    O = 0
+    None = 0
+
+[3] table with:
+    None = Vector2.new(0, -0)
+    Thumbstick2 = Vector2.new(0, 0)
+
+[4] table with:
+    Pinch = 0
+    Pan = Vector2.new(0, 0)
+    Movement = Vector2.new(0, 0)
+    Wheel = 0
+
+[5] function: adjustTouchPitchSensitivity
+[6] table with:
+    Move = Vector2.new(0, 0)
+    Pinch = 0
+
+[7] Vector2:
+    4.18879032, 3.2253685
+
+[8] Vector2:
+    0.00575958658, 0.00575958658
+
+[9] Vector2:
+    0.080634214, 0.080634214
+
+[10] Vector2:
+    0.0195825938, 0.0195825938
+
+The exact state table important for MouseMovement was:
+
+upvalue[4]
+
+with fields:
+
+Movement
+Pan
+Pinch
+Wheel
+
+
+============================================================
+9. CONFIRMED MOUSE ROTATION WRITER
+============================================================
+
+A search for functions capturing the upvalue[4] state table found:
+
+inputChanged
+line 379
+
+Relevant constants:
+
+UserInputType
+Enum
+Touch
+MouseMovement
+Enum.UserInputType.MouseMovement
+Delta
+Vector2
+new
+X
+Y
+Movement
+
+Its upvalues included:
+
+[1] function
+[2] the exact live state table containing:
+    Pinch
+    Pan
+    Movement
+    Wheel
+
+This confirms:
+
+MouseMovement -> inputChanged -> Movement
+
+
+============================================================
+10. END-OF-FRAME RESET
+============================================================
+
+resetInputForFrameEnd
+line 472
+
+captures the same Movement/Pan/Pinch/Wheel table.
+
+Relevant constants included:
+
+Vector2
+new
+Movement
+Move
+Pinch
+Wheel
+Pan
+
+This indicates input values such as Movement are frame-oriented state and are
+reset/cleared by CameraInput after the frame processing.
+
+
+============================================================
+11. CAMERA CONSUMPTION PIPELINE
+============================================================
+
+The confirmed pipeline is:
+
+Mouse movement
+    |
+    v
+CameraInput.inputChanged
+    |
+    v
+CameraInput state table:
+    Movement = Vector2(...)
+    |
+    v
+CameraInput.getRotation()
+    |
+    v
+ClassicCamera.Update()
+    |
+    v
+ClassicCamera.CameraCFrame
+    |
+    v
+workspace.CurrentCamera
+
+
+============================================================
+12. PROGRAMMATIC CAMERA ROTATION — CONFIRMED TEST
+============================================================
+
+The following approach was tested successfully:
+
+Find CameraInput.getRotation.
+
+Take debug.getupvalues(getRotation)[4].
+
+That gives the live table containing:
+
+Movement
+Pan
+Pinch
+Wheel
+
+Then write:
+
+movementTable.Movement = Vector2.new(3, 0)
+
+on a RenderStep before camera processing.
+
+Example tested pattern:
+
+local RunService = game:GetService("RunService")
+
+local getRotation
+for _, fn in pairs(getgc(true)) do
+    if type(fn) == "function" then
+        local ok, info = pcall(debug.getinfo, fn)
+
+        if ok and info
+            and tostring(info.source):find(
+                "PlayerModule.CameraModule.CameraInput",
+                1,
+                true
+            )
+            and tostring(info.name) == "getRotation"
+        then
+            getRotation = fn
+            break
+        end
+    end
+end
+
+local upvalues = debug.getupvalues(getRotation)
+local movementTable = upvalues[4]
+
+_G.DeadEyeStopCameraRotation = false
+
+local start = tick()
+
+RunService:BindToRenderStep(
+    "DeadEyeCameraTest",
+    Enum.RenderPriority.Camera.Value - 1,
+    function()
+        if _G.DeadEyeStopCameraRotation
+            or tick() - start >= 1
+        then
+            RunService:UnbindFromRenderStep("DeadEyeCameraTest")
+            movementTable.Movement = Vector2.new(0, 0)
+            return
+        end
+
+        movementTable.Movement = Vector2.new(3, 0)
+    end
+)
+
+The user confirmed this test worked ("пиздато").
+
+This is important because it proves the camera can be rotated through the game's
+native CameraInput pipeline without directly assigning:
+
+workspace.CurrentCamera.CFrame
+
+
+============================================================
+13. WHY THIS IS BETTER THAN SETTING CurrentCamera.CFrame
+============================================================
+
+Directly assigning:
+
+workspace.CurrentCamera.CFrame = ...
+
+would bypass the normal CameraModule rotation pipeline and can be overwritten
+by the next camera update.
+
+Writing CameraInput.Movement instead feeds the same input path used by the
+active camera controller.
+
+Therefore the sequence is:
+
+custom input value
+    ->
+CameraInput.getRotation()
+    ->
+ClassicCamera.Update()
+    ->
+CameraCFrame
+
+
+============================================================
+14. OTHER CAMERA FUNCTIONS DISCOVERED
+============================================================
+
+ClassicCamera inherited from BaseCamera.
+
+Useful methods observed:
+
+GetCameraLookVector
+GetSubjectCFrame
+InputTranslationToCameraAngleChange
+CalculateNewLookVectorFromArg
+CalculateNewLookCFrameFromArg
+GetSubjectPosition
+GetSubjectVelocity
+GetSubjectRotVelocity
+GetCameraToSubjectDistance
+SetCameraToSubjectDistance
+SetCameraOffset
+SetCFrame
+GetCFrame
+Update
+
+BaseCamera.GetCameraLookVector references the active camera state and ultimately
+reads the current camera's look direction.
+
+ClassicCamera.Update contains constants including:
+
+CurrentCamera
+CFrame
+lookVector
+getRotation
+LookVector
+
+This confirms that camera rotation obtained from CameraInput is consumed inside
+the active ClassicCamera update path.
+
+
+============================================================
+15. IMPORTANT FUNCTIONAL DISTINCTION
+============================================================
+
+Do not confuse these two different concepts:
+
+A) Character/root rotation
+   - logic can set HumanoidRootPart yaw/orientation
+   - this affects character facing
+
+B) Camera rotation
+   - active path is CameraInput -> getRotation -> ClassicCamera.Update
+   - this changes the actual camera look direction
+
+The jump-speed formula uses:
+
+HumanoidRootPart.CFrame.lookVector
+
+not merely:
+
+workspace.CurrentCamera.CFrame.LookVector
+
+Therefore future testing must verify whether the game's character orientation
+has already been synchronized with the camera before Jump() executes.
+
+There was also a separate character-orientation Update function found that uses
+DataRegistry "LookCFrame" and a movement state's RootPartOrientation.
+
+That system should be treated separately from CameraInput itself.
+
+
+============================================================
+16. CHARACTER ROTATION FUNCTION OBSERVED
+============================================================
+
+A separate movement/orientation update function contained logic equivalent to:
+
+local LookCFrame = DataRegistry:Get("LookCFrame")
+local _, yaw, _ = LookCFrame:ToOrientation()
+
+local yawOnly =
+    CFrame.new(LookCFrame.Position)
+    * CFrame.Angles(0, yaw, 0)
+
+local lookVector = yawOnly.lookVector
+
+...
+
+if Movement.RootPartOrientation.Type == "Camera" then
+    local _, cameraYaw, _ =
+        DataRegistry:Get("LookCFrame"):ToOrientation()
+
+    p2:SetCFrame(
+        CFrame.new(p2.RootPart.CFrame.p)
+        * CFrame.Angles(0, cameraYaw, 0)
+    )
+
+    return
+end
+
+Other movement orientation modes seen:
+
+MoveDir
+EmotingMoveDir
+Velocity
+Camera
+
+This is potentially important because the Jump() function uses the
+HumanoidRootPart.CFrame.lookVector. Therefore the exact timing of character
+rotation relative to camera rotation matters.
+
+
+============================================================
+17. VR / VEHICLE CAMERA FINDINGS
+============================================================
+
+VehicleCameraCore had:
+
+setGoal
+getCFrame
+step
+new
+
+Its getCFrame decompiled as:
+
+return CFrame.fromEulerAnglesYXZ(
+    v1.pitchP,
+    v1.yawP,
+    0
+)
+
+The core step logic uses spring state:
+
+yawG
+yawP
+yawV
+pitchG
+pitchP
+pitchV
+
+and damping/stiffness settings including:
+
+cutoffMinAngularVelYaw = 60
+cutoffMaxAngularVelYaw = 180
+yawStiffness = 2.5
+cutoffMinAngularVelPitch = 15
+cutoffMaxAngularVelPitch = 60
+pitchStiffness = 0.5
+yawResponseDampingFalling = 3
+pitchResponseDampingFalling = 3
+yawReponseDampingRising = 1
+pitchReponseDampingRising = 1
+pitchBaseAngle = 18
+pitchDeadzoneAngle = 12
+
+These were found in the Vehicle/VR camera core configuration.
+
+They are NOT needed for the currently active ClassicCamera path.
+
+
+============================================================
+18. SEARCH STRATEGY / IDENTIFIERS THAT WORKED
+============================================================
+
+Useful source strings:
+
+PlayerModule.CameraModule
+PlayerModule.CameraModule.ClassicCamera
+PlayerModule.CameraModule.CameraInput
+PlayerModule.CameraModule.BaseCamera
+PlayerModule.CameraModule.VehicleCamera
+PlayerModule.CameraModule.VehicleCamera.VehicleCameraCore
+
+Useful function names:
+
+ClassicCamera.Update
+CameraInput.getRotation
+CameraInput.inputChanged
+CameraInput.resetInputForFrameEnd
+BaseCamera.GetCameraLookVector
+BaseCamera.GetSubjectCFrame
+
+Useful constants for searching:
+
+activeCameraController
+CurrentCamera
+getRotation
+CFrame
+lookVector
+LookVector
+MouseMovement
+UserInputType
+Movement
+Pan
+Thumbstick2
+InputChanged
+CameraCFrame
+
+
+============================================================
+19. STABLE WAY TO REDISCOVER THE ACTIVE CAMERA
+============================================================
+
+Do not hardcode GC index numbers.
+
+Instead:
+
+1. Scan getgc(true).
+2. Find a function where:
+   debug.getinfo(fn).source contains:
+   PlayerModule.CameraModule.ClassicCamera
+3. Match function name:
+   Update
+4. Read:
+   debug.getupvalues(Update)
+5. Upvalue 1 = active ClassicCamera controller.
+6. Upvalue 4 = active CameraInput object.
+7. Find:
+   CameraInput.getRotation
+8. Read:
+   debug.getupvalues(getRotation)[4]
+9. That table contains:
+   Movement / Pan / Pinch / Wheel
+
+
+============================================================
+20. CURRENTLY CONFIRMED FACTS VS UNCONFIRMED PARTS
+============================================================
+
+CONFIRMED:
+
+- Jump uses JumpSpeedMultiplier * (lookVector · Velocity.unit)^2.
+- The resulting value participates in a min() speed cap.
+- JumpHeight is separate from this speed calculation.
+- Active ordinary camera is ClassicCamera in the tested state.
+- ClassicCamera.Update has the live controller as upvalue 1.
+- ClassicCamera.Update has CameraInput as upvalue 4.
+- CameraInput.getRotation has the input state table at upvalue 4.
+- That table has Movement / Pan / Pinch / Wheel.
+- CameraInput.inputChanged captures that same table.
+- inputChanged explicitly handles Enum.UserInputType.MouseMovement.
+- MouseMovement contains Delta and writes to Movement.
+- CameraInput.resetInputForFrameEnd captures the same table.
+- Directly setting Movement worked as a programmatic camera-rotation test.
+
+NOT YET FULLY ESTABLISHED:
+
+- Exact mathematical scaling from MouseMovement Delta to final yaw/pitch in every
+  input mode.
+- Exact relationship/timing between camera yaw/pitch update and
+  HumanoidRootPart.CFrame.lookVector at the instant Jump() runs.
+- Whether every camera rotation change immediately reaches the character's
+  LookCFrame/root orientation in the same frame.
+- Whether the game has additional custom movement code that modifies Velocity
+  immediately before/after Jump() beyond the discovered Jump() function.
+- The precise optimal timing/angle strategy for any later automation.
+
+============================================================
+END
+============================================================
