@@ -1,8962 +1,7161 @@
-==============================================
-PASSIVE VELOCITY TRACE
-==============================================
-БЕЗ ХУКОВ
-БЕЗ Get / Set
+============================================================
+AIR-STRAFE SOURCE TRACE
+============================================================
 F6 = STOP + COPY
-
-LIVE REGISTRY FOUND
-REGISTRY = table: 0x9da1031f448a4d91
-PARENT = table: 0x877163aabed5f0b5
-NAME = DEN919191
-LOCAL = true
-
-INITIAL VALUES:
- Data.Velocity = Vector3(0.000000, 0.000000, 0.000000)
- Data.Velocity MAG = 0.000000
- Movement.Velocity = Vector3(0.000000, 0.000000, 0.000000)
- Movement.Velocity MAG = 0.000000
- Data.ActualVelocity = Vector3(0.000000, 0.000624, 0.000000)
- ActualVelocityMagnitude = 0.000624237465672195
-
-TRACE ACTIVE.
-
-
-==============================================
-EVENT #1 | FRAME #122
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.019597, 0.000000, -0.999808)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(0.000000, 0.000000, 0.000000)
- NEW = Vector3(5.327763, 0.000000, -271.813812)
- OLD MAG = 0.000000
- NEW MAG = 271.866028
- DELTA MAG = 271.866028
- DELTA = Vector3(5.327763, 0.000000, -271.813812)
-
-HRP = Vector3(0.059197, 0.000624, -3.020141)
-
-REGISTRY OTHER DATA:
- Speed = 3
- Sprint = 1.0069442168343812
- State = Idle
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.018613, -0.312942, -0.949590)
- RelativeMoveDirection = Vector3(0.000000, 0.000000, -1.000000)
-
-==============================================
-EVENT #2 | FRAME #123
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.019597, 0.000000, -0.999808)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(5.327763, 0.000000, -271.813812)
- NEW = Vector3(9.718453, 0.000000, -495.819702)
- OLD MAG = 271.866028
- NEW MAG = 495.914948
- DELTA MAG = 224.048920
- DELTA = Vector3(4.390690, 0.000000, -224.005890)
- DIRECTION DOT = 0.999999881
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.000000, 0.000624, 0.000000)
- NEW = Vector3(0.059197, 0.000624, -3.020141)
- OLD MAG = 0.000624
- NEW MAG = 3.020721
-
-HRP = Vector3(0.107983, 0.000624, -5.509092)
-
-REGISTRY OTHER DATA:
- Speed = 5.5
- Sprint = 1.0138553192373365
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.018613, -0.312942, -0.949590)
- RelativeMoveDirection = Vector3(0.000004, -0.000000, -1.000000)
-
-==============================================
-EVENT #3 | FRAME #124
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.019597, 0.000000, -0.999808)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(9.718453, 0.000000, -495.819702)
- NEW = Vector3(15.876211, 0.000000, -740.157532)
- OLD MAG = 495.914948
- NEW MAG = 740.327820
- DELTA MAG = 244.412872
- DELTA = Vector3(6.157758, 0.000000, -244.337830)
- DIRECTION DOT = 0.999998212
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.059197, 0.000624, -3.020141)
- NEW = Vector3(0.107983, 0.000624, -5.509092)
- OLD MAG = 3.020721
- NEW MAG = 5.510150
-
-HRP = Vector3(0.176402, 0.000624, -8.223955)
-
-REGISTRY OTHER DATA:
- Speed = 8.2
- Sprint = 1.0213276689406485
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.022974, -0.315131, -0.948770)
- RelativeMoveDirection = Vector3(0.001855, -0.000000, -0.999998)
-
-==============================================
-EVENT #4 | FRAME #125
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.024207, 0.000000, -0.999707)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(15.876211, 0.000000, -740.157532)
- NEW = Vector3(23.141104, 0.000000, -959.017944)
- OLD MAG = 740.327820
- NEW MAG = 959.297119
- DELTA MAG = 218.969299
- DELTA = Vector3(7.264893, 0.000000, -218.860413)
- DIRECTION DOT = 0.999996364
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.107983, 0.000624, -5.509092)
- NEW = Vector3(0.176402, 0.000624, -8.223955)
- OLD MAG = 5.510150
- NEW MAG = 8.225847
-
-HRP = Vector3(0.257123, 0.000624, -10.655736)
-
-REGISTRY OTHER DATA:
- Speed = 10.6
- Sprint = 1.0279699231032282
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.029479, -0.320596, -0.946757)
- RelativeMoveDirection = Vector3(-0.000076, -0.000000, -1.000000)
-
-==============================================
-EVENT #5 | FRAME #126
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.031122, 0.000000, -0.999516)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(23.141104, 0.000000, -959.017944)
- NEW = Vector3(34.900314, 0.000000, -1211.427490)
- OLD MAG = 959.297119
- NEW MAG = 1211.930176
- DELTA MAG = 252.633057
- DELTA = Vector3(11.759211, 0.000000, -252.409546)
- DIRECTION DOT = 0.999989033
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.176402, 0.000624, -8.223955)
- NEW = Vector3(0.257123, 0.000624, -10.655736)
- OLD MAG = 8.225847
- NEW MAG = 10.658838
-
-HRP = Vector3(0.387781, 0.000624, -13.460286)
-
-REGISTRY OTHER DATA:
- Speed = 13.4
- Sprint = 1.03556616040878
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.040280, -0.328229, -0.943739)
- RelativeMoveDirection = Vector3(-0.002316, -0.000000, -0.999997)
-
-==============================================
-EVENT #6 | FRAME #127
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.042642, 0.000000, -0.999090)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(34.900314, 0.000000, -1211.427490)
- NEW = Vector3(47.646469, 0.000000, -1430.174927)
- OLD MAG = 1211.930176
- NEW MAG = 1430.968384
- DELTA MAG = 219.038208
- DELTA = Vector3(12.746155, 0.000000, -218.747437)
- DIRECTION DOT = 0.999989808
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.257123, 0.000624, -10.655736)
- NEW = Vector3(0.387781, 0.000624, -13.460286)
- OLD MAG = 10.658838
- NEW MAG = 13.465871
-
-HRP = Vector3(0.529405, 0.000624, -15.890812)
-
-REGISTRY OTHER DATA:
- Speed = 15.8
- Sprint = 1.0421282665804028
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.049948, -0.334755, -0.940980)
- RelativeMoveDirection = Vector3(-0.009342, -0.000000, -0.999956)
-
-==============================================
-EVENT #7 | FRAME #128
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.053006, 0.000000, -0.998594)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(47.646469, 0.000000, -1430.174927)
- NEW = Vector3(63.162201, 0.000000, -1656.903931)
- OLD MAG = 1430.968384
- NEW MAG = 1658.107422
- DELTA MAG = 227.139038
- DELTA = Vector3(15.515732, 0.000000, -226.729004)
- DIRECTION DOT = 0.999988496
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.387781, 0.000624, -13.460286)
- NEW = Vector3(0.529405, 0.000624, -15.890812)
- OLD MAG = 13.465871
- NEW MAG = 15.899628
-
-HRP = Vector3(0.701802, 0.000624, -18.410023)
-
-REGISTRY OTHER DATA:
- Speed = 18.4
- Sprint = 1.0491473188158125
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.057445, -0.339097, -0.938996)
- RelativeMoveDirection = Vector3(-0.014918, -0.000000, -0.999889)
-
-==============================================
-EVENT #8 | FRAME #129
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.061062, 0.000000, -0.998134)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(63.162201, 0.000000, -1656.903931)
- NEW = Vector3(68.600082, 0.000000, -1710.340576)
- OLD MAG = 1658.107422
- NEW MAG = 1711.715820
- DELTA MAG = 53.608398
- DELTA = Vector3(5.437881, 0.000000, -53.436646)
- DIRECTION DOT = 0.999997973
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.529405, 0.000624, -15.890812)
- NEW = Vector3(0.701802, 0.000624, -18.410023)
- OLD MAG = 15.899628
- NEW MAG = 18.423393
-
-HRP = Vector3(0.762223, 0.000624, -19.003763)
-
-REGISTRY OTHER DATA:
- Speed = 19
- Sprint = 1.0562678042333573
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.061723, -0.341265, -0.937938)
- RelativeMoveDirection = Vector3(-0.021002, -0.000000, -0.999779)
-
-==============================================
-EVENT #9 | FRAME #130
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.065665, 0.000000, -0.997842)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(68.600082, 0.000000, -1710.340576)
- NEW = Vector3(71.863220, 0.000000, -1722.613159)
- OLD MAG = 1711.715820
- NEW MAG = 1724.111450
- DELTA MAG = 12.395630
- DELTA = Vector3(3.263138, 0.000000, -12.272583)
- DIRECTION DOT = 0.999998689
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.701802, 0.000624, -18.410023)
- NEW = Vector3(0.762223, 0.000624, -19.003763)
- OLD MAG = 18.423393
- NEW MAG = 19.019043
-
-HRP = Vector3(0.798480, 0.000624, -19.140123)
-
-REGISTRY OTHER DATA:
- Speed = 19.1
- Sprint = 1.0637943770270795
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.067072, -0.343432, -0.936780)
- RelativeMoveDirection = Vector3(-0.024008, -0.000000, -0.999712)
-
-==============================================
-EVENT #10 | FRAME #131
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.071415, 0.000000, -0.997447)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(71.863220, 0.000000, -1722.613159)
- NEW = Vector3(75.894325, 0.000000, -1734.470093)
- OLD MAG = 1724.111450
- NEW MAG = 1736.129761
- DELTA MAG = 12.018311
- DELTA = Vector3(4.031105, 0.000000, -11.856934)
- DIRECTION DOT = 0.999997914
-
-HRP = Vector3(0.843270, 0.000624, -19.271868)
-
-REGISTRY OTHER DATA:
- Speed = 19.2
- Sprint = 1.0708093563560397
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.078778, -0.348839, -0.933866)
- RelativeMoveDirection = Vector3(-0.027737, -0.000000, -0.999615)
-
-==============================================
-EVENT #11 | FRAME #132
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.084058, 0.000000, -0.996461)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(75.894325, 0.000000, -1734.470093)
- NEW = Vector3(81.143303, 0.000000, -1746.738647)
- OLD MAG = 1736.129761
- NEW MAG = 1748.622437
- DELTA MAG = 12.492676
- DELTA = Vector3(5.248978, 0.000000, -12.268555)
- DIRECTION DOT = 0.999996245
-
-HRP = Vector3(0.901592, 0.000624, -19.408184)
-
-REGISTRY OTHER DATA:
- Speed = 19.4
- Sprint = 1.0778965856414289
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.092604, -0.353157, -0.930970)
- RelativeMoveDirection = Vector3(-0.037721, -0.000000, -0.999288)
-
-==============================================
-EVENT #12 | FRAME #133
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.098982, 0.000000, -0.995089)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(81.143303, 0.000000, -1746.738647)
- NEW = Vector3(87.583595, 0.000000, -1759.035278)
- OLD MAG = 1748.622437
- NEW MAG = 1761.214355
- DELTA MAG = 12.591919
- DELTA = Vector3(6.440292, 0.000000, -12.296631)
- DIRECTION DOT = 0.999994397
-
-HRP = Vector3(0.973150, 0.000624, -19.544815)
-
-REGISTRY OTHER DATA:
- Speed = 19.5
- Sprint = 1.0846685711760073
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.109470, -0.359620, -0.926655)
- RelativeMoveDirection = Vector3(-0.049368, -0.000000, -0.998781)
-
-==============================================
-EVENT #13 | FRAME #134
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.117319, 0.000000, -0.993094)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(87.583595, 0.000000, -1759.035278)
- NEW = Vector3(96.165283, 0.000000, -1772.612427)
- OLD MAG = 1761.214355
- NEW MAG = 1775.218994
- DELTA MAG = 14.004639
- DELTA = Vector3(8.581688, 0.000000, -13.577148)
- DIRECTION DOT = 0.999990165
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.901592, 0.000624, -19.408184)
- NEW = Vector3(0.973150, 0.000624, -19.544815)
- OLD MAG = 19.429113
- NEW MAG = 19.569027
-
-HRP = Vector3(1.068502, 0.000624, -19.695671)
-
-REGISTRY OTHER DATA:
- Speed = 19.7
- Sprint = 1.0922492958139627
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.125196, -0.364993, -0.922554)
- RelativeMoveDirection = Vector3(-0.063342, -0.000000, -0.997992)
-
-==============================================
-EVENT #14 | FRAME #135
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.134474, 0.000000, -0.990917)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(96.165283, 0.000000, -1772.612427)
- NEW = Vector3(104.589348, 0.000000, -1784.511841)
- OLD MAG = 1775.218994
- NEW MAG = 1787.574219
- DELTA MAG = 12.355225
- DELTA = Vector3(8.424065, 0.000000, -11.899414)
- DIRECTION DOT = 0.999990642
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.973150, 0.000624, -19.544815)
- NEW = Vector3(1.068502, 0.000624, -19.695671)
- OLD MAG = 19.569027
- NEW MAG = 19.724634
-
-HRP = Vector3(1.162103, 0.000624, -19.827888)
-
-REGISTRY OTHER DATA:
- Speed = 19.8
- Sprint = 1.0987256583990528
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.139750, -0.370353, -0.918318)
- RelativeMoveDirection = Vector3(-0.076258, 0.000000, -0.997088)
-
-==============================================
-EVENT #15 | FRAME #136
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.150448, 0.000000, -0.988618)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(104.589348, 0.000000, -1784.511841)
- NEW = Vector3(115.785835, 0.000000, -1798.551270)
- OLD MAG = 1787.574219
- NEW MAG = 1802.274414
- DELTA MAG = 14.700195
- DELTA = Vector3(11.196487, 0.000000, -14.039429)
- DIRECTION DOT = 0.999983430
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.068502, 0.000624, -19.695671)
- NEW = Vector3(1.162103, 0.000624, -19.827888)
- OLD MAG = 19.724634
- NEW MAG = 19.861916
-
-HRP = Vector3(1.286508, 0.000624, -19.983881)
-
-REGISTRY OTHER DATA:
- Speed = 20
- Sprint = 1.1058167128125205
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.160362, -0.377837, -0.911879)
- RelativeMoveDirection = Vector3(-0.086617, 0.000000, -0.996242)
-
-==============================================
-EVENT #16 | FRAME #137
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.173201, 0.000000, -0.984887)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(115.785835, 0.000000, -1798.551270)
- NEW = Vector3(130.024445, 0.000000, -1813.980835)
- OLD MAG = 1802.274414
- NEW MAG = 1818.634888
- DELTA MAG = 16.360474
- DELTA = Vector3(14.238609, 0.000000, -15.429565)
- DIRECTION DOT = 0.999973536
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.162103, 0.000624, -19.827888)
- NEW = Vector3(1.286508, 0.000624, -19.983881)
- OLD MAG = 19.861916
- NEW MAG = 20.025249
-
-HRP = Vector3(1.444715, 0.000624, -20.155321)
-
-REGISTRY OTHER DATA:
- Speed = 20.2
- Sprint = 1.1134468086762352
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.182737, -0.386360, -0.904065)
- RelativeMoveDirection = Vector3(-0.102334, 0.000000, -0.994750)
-
-==============================================
-EVENT #17 | FRAME #138
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.198122, 0.000000, -0.980177)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(130.024445, 0.000000, -1813.980835)
- NEW = Vector3(144.099396, 0.000000, -1827.150146)
- OLD MAG = 1818.634888
- NEW MAG = 1832.823608
- DELTA MAG = 14.188721
- DELTA = Vector3(14.074951, 0.000000, -13.169312)
- DIRECTION DOT = 0.999974430
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.286508, 0.000624, -19.983881)
- NEW = Vector3(1.444715, 0.000624, -20.155321)
- OLD MAG = 20.025249
- NEW MAG = 20.207033
-
-HRP = Vector3(1.601103, 0.000624, -20.301645)
-
-REGISTRY OTHER DATA:
- Speed = 20.3
- Sprint = 1.1204317901981993
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.198896, -0.391670, -0.898351)
- RelativeMoveDirection = Vector3(-0.120436, 0.000000, -0.992721)
-
-==============================================
-EVENT #18 | FRAME #139
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.216167, 0.000000, -0.976357)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(144.099396, 0.000000, -1827.150146)
- NEW = Vector3(158.595947, 0.000000, -1839.582397)
- OLD MAG = 1832.823608
- NEW MAG = 1846.406250
- DELTA MAG = 13.582642
- DELTA = Vector3(14.496552, 0.000000, -12.432251)
- DIRECTION DOT = 0.999973357
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.444715, 0.000624, -20.155321)
- NEW = Vector3(1.601103, 0.000624, -20.301645)
- OLD MAG = 20.207033
- NEW MAG = 20.364683
-
-HRP = Vector3(1.762176, 0.000624, -20.439781)
-
-REGISTRY OTHER DATA:
- Speed = 20.5
- Sprint = 1.1270982340211047
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.213871, -0.396967, -0.892567)
- RelativeMoveDirection = Vector3(-0.131495, 0.000000, -0.991317)
-
-==============================================
-EVENT #19 | FRAME #140
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.233017, 0.000000, -0.972473)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(158.595947, 0.000000, -1839.582397)
- NEW = Vector3(175.412048, 0.000000, -1852.156860)
- OLD MAG = 1846.406250
- NEW MAG = 1860.444702
- DELTA MAG = 14.038452
- DELTA = Vector3(16.816101, 0.000000, -12.574463)
- DIRECTION DOT = 0.999964416
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.601103, 0.000624, -20.301645)
- NEW = Vector3(1.762176, 0.000624, -20.439781)
- OLD MAG = 20.364683
- NEW MAG = 20.515602
-
-HRP = Vector3(1.949021, 0.000624, -20.579498)
-
-REGISTRY OTHER DATA:
- Speed = 20.6
- Sprint = 1.1345232319319618
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.226767, -0.401195, -0.887479)
- RelativeMoveDirection = Vector3(-0.140280, 0.000000, -0.990112)
-
-==============================================
-EVENT #20 | FRAME #141
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.247565, 0.000000, -0.968871)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(175.412048, 0.000000, -1852.156860)
- NEW = Vector3(192.355820, 0.000000, -1863.748779)
- OLD MAG = 1860.444702
- NEW MAG = 1873.648926
- DELTA MAG = 13.204224
- DELTA = Vector3(16.943771, 0.000000, -11.591919)
- DIRECTION DOT = 0.999964535
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.762176, 0.000624, -20.439781)
- NEW = Vector3(1.949021, 0.000624, -20.579498)
- OLD MAG = 20.515602
- NEW MAG = 20.671585
-
-HRP = Vector3(2.137285, -0.582694, -20.708298)
-
-REGISTRY OTHER DATA:
- Speed = 20.8
- Sprint = 1.1418004716048014
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.237641, -0.404361, -0.883187)
- RelativeMoveDirection = Vector3(-0.146779, 0.000000, -0.989169)
-
-==============================================
-EVENT #21 | FRAME #142
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.259831, 0.000000, -0.965654)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(192.355820, 0.000000, -1863.748779)
- NEW = Vector3(207.976608, 0.000000, -1873.792725)
- OLD MAG = 1873.648926
- NEW MAG = 1885.299316
- DELTA MAG = 11.650391
- DELTA = Vector3(15.620789, 0.000000, -10.043945)
- DIRECTION DOT = 0.999970376
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.949021, 0.000624, -20.579498)
- NEW = Vector3(2.137285, -0.582694, -20.708298)
- OLD MAG = 20.671585
- NEW MAG = 20.826452
-
-HRP = Vector3(2.310849, -0.999361, -20.819897)
-
-REGISTRY OTHER DATA:
- Speed = 20.9
- Sprint = 1.1483990926295515
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.246413, -0.407522, -0.879322)
- RelativeMoveDirection = Vector3(-0.151709, 0.000000, -0.988425)
-
-==============================================
-EVENT #22 | FRAME #143
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.269836, 0.000000, -0.962906)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(207.976608, 0.000000, -1873.792725)
- NEW = Vector3(225.319305, 0.000000, -1884.718384)
- OLD MAG = 1885.299316
- NEW MAG = 1898.139160
- DELTA MAG = 12.839844
- DELTA = Vector3(17.342697, 0.000000, -10.925659)
- DIRECTION DOT = 0.999964297
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.137285, -0.582694, -20.708298)
- NEW = Vector3(2.310849, -0.999361, -20.819897)
- OLD MAG = 20.826452
- NEW MAG = 20.971573
-
-HRP = Vector3(2.503546, -1.416027, -20.941296)
-
-REGISTRY OTHER DATA:
- Speed = 21
- Sprint = 1.1554061026778069
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.257145, -0.410678, -0.874769)
- RelativeMoveDirection = Vector3(-0.153616, 0.000000, -0.988131)
-
-==============================================
-EVENT #23 | FRAME #144
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.282025, 0.000000, -0.959407)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(225.319305, 0.000000, -1884.718384)
- NEW = Vector3(244.011749, 0.000000, -1896.462524)
- OLD MAG = 1898.139160
- NEW MAG = 1912.096191
- DELTA MAG = 13.957031
- DELTA = Vector3(18.692444, 0.000000, -11.744141)
- DIRECTION DOT = 0.999959707
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.310849, -0.999361, -20.819897)
- NEW = Vector3(2.503546, -1.416027, -20.941296)
- OLD MAG = 20.971573
- NEW MAG = 21.137899
-
-HRP = Vector3(2.711239, -1.832694, -21.071785)
-
-REGISTRY OTHER DATA:
- Speed = 21.2
- Sprint = 1.162467548763379
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.270805, -0.413829, -0.869144)
- RelativeMoveDirection = Vector3(-0.157274, 0.000000, -0.987555)
-
-==============================================
-EVENT #24 | FRAME #145
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.297472, 0.000000, -0.954731)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(244.011749, 0.000000, -1896.462524)
- NEW = Vector3(263.414673, 0.000000, -1907.609375)
- OLD MAG = 1912.096191
- NEW MAG = 1925.710449
- DELTA MAG = 13.614258
- DELTA = Vector3(19.402924, 0.000000, -11.146851)
- DIRECTION DOT = 0.999957204
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.503546, -1.416027, -20.941296)
- NEW = Vector3(2.711239, -1.832694, -21.071785)
- OLD MAG = 21.137899
- NEW MAG = 21.324392
-
-HRP = Vector3(2.926827, -2.249361, -21.195639)
-
-REGISTRY OTHER DATA:
- Speed = 21.3
- Sprint = 1.1695449674502012
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.283352, -0.416975, -0.863622)
- RelativeMoveDirection = Vector3(-0.164070, 0.000000, -0.986449)
-
-==============================================
-EVENT #25 | FRAME #146
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.311747, 0.000000, -0.950165)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(263.414673, 0.000000, -1907.609375)
- NEW = Vector3(283.908112, 0.000000, -1918.575562)
- OLD MAG = 1925.710449
- NEW MAG = 1939.468018
- DELTA MAG = 13.757568
- DELTA = Vector3(20.493439, 0.000000, -10.966187)
- DIRECTION DOT = 0.999953091
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.711239, -1.832694, -21.071785)
- NEW = Vector3(2.926827, -2.249361, -21.195639)
- OLD MAG = 21.324392
- NEW MAG = 21.514671
-
-HRP = Vector3(3.154532, -1.269834, -21.317486)
-
-REGISTRY OTHER DATA:
- Speed = 21.5
- Sprint = 1.1767505944240835
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.295949, -0.419069, -0.858368)
- RelativeMoveDirection = Vector3(-0.169288, 0.000000, -0.985567)
-
-==============================================
-EVENT #26 | FRAME #147
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.325951, 0.000000, -0.945387)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(283.908112, 0.000000, -1918.575562)
- NEW = Vector3(305.006165, 0.000000, -1928.331177)
- OLD MAG = 1939.468018
- NEW MAG = 1952.303711
- DELTA MAG = 12.835693
- DELTA = Vector3(21.098053, 0.000000, -9.755615)
- DIRECTION DOT = 0.999950349
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.926827, -2.249361, -21.195639)
- NEW = Vector3(3.154532, -1.269834, -21.317486)
- OLD MAG = 21.514671
- NEW MAG = 21.587004
-
-HRP = Vector3(3.388954, -0.146818, -21.425882)
-
-REGISTRY OTHER DATA:
- Speed = 21.6
- Sprint = 1.1841889446601268
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.305498, -0.421162, -0.853987)
- RelativeMoveDirection = Vector3(-0.174241, 0.000000, -0.984703)
-
-==============================================
-EVENT #27 | FRAME #148
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.336828, 0.000000, -0.941566)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(305.006165, 0.000000, -1928.331177)
- NEW = Vector3(325.647644, 0.000000, -1937.595093)
- OLD MAG = 1952.303711
- NEW MAG = 1964.770020
- DELTA MAG = 12.466309
- DELTA = Vector3(20.641479, 0.000000, -9.263916)
- DIRECTION DOT = 0.999953389
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.154532, -1.269834, -21.317486)
- NEW = Vector3(3.388954, -0.146818, -21.425882)
- OLD MAG = 21.587004
- NEW MAG = 21.692739
-
-HRP = Vector3(3.618304, 0.205860, -21.528814)
-
-REGISTRY OTHER DATA:
- Speed = 21.8
- Sprint = 1.191323384037241
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.314984, -0.423252, -0.849496)
- RelativeMoveDirection = Vector3(-0.176100, 0.000000, -0.984372)
-
-==============================================
-EVENT #28 | FRAME #149
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.347660, 0.000000, -0.937621)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(325.647644, 0.000000, -1937.595093)
- NEW = Vector3(346.565247, 0.000000, -1948.101562)
- OLD MAG = 1964.770020
- NEW MAG = 1978.688232
- DELTA MAG = 13.918213
- DELTA = Vector3(20.917603, 0.000000, -10.506470)
- DIRECTION DOT = 0.999954402
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.388954, -0.146818, -21.425882)
- NEW = Vector3(3.618304, 0.205860, -21.528814)
- OLD MAG = 21.692739
- NEW MAG = 21.831728
-
-HRP = Vector3(3.850722, -0.322561, -21.645552)
-
-REGISTRY OTHER DATA:
- Speed = 21.9
- Sprint = 1.1979529235279185
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.328913, -0.427425, -0.842095)
- RelativeMoveDirection = Vector3(-0.178052, 0.000000, -0.984021)
-
-==============================================
-EVENT #29 | FRAME #150
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.363821, 0.000000, -0.931469)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(346.565247, 0.000000, -1948.101562)
- NEW = Vector3(369.245056, 0.000000, -1958.093140)
- OLD MAG = 1978.688232
- NEW MAG = 1992.604004
- DELTA MAG = 13.915771
- DELTA = Vector3(22.679810, 0.000000, -9.991577)
- DIRECTION DOT = 0.999946654
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.618304, 0.205860, -21.528814)
- NEW = Vector3(3.850722, -0.322561, -21.645552)
- OLD MAG = 21.831728
- NEW MAG = 21.987770
-
-HRP = Vector3(4.102719, -0.739227, -21.756571)
-
-REGISTRY OTHER DATA:
- Speed = 22.1
- Sprint = 1.2049631919013333
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.341899, -0.430549, -0.835304)
- RelativeMoveDirection = Vector3(-0.184901, -0.000000, -0.982757)
-
-==============================================
-EVENT #30 | FRAME #151
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.378807, 0.000000, -0.925476)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(369.245056, 0.000000, -1958.093140)
- NEW = Vector3(390.400177, 0.000000, -1964.269653)
- OLD MAG = 1992.604004
- NEW MAG = 2002.690063
- DELTA MAG = 10.086060
- DELTA = Vector3(21.155121, 0.000000, -6.176514)
- DIRECTION DOT = 0.999951780
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.850722, -0.322561, -21.645552)
- NEW = Vector3(4.102719, -0.739227, -21.756571)
- OLD MAG = 21.987770
- NEW MAG = 22.152363
-
-HRP = Vector3(4.337776, -1.155894, -21.825197)
-
-REGISTRY OTHER DATA:
- Speed = 22.2
- Sprint = 1.212056335411034
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.346517, -0.431590, -0.832860)
- RelativeMoveDirection = Vector3(-0.191118, -0.000000, -0.981567)
-
-==============================================
-EVENT #31 | FRAME #152
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.384135, 0.000000, -0.923277)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(390.400177, 0.000000, -1964.269653)
- NEW = Vector3(413.927460, 0.000000, -1973.787964)
- OLD MAG = 2002.690063
- NEW MAG = 2016.723877
- DELTA MAG = 14.033813
- DELTA = Vector3(23.527283, 0.000000, -9.518311)
- DIRECTION DOT = 0.999944568
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.102719, -0.739227, -21.756571)
- NEW = Vector3(4.337776, -1.155894, -21.825197)
- OLD MAG = 22.152363
- NEW MAG = 22.282093
-
-HRP = Vector3(4.599190, -0.695278, -21.930958)
-
-REGISTRY OTHER DATA:
- Speed = 22.4
- Sprint = 1.2191543664084743
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.359316, -0.434707, -0.825786)
- RelativeMoveDirection = Vector3(-0.186446, -0.000000, -0.982465)
-
-==============================================
-EVENT #32 | FRAME #153
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.398986, 0.000000, -0.916957)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(413.927460, 0.000000, -1973.787964)
- NEW = Vector3(436.405151, 0.000000, -1980.548584)
- OLD MAG = 2016.723877
- NEW MAG = 2028.058716
- DELTA MAG = 11.334839
- DELTA = Vector3(22.477692, 0.000000, -6.760620)
- DIRECTION DOT = 0.999948442
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.337776, -1.155894, -21.825197)
- NEW = Vector3(4.599190, -0.695278, -21.930958)
- OLD MAG = 22.282093
- NEW MAG = 22.418806
-
-HRP = Vector3(4.848942, -1.111945, -22.006075)
-
-REGISTRY OTHER DATA:
- Speed = 22.5
- Sprint = 1.2262442515930156
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.366712, -0.435745, -0.821979)
- RelativeMoveDirection = Vector3(-0.192314, -0.000000, -0.981334)
-
-==============================================
-EVENT #33 | FRAME #154
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.407426, 0.000000, -0.913238)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(436.405151, 0.000000, -1980.548584)
- NEW = Vector3(460.085663, 0.000000, -1988.625122)
- OLD MAG = 2028.058716
- NEW MAG = 2041.153809
- DELTA MAG = 13.095093
- DELTA = Vector3(23.680511, 0.000000, -8.076538)
- DIRECTION DOT = 0.999945164
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.599190, -0.695278, -21.930958)
- NEW = Vector3(4.848942, -1.111945, -22.006075)
- OLD MAG = 22.418806
- NEW MAG = 22.561382
-
-HRP = Vector3(5.112058, -1.528612, -22.095814)
-
-REGISTRY OTHER DATA:
- Speed = 22.6
- Sprint = 1.2333036790369074
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.377625, -0.437819, -0.815913)
- RelativeMoveDirection = Vector3(-0.191081, -0.000000, -0.981574)
-
-==============================================
-EVENT #34 | FRAME #155
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.420020, 0.000000, -0.907515)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(460.085663, 0.000000, -1988.625122)
- NEW = Vector3(484.241608, 0.000000, -1994.561035)
- OLD MAG = 2041.153809
- NEW MAG = 2052.501709
- DELTA MAG = 11.347900
- DELTA = Vector3(24.155945, 0.000000, -5.935913)
- DIRECTION DOT = 0.999941528
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.848942, -1.111945, -22.006075)
- NEW = Vector3(5.112058, -1.528612, -22.095814)
- OLD MAG = 22.561382
- NEW MAG = 22.730921
-
-HRP = Vector3(5.380458, -0.892208, -22.161768)
-
-REGISTRY OTHER DATA:
- Speed = 22.8
- Sprint = 1.2408674747915933
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.383981, -0.438855, -0.812382)
- RelativeMoveDirection = Vector3(-0.194044, -0.000000, -0.980993)
-
-==============================================
-EVENT #35 | FRAME #156
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.427330, 0.000000, -0.904096)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(484.241608, 0.000000, -1994.561035)
- NEW = Vector3(507.369995, 0.000000, -2000.914795)
- OLD MAG = 2052.501709
- NEW MAG = 2064.239502
- DELTA MAG = 11.737793
- DELTA = Vector3(23.128387, 0.000000, -6.353760)
- DIRECTION DOT = 0.999948382
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.112058, -1.528612, -22.095814)
- NEW = Vector3(5.380458, -0.892208, -22.161768)
- OLD MAG = 22.730921
- NEW MAG = 22.822998
-
-HRP = Vector3(5.637439, -0.094975, -22.232367)
-
-REGISTRY OTHER DATA:
- Speed = 22.9
- Sprint = 1.2479084850987414
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.391946, -0.440926, -0.807442)
- RelativeMoveDirection = Vector3(-0.191992, -0.000000, -0.981396)
-
-==============================================
-EVENT #36 | FRAME #157
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.436687, 0.000000, -0.899613)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(507.369995, 0.000000, -2000.914795)
- NEW = Vector3(536.353577, 0.000000, -2013.737549)
- OLD MAG = 2064.239502
- NEW MAG = 2083.941895
- DELTA MAG = 19.702393
- DELTA = Vector3(28.983582, 0.000000, -12.822754)
- DIRECTION DOT = 0.999928296
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.380458, -0.892208, -22.161768)
- NEW = Vector3(5.637439, -0.094975, -22.232367)
- OLD MAG = 22.822998
- NEW MAG = 22.936169
-
-HRP = Vector3(5.959479, -0.514409, -22.374842)
-
-REGISTRY OTHER DATA:
- Speed = 23.1
- Sprint = 1.2549329560017208
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.415022, -0.445060, -0.793523)
- RelativeMoveDirection = Vector3(-0.190427, -0.000000, -0.981701)
-
-==============================================
-EVENT #37 | FRAME #158
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.463452, 0.000000, -0.886122)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(536.353577, 0.000000, -2013.737549)
- NEW = Vector3(560.508911, 0.000000, -2018.666016)
- OLD MAG = 2083.941895
- NEW MAG = 2095.037598
- DELTA MAG = 11.095703
- DELTA = Vector3(24.155334, 0.000000, -4.928467)
- DIRECTION DOT = 0.999944448
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.637439, -0.094975, -22.232367)
- NEW = Vector3(5.959479, -0.514409, -22.374842)
- OLD MAG = 22.936169
- NEW MAG = 23.160604
-
-HRP = Vector3(6.227871, -0.931076, -22.429602)
-
-REGISTRY OTHER DATA:
- Speed = 23.2
- Sprint = 1.2616603517206382
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.422746, -0.447123, -0.788268)
- RelativeMoveDirection = Vector3(-0.209472, -0.000000, -0.977815)
-
-==============================================
-EVENT #38 | FRAME #159
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.472621, 0.000000, -0.881266)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(560.508911, 0.000000, -2018.666016)
- NEW = Vector3(585.703430, 0.000000, -2021.749634)
- OLD MAG = 2095.037598
- NEW MAG = 2104.880127
- DELTA MAG = 9.842529
- DELTA = Vector3(25.194519, 0.000000, -3.083618)
- DIRECTION DOT = 0.999937892
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.959479, -0.514409, -22.374842)
- NEW = Vector3(6.227871, -0.931076, -22.429602)
- OLD MAG = 23.160604
- NEW MAG = 23.296787
-
-HRP = Vector3(6.507810, -1.347742, -22.463865)
-
-REGISTRY OTHER DATA:
- Speed = 23.3
- Sprint = 1.2691037311451505
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.427036, -0.448154, -0.785365)
- RelativeMoveDirection = Vector3(-0.208722, -0.000000, -0.977975)
-
-==============================================
-EVENT #39 | FRAME #160
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.477693, 0.000000, -0.878527)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(585.703430, 0.000000, -2021.749634)
- NEW = Vector3(608.987305, 0.000000, -2025.551514)
- OLD MAG = 2104.880127
- NEW MAG = 2115.118164
- DELTA MAG = 10.238037
- DELTA = Vector3(23.283875, 0.000000, -3.801880)
- DIRECTION DOT = 0.999949217
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.227871, -0.931076, -22.429602)
- NEW = Vector3(6.507810, -1.347742, -22.463865)
- OLD MAG = 23.296787
- NEW MAG = 23.426336
-
-HRP = Vector3(6.766520, -0.351837, -22.506107)
-
-REGISTRY OTHER DATA:
- Speed = 23.5
- Sprint = 1.275834774668328
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.433109, -0.449185, -0.781441)
- RelativeMoveDirection = Vector3(-0.204506, -0.000000, -0.978865)
-
-==============================================
-EVENT #40 | FRAME #161
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.484767, 0.000000, -0.874644)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(608.987305, 0.000000, -2025.551514)
- NEW = Vector3(632.435303, 0.000000, -2028.425903)
- OLD MAG = 2115.118164
- NEW MAG = 2124.731934
- DELTA MAG = 9.613770
- DELTA = Vector3(23.447998, 0.000000, -2.874390)
- DIRECTION DOT = 0.999948263
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.507810, -1.347742, -22.463865)
- NEW = Vector3(6.766520, -0.351837, -22.506107)
- OLD MAG = 23.426336
- NEW MAG = 23.503923
-
-HRP = Vector3(7.027053, -0.004127, -22.538046)
-
-REGISTRY OTHER DATA:
- Speed = 23.6
- Sprint = 1.2828514187829565
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.437353, -0.450214, -0.778479)
- RelativeMoveDirection = Vector3(-0.202441, -0.000000, -0.979294)
-
-==============================================
-EVENT #41 | FRAME #162
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.489800, 0.000000, -0.871835)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(632.435303, 0.000000, -2028.425903)
- NEW = Vector3(657.452881, 0.000000, -2031.324463)
- OLD MAG = 2124.731934
- NEW MAG = 2135.069824
- DELTA MAG = 10.337891
- DELTA = Vector3(25.017578, 0.000000, -2.898560)
- DIRECTION DOT = 0.999941945
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.766520, -0.351837, -22.506107)
- NEW = Vector3(7.027053, -0.004127, -22.538046)
- OLD MAG = 23.503923
- NEW MAG = 23.608114
-
-HRP = Vector3(7.305026, 0.098516, -22.570251)
-
-REGISTRY OTHER DATA:
- Speed = 23.7
- Sprint = 1.2904530043015252
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.441575, -0.451244, -0.775494)
- RelativeMoveDirection = Vector3(-0.197524, -0.000000, -0.980298)
-
-==============================================
-EVENT #42 | FRAME #163
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.494817, 0.000000, -0.868997)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(657.452881, 0.000000, -2031.324463)
- NEW = Vector3(679.259766, 0.000000, -2032.716919)
- OLD MAG = 2135.069824
- NEW MAG = 2143.206055
- DELTA MAG = 8.136230
- DELTA = Vector3(21.806885, 0.000000, -1.392456)
- DIRECTION DOT = 0.999955058
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.027053, -0.004127, -22.538046)
- NEW = Vector3(7.305026, 0.098516, -22.570251)
- OLD MAG = 23.608114
- NEW MAG = 23.723183
-
-HRP = Vector3(7.547324, 0.113067, -22.585724)
-
-REGISTRY OTHER DATA:
- Speed = 23.8
- Sprint = 1.2975641754688692
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.442469, -0.451244, -0.774984)
- RelativeMoveDirection = Vector3(-0.193880, -0.000000, -0.981025)
-
-==============================================
-EVENT #43 | FRAME #164
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.495819, 0.000000, -0.868426)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(679.259766, 0.000000, -2032.716919)
- NEW = Vector3(699.340271, 0.000000, -2034.660889)
- OLD MAG = 2143.206055
- NEW MAG = 2151.492920
- DELTA MAG = 8.286865
- DELTA = Vector3(20.080505, 0.000000, -1.943970)
- DIRECTION DOT = 0.999963284
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.305026, 0.098516, -22.570251)
- NEW = Vector3(7.547324, 0.113067, -22.585724)
- OLD MAG = 23.723183
- NEW MAG = 23.813648
-
-HRP = Vector3(7.770441, 0.099442, -22.607323)
-
-REGISTRY OTHER DATA:
- Speed = 23.9
- Sprint = 1.3041772107826541
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.443996, -0.452272, -0.773510)
- RelativeMoveDirection = Vector3(-0.186603, -0.000000, -0.982435)
-
-==============================================
-EVENT #44 | FRAME #165
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.497820, 0.000000, -0.867280)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(699.340271, 0.000000, -2034.660889)
- NEW = Vector3(719.812256, 0.000000, -2036.189453)
- OLD MAG = 2151.492920
- NEW MAG = 2159.675293
- DELTA MAG = 8.182373
- DELTA = Vector3(20.471985, 0.000000, -1.528564)
- DIRECTION DOT = 0.999961793
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.547324, 0.113067, -22.585724)
- NEW = Vector3(7.770441, 0.099442, -22.607323)
- OLD MAG = 23.813648
- NEW MAG = 23.905661
-
-HRP = Vector3(7.997907, 0.079785, -22.624308)
-
-REGISTRY OTHER DATA:
- Speed = 23.9
- Sprint = 1.3112864693859587
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.443996, -0.452272, -0.773510)
- RelativeMoveDirection = Vector3(-0.180283, -0.000000, -0.983615)
-
-==============================================
-EVENT #45 | FRAME #166
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.497820, 0.000000, -0.867280)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(719.812256, 0.000000, -2036.189453)
- NEW = Vector3(740.618530, 0.000000, -2038.161743)
- OLD MAG = 2159.675293
- NEW MAG = 2168.552246
- DELTA MAG = 8.876953
- DELTA = Vector3(20.806274, 0.000000, -1.972290)
- DIRECTION DOT = 0.999961793
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.770441, 0.099442, -22.607323)
- NEW = Vector3(7.997907, 0.079785, -22.624308)
- OLD MAG = 23.905661
- NEW MAG = 23.996504
-
-HRP = Vector3(8.229087, 0.061393, -22.646221)
-
-REGISTRY OTHER DATA:
- Speed = 24
- Sprint = 1.3187361176824193
- State = Move
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.443996, -0.452272, -0.773510)
- RelativeMoveDirection = Vector3(-0.171677, -0.000000, -0.985153)
-
-==============================================
-EVENT #46 | FRAME #167
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(740.618530, 0.000000, -2038.161743)
- NEW = Vector3(597.355347, 0.000000, -2294.398926)
- OLD MAG = 2168.552246
- NEW MAG = 2370.885986
- DELTA MAG = 202.333740
- DELTA = Vector3(-143.263184, 0.000000, -256.237183)
- DIRECTION DOT = 0.995600104
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.997907, 0.079785, -22.624308)
- NEW = Vector3(8.229087, 0.061393, -22.646221)
- OLD MAG = 23.996504
- NEW MAG = 24.095081
-
-HRP = Vector3(6.637277, 0.046270, -25.493301)
-
-REGISTRY OTHER DATA:
- Speed = 26.3
- Sprint = 1.3256776073714713
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
- RelativeMoveDirection = Vector3(-0.263234, 0.000000, -0.964732)
-
-==============================================
-EVENT #47 | FRAME #168
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(597.355347, 0.000000, -2294.398926)
- NEW = Vector3(492.679840, 0.000000, -2439.554932)
- OLD MAG = 2370.885986
- NEW MAG = 2488.807373
- DELTA MAG = 117.921387
- DELTA = Vector3(-104.675507, 0.000000, -145.156006)
- DIRECTION DOT = 0.998464346
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(8.229087, 0.061393, -22.646221)
- NEW = Vector3(6.637277, 0.046270, -25.493301)
- OLD MAG = 24.095081
- NEW MAG = 26.343197
-
-HRP = Vector3(5.474218, 0.034560, -27.106144)
-
-REGISTRY OTHER DATA:
- Speed = 27.6
- Sprint = 1.3327143326168875
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
- RelativeMoveDirection = Vector3(-0.316251, 0.000000, -0.948676)
-
-==============================================
-EVENT #48 | FRAME #169
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(492.679840, 0.000000, -2439.554932)
- NEW = Vector3(440.172821, 0.000000, -2434.152832)
- OLD MAG = 2488.807373
- NEW MAG = 2473.631348
- DELTA MAG = -15.176025
- DELTA = Vector3(-52.507019, 0.000000, 5.402100)
- DIRECTION DOT = 0.999792397
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.637277, 0.046270, -25.493301)
- NEW = Vector3(5.474218, 0.034560, -27.106144)
- OLD MAG = 26.343197
- NEW MAG = 27.653414
-
-HRP = Vector3(4.890806, 0.025669, -27.046120)
-
-REGISTRY OTHER DATA:
- Speed = 27.4
- Sprint = 1.339789059781469
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
- RelativeMoveDirection = Vector3(-0.335512, 0.000000, -0.942036)
-
-==============================================
-EVENT #49 | FRAME #170
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(440.172821, 0.000000, -2434.152832)
- NEW = Vector3(387.218658, 0.000000, -2429.195312)
- OLD MAG = 2473.631348
- NEW MAG = 2459.863525
- DELTA MAG = -13.767822
- DELTA = Vector3(-52.954163, 0.000000, 4.957520)
- DIRECTION DOT = 0.999783099
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.474218, 0.034560, -27.106144)
- NEW = Vector3(4.890806, 0.025669, -27.046120)
- OLD MAG = 27.653414
- NEW MAG = 27.484783
-
-HRP = Vector3(4.302427, 0.019031, -26.991037)
-
-REGISTRY OTHER DATA:
- Speed = 27.3
- Sprint = 1.347211649571545
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
- RelativeMoveDirection = Vector3(-0.355065, 0.000000, -0.934841)
-
-==============================================
-EVENT #50 | FRAME #171
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(387.218658, 0.000000, -2429.195312)
- NEW = Vector3(342.602356, 0.000000, -2425.469482)
- OLD MAG = 2459.863525
- NEW MAG = 2449.546631
- DELTA MAG = -10.316895
- DELTA = Vector3(-44.616302, 0.000000, 3.725830)
- DIRECTION DOT = 0.999842465
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.890806, 0.025669, -27.046120)
- NEW = Vector3(4.302427, 0.019031, -26.991037)
- OLD MAG = 27.484783
- NEW MAG = 27.331800
-
-HRP = Vector3(3.806691, 0.014135, -26.949638)
-
-REGISTRY OTHER DATA:
- Speed = 27.2
- Sprint = 1.353729697503149
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
- RelativeMoveDirection = Vector3(-0.371603, 0.000000, -0.928392)
-
-==============================================
-EVENT #51 | FRAME #172
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(342.602356, 0.000000, -2425.469482)
- NEW = Vector3(294.640076, 0.000000, -2424.483643)
- OLD MAG = 2449.546631
- NEW MAG = 2442.321533
- DELTA MAG = -7.225098
- DELTA = Vector3(-47.962280, 0.000000, 0.985840)
- DIRECTION DOT = 0.999811947
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.302427, 0.019031, -26.991037)
- NEW = Vector3(3.806691, 0.014135, -26.949638)
- OLD MAG = 27.331800
- NEW MAG = 27.217165
-
-HRP = Vector3(3.273777, 0.010390, -26.938684)
-
-REGISTRY OTHER DATA:
- Speed = 27.1
- Sprint = 1.3608245770446952
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.426474, -0.453300, -1.269897)
- RelativeMoveDirection = Vector3(-0.389534, 0.000000, -0.921012)
-
-==============================================
-EVENT #52 | FRAME #173
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.263473, 0.000000, -0.964667)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(294.640076, 0.000000, -2424.483643)
- NEW = Vector3(247.909668, 0.000000, -2425.166992)
- OLD MAG = 2442.321533
- NEW MAG = 2437.805176
- DELTA MAG = -4.516357
- DELTA = Vector3(-46.730408, 0.000000, -0.683350)
- DIRECTION DOT = 0.999818146
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.806691, 0.014135, -26.949638)
- NEW = Vector3(3.273777, 0.010390, -26.938684)
- OLD MAG = 27.217165
- NEW MAG = 27.136885
-
-HRP = Vector3(2.754551, 0.007570, -26.946278)
-
-REGISTRY OTHER DATA:
- Speed = 27
- Sprint = 1.3678836498409506
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.431380, -0.455354, -1.267503)
- RelativeMoveDirection = Vector3(-0.404913, 0.000000, -0.914355)
-
-==============================================
-EVENT #53 | FRAME #174
-==============================================
-STATE = Enum.HumanoidStateType.Jumping
-MOVE DIRECTION = Vector3(-0.266808, 0.000000, -0.963750)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(247.909668, 0.000000, -2425.166992)
- NEW = Vector3(262.570404, 0.000000, -2568.585205)
- OLD MAG = 2437.805176
- NEW MAG = 2581.970703
- DELTA MAG = 144.165527
- DELTA = Vector3(14.660736, 0.000000, -143.418213)
- DIRECTION DOT = 1.000000000
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.273777, 0.010390, -26.938684)
- NEW = Vector3(2.754551, 0.007570, -26.946278)
- OLD MAG = 27.136885
- NEW MAG = 27.086702
-
-HRP = Vector3(2.917451, 17.112175, -28.539835)
-
-REGISTRY OTHER DATA:
- Speed = 28.6
- Sprint = 1.3749862849246706
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.445271, -0.458430, -1.261576)
- RelativeMoveDirection = Vector3(-0.401748, 0.000000, -0.915750)
-
-==============================================
-EVENT #54 | FRAME #175
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.276793, 0.000000, -0.960930)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(262.570404, 0.000000, -2568.585205)
- NEW = Vector3(251.313477, 0.000000, -2462.972412)
- OLD MAG = 2581.970703
- NEW MAG = 2475.760742
- DELTA MAG = -106.209961
- DELTA = Vector3(-11.256927, 0.000000, 105.612793)
- DIRECTION DOT = 1.000000000
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.754551, 0.007570, -26.946278)
- NEW = Vector3(2.917451, 17.112175, -28.539835)
- OLD MAG = 27.086702
- NEW MAG = 33.404495
-
-HRP = Vector3(2.792372, 16.695507, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.3820431973785157
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.445271, -0.458430, -1.261576)
- RelativeMoveDirection = Vector3(-0.392389, 0.000000, -0.919799)
-
-==============================================
-EVENT #55 | FRAME #176
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.276793, 0.000000, -0.960930)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.917451, 17.112175, -28.539835)
- NEW = Vector3(2.792372, 16.695507, -27.366354)
- OLD MAG = 33.404495
- NEW MAG = 32.178482
-
-HRP = Vector3(2.792372, 16.278839, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.458840, -0.460478, -1.255956)
- RelativeMoveDirection = Vector3(-0.392405, 0.000000, -0.919792)
-
-==============================================
-EVENT #56 | FRAME #177
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.286748, 0.000000, -0.958006)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 16.695507, -27.366354)
- NEW = Vector3(2.792372, 16.278839, -27.366354)
- OLD MAG = 32.178482
- NEW MAG = 31.964283
-
-HRP = Vector3(2.792372, 15.862172, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.466571, -0.462524, -1.252351)
- RelativeMoveDirection = Vector3(-0.382845, 0.000000, -0.923813)
-
-==============================================
-EVENT #57 | FRAME #178
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.292265, 0.000000, -0.956337)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 16.278839, -27.366354)
- NEW = Vector3(2.792372, 15.862172, -27.366354)
- OLD MAG = 31.964283
- NEW MAG = 31.754107
-
-HRP = Vector3(2.792372, 15.445506, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.466571, -0.462524, -1.252351)
- RelativeMoveDirection = Vector3(-0.377515, 0.000000, -0.926003)
-
-==============================================
-EVENT #58 | FRAME #179
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.292265, 0.000000, -0.956337)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 15.862172, -27.366354)
- NEW = Vector3(2.792372, 15.445506, -27.366354)
- OLD MAG = 31.754107
- NEW MAG = 31.548033
-
-HRP = Vector3(2.792372, 15.028840, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.501046, -0.468645, -1.236659)
- RelativeMoveDirection = Vector3(-0.377516, 0.000000, -0.926003)
-
-==============================================
-EVENT #59 | FRAME #180
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.317517, 0.000000, -0.948253)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 15.445506, -27.366354)
- NEW = Vector3(2.792372, 15.028840, -27.366354)
- OLD MAG = 31.548033
- NEW MAG = 31.346144
-
-HRP = Vector3(2.792372, 14.612174, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.527526, -0.472714, -1.224033)
- RelativeMoveDirection = Vector3(-0.352833, 0.000000, -0.935686)
-
-==============================================
-EVENT #60 | FRAME #181
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.337124, 0.000000, -0.941460)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 15.028840, -27.366354)
- NEW = Vector3(2.792372, 14.612174, -27.366354)
- OLD MAG = 31.346144
- NEW MAG = 31.148521
-
-HRP = Vector3(2.792372, 14.195508, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.581381, -0.482841, -1.195350)
- RelativeMoveDirection = Vector3(-0.333342, 0.000000, -0.942806)
-
-==============================================
-EVENT #61 | FRAME #182
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.376964, 0.000000, -0.926228)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 14.612174, -27.366354)
- NEW = Vector3(2.792372, 14.195508, -27.366354)
- OLD MAG = 31.148521
- NEW MAG = 30.955244
-
-HRP = Vector3(2.792372, 13.778842, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.581381, -0.482841, -1.195350)
- RelativeMoveDirection = Vector3(-0.292836, 0.000000, -0.956163)
-
-==============================================
-EVENT #62 | FRAME #183
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.376964, 0.000000, -0.926228)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 14.195508, -27.366354)
- NEW = Vector3(2.792372, 13.778842, -27.366354)
- OLD MAG = 30.955244
- NEW MAG = 30.766397
-
-HRP = Vector3(2.792372, 13.362176, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.598490, -0.485867, -1.185640)
- RelativeMoveDirection = Vector3(-0.292836, 0.000000, -0.956163)
-
-==============================================
-EVENT #63 | FRAME #184
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.389741, 0.000000, -0.920925)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 13.778842, -27.366354)
- NEW = Vector3(2.792372, 13.362176, -27.366354)
- OLD MAG = 30.766397
- NEW MAG = 30.582062
-
-HRP = Vector3(2.792372, 12.945510, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.617005, -0.489892, -1.174440)
- RelativeMoveDirection = Vector3(-0.279581, 0.000000, -0.960122)
-
-==============================================
-EVENT #64 | FRAME #185
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.403498, 0.000000, -0.914981)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 13.362176, -27.366354)
- NEW = Vector3(2.792372, 12.945510, -27.366354)
- OLD MAG = 30.582062
- NEW MAG = 30.402317
-
-HRP = Vector3(2.792372, 12.528844, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.654581, -0.496912, -1.150914)
- RelativeMoveDirection = Vector3(-0.265161, 0.000000, -0.964204)
-
-==============================================
-EVENT #65 | FRAME #186
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.431778, 0.000000, -0.901980)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 12.945510, -27.366354)
- NEW = Vector3(2.792372, 12.528844, -27.366354)
- OLD MAG = 30.402317
- NEW MAG = 30.227249
-
-HRP = Vector3(2.792372, 12.112178, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.688530, -0.502902, -1.128280)
- RelativeMoveDirection = Vector3(-0.235026, 0.000000, -0.971989)
-
-==============================================
-EVENT #66 | FRAME #187
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.457591, 0.000000, -0.889163)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 12.528844, -27.366354)
- NEW = Vector3(2.792372, 12.112178, -27.366354)
- OLD MAG = 30.227249
- NEW MAG = 30.056938
-
-HRP = Vector3(2.792372, 11.695512, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.709725, -0.505889, -1.113718)
- RelativeMoveDirection = Vector3(-0.206919, 0.000000, -0.978358)
-
-==============================================
-EVENT #67 | FRAME #188
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.473914, 0.000000, -0.880571)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 12.112178, -27.366354)
- NEW = Vector3(2.792372, 11.695512, -27.366354)
- OLD MAG = 30.056938
- NEW MAG = 29.891466
-
-HRP = Vector3(2.792372, 11.278846, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.768872, -0.513823, -1.069964)
- RelativeMoveDirection = Vector3(-0.188838, 0.000000, -0.982008)
-
-==============================================
-EVENT #68 | FRAME #189
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.519923, 0.000000, -0.854213)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 11.695512, -27.366354)
- NEW = Vector3(2.792372, 11.278846, -27.366354)
- OLD MAG = 29.891466
- NEW MAG = 29.730911
-
-HRP = Vector3(2.792372, 10.862180, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.768872, -0.513823, -1.069964)
- RelativeMoveDirection = Vector3(-0.136521, 0.000000, -0.990637)
-
-==============================================
-EVENT #69 | FRAME #190
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.519923, 0.000000, -0.854213)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 11.278846, -27.366354)
- NEW = Vector3(2.792372, 10.862180, -27.366354)
- OLD MAG = 29.730911
- NEW MAG = 29.575356
-
-HRP = Vector3(2.792372, 10.445514, -27.366354)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.806013, -0.518759, -1.039823)
- RelativeMoveDirection = Vector3(-0.136522, 0.000000, -0.990637)
-
-==============================================
-EVENT #70 | FRAME #191
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.549149, 0.000000, -0.835724)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(251.313477, 0.000000, -2462.972412)
- NEW = Vector3(228.768921, 0.000000, -2466.749756)
- OLD MAG = 2475.760742
- NEW MAG = 2477.335205
- DELTA MAG = 1.574463
- DELTA = Vector3(-22.544556, 0.000000, -3.777344)
- DIRECTION DOT = 0.999957621
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 10.862180, -27.366354)
- NEW = Vector3(2.792372, 10.445514, -27.366354)
- OLD MAG = 29.575356
- NEW MAG = 29.424879
-
-HRP = Vector3(2.541877, 10.028848, -27.408323)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.528247371720679
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.845475, -0.523678, -1.005451)
- RelativeMoveDirection = Vector3(-0.111341, 0.000000, -0.993782)
-
-==============================================
-EVENT #71 | FRAME #192
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.580538, 0.000000, -0.814233)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(228.768921, 0.000000, -2466.749756)
- NEW = Vector3(109.803085, 0.000000, -2480.803711)
- OLD MAG = 2477.335205
- NEW MAG = 2483.232422
- DELTA MAG = 5.897217
- DELTA = Vector3(-118.965836, 0.000000, -14.053955)
- DIRECTION DOT = 0.998836517
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.792372, 10.445514, -27.366354)
- NEW = Vector3(2.541877, 10.028848, -27.408323)
- OLD MAG = 29.424879
- NEW MAG = 29.295992
-
-HRP = Vector3(1.220035, 9.612182, -27.564478)
-
-REGISTRY OTHER DATA:
- Speed = 27.5
- Sprint = 1.5292192623939043
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.893719, -0.531513, -0.958519)
- RelativeMoveDirection = Vector3(-0.121471, 0.000000, -0.992595)
-
-==============================================
-EVENT #72 | FRAME #193
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.619267, 0.000000, -0.785181)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(109.803085, 0.000000, -2480.803711)
- NEW = Vector3(-9.989059, 0.000000, -2489.103027)
- OLD MAG = 2483.232422
- NEW MAG = 2489.123047
- DELTA MAG = 5.890625
- DELTA = Vector3(-119.792145, 0.000000, -8.299316)
- DIRECTION DOT = 0.998836517
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.541877, 10.028848, -27.408323)
- NEW = Vector3(1.220035, 9.612182, -27.564478)
- OLD MAG = 29.295992
- NEW MAG = 29.217854
-
-HRP = Vector3(-0.110989, 9.195516, -27.656693)
-
-REGISTRY OTHER DATA:
- Speed = 27.6
- Sprint = 1.5328595196759258
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.939406, -0.539302, -0.909214)
- RelativeMoveDirection = Vector3(-0.121291, 0.000000, -0.992617)
-
-==============================================
-EVENT #73 | FRAME #194
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.656544, 0.000000, -0.754288)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-9.989059, 0.000000, -2489.103027)
- NEW = Vector3(-72.941681, 0.000000, -2491.862549)
- OLD MAG = 2489.123047
- NEW MAG = 2492.929932
- DELTA MAG = 3.806885
- DELTA = Vector3(-62.952621, 0.000000, -2.759521)
- DIRECTION DOT = 0.999681234
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.220035, 9.612182, -27.564478)
- NEW = Vector3(-0.110989, 9.195516, -27.656693)
- OLD MAG = 29.217854
- NEW MAG = 29.145540
-
-HRP = Vector3(-0.810462, 8.778850, -27.687355)
-
-REGISTRY OTHER DATA:
- Speed = 27.6
- Sprint = 1.5364957079475308
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.962271, -0.543180, -0.882605)
- RelativeMoveDirection = Vector3(-0.098260, 0.000000, -0.995161)
-
-==============================================
-EVENT #74 | FRAME #195
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.675461, 0.000000, -0.737395)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-72.941681, 0.000000, -2491.862549)
- NEW = Vector3(-141.784241, 0.000000, -2492.973633)
- OLD MAG = 2492.929932
- NEW MAG = 2497.002197
- DELTA MAG = 4.072266
- DELTA = Vector3(-68.842560, 0.000000, -1.111084)
- DIRECTION DOT = 0.999620676
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-0.110989, 9.195516, -27.656693)
- NEW = Vector3(-0.810462, 8.778850, -27.687355)
- OLD MAG = 29.145540
- NEW MAG = 29.057093
-
-HRP = Vector3(-1.575379, 8.362184, -27.699699)
-
-REGISTRY OTHER DATA:
- Speed = 27.7
- Sprint = 1.5388456368152006
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.986370, -0.548011, -0.852502)
- RelativeMoveDirection = Vector3(-0.100439, 0.000000, -0.994943)
-
-==============================================
-EVENT #75 | FRAME #196
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.695603, 0.000000, -0.718427)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-141.784241, 0.000000, -2492.973633)
- NEW = Vector3(-225.116516, 0.000000, -2491.532471)
- OLD MAG = 2497.002197
- NEW MAG = 2501.681641
- DELTA MAG = 4.679443
- DELTA = Vector3(-83.332275, 0.000000, 1.441162)
- DIRECTION DOT = 0.999445856
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-0.810462, 8.778850, -27.687355)
- NEW = Vector3(-1.575379, 8.362184, -27.699699)
- OLD MAG = 29.057093
- NEW MAG = 28.977255
-
-HRP = Vector3(-2.501293, 7.945517, -27.683687)
-
-REGISTRY OTHER DATA:
- Speed = 27.7
- Sprint = 1.5413593810281636
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.014260, -0.552823, -0.815882)
- RelativeMoveDirection = Vector3(-0.106037, 0.000000, -0.994362)
-
-==============================================
-EVENT #76 | FRAME #197
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.719228, 0.000000, -0.694774)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-225.116516, 0.000000, -2491.532471)
- NEW = Vector3(-308.510712, 0.000000, -2487.298584)
- OLD MAG = 2501.681641
- NEW MAG = 2506.358398
- DELTA MAG = 4.676758
- DELTA = Vector3(-83.394196, 0.000000, 4.233887)
- DIRECTION DOT = 0.999445856
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-1.575379, 8.362184, -27.699699)
- NEW = Vector3(-2.501293, 7.945517, -27.683687)
- OLD MAG = 28.977255
- NEW MAG = 28.909760
-
-HRP = Vector3(-3.427896, 7.528850, -27.636644)
-
-REGISTRY OTHER DATA:
- Speed = 27.8
- Sprint = 1.5442479263117284
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.040802, -0.557617, -0.778327)
- RelativeMoveDirection = Vector3(-0.105900, 0.000000, -0.994377)
-
-==============================================
-EVENT #77 | FRAME #198
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.742050, 0.000000, -0.670345)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-308.510712, 0.000000, -2487.298584)
- NEW = Vector3(-397.609619, 0.000000, -2479.575684)
- OLD MAG = 2506.358398
- NEW MAG = 2511.252441
- DELTA MAG = 4.894043
- DELTA = Vector3(-89.098907, 0.000000, 7.722900)
- DIRECTION DOT = 0.999366581
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-2.501293, 7.945517, -27.683687)
- NEW = Vector3(-3.427896, 7.528850, -27.636644)
- OLD MAG = 28.909760
- NEW MAG = 28.848192
-
-HRP = Vector3(-4.417883, 7.112183, -27.550835)
-
-REGISTRY OTHER DATA:
- Speed = 27.9
- Sprint = 1.5471348138503087
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.067613, -0.563346, -0.736780)
- RelativeMoveDirection = Vector3(-0.108051, 0.000000, -0.994145)
-
-==============================================
-EVENT #78 | FRAME #199
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.765528, 0.000000, -0.643403)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-397.609619, 0.000000, -2479.575684)
- NEW = Vector3(-497.978821, 0.000000, -2466.779053)
- OLD MAG = 2511.252441
- NEW MAG = 2516.541748
- DELTA MAG = 5.289307
- DELTA = Vector3(-100.369202, 0.000000, 12.796631)
- DIRECTION DOT = 0.999192238
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-3.427896, 7.528850, -27.636644)
- NEW = Vector3(-4.417883, 7.112183, -27.550835)
- OLD MAG = 28.848192
- NEW MAG = 28.794952
-
-HRP = Vector3(-5.533096, 6.695516, -27.408649)
-
-REGISTRY OTHER DATA:
- Speed = 27.9
- Sprint = 1.5501558280285495
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.096052, -0.568099, -0.689880)
- RelativeMoveDirection = Vector3(-0.112482, 0.000000, -0.993654)
-
-==============================================
-EVENT #79 | FRAME #200
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.790858, 0.000000, -0.611999)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-497.978821, 0.000000, -2466.779053)
- NEW = Vector3(-603.638428, 0.000000, -2448.699707)
- OLD MAG = 2516.541748
- NEW MAG = 2522.005127
- DELTA MAG = 5.463379
- DELTA = Vector3(-105.659607, 0.000000, 18.079346)
- DIRECTION DOT = 0.999096930
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-4.417883, 7.112183, -27.550835)
- NEW = Vector3(-5.533096, 6.695516, -27.408649)
- OLD MAG = 28.794952
- NEW MAG = 28.752028
-
-HRP = Vector3(-6.707091, 6.278849, -27.207767)
-
-REGISTRY OTHER DATA:
- Speed = 28
- Sprint = 1.5534208321277005
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.123918, -0.572833, -0.639273)
- RelativeMoveDirection = Vector3(-0.114616, 0.000000, -0.993410)
-
-==============================================
-EVENT #80 | FRAME #201
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.816236, 0.000000, -0.577719)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-603.638428, 0.000000, -2448.699707)
- NEW = Vector3(-700.207825, 0.000000, -2428.251465)
- OLD MAG = 2522.005127
- NEW MAG = 2527.191406
- DELTA MAG = 5.186279
- DELTA = Vector3(-96.569397, 0.000000, 20.448242)
- DIRECTION DOT = 0.999237657
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-5.533096, 6.695516, -27.408649)
- NEW = Vector3(-6.707091, 6.278849, -27.207767)
- OLD MAG = 28.752028
- NEW MAG = 28.717096
-
-HRP = Vector3(-7.780084, 5.862182, -26.980564)
-
-REGISTRY OTHER DATA:
- Speed = 28
- Sprint = 1.5567932882426698
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.147419, -0.577548, -0.591496)
- RelativeMoveDirection = Vector3(-0.111031, 0.000000, -0.993817)
-
-==============================================
-EVENT #81 | FRAME #202
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.838248, 0.000000, -0.545289)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-700.207825, 0.000000, -2428.251465)
- NEW = Vector3(-801.685791, 0.000000, -2402.322021)
- OLD MAG = 2527.191406
- NEW MAG = 2532.558105
- DELTA MAG = 5.366699
- DELTA = Vector3(-101.477966, 0.000000, 25.929443)
- DIRECTION DOT = 0.999145210
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-6.707091, 6.278849, -27.207767)
- NEW = Vector3(-7.780084, 5.862182, -26.980564)
- OLD MAG = 28.717096
- NEW MAG = 28.685287
-
-HRP = Vector3(-8.907618, 5.237182, -26.692459)
-
-REGISTRY OTHER DATA:
- Speed = 28.1
- Sprint = 1.5599946952160493
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.170145, -0.582244, -0.540141)
- RelativeMoveDirection = Vector3(-0.113170, 0.000000, -0.993576)
-
-==============================================
-EVENT #82 | FRAME #203
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.860150, 0.000000, -0.510041)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-801.685791, 0.000000, -2402.322021)
- NEW = Vector3(-965.148438, 0.000000, -2348.481689)
- OLD MAG = 2532.558105
- NEW MAG = 2539.070312
- DELTA MAG = 6.512207
- DELTA = Vector3(-163.462646, 0.000000, 53.840332)
- DIRECTION DOT = 0.997700214
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-7.780084, 5.862182, -26.980564)
- NEW = Vector3(-8.907618, 5.237182, -26.692459)
- OLD MAG = 28.685287
- NEW MAG = 28.622738
-
-HRP = Vector3(-10.723845, 5.028848, -26.094242)
-
-REGISTRY OTHER DATA:
- Speed = 28.2
- Sprint = 1.563307472511574
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.202672, -0.588786, -0.454875)
- RelativeMoveDirection = Vector3(-0.139285, 0.000000, -0.990252)
-
-==============================================
-EVENT #83 | FRAME #204
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.892826, 0.000000, -0.450401)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-965.148438, 0.000000, -2348.481689)
- NEW = Vector3(-1106.462280, 0.000000, -2292.345215)
- OLD MAG = 2539.070312
- NEW MAG = 2545.408691
- DELTA MAG = 6.338379
- DELTA = Vector3(-141.313843, 0.000000, 56.136475)
- DIRECTION DOT = 0.998214304
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-8.907618, 5.237182, -26.692459)
- NEW = Vector3(-10.723845, 5.028848, -26.094242)
- OLD MAG = 28.622738
- NEW MAG = 28.656582
-
-HRP = Vector3(-12.294021, 4.612181, -25.470495)
-
-REGISTRY OTHER DATA:
- Speed = 28.2
- Sprint = 1.5673273533950618
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.226506, -0.593435, -0.378837)
- RelativeMoveDirection = Vector3(-0.131120, 0.000000, -0.991366)
-
-==============================================
-EVENT #84 | FRAME #205
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.918207, 0.000000, -0.396101)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1106.462280, 0.000000, -2292.345215)
- NEW = Vector3(-1194.905762, 0.000000, -2253.253906)
- OLD MAG = 2545.408691
- NEW MAG = 2550.480957
- DELTA MAG = 5.072266
- DELTA = Vector3(-88.443481, 0.000000, 39.091309)
- DIRECTION DOT = 0.999281764
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-10.723845, 5.028848, -26.094242)
- NEW = Vector3(-12.294021, 4.612181, -25.470495)
- OLD MAG = 28.656582
- NEW MAG = 28.655912
-
-HRP = Vector3(-13.276726, 4.195514, -25.036148)
-
-REGISTRY OTHER DATA:
- Speed = 28.3
- Sprint = 1.571239932966821
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.239196, -0.596216, -0.330032)
- RelativeMoveDirection = Vector3(-0.109222, 0.000000, -0.994017)
-
-==============================================
-EVENT #85 | FRAME #206
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.932608, 0.000000, -0.360891)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1194.905762, 0.000000, -2253.253906)
- NEW = Vector3(-1294.892822, 0.000000, -2203.717529)
- OLD MAG = 2550.480957
- NEW MAG = 2555.996582
- DELTA MAG = 5.515625
- DELTA = Vector3(-99.987061, 0.000000, 49.536377)
- DIRECTION DOT = 0.999047220
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-12.294021, 4.612181, -25.470495)
- NEW = Vector3(-13.276726, 4.195514, -25.036148)
- OLD MAG = 28.655912
- NEW MAG = 28.647556
-
-HRP = Vector3(-14.387693, 3.778848, -24.485743)
-
-REGISTRY OTHER DATA:
- Speed = 28.3
- Sprint = 1.5743709611304013
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.251236, -0.599911, -0.272975)
- RelativeMoveDirection = Vector3(-0.114802, 0.000000, -0.993388)
-
-==============================================
-EVENT #86 | FRAME #207
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.947518, 0.000000, -0.319703)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1294.892822, 0.000000, -2203.717529)
- NEW = Vector3(-1400.363647, 0.000000, -2145.101807)
- OLD MAG = 2555.996582
- NEW MAG = 2561.733887
- DELTA MAG = 5.737305
- DELTA = Vector3(-105.470825, 0.000000, 58.615723)
- DIRECTION DOT = 0.998890638
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-13.276726, 4.195514, -25.036148)
- NEW = Vector3(-14.387693, 3.778848, -24.485743)
- OLD MAG = 28.647556
- NEW MAG = 28.650253
-
-HRP = Vector3(-15.559590, 3.362181, -23.834459)
-
-REGISTRY OTHER DATA:
- Speed = 28.4
- Sprint = 1.5777756679205246
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.261388, -0.603594, -0.211125)
- RelativeMoveDirection = Vector3(-0.118079, 0.000000, -0.993004)
-
-==============================================
-EVENT #87 | FRAME #208
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.961565, 0.000000, -0.274576)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1400.363647, 0.000000, -2145.101807)
- NEW = Vector3(-1495.852173, 0.000000, -2086.418457)
- OLD MAG = 2561.733887
- NEW MAG = 2567.239014
- DELTA MAG = 5.505127
- DELTA = Vector3(-95.488525, 0.000000, 58.683350)
- DIRECTION DOT = 0.999047160
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-14.387693, 3.778848, -24.485743)
- NEW = Vector3(-15.559590, 3.362181, -23.834459)
- OLD MAG = 28.650253
- NEW MAG = 28.661587
-
-HRP = Vector3(-16.620577, 2.945515, -23.182423)
-
-REGISTRY OTHER DATA:
- Speed = 28.5
- Sprint = 1.5813172140239198
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.267962, -0.607265, -0.153303)
- RelativeMoveDirection = Vector3(-0.114492, 0.000000, -0.993424)
-
-==============================================
-EVENT #88 | FRAME #209
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.972668, 0.000000, -0.232202)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1495.852173, 0.000000, -2086.418457)
- NEW = Vector3(-1586.499634, 0.000000, -2025.236328)
- OLD MAG = 2567.239014
- NEW MAG = 2572.656738
- DELTA MAG = 5.417725
- DELTA = Vector3(-90.647461, 0.000000, 61.182129)
- DIRECTION DOT = 0.999096870
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-15.559590, 3.362181, -23.834459)
- NEW = Vector3(-16.620577, 2.945515, -23.182423)
- OLD MAG = 28.661587
- NEW MAG = 28.676548
-
-HRP = Vector3(-17.627768, 2.528848, -22.502621)
-
-REGISTRY OTHER DATA:
- Speed = 28.5
- Sprint = 1.5847154405381945
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.271775, -0.610922, -0.096767)
- RelativeMoveDirection = Vector3(-0.113199, 0.000000, -0.993572)
-
-==============================================
-EVENT #89 | FRAME #210
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.981684, 0.000000, -0.190514)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1586.499634, 0.000000, -2025.236328)
- NEW = Vector3(-1658.377197, 0.000000, -1973.016602)
- OLD MAG = 2572.656738
- NEW MAG = 2577.403564
- DELTA MAG = 4.746826
- DELTA = Vector3(-71.877563, 0.000000, 52.219727)
- DIRECTION DOT = 0.999406636
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-16.620577, 2.945515, -23.182423)
- NEW = Vector3(-17.627768, 2.528848, -22.502621)
- OLD MAG = 28.676548
- NEW MAG = 28.696711
-
-HRP = Vector3(-18.426409, 2.112182, -21.922401)
-
-REGISTRY OTHER DATA:
- Speed = 28.6
- Sprint = 1.588059714988426
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.273115, -0.613656, -0.051020)
- RelativeMoveDirection = Vector3(-0.105048, 0.000000, -0.994467)
-
-==============================================
-EVENT #90 | FRAME #211
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.987685, 0.000000, -0.156456)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1658.377197, 0.000000, -1973.016602)
- NEW = Vector3(-1723.972534, 0.000000, -1922.047119)
- OLD MAG = 2577.403564
- NEW MAG = 2581.927002
- DELTA MAG = 4.523438
- DELTA = Vector3(-65.595337, 0.000000, 50.969482)
- DIRECTION DOT = 0.999482989
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.627768, 2.528848, -22.502621)
- NEW = Vector3(-18.426409, 2.112182, -21.922401)
- OLD MAG = 28.696711
- NEW MAG = 28.715597
-
-HRP = Vector3(-19.155245, 1.695515, -21.356073)
-
-REGISTRY OTHER DATA:
- Speed = 28.6
- Sprint = 1.5909898546006944
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.273229, -0.615475, -0.008786)
- RelativeMoveDirection = Vector3(-0.102633, 0.000000, -0.994719)
-
-==============================================
-EVENT #91 | FRAME #212
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.992220, 0.000000, -0.124498)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1723.972534, 0.000000, -1922.047119)
- NEW = Vector3(-1772.303955, 0.000000, -1882.579224)
- OLD MAG = 2581.927002
- NEW MAG = 2585.568848
- DELTA MAG = 3.641846
- DELTA = Vector3(-48.331421, 0.000000, 39.467896)
- DIRECTION DOT = 0.999709249
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-18.426409, 2.112182, -21.922401)
- NEW = Vector3(-19.155245, 1.695515, -21.356073)
- OLD MAG = 28.715597
- NEW MAG = 28.738129
-
-HRP = Vector3(-19.692261, 1.278848, -20.917542)
-
-REGISTRY OTHER DATA:
- Speed = 28.7
- Sprint = 1.5937820999710648
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.271720, -0.618197, 0.023690)
- RelativeMoveDirection = Vector3(-0.094504, 0.000000, -0.995524)
-
-==============================================
-EVENT #92 | FRAME #213
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.994943, 0.000000, -0.100442)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1772.303955, 0.000000, -1882.579224)
- NEW = Vector3(-1813.073730, 0.000000, -1847.851562)
- OLD MAG = 2585.568848
- NEW MAG = 2588.781982
- DELTA MAG = 3.213135
- DELTA = Vector3(-40.769775, 0.000000, 34.727661)
- DIRECTION DOT = 0.999786496
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-19.155245, 1.695515, -21.356073)
- NEW = Vector3(-19.692261, 1.278848, -20.917542)
- OLD MAG = 28.738129
- NEW MAG = 28.756983
-
-HRP = Vector3(-20.145258, 0.862181, -20.531679)
-
-REGISTRY OTHER DATA:
- Speed = 28.7
- Sprint = 1.5960301528742284
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.270029, -0.620008, 0.051159)
- RelativeMoveDirection = Vector3(-0.090975, 0.000000, -0.995853)
-
-==============================================
-EVENT #93 | FRAME #214
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.996813, 0.000000, -0.079776)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1813.073730, 0.000000, -1847.851562)
- NEW = Vector3(-1833.296387, 0.000000, -1830.260620)
- OLD MAG = 2588.781982
- NEW MAG = 2590.526855
- DELTA MAG = 1.744873
- DELTA = Vector3(-20.222656, 0.000000, 17.590942)
- DIRECTION DOT = 0.999946713
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-19.692261, 1.278848, -20.917542)
- NEW = Vector3(-20.145258, 0.862181, -20.531679)
- OLD MAG = 28.756983
- NEW MAG = 28.777155
-
-HRP = Vector3(-20.369955, 0.445515, -20.336224)
-
-REGISTRY OTHER DATA:
- Speed = 28.7
- Sprint = 1.5980135693962192
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.268960, -0.620912, 0.064873)
- RelativeMoveDirection = Vector3(-0.080592, 0.000000, -0.996747)
-
-==============================================
-EVENT #94 | FRAME #215
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.997587, 0.000000, -0.069429)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1833.296387, 0.000000, -1830.260620)
- NEW = Vector3(-1848.923584, 0.000000, -1816.443970)
- OLD MAG = 2590.526855
- NEW MAG = 2591.907959
- DELTA MAG = 1.381104
- DELTA = Vector3(-15.627197, 0.000000, 13.816650)
- DIRECTION DOT = 0.999967813
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-20.145258, 0.862181, -20.531679)
- NEW = Vector3(-20.369955, 0.445515, -20.336224)
- OLD MAG = 28.777155
- NEW MAG = 28.787073
-
-HRP = Vector3(-20.543591, -0.387819, -20.182705)
-
-REGISTRY OTHER DATA:
- Speed = 28.7
- Sprint = 1.5990906515239198
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.268395, -0.620912, 0.075112)
- RelativeMoveDirection = Vector3(-0.078259, 0.000000, -0.996933)
-
-==============================================
-EVENT #95 | FRAME #216
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.998115, 0.000000, -0.061377)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1848.923584, 0.000000, -1816.443970)
- NEW = Vector3(-1857.820679, 0.000000, -1808.504272)
- OLD MAG = 2591.907959
- NEW MAG = 2592.717773
- DELTA MAG = 0.809814
- DELTA = Vector3(-8.897095, 0.000000, 7.939697)
- DIRECTION DOT = 0.999989510
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-20.369955, 0.445515, -20.336224)
- NEW = Vector3(-20.543591, -0.387819, -20.182705)
- OLD MAG = 28.787073
- NEW MAG = 28.801582
-
-HRP = Vector3(-20.642447, -0.804485, -20.094486)
-
-REGISTRY OTHER DATA:
- Speed = 28.8
- Sprint = 1.5999431845582561
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.267558, -0.621816, 0.081494)
- RelativeMoveDirection = Vector3(-0.074786, 0.000000, -0.997200)
-
-==============================================
-EVENT #96 | FRAME #217
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.665821, 0.000000, -0.746111)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-20.543591, -0.387819, -20.182705)
- NEW = Vector3(-20.642447, -0.804485, -20.094486)
- OLD MAG = 28.801582
- NEW MAG = 28.819197
-
-HRP = Vector3(-20.642447, -1.221152, -20.094486)
-
-REGISTRY OTHER DATA:
- Speed = 28.8
- Sprint = 1.6004430700231482
- State = Air
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.520969, -0.622718, -0.583792)
- RelativeMoveDirection = Vector3(-0.070193, 0.000000, -0.997533)
-
-==============================================
-EVENT #97 | FRAME #218
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.056773, 0.000000, -0.998387)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1857.820679, 0.000000, -1808.504272)
- NEW = Vector3(-1652.604736, 0.000000, -1991.212158)
- OLD MAG = 2592.717773
- NEW MAG = 2587.668457
- DELTA MAG = -5.049316
- DELTA = Vector3(205.215942, 0.000000, -182.707886)
- DIRECTION DOT = 0.994375527
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-20.642447, -0.804485, -20.094486)
- NEW = Vector3(-20.642447, -1.221152, -20.094486)
- OLD MAG = 28.819197
- NEW MAG = 28.833838
-
-HRP = Vector3(-18.362270, -1.637819, -22.124575)
-
-REGISTRY OTHER DATA:
- Speed = 28.7
- Sprint = 1.6004430700231482
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.226582, -0.622718, -1.249353)
- RelativeMoveDirection = Vector3(0.035852, 0.000000, -0.999357)
-
-==============================================
-EVENT #98 | FRAME #219
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.057924, 0.000000, -0.998321)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1652.604736, 0.000000, -1991.212158)
- NEW = Vector3(-1583.730225, 0.000000, -2052.532471)
- OLD MAG = 2587.668457
- NEW MAG = 2592.506592
- DELTA MAG = 4.838135
- DELTA = Vector3(68.874512, 0.000000, -61.320312)
- DIRECTION DOT = 0.999368072
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-20.642447, -1.221152, -20.094486)
- NEW = Vector3(-18.362270, -1.637819, -22.124575)
- OLD MAG = 28.833838
- NEW MAG = 28.798477
-
-HRP = Vector3(-17.596996, -2.054486, -22.805912)
-
-REGISTRY OTHER DATA:
- Speed = 28.8
- Sprint = 1.5973262080439814
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.226582, -0.622718, -1.249353)
- RelativeMoveDirection = Vector3(0.070183, 0.000000, -0.997534)
-
-==============================================
-EVENT #99 | FRAME #220
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.057924, 0.000000, -0.998321)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1583.730225, 0.000000, -2052.532471)
- NEW = Vector3(-1572.537354, 0.000000, -2062.382568)
- OLD MAG = 2592.506592
- NEW MAG = 2593.510254
- DELTA MAG = 1.003662
- DELTA = Vector3(11.192871, 0.000000, -9.850098)
- DIRECTION DOT = 0.999983668
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-18.362270, -1.637819, -22.124575)
- NEW = Vector3(-17.596996, -2.054486, -22.805912)
- OLD MAG = 28.798477
- NEW MAG = 28.878796
-
-HRP = Vector3(-17.472631, -2.471152, -22.915358)
-
-REGISTRY OTHER DATA:
- Speed = 28.8
- Sprint = 1.6003127109857254
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.234730, -0.624521, -1.246947)
- RelativeMoveDirection = Vector3(0.075911, 0.000000, -0.997115)
-
-==============================================
-EVENT #100 | FRAME #221
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.063678, 0.000000, -0.997971)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1572.537354, 0.000000, -2062.382568)
- NEW = Vector3(-1563.543579, 0.000000, -2070.224121)
- OLD MAG = 2593.510254
- NEW MAG = 2594.320068
- DELTA MAG = 0.809814
- DELTA = Vector3(8.993774, 0.000000, -7.841553)
- DIRECTION DOT = 0.999989510
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.596996, -2.054486, -22.805912)
- NEW = Vector3(-17.472631, -2.471152, -22.915358)
- OLD MAG = 28.878796
- NEW MAG = 28.922535
-
-HRP = Vector3(-17.372702, -2.887819, -23.002485)
-
-REGISTRY OTHER DATA:
- Speed = 28.8
- Sprint = 1.6009322554976853
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.240951, -0.625421, -1.245308)
- RelativeMoveDirection = Vector3(0.074748, 0.000000, -0.997202)
-
-==============================================
-EVENT #101 | FRAME #222
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.068279, 0.000000, -0.997666)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.472631, -2.471152, -22.915358)
- NEW = Vector3(-17.372702, -2.887819, -23.002485)
- OLD MAG = 28.922535
- NEW MAG = 28.970064
-
-HRP = Vector3(-17.372700, -3.304485, -23.002485)
-
-REGISTRY OTHER DATA:
- Speed = 28.8
- Sprint = 1.6014321409625771
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.240951, -0.625421, -1.245308)
- RelativeMoveDirection = Vector3(0.070151, 0.000000, -0.997536)
-
-==============================================
-EVENT #102 | FRAME #223
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.068279, 0.000000, -0.997666)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1563.543457, 0.000000, -2070.224121)
- NEW = Vector3(-1498.777100, 0.000000, -2123.112793)
- OLD MAG = 2594.320068
- NEW MAG = 2598.834473
- DELTA MAG = 4.514404
- DELTA = Vector3(64.766357, 0.000000, -52.888672)
- DIRECTION DOT = 0.999482989
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.372702, -2.887819, -23.002485)
- NEW = Vector3(-17.372700, -3.304485, -23.002485)
- OLD MAG = 28.970064
- NEW MAG = 29.014559
-
-HRP = Vector3(-16.653076, -3.721152, -23.590137)
-
-REGISTRY OTHER DATA:
- Speed = 28.8
- Sprint = 1.6014321409625771
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.282846, -0.629012, -1.234642)
- RelativeMoveDirection = Vector3(0.102189, 0.000000, -0.994765)
-
-==============================================
-EVENT #103 | FRAME #224
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.100442, 0.000000, -0.994943)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1498.777100, 0.000000, -2123.112793)
- NEW = Vector3(-1456.384277, 0.000000, -2156.289062)
- OLD MAG = 2598.834473
- NEW MAG = 2602.044922
- DELTA MAG = 3.210449
- DELTA = Vector3(42.392822, 0.000000, -33.176270)
- DIRECTION DOT = 0.999786496
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.372700, -3.304485, -23.002485)
- NEW = Vector3(-16.653076, -3.721152, -23.590137)
- OLD MAG = 29.014559
- NEW MAG = 29.114714
-
-HRP = Vector3(-16.182045, -4.137818, -23.958763)
-
-REGISTRY OTHER DATA:
- Speed = 28.9
- Sprint = 1.6042188102816357
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.309747, -0.631697, -1.226791)
- RelativeMoveDirection = Vector3(0.090623, 0.000000, -0.995885)
-
-==============================================
-EVENT #104 | FRAME #225
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.121065, 0.000000, -0.992645)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1456.384277, 0.000000, -2156.289062)
- NEW = Vector3(-1405.935913, 0.000000, -2193.836426)
- OLD MAG = 2602.044922
- NEW MAG = 2605.681152
- DELTA MAG = 3.636230
- DELTA = Vector3(50.448364, 0.000000, -37.547363)
- DIRECTION DOT = 0.999709308
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-16.653076, -3.721152, -23.590137)
- NEW = Vector3(-16.182045, -4.137818, -23.958763)
- OLD MAG = 29.114714
- NEW MAG = 29.206205
-
-HRP = Vector3(-15.621506, -4.554485, -24.375954)
-
-REGISTRY OTHER DATA:
- Speed = 28.9
- Sprint = 1.606200569058642
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.340224, -0.633483, -1.217763)
- RelativeMoveDirection = Vector3(0.093969, 0.000000, -0.995575)
-
-==============================================
-EVENT #105 | FRAME #226
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.145059, 0.000000, -0.989423)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1405.935913, 0.000000, -2193.836426)
- NEW = Vector3(-1354.521362, 0.000000, -2230.202393)
- OLD MAG = 2605.681152
- NEW MAG = 2609.316162
- DELTA MAG = 3.635010
- DELTA = Vector3(51.414551, 0.000000, -36.365967)
- DIRECTION DOT = 0.999709368
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-16.182045, -4.137818, -23.958763)
- NEW = Vector3(-15.621506, -4.554485, -24.375954)
- OLD MAG = 29.206205
- NEW MAG = 29.308052
-
-HRP = Vector3(-15.050234, -4.971152, -24.780020)
-
-REGISTRY OTHER DATA:
- Speed = 28.9
- Sprint = 1.6084451557677468
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.370871, -0.636155, -1.207378)
- RelativeMoveDirection = Vector3(0.093872, 0.000000, -0.995584)
-
-==============================================
-EVENT #106 | FRAME #227
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.168968, 0.000000, -0.985622)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1354.521362, 0.000000, -2230.202393)
- NEW = Vector3(-1307.231079, 0.000000, -2262.120850)
- OLD MAG = 2609.316162
- NEW MAG = 2612.669922
- DELTA MAG = 3.353760
- DELTA = Vector3(47.290283, 0.000000, -31.918457)
- DIRECTION DOT = 0.999762058
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-15.621506, -4.554485, -24.375954)
- NEW = Vector3(-15.050234, -4.971152, -24.780020)
- OLD MAG = 29.308052
- NEW MAG = 29.415493
-
-HRP = Vector3(-14.524786, -5.387819, -25.134668)
-
-REGISTRY OTHER DATA:
- Speed = 29
- Sprint = 1.6106889889564042
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.397637, -0.637044, -1.198357)
- RelativeMoveDirection = Vector3(0.091486, 0.000000, -0.995806)
-
-==============================================
-EVENT #107 | FRAME #228
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.190515, 0.000000, -0.981684)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1307.231079, 0.000000, -2262.120850)
- NEW = Vector3(-1264.314453, 0.000000, -2289.878906)
- OLD MAG = 2612.669922
- NEW MAG = 2615.728760
- DELTA MAG = 3.058838
- DELTA = Vector3(42.916626, 0.000000, -27.758057)
- DIRECTION DOT = 0.999809563
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-15.050234, -4.971152, -24.780020)
- NEW = Vector3(-14.524786, -5.387819, -25.134668)
- OLD MAG = 29.415493
- NEW MAG = 29.525404
-
-HRP = Vector3(-14.047935, -5.804486, -25.443092)
-
-REGISTRY OTHER DATA:
- Speed = 29
- Sprint = 1.6127592110339506
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.421444, -0.637932, -1.189717)
- RelativeMoveDirection = Vector3(0.089109, 0.000000, -0.996022)
-
-==============================================
-EVENT #108 | FRAME #229
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.209716, 0.000000, -0.977762)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1264.314453, 0.000000, -2289.878906)
- NEW = Vector3(-1202.579224, 0.000000, -2327.427734)
- OLD MAG = 2615.728760
- NEW MAG = 2619.755127
- DELTA MAG = 4.026367
- DELTA = Vector3(61.735229, 0.000000, -37.548828)
- DIRECTION DOT = 0.999620199
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-14.524786, -5.387819, -25.134668)
- NEW = Vector3(-14.047935, -5.804486, -25.443092)
- OLD MAG = 29.525404
- NEW MAG = 29.637602
-
-HRP = Vector3(-13.361988, -6.221153, -25.860302)
-
-REGISTRY OTHER DATA:
- Speed = 29.1
- Sprint = 1.6146473825713734
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.454961, -0.639706, -1.176344)
- RelativeMoveDirection = Vector3(0.097038, 0.000000, -0.995281)
-
-==============================================
-EVENT #109 | FRAME #230
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.236685, 0.000000, -0.971586)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1202.579224, 0.000000, -2327.427734)
- NEW = Vector3(-1066.634644, 0.000000, -2399.529297)
- OLD MAG = 2619.755127
- NEW MAG = 2625.918945
- DELTA MAG = 6.163818
- DELTA = Vector3(135.944580, 0.000000, -72.101562)
- DIRECTION DOT = 0.998281658
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-14.047935, -5.804486, -25.443092)
- NEW = Vector3(-13.361988, -6.221153, -25.860302)
- OLD MAG = 29.637602
- NEW MAG = 29.765764
-
-HRP = Vector3(-11.851495, -6.637820, -26.661430)
-
-REGISTRY OTHER DATA:
- Speed = 29.1
- Sprint = 1.6171327944155092
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.525032, -0.644126, -1.144309)
- RelativeMoveDirection = Vector3(0.127802, 0.000000, -0.991800)
-
-==============================================
-EVENT #110 | FRAME #231
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.293368, 0.000000, -0.956000)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-13.361988, -6.221153, -25.860302)
- NEW = Vector3(-11.851495, -6.637820, -26.661430)
- OLD MAG = 29.765764
- NEW MAG = 29.922407
-
-HRP = Vector3(-11.851494, -7.054487, -26.661430)
-
-REGISTRY OTHER DATA:
- Speed = 29.1
- Sprint = 1.6209376205632715
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.525032, -0.644126, -1.144309)
- RelativeMoveDirection = Vector3(0.069295, 0.000000, -0.997596)
-
-==============================================
-EVENT #111 | FRAME #232
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.293368, 0.000000, -0.956000)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1066.634644, 0.000000, -2399.529297)
- NEW = Vector3(-1009.862305, 0.000000, -2427.900879)
- OLD MAG = 2625.918945
- NEW MAG = 2629.548340
- DELTA MAG = 3.629395
- DELTA = Vector3(56.772339, 0.000000, -28.371582)
- DIRECTION DOT = 0.999709189
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-11.851495, -6.637820, -26.661430)
- NEW = Vector3(-11.851494, -7.054487, -26.661430)
- OLD MAG = 29.922407
- NEW MAG = 30.017588
-
-HRP = Vector3(-11.220690, -7.471154, -26.976669)
-
-REGISTRY OTHER DATA:
- Speed = 29.2
- Sprint = 1.6209376205632715
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.553243, -0.645888, -1.129934)
- RelativeMoveDirection = Vector3(0.093338, 0.000000, -0.995634)
-
-==============================================
-EVENT #112 | FRAME #233
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.316424, 0.000000, -0.948618)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1009.862305, 0.000000, -2427.900879)
- NEW = Vector3(-966.162415, 0.000000, -2448.741211)
- OLD MAG = 2629.548340
- NEW MAG = 2632.451904
- DELTA MAG = 2.903564
- DELTA = Vector3(43.699890, 0.000000, -20.840332)
- DIRECTION DOT = 0.999831259
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-11.851494, -7.054487, -26.661430)
- NEW = Vector3(-11.220690, -7.471154, -26.976669)
- OLD MAG = 30.017588
- NEW MAG = 30.157299
-
-HRP = Vector3(-10.735135, -7.887821, -27.208229)
-
-REGISTRY OTHER DATA:
- Speed = 29.2
- Sprint = 1.6231779875578705
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.574632, -0.647647, -1.118191)
- RelativeMoveDirection = Vector3(0.087520, 0.000000, -0.996163)
-
-==============================================
-EVENT #113 | FRAME #234
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.333867, 0.000000, -0.942620)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-966.162415, 0.000000, -2448.741211)
- NEW = Vector3(-910.882935, 0.000000, -2473.556152)
- OLD MAG = 2632.451904
- NEW MAG = 2635.941650
- DELTA MAG = 3.489746
- DELTA = Vector3(55.279480, 0.000000, -24.814941)
- DIRECTION DOT = 0.999736309
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-11.220690, -7.471154, -26.976669)
- NEW = Vector3(-10.735135, -7.887821, -27.208229)
- OLD MAG = 30.157299
- NEW MAG = 30.294365
-
-HRP = Vector3(-10.120919, -8.304487, -27.483950)
-
-REGISTRY OTHER DATA:
- Speed = 29.2
- Sprint = 1.6249703112943672
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.600565, -0.648525, -1.103965)
- RelativeMoveDirection = Vector3(0.092022, 0.000000, -0.995757)
-
-==============================================
-EVENT #114 | FRAME #235
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.355510, 0.000000, -0.934673)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-910.882935, 0.000000, -2473.556152)
- NEW = Vector3(-846.486023, 0.000000, -2500.436035)
- OLD MAG = 2635.941650
- NEW MAG = 2639.833252
- DELTA MAG = 3.891602
- DELTA = Vector3(64.396912, 0.000000, -26.879883)
- DIRECTION DOT = 0.999651134
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-10.735135, -7.887821, -27.208229)
- NEW = Vector3(-10.120919, -8.304487, -27.483950)
- OLD MAG = 30.294365
- NEW MAG = 30.442816
-
-HRP = Vector3(-9.405397, -8.721153, -27.782616)
-
-REGISTRY OTHER DATA:
- Speed = 29.3
- Sprint = 1.6271244755497685
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.629911, -0.649402, -1.086964)
- RelativeMoveDirection = Vector3(0.095363, 0.000000, -0.995443)
-
-==============================================
-EVENT #115 | FRAME #236
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.380165, 0.000000, -0.924919)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-846.486023, 0.000000, -2500.436035)
- NEW = Vector3(-749.634460, 0.000000, -2536.474609)
- OLD MAG = 2639.833252
- NEW MAG = 2644.930176
- DELTA MAG = 5.096924
- DELTA = Vector3(96.851562, 0.000000, -36.038574)
- DIRECTION DOT = 0.999237061
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-10.120919, -8.304487, -27.483950)
- NEW = Vector3(-9.405397, -8.721153, -27.782616)
- OLD MAG = 30.442816
- NEW MAG = 30.600552
-
-HRP = Vector3(-8.329270, -9.137819, -28.183044)
-
-REGISTRY OTHER DATA:
- Speed = 29.3
- Sprint = 1.629526698736497
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.672282, -0.650278, -1.060743)
- RelativeMoveDirection = Vector3(0.107845, 0.000000, -0.994168)
-
-==============================================
-EVENT #116 | FRAME #237
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.416117, 0.000000, -0.909311)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-749.634460, 0.000000, -2536.474609)
- NEW = Vector3(-648.320435, 0.000000, -2569.586182)
- OLD MAG = 2644.930176
- NEW MAG = 2650.111816
- DELTA MAG = 5.181641
- DELTA = Vector3(101.314026, 0.000000, -33.111572)
- DIRECTION DOT = 0.999191523
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-9.405397, -8.721153, -27.782616)
- NEW = Vector3(-8.329270, -9.137819, -28.183044)
- OLD MAG = 30.600552
- NEW MAG = 30.775972
-
-HRP = Vector3(-7.203559, -9.554485, -28.550951)
-
-REGISTRY OTHER DATA:
- Speed = 29.4
- Sprint = 1.6326729480131172
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.714757, -0.651153, -1.032048)
- RelativeMoveDirection = Vector3(0.108854, 0.000000, -0.994058)
-
-==============================================
-EVENT #117 | FRAME #238
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.452459, 0.000000, -0.891785)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-648.320435, 0.000000, -2569.586182)
- NEW = Vector3(-572.223816, 0.000000, -2591.955322)
- OLD MAG = 2650.111816
- NEW MAG = 2654.368652
- DELTA MAG = 4.256836
- DELTA = Vector3(76.096619, 0.000000, -22.369141)
- DIRECTION DOT = 0.999554098
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-8.329270, -9.137819, -28.183044)
- NEW = Vector3(-7.203559, -9.554485, -28.550951)
- OLD MAG = 30.775972
- NEW MAG = 30.957006
-
-HRP = Vector3(-6.358041, -9.971151, -28.799496)
-
-REGISTRY OTHER DATA:
- Speed = 29.4
- Sprint = 1.6358714916087962
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.745577, -0.652028, -1.009443)
- RelativeMoveDirection = Vector3(0.098423, 0.000000, -0.995145)
-
-==============================================
-EVENT #118 | FRAME #239
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.478982, 0.000000, -0.877825)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-572.223816, 0.000000, -2591.955322)
- NEW = Vector3(-492.384949, 0.000000, -2612.748291)
- OLD MAG = 2654.368652
- NEW MAG = 2658.739746
- DELTA MAG = 4.371094
- DELTA = Vector3(79.838867, 0.000000, -20.792969)
- DIRECTION DOT = 0.999519050
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-7.203559, -9.554485, -28.550951)
- NEW = Vector3(-6.358041, -9.971151, -28.799496)
- OLD MAG = 30.957006
- NEW MAG = 31.132933
-
-HRP = Vector3(-5.470943, -10.387817, -29.030529)
-
-REGISTRY OTHER DATA:
- Speed = 29.5
- Sprint = 1.638499168113426
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.776632, -0.652028, -0.985750)
- RelativeMoveDirection = Vector3(0.099460, 0.000000, -0.995042)
-
-==============================================
-EVENT #119 | FRAME #240
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.506069, 0.000000, -0.862493)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-492.384949, 0.000000, -2612.748291)
- NEW = Vector3(-399.761108, 0.000000, -2633.367432)
- OLD MAG = 2658.739746
- NEW MAG = 2663.537598
- DELTA MAG = 4.797852
- DELTA = Vector3(92.623840, 0.000000, -20.619141)
- DIRECTION DOT = 0.999365866
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-6.358041, -9.971151, -28.799496)
- NEW = Vector3(-5.470943, -10.387817, -29.030529)
- OLD MAG = 31.132933
- NEW MAG = 31.314686
-
-HRP = Vector3(-4.441789, -10.804483, -29.259632)
-
-REGISTRY OTHER DATA:
- Speed = 29.5
- Sprint = 1.6411973741319446
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.811357, -0.652028, -0.957371)
- RelativeMoveDirection = Vector3(0.103924, 0.000000, -0.994585)
-
-==============================================
-EVENT #120 | FRAME #241
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.536563, 0.000000, -0.843860)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-399.761108, 0.000000, -2633.367432)
- NEW = Vector3(-315.397369, 0.000000, -2649.308838)
- OLD MAG = 2663.537598
- NEW MAG = 2668.016602
- DELTA MAG = 4.479004
- DELTA = Vector3(84.363739, 0.000000, -15.941406)
- DIRECTION DOT = 0.999482870
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-5.470943, -10.387817, -29.030529)
- NEW = Vector3(-4.441789, -10.804483, -29.259632)
- OLD MAG = 31.314686
- NEW MAG = 31.505436
-
-HRP = Vector3(-3.504415, -11.221149, -29.436758)
-
-REGISTRY OTHER DATA:
- Speed = 29.6
- Sprint = 1.6441590108989197
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.841972, -0.652901, -0.929948)
- RelativeMoveDirection = Vector3(0.100369, 0.000000, -0.994950)
-
-==============================================
-EVENT #121 | FRAME #242
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.563518, 0.000000, -0.826104)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-315.397369, 0.000000, -2649.308838)
- NEW = Vector3(-236.522736, 0.000000, -2661.777588)
- OLD MAG = 2668.016602
- NEW MAG = 2672.265625
- DELTA MAG = 4.249023
- DELTA = Vector3(78.874634, 0.000000, -12.468750)
- DIRECTION DOT = 0.999554098
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-4.441789, -10.804483, -29.259632)
- NEW = Vector3(-3.504415, -11.221149, -29.436758)
- OLD MAG = 31.505436
- NEW MAG = 31.697285
-
-HRP = Vector3(-2.628030, -11.637815, -29.575300)
-
-REGISTRY OTHER DATA:
- Speed = 29.6
- Sprint = 1.646923828125
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.869464, -0.652901, -0.904297)
- RelativeMoveDirection = Vector3(0.097967, 0.000000, -0.995190)
-
-==============================================
-EVENT #122 | FRAME #243
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.588023, 0.000000, -0.808844)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-236.522736, 0.000000, -2661.777588)
- NEW = Vector3(-163.312119, 0.000000, -2671.283203)
- OLD MAG = 2672.265625
- NEW MAG = 2676.270752
- DELTA MAG = 4.005127
- DELTA = Vector3(73.210617, 0.000000, -9.505615)
- DIRECTION DOT = 0.999620020
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-3.504415, -11.221149, -29.436758)
- NEW = Vector3(-2.628030, -11.637815, -29.575300)
- OLD MAG = 31.697285
- NEW MAG = 31.891121
-
-HRP = Vector3(-1.814579, -12.054482, -29.680918)
-
-REGISTRY OTHER DATA:
- Speed = 29.7
- Sprint = 1.6495466820987654
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.894245, -0.653774, -0.879150)
- RelativeMoveDirection = Vector3(0.095571, 0.000000, -0.995423)
-
-==============================================
-EVENT #123 | FRAME #244
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.610174, 0.000000, -0.792267)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-163.312119, 0.000000, -2671.283203)
- NEW = Vector3(-89.756035, 0.000000, -2678.771240)
- OLD MAG = 2676.270752
- NEW MAG = 2680.274414
- DELTA MAG = 4.003662
- DELTA = Vector3(73.556084, 0.000000, -7.488037)
- DIRECTION DOT = 0.999620140
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-2.628030, -11.637815, -29.575300)
- NEW = Vector3(-1.814579, -12.054482, -29.680918)
- OLD MAG = 31.891121
- NEW MAG = 32.086758
-
-HRP = Vector3(-0.997289, -12.471148, -29.764118)
-
-REGISTRY OTHER DATA:
- Speed = 29.7
- Sprint = 1.6520189826871141
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.918224, -0.653774, -0.854075)
- RelativeMoveDirection = Vector3(0.095470, 0.000000, -0.995432)
-
-==============================================
-EVENT #124 | FRAME #245
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.631858, 0.000000, -0.775084)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-89.756035, 0.000000, -2678.771240)
- NEW = Vector3(-6.651810, 0.000000, -2684.625000)
- OLD MAG = 2680.274414
- NEW MAG = 2684.633301
- DELTA MAG = 4.358887
- DELTA = Vector3(83.104225, 0.000000, -5.853760)
- DIRECTION DOT = 0.999519050
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-1.814579, -12.054482, -29.680918)
- NEW = Vector3(-0.997289, -12.471148, -29.764118)
- OLD MAG = 32.086758
- NEW MAG = 32.286633
-
-HRP = Vector3(-0.073909, -12.887814, -29.829161)
-
-REGISTRY OTHER DATA:
- Speed = 29.8
- Sprint = 1.654490379050926
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.944466, -0.655517, -0.823579)
- RelativeMoveDirection = Vector3(0.098802, 0.000000, -0.995107)
-
-==============================================
-EVENT #125 | FRAME #246
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.655674, 0.000000, -0.755044)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-6.651810, 0.000000, -2684.625000)
- NEW = Vector3(79.824585, 0.000000, -2687.916504)
- OLD MAG = 2684.633301
- NEW MAG = 2689.101562
- DELTA MAG = 4.468262
- DELTA = Vector3(86.476395, 0.000000, -3.291504)
- DIRECTION DOT = 0.999482632
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-0.997289, -12.471148, -29.764118)
- NEW = Vector3(-0.073909, -12.887814, -29.829161)
- OLD MAG = 32.286633
- NEW MAG = 32.494308
-
-HRP = Vector3(0.886939, -13.304480, -29.865732)
-
-REGISTRY OTHER DATA:
- Speed = 29.8
- Sprint = 1.657181049864969
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.970611, -0.657257, -0.791156)
- RelativeMoveDirection = Vector3(0.099837, 0.000000, -0.995004)
-
-==============================================
-EVENT #126 | FRAME #247
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.679701, 0.000000, -0.733490)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(79.824585, 0.000000, -2687.916504)
- NEW = Vector3(191.296402, 0.000000, -2687.531006)
- OLD MAG = 2689.101562
- NEW MAG = 2694.330566
- DELTA MAG = 5.229004
- DELTA = Vector3(111.471817, 0.000000, 0.385498)
- DIRECTION DOT = 0.999144316
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-0.073909, -12.887814, -29.829161)
- NEW = Vector3(0.886939, -13.304480, -29.865732)
- OLD MAG = 32.494308
- NEW MAG = 32.707153
-
-HRP = Vector3(2.125515, -13.721146, -29.861448)
-
-REGISTRY OTHER DATA:
- Speed = 29.9
- Sprint = 1.6599392361111112
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.002595, -0.658993, -0.748686)
- RelativeMoveDirection = Vector3(0.108877, 0.000000, -0.994055)
-
-==============================================
-EVENT #127 | FRAME #248
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.709548, 0.000000, -0.704657)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(191.296402, 0.000000, -2687.531006)
- NEW = Vector3(287.388367, 0.000000, -2683.762695)
- OLD MAG = 2694.330566
- NEW MAG = 2699.106201
- DELTA MAG = 4.775635
- DELTA = Vector3(96.091965, 0.000000, 3.768311)
- DIRECTION DOT = 0.999365747
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.886939, -13.304480, -29.865732)
- NEW = Vector3(2.125515, -13.721146, -29.861448)
- OLD MAG = 32.707153
- NEW MAG = 32.931652
-
-HRP = Vector3(3.193203, -14.137812, -29.819578)
-
-REGISTRY OTHER DATA:
- Speed = 29.9
- Sprint = 1.6631670163001544
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.028646, -0.660725, -0.710865)
- RelativeMoveDirection = Vector3(0.103024, 0.000000, -0.994679)
-
-==============================================
-EVENT #128 | FRAME #249
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.734273, 0.000000, -0.678855)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(287.388367, 0.000000, -2683.762695)
- NEW = Vector3(420.526764, 0.000000, -2671.913086)
- OLD MAG = 2699.106201
- NEW MAG = 2704.803711
- DELTA MAG = 5.697510
- DELTA = Vector3(133.138397, 0.000000, 11.849609)
- DIRECTION DOT = 0.998778582
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.125515, -13.721146, -29.861448)
- NEW = Vector3(3.193203, -14.137812, -29.819578)
- OLD MAG = 32.931652
- NEW MAG = 33.155415
-
-HRP = Vector3(4.672518, -14.554478, -29.687916)
-
-REGISTRY OTHER DATA:
- Speed = 30
- Sprint = 1.6661149389949845
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.062405, -0.663317, -0.656740)
- RelativeMoveDirection = Vector3(0.116634, 0.000000, -0.993175)
-
-==============================================
-EVENT #129 | FRAME #250
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(0.767009, 0.000000, -0.641636)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.193203, -14.137812, -29.819578)
- NEW = Vector3(4.672518, -14.554478, -29.687916)
- OLD MAG = 33.155415
- NEW MAG = 33.392178
-
-HRP = Vector3(4.672516, -14.971144, -29.687901)
-
-REGISTRY OTHER DATA:
- Speed = 30
- Sprint = 1.6696319203317902
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.062405, -0.663317, -0.656740)
- RelativeMoveDirection = Vector3(0.067274, 0.000000, -0.997734)
-
-==============================================
-EVENT #130 | FRAME #251
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(0.767009, 0.000000, -0.641636)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(420.526764, 0.000000, -2671.913086)
- NEW = Vector3(494.748199, 0.000000, -2663.231689)
- OLD MAG = 2704.803711
- NEW MAG = 2708.796631
- DELTA MAG = 3.992920
- DELTA = Vector3(74.221436, 0.000000, 8.681396)
- DIRECTION DOT = 0.999619961
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.672518, -14.554478, -29.687916)
- NEW = Vector3(4.672516, -14.971144, -29.687901)
- OLD MAG = 33.392178
- NEW MAG = 33.575871
-
-HRP = Vector3(5.497198, -15.387810, -29.591440)
-
-REGISTRY OTHER DATA:
- Speed = 30
- Sprint = 1.6696319203317902
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.080077, -0.664179, -0.626337)
- RelativeMoveDirection = Vector3(0.094762, 0.000000, -0.995500)
-
-==============================================
-EVENT #131 | FRAME #252
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(0.784466, 0.000000, -0.620171)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(494.748199, 0.000000, -2663.231689)
- NEW = Vector3(565.734497, 0.000000, -2653.014404)
- OLD MAG = 2708.796631
- NEW MAG = 2712.663086
- DELTA MAG = 3.866455
- DELTA = Vector3(70.986298, 0.000000, 10.217285)
- DIRECTION DOT = 0.999651015
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.672516, -14.971144, -29.687901)
- NEW = Vector3(5.497198, -15.387810, -29.591440)
- OLD MAG = 33.575871
- NEW MAG = 33.803215
-
-HRP = Vector3(6.285934, -15.804476, -29.477915)
-
-REGISTRY OTHER DATA:
- Speed = 30.1
- Sprint = 1.6720966857156636
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.096085, -0.665901, -0.595964)
- RelativeMoveDirection = Vector3(0.093517, 0.000000, -0.995618)
-
-==============================================
-EVENT #132 | FRAME #253
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(0.800633, 0.000000, -0.599156)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(565.734497, 0.000000, -2653.014404)
- NEW = Vector3(633.459656, 0.000000, -2641.506348)
- OLD MAG = 2712.663086
- NEW MAG = 2716.399658
- DELTA MAG = 3.736572
- DELTA = Vector3(67.725159, 0.000000, 11.508057)
- DIRECTION DOT = 0.999680698
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.497198, -15.387810, -29.591440)
- NEW = Vector3(6.285934, -15.804476, -29.477915)
- OLD MAG = 33.803215
- NEW MAG = 34.032951
-
-HRP = Vector3(7.038435, -16.221144, -29.350048)
-
-REGISTRY OTHER DATA:
- Speed = 30.1
- Sprint = 1.6744833863811728
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.110717, -0.666761, -0.567219)
- RelativeMoveDirection = Vector3(0.092277, 0.000000, -0.995733)
-
-==============================================
-EVENT #133 | FRAME #254
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(0.815570, 0.000000, -0.578659)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(633.459656, 0.000000, -2641.506348)
- NEW = Vector3(704.018799, 0.000000, -2627.582764)
- OLD MAG = 2716.399658
- NEW MAG = 2720.263428
- DELTA MAG = 3.863770
- DELTA = Vector3(70.559143, 0.000000, 13.923584)
- DIRECTION DOT = 0.999651074
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.285934, -15.804476, -29.477915)
- NEW = Vector3(7.038435, -16.221144, -29.350048)
- OLD MAG = 34.032951
- NEW MAG = 34.265003
-
-HRP = Vector3(7.822424, -16.637812, -29.195341)
-
-REGISTRY OTHER DATA:
- Speed = 30.2
- Sprint = 1.6767899124710648
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.125216, -0.667620, -0.536817)
- RelativeMoveDirection = Vector3(0.093329, 0.000000, -0.995635)
-
-==============================================
-EVENT #134 | FRAME #255
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(0.830624, 0.000000, -0.556833)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(704.018799, 0.000000, -2627.582764)
- NEW = Vector3(777.322144, 0.000000, -2610.998291)
- OLD MAG = 2720.263428
- NEW MAG = 2724.250732
- DELTA MAG = 3.987305
- DELTA = Vector3(73.303345, 0.000000, 16.584473)
- DIRECTION DOT = 0.999619961
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.038435, -16.221144, -29.350048)
- NEW = Vector3(7.822424, -16.637812, -29.195341)
- OLD MAG = 34.265003
- NEW MAG = 34.501812
-
-HRP = Vector3(8.636907, -17.054480, -29.011070)
-
-REGISTRY OTHER DATA:
- Speed = 30.2
- Sprint = 1.6791749553915896
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.139296, -0.669334, -0.503980)
- RelativeMoveDirection = Vector3(0.094379, 0.000000, -0.995536)
-
-==============================================
-EVENT #135 | FRAME #256
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.845711, 0.000000, -0.533641)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(777.322144, 0.000000, -2610.998291)
- NEW = Vector3(1179.534424, 0.000000, -2677.781250)
- OLD MAG = 2724.250732
- NEW MAG = 2926.057861
- DELTA MAG = 201.807129
- DELTA = Vector3(402.212280, 0.000000, -66.782959)
- DIRECTION DOT = 0.992127359
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.822424, -16.637812, -29.195341)
- NEW = Vector3(8.636907, -17.054480, -29.011070)
- OLD MAG = 34.501812
- NEW MAG = 34.743252
-
-HRP = Vector3(13.105927, -11.984114, -29.753105)
-
-REGISTRY OTHER DATA:
- Speed = 32.5
- Sprint = 1.6863358508490809
- State = Move
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.153695, -0.670191, -0.468862)
- RelativeMoveDirection = Vector3(0.191228, -0.000000, -0.981546)
-
-==============================================
-EVENT #136 | FRAME #257
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.861324, 0.000000, -0.508056)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1179.534424, 0.000000, -2677.781250)
- NEW = Vector3(1563.600098, 0.000000, -2724.662598)
- OLD MAG = 2926.057861
- NEW MAG = 3141.437988
- DELTA MAG = 215.380127
- DELTA = Vector3(384.065674, 0.000000, -46.881348)
- DIRECTION DOT = 0.994380057
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(8.636907, -17.054480, -29.011070)
- NEW = Vector3(13.105927, -11.984114, -29.753105)
- OLD MAG = 34.743252
- NEW MAG = 34.650131
-
-HRP = Vector3(17.373322, -2.619102, -30.274008)
-
-REGISTRY OTHER DATA:
- Speed = 34.9
- Sprint = 1.693325365211148
- State = Move
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.169762, -0.671900, -0.424509)
- RelativeMoveDirection = Vector3(0.265271, -0.000000, -0.964174)
-
-==============================================
-EVENT #137 | FRAME #258
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.879476, 0.000000, -0.475943)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1563.600098, 0.000000, -2724.662598)
- NEW = Vector3(1974.082520, 0.000000, -2748.259277)
- OLD MAG = 3141.437988
- NEW MAG = 3383.774658
- DELTA MAG = 242.336670
- DELTA = Vector3(410.482422, 0.000000, -23.596680)
- DIRECTION DOT = 0.994810581
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(13.105927, -11.984114, -29.753105)
- NEW = Vector3(17.373322, -2.619102, -30.274008)
- OLD MAG = 34.650131
- NEW MAG = 35.002964
-
-HRP = Vector3(21.934235, 0.542012, -30.536196)
-
-REGISTRY OTHER DATA:
- Speed = 37.5
- Sprint = 1.7009122526434102
- State = Move
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.189837, -0.674457, -0.359715)
- RelativeMoveDirection = Vector3(0.327357, -0.000000, -0.944901)
-
-==============================================
-EVENT #138 | FRAME #259
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.903468, 0.000000, -0.428656)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1974.082520, 0.000000, -2748.259277)
- NEW = Vector3(2170.645020, 0.000000, -2709.940674)
- OLD MAG = 3383.774658
- NEW MAG = 3472.099854
- DELTA MAG = 88.325195
- DELTA = Vector3(196.562500, 0.000000, 38.318604)
- DIRECTION DOT = 0.998625278
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(17.373322, -2.619102, -30.274008)
- NEW = Vector3(21.934235, 0.542012, -30.536196)
- OLD MAG = 35.002964
- NEW MAG = 37.601379
-
-HRP = Vector3(24.118261, 1.383903, -30.110434)
-
-REGISTRY OTHER DATA:
- Speed = 38.5
- Sprint = 1.7075389589111172
- State = Move
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.204564, -0.676158, -0.303043)
- RelativeMoveDirection = Vector3(0.326795, -0.000000, -0.945095)
-
-==============================================
-EVENT #139 | FRAME #260
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(0.922267, 0.000000, -0.386553)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2170.645020, 0.000000, -2709.940674)
- NEW = Vector3(2247.645508, 0.000000, -2626.706787)
- OLD MAG = 3472.099854
- NEW MAG = 3457.093994
- DELTA MAG = -15.005859
- DELTA = Vector3(77.000488, 0.000000, 83.233887)
- DIRECTION DOT = 0.999473870
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(21.934235, 0.542012, -30.536196)
- NEW = Vector3(24.118261, 1.383903, -30.110434)
- OLD MAG = 37.601379
- NEW MAG = 38.603676
-
-HRP = Vector3(24.973824, 1.412370, -29.185614)
-
-REGISTRY OTHER DATA:
- Speed = 38.4
- Sprint = 1.71529839666773
- State = Move
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.209652, -0.677855, -0.277947)
- RelativeMoveDirection = Vector3(0.313853, -0.000000, -0.949472)
-
-==============================================
-EVENT #140 | FRAME #261
-==============================================
-STATE = Enum.HumanoidStateType.Jumping
-MOVE DIRECTION = Vector3(0.929665, 0.000000, -0.368405)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2247.645508, 0.000000, -2626.706787)
- NEW = Vector3(2492.332520, 0.000000, -2710.856201)
- OLD MAG = 3457.093994
- NEW MAG = 3682.453369
- DELTA MAG = 225.359375
- DELTA = Vector3(244.687012, 0.000000, -84.149414)
- DIRECTION DOT = 0.999365091
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(24.118261, 1.383903, -30.110434)
- NEW = Vector3(24.973824, 1.412370, -29.185614)
- OLD MAG = 38.603676
- NEW MAG = 38.438087
-
-HRP = Vector3(27.692583, 17.112175, -30.120626)
-
-REGISTRY OTHER DATA:
- Speed = 40.9
- Sprint = 1.7217546072716674
- State = Move
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.231458, -0.680394, -0.143444)
- RelativeMoveDirection = Vector3(0.329049, -0.000000, -0.944313)
-
-==============================================
-EVENT #141 | FRAME #262
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.964057, 0.000000, -0.265696)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2492.332520, 0.000000, -2710.856201)
- NEW = Vector3(2515.164795, 0.000000, -2613.347168)
- OLD MAG = 3682.453369
- NEW MAG = 3627.070068
- DELTA MAG = -55.383301
- DELTA = Vector3(22.832275, 0.000000, 97.509033)
- DIRECTION DOT = 0.999739408
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(24.973824, 1.412370, -29.185614)
- NEW = Vector3(27.692583, 17.112175, -30.120626)
- OLD MAG = 38.438087
- NEW MAG = 44.350399
-
-HRP = Vector3(27.946270, 16.695507, -29.037186)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 1.7287896677314154
- State = Move
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.231458, -0.680394, -0.143444)
- RelativeMoveDirection = Vector3(0.247163, -0.000000, -0.968974)
-
-==============================================
-EVENT #142 | FRAME #263
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.964057, 0.000000, -0.265696)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.692583, 17.112175, -30.120626)
- NEW = Vector3(27.946270, 16.695507, -29.037186)
- OLD MAG = 44.350399
- NEW MAG = 43.622150
-
-HRP = Vector3(27.946270, 16.278839, -29.037186)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.235911, -0.680394, -0.097927)
- RelativeMoveDirection = Vector3(0.247173, -0.000000, -0.968971)
-
-==============================================
-EVENT #143 | FRAME #264
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.973200, 0.000000, -0.229959)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.946270, 16.695507, -29.037186)
- NEW = Vector3(27.946270, 16.278839, -29.037186)
- OLD MAG = 43.622150
- NEW MAG = 43.464386
-
-HRP = Vector3(27.946270, 15.862172, -29.037186)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.238620, -0.680394, -0.053705)
- RelativeMoveDirection = Vector3(0.211281, -0.000000, -0.977425)
-
-==============================================
-EVENT #144 | FRAME #265
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.980795, 0.000000, -0.195039)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.946270, 16.278839, -29.037186)
- NEW = Vector3(27.946270, 15.862172, -29.037186)
- OLD MAG = 43.464386
- NEW MAG = 43.310055
-
-HRP = Vector3(27.946270, 15.445506, -29.037186)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.239774, -0.680394, -0.005127)
- RelativeMoveDirection = Vector3(0.176227, -0.000000, -0.984350)
-
-==============================================
-EVENT #145 | FRAME #266
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.987685, 0.000000, -0.156455)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.946270, 15.862172, -29.037186)
- NEW = Vector3(27.946270, 15.445506, -29.037186)
- OLD MAG = 43.310055
- NEW MAG = 43.159191
-
-HRP = Vector3(27.946270, 15.028840, -29.037186)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.239209, -0.680394, 0.037746)
- RelativeMoveDirection = Vector3(0.137520, -0.000000, -0.990499)
-
-==============================================
-EVENT #146 | FRAME #267
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.992504, 0.000000, -0.122209)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.946270, 15.445506, -29.037186)
- NEW = Vector3(27.946270, 15.028840, -29.037186)
- OLD MAG = 43.159191
- NEW MAG = 43.011837
-
-HRP = Vector3(27.946270, 14.612174, -29.037186)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.237522, -0.680394, 0.074867)
- RelativeMoveDirection = Vector3(0.103189, -0.000000, -0.994662)
-
-==============================================
-EVENT #147 | FRAME #268
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.995721, 0.000000, -0.092410)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2515.164795, 0.000000, -2613.347168)
- NEW = Vector3(2521.062256, 0.000000, -2608.193359)
- OLD MAG = 3627.070068
- NEW MAG = 3627.454834
- DELTA MAG = 0.384766
- DELTA = Vector3(5.897461, 0.000000, 5.153809)
- DIRECTION DOT = 0.999997616
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.946270, 15.028840, -29.037186)
- NEW = Vector3(27.946270, 14.612174, -29.037186)
- OLD MAG = 43.011837
- NEW MAG = 42.868027
-
-HRP = Vector3(28.011797, 14.195508, -28.979921)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.235225, -0.680394, 0.106226)
- RelativeMoveDirection = Vector3(0.075485, -0.000000, -0.997147)
-
-==============================================
-EVENT #148 | FRAME #269
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.658045, 0.000000, -0.752979)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.946270, 14.612174, -29.037186)
- NEW = Vector3(28.011797, 14.195508, -28.979921)
- OLD MAG = 42.868027
- NEW MAG = 42.731827
-
-HRP = Vector3(28.011797, 13.778842, -28.979921)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.504113, -0.680394, -0.531916)
- RelativeMoveDirection = Vector3(0.050173, -0.000000, -0.998741)
-
-==============================================
-EVENT #149 | FRAME #270
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.687883, 0.000000, -0.725822)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(28.011797, 14.195508, -28.979921)
- NEW = Vector3(28.011797, 13.778842, -28.979921)
- OLD MAG = 42.731827
- NEW MAG = 42.595222
-
-HRP = Vector3(28.011797, 13.362176, -28.979921)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.504113, -0.680394, -0.531916)
- RelativeMoveDirection = Vector3(0.009845, -0.000000, -0.999951)
-
-==============================================
-EVENT #150 | FRAME #271
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.026827, 0.000000, -0.999640)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2521.062256, 0.000000, -2608.193359)
- NEW = Vector3(2410.433105, 0.000000, -2716.732178)
- OLD MAG = 3627.454834
- NEW MAG = 3631.917236
- DELTA MAG = 4.462402
- DELTA = Vector3(-110.629150, 0.000000, -108.538818)
- DIRECTION DOT = 0.999089122
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(28.011797, 13.778842, -28.979921)
- NEW = Vector3(28.011797, 13.362176, -28.979921)
- OLD MAG = 42.595222
- NEW MAG = 42.462269
-
-HRP = Vector3(26.782585, 12.945510, -30.185907)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
- RelativeMoveDirection = Vector3(-0.032832, -0.000000, -0.999461)
-
-==============================================
-EVENT #151 | FRAME #272
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(28.011797, 13.362176, -28.979921)
- NEW = Vector3(26.782585, 12.945510, -30.185907)
- OLD MAG = 42.462269
- NEW MAG = 42.380211
-
-HRP = Vector3(26.782585, 12.528844, -30.185907)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
- RelativeMoveDirection = Vector3(-0.050097, -0.000000, -0.998744)
-
-==============================================
-EVENT #152 | FRAME #273
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.782585, 12.945510, -30.185907)
- NEW = Vector3(26.782585, 12.528844, -30.185907)
- OLD MAG = 42.380211
- NEW MAG = 42.254795
-
-HRP = Vector3(26.782585, 12.112178, -30.185907)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
- RelativeMoveDirection = Vector3(-0.050105, -0.000000, -0.998744)
-
-==============================================
-EVENT #153 | FRAME #274
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.782585, 12.528844, -30.185907)
- NEW = Vector3(26.782585, 12.112178, -30.185907)
- OLD MAG = 42.254795
- NEW MAG = 42.133129
-
-HRP = Vector3(26.782585, 11.695512, -30.185907)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
- RelativeMoveDirection = Vector3(-0.050108, -0.000000, -0.998744)
-
-==============================================
-EVENT #154 | FRAME #275
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2410.433105, 0.000000, -2716.732178)
- NEW = Vector3(2407.444580, 0.000000, -2719.657471)
- OLD MAG = 3631.917236
- NEW MAG = 3632.124268
- DELTA MAG = 0.207031
- DELTA = Vector3(-2.988525, 0.000000, -2.925293)
- DIRECTION DOT = 0.999999285
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.782585, 12.112178, -30.185907)
- NEW = Vector3(26.782585, 11.695512, -30.185907)
- OLD MAG = 42.133129
- NEW MAG = 42.015247
-
-HRP = Vector3(26.749378, 11.278846, -30.218410)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.201993, -0.680394, -1.223218)
- RelativeMoveDirection = Vector3(-0.051257, -0.000000, -0.998686)
-
-==============================================
-EVENT #155 | FRAME #276
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.010690, 0.000000, -0.999943)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2407.444580, 0.000000, -2719.657471)
- NEW = Vector3(2386.356201, 0.000000, -2739.969238)
- OLD MAG = 3632.124268
- NEW MAG = 3633.473389
- DELTA MAG = 1.349121
- DELTA = Vector3(-21.088379, 0.000000, -20.311768)
- DIRECTION DOT = 0.999967515
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.782585, 11.695512, -30.185907)
- NEW = Vector3(26.749378, 11.278846, -30.218410)
- OLD MAG = 42.015247
- NEW MAG = 41.903389
-
-HRP = Vector3(26.515064, 10.862180, -30.444098)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.212403, -0.681238, -1.220983)
- RelativeMoveDirection = Vector3(-0.058145, -0.000000, -0.998308)
-
-==============================================
-EVENT #156 | FRAME #277
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.018759, 0.000000, -0.999824)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2386.356201, 0.000000, -2739.969238)
- NEW = Vector3(2362.032227, 0.000000, -2762.968506)
- OLD MAG = 3633.473389
- NEW MAG = 3634.995361
- DELTA MAG = 1.521973
- DELTA = Vector3(-24.323975, 0.000000, -22.999268)
- DIRECTION DOT = 0.999957621
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.749378, 11.278846, -30.218410)
- NEW = Vector3(26.515064, 10.862180, -30.444098)
- OLD MAG = 41.903389
- NEW MAG = 41.807640
-
-HRP = Vector3(26.244797, 10.445514, -30.699646)
-
-REGISTRY OTHER DATA:
- Speed = 40.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.223654, -0.681238, -1.218972)
- RelativeMoveDirection = Vector3(-0.059273, -0.000000, -0.998242)
-
-==============================================
-EVENT #157 | FRAME #278
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.027979, 0.000000, -0.999609)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2362.032227, 0.000000, -2762.968506)
- NEW = Vector3(2334.388672, 0.000000, -2788.568848)
- OLD MAG = 3634.995361
- NEW MAG = 3636.686035
- DELTA MAG = 1.690674
- DELTA = Vector3(-27.643555, 0.000000, -25.600342)
- DIRECTION DOT = 0.999946475
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.515064, 10.862180, -30.444098)
- NEW = Vector3(26.244797, 10.445514, -30.699646)
- OLD MAG = 41.807640
- NEW MAG = 41.717701
-
-HRP = Vector3(25.937647, 10.028848, -30.984093)
-
-REGISTRY OTHER DATA:
- Speed = 40.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.236289, -0.681238, -1.216586)
- RelativeMoveDirection = Vector3(-0.060399, -0.000000, -0.998174)
-
-==============================================
-EVENT #158 | FRAME #279
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.038349, 0.000000, -0.999264)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2334.388672, 0.000000, -2788.568848)
- NEW = Vector3(2303.332520, 0.000000, -2816.671387)
- OLD MAG = 3636.686035
- NEW MAG = 3638.540527
- DELTA MAG = 1.854492
- DELTA = Vector3(-31.056152, 0.000000, -28.102539)
- DIRECTION DOT = 0.999933958
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.244797, 10.445514, -30.699646)
- NEW = Vector3(25.937647, 10.028848, -30.984093)
- OLD MAG = 41.717701
- NEW MAG = 41.633560
-
-HRP = Vector3(25.592579, 9.612182, -31.296343)
-
-REGISTRY OTHER DATA:
- Speed = 40.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.250826, -0.682082, -1.213199)
- RelativeMoveDirection = Vector3(-0.061524, -0.000000, -0.998106)
-
-==============================================
-EVENT #159 | FRAME #280
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.049866, 0.000000, -0.998756)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2303.332520, 0.000000, -2816.671387)
- NEW = Vector3(2268.762939, 0.000000, -2847.164795)
- OLD MAG = 3638.540527
- NEW MAG = 3640.553955
- DELTA MAG = 2.013428
- DELTA = Vector3(-34.569580, 0.000000, -30.493408)
- DIRECTION DOT = 0.999920011
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(25.937647, 10.028848, -30.984093)
- NEW = Vector3(25.592579, 9.612182, -31.296343)
- OLD MAG = 41.633560
- NEW MAG = 41.555206
-
-HRP = Vector3(25.208471, 9.195516, -31.635159)
-
-REGISTRY OTHER DATA:
- Speed = 40.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.266190, -0.682082, -1.209920)
- RelativeMoveDirection = Vector3(-0.062646, -0.000000, -0.998036)
-
-==============================================
-EVENT #160 | FRAME #281
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.062527, 0.000000, -0.998043)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2268.762939, 0.000000, -2847.164795)
- NEW = Vector3(2237.001465, 0.000000, -2874.536621)
- OLD MAG = 3640.553955
- NEW MAG = 3642.407959
- DELTA MAG = 1.854004
- DELTA = Vector3(-31.761475, 0.000000, -27.371826)
- DIRECTION DOT = 0.999933839
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(25.592579, 9.612182, -31.296343)
- NEW = Vector3(25.208471, 9.195516, -31.635159)
- OLD MAG = 41.555206
- NEW MAG = 41.482620
-
-HRP = Vector3(24.855566, 8.778850, -31.939291)
-
-REGISTRY OTHER DATA:
- Speed = 40.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.280634, -0.682924, -1.206175)
- RelativeMoveDirection = Vector3(-0.061470, -0.000000, -0.998109)
-
-==============================================
-EVENT #161 | FRAME #282
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.074028, 0.000000, -0.997256)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2237.001465, 0.000000, -2874.536621)
- NEW = Vector3(2204.910400, 0.000000, -2901.554199)
- OLD MAG = 3642.407959
- NEW MAG = 3644.262207
- DELTA MAG = 1.854248
- DELTA = Vector3(-32.091064, 0.000000, -27.017578)
- DIRECTION DOT = 0.999933839
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(25.208471, 9.195516, -31.635159)
- NEW = Vector3(24.855566, 8.778850, -31.939291)
- OLD MAG = 41.482620
- NEW MAG = 41.412384
-
-HRP = Vector3(24.498999, 8.362184, -32.239483)
-
-REGISTRY OTHER DATA:
- Speed = 40.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.295028, -0.683766, -1.202257)
- RelativeMoveDirection = Vector3(-0.061444, -0.000000, -0.998110)
-
-==============================================
-EVENT #162 | FRAME #283
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.085520, 0.000000, -0.996336)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2204.910400, 0.000000, -2901.554199)
- NEW = Vector3(2169.217041, 0.000000, -2930.839111)
- OLD MAG = 3644.262207
- NEW MAG = 3646.274902
- DELTA MAG = 2.012695
- DELTA = Vector3(-35.693359, 0.000000, -29.284912)
- DIRECTION DOT = 0.999919891
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(24.855566, 8.778850, -31.939291)
- NEW = Vector3(24.498999, 8.362184, -32.239483)
- OLD MAG = 41.412384
- NEW MAG = 41.346237
-
-HRP = Vector3(24.102407, 7.945517, -32.564873)
-
-REGISTRY OTHER DATA:
- Speed = 40.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.310750, -0.684607, -1.197810)
- RelativeMoveDirection = Vector3(-0.062568, -0.000000, -0.998041)
-
-==============================================
-EVENT #163 | FRAME #284
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.098148, 0.000000, -0.995172)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2169.217041, 0.000000, -2930.839111)
- NEW = Vector3(2129.817871, 0.000000, -2962.262695)
- OLD MAG = 3646.274902
- NEW MAG = 3648.441406
- DELTA MAG = 2.166504
- DELTA = Vector3(-39.399170, 0.000000, -31.423584)
- DIRECTION DOT = 0.999904633
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(24.498999, 8.362184, -32.239483)
- NEW = Vector3(24.102407, 7.945517, -32.564873)
- OLD MAG = 41.346237
- NEW MAG = 41.285931
-
-HRP = Vector3(23.664640, 7.528850, -32.914024)
-
-REGISTRY OTHER DATA:
- Speed = 40.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.327783, -0.685447, -1.192779)
- RelativeMoveDirection = Vector3(-0.063688, -0.000000, -0.997970)
-
-==============================================
-EVENT #164 | FRAME #285
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.111905, 0.000000, -0.993719)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2129.817871, 0.000000, -2962.262695)
- NEW = Vector3(2086.603516, 0.000000, -2995.682129)
- OLD MAG = 3648.441406
- NEW MAG = 3650.756836
- DELTA MAG = 2.315430
- DELTA = Vector3(-43.214355, 0.000000, -33.419434)
- DIRECTION DOT = 0.999888003
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(24.102407, 7.945517, -32.564873)
- NEW = Vector3(23.664640, 7.528850, -32.914024)
- OLD MAG = 41.285931
- NEW MAG = 41.231441
-
-HRP = Vector3(23.184481, 7.112183, -33.285351)
-
-REGISTRY OTHER DATA:
- Speed = 40.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.346589, -0.687124, -1.186481)
- RelativeMoveDirection = Vector3(-0.064807, -0.000000, -0.997898)
-
-==============================================
-EVENT #165 | FRAME #286
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.126785, 0.000000, -0.991930)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2086.603516, 0.000000, -2995.682129)
- NEW = Vector3(2039.458740, 0.000000, -3030.939941)
- OLD MAG = 3650.756836
- NEW MAG = 3653.216309
- DELTA MAG = 2.459473
- DELTA = Vector3(-47.144775, 0.000000, -35.257812)
- DIRECTION DOT = 0.999870181
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(23.664640, 7.528850, -32.914024)
- NEW = Vector3(23.184481, 7.112183, -33.285351)
- OLD MAG = 41.231441
- NEW MAG = 41.182735
-
-HRP = Vector3(22.660650, 6.695516, -33.677105)
-
-REGISTRY OTHER DATA:
- Speed = 40.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.366643, -0.688797, -1.179462)
- RelativeMoveDirection = Vector3(-0.065923, -0.000000, -0.997825)
-
-==============================================
-EVENT #166 | FRAME #287
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.142777, 0.000000, -0.989755)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2039.458740, 0.000000, -3030.939941)
- NEW = Vector3(1981.341064, 0.000000, -3072.653320)
- OLD MAG = 3653.216309
- NEW MAG = 3656.078613
- DELTA MAG = 2.862305
- DELTA = Vector3(-58.117676, 0.000000, -41.713379)
- DIRECTION DOT = 0.999808669
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(23.184481, 7.112183, -33.285351)
- NEW = Vector3(22.660650, 6.695516, -33.677105)
- OLD MAG = 41.182735
- NEW MAG = 41.139790
-
-HRP = Vector3(22.014898, 6.278849, -34.140587)
-
-REGISTRY OTHER DATA:
- Speed = 40.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.390150, -0.689632, -1.171405)
- RelativeMoveDirection = Vector3(-0.069334, -0.000000, -0.997594)
-
-==============================================
-EVENT #167 | FRAME #288
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.162146, 0.000000, -0.986767)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1981.341064, 0.000000, -3072.653320)
- NEW = Vector3(1922.370483, 0.000000, -3113.251953)
- OLD MAG = 3656.078613
- NEW MAG = 3658.940674
- DELTA MAG = 2.862061
- DELTA = Vector3(-58.970581, 0.000000, -40.598633)
- DIRECTION DOT = 0.999808788
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(22.660650, 6.695516, -33.677105)
- NEW = Vector3(22.014898, 6.278849, -34.140587)
- OLD MAG = 41.139790
- NEW MAG = 41.105469
-
-HRP = Vector3(21.359669, 5.862182, -34.591682)
-
-REGISTRY OTHER DATA:
- Speed = 40.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.413934, -0.691300, -1.162223)
- RelativeMoveDirection = Vector3(-0.069294, -0.000000, -0.997596)
-
-==============================================
-EVENT #168 | FRAME #289
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.181452, 0.000000, -0.983400)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1922.370483, 0.000000, -3113.251953)
- NEW = Vector3(1859.001709, 0.000000, -3154.967285)
- OLD MAG = 3658.940674
- NEW MAG = 3661.926514
- DELTA MAG = 2.985840
- DELTA = Vector3(-63.368774, 0.000000, -41.715332)
- DIRECTION DOT = 0.999785602
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(22.014898, 6.278849, -34.140587)
- NEW = Vector3(21.359669, 5.862182, -34.591682)
- OLD MAG = 41.105469
- NEW MAG = 41.075359
-
-HRP = Vector3(20.655571, 5.445515, -35.055183)
-
-REGISTRY OTHER DATA:
- Speed = 40.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.438399, -0.692133, -1.152718)
- RelativeMoveDirection = Vector3(-0.070403, -0.000000, -0.997519)
-
-==============================================
-EVENT #169 | FRAME #290
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.201818, 0.000000, -0.979423)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1859.001709, 0.000000, -3154.967285)
- NEW = Vector3(1819.930054, 0.000000, -3179.983643)
- OLD MAG = 3661.926514
- NEW MAG = 3663.937988
- DELTA MAG = 2.011475
- DELTA = Vector3(-39.071655, 0.000000, -25.016357)
- DIRECTION DOT = 0.999920011
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(21.359669, 5.862182, -34.591682)
- NEW = Vector3(20.655571, 5.445515, -35.055183)
- OLD MAG = 41.075359
- NEW MAG = 41.050846
-
-HRP = Vector3(20.221441, 5.028848, -35.333145)
-
-REGISTRY OTHER DATA:
- Speed = 40.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.453412, -0.692964, -1.146394)
- RelativeMoveDirection = Vector3(-0.062323, -0.000000, -0.998056)
-
-==============================================
-EVENT #170 | FRAME #291
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.214222, 0.000000, -0.976785)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1819.930054, 0.000000, -3179.983643)
- NEW = Vector3(1776.908569, 0.000000, -3206.697021)
- OLD MAG = 3663.937988
- NEW MAG = 3666.102783
- DELTA MAG = 2.164795
- DELTA = Vector3(-43.021484, 0.000000, -26.713379)
- DIRECTION DOT = 0.999904811
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(20.655571, 5.445515, -35.055183)
- NEW = Vector3(20.221441, 5.028848, -35.333145)
- OLD MAG = 41.050846
- NEW MAG = 41.019840
-
-HRP = Vector3(19.743425, 4.612181, -35.629959)
-
-REGISTRY OTHER DATA:
- Speed = 40.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.469649, -0.693795, -1.139333)
- RelativeMoveDirection = Vector3(-0.063447, -0.000000, -0.997985)
-
-==============================================
-EVENT #171 | FRAME #292
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.227714, 0.000000, -0.973728)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1776.908569, 0.000000, -3206.697021)
- NEW = Vector3(1711.511475, 0.000000, -3245.447510)
- OLD MAG = 3666.102783
- NEW MAG = 3669.087402
- DELTA MAG = 2.984619
- DELTA = Vector3(-65.397095, 0.000000, -38.750488)
- DIRECTION DOT = 0.999785483
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(20.221441, 5.028848, -35.333145)
- NEW = Vector3(19.743425, 4.612181, -35.629959)
- OLD MAG = 41.019840
- NEW MAG = 40.994743
-
-HRP = Vector3(19.016790, 4.195514, -36.060520)
-
-REGISTRY OTHER DATA:
- Speed = 40.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.494005, -0.695454, -1.127964)
- RelativeMoveDirection = Vector3(-0.070308, -0.000000, -0.997525)
-
-==============================================
-EVENT #172 | FRAME #293
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.247870, 0.000000, -0.968793)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1711.511475, 0.000000, -3245.447510)
- NEW = Vector3(1648.992798, 0.000000, -3280.855713)
- OLD MAG = 3669.087402
- NEW MAG = 3671.946533
- DELTA MAG = 2.859131
- DELTA = Vector3(-62.518677, 0.000000, -35.408203)
- DIRECTION DOT = 0.999808609
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(19.743425, 4.612181, -35.629959)
- NEW = Vector3(19.016790, 4.195514, -36.060520)
- OLD MAG = 40.994743
- NEW MAG = 40.982944
-
-HRP = Vector3(18.322140, 3.778848, -36.453945)
-
-REGISTRY OTHER DATA:
- Speed = 40.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.516806, -0.697109, -1.116670)
- RelativeMoveDirection = Vector3(-0.069118, -0.000000, -0.997608)
-
-==============================================
-EVENT #173 | FRAME #294
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.266808, 0.000000, -0.963750)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1648.992798, 0.000000, -3280.855713)
- NEW = Vector3(1593.255737, 0.000000, -3311.162354)
- OLD MAG = 3671.946533
- NEW MAG = 3674.542236
- DELTA MAG = 2.595703
- DELTA = Vector3(-55.737061, 0.000000, -30.306641)
- DIRECTION DOT = 0.999850929
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(19.016790, 4.195514, -36.060520)
- NEW = Vector3(18.322140, 3.778848, -36.453945)
- OLD MAG = 40.982944
- NEW MAG = 40.974022
-
-HRP = Vector3(17.702839, 3.362181, -36.790688)
-
-REGISTRY OTHER DATA:
- Speed = 40.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.536422, -0.697935, -1.106860)
- RelativeMoveDirection = Vector3(-0.066782, -0.000000, -0.997768)
-
-==============================================
-EVENT #174 | FRAME #295
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.283433, 0.000000, -0.958992)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1593.255737, 0.000000, -3311.162354)
- NEW = Vector3(1544.530151, 0.000000, -3336.718018)
- OLD MAG = 3674.542236
- NEW MAG = 3676.854736
- DELTA MAG = 2.312500
- DELTA = Vector3(-48.725586, 0.000000, -25.555664)
- DIRECTION DOT = 0.999888062
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(18.322140, 3.778848, -36.453945)
- NEW = Vector3(17.702839, 3.362181, -36.790688)
- OLD MAG = 40.974022
- NEW MAG = 40.966442
-
-HRP = Vector3(17.161442, 2.945515, -37.074638)
-
-REGISTRY OTHER DATA:
- Speed = 40.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.553698, -0.699584, -1.097270)
- RelativeMoveDirection = Vector3(-0.064451, -0.000000, -0.997921)
-
-==============================================
-EVENT #175 | FRAME #296
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.297773, 0.000000, -0.954637)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1544.530151, 0.000000, -3336.718018)
- NEW = Vector3(1506.803467, 0.000000, -3355.953613)
- OLD MAG = 3676.854736
- NEW MAG = 3678.706543
- DELTA MAG = 1.851807
- DELTA = Vector3(-37.726685, 0.000000, -19.235596)
- DIRECTION DOT = 0.999933720
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(17.702839, 3.362181, -36.790688)
- NEW = Vector3(17.161442, 2.945515, -37.074638)
- OLD MAG = 40.966442
- NEW MAG = 40.959980
-
-HRP = Vector3(16.742258, 2.528848, -37.288368)
-
-REGISTRY OTHER DATA:
- Speed = 40.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.566677, -0.700407, -1.090095)
- RelativeMoveDirection = Vector3(-0.060975, -0.000000, -0.998139)
-
-==============================================
-EVENT #176 | FRAME #297
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.308758, 0.000000, -0.951141)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1506.803467, 0.000000, -3355.953613)
- NEW = Vector3(1449.687744, 0.000000, -3383.841553)
- OLD MAG = 3678.706543
- NEW MAG = 3681.301025
- DELTA MAG = 2.594482
- DELTA = Vector3(-57.115723, 0.000000, -27.887939)
- DIRECTION DOT = 0.999851048
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(17.161442, 2.945515, -37.074638)
- NEW = Vector3(16.742258, 2.528848, -37.288368)
- OLD MAG = 40.959980
- NEW MAG = 40.952663
-
-HRP = Vector3(16.107637, 2.112182, -37.598232)
-
-REGISTRY OTHER DATA:
- Speed = 40.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.585796, -0.701230, -1.079407)
- RelativeMoveDirection = Vector3(-0.066694, 0.000000, -0.997774)
-
-==============================================
-EVENT #177 | FRAME #298
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.325159, 0.000000, -0.945659)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1449.687744, 0.000000, -3383.841553)
- NEW = Vector3(1388.181274, 0.000000, -3412.480713)
- OLD MAG = 3681.301025
- NEW MAG = 3684.029297
- DELTA MAG = 2.728271
- DELTA = Vector3(-61.506470, 0.000000, -28.639160)
- DIRECTION DOT = 0.999830544
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(16.742258, 2.528848, -37.288368)
- NEW = Vector3(16.107637, 2.112182, -37.598232)
- OLD MAG = 40.952663
- NEW MAG = 40.957836
-
-HRP = Vector3(15.424233, 1.695515, -37.916447)
-
-REGISTRY OTHER DATA:
- Speed = 40.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.605947, -0.702051, -1.067685)
- RelativeMoveDirection = Vector3(-0.067807, 0.000000, -0.997698)
-
-==============================================
-EVENT #178 | FRAME #299
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.342545, 0.000000, -0.939501)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1388.181274, 0.000000, -3412.480713)
- NEW = Vector3(1326.110718, 0.000000, -3440.000977)
- OLD MAG = 3684.029297
- NEW MAG = 3686.757080
- DELTA MAG = 2.727783
- DELTA = Vector3(-62.070557, 0.000000, -27.520264)
- DIRECTION DOT = 0.999830484
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(16.107637, 2.112182, -37.598232)
- NEW = Vector3(15.424233, 1.695515, -37.916447)
- OLD MAG = 40.957836
- NEW MAG = 40.968754
-
-HRP = Vector3(14.734561, 1.278848, -38.222225)
-
-REGISTRY OTHER DATA:
- Speed = 40.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.625865, -0.702872, -1.055587)
- RelativeMoveDirection = Vector3(-0.067769, 0.000000, -0.997701)
-
-==============================================
-EVENT #179 | FRAME #300
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.359816, 0.000000, -0.933023)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1326.110718, 0.000000, -3440.000977)
- NEW = Vector3(1263.496948, 0.000000, -3466.391113)
- OLD MAG = 3686.757080
- NEW MAG = 3689.483887
- DELTA MAG = 2.726807
- DELTA = Vector3(-62.613770, 0.000000, -26.390137)
- DIRECTION DOT = 0.999830604
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(15.424233, 1.695515, -37.916447)
- NEW = Vector3(14.734561, 1.278848, -38.222225)
- OLD MAG = 40.968754
- NEW MAG = 40.983913
-
-HRP = Vector3(14.038853, 0.862181, -38.515450)
-
-REGISTRY OTHER DATA:
- Speed = 40.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.645543, -0.703691, -1.043117)
- RelativeMoveDirection = Vector3(-0.067733, 0.000000, -0.997704)
-
-==============================================
-EVENT #180 | FRAME #301
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.376964, 0.000000, -0.926228)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1263.496948, 0.000000, -3466.391113)
- NEW = Vector3(1204.334961, 0.000000, -3490.130371)
- OLD MAG = 3689.483887
- NEW MAG = 3692.077148
- DELTA MAG = 2.593262
- DELTA = Vector3(-59.161987, 0.000000, -23.739258)
- DIRECTION DOT = 0.999851167
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(14.734561, 1.278848, -38.222225)
- NEW = Vector3(14.038853, 0.862181, -38.515450)
- OLD MAG = 40.983913
- NEW MAG = 41.003323
-
-HRP = Vector3(13.381497, 0.445515, -38.779221)
-
-REGISTRY OTHER DATA:
- Speed = 41
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.663786, -0.704510, -1.031045)
- RelativeMoveDirection = Vector3(-0.066548, 0.000000, -0.997783)
-
-==============================================
-EVENT #181 | FRAME #302
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.392923, 0.000000, -0.919571)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1204.334961, 0.000000, -3490.130371)
- NEW = Vector3(1148.728760, 0.000000, -3511.407471)
- OLD MAG = 3692.077148
- NEW MAG = 3694.531006
- DELTA MAG = 2.453857
- DELTA = Vector3(-55.606201, 0.000000, -21.277100)
- DIRECTION DOT = 0.999870300
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(14.038853, 0.862181, -38.515450)
- NEW = Vector3(13.381497, 0.445515, -38.779221)
- OLD MAG = 41.003323
- NEW MAG = 41.025490
-
-HRP = Vector3(12.763650, 0.028848, -39.015633)
-
-REGISTRY OTHER DATA:
- Speed = 41
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.680340, -0.704510, -1.020198)
- RelativeMoveDirection = Vector3(-0.065365, 0.000000, -0.997861)
-
-==============================================
-EVENT #182 | FRAME #303
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.407713, 0.000000, -0.913110)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1148.728760, 0.000000, -3511.407471)
- NEW = Vector3(1100.789185, 0.000000, -3528.994629)
- OLD MAG = 3694.531006
- NEW MAG = 3696.693115
- DELTA MAG = 2.162109
- DELTA = Vector3(-47.939575, 0.000000, -17.587158)
- DIRECTION DOT = 0.999904692
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(13.381497, 0.445515, -38.779221)
- NEW = Vector3(12.763650, 0.028848, -39.015633)
- OLD MAG = 41.025490
- NEW MAG = 41.050350
-
-HRP = Vector3(12.230989, -0.387819, -39.211044)
-
-REGISTRY OTHER DATA:
- Speed = 41
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.694668, -0.705328, -1.009926)
- RelativeMoveDirection = Vector3(-0.063036, 0.000000, -0.998011)
-
-==============================================
-EVENT #183 | FRAME #304
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.420306, 0.000000, -0.907383)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1100.789185, 0.000000, -3528.994629)
- NEW = Vector3(971.182373, 0.000000, -3571.187500)
- OLD MAG = 3696.693115
- NEW MAG = 3700.888428
- DELTA MAG = 4.195312
- DELTA = Vector3(-129.606812, 0.000000, -42.192871)
- DIRECTION DOT = 0.999321640
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(12.763650, 0.028848, -39.015633)
- NEW = Vector3(12.230989, -0.387819, -39.211044)
- OLD MAG = 41.050350
- NEW MAG = 41.076191
-
-HRP = Vector3(10.790915, -0.804485, -39.679855)
-
-REGISTRY OTHER DATA:
- Speed = 41.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.732200, -0.707775, -0.981294)
- RelativeMoveDirection = Vector3(-0.085973, 0.000000, -0.996297)
-
-==============================================
-EVENT #184 | FRAME #305
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.453486, 0.000000, -0.891263)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(12.230989, -0.387819, -39.211044)
- NEW = Vector3(10.790915, -0.804485, -39.679855)
- OLD MAG = 41.076191
- NEW MAG = 41.128845
-
-HRP = Vector3(10.790914, -1.221152, -39.679855)
-
-REGISTRY OTHER DATA:
- Speed = 41.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.732200, -0.707775, -0.981294)
- RelativeMoveDirection = Vector3(-0.049162, 0.000000, -0.998791)
-
-==============================================
-EVENT #185 | FRAME #306
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.453486, 0.000000, -0.891263)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(971.182373, 0.000000, -3571.187500)
- NEW = Vector3(905.945312, 0.000000, -3591.102051)
- OLD MAG = 3700.888428
- NEW MAG = 3703.613281
- DELTA MAG = 2.724854
- DELTA = Vector3(-65.237061, 0.000000, -19.914551)
- DIRECTION DOT = 0.999830544
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(10.790915, -0.804485, -39.679855)
- NEW = Vector3(10.790914, -1.221152, -39.679855)
- OLD MAG = 41.128845
- NEW MAG = 41.139107
-
-HRP = Vector3(10.066057, -1.637819, -39.901127)
-
-REGISTRY OTHER DATA:
- Speed = 41.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.750413, -0.708589, -0.966841)
- RelativeMoveDirection = Vector3(-0.067548, 0.000000, -0.997716)
-
-==============================================
-EVENT #186 | FRAME #307
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.469848, 0.000000, -0.882747)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(905.945312, 0.000000, -3591.102051)
- NEW = Vector3(840.303711, 0.000000, -3609.823730)
- OLD MAG = 3703.613281
- NEW MAG = 3706.337402
- DELTA MAG = 2.724121
- DELTA = Vector3(-65.641602, 0.000000, -18.721680)
- DIRECTION DOT = 0.999830544
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(10.790914, -1.221152, -39.679855)
- NEW = Vector3(10.066057, -1.637819, -39.901127)
- OLD MAG = 41.139107
- NEW MAG = 41.183830
-
-HRP = Vector3(9.336707, -2.054486, -40.109146)
-
-REGISTRY OTHER DATA:
- Speed = 41.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.768342, -0.709402, -0.952050)
- RelativeMoveDirection = Vector3(-0.067510, 0.000000, -0.997719)
-
-==============================================
-EVENT #187 | FRAME #308
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.486050, 0.000000, -0.873931)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(840.303711, 0.000000, -3609.823730)
- NEW = Vector3(794.987244, 0.000000, -3622.129395)
- OLD MAG = 3706.337402
- NEW MAG = 3708.345459
- DELTA MAG = 2.008057
- DELTA = Vector3(-45.316467, 0.000000, -12.305664)
- DIRECTION DOT = 0.999919891
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(10.066057, -1.637819, -39.901127)
- NEW = Vector3(9.336707, -2.054486, -40.109146)
- OLD MAG = 41.183830
- NEW MAG = 41.232738
-
-HRP = Vector3(8.833190, -2.471152, -40.245876)
-
-REGISTRY OTHER DATA:
- Speed = 41.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.780568, -0.710214, -0.941440)
- RelativeMoveDirection = Vector3(-0.061730, 0.000000, -0.998093)
-
-==============================================
-EVENT #188 | FRAME #309
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.497093, 0.000000, -0.867697)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(794.987244, 0.000000, -3622.129395)
- NEW = Vector3(753.642578, 0.000000, -3632.846191)
- OLD MAG = 3708.345459
- NEW MAG = 3710.195068
- DELTA MAG = 1.849609
- DELTA = Vector3(-41.344666, 0.000000, -10.716797)
- DIRECTION DOT = 0.999933839
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(9.336707, -2.054486, -40.109146)
- NEW = Vector3(8.833190, -2.471152, -40.245876)
- OLD MAG = 41.232738
- NEW MAG = 41.277870
-
-HRP = Vector3(8.373805, -2.887819, -40.364952)
-
-REGISTRY OTHER DATA:
- Speed = 41.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.791575, -0.711025, -0.931586)
- RelativeMoveDirection = Vector3(-0.060556, 0.000000, -0.998165)
-
-==============================================
-EVENT #189 | FRAME #310
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.507063, 0.000000, -0.861909)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(753.642578, 0.000000, -3632.846191)
- NEW = Vector3(682.966980, 0.000000, -3649.694824)
- OLD MAG = 3710.195068
- NEW MAG = 3713.046631
- DELTA MAG = 2.851562
- DELTA = Vector3(-70.675598, 0.000000, -16.848633)
- DIRECTION DOT = 0.999808788
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(8.833190, -2.471152, -40.245876)
- NEW = Vector3(8.373805, -2.887819, -40.364952)
- OLD MAG = 41.277870
- NEW MAG = 41.325409
-
-HRP = Vector3(7.588521, -3.304485, -40.552158)
-
-REGISTRY OTHER DATA:
- Speed = 41.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.809869, -0.711835, -0.915097)
- RelativeMoveDirection = Vector3(-0.068573, 0.000000, -0.997646)
-
-==============================================
-EVENT #190 | FRAME #311
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.523856, 0.000000, -0.851807)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(682.966980, 0.000000, -3649.694824)
- NEW = Vector3(620.312927, 0.000000, -3663.490723)
- OLD MAG = 3713.046631
- NEW MAG = 3715.636230
- DELTA MAG = 2.589600
- DELTA = Vector3(-62.654053, 0.000000, -13.795898)
- DIRECTION DOT = 0.999851048
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(8.373805, -2.887819, -40.364952)
- NEW = Vector3(7.588521, -3.304485, -40.552158)
- OLD MAG = 41.325409
- NEW MAG = 41.388195
-
-HRP = Vector3(6.892365, -3.721152, -40.705444)
-
-REGISTRY OTHER DATA:
- Speed = 41.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.825925, -0.713453, -0.899351)
- RelativeMoveDirection = Vector3(-0.066236, 0.000000, -0.997804)
-
-==============================================
-EVENT #191 | FRAME #312
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.538507, 0.000000, -0.842621)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(620.312927, 0.000000, -3663.490723)
- NEW = Vector3(561.595825, 0.000000, -3675.429688)
- OLD MAG = 3715.636230
- NEW MAG = 3718.087158
- DELTA MAG = 2.450928
- DELTA = Vector3(-58.717102, 0.000000, -11.938965)
- DIRECTION DOT = 0.999870300
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.588521, -3.304485, -40.552158)
- NEW = Vector3(6.892365, -3.721152, -40.705444)
- OLD MAG = 41.388195
- NEW MAG = 41.452202
-
-HRP = Vector3(6.239954, -4.137818, -40.838100)
-
-REGISTRY OTHER DATA:
- Speed = 41.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.840496, -0.714260, -0.885098)
- RelativeMoveDirection = Vector3(-0.065053, 0.000000, -0.997882)
-
-==============================================
-EVENT #192 | FRAME #313
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.552036, 0.000000, -0.833820)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(561.595825, 0.000000, -3675.429688)
- NEW = Vector3(527.964233, 0.000000, -3681.945557)
- OLD MAG = 3718.087158
- NEW MAG = 3719.605957
- DELTA MAG = 1.518799
- DELTA = Vector3(-33.631592, 0.000000, -6.515869)
- DIRECTION DOT = 0.999957740
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.892365, -3.721152, -40.705444)
- NEW = Vector3(6.239954, -4.137818, -40.838100)
- OLD MAG = 41.452202
- NEW MAG = 41.518780
-
-HRP = Vector3(5.866269, -4.554485, -40.910500)
-
-REGISTRY OTHER DATA:
- Speed = 41.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.848780, -0.715067, -0.876500)
- RelativeMoveDirection = Vector3(-0.058129, 0.000000, -0.998309)
-
-==============================================
-EVENT #193 | FRAME #314
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.559703, 0.000000, -0.828694)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(527.964233, 0.000000, -3681.945557)
- NEW = Vector3(468.900085, 0.000000, -3692.402832)
- OLD MAG = 3719.605957
- NEW MAG = 3722.056641
- DELTA MAG = 2.450684
- DELTA = Vector3(-59.064148, 0.000000, -10.457275)
- DIRECTION DOT = 0.999870241
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.239954, -4.137818, -40.838100)
- NEW = Vector3(5.866269, -4.554485, -40.910500)
- OLD MAG = 41.518780
- NEW MAG = 41.579147
-
-HRP = Vector3(5.210001, -4.971152, -41.026691)
-
-REGISTRY OTHER DATA:
- Speed = 41.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.862959, -0.715872, -0.861875)
- RelativeMoveDirection = Vector3(-0.065003, 0.000000, -0.997885)
-
-==============================================
-EVENT #194 | FRAME #315
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.573004, 0.000000, -0.819553)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(468.900085, 0.000000, -3692.402832)
- NEW = Vector3(405.389587, 0.000000, -3702.517822)
- OLD MAG = 3722.056641
- NEW MAG = 3724.644775
- DELTA MAG = 2.588135
- DELTA = Vector3(-63.510498, 0.000000, -10.114990)
- DIRECTION DOT = 0.999851167
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.866269, -4.554485, -40.910500)
- NEW = Vector3(5.210001, -4.971152, -41.026691)
- OLD MAG = 41.579147
- NEW MAG = 41.653881
-
-HRP = Vector3(4.504328, -5.387819, -41.139080)
-
-REGISTRY OTHER DATA:
- Speed = 41.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.877863, -0.716677, -0.846009)
- RelativeMoveDirection = Vector3(-0.066119, 0.000000, -0.997812)
-
-==============================================
-EVENT #195 | FRAME #316
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.587090, 0.000000, -0.809522)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(405.389587, 0.000000, -3702.517822)
- NEW = Vector3(333.146851, 0.000000, -3712.576172)
- OLD MAG = 3724.644775
- NEW MAG = 3727.493652
- DELTA MAG = 2.848877
- DELTA = Vector3(-72.242737, 0.000000, -10.058350)
- DIRECTION DOT = 0.999808729
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(5.210001, -4.971152, -41.026691)
- NEW = Vector3(4.504328, -5.387819, -41.139080)
- OLD MAG = 41.653881
- NEW MAG = 41.734177
-
-HRP = Vector3(3.701632, -5.804486, -41.250839)
-
-REGISTRY OTHER DATA:
- Speed = 41.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.894274, -0.716677, -0.828643)
- RelativeMoveDirection = Vector3(-0.068381, 0.000000, -0.997659)
-
-==============================================
-EVENT #196 | FRAME #317
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.602841, 0.000000, -0.797861)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(333.146851, 0.000000, -3712.576172)
- NEW = Vector3(290.559753, 0.000000, -3718.005859)
- OLD MAG = 3727.493652
- NEW MAG = 3729.342285
- DELTA MAG = 1.848633
- DELTA = Vector3(-42.587097, 0.000000, -5.429688)
- DIRECTION DOT = 0.999933779
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.504328, -5.387819, -41.139080)
- NEW = Vector3(3.701632, -5.804486, -41.250839)
- OLD MAG = 41.734177
- NEW MAG = 41.821358
-
-HRP = Vector3(3.228442, -6.221153, -41.311169)
-
-REGISTRY OTHER DATA:
- Speed = 41.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.903767, -0.716677, -0.818278)
- RelativeMoveDirection = Vector3(-0.060303, 0.000000, -0.998180)
-
-==============================================
-EVENT #197 | FRAME #318
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.611999, 0.000000, -0.790859)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(290.559753, 0.000000, -3718.005859)
- NEW = Vector3(157.903503, 0.000000, -3730.120850)
- OLD MAG = 3729.342285
- NEW MAG = 3733.461670
- DELTA MAG = 4.119385
- DELTA = Vector3(-132.656250, 0.000000, -12.114990)
- DIRECTION DOT = 0.999363303
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.701632, -5.804486, -41.250839)
- NEW = Vector3(3.228442, -6.221153, -41.311169)
- OLD MAG = 41.821358
- NEW MAG = 41.901531
-
-HRP = Vector3(1.754484, -6.637820, -41.445782)
-
-REGISTRY OTHER DATA:
- Speed = 41.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.932503, -0.717480, -0.784641)
- RelativeMoveDirection = Vector3(-0.084397, 0.000000, -0.996432)
-
-==============================================
-EVENT #198 | FRAME #319
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.639866, 0.000000, -0.768487)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(157.903503, 0.000000, -3730.120850)
- NEW = Vector3(102.160416, 0.000000, -3734.370361)
- OLD MAG = 3733.461670
- NEW MAG = 3735.767578
- DELTA MAG = 2.305908
- DELTA = Vector3(-55.743088, 0.000000, -4.249512)
- DIRECTION DOT = 0.999888122
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(3.228442, -6.221153, -41.311169)
- NEW = Vector3(1.754484, -6.637820, -41.445782)
- OLD MAG = 41.901531
- NEW MAG = 42.010616
-
-HRP = Vector3(1.135116, -7.054487, -41.492996)
-
-REGISTRY OTHER DATA:
- Speed = 41.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.944157, -0.717480, -0.770578)
- RelativeMoveDirection = Vector3(-0.063667, 0.000000, -0.997971)
-
-==============================================
-EVENT #199 | FRAME #320
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.651311, 0.000000, -0.758811)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(102.160416, 0.000000, -3734.370361)
- NEW = Vector3(42.024788, 0.000000, -3737.979736)
- OLD MAG = 3735.767578
- NEW MAG = 3738.216064
- DELTA MAG = 2.448486
- DELTA = Vector3(-60.135628, 0.000000, -3.609375)
- DIRECTION DOT = 0.999870181
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.754484, -6.637820, -41.445782)
- NEW = Vector3(1.135116, -7.054487, -41.492996)
- OLD MAG = 42.010616
- NEW MAG = 42.103718
-
-HRP = Vector3(0.466943, -7.471154, -41.533100)
-
-REGISTRY OTHER DATA:
- Speed = 41.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.956520, -0.718283, -0.754413)
- RelativeMoveDirection = Vector3(-0.064789, 0.000000, -0.997899)
-
-==============================================
-EVENT #200 | FRAME #321
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.663473, 0.000000, -0.748201)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(42.024788, 0.000000, -3737.979736)
- NEW = Vector3(-0.980373, 0.000000, -3740.063721)
- OLD MAG = 3738.216064
- NEW MAG = 3740.063965
- DELTA MAG = 1.847900
- DELTA = Vector3(-43.005161, 0.000000, -2.083984)
- DIRECTION DOT = 0.999933779
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(1.135116, -7.054487, -41.492996)
- NEW = Vector3(0.466943, -7.471154, -41.533100)
- OLD MAG = 42.103718
- NEW MAG = 42.202305
-
-HRP = Vector3(-0.010893, -7.887821, -41.556255)
-
-REGISTRY OTHER DATA:
- Speed = 41.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.965153, -0.718283, -0.743336)
- RelativeMoveDirection = Vector3(-0.060164, 0.000000, -0.998189)
-
-==============================================
-EVENT #201 | FRAME #322
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.672054, 0.000000, -0.740502)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-0.980373, 0.000000, -3740.063721)
- NEW = Vector3(-112.997452, 0.000000, -3742.130127)
- OLD MAG = 3740.063965
- NEW MAG = 3743.835693
- DELTA MAG = 3.771729
- DELTA = Vector3(-112.017075, 0.000000, -2.066406)
- DIRECTION DOT = 0.999552250
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.466943, -7.471154, -41.533100)
- NEW = Vector3(-0.010893, -7.887821, -41.556255)
- OLD MAG = 42.202305
- NEW MAG = 42.298229
-
-HRP = Vector3(-1.255526, -8.304487, -41.579216)
-
-REGISTRY OTHER DATA:
- Speed = 41.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.986997, -0.718283, -0.714077)
- RelativeMoveDirection = Vector3(-0.078517, 0.000000, -0.996913)
-
-==============================================
-EVENT #202 | FRAME #323
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.693944, 0.000000, -0.720029)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-112.997452, 0.000000, -3742.130127)
- NEW = Vector3(-173.371475, 0.000000, -3742.269287)
- OLD MAG = 3743.835693
- NEW MAG = 3746.283203
- DELTA MAG = 2.447510
- DELTA = Vector3(-60.374023, 0.000000, -0.139160)
- DIRECTION DOT = 0.999870181
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-0.010893, -7.887821, -41.556255)
- NEW = Vector3(-1.255526, -8.304487, -41.579216)
- OLD MAG = 42.298229
- NEW MAG = 42.419006
-
-HRP = Vector3(-1.926349, -8.721153, -41.580765)
-
-REGISTRY OTHER DATA:
- Speed = 41.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.998395, -0.719084, -0.697227)
- RelativeMoveDirection = Vector3(-0.064682, 0.000000, -0.997906)
-
-==============================================
-EVENT #203 | FRAME #324
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.705474, 0.000000, -0.708735)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-173.371475, 0.000000, -3742.269287)
- NEW = Vector3(-242.409714, 0.000000, -3741.155029)
- OLD MAG = 3746.283203
- NEW MAG = 3749.000244
- DELTA MAG = 2.717041
- DELTA = Vector3(-69.038239, 0.000000, 1.114258)
- DIRECTION DOT = 0.999830484
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-1.255526, -8.304487, -41.579216)
- NEW = Vector3(-1.926349, -8.721153, -41.580765)
- OLD MAG = 42.419006
- NEW MAG = 42.529156
-
-HRP = Vector3(-2.693440, -9.137819, -41.568382)
-
-REGISTRY OTHER DATA:
- Speed = 41.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.011085, -0.719084, -0.678693)
- RelativeMoveDirection = Vector3(-0.066950, 0.000000, -0.997756)
-
-==============================================
-EVENT #204 | FRAME #325
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.718427, 0.000000, -0.695603)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-242.409714, 0.000000, -3741.155029)
- NEW = Vector3(-281.257233, 0.000000, -3740.124756)
- OLD MAG = 3749.000244
- NEW MAG = 3750.685059
- DELTA MAG = 1.684814
- DELTA = Vector3(-38.847519, 0.000000, 1.030273)
- DIRECTION DOT = 0.999946356
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-1.926349, -8.721153, -41.580765)
- NEW = Vector3(-2.693440, -9.137819, -41.568382)
- OLD MAG = 42.529156
- NEW MAG = 42.646042
-
-HRP = Vector3(-3.125079, -9.554485, -41.556934)
-
-REGISTRY OTHER DATA:
- Speed = 41.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.018072, -0.719084, -0.668166)
- RelativeMoveDirection = Vector3(-0.058874, 0.000000, -0.998265)
-
-==============================================
-EVENT #205 | FRAME #326
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.725605, 0.000000, -0.688111)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-281.257233, 0.000000, -3740.124756)
- NEW = Vector3(-376.192200, 0.000000, -3735.195312)
- OLD MAG = 3750.685059
- NEW MAG = 3754.091797
- DELTA MAG = 3.406738
- DELTA = Vector3(-94.934967, 0.000000, 4.929443)
- DIRECTION DOT = 0.999679506
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-2.693440, -9.137819, -41.568382)
- NEW = Vector3(-3.125079, -9.554485, -41.556934)
- OLD MAG = 42.646042
- NEW MAG = 42.755505
-
-HRP = Vector3(-4.179912, -9.971151, -41.502163)
-
-REGISTRY OTHER DATA:
- Speed = 41.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.034646, -0.719885, -0.641305)
- RelativeMoveDirection = Vector3(-0.073786, 0.000000, -0.997274)
-
-==============================================
-EVENT #206 | FRAME #327
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.742822, 0.000000, -0.669489)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-376.192200, 0.000000, -3735.195312)
- NEW = Vector3(-436.592133, 0.000000, -3731.080811)
- OLD MAG = 3754.091797
- NEW MAG = 3756.537842
- DELTA MAG = 2.446045
- DELTA = Vector3(-60.399933, 0.000000, 4.114502)
- DIRECTION DOT = 0.999870241
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-3.125079, -9.554485, -41.556934)
- NEW = Vector3(-4.179912, -9.971151, -41.502163)
- OLD MAG = 42.755505
- NEW MAG = 42.887352
-
-HRP = Vector3(-4.851022, -10.387817, -41.456448)
-
-REGISTRY OTHER DATA:
- Speed = 41.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.044862, -0.719885, -0.624523)
- RelativeMoveDirection = Vector3(-0.064551, 0.000000, -0.997914)
-
-==============================================
-EVENT #207 | FRAME #328
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.753530, 0.000000, -0.657413)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-436.592133, 0.000000, -3731.080811)
- NEW = Vector3(-531.388794, 0.000000, -3722.202881)
- OLD MAG = 3756.537842
- NEW MAG = 3759.942627
- DELTA MAG = 3.404785
- DELTA = Vector3(-94.796661, 0.000000, 8.877930)
- DIRECTION DOT = 0.999679506
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-4.179912, -9.971151, -41.502163)
- NEW = Vector3(-4.851022, -10.387817, -41.456448)
- OLD MAG = 42.887352
- NEW MAG = 43.012512
-
-HRP = Vector3(-5.904319, -10.804483, -41.357803)
-
-REGISTRY OTHER DATA:
- Speed = 41.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.060363, -0.719885, -0.597825)
- RelativeMoveDirection = Vector3(-0.073709, 0.000000, -0.997280)
-
-==============================================
-EVENT #208 | FRAME #329
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.769960, 0.000000, -0.638093)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-531.388794, 0.000000, -3722.202881)
- NEW = Vector3(-578.759216, 0.000000, -3717.159912)
- OLD MAG = 3759.942627
- NEW MAG = 3761.946289
- DELTA MAG = 2.003662
- DELTA = Vector3(-47.370422, 0.000000, 5.042969)
- DIRECTION DOT = 0.999920011
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-4.851022, -10.387817, -41.456448)
- NEW = Vector3(-5.904319, -10.804483, -41.357803)
- OLD MAG = 43.012512
- NEW MAG = 43.151657
-
-HRP = Vector3(-6.430656, -11.221149, -41.301769)
-
-REGISTRY OTHER DATA:
- Speed = 41.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.067859, -0.719885, -0.584331)
- RelativeMoveDirection = Vector3(-0.061029, 0.000000, -0.998136)
-
-==============================================
-EVENT #209 | FRAME #330
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.777989, 0.000000, -0.628277)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-578.759216, 0.000000, -3717.159912)
- NEW = Vector3(-724.591797, 0.000000, -3695.826416)
- OLD MAG = 3761.946289
- NEW MAG = 3766.187256
- DELTA MAG = 4.240967
- DELTA = Vector3(-145.832581, 0.000000, 21.333496)
- DIRECTION DOT = 0.999234140
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-5.904319, -10.804483, -41.357803)
- NEW = Vector3(-6.430656, -11.221149, -41.301769)
- OLD MAG = 43.151657
- NEW MAG = 43.279369
-
-HRP = Vector3(-8.051018, -11.637815, -41.064732)
-
-REGISTRY OTHER DATA:
- Speed = 41.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.089937, -0.719885, -0.542036)
- RelativeMoveDirection = Vector3(-0.087419, 0.000000, -0.996172)
-
-==============================================
-EVENT #210 | FRAME #331
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.802012, 0.000000, -0.597308)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-724.591797, 0.000000, -3695.826416)
- NEW = Vector3(-805.877747, 0.000000, -3682.110596)
- OLD MAG = 3766.187256
- NEW MAG = 3769.267334
- DELTA MAG = 3.080078
- DELTA = Vector3(-81.285950, 0.000000, 13.715820)
- DIRECTION DOT = 0.999761105
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-6.430656, -11.221149, -41.301769)
- NEW = Vector3(-8.051018, -11.637815, -41.064732)
- OLD MAG = 43.279369
- NEW MAG = 43.434662
-
-HRP = Vector3(-8.954194, -12.054482, -40.912334)
-
-REGISTRY OTHER DATA:
- Speed = 41.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.101547, -0.719885, -0.518034)
- RelativeMoveDirection = Vector3(-0.070134, 0.000000, -0.997538)
-
-==============================================
-EVENT #211 | FRAME #332
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.814902, 0.000000, -0.579599)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-805.877747, 0.000000, -3682.110596)
- NEW = Vector3(-869.901245, 0.000000, -3670.165527)
- OLD MAG = 3769.267334
- NEW MAG = 3771.848633
- DELTA MAG = 2.581299
- DELTA = Vector3(-64.023499, 0.000000, 11.945068)
- DIRECTION DOT = 0.999851167
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-8.051018, -11.637815, -41.064732)
- NEW = Vector3(-8.954194, -12.054482, -40.912334)
- OLD MAG = 43.434662
- NEW MAG = 43.581043
-
-HRP = Vector3(-9.665566, -12.471148, -40.779610)
-
-REGISTRY OTHER DATA:
- Speed = 41.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.110340, -0.719885, -0.498909)
- RelativeMoveDirection = Vector3(-0.065503, 0.000000, -0.997852)
-
-==============================================
-EVENT #212 | FRAME #333
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.824802, 0.000000, -0.565421)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-869.901245, 0.000000, -3670.165527)
- NEW = Vector3(-908.260132, 0.000000, -3662.595947)
- OLD MAG = 3771.848633
- NEW MAG = 3773.532227
- DELTA MAG = 1.683594
- DELTA = Vector3(-38.358887, 0.000000, 7.569580)
- DIRECTION DOT = 0.999946535
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-8.954194, -12.054482, -40.912334)
- NEW = Vector3(-9.665566, -12.471148, -40.779610)
- OLD MAG = 43.581043
- NEW MAG = 43.725613
-
-HRP = Vector3(-10.091778, -12.887814, -40.695503)
-
-REGISTRY OTHER DATA:
- Speed = 41.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.115457, -0.719885, -0.487362)
- RelativeMoveDirection = Vector3(-0.058580, 0.000000, -0.998283)
-
-==============================================
-EVENT #213 | FRAME #334
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.830624, 0.000000, -0.556833)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-908.260132, 0.000000, -3662.595947)
- NEW = Vector3(-1081.351318, 0.000000, -3619.853027)
- OLD MAG = 3773.532227
- NEW MAG = 3777.916992
- DELTA MAG = 4.384766
- DELTA = Vector3(-173.091187, 0.000000, 42.742920)
- DIRECTION DOT = 0.998885870
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-9.665566, -12.471148, -40.779610)
- NEW = Vector3(-10.091778, -12.887814, -40.695503)
- OLD MAG = 43.725613
- NEW MAG = 43.864151
-
-HRP = Vector3(-12.015012, -13.304480, -40.220581)
-
-REGISTRY OTHER DATA:
- Speed = 41.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.137238, -0.719885, -0.434114)
- RelativeMoveDirection = Vector3(-0.095306, 0.000000, -0.995448)
-
-==============================================
-EVENT #214 | FRAME #335
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.856006, 0.000000, -0.516965)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1081.351318, 0.000000, -3619.853027)
- NEW = Vector3(-1206.975586, 0.000000, -3584.180176)
- OLD MAG = 3777.916992
- NEW MAG = 3781.948975
- DELTA MAG = 4.031982
- DELTA = Vector3(-125.624268, 0.000000, 35.672852)
- DIRECTION DOT = 0.999403834
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-10.091778, -12.887814, -40.695503)
- NEW = Vector3(-12.015012, -13.304480, -40.220581)
- OLD MAG = 43.864151
- NEW MAG = 44.034817
-
-HRP = Vector3(-13.410836, -13.721146, -39.824219)
-
-REGISTRY OTHER DATA:
- Speed = 42
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.151569, -0.719885, -0.394531)
- RelativeMoveDirection = Vector3(-0.082614, 0.000000, -0.996582)
-
-==============================================
-EVENT #215 | FRAME #336
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.873370, 0.000000, -0.487057)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1206.975586, 0.000000, -3584.180176)
- NEW = Vector3(-1327.318481, 0.000000, -3545.615967)
- OLD MAG = 3781.948975
- NEW MAG = 3785.916992
- DELTA MAG = 3.968018
- DELTA = Vector3(-120.342896, 0.000000, 38.564209)
- DIRECTION DOT = 0.999442875
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-12.015012, -13.304480, -40.220581)
- NEW = Vector3(-13.410836, -13.721146, -39.824219)
- OLD MAG = 44.034817
- NEW MAG = 44.205074
-
-HRP = Vector3(-14.747980, -14.137812, -39.395725)
-
-REGISTRY OTHER DATA:
- Speed = 42
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.164113, -0.719885, -0.355818)
- RelativeMoveDirection = Vector3(-0.081415, 0.000000, -0.996680)
-
-==============================================
-EVENT #216 | FRAME #337
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.889163, 0.000000, -0.457592)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1327.318481, 0.000000, -3545.615967)
- NEW = Vector3(-1368.688599, 0.000000, -3531.830811)
- OLD MAG = 3785.916992
- NEW MAG = 3787.761719
- DELTA MAG = 1.844727
- DELTA = Vector3(-41.370117, 0.000000, 13.785156)
- DIRECTION DOT = 0.999933660
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-13.410836, -13.721146, -39.824219)
- NEW = Vector3(-14.747980, -14.137812, -39.395725)
- OLD MAG = 44.205074
- NEW MAG = 44.377964
-
-HRP = Vector3(-15.207648, -14.554478, -39.242558)
-
-REGISTRY OTHER DATA:
- Speed = 42
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.168138, -0.719885, -0.342374)
- RelativeMoveDirection = Vector3(-0.059544, 0.000000, -0.998226)
-
-==============================================
-EVENT #217 | FRAME #338
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(-0.894379, 0.000000, -0.447311)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1368.688599, 0.000000, -3531.830811)
- NEW = Vector3(-1495.437988, 0.000000, -3484.500732)
- OLD MAG = 3787.761719
- NEW MAG = 3791.843994
- DELTA MAG = 4.082275
- DELTA = Vector3(-126.749390, 0.000000, 47.330078)
- DIRECTION DOT = 0.999363184
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-14.747980, -14.137812, -39.395725)
- NEW = Vector3(-15.207648, -14.554478, -39.242558)
- OLD MAG = 44.377964
- NEW MAG = 44.531830
-
-HRP = Vector3(-16.615969, -14.971144, -38.716652)
-
-REGISTRY OTHER DATA:
- Speed = 42.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.179915, -0.719084, -0.301194)
- RelativeMoveDirection = Vector3(-0.083645, 0.000000, -0.996495)
-
-==============================================
-EVENT #218 | FRAME #339
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(-0.909790, 0.000000, -0.415069)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1495.437988, 0.000000, -3484.500732)
- NEW = Vector3(-1612.586914, 0.000000, -3436.234863)
- OLD MAG = 3791.843994
- NEW MAG = 3795.806396
- DELTA MAG = 3.962402
- DELTA = Vector3(-117.148926, 0.000000, 48.265869)
- DIRECTION DOT = 0.999442816
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-15.207648, -14.554478, -39.242558)
- NEW = Vector3(-16.615969, -14.971144, -38.716652)
- OLD MAG = 44.531830
- NEW MAG = 44.712467
-
-HRP = Vector3(-17.917624, -15.387810, -38.180367)
-
-REGISTRY OTHER DATA:
- Speed = 42.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.189323, -0.719084, -0.261586)
- RelativeMoveDirection = Vector3(-0.081291, 0.000000, -0.996690)
-
-==============================================
-EVENT #219 | FRAME #340
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(-0.923156, 0.000000, -0.384426)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1612.586914, 0.000000, -3436.234863)
- NEW = Vector3(-1708.487915, 0.000000, -3393.582764)
- OLD MAG = 3795.806396
- NEW MAG = 3799.386230
- DELTA MAG = 3.579834
- DELTA = Vector3(-95.901001, 0.000000, 42.652100)
- DIRECTION DOT = 0.999618471
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-16.615969, -14.971144, -38.716652)
- NEW = Vector3(-17.917624, -15.387810, -38.180367)
- OLD MAG = 44.712467
- NEW MAG = 44.895058
-
-HRP = Vector3(-18.983189, -15.804476, -37.706451)
-
-REGISTRY OTHER DATA:
- Speed = 42.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.196105, -0.719084, -0.228584)
- RelativeMoveDirection = Vector3(-0.075497, 0.000000, -0.997146)
-
-==============================================
-EVENT #220 | FRAME #341
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(-0.933437, 0.000000, -0.358740)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1708.487915, 0.000000, -3393.582764)
- NEW = Vector3(-1744.305786, 0.000000, -3377.205566)
- OLD MAG = 3799.386230
- NEW MAG = 3801.068359
- DELTA MAG = 1.682129
- DELTA = Vector3(-35.817871, 0.000000, 16.377197)
- DIRECTION DOT = 0.999946356
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.917624, -15.387810, -38.180367)
- NEW = Vector3(-18.983189, -15.804476, -37.706451)
- OLD MAG = 44.895058
- NEW MAG = 45.076817
-
-HRP = Vector3(-19.381165, -16.221144, -37.524483)
-
-REGISTRY OTHER DATA:
- Speed = 42.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.198757, -0.718283, -0.216915)
- RelativeMoveDirection = Vector3(-0.058223, 0.000000, -0.998304)
-
-==============================================
-EVENT #221 | FRAME #342
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(-0.937109, 0.000000, -0.349036)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1744.305786, 0.000000, -3377.205566)
- NEW = Vector3(-1865.688232, 0.000000, -3316.370605)
- OLD MAG = 3801.068359
- NEW MAG = 3805.142090
- DELTA MAG = 4.073730
- DELTA = Vector3(-121.382446, 0.000000, 60.834961)
- DIRECTION DOT = 0.999363244
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-18.983189, -15.804476, -37.706451)
- NEW = Vector3(-19.381165, -16.221144, -37.524483)
- OLD MAG = 45.076817
- NEW MAG = 45.242035
-
-HRP = Vector3(-20.729858, -16.637812, -36.848545)
-
-REGISTRY OTHER DATA:
- Speed = 42.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.205742, -0.718283, -0.173945)
- RelativeMoveDirection = Vector3(-0.083475, 0.000000, -0.996510)
-
-==============================================
-EVENT #222 | FRAME #343
-==============================================
-STATE = Enum.HumanoidStateType.Landed
-MOVE DIRECTION = Vector3(-0.948982, 0.000000, -0.315330)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1865.688232, 0.000000, -3316.370605)
- NEW = Vector3(-1950.787354, 0.000000, -3270.984619)
- OLD MAG = 3805.142090
- NEW MAG = 3808.531250
- DELTA MAG = 3.389160
- DELTA = Vector3(-85.099121, 0.000000, 45.385986)
- DIRECTION DOT = 0.999679446
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-19.381165, -16.221144, -37.524483)
- NEW = Vector3(-20.729858, -16.637812, -36.848545)
- OLD MAG = 45.242035
- NEW MAG = 45.435219
-
-HRP = Vector3(-21.675404, -17.054480, -36.344254)
-
-REGISTRY OTHER DATA:
- Speed = 42.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.210155, -0.717480, -0.144041)
- RelativeMoveDirection = Vector3(-0.073083, 0.000000, -0.997326)
-
-==============================================
-EVENT #223 | FRAME #344
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.956674, 0.000000, -0.291163)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1950.787354, 0.000000, -3270.984619)
- NEW = Vector3(-2384.230713, 0.000000, -3196.074707)
- OLD MAG = 3808.531250
- NEW MAG = 3987.411377
- DELTA MAG = 178.880127
- DELTA = Vector3(-433.443359, 0.000000, 74.909912)
- DIRECTION DOT = 0.994683146
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-20.729858, -16.637812, -36.848545)
- NEW = Vector3(-21.675404, -17.054480, -36.344254)
- OLD MAG = 45.435219
- NEW MAG = 45.624371
-
-HRP = Vector3(-26.491436, -9.049329, -35.511925)
-
-REGISTRY OTHER DATA:
- Speed = 44.3
- Sprint = 2
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.212464, -0.717480, -0.123094)
- RelativeMoveDirection = Vector3(-0.150380, 0.000000, -0.988628)
-
-==============================================
-EVENT #224 | FRAME #345
-==============================================
-STATE = Enum.HumanoidStateType.Running
-MOVE DIRECTION = Vector3(-0.961565, 0.000000, -0.274577)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-2384.230713, 0.000000, -3196.074707)
- NEW = Vector3(-2833.785400, 0.000000, -3114.326416)
- OLD MAG = 3987.411377
- NEW MAG = 4210.625488
- DELTA MAG = 223.214111
- DELTA = Vector3(-449.554688, 0.000000, 81.748291)
- DIRECTION DOT = 0.995266199
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-21.675404, -17.054480, -36.344254)
- NEW = Vector3(-26.491436, -9.049329, -35.511925)
- OLD MAG = 45.624371
- NEW MAG = 45.219280
-
-HRP = Vector3(-31.486488, -1.248849, -34.603607)
-
-REGISTRY OTHER DATA:
- Speed = 46.7
- Sprint = 2
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.213826, -0.716677, -0.114025)
- RelativeMoveDirection = Vector3(-0.228924, 0.000000, -0.973444)
-
-==============================================
-EVENT #225 | FRAME #346
-==============================================
-STATE = Enum.HumanoidStateType.Jumping
-MOVE DIRECTION = Vector3(-0.963750, 0.000000, -0.266808)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-2833.785400, 0.000000, -3114.326416)
- NEW = Vector3(-3086.079834, 0.000000, -3168.128418)
- OLD MAG = 4210.625488
- NEW MAG = 4422.773926
- DELTA MAG = 212.148438
- DELTA = Vector3(-252.294434, 0.000000, -53.802002)
- DIRECTION DOT = 0.999421597
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-26.491436, -9.049329, -35.511925)
- NEW = Vector3(-31.486488, -1.248849, -34.603607)
- OLD MAG = 45.219280
- NEW MAG = 46.801369
-
-HRP = Vector3(-34.289772, 17.112177, -35.201427)
-
-REGISTRY OTHER DATA:
- Speed = 49.1
- Sprint = 2
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.218601, -0.715067, -0.060752)
- RelativeMoveDirection = Vector3(-0.254086, 0.000000, -0.967182)
-
-==============================================
-EVENT #226 | FRAME #347
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.974768, 0.000000, -0.223222)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-3086.079834, 0.000000, -3168.128418)
- NEW = Vector3(-3091.932129, 0.000000, -3050.737305)
- OLD MAG = 4422.773926
- NEW MAG = 4343.620605
- DELTA MAG = -79.153320
- DELTA = Vector3(-5.852295, 0.000000, 117.391113)
- DIRECTION DOT = 0.999803424
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-31.486488, -1.248849, -34.603607)
- NEW = Vector3(-34.289772, 17.112177, -35.201427)
- OLD MAG = 46.801369
- NEW MAG = 52.036098
-
-HRP = Vector3(-34.354794, 16.695509, -33.897079)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Move
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.218601, -0.715067, -0.060752)
- RelativeMoveDirection = Vector3(-0.229689, 0.000000, -0.973264)
-
-==============================================
-EVENT #227 | FRAME #348
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.974768, 0.000000, -0.223222)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.289772, 17.112177, -35.201427)
- NEW = Vector3(-34.354794, 16.695509, -33.897079)
- OLD MAG = 52.036098
- NEW MAG = 51.068619
-
-HRP = Vector3(-34.354794, 16.278841, -33.897079)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.219554, -0.714260, -0.050205)
- RelativeMoveDirection = Vector3(-0.229717, 0.000000, -0.973257)
-
-==============================================
-EVENT #228 | FRAME #349
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.976785, 0.000000, -0.214223)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.354794, 16.695509, -33.897079)
- NEW = Vector3(-34.354794, 16.278841, -33.897079)
- OLD MAG = 51.068619
- NEW MAG = 50.933922
-
-HRP = Vector3(-34.354794, 15.862174, -33.897079)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.219772, -0.714260, -0.044581)
- RelativeMoveDirection = Vector3(-0.220753, 0.000000, -0.975330)
-
-==============================================
-EVENT #229 | FRAME #350
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.977762, 0.000000, -0.209716)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.354794, 16.278841, -33.897079)
- NEW = Vector3(-34.354794, 15.862174, -33.897079)
- OLD MAG = 50.933922
- NEW MAG = 50.802288
-
-HRP = Vector3(-34.354794, 15.445508, -33.897079)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-1.219772, -0.714260, -0.044581)
- RelativeMoveDirection = Vector3(-0.216260, 0.000000, -0.976336)
-
-==============================================
-EVENT #230 | FRAME #351
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.543091, 0.000000, -0.839674)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.354794, 15.862174, -33.897079)
- NEW = Vector3(-34.354794, 15.445508, -33.897079)
- OLD MAG = 50.802288
- NEW MAG = 50.673737
-
-HRP = Vector3(-34.354794, 15.028842, -33.897079)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.380098, -0.714260, -0.587671)
- RelativeMoveDirection = Vector3(-0.216263, 0.000000, -0.976335)
-
-==============================================
-EVENT #231 | FRAME #352
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.543091, 0.000000, -0.839674)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.354794, 15.445508, -33.897079)
- NEW = Vector3(-34.354794, 15.028842, -33.897079)
- OLD MAG = 50.673737
- NEW MAG = 50.548294
-
-HRP = Vector3(-34.354794, 14.612176, -33.897079)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.380098, -0.714260, -0.587671)
- RelativeMoveDirection = Vector3(-0.216264, 0.000000, -0.976335)
-
-==============================================
-EVENT #232 | FRAME #353
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.543091, 0.000000, -0.839674)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.354794, 15.028842, -33.897079)
- NEW = Vector3(-34.354794, 14.612176, -33.897079)
- OLD MAG = 50.548294
- NEW MAG = 50.425980
-
-HRP = Vector3(-34.354794, 14.195510, -33.897079)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.379867, -0.713453, -0.588800)
- RelativeMoveDirection = Vector3(-0.216264, 0.000000, -0.976335)
-
-==============================================
-EVENT #233 | FRAME #354
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.210843, 0.000000, -0.977520)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-3091.932129, 0.000000, -3050.737305)
- NEW = Vector3(-2860.052734, 0.000000, -3199.956787)
- OLD MAG = 4343.620605
- NEW MAG = 4291.809082
- DELTA MAG = -51.811523
- DELTA = Vector3(231.879395, 0.000000, -149.219482)
- DIRECTION DOT = 0.998032689
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.354794, 14.612176, -33.897079)
- NEW = Vector3(-34.354794, 14.195510, -33.897079)
- OLD MAG = 50.425980
- NEW MAG = 50.306824
-
-HRP = Vector3(-31.778358, 13.778844, -35.555069)
-
-REGISTRY OTHER DATA:
- Speed = 47.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.461736, -0.713453, -1.130391)
- RelativeMoveDirection = Vector3(-0.155765, 0.000000, -0.987794)
-
-==============================================
-EVENT #234 | FRAME #355
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.211970, 0.000000, -0.977276)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-2860.052734, 0.000000, -3199.956787)
- NEW = Vector3(-2628.512207, 0.000000, -3347.452881)
- OLD MAG = 4291.809082
- NEW MAG = 4256.115234
- DELTA MAG = -35.693848
- DELTA = Vector3(231.540527, 0.000000, -147.496094)
- DIRECTION DOT = 0.997971892
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-34.354794, 14.195510, -33.897079)
- NEW = Vector3(-31.778358, 13.778844, -35.555069)
- OLD MAG = 50.306824
- NEW MAG = 49.637520
-
-HRP = Vector3(-29.205688, 13.362178, -37.193913)
-
-REGISTRY OTHER DATA:
- Speed = 47.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.466944, -0.713453, -1.128250)
- RelativeMoveDirection = Vector3(-0.093740, 0.000000, -0.995597)
-
-==============================================
-EVENT #235 | FRAME #356
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.216474, 0.000000, -0.976288)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-2628.512207, 0.000000, -3347.452881)
- NEW = Vector3(-2393.003662, 0.000000, -3491.813232)
- OLD MAG = 4256.115234
- NEW MAG = 4233.110840
- DELTA MAG = -23.004395
- DELTA = Vector3(235.508545, 0.000000, -144.360352)
- DIRECTION DOT = 0.997896969
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-31.778358, 13.778844, -35.555069)
- NEW = Vector3(-29.205688, 13.362178, -37.193913)
- OLD MAG = 49.637520
- NEW MAG = 49.141705
-
-HRP = Vector3(-26.588928, 12.945512, -38.797916)
-
-REGISTRY OTHER DATA:
- Speed = 47
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.485954, -0.712645, -1.120708)
- RelativeMoveDirection = Vector3(-0.033627, 0.000000, -0.999434)
-
-==============================================
-EVENT #236 | FRAME #357
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.233324, 0.000000, -0.972399)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-2393.003662, 0.000000, -3491.813232)
- NEW = Vector3(-2158.411865, 0.000000, -3635.611816)
- OLD MAG = 4233.110840
- NEW MAG = 4228.051270
- DELTA MAG = -5.059570
- DELTA = Vector3(234.591797, 0.000000, -143.798584)
- DIRECTION DOT = 0.997885466
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-29.205688, 13.362178, -37.193913)
- NEW = Vector3(-26.588928, 12.945512, -38.797916)
- OLD MAG = 49.141705
- NEW MAG = 48.783558
-
-HRP = Vector3(-23.982353, 12.528846, -40.395679)
-
-REGISTRY OTHER DATA:
- Speed = 46.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.485954, -0.712645, -1.120708)
- RelativeMoveDirection = Vector3(0.014111, 0.000000, -0.999900)
-
-==============================================
-EVENT #237 | FRAME #358
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.233324, 0.000000, -0.972399)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-2158.411865, 0.000000, -3635.611816)
- NEW = Vector3(-2015.919800, 0.000000, -3720.934326)
- OLD MAG = 4228.051270
- NEW MAG = 4231.936035
- DELTA MAG = 3.884766
- DELTA = Vector3(142.492065, 0.000000, -85.322510)
- DIRECTION DOT = 0.999229610
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-26.588928, 12.945512, -38.797916)
- NEW = Vector3(-23.982353, 12.528846, -40.395679)
- OLD MAG = 48.783558
- NEW MAG = 48.620327
-
-HRP = Vector3(-22.399109, 12.112180, -41.343708)
-
-REGISTRY OTHER DATA:
- Speed = 47
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.497556, -0.712645, -1.115606)
- RelativeMoveDirection = Vector3(0.053340, 0.000000, -0.998576)
-
-==============================================
-EVENT #238 | FRAME #359
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.243400, 0.000000, -0.969926)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-2015.919800, 0.000000, -3720.934326)
- NEW = Vector3(-1978.043701, 0.000000, -3743.083496)
- OLD MAG = 4231.936035
- NEW MAG = 4233.595703
- DELTA MAG = 1.659668
- DELTA = Vector3(37.876099, 0.000000, -22.149170)
- DIRECTION DOT = 0.999946356
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-23.982353, 12.528846, -40.395679)
- NEW = Vector3(-22.399109, 12.112180, -41.343708)
- OLD MAG = 48.620327
- NEW MAG = 48.556435
-
-HRP = Vector3(-21.978260, 11.695514, -41.589809)
-
-REGISTRY OTHER DATA:
- Speed = 47
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.508689, -0.711836, -1.111092)
- RelativeMoveDirection = Vector3(0.053331, 0.000000, -0.998577)
-
-==============================================
-EVENT #239 | FRAME #360
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.253450, 0.000000, -0.967348)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1978.043701, 0.000000, -3743.083496)
- NEW = Vector3(-1944.183105, 0.000000, -3762.467529)
- OLD MAG = 4233.595703
- NEW MAG = 4235.092773
- DELTA MAG = 1.497070
- DELTA = Vector3(33.860596, 0.000000, -19.384033)
- DIRECTION DOT = 0.999957502
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-22.399109, 12.112180, -41.343708)
- NEW = Vector3(-21.978260, 11.695514, -41.589809)
- OLD MAG = 48.556435
- NEW MAG = 48.472065
-
-HRP = Vector3(-21.602032, 11.278848, -41.805187)
-
-REGISTRY OTHER DATA:
- Speed = 47
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.518915, -0.711836, -1.106353)
- RelativeMoveDirection = Vector3(0.052176, 0.000000, -0.998638)
-
-==============================================
-EVENT #240 | FRAME #361
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.262361, 0.000000, -0.964970)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1944.183105, 0.000000, -3762.467529)
- NEW = Vector3(-1910.133301, 0.000000, -3781.545166)
- OLD MAG = 4235.092773
- NEW MAG = 4236.589844
- DELTA MAG = 1.497070
- DELTA = Vector3(34.049805, 0.000000, -19.077637)
- DIRECTION DOT = 0.999957561
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-21.978260, 11.695514, -41.589809)
- NEW = Vector3(-21.602032, 11.278848, -41.805187)
- OLD MAG = 48.472065
- NEW MAG = 48.389400
-
-HRP = Vector3(-21.223700, 10.862182, -42.017162)
-
-REGISTRY OTHER DATA:
- Speed = 47
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.529096, -0.711836, -1.101521)
- RelativeMoveDirection = Vector3(0.052166, 0.000000, -0.998638)
-
-==============================================
-EVENT #241 | FRAME #362
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.271249, 0.000000, -0.962509)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1910.133301, 0.000000, -3781.545166)
- NEW = Vector3(-1854.318481, 0.000000, -3811.727539)
- OLD MAG = 4236.589844
- NEW MAG = 4238.839844
- DELTA MAG = 2.250000
- DELTA = Vector3(55.814819, 0.000000, -30.182373)
- DIRECTION DOT = 0.999888062
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-21.602032, 11.278848, -41.805187)
- NEW = Vector3(-21.223700, 10.862182, -42.017162)
- OLD MAG = 48.389400
- NEW MAG = 48.310188
-
-HRP = Vector3(-20.603535, 10.445516, -42.352520)
-
-REGISTRY OTHER DATA:
- Speed = 47
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.545544, -0.711836, -1.093468)
- RelativeMoveDirection = Vector3(0.057900, 0.000000, -0.998322)
-
-==============================================
-EVENT #242 | FRAME #363
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.285643, 0.000000, -0.958336)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1854.318481, 0.000000, -3811.727539)
- NEW = Vector3(-1798.027466, 0.000000, -3841.085693)
- OLD MAG = 4238.839844
- NEW MAG = 4241.089844
- DELTA MAG = 2.250000
- DELTA = Vector3(56.291016, 0.000000, -29.358154)
- DIRECTION DOT = 0.999888062
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-21.223700, 10.862182, -42.017162)
- NEW = Vector3(-20.603535, 10.445516, -42.352520)
- OLD MAG = 48.310188
- NEW MAG = 48.242619
-
-HRP = Vector3(-19.978079, 10.028850, -42.678722)
-
-REGISTRY OTHER DATA:
- Speed = 47.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.561491, -0.711025, -1.085896)
- RelativeMoveDirection = Vector3(0.057876, 0.000000, -0.998324)
-
-==============================================
-EVENT #243 | FRAME #364
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.299973, 0.000000, -0.953948)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1798.027466, 0.000000, -3841.085693)
- NEW = Vector3(-1741.273071, 0.000000, -3869.612061)
- OLD MAG = 4241.089844
- NEW MAG = 4243.339355
- DELTA MAG = 2.249512
- DELTA = Vector3(56.754395, 0.000000, -28.526367)
- DIRECTION DOT = 0.999888003
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-20.603535, 10.445516, -42.352520)
- NEW = Vector3(-19.978079, 10.028850, -42.678722)
- OLD MAG = 48.242619
- NEW MAG = 48.178574
-
-HRP = Vector3(-19.347475, 9.612184, -42.995682)
-
-REGISTRY OTHER DATA:
- Speed = 47.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.577702, -0.711025, -1.077360)
- RelativeMoveDirection = Vector3(0.057852, 0.000000, -0.998325)
-
-==============================================
-EVENT #244 | FRAME #365
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.314236, 0.000000, -0.949345)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1741.273071, 0.000000, -3869.612061)
- NEW = Vector3(-1679.631226, 0.000000, -3899.358643)
- OLD MAG = 4243.339355
- NEW MAG = 4245.722656
- DELTA MAG = 2.383301
- DELTA = Vector3(61.641846, 0.000000, -29.746582)
- DIRECTION DOT = 0.999870062
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-19.978079, 10.028850, -42.678722)
- NEW = Vector3(-19.347475, 9.612184, -42.995682)
- OLD MAG = 48.178574
- NEW MAG = 48.118061
-
-HRP = Vector3(-18.662565, 9.195518, -43.326202)
-
-REGISTRY OTHER DATA:
- Speed = 47.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.595014, -0.711025, -1.067896)
- RelativeMoveDirection = Vector3(0.058979, 0.000000, -0.998259)
-
-==============================================
-EVENT #245 | FRAME #366
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.329516, 0.000000, -0.944150)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1679.631226, 0.000000, -3899.358643)
- NEW = Vector3(-1613.006226, 0.000000, -3930.101074)
- OLD MAG = 4245.722656
- NEW MAG = 4248.232910
- DELTA MAG = 2.510254
- DELTA = Vector3(66.625000, 0.000000, -30.742432)
- DIRECTION DOT = 0.999850750
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-19.347475, 9.612184, -42.995682)
- NEW = Vector3(-18.662565, 9.195518, -43.326202)
- OLD MAG = 48.118061
- NEW MAG = 48.062550
-
-HRP = Vector3(-17.922289, 8.778852, -43.667782)
-
-REGISTRY OTHER DATA:
- Speed = 47.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.613391, -0.711025, -1.057447)
- RelativeMoveDirection = Vector3(0.060104, 0.000000, -0.998192)
-
-==============================================
-EVENT #246 | FRAME #367
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.345793, 0.000000, -0.938311)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1613.006226, 0.000000, -3930.101074)
- NEW = Vector3(-1550.332397, 0.000000, -3957.802490)
- OLD MAG = 4248.232910
- NEW MAG = 4250.615723
- DELTA MAG = 2.382812
- DELTA = Vector3(62.673828, 0.000000, -27.701416)
- DIRECTION DOT = 0.999870002
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-18.662565, 9.195518, -43.326202)
- NEW = Vector3(-17.922289, 8.778852, -43.667782)
- OLD MAG = 48.062550
- NEW MAG = 48.011997
-
-HRP = Vector3(-17.225912, 8.362185, -43.975578)
-
-REGISTRY OTHER DATA:
- Speed = 47.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.630377, -0.711025, -1.047410)
- RelativeMoveDirection = Vector3(0.058929, 0.000000, -0.998262)
-
-==============================================
-EVENT #247 | FRAME #368
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.360891, 0.000000, -0.932608)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1550.332397, 0.000000, -3957.802490)
- NEW = Vector3(-1500.791260, 0.000000, -3978.952393)
- OLD MAG = 4250.615723
- NEW MAG = 4252.580078
- DELTA MAG = 1.964355
- DELTA = Vector3(49.541138, 0.000000, -21.149902)
- DIRECTION DOT = 0.999919713
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.922289, 8.778852, -43.667782)
- NEW = Vector3(-17.225912, 8.362185, -43.975578)
- OLD MAG = 48.011997
- NEW MAG = 47.963631
-
-HRP = Vector3(-16.675457, 7.945519, -44.210575)
-
-REGISTRY OTHER DATA:
- Speed = 47.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.643608, -0.711025, -1.039332)
- RelativeMoveDirection = Vector3(0.055456, 0.000000, -0.998461)
-
-==============================================
-EVENT #248 | FRAME #369
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.372689, 0.000000, -0.927956)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1500.791260, 0.000000, -3978.952393)
- NEW = Vector3(-1409.797363, 0.000000, -4015.342529)
- OLD MAG = 4252.580078
- NEW MAG = 4255.643555
- DELTA MAG = 3.063477
- DELTA = Vector3(90.993896, 0.000000, -36.390137)
- DIRECTION DOT = 0.999734938
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-17.225912, 8.362185, -43.975578)
- NEW = Vector3(-16.675457, 7.945519, -44.210575)
- OLD MAG = 47.963631
- NEW MAG = 47.914268
-
-HRP = Vector3(-15.664412, 7.528852, -44.614910)
-
-REGISTRY OTHER DATA:
- Speed = 47.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.667399, -0.711025, -1.024218)
- RelativeMoveDirection = Vector3(0.065783, 0.000000, -0.997834)
-
-==============================================
-EVENT #249 | FRAME #370
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.393983, 0.000000, -0.919118)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1409.797363, 0.000000, -4015.342529)
- NEW = Vector3(-1294.699829, 0.000000, -4057.567139)
- OLD MAG = 4255.643555
- NEW MAG = 4259.119629
- DELTA MAG = 3.476074
- DELTA = Vector3(115.097534, 0.000000, -42.224609)
- DIRECTION DOT = 0.999585688
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-16.675457, 7.945519, -44.210575)
- NEW = Vector3(-15.664412, 7.528852, -44.614910)
- OLD MAG = 47.914268
- NEW MAG = 47.880554
-
-HRP = Vector3(-14.385552, 7.112185, -45.084072)
-
-REGISTRY OTHER DATA:
- Speed = 47.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.696919, -0.711836, -1.003790)
- RelativeMoveDirection = Vector3(0.071496, 0.000000, -0.997441)
-
-==============================================
-EVENT #250 | FRAME #371
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.420306, 0.000000, -0.907382)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1294.699829, 0.000000, -4057.567139)
- NEW = Vector3(-1173.635864, 0.000000, -4097.907227)
- OLD MAG = 4259.119629
- NEW MAG = 4262.659668
- DELTA MAG = 3.540039
- DELTA = Vector3(121.063965, 0.000000, -40.340088)
- DIRECTION DOT = 0.999551773
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-15.664412, 7.528852, -44.614910)
- NEW = Vector3(-14.385552, 7.112185, -45.084072)
- OLD MAG = 47.880554
- NEW MAG = 47.855000
-
-HRP = Vector3(-13.040398, 6.695518, -45.532295)
-
-REGISTRY OTHER DATA:
- Speed = 47.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.726948, -0.712645, -0.981674)
- RelativeMoveDirection = Vector3(0.072608, 0.000000, -0.997361)
-
-==============================================
-EVENT #251 | FRAME #372
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.447311, 0.000000, -0.894379)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1173.635864, 0.000000, -4097.907227)
- NEW = Vector3(-1056.062500, 0.000000, -4133.354004)
- OLD MAG = 4262.659668
- NEW MAG = 4266.132324
- DELTA MAG = 3.472656
- DELTA = Vector3(117.573364, 0.000000, -35.446777)
- DIRECTION DOT = 0.999585569
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-14.385552, 7.112185, -45.084072)
- NEW = Vector3(-13.040398, 6.695518, -45.532295)
- OLD MAG = 47.855000
- NEW MAG = 47.833794
-
-HRP = Vector3(-11.734027, 6.278851, -45.926147)
-
-REGISTRY OTHER DATA:
- Speed = 47.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.755173, -0.713453, -0.959530)
- RelativeMoveDirection = Vector3(0.071422, 0.000000, -0.997446)
-
-==============================================
-EVENT #252 | FRAME #373
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.472898, 0.000000, -0.881117)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-1056.062500, 0.000000, -4133.354004)
- NEW = Vector3(-985.114624, 0.000000, -4153.412109)
- OLD MAG = 4266.132324
- NEW MAG = 4268.639160
- DELTA MAG = 2.506836
- DELTA = Vector3(70.947876, 0.000000, -20.058105)
- DIRECTION DOT = 0.999850929
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-13.040398, 6.695518, -45.532295)
- NEW = Vector3(-11.734027, 6.278851, -45.926147)
- OLD MAG = 47.833794
- NEW MAG = 47.815502
-
-HRP = Vector3(-10.945718, 5.862184, -46.149017)
-
-REGISTRY OTHER DATA:
- Speed = 47.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.771876, -0.714261, -0.945537)
- RelativeMoveDirection = Vector3(0.059893, 0.000000, -0.998205)
-
-==============================================
-EVENT #253 | FRAME #374
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.488064, 0.000000, -0.872808)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-985.114624, 0.000000, -4153.412109)
- NEW = Vector3(-899.441162, 0.000000, -4175.724609)
- OLD MAG = 4268.639160
- NEW MAG = 4271.495117
- DELTA MAG = 2.855957
- DELTA = Vector3(85.673462, 0.000000, -22.312500)
- DIRECTION DOT = 0.999785364
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-11.734027, 6.278851, -45.926147)
- NEW = Vector3(-10.945718, 5.862184, -46.149017)
- OLD MAG = 47.815502
- NEW MAG = 47.790226
-
-HRP = Vector3(-9.993790, 5.445517, -46.396935)
-
-REGISTRY OTHER DATA:
- Speed = 47.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.791537, -0.715067, -0.928520)
- RelativeMoveDirection = Vector3(0.063320, 0.000000, -0.997993)
-
-==============================================
-EVENT #254 | FRAME #375
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.506069, 0.000000, -0.862493)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-899.441162, 0.000000, -4175.724609)
- NEW = Vector3(-774.682068, 0.000000, -4204.252930)
- OLD MAG = 4271.495117
- NEW MAG = 4275.029297
- DELTA MAG = 3.534180
- DELTA = Vector3(124.759094, 0.000000, -28.528320)
- DIRECTION DOT = 0.999551892
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-10.945718, 5.862184, -46.149017)
- NEW = Vector3(-9.993790, 5.445517, -46.396935)
- OLD MAG = 47.790226
- NEW MAG = 47.772430
-
-HRP = Vector3(-8.607577, 5.028850, -46.713917)
-
-REGISTRY OTHER DATA:
- Speed = 47.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.819008, -0.715067, -0.904381)
- RelativeMoveDirection = Vector3(0.072486, 0.000000, -0.997369)
-
-==============================================
-EVENT #255 | FRAME #376
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.531690, 0.000000, -0.846939)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-774.682068, 0.000000, -4204.252930)
- NEW = Vector3(-668.456604, 0.000000, -4225.724121)
- OLD MAG = 4275.029297
- NEW MAG = 4278.268066
- DELTA MAG = 3.238770
- DELTA = Vector3(106.225464, 0.000000, -21.471191)
- DIRECTION DOT = 0.999679148
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-9.993790, 5.445517, -46.396935)
- NEW = Vector3(-8.607577, 5.028850, -46.713917)
- OLD MAG = 47.772430
- NEW MAG = 47.765778
-
-HRP = Vector3(-7.427295, 4.612183, -46.952484)
-
-REGISTRY OTHER DATA:
- Speed = 47.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.841843, -0.715872, -0.882512)
- RelativeMoveDirection = Vector3(0.067851, 0.000000, -0.997695)
-
-==============================================
-EVENT #256 | FRAME #377
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.552997, 0.000000, -0.833183)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-668.456604, 0.000000, -4225.724121)
- NEW = Vector3(-586.007812, 0.000000, -4240.713867)
- OLD MAG = 4278.268066
- NEW MAG = 4281.011719
- DELTA MAG = 2.743652
- DELTA = Vector3(82.448792, 0.000000, -14.989746)
- DIRECTION DOT = 0.999808431
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-8.607577, 5.028850, -46.713917)
- NEW = Vector3(-7.427295, 4.612183, -46.952484)
- OLD MAG = 47.765778
- NEW MAG = 47.759529
-
-HRP = Vector3(-6.511198, 4.195516, -47.119038)
-
-REGISTRY OTHER DATA:
- Speed = 47.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.858976, -0.715872, -0.865845)
- RelativeMoveDirection = Vector3(0.062072, 0.000000, -0.998072)
-
-==============================================
-EVENT #257 | FRAME #378
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.569219, 0.000000, -0.822186)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-586.007812, 0.000000, -4240.713867)
- NEW = Vector3(-483.668732, 0.000000, -4256.770996)
- OLD MAG = 4281.011719
- NEW MAG = 4284.161133
- DELTA MAG = 3.149414
- DELTA = Vector3(102.339081, 0.000000, -16.057129)
- DIRECTION DOT = 0.999707639
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-7.427295, 4.612183, -46.952484)
- NEW = Vector3(-6.511198, 4.195516, -47.119038)
- OLD MAG = 47.759529
- NEW MAG = 47.751457
-
-HRP = Vector3(-5.374097, 3.778850, -47.297447)
-
-REGISTRY OTHER DATA:
- Speed = 47.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.879684, -0.715872, -0.844798)
- RelativeMoveDirection = Vector3(0.066645, 0.000000, -0.997777)
-
-==============================================
-EVENT #258 | FRAME #379
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.588955, 0.000000, -0.808166)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-483.668732, 0.000000, -4256.770996)
- NEW = Vector3(-371.069977, 0.000000, -4271.390625)
- OLD MAG = 4284.161133
- NEW MAG = 4287.478516
- DELTA MAG = 3.317383
- DELTA = Vector3(112.598755, 0.000000, -14.619629)
- DIRECTION DOT = 0.999649286
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-6.511198, 4.195516, -47.119038)
- NEW = Vector3(-5.374097, 3.778850, -47.297447)
- OLD MAG = 47.751457
- NEW MAG = 47.751537
-
-HRP = Vector3(-4.122999, 3.362183, -47.459888)
-
-REGISTRY OTHER DATA:
- Speed = 47.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.901772, -0.715872, -0.821178)
- RelativeMoveDirection = Vector3(0.068912, 0.000000, -0.997623)
-
-==============================================
-EVENT #259 | FRAME #380
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.610174, 0.000000, -0.792267)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-371.069977, 0.000000, -4271.390625)
- NEW = Vector3(-243.242035, 0.000000, -4284.105469)
- OLD MAG = 4287.478516
- NEW MAG = 4291.005371
- DELTA MAG = 3.526855
- DELTA = Vector3(127.827942, 0.000000, -12.714844)
- DIRECTION DOT = 0.999551773
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-5.374097, 3.778850, -47.297447)
- NEW = Vector3(-4.122999, 3.362183, -47.459888)
- OLD MAG = 47.751537
- NEW MAG = 47.757141
-
-HRP = Vector3(-2.702690, 2.945517, -47.601166)
-
-REGISTRY OTHER DATA:
- Speed = 47.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.925977, -0.715872, -0.793784)
- RelativeMoveDirection = Vector3(0.072326, 0.000000, -0.997381)
-
-==============================================
-EVENT #260 | FRAME #381
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.633644, 0.000000, -0.773625)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-243.242035, 0.000000, -4284.105469)
- NEW = Vector3(-105.093872, 0.000000, -4293.356445)
- OLD MAG = 4291.005371
- NEW MAG = 4294.642578
- DELTA MAG = 3.637207
- DELTA = Vector3(138.148163, 0.000000, -9.250977)
- DIRECTION DOT = 0.999480188
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-4.122999, 3.362183, -47.459888)
- NEW = Vector3(-2.702690, 2.945517, -47.601166)
- OLD MAG = 47.757141
- NEW MAG = 47.768734
-
-HRP = Vector3(-1.167710, 2.528850, -47.703953)
-
-REGISTRY OTHER DATA:
- Speed = 47.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.951113, -0.715872, -0.763486)
- RelativeMoveDirection = Vector3(0.074588, 0.000000, -0.997214)
-
-==============================================
-EVENT #261 | FRAME #382
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.658282, 0.000000, -0.752772)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(-105.093872, 0.000000, -4293.356445)
- NEW = Vector3(33.398346, 0.000000, -4298.147949)
- OLD MAG = 4294.642578
- NEW MAG = 4298.277832
- DELTA MAG = 3.635254
- DELTA = Vector3(138.492218, 0.000000, -4.791504)
- DIRECTION DOT = 0.999480188
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-2.702690, 2.945517, -47.601166)
- NEW = Vector3(-1.167710, 2.528850, -47.703953)
- OLD MAG = 47.768734
- NEW MAG = 47.785202
-
-HRP = Vector3(0.371092, 2.112184, -47.757195)
-
-REGISTRY OTHER DATA:
- Speed = 47.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.975287, -0.716677, -0.731566)
- RelativeMoveDirection = Vector3(0.074551, 0.000000, -0.997217)
-
-==============================================
-EVENT #262 | FRAME #383
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.682234, 0.000000, -0.731134)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(33.398346, 0.000000, -4298.147949)
- NEW = Vector3(191.910706, 0.000000, -4297.782227)
- OLD MAG = 4298.277832
- NEW MAG = 4302.064941
- DELTA MAG = 3.787109
- DELTA = Vector3(158.512360, 0.000000, 0.365723)
- DIRECTION DOT = 0.999320924
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(-1.167710, 2.528850, -47.703953)
- NEW = Vector3(0.371092, 2.112184, -47.757195)
- OLD MAG = 47.785202
- NEW MAG = 47.805321
-
-HRP = Vector3(2.132340, 1.695517, -47.753128)
-
-REGISTRY OTHER DATA:
- Speed = 47.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.001604, -0.717480, -0.694271)
- RelativeMoveDirection = Vector3(0.079111, 0.000000, -0.996866)
-
-==============================================
-EVENT #263 | FRAME #384
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.708735, 0.000000, -0.705474)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(191.910706, 0.000000, -4297.782227)
- NEW = Vector3(404.831512, 0.000000, -4286.726562)
- OLD MAG = 4302.064941
- NEW MAG = 4305.799805
- DELTA MAG = 3.734863
- DELTA = Vector3(212.920807, 0.000000, 11.055664)
- DIRECTION DOT = 0.998773336
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(0.371092, 2.112184, -47.757195)
- NEW = Vector3(2.132340, 1.695517, -47.753128)
- OLD MAG = 47.805321
- NEW MAG = 47.830772
-
-HRP = Vector3(4.498126, 1.278850, -47.630287)
-
-REGISTRY OTHER DATA:
- Speed = 47.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.034733, -0.718283, -0.642960)
- RelativeMoveDirection = Vector3(0.091707, 0.000000, -0.995786)
-
-==============================================
-EVENT #264 | FRAME #385
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.742822, 0.000000, -0.669489)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(404.831512, 0.000000, -4286.726562)
- NEW = Vector3(572.850464, 0.000000, -4271.381836)
- OLD MAG = 4305.799805
- NEW MAG = 4309.624023
- DELTA MAG = 3.824219
- DELTA = Vector3(168.018951, 0.000000, 15.344727)
- DIRECTION DOT = 0.999233365
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(2.132340, 1.695517, -47.753128)
- NEW = Vector3(4.498126, 1.278850, -47.630287)
- OLD MAG = 47.830772
- NEW MAG = 47.859303
-
-HRP = Vector3(6.365004, 0.862183, -47.459793)
-
-REGISTRY OTHER DATA:
- Speed = 47.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.059058, -0.719085, -0.601094)
- RelativeMoveDirection = Vector3(0.081329, 0.000000, -0.996687)
-
-==============================================
-EVENT #265 | FRAME #386
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.768487, 0.000000, -0.639866)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(572.850464, 0.000000, -4271.381836)
- NEW = Vector3(671.521240, 0.000000, -4260.071289)
- OLD MAG = 4309.624023
- NEW MAG = 4312.672852
- DELTA MAG = 3.048828
- DELTA = Vector3(98.670776, 0.000000, 11.310547)
- DIRECTION DOT = 0.999734879
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(4.498126, 1.278850, -47.630287)
- NEW = Vector3(6.365004, 0.862183, -47.459793)
- OLD MAG = 47.859303
- NEW MAG = 47.892467
-
-HRP = Vector3(7.461345, 0.445517, -47.334118)
-
-REGISTRY OTHER DATA:
- Speed = 47.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.072634, -0.719085, -0.576518)
- RelativeMoveDirection = Vector3(0.065205, 0.000000, -0.997872)
-
-==============================================
-EVENT #266 | FRAME #387
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.783034, 0.000000, -0.621979)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(671.521240, 0.000000, -4260.071289)
- NEW = Vector3(784.692993, 0.000000, -4244.048340)
- OLD MAG = 4312.672852
- NEW MAG = 4315.980957
- DELTA MAG = 3.308105
- DELTA = Vector3(113.171753, 0.000000, 16.022949)
- DIRECTION DOT = 0.999649286
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(6.365004, 0.862183, -47.459793)
- NEW = Vector3(7.461345, 0.445517, -47.334118)
- OLD MAG = 47.892467
- NEW MAG = 47.920650
-
-HRP = Vector3(8.718809, 0.028850, -47.156086)
-
-REGISTRY OTHER DATA:
- Speed = 47.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.087542, -0.719085, -0.547877)
- RelativeMoveDirection = Vector3(0.068629, 0.000000, -0.997642)
-
-==============================================
-EVENT #267 | FRAME #388
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.799249, 0.000000, -0.601000)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(784.692993, 0.000000, -4244.048340)
- NEW = Vector3(907.250305, 0.000000, -4223.077637)
- OLD MAG = 4315.980957
- NEW MAG = 4319.431641
- DELTA MAG = 3.450684
- DELTA = Vector3(122.557312, 0.000000, 20.970703)
- DIRECTION DOT = 0.999585509
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(7.461345, 0.445517, -47.334118)
- NEW = Vector3(8.718809, 0.028850, -47.156086)
- OLD MAG = 47.920650
- NEW MAG = 47.955345
-
-HRP = Vector3(10.080556, -0.387817, -46.923077)
-
-REGISTRY OTHER DATA:
- Speed = 47.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.102879, -0.719085, -0.516310)
- RelativeMoveDirection = Vector3(0.070896, 0.000000, -0.997484)
-
-==============================================
-EVENT #268 | FRAME #389
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.816236, 0.000000, -0.577718)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(907.250305, 0.000000, -4223.077637)
- NEW = Vector3(1043.799316, 0.000000, -4195.149414)
- OLD MAG = 4319.431641
- NEW MAG = 4323.054199
- DELTA MAG = 3.622559
- DELTA = Vector3(136.549011, 0.000000, 27.928223)
- DIRECTION DOT = 0.999480128
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(8.718809, 0.028850, -47.156086)
- NEW = Vector3(10.080556, -0.387817, -46.923077)
- OLD MAG = 47.955345
- NEW MAG = 47.995243
-
-HRP = Vector3(11.597768, -0.804483, -46.612766)
-
-REGISTRY OTHER DATA:
- Speed = 48
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.118967, -0.719085, -0.480447)
- RelativeMoveDirection = Vector3(0.074310, 0.000000, -0.997235)
-
-==============================================
-EVENT #269 | FRAME #390
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.834456, 0.000000, -0.551074)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1043.799316, 0.000000, -4195.149414)
- NEW = Vector3(1179.489746, 0.000000, -4162.801758)
- OLD MAG = 4323.054199
- NEW MAG = 4326.674805
- DELTA MAG = 3.620605
- DELTA = Vector3(135.690430, 0.000000, 32.347656)
- DIRECTION DOT = 0.999480128
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(10.080556, -0.387817, -46.923077)
- NEW = Vector3(11.597768, -0.804483, -46.612766)
- OLD MAG = 47.995243
- NEW MAG = 48.040665
-
-HRP = Vector3(13.105439, -1.221150, -46.253345)
-
-REGISTRY OTHER DATA:
- Speed = 48
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.133890, -0.719085, -0.444083)
- RelativeMoveDirection = Vector3(0.074273, 0.000000, -0.997238)
-
-==============================================
-EVENT #270 | FRAME #391
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.851807, 0.000000, -0.523856)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1179.489746, 0.000000, -4162.801758)
- NEW = Vector3(1337.986084, 0.000000, -4118.583008)
- OLD MAG = 4326.674805
- NEW MAG = 4330.465332
- DELTA MAG = 3.790527
- DELTA = Vector3(158.496338, 0.000000, 44.218750)
- DIRECTION DOT = 0.999277949
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(11.597768, -0.804483, -46.612766)
- NEW = Vector3(13.105439, -1.221150, -46.253345)
- OLD MAG = 48.040665
- NEW MAG = 48.089664
-
-HRP = Vector3(14.866508, -1.637817, -45.762028)
-
-REGISTRY OTHER DATA:
- Speed = 48.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.149737, -0.719885, -0.399836)
- RelativeMoveDirection = Vector3(0.079983, 0.000000, -0.996796)
-
-==============================================
-EVENT #271 | FRAME #392
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.871115, 0.000000, -0.491079)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1337.986084, 0.000000, -4118.583008)
- NEW = Vector3(1490.125122, 0.000000, -4070.022949)
- OLD MAG = 4330.465332
- NEW MAG = 4334.230957
- DELTA MAG = 3.765625
- DELTA = Vector3(152.139038, 0.000000, 48.560059)
- DIRECTION DOT = 0.999321163
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(13.105439, -1.221150, -46.253345)
- NEW = Vector3(14.866508, -1.637817, -45.762028)
- OLD MAG = 48.089664
- NEW MAG = 48.144146
-
-HRP = Vector3(16.556944, -2.054484, -45.222469)
-
-REGISTRY OTHER DATA:
- Speed = 48.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.163450, -0.720685, -0.356368)
- RelativeMoveDirection = Vector3(0.078796, -0.000000, -0.996891)
-
-==============================================
-EVENT #272 | FRAME #393
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.888635, 0.000000, -0.458616)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1490.125122, 0.000000, -4070.022949)
- NEW = Vector3(1635.860352, 0.000000, -4017.699219)
- OLD MAG = 4334.230957
- NEW MAG = 4337.965820
- DELTA MAG = 3.734863
- DELTA = Vector3(145.735229, 0.000000, 52.323730)
- DIRECTION DOT = 0.999362826
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(14.866508, -1.637817, -45.762028)
- NEW = Vector3(16.556944, -2.054484, -45.222469)
- OLD MAG = 48.144146
- NEW MAG = 48.201920
-
-HRP = Vector3(18.176222, -2.471150, -44.641094)
-
-REGISTRY OTHER DATA:
- Speed = 48.1
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.175159, -0.721484, -0.313787)
- RelativeMoveDirection = Vector3(0.077610, -0.000000, -0.996984)
-
-==============================================
-EVENT #273 | FRAME #394
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.904454, 0.000000, -0.426572)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1635.860352, 0.000000, -4017.699219)
- NEW = Vector3(1798.029297, 0.000000, -3951.975586)
- OLD MAG = 4337.965820
- NEW MAG = 4341.776367
- DELTA MAG = 3.810547
- DELTA = Vector3(162.168945, 0.000000, 65.723633)
- DIRECTION DOT = 0.999187469
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(16.556944, -2.054484, -45.222469)
- NEW = Vector3(18.176222, -2.471150, -44.641094)
- OLD MAG = 48.201920
- NEW MAG = 48.262913
-
-HRP = Vector3(19.978100, -2.887817, -43.910831)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.186860, -0.721484, -0.266128)
- RelativeMoveDirection = Vector3(0.082170, -0.000000, -0.996618)
-
-==============================================
-EVENT #274 | FRAME #395
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.920925, 0.000000, -0.389740)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1798.029297, 0.000000, -3951.975586)
- NEW = Vector3(1979.872070, 0.000000, -3868.322754)
- OLD MAG = 4341.776367
- NEW MAG = 4345.551270
- DELTA MAG = 3.774902
- DELTA = Vector3(181.842773, 0.000000, 83.652832)
- DIRECTION DOT = 0.998938620
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(18.176222, -2.471150, -44.641094)
- NEW = Vector3(19.978100, -2.887817, -43.910831)
- OLD MAG = 48.262913
- NEW MAG = 48.328304
-
-HRP = Vector3(21.998575, -3.304483, -42.981358)
-
-REGISTRY OTHER DATA:
- Speed = 48.2
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.197866, -0.721484, -0.211134)
- RelativeMoveDirection = Vector3(0.087876, -0.000000, -0.996131)
-
-==============================================
-EVENT #275 | FRAME #396
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.937912, 0.000000, -0.346874)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(1979.872070, 0.000000, -3868.322754)
- NEW = Vector3(2100.889404, 0.000000, -3808.019531)
- OLD MAG = 4345.551270
- NEW MAG = 4349.108887
- DELTA MAG = 3.557617
- DELTA = Vector3(121.017334, 0.000000, 60.303223)
- DIRECTION DOT = 0.999516666
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(19.978100, -2.887817, -43.910831)
- NEW = Vector3(21.998575, -3.304483, -42.981358)
- OLD MAG = 48.328304
- NEW MAG = 48.396839
-
-HRP = Vector3(23.343212, -3.721150, -42.311321)
-
-REGISTRY OTHER DATA:
- Speed = 48.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.203857, -0.721484, -0.173752)
- RelativeMoveDirection = Vector3(0.072900, -0.000000, -0.997339)
-
-==============================================
-EVENT #276 | FRAME #397
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.948253, 0.000000, -0.317517)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2100.889404, 0.000000, -3808.019531)
- NEW = Vector3(2193.920166, 0.000000, -3758.815674)
- OLD MAG = 4349.108887
- NEW MAG = 4352.238281
- DELTA MAG = 3.129395
- DELTA = Vector3(93.030762, 0.000000, 49.203857)
- DIRECTION DOT = 0.999707758
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(21.998575, -3.304483, -42.981358)
- NEW = Vector3(23.343212, -3.721150, -42.311321)
- OLD MAG = 48.396839
- NEW MAG = 48.466488
-
-HRP = Vector3(24.376888, -4.137816, -41.764610)
-
-REGISTRY OTHER DATA:
- Speed = 48.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.207710, -0.721484, -0.144559)
- RelativeMoveDirection = Vector3(0.065974, -0.000000, -0.997821)
-
-==============================================
-EVENT #277 | FRAME #398
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.955661, 0.000000, -0.294469)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2193.920166, 0.000000, -3758.815674)
- NEW = Vector3(2298.724365, 0.000000, -3699.617920)
- OLD MAG = 4352.238281
- NEW MAG = 4355.606445
- DELTA MAG = 3.368164
- DELTA = Vector3(104.804199, 0.000000, 59.197754)
- DIRECTION DOT = 0.999618232
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(23.343212, -3.721150, -42.311321)
- NEW = Vector3(24.376888, -4.137816, -41.764610)
- OLD MAG = 48.466488
- NEW MAG = 48.534904
-
-HRP = Vector3(25.541378, -4.554483, -41.106857)
-
-REGISTRY OTHER DATA:
- Speed = 48.3
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.211247, -0.721484, -0.111093)
- RelativeMoveDirection = Vector3(0.069397, -0.000000, -0.997589)
-
-==============================================
-EVENT #278 | FRAME #399
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.963442, 0.000000, -0.267918)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2298.724365, 0.000000, -3699.617920)
- NEW = Vector3(2401.930664, 0.000000, -3637.495361)
- OLD MAG = 4355.606445
- NEW MAG = 4358.972656
- DELTA MAG = 3.366211
- DELTA = Vector3(103.206299, 0.000000, 62.122559)
- DIRECTION DOT = 0.999618173
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(24.376888, -4.137816, -41.764610)
- NEW = Vector3(25.541378, -4.554483, -41.106857)
- OLD MAG = 48.534904
- NEW MAG = 48.609451
-
-HRP = Vector3(26.688116, -4.971150, -40.416607)
-
-REGISTRY OTHER DATA:
- Speed = 48.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.213857, -0.721484, -0.077542)
- RelativeMoveDirection = Vector3(0.069365, -0.000000, -0.997591)
-
-==============================================
-EVENT #279 | FRAME #400
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.970485, 0.000000, -0.241163)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2401.930664, 0.000000, -3637.495361)
- NEW = Vector3(2503.457275, 0.000000, -3572.491211)
- OLD MAG = 4358.972656
- NEW MAG = 4362.337891
- DELTA MAG = 3.365234
- DELTA = Vector3(101.526611, 0.000000, 65.004150)
- DIRECTION DOT = 0.999618173
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(25.541378, -4.554483, -41.106857)
- NEW = Vector3(26.688116, -4.971150, -40.416607)
- OLD MAG = 48.609451
- NEW MAG = 48.687473
-
-HRP = Vector3(27.816189, -5.387817, -39.694340)
-
-REGISTRY OTHER DATA:
- Speed = 48.4
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.215537, -0.721484, -0.043931)
- RelativeMoveDirection = Vector3(0.069332, -0.000000, -0.997594)
-
-==============================================
-EVENT #280 | FRAME #401
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.976785, 0.000000, -0.214222)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2503.457275, 0.000000, -3572.491211)
- NEW = Vector3(2603.223877, 0.000000, -3504.650635)
- OLD MAG = 4362.337891
- NEW MAG = 4365.701660
- DELTA MAG = 3.363770
- DELTA = Vector3(99.766602, 0.000000, 67.840576)
- DIRECTION DOT = 0.999618053
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(26.688116, -4.971150, -40.416607)
- NEW = Vector3(27.816189, -5.387817, -39.694340)
- OLD MAG = 48.687473
- NEW MAG = 48.768940
-
-HRP = Vector3(28.924707, -5.804484, -38.940556)
-
-REGISTRY OTHER DATA:
- Speed = 48.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.216288, -0.721484, -0.010287)
- RelativeMoveDirection = Vector3(0.069300, -0.000000, -0.997596)
-
-==============================================
-EVENT #281 | FRAME #402
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.982337, 0.000000, -0.187118)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2603.223877, 0.000000, -3504.650635)
- NEW = Vector3(2705.147705, 0.000000, -3430.960449)
- OLD MAG = 4365.701660
- NEW MAG = 4369.131836
- DELTA MAG = 3.430176
- DELTA = Vector3(101.923828, 0.000000, 73.690186)
- DIRECTION DOT = 0.999585569
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.816189, -5.387817, -39.694340)
- NEW = Vector3(28.924707, -5.804484, -38.940556)
- OLD MAG = 48.768940
- NEW MAG = 48.853840
-
-HRP = Vector3(30.057192, -6.221151, -38.121777)
-
-REGISTRY OTHER DATA:
- Speed = 48.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.215591, -0.722282, 0.025442)
- RelativeMoveDirection = Vector3(0.070418, -0.000000, -0.997518)
-
-==============================================
-EVENT #282 | FRAME #403
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.987322, 0.000000, -0.158732)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2705.147705, 0.000000, -3430.960449)
- NEW = Vector3(2801.074219, 0.000000, -3357.481201)
- OLD MAG = 4369.131836
- NEW MAG = 4372.493164
- DELTA MAG = 3.361328
- DELTA = Vector3(95.926514, 0.000000, 73.479248)
- DIRECTION DOT = 0.999618113
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(28.924707, -5.804484, -38.940556)
- NEW = Vector3(30.057192, -6.221151, -38.121777)
- OLD MAG = 48.853840
- NEW MAG = 48.942898
-
-HRP = Vector3(31.123041, -6.637818, -37.305340)
-
-REGISTRY OTHER DATA:
- Speed = 48.5
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.214422, -0.722282, 0.059061)
- RelativeMoveDirection = Vector3(0.069235, -0.000000, -0.997600)
-
-==============================================
-EVENT #283 | FRAME #404
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.991335, 0.000000, -0.131358)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2801.074219, 0.000000, -3357.481201)
- NEW = Vector3(2898.827148, 0.000000, -3278.030273)
- OLD MAG = 4372.493164
- NEW MAG = 4375.920410
- DELTA MAG = 3.427246
- DELTA = Vector3(97.752930, 0.000000, 79.450928)
- DIRECTION DOT = 0.999585688
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(30.057192, -6.221151, -38.121777)
- NEW = Vector3(31.123041, -6.637818, -37.305340)
- OLD MAG = 48.942898
- NEW MAG = 49.034607
-
-HRP = Vector3(32.209187, -7.054485, -36.422550)
-
-REGISTRY OTHER DATA:
- Speed = 48.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.212216, -0.722282, 0.094032)
- RelativeMoveDirection = Vector3(0.070353, -0.000000, -0.997522)
-
-==============================================
-EVENT #284 | FRAME #405
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.994709, 0.000000, -0.102736)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2898.827148, 0.000000, -3278.030273)
- NEW = Vector3(2998.047119, 0.000000, -3192.323486)
- OLD MAG = 4375.920410
- NEW MAG = 4379.408203
- DELTA MAG = 3.487793
- DELTA = Vector3(99.219971, 0.000000, 85.706787)
- DIRECTION DOT = 0.999551892
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(31.123041, -6.637818, -37.305340)
- NEW = Vector3(32.209187, -7.054485, -36.422550)
- OLD MAG = 49.034607
- NEW MAG = 49.130436
-
-HRP = Vector3(33.311630, -7.471152, -35.470253)
-
-REGISTRY OTHER DATA:
- Speed = 48.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.208853, -0.722282, 0.130319)
- RelativeMoveDirection = Vector3(0.071470, -0.000000, -0.997443)
-
-==============================================
-EVENT #285 | FRAME #406
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.997341, 0.000000, -0.072879)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2998.047119, 0.000000, -3192.323486)
- NEW = Vector3(3087.479980, 0.000000, -3110.643066)
- OLD MAG = 4379.408203
- NEW MAG = 4382.765137
- DELTA MAG = 3.356934
- DELTA = Vector3(89.432861, 0.000000, 81.680420)
- DIRECTION DOT = 0.999618232
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(32.209187, -7.054485, -36.422550)
- NEW = Vector3(33.311630, -7.471152, -35.470253)
- OLD MAG = 49.130436
- NEW MAG = 49.230289
-
-HRP = Vector3(34.305328, -7.887819, -34.562698)
-
-REGISTRY OTHER DATA:
- Speed = 48.6
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.204785, -0.722282, 0.163712)
- RelativeMoveDirection = Vector3(0.069137, -0.000000, -0.997607)
-
-==============================================
-EVENT #286 | FRAME #407
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.998975, 0.000000, -0.045260)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(3087.479980, 0.000000, -3110.643066)
- NEW = Vector3(3167.594238, 0.000000, -3033.657471)
- OLD MAG = 4382.765137
- NEW MAG = 4385.969727
- DELTA MAG = 3.204590
- DELTA = Vector3(80.114258, 0.000000, 76.985596)
- DIRECTION DOT = 0.999679208
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(33.311630, -7.471152, -35.470253)
- NEW = Vector3(34.305328, -7.887819, -34.562698)
- OLD MAG = 49.230289
- NEW MAG = 49.332073
-
-HRP = Vector3(35.195488, -8.304485, -33.707302)
-
-REGISTRY OTHER DATA:
- Speed = 48.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.200246, -0.722282, 0.194212)
- RelativeMoveDirection = Vector3(0.066807, -0.000000, -0.997766)
-
-==============================================
-EVENT #287 | FRAME #408
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.999802, 0.000000, -0.019912)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(3167.594238, 0.000000, -3033.657471)
- NEW = Vector3(3245.787598, 0.000000, -2954.607178)
- OLD MAG = 4385.969727
- NEW MAG = 4389.172852
- DELTA MAG = 3.203125
- DELTA = Vector3(78.193359, 0.000000, 79.050293)
- DIRECTION DOT = 0.999679148
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(34.305328, -7.887819, -34.562698)
- NEW = Vector3(35.195488, -8.304485, -33.707302)
- OLD MAG = 49.332073
- NEW MAG = 49.435505
-
-HRP = Vector3(36.064301, -8.721151, -32.828964)
-
-REGISTRY OTHER DATA:
- Speed = 48.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.194935, -0.722282, 0.224588)
- RelativeMoveDirection = Vector3(0.066778, -0.000000, -0.997768)
-
-==============================================
-EVENT #288 | FRAME #409
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.999985, 0.000000, 0.005450)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(3245.787598, 0.000000, -2954.607178)
- NEW = Vector3(3263.462402, 0.000000, -2936.531494)
- OLD MAG = 4389.172852
- NEW MAG = 4390.148438
- DELTA MAG = 0.975586
- DELTA = Vector3(17.674805, 0.000000, 18.075684)
- DIRECTION DOT = 0.999983490
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(35.195488, -8.304485, -33.707302)
- NEW = Vector3(36.064301, -8.721151, -32.828964)
- OLD MAG = 49.435505
- NEW MAG = 49.542236
-
-HRP = Vector3(36.260685, -9.137817, -32.628124)
-
-REGISTRY OTHER DATA:
- Speed = 48.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(1.193621, -0.722282, 0.231472)
- RelativeMoveDirection = Vector3(0.047203, -0.000000, -0.998885)
-
-==============================================
-EVENT #289 | FRAME #410
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.714992, 0.000000, -0.699133)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(36.064301, -8.721151, -32.828964)
- NEW = Vector3(36.260685, -9.137817, -32.628124)
- OLD MAG = 49.542236
- NEW MAG = 49.627934
-
-HRP = Vector3(36.260685, -9.554483, -32.628124)
-
-REGISTRY OTHER DATA:
- Speed = 48.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(0.497820, -0.722282, -0.480088)
- RelativeMoveDirection = Vector3(0.041451, -0.000000, -0.999141)
-
-==============================================
-EVENT #290 | FRAME #411
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.018130, 0.000000, -0.999836)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(3263.462402, 0.000000, -2936.531494)
- NEW = Vector3(3071.085938, 0.000000, -3136.474121)
- OLD MAG = 4390.148438
- NEW MAG = 4389.651367
- DELTA MAG = -0.497070
- DELTA = Vector3(-192.376465, 0.000000, -199.942627)
- DIRECTION DOT = 0.998002648
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(36.260685, -9.137817, -32.628124)
- NEW = Vector3(36.260685, -9.554483, -32.628124)
- OLD MAG = 49.627934
- NEW MAG = 49.706337
-
-HRP = Vector3(34.123173, -9.971149, -34.849709)
-
-REGISTRY OTHER DATA:
- Speed = 48.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.194967, -0.722282, -1.200124)
- RelativeMoveDirection = Vector3(-0.028661, -0.000000, -0.999589)
-
-==============================================
-EVENT #291 | FRAME #412
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.019282, 0.000000, -0.999814)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(3071.085938, 0.000000, -3136.474121)
- NEW = Vector3(3035.633057, 0.000000, -3173.321533)
- OLD MAG = 4389.651367
- NEW MAG = 4391.473145
- DELTA MAG = 1.821777
- DELTA = Vector3(-35.452881, 0.000000, -36.847412)
- DIRECTION DOT = 0.999932289
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(36.260685, -9.554483, -32.628124)
- NEW = Vector3(34.123173, -9.971149, -34.849709)
- OLD MAG = 49.706337
- NEW MAG = 49.782696
-
-HRP = Vector3(33.729252, -10.387815, -35.259121)
-
-REGISTRY OTHER DATA:
- Speed = 48.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.194967, -0.722282, -1.200124)
- RelativeMoveDirection = Vector3(-0.041421, -0.000000, -0.999142)
-
-==============================================
-EVENT #292 | FRAME #413
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.019282, 0.000000, -0.999814)
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(34.123173, -9.971149, -34.849709)
- NEW = Vector3(33.729252, -10.387815, -35.259121)
- OLD MAG = 49.782696
- NEW MAG = 49.887623
-
-HRP = Vector3(33.729252, -10.804482, -35.259121)
-
-REGISTRY OTHER DATA:
- Speed = 48.7
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.194967, -0.722282, -1.200124)
- RelativeMoveDirection = Vector3(-0.041431, -0.000000, -0.999141)
-
-==============================================
-EVENT #293 | FRAME #414
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.019282, 0.000000, -0.999814)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(3035.633057, 0.000000, -3173.321533)
- NEW = Vector3(3021.536133, 0.000000, -3187.838379)
- OLD MAG = 4391.473145
- NEW MAG = 4392.265625
- DELTA MAG = 0.792480
- DELTA = Vector3(-14.096924, 0.000000, -14.516846)
- DIRECTION DOT = 0.999989390
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(33.729252, -10.387815, -35.259121)
- NEW = Vector3(33.729252, -10.804482, -35.259121)
- OLD MAG = 49.887623
- NEW MAG = 49.976044
-
-HRP = Vector3(33.572620, -11.429481, -35.420418)
-
-REGISTRY OTHER DATA:
- Speed = 48.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.200499, -0.722282, -1.199212)
- RelativeMoveDirection = Vector3(-0.046037, -0.000000, -0.998940)
-
-==============================================
-EVENT #294 | FRAME #415
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.014672, 0.000000, -0.999892)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(3021.536133, 0.000000, -3187.838379)
- NEW = Vector3(2996.656250, 0.000000, -3213.048828)
- OLD MAG = 4392.265625
- NEW MAG = 4393.589844
- DELTA MAG = 1.324219
- DELTA = Vector3(-24.879883, 0.000000, -25.210449)
- DIRECTION DOT = 0.999967456
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(33.729252, -10.804482, -35.259121)
- NEW = Vector3(33.572620, -11.429481, -35.420418)
- OLD MAG = 49.976044
- NEW MAG = 50.123447
-
-HRP = Vector3(33.296181, -11.637814, -35.700531)
-
-REGISTRY OTHER DATA:
- Speed = 48.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.210170, -0.722282, -1.197555)
- RelativeMoveDirection = Vector3(-0.049478, -0.000000, -0.998775)
-
-==============================================
-EVENT #295 | FRAME #416
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(0.006602, 0.000000, -0.999978)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2996.656250, 0.000000, -3213.048828)
- NEW = Vector3(2901.421631, 0.000000, -3303.932861)
- OLD MAG = 4393.589844
- NEW MAG = 4397.069336
- DELTA MAG = 3.479492
- DELTA = Vector3(-95.234619, 0.000000, -90.884033)
- DIRECTION DOT = 0.999551773
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(33.572620, -11.429481, -35.420418)
- NEW = Vector3(33.296181, -11.637814, -35.700531)
- OLD MAG = 50.123447
- NEW MAG = 50.185677
-
-HRP = Vector3(32.238014, -12.054480, -36.710358)
-
-REGISTRY OTHER DATA:
- Speed = 48.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.245966, -0.722282, -1.190718)
- RelativeMoveDirection = Vector3(-0.071313, -0.000000, -0.997454)
-
-==============================================
-EVENT #296 | FRAME #417
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.023369, 0.000000, -0.999727)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2901.421631, 0.000000, -3303.932861)
- NEW = Vector3(2795.669434, 0.000000, -3398.524170)
- OLD MAG = 4397.069336
- NEW MAG = 4400.651367
- DELTA MAG = 3.582031
- DELTA = Vector3(-105.752197, 0.000000, -94.591309)
- DIRECTION DOT = 0.999480188
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(33.296181, -11.637814, -35.700531)
- NEW = Vector3(32.238014, -12.054480, -36.710358)
- OLD MAG = 50.185677
- NEW MAG = 50.321472
-
-HRP = Vector3(31.062988, -12.471146, -37.761372)
-
-REGISTRY OTHER DATA:
- Speed = 48.8
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.283712, -0.721484, -1.182780)
- RelativeMoveDirection = Vector3(-0.073567, -0.000000, -0.997290)
-
-==============================================
-EVENT #297 | FRAME #418
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.055622, 0.000000, -0.998452)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2795.669434, 0.000000, -3398.524170)
- NEW = Vector3(2646.529541, 0.000000, -3520.600098)
- OLD MAG = 4400.651367
- NEW MAG = 4404.400391
- DELTA MAG = 3.749023
- DELTA = Vector3(-149.139893, 0.000000, -122.075928)
- DIRECTION DOT = 0.999042213
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(32.238014, -12.054480, -36.710358)
- NEW = Vector3(31.062988, -12.471146, -37.761372)
- OLD MAG = 50.321472
- NEW MAG = 50.461468
-
-HRP = Vector3(29.405880, -12.887812, -39.117771)
-
-REGISTRY OTHER DATA:
- Speed = 48.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.335238, -0.721484, -1.169220)
- RelativeMoveDirection = Vector3(-0.085021, -0.000000, -0.996379)
-
-==============================================
-EVENT #298 | FRAME #419
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.099295, 0.000000, -0.995058)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2646.529541, 0.000000, -3520.600098)
- NEW = Vector3(2504.622314, 0.000000, -3627.494385)
- OLD MAG = 4404.400391
- NEW MAG = 4408.157227
- DELTA MAG = 3.756836
- DELTA = Vector3(-141.907227, 0.000000, -106.894287)
- DIRECTION DOT = 0.999187469
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(31.062988, -12.471146, -37.761372)
- NEW = Vector3(29.405880, -12.887812, -39.117771)
- OLD MAG = 50.461468
- NEW MAG = 50.606339
-
-HRP = Vector3(27.829134, -13.304478, -40.305485)
-
-REGISTRY OTHER DATA:
- Speed = 48.9
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.381630, -0.720685, -1.155410)
- RelativeMoveDirection = Vector3(-0.081535, -0.000000, -0.996670)
-
-==============================================
-EVENT #299 | FRAME #420
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.139353, 0.000000, -0.990243)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2504.622314, 0.000000, -3627.494385)
- NEW = Vector3(2371.251953, 0.000000, -3720.451416)
- OLD MAG = 4408.157227
- NEW MAG = 4411.870117
- DELTA MAG = 3.712891
- DELTA = Vector3(-133.370361, 0.000000, -92.957031)
- DIRECTION DOT = 0.999320865
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(29.405880, -12.887812, -39.117771)
- NEW = Vector3(27.829134, -13.304478, -40.305485)
- OLD MAG = 50.606339
- NEW MAG = 50.754330
-
-HRP = Vector3(26.347240, -13.721144, -41.338341)
-
-REGISTRY OTHER DATA:
- Speed = 49
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.423984, -0.720685, -1.140548)
- RelativeMoveDirection = Vector3(-0.078052, -0.000000, -0.996949)
-
-==============================================
-EVENT #300 | FRAME #421
-==============================================
-STATE = Enum.HumanoidStateType.Freefall
-MOVE DIRECTION = Vector3(-0.175781, 0.000000, -0.984429)
-
-DATA.VELOCITY CHANGED
- OLD = Vector3(2371.251953, 0.000000, -3720.451416)
- NEW = Vector3(2251.892822, 0.000000, -3798.042480)
- OLD MAG = 4411.870117
- NEW MAG = 4415.444336
- DELTA MAG = 3.574219
- DELTA = Vector3(-119.359131, 0.000000, -77.591064)
- DIRECTION DOT = 0.999480128
-
-ACTUAL VELOCITY CHANGED
- OLD = Vector3(27.829134, -13.304478, -40.305485)
- NEW = Vector3(26.347240, -13.721144, -41.338341)
- OLD MAG = 50.754330
- NEW MAG = 50.904865
-
-HRP = Vector3(25.021029, -14.137810, -42.200466)
-
-REGISTRY OTHER DATA:
- Speed = 49
- Sprint = 2
- State = Air
- MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
- GlobalMoveDirection = Vector3(-0.461027, -0.721484, -1.125573)
- RelativeMoveDirection = Vector3(-0.073422, -0.000000, -0.997301)
-
-==============================================
-TRACE STOPPED
-FRAMES = 2024
-EVENTS = 496
-==============================================
+_G.DeadEyeStopAirTrace = true  -> external stop
+
+Accelerate = function: 0x8a19bbe30a8dc915
+  source = =ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
+  line   = 177
+  name   = Accelerate
+
+AirControl = function: 0x7745d716b4bc874e
+  source = =ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
+  line   = 164
+  name   = AirControl
+
+============================================================
+TRACE RUNNING
+Do ONE normal jump with your usual smooth air-strafe.
+Do NOT abruptly reverse direction.
+Press F6 after landing.
+============================================================
+ACCEL #1 t=1.0477 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (223.650,0.000,23.049) mag= 224.834579
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1642.835307
+  WishSpeed  = 20.400000
+  dt         = 0.008337
+  Dot(Vel,Wish) = 224.834579
+  addSpeed = -204.434579
+  accelSpeed(x10) = 2794.020901
+  expectedAdd = 0.000000
+  RETURN     = (501.580,0.000,51.692)
+  DELTA      = (277.930,0.000,28.643) mag= 279.402069
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000004
+  Wish(root basis): Right= 0.000004 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #2 t=1.0560 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (451.901,0.000,46.572) mag= 454.294830
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1654.393271
+  WishSpeed  = 20.400000
+  dt         = 0.008394
+  Dot(Vel,Wish) = 454.294861
+  addSpeed = -433.894861
+  accelSpeed(x10) = 2832.802557
+  expectedAdd = 0.000000
+  RETURN     = (733.689,0.000,75.613)
+  DELTA      = (281.788,0.000,29.041) mag= 283.280243
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000008
+  Wish(root basis): Right= 0.000008 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #3 t=1.0645 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (683.758,0.000,70.467) mag= 687.379639
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1666.009930
+  WishSpeed  = 20.400000
+  dt         = 0.008436
+  Dot(Vel,Wish) = 687.379639
+  addSpeed = -666.979639
+  accelSpeed(x10) = 2867.180686
+  expectedAdd = 0.000000
+  RETURN     = (968.966,0.000,99.860)
+  DELTA      = (285.207,0.000,29.393) mag= 286.718079
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.102) angle= 0.000000
+  RootRight  = (-0.102,0.000,0.995) dot= 0.000016
+  Wish(root basis): Right= 0.000016 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #4 t=1.0727 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (920.281,0.000,94.843) mag= 925.155762
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1677.336501
+  WishSpeed  = 20.400000
+  dt         = 0.008226
+  Dot(Vel,Wish) = 925.155762
+  addSpeed = -904.755762
+  accelSpeed(x10) = 2814.588224
+  expectedAdd = 0.000000
+  RETURN     = (1200.257,0.000,123.697)
+  DELTA      = (279.976,0.000,28.854) mag= 281.458862
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000012
+  Wish(root basis): Right= 0.000012 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #5 t=1.0809 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1150.803,0.000,118.600) mag= 1156.898560
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1688.683784
+  WishSpeed  = 20.400000
+  dt         = 0.008241
+  Dot(Vel,Wish) = 1156.898682
+  addSpeed = -1136.498682
+  accelSpeed(x10) = 2838.810853
+  expectedAdd = 0.000000
+  RETURN     = (1433.189,0.000,147.703)
+  DELTA      = (282.385,0.000,29.102) mag= 283.881042
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000007
+  Wish(root basis): Right= 0.000007 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #6 t=1.0892 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1373.551,0.000,141.556) mag= 1380.825806
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1700.143752
+  WishSpeed  = 20.400000
+  dt         = 0.008322
+  Dot(Vel,Wish) = 1380.825806
+  addSpeed = -1360.425806
+  accelSpeed(x10) = 2886.458206
+  expectedAdd = 0.000000
+  RETURN     = (1660.676,0.000,171.147)
+  DELTA      = (287.125,0.000,29.591) mag= 288.645752
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000013
+  Wish(root basis): Right= 0.000013 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #7 t=1.0977 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1590.230,0.000,163.887) mag= 1598.652588
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1711.826220
+  WishSpeed  = 20.400000
+  dt         = 0.008484
+  Dot(Vel,Wish) = 1598.652588
+  addSpeed = -1578.252588
+  accelSpeed(x10) = 2962.719384
+  expectedAdd = 0.000000
+  RETURN     = (1702.807,0.000,175.489)
+  DELTA      = (112.577,0.000,11.602) mag= 113.173660
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000013
+  Wish(root basis): Right= 0.000013 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #8 t=1.1066 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1630.840,0.000,168.072) mag= 1639.477539
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1723.465714
+  WishSpeed  = 20.400000
+  dt         = 0.008453
+  Dot(Vel,Wish) = 1639.477661
+  addSpeed = -1619.077661
+  accelSpeed(x10) = 2971.891731
+  expectedAdd = 0.000000
+  RETURN     = (1714.385,0.000,176.682)
+  DELTA      = (83.546,0.000,8.610) mag= 83.988037
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000011
+  Wish(root basis): Right= 0.000011 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #9 t=1.1145 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1646.620,0.000,169.699) mag= 1655.341675
+  WishDir    = (0.995,0.000,0.103) mag= 1.000000
+  Accel      = 1734.351530
+  WishSpeed  = 20.400000
+  dt         = 0.007905
+  Dot(Vel,Wish) = 1655.341797
+  addSpeed = -1634.941797
+  accelSpeed(x10) = 2797.012044
+  expectedAdd = 0.000000
+  RETURN     = (1725.214,0.000,177.798)
+  DELTA      = (78.594,0.000,8.100) mag= 79.009781
+  CameraLook = (0.995,0.000,0.103) angle= 0.000000
+  CameraRight= (-0.103,0.000,0.995) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.000000
+  RootRight  = (-0.103,0.000,0.995) dot= 0.000010
+  Wish(root basis): Right= 0.000010 Forward= 1.000000
+  HumMove    = (0.995,0.000,0.103) angle= 0.000000
+
+ACCEL #10 t=1.1226 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1653.778,0.000,170.436) mag= 1662.537476
+  WishDir    = (0.994,0.000,0.105) mag= 1.000000
+  Accel      = 1745.754984
+  WishSpeed  = 20.400000
+  dt         = 0.008281
+  Dot(Vel,Wish) = 1662.533203
+  addSpeed = -1642.133203
+  accelSpeed(x10) = 2949.279443
+  expectedAdd = 0.000000
+  RETURN     = (1736.542,0.000,179.159)
+  DELTA      = (82.763,0.000,8.722) mag= 83.221786
+  CameraLook = (0.994,0.000,0.105) angle= 0.000000
+  CameraRight= (-0.105,0.000,0.994) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.995,0.000,0.103) angle= 0.128204
+  RootRight  = (-0.103,0.000,0.995) dot= 0.002315
+  Wish(root basis): Right= 0.002315 Forward= 0.999997
+  HumMove    = (0.995,0.000,0.103) angle= 0.131221
+
+ACCEL #11 t=1.1309 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1664.166,0.000,171.692) mag= 1672.999512
+  WishDir    = (0.994,0.000,0.108) mag= 1.000000
+  Accel      = 1757.233082
+  WishSpeed  = 20.400000
+  dt         = 0.008336
+  Dot(Vel,Wish) = 1672.972900
+  addSpeed = -1652.572900
+  accelSpeed(x10) = 2988.102658
+  expectedAdd = 0.000000
+  RETURN     = (1747.931,0.000,180.813)
+  DELTA      = (83.765,0.000,9.121) mag= 84.260132
+  CameraLook = (0.994,0.000,0.108) angle= 0.000000
+  CameraRight= (-0.108,0.000,0.994) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.994,0.000,0.105) angle= 0.197824
+  RootRight  = (-0.105,0.000,0.994) dot= 0.003468
+  Wish(root basis): Right= 0.003468 Forward= 0.999994
+  HumMove    = (0.994,0.000,0.105) angle= 0.197824
+
+ACCEL #12 t=1.1393 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1675.363,0.000,173.306) mag= 1684.303101
+  WishDir    = (0.994,0.000,0.112) mag= 1.000000
+  Accel      = 1768.666715
+  WishSpeed  = 20.400000
+  dt         = 0.008303
+  Dot(Vel,Wish) = 1684.237305
+  addSpeed = -1663.837305
+  accelSpeed(x10) = 2995.894296
+  expectedAdd = 0.000000
+  RETURN     = (1759.265,0.000,182.736)
+  DELTA      = (83.901,0.000,9.430) mag= 84.429466
+  CameraLook = (0.994,0.000,0.112) angle= 0.000000
+  CameraRight= (-0.112,0.000,0.994) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.994,0.000,0.108) angle= 0.198810
+  RootRight  = (-0.108,0.000,0.994) dot= 0.003468
+  Wish(root basis): Right= 0.003468 Forward= 0.999994
+  HumMove    = (0.994,0.000,0.108) angle= 0.198810
+
+ACCEL #13 t=1.1475 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1685.982,0.000,175.124) mag= 1695.052734
+  WishDir    = (0.993,0.000,0.115) mag= 1.000000
+  Accel      = 1780.138559
+  WishSpeed  = 20.400000
+  dt         = 0.008331
+  Dot(Vel,Wish) = 1694.933105
+  addSpeed = -1674.533105
+  accelSpeed(x10) = 3025.403379
+  expectedAdd = 0.000000
+  RETURN     = (1770.621,0.000,184.933)
+  DELTA      = (84.639,0.000,9.809) mag= 85.205414
+  CameraLook = (0.993,0.000,0.115) angle= 0.000000
+  CameraRight= (-0.115,0.000,0.993) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.994,0.000,0.112) angle= 0.198810
+  RootRight  = (-0.112,0.000,0.994) dot= 0.003468
+  Wish(root basis): Right= 0.003468 Forward= 0.999994
+  HumMove    = (0.994,0.000,0.112) angle= 0.198810
+
+ACCEL #14 t=1.1560 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1696.715,0.000,177.214) mag= 1705.944702
+  WishDir    = (0.993,0.000,0.119) mag= 1.000000
+  Accel      = 1791.633756
+  WishSpeed  = 20.400000
+  dt         = 0.008348
+  Dot(Vel,Wish) = 1705.758667
+  addSpeed = -1685.358667
+  accelSpeed(x10) = 3051.138039
+  expectedAdd = 0.000000
+  RETURN     = (1781.985,0.000,187.395)
+  DELTA      = (85.269,0.000,10.181) mag= 85.875053
+  CameraLook = (0.993,0.000,0.119) angle= 0.000000
+  CameraRight= (-0.119,0.000,0.993) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.993,0.000,0.115) angle= 0.197824
+  RootRight  = (-0.115,0.000,0.993) dot= 0.003468
+  Wish(root basis): Right= 0.003468 Forward= 0.999994
+  HumMove    = (0.993,0.000,0.115) angle= 0.197824
+
+ACCEL #15 t=1.1644 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1703.749,0.000,179.167) mag= 1713.143921
+  WishDir    = (0.993,0.000,0.119) mag= 1.000000
+  Accel      = 1803.724791
+  WishSpeed  = 20.400000
+  dt         = 0.008781
+  Dot(Vel,Wish) = 1712.974609
+  addSpeed = -1692.574609
+  accelSpeed(x10) = 3230.948261
+  expectedAdd = 0.000000
+  RETURN     = (1793.859,0.000,189.926)
+  DELTA      = (90.110,0.000,10.759) mag= 90.750137
+  CameraLook = (0.993,0.000,0.119) angle= 0.000000
+  CameraRight= (-0.119,0.000,0.993) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.993,0.000,0.119) angle= 0.000000
+  RootRight  = (-0.119,0.000,0.993) dot= 0.000009
+  Wish(root basis): Right= 0.000009 Forward= 1.000000
+  HumMove    = (0.993,0.000,0.119) angle= 0.000000
+
+ACCEL #16 t=1.1725 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1723.131,0.000,182.438) mag= 1732.761719
+  WishDir    = (0.993,0.000,0.119) mag= 1.000000
+  Accel      = 1814.583297
+  WishSpeed  = 20.400000
+  dt         = 0.007886
+  Dot(Vel,Wish) = 1732.607178
+  addSpeed = -1712.207178
+  accelSpeed(x10) = 2919.061047
+  expectedAdd = 0.000000
+  RETURN     = (1804.529,0.000,192.157)
+  DELTA      = (81.398,0.000,9.719) mag= 81.976097
+  CameraLook = (0.993,0.000,0.119) angle= 0.000000
+  CameraRight= (-0.119,0.000,0.993) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.993,0.000,0.119) angle= 0.000000
+  RootRight  = (-0.119,0.000,0.993) dot= 0.000009
+  Wish(root basis): Right= 0.000009 Forward= 1.000000
+  HumMove    = (0.993,0.000,0.119) angle= 0.000000
+
+ACCEL #17 t=1.1811 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1729.162,0.000,184.131) mag= 1738.937866
+  WishDir    = (0.993,0.000,0.120) mag= 1.000000
+  Accel      = 1826.085384
+  WishSpeed  = 20.400000
+  dt         = 0.008353
+  Dot(Vel,Wish) = 1738.769775
+  addSpeed = -1718.369775
+  accelSpeed(x10) = 3111.702473
+  expectedAdd = 0.000000
+  RETURN     = (1815.850,0.000,194.583)
+  DELTA      = (86.688,0.000,10.452) mag= 87.315544
+  CameraLook = (0.993,0.000,0.120) angle= 0.000000
+  CameraRight= (-0.120,0.000,0.993) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.993,0.000,0.119) angle= 0.059347
+  RootRight  = (-0.119,0.000,0.993) dot= 0.001162
+  Wish(root basis): Right= 0.001162 Forward= 0.999999
+  HumMove    = (0.993,0.000,0.119) angle= 0.059347
+
+ACCEL #18 t=1.1903 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2515.706,0.000,269.578) mag= 2530.108398
+  WishDir    = (0.600,0.000,0.800) mag= 1.000000
+  Accel      = 1838.283130
+  WishSpeed  = 20.400000
+  dt         = 0.008858
+  Dot(Vel,Wish) = 1724.437988
+  addSpeed = -1704.037988
+  accelSpeed(x10) = 3321.883215
+  expectedAdd = 0.000000
+  RETURN     = (2583.981,0.000,360.678)
+  DELTA      = (68.275,0.000,91.100) mag= 113.845123
+  CameraLook = (0.992,0.000,0.124) angle= 46.011101
+  CameraRight= (-0.124,0.000,0.992) dot= 0.719474
+  Wish(cam basis): Right= 0.719474 Forward= 0.694519
+  RootLook   = (0.993,0.000,0.120) angle= 46.275958
+  RootRight  = (-0.120,0.000,0.993) dot= 0.722677
+  Wish(root basis): Right= 0.722677 Forward= 0.691186
+  HumMove    = (0.617,0.000,0.787) angle= 1.275335
+
+ACCEL #19 t=1.1981 state=Enum.HumanoidStateType.Jumping callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2476.155,0.000,345.628) mag= 2500.160645
+  WishDir    = (0.600,0.000,0.800) mag= 1.000000
+  Accel      = 1849.775170
+  WishSpeed  = 20.400000
+  dt         = 0.008346
+  Dot(Vel,Wish) = 1761.574219
+  addSpeed = -1741.174219
+  accelSpeed(x10) = 3149.287516
+  expectedAdd = 0.000000
+  RETURN     = (2529.051,0.000,416.207)
+  DELTA      = (52.896,0.000,70.579) mag= 88.200890
+  CameraLook = (0.992,0.000,0.124) angle= 46.011101
+  CameraRight= (-0.124,0.000,0.992) dot= 0.719474
+  Wish(cam basis): Right= 0.719474 Forward= 0.694519
+  RootLook   = (0.992,0.000,0.124) angle= 46.012107
+  RootRight  = (-0.124,0.000,0.992) dot= 0.719487
+  Wish(root basis): Right= 0.719487 Forward= 0.694506
+  HumMove    = (0.614,0.000,0.790) angle= 1.011044
+
+ACCEL #20 t=1.2063 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2529.051,0.000,416.207) mag= 2563.069824
+  WishDir    = (-0.128,0.000,0.992) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007786
+  Dot(Vel,Wish) = 89.816742
+  addSpeed = 92.183258
+  accelSpeed(x10) = 2579.089909
+  expectedAdd = 92.183258
+  RETURN     = (2517.278,0.000,507.635)
+  DELTA      = (-11.773,0.000,91.428) mag= 92.183273
+  CameraLook = (0.992,0.000,0.128) angle= 90.000000
+  CameraRight= (-0.128,0.000,0.992) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.992,0.000,0.124) angle= 90.198358
+  RootRight  = (-0.124,0.000,0.992) dot= 0.999994
+  Wish(root basis): Right= 0.999994 Forward= -0.003462
+  HumMove    = (0.614,0.000,0.790) angle= 45.198158
+
+AIRCONTROL #1 t=1.2063 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.128,0.000,0.992)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2517.278,0.000,507.635)
+  Arg6 = 0.007786
+  RETURN = (2517.278,0.000,507.635)
+  Arg4 vs CameraRight = -0.127709
+  Arg4 vs RootRight   = -0.124274
+  Arg4 vs CameraLook  = 0.991812
+  Arg4 vs RootLook    = 0.992248
+  Arg4 vs HumMove     = 0.613747
+
+ACCEL #21 t=1.2149 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2517.278,0.000,507.635) mag= 2567.953369
+  WishDir    = (-0.136,0.000,0.991) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008936
+  Dot(Vel,Wish) = 161.323364
+  addSpeed = 20.676636
+  accelSpeed(x10) = 2959.808881
+  expectedAdd = 20.676636
+  RETURN     = (2514.472,0.000,528.121)
+  DELTA      = (-2.806,0.000,20.485) mag= 20.676653
+  CameraLook = (0.991,0.000,0.136) angle= 90.000000
+  CameraRight= (-0.136,0.000,0.991) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.992,0.000,0.128) angle= 90.462073
+  RootRight  = (-0.128,0.000,0.992) dot= 0.999967
+  Wish(root basis): Right= 0.999967 Forward= -0.008065
+  HumMove    = (0.611,0.000,0.792) angle= 45.462373
+
+AIRCONTROL #2 t=1.2150 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.136,0.000,0.991)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2514.472,0.000,528.121)
+  Arg6 = 0.008936
+  RETURN = (2514.472,0.000,528.121)
+  Arg4 vs CameraRight = -0.135708
+  Arg4 vs RootRight   = -0.127714
+  Arg4 vs CameraLook  = 0.990749
+  Arg4 vs RootLook    = 0.991811
+  Arg4 vs HumMove     = 0.611013
+
+ACCEL #22 t=1.2229 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2514.472,0.000,528.121) mag= 2569.335205
+  WishDir    = (-0.157,0.000,0.988) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007765
+  Dot(Vel,Wish) = 125.823578
+  addSpeed = 56.176422
+  accelSpeed(x10) = 2571.981961
+  expectedAdd = 56.176422
+  RETURN     = (2505.632,0.000,583.597)
+  DELTA      = (-8.841,0.000,55.476) mag= 56.176407
+  CameraLook = (0.988,0.000,0.157) angle= 90.000000
+  CameraRight= (-0.157,0.000,0.988) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.991,0.000,0.136) angle= 91.254854
+  RootRight  = (-0.136,0.000,0.991) dot= 0.999760
+  Wish(root basis): Right= 0.999760 Forward= -0.021900
+  HumMove    = (0.605,0.000,0.797) angle= 46.255001
+
+AIRCONTROL #3 t=1.2229 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.157,0.000,0.988)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2505.632,0.000,583.597)
+  Arg6 = 0.007765
+  RETURN = (2505.632,0.000,583.597)
+  Arg4 vs CameraRight = -0.157375
+  Arg4 vs RootRight   = -0.135711
+  Arg4 vs CameraLook  = 0.987539
+  Arg4 vs RootLook    = 0.990748
+  Arg4 vs HumMove     = 0.604605
+
+ACCEL #23 t=1.2308 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2505.632,0.000,583.597) mag= 2572.697998
+  WishDir    = (-0.157,0.000,0.988) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008271
+  Dot(Vel,Wish) = 182.000000
+  addSpeed = 0.000000
+  accelSpeed(x10) = 2739.741375
+  expectedAdd = 0.000000
+  RETURN     = (2505.632,0.000,583.597)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.988,0.000,0.157) angle= 90.000000
+  CameraRight= (-0.157,0.000,0.988) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.988,0.000,0.157) angle= 89.999727
+  RootRight  = (-0.157,0.000,0.988) dot= 1.000000
+  Wish(root basis): Right= 1.000000 Forward= 0.000005
+  HumMove    = (0.587,0.000,0.810) angle= 44.999996
+
+AIRCONTROL #4 t=1.2309 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.157,0.000,0.988)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2505.632,0.000,583.597)
+  Arg6 = 0.008271
+  RETURN = (2505.632,0.000,583.597)
+  Arg4 vs CameraRight = -0.157375
+  Arg4 vs RootRight   = -0.157380
+  Arg4 vs CameraLook  = 0.987539
+  Arg4 vs RootLook    = 0.987538
+  Arg4 vs HumMove     = 0.587014
+
+ACCEL #24 t=1.2397 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2505.632,0.000,583.597) mag= 2572.697998
+  WishDir    = (-0.171,0.000,0.985) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008932
+  Dot(Vel,Wish) = 146.482117
+  addSpeed = 35.517883
+  accelSpeed(x10) = 2958.607924
+  expectedAdd = 35.517883
+  RETURN     = (2499.557,0.000,618.592)
+  DELTA      = (-6.074,0.000,34.995) mag= 35.517883
+  CameraLook = (0.985,0.000,0.171) angle= 90.000001
+  CameraRight= (-0.171,0.000,0.985) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.988,0.000,0.157) angle= 90.792565
+  RootRight  = (-0.157,0.000,0.988) dot= 0.999904
+  Wish(root basis): Right= 0.999904 Forward= -0.013832
+  HumMove    = (0.587,0.000,0.810) angle= 45.792623
+
+AIRCONTROL #5 t=1.2398 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.171,0.000,0.985)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2499.557,0.000,618.592)
+  Arg6 = 0.008932
+  RETURN = (2499.557,0.000,618.592)
+  Arg4 vs CameraRight = -0.171022
+  Arg4 vs RootRight   = -0.157377
+  Arg4 vs CameraLook  = 0.985267
+  Arg4 vs RootLook    = 0.987539
+  Arg4 vs HumMove     = 0.587014
+
+ACCEL #25 t=1.2477 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2499.557,0.000,618.592) mag= 2574.964600
+  WishDir    = (-0.186,0.000,0.983) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007788
+  Dot(Vel,Wish) = 143.486877
+  addSpeed = 38.513123
+  accelSpeed(x10) = 2579.559124
+  expectedAdd = 38.513123
+  RETURN     = (2492.403,0.000,656.435)
+  DELTA      = (-7.155,0.000,37.843) mag= 38.513153
+  CameraLook = (0.983,0.000,0.186) angle= 90.000000
+  CameraRight= (-0.186,0.000,0.983) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.985,0.000,0.171) angle= 90.858526
+  RootRight  = (-0.171,0.000,0.985) dot= 0.999888
+  Wish(root basis): Right= 0.999888 Forward= -0.014984
+  HumMove    = (0.576,0.000,0.818) angle= 45.858680
+
+AIRCONTROL #6 t=1.2477 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.186,0.000,0.983)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2492.403,0.000,656.435)
+  Arg6 = 0.007788
+  RETURN = (2492.403,0.000,656.435)
+  Arg4 vs CameraRight = -0.185768
+  Arg4 vs RootRight   = -0.171024
+  Arg4 vs CameraLook  = 0.982594
+  Arg4 vs RootLook    = 0.985267
+  Arg4 vs HumMove     = 0.575759
+
+ACCEL #26 t=1.2563 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2492.403,0.000,656.435) mag= 2577.397705
+  WishDir    = (-0.208,0.000,0.978) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008759
+  Dot(Vel,Wish) = 122.678772
+  addSpeed = 59.321228
+  accelSpeed(x10) = 2901.179494
+  expectedAdd = 59.321228
+  RETURN     = (2480.042,0.000,714.454)
+  DELTA      = (-12.361,0.000,58.019) mag= 59.321217
+  CameraLook = (0.978,0.000,0.208) angle= 89.999999
+  CameraRight= (-0.208,0.000,0.978) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.983,0.000,0.186) angle= 91.320865
+  RootRight  = (-0.186,0.000,0.983) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023051
+  HumMove    = (0.563,0.000,0.826) angle= 46.321047
+
+AIRCONTROL #7 t=1.2563 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.208,0.000,0.978)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2480.042,0.000,714.454)
+  Arg6 = 0.008759
+  RETURN = (2480.042,0.000,714.454)
+  Arg4 vs CameraRight = -0.208372
+  Arg4 vs RootRight   = -0.185771
+  Arg4 vs CameraLook  = 0.978050
+  Arg4 vs RootLook    = 0.982593
+  Arg4 vs HumMove     = 0.563441
+
+ACCEL #27 t=1.2645 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2480.042,0.000,714.454) mag= 2580.901611
+  WishDir    = (-0.270,0.000,0.963) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007907
+  Dot(Vel,Wish) = 18.506104
+  addSpeed = 163.493896
+  accelSpeed(x10) = 2619.197478
+  expectedAdd = 163.493896
+  RETURN     = (2435.911,0.000,871.879)
+  DELTA      = (-44.131,0.000,157.425) mag= 163.493912
+  CameraLook = (0.963,0.000,0.270) angle= 90.000002
+  CameraRight= (-0.270,0.000,0.963) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.978,0.000,0.208) angle= 93.632599
+  RootRight  = (-0.208,0.000,0.978) dot= 0.997991
+  Wish(root basis): Right= 0.997991 Forward= -0.063358
+  HumMove    = (0.544,0.000,0.839) angle= 48.632899
+
+AIRCONTROL #8 t=1.2645 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.270,0.000,0.963)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2435.911,0.000,871.879)
+  Arg6 = 0.007907
+  RETURN = (2435.911,0.000,871.879)
+  Arg4 vs CameraRight = -0.269926
+  Arg4 vs RootRight   = -0.208377
+  Arg4 vs CameraLook  = 0.962881
+  Arg4 vs RootLook    = 0.978049
+  Arg4 vs HumMove     = 0.544244
+
+ACCEL #28 t=1.2724 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2435.911,0.000,871.879) mag= 2587.244385
+  WishDir    = (-0.270,0.000,0.963) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008284
+  Dot(Vel,Wish) = 182.000061
+  addSpeed = -0.000061
+  accelSpeed(x10) = 2743.881637
+  expectedAdd = 0.000000
+  RETURN     = (2435.911,0.000,871.879)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.963,0.000,0.270) angle= 90.000002
+  CameraRight= (-0.270,0.000,0.963) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.963,0.000,0.270) angle= 89.999209
+  RootRight  = (-0.270,0.000,0.963) dot= 1.000000
+  Wish(root basis): Right= 1.000000 Forward= 0.000014
+  HumMove    = (0.490,0.000,0.872) angle= 44.999991
+
+AIRCONTROL #9 t=1.2725 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.270,0.000,0.963)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2435.911,0.000,871.879)
+  Arg6 = 0.008284
+  RETURN = (2435.911,0.000,871.879)
+  Arg4 vs CameraRight = -0.269926
+  Arg4 vs RootRight   = -0.269939
+  Arg4 vs CameraLook  = 0.962881
+  Arg4 vs RootLook    = 0.962877
+  Arg4 vs HumMove     = 0.489993
+
+ACCEL #29 t=1.2809 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2435.911,0.000,871.879) mag= 2587.244385
+  WishDir    = (-0.302,0.000,0.953) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008305
+  Dot(Vel,Wish) = 95.631042
+  addSpeed = 86.368958
+  accelSpeed(x10) = 2750.782587
+  expectedAdd = 86.368958
+  RETURN     = (2409.831,0.000,954.216)
+  DELTA      = (-26.080,0.000,82.337) mag= 86.368965
+  CameraLook = (0.953,0.000,0.302) angle= 89.999998
+  CameraRight= (-0.302,0.000,0.953) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.963,0.000,0.270) angle= 91.915298
+  RootRight  = (-0.270,0.000,0.963) dot= 0.999441
+  Wish(root basis): Right= 0.999441 Forward= -0.033422
+  HumMove    = (0.490,0.000,0.872) angle= 46.915525
+
+AIRCONTROL #10 t=1.2809 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.302,0.000,0.953)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2409.831,0.000,954.216)
+  Arg6 = 0.008305
+  RETURN = (2409.831,0.000,954.216)
+  Arg4 vs CameraRight = -0.301961
+  Arg4 vs RootRight   = -0.269930
+  Arg4 vs CameraLook  = 0.953320
+  Arg4 vs RootLook    = 0.962880
+  Arg4 vs HumMove     = 0.489993
+
+ACCEL #30 t=1.2901 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2409.831,0.000,954.216) mag= 2591.874268
+  WishDir    = (-0.325,0.000,0.946) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.009361
+  Dot(Vel,Wish) = 119.359375
+  addSpeed = 62.640625
+  accelSpeed(x10) = 3100.627134
+  expectedAdd = 62.640625
+  RETURN     = (2389.476,0.000,1013.457)
+  DELTA      = (-20.355,0.000,59.241) mag= 62.640610
+  CameraLook = (0.946,0.000,0.325) angle= 90.000000
+  CameraRight= (-0.325,0.000,0.946) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.953,0.000,0.302) angle= 91.386684
+  RootRight  = (-0.302,0.000,0.953) dot= 0.999707
+  Wish(root basis): Right= 0.999707 Forward= -0.024200
+  HumMove    = (0.461,0.000,0.888) angle= 46.387106
+
+AIRCONTROL #11 t=1.2901 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.325,0.000,0.946)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2389.476,0.000,1013.457)
+  Arg6 = 0.009361
+  RETURN = (2389.476,0.000,1013.457)
+  Arg4 vs CameraRight = -0.324949
+  Arg4 vs RootRight   = -0.301968
+  Arg4 vs CameraLook  = 0.945731
+  Arg4 vs RootLook    = 0.953318
+  Arg4 vs HumMove     = 0.460581
+
+ACCEL #31 t=1.2977 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2389.476,0.000,1013.457) mag= 2595.513428
+  WishDir    = (-0.336,0.000,0.942) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007373
+  Dot(Vel,Wish) = 152.140137
+  addSpeed = 29.859863
+  accelSpeed(x10) = 2442.246258
+  expectedAdd = 29.859863
+  RETURN     = (2379.448,0.000,1041.583)
+  DELTA      = (-10.028,0.000,28.126) mag= 29.859911
+  CameraLook = (0.942,0.000,0.336) angle= 90.000000
+  CameraRight= (-0.336,0.000,0.942) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.946,0.000,0.325) angle= 90.660134
+  RootRight  = (-0.325,0.000,0.946) dot= 0.999934
+  Wish(root basis): Right= 0.999934 Forward= -0.011521
+  HumMove    = (0.439,0.000,0.899) angle= 45.660525
+
+AIRCONTROL #12 t=1.2977 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.336,0.000,0.942)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2379.448,0.000,1041.583)
+  Arg6 = 0.007373
+  RETURN = (2379.448,0.000,1041.583)
+  Arg4 vs CameraRight = -0.335830
+  Arg4 vs RootRight   = -0.324956
+  Arg4 vs CameraLook  = 0.941922
+  Arg4 vs RootLook    = 0.945729
+  Arg4 vs HumMove     = 0.438959
+
+ACCEL #32 t=1.3064 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2379.448,0.000,1041.583) mag= 2597.434814
+  WishDir    = (-0.388,0.000,0.921) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008851
+  Dot(Vel,Wish) = 35.421509
+  addSpeed = 146.578491
+  accelSpeed(x10) = 2931.736174
+  expectedAdd = 146.578491
+  RETURN     = (2322.506,0.000,1176.649)
+  DELTA      = (-56.942,0.000,135.066) mag= 146.578552
+  CameraLook = (0.921,0.000,0.388) angle= 90.000000
+  CameraRight= (-0.388,0.000,0.921) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.942,0.000,0.336) angle= 93.236345
+  RootRight  = (-0.336,0.000,0.942) dot= 0.998405
+  Wish(root basis): Right= 0.998405 Forward= -0.056455
+  HumMove    = (0.429,0.000,0.904) angle= 48.236589
+
+AIRCONTROL #13 t=1.3064 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.388,0.000,0.921)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2322.506,0.000,1176.649)
+  Arg6 = 0.008851
+  RETURN = (2322.506,0.000,1176.649)
+  Arg4 vs CameraRight = -0.388475
+  Arg4 vs RootRight   = -0.335834
+  Arg4 vs CameraLook  = 0.921459
+  Arg4 vs RootLook    = 0.941921
+  Arg4 vs HumMove     = 0.428572
+
+ACCEL #33 t=1.3147 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2322.506,0.000,1176.649) mag= 2603.562256
+  WishDir    = (-0.427,0.000,0.904) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008320
+  Dot(Vel,Wish) = 71.084534
+  addSpeed = 110.915466
+  accelSpeed(x10) = 2755.834132
+  expectedAdd = 110.915466
+  RETURN     = (2275.099,0.000,1276.923)
+  DELTA      = (-47.407,0.000,100.274) mag= 110.915543
+  CameraLook = (0.904,0.000,0.427) angle= 90.000002
+  CameraRight= (-0.427,0.000,0.904) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.921,0.000,0.388) angle= 92.443267
+  RootRight  = (-0.388,0.000,0.921) dot= 0.999091
+  Wish(root basis): Right= 0.999091 Forward= -0.042630
+  HumMove    = (0.377,0.000,0.926) angle= 47.443959
+
+AIRCONTROL #14 t=1.3147 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.427,0.000,0.904)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2275.099,0.000,1276.923)
+  Arg6 = 0.008320
+  RETURN = (2275.099,0.000,1276.923)
+  Arg4 vs CameraRight = -0.427414
+  Arg4 vs RootRight   = -0.388486
+  Arg4 vs CameraLook  = 0.904056
+  Arg4 vs RootLook    = 0.921455
+  Arg4 vs HumMove     = 0.376877
+
+ACCEL #34 t=1.3227 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2275.099,0.000,1276.923) mag= 2608.947510
+  WishDir    = (-0.468,0.000,0.884) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007835
+  Dot(Vel,Wish) = 64.841064
+  addSpeed = 117.158936
+  accelSpeed(x10) = 2595.375781
+  expectedAdd = 117.158936
+  RETURN     = (2220.313,0.000,1380.484)
+  DELTA      = (-54.785,0.000,103.561) mag= 117.158981
+  CameraLook = (0.884,0.000,0.468) angle= 90.000000
+  CameraRight= (-0.468,0.000,0.884) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.904,0.000,0.427) angle= 92.575358
+  RootRight  = (-0.427,0.000,0.904) dot= 0.998990
+  Wish(root basis): Right= 0.998990 Forward= -0.044933
+  HumMove    = (0.337,0.000,0.941) angle= 47.576057
+
+AIRCONTROL #15 t=1.3227 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.468,0.000,0.884)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2220.313,0.000,1380.484)
+  Arg6 = 0.007835
+  RETURN = (2220.313,0.000,1380.484)
+  Arg4 vs CameraRight = -0.467616
+  Arg4 vs RootRight   = -0.427425
+  Arg4 vs CameraLook  = 0.883932
+  Arg4 vs RootLook    = 0.904051
+  Arg4 vs HumMove     = 0.337036
+
+ACCEL #35 t=1.3314 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2220.313,0.000,1380.484) mag= 2614.483887
+  WishDir    = (-0.499,0.000,0.867) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008896
+  Dot(Vel,Wish) = 88.693970
+  addSpeed = 93.306030
+  accelSpeed(x10) = 2946.669620
+  expectedAdd = 93.306030
+  RETURN     = (2173.763,0.000,1461.348)
+  DELTA      = (-46.551,0.000,80.865) mag= 93.306061
+  CameraLook = (0.867,0.000,0.499) angle= 90.000002
+  CameraRight= (-0.499,0.000,0.867) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.884,0.000,0.468) angle= 92.046922
+  RootRight  = (-0.468,0.000,0.884) dot= 0.999362
+  Wish(root basis): Right= 0.999362 Forward= -0.035718
+  HumMove    = (0.294,0.000,0.956) angle= 47.047633
+
+AIRCONTROL #16 t=1.3315 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.499,0.000,0.867)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2173.763,0.000,1461.348)
+  Arg6 = 0.008896
+  RETURN = (2173.763,0.000,1461.348)
+  Arg4 vs CameraRight = -0.498900
+  Arg4 vs RootRight   = -0.467627
+  Arg4 vs CameraLook  = 0.866659
+  Arg4 vs RootLook    = 0.883926
+  Arg4 vs HumMove     = 0.294380
+
+ACCEL #36 t=1.3394 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2173.763,0.000,1461.348) mag= 2619.309570
+  WishDir    = (-0.526,0.000,0.851) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007789
+  Dot(Vel,Wish) = 100.592041
+  addSpeed = 81.407959
+  accelSpeed(x10) = 2580.000729
+  expectedAdd = 81.407959
+  RETURN     = (2130.972,0.000,1530.603)
+  DELTA      = (-42.791,0.000,69.255) mag= 81.407928
+  CameraLook = (0.851,0.000,0.526) angle= 90.000002
+  CameraRight= (-0.526,0.000,0.851) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.867,0.000,0.499) angle= 91.782793
+  RootRight  = (-0.499,0.000,0.867) dot= 0.999516
+  Wish(root basis): Right= 0.999516 Forward= -0.031111
+  HumMove    = (0.260,0.000,0.966) angle= 46.783421
+
+AIRCONTROL #17 t=1.3395 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.526,0.000,0.851)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2130.972,0.000,1530.603)
+  Arg6 = 0.007789
+  RETURN = (2130.972,0.000,1530.603)
+  Arg4 vs CameraRight = -0.525630
+  Arg4 vs RootRight   = -0.498910
+  Arg4 vs CameraLook  = 0.850713
+  Arg4 vs RootLook    = 0.866654
+  Arg4 vs HumMove     = 0.260045
+
+ACCEL #37 t=1.3474 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2130.972,0.000,1530.603) mag= 2623.697510
+  WishDir    = (-0.566,0.000,0.824) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008275
+  Dot(Vel,Wish) = 55.104980
+  addSpeed = 126.895020
+  accelSpeed(x10) = 2740.955905
+  expectedAdd = 126.895020
+  RETURN     = (2059.125,0.000,1635.199)
+  DELTA      = (-71.847,0.000,104.596) mag= 126.895073
+  CameraLook = (0.824,0.000,0.566) angle= 90.000000
+  CameraRight= (-0.566,0.000,0.824) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.851,0.000,0.526) angle= 92.773664
+  RootRight  = (-0.526,0.000,0.851) dot= 0.998828
+  Wish(root basis): Right= 0.998828 Forward= -0.048391
+  HumMove    = (0.230,0.000,0.973) angle= 47.774213
+
+AIRCONTROL #18 t=1.3475 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.566,0.000,0.824)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2059.125,0.000,1635.199)
+  Arg6 = 0.008275
+  RETURN = (2059.125,0.000,1635.199)
+  Arg4 vs CameraRight = -0.566189
+  Arg4 vs RootRight   = -0.525639
+  Arg4 vs CameraLook  = 0.824275
+  Arg4 vs RootLook    = 0.850708
+  Arg4 vs HumMove     = 0.229868
+
+ACCEL #38 t=1.3563 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2059.125,0.000,1635.199) mag= 2629.424805
+  WishDir    = (-0.610,0.000,0.792) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008650
+  Dot(Vel,Wish) = 39.672729
+  addSpeed = 142.327271
+  accelSpeed(x10) = 2865.060409
+  expectedAdd = 142.327271
+  RETURN     = (1972.306,0.000,1747.980)
+  DELTA      = (-86.819,0.000,112.781) mag= 142.327301
+  CameraLook = (0.792,0.000,0.610) angle= 90.000000
+  CameraRight= (-0.610,0.000,0.792) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.824,0.000,0.566) angle= 93.103764
+  RootRight  = (-0.566,0.000,0.824) dot= 0.998533
+  Wish(root basis): Right= 0.998533 Forward= -0.054144
+  HumMove    = (0.182,0.000,0.983) angle= 48.104483
+
+AIRCONTROL #19 t=1.3563 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.610,0.000,0.792)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1972.306,0.000,1747.980)
+  Arg6 = 0.008650
+  RETURN = (1972.306,0.000,1747.980)
+  Arg4 vs CameraRight = -0.609999
+  Arg4 vs RootRight   = -0.566200
+  Arg4 vs CameraLook  = 0.792403
+  Arg4 vs RootLook    = 0.824268
+  Arg4 vs HumMove     = 0.182494
+
+ACCEL #39 t=1.3642 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1972.306,0.000,1747.980) mag= 2635.417236
+  WishDir    = (-0.637,0.000,0.771) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008025
+  Dot(Vel,Wish) = 90.980225
+  addSpeed = 91.019775
+  accelSpeed(x10) = 2658.228722
+  expectedAdd = 91.019775
+  RETURN     = (1914.323,0.000,1818.141)
+  DELTA      = (-57.983,0.000,70.161) mag= 91.019730
+  CameraLook = (0.771,0.000,0.637) angle= 90.000000
+  CameraRight= (-0.637,0.000,0.771) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.792,0.000,0.610) angle= 91.980762
+  RootRight  = (-0.610,0.000,0.792) dot= 0.999403
+  Wish(root basis): Right= 0.999403 Forward= -0.034564
+  HumMove    = (0.129,0.000,0.992) angle= 46.981589
+
+AIRCONTROL #20 t=1.3643 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.637,0.000,0.771)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1914.323,0.000,1818.141)
+  Arg6 = 0.008025
+  RETURN = (1914.323,0.000,1818.141)
+  Arg4 vs CameraRight = -0.637034
+  Arg4 vs RootRight   = -0.610010
+  Arg4 vs CameraLook  = 0.770836
+  Arg4 vs RootLook    = 0.792394
+  Arg4 vs HumMove     = 0.128979
+
+ACCEL #40 t=1.3731 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1914.323,0.000,1818.141) mag= 2640.127197
+  WishDir    = (-0.662,0.000,0.749) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008905
+  Dot(Vel,Wish) = 93.858643
+  addSpeed = 88.141357
+  accelSpeed(x10) = 2949.595660
+  expectedAdd = 88.141357
+  RETURN     = (1855.935,0.000,1884.169)
+  DELTA      = (-58.389,0.000,66.028) mag= 88.141335
+  CameraLook = (0.749,0.000,0.662) angle= 90.000000
+  CameraRight= (-0.662,0.000,0.749) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.771,0.000,0.637) angle= 91.914886
+  RootRight  = (-0.637,0.000,0.771) dot= 0.999442
+  Wish(root basis): Right= 0.999442 Forward= -0.033415
+  HumMove    = (0.095,0.000,0.996) angle= 46.915534
+
+AIRCONTROL #21 t=1.3731 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.662,0.000,0.749)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1855.935,0.000,1884.169)
+  Arg6 = 0.008905
+  RETURN = (1855.935,0.000,1884.169)
+  Arg4 vs CameraRight = -0.662444
+  Arg4 vs RootRight   = -0.637043
+  Arg4 vs CameraLook  = 0.749112
+  Arg4 vs RootLook    = 0.770829
+  Arg4 vs HumMove     = 0.094612
+
+ACCEL #41 t=1.3808 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1855.935,0.000,1884.169) mag= 2644.728027
+  WishDir    = (-0.687,0.000,0.727) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007764
+  Dot(Vel,Wish) = 93.704590
+  addSpeed = 88.295410
+  accelSpeed(x10) = 2571.650796
+  expectedAdd = 88.295410
+  RETURN     = (1795.266,0.000,1948.320)
+  DELTA      = (-60.669,0.000,64.151) mag= 88.295372
+  CameraLook = (0.727,0.000,0.687) angle= 90.000003
+  CameraRight= (-0.687,0.000,0.727) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.749,0.000,0.662) angle= 91.914939
+  RootRight  = (-0.662,0.000,0.749) dot= 0.999442
+  Wish(root basis): Right= 0.999442 Forward= -0.033416
+  HumMove    = (0.061,0.000,0.998) angle= 46.915534
+
+AIRCONTROL #22 t=1.3809 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.687,0.000,0.727)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1795.266,0.000,1948.320)
+  Arg6 = 0.007764
+  RETURN = (1795.266,0.000,1948.320)
+  Arg4 vs CameraRight = -0.687114
+  Arg4 vs RootRight   = -0.662452
+  Arg4 vs CameraLook  = 0.726550
+  Arg4 vs RootLook    = 0.749105
+  Arg4 vs HumMove     = 0.061283
+
+ACCEL #42 t=1.3893 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1795.266,0.000,1948.320) mag= 2649.326172
+  WishDir    = (-0.713,0.000,0.701) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008308
+  Dot(Vel,Wish) = 84.393677
+  addSpeed = 97.606323
+  accelSpeed(x10) = 2751.872795
+  expectedAdd = 97.606323
+  RETURN     = (1725.629,0.000,2016.714)
+  DELTA      = (-69.637,0.000,68.394) mag= 97.606354
+  CameraLook = (0.701,0.000,0.713) angle= 90.000002
+  CameraRight= (-0.713,0.000,0.701) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.727,0.000,0.687) angle= 92.113121
+  RootRight  = (-0.687,0.000,0.727) dot= 0.999320
+  Wish(root basis): Right= 0.999320 Forward= -0.036873
+  HumMove    = (0.028,0.000,1.000) angle= 47.113682
+
+AIRCONTROL #23 t=1.3894 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.713,0.000,0.701)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1725.629,0.000,2016.714)
+  Arg6 = 0.008308
+  RETURN = (1725.629,0.000,2016.714)
+  Arg4 vs CameraRight = -0.713443
+  Arg4 vs RootRight   = -0.687121
+  Arg4 vs CameraLook  = 0.700713
+  Arg4 vs RootLook    = 0.726543
+  Arg4 vs HumMove     = 0.027886
+
+ACCEL #43 t=1.3983 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1725.629,0.000,2016.714) mag= 2654.229004
+  WishDir    = (-0.740,0.000,0.672) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008991
+  Dot(Vel,Wish) = 78.095093
+  addSpeed = 103.904907
+  accelSpeed(x10) = 2978.123700
+  expectedAdd = 103.904907
+  RETURN     = (1648.703,0.000,2086.561)
+  DELTA      = (-76.926,0.000,69.847) mag= 103.904900
+  CameraLook = (0.672,0.000,0.740) angle= 90.000000
+  CameraRight= (-0.740,0.000,0.672) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.701,0.000,0.713) angle= 92.245185
+  RootRight  = (-0.713,0.000,0.701) dot= 0.999232
+  Wish(root basis): Right= 0.999232 Forward= -0.039176
+  HumMove    = (-0.009,0.000,1.000) angle= 47.245790
+
+AIRCONTROL #24 t=1.3983 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.740,0.000,0.672)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1648.703,0.000,2086.561)
+  Arg6 = 0.008991
+  RETURN = (1648.703,0.000,2086.561)
+  Arg4 vs CameraRight = -0.740354
+  Arg4 vs RootRight   = -0.713450
+  Arg4 vs CameraLook  = 0.672218
+  Arg4 vs RootLook    = 0.700706
+  Arg4 vs HumMove     = -0.009001
+
+ACCEL #44 t=1.4059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1648.703,0.000,2086.561) mag= 2659.314941
+  WishDir    = (-0.773,0.000,0.635) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007677
+  Dot(Vel,Wish) = 50.311768
+  addSpeed = 131.688232
+  accelSpeed(x10) = 2542.929485
+  expectedAdd = 131.688232
+  RETURN     = (1546.940,0.000,2170.144)
+  DELTA      = (-101.763,0.000,83.583) mag= 131.688202
+  CameraLook = (0.635,0.000,0.773) angle= 90.000000
+  CameraRight= (-0.773,0.000,0.635) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.672,0.000,0.740) angle= 92.839623
+  RootRight  = (-0.740,0.000,0.672) dot= 0.998772
+  Wish(root basis): Right= 0.998772 Forward= -0.049540
+  HumMove    = (-0.048,0.000,0.999) angle= 47.840257
+
+AIRCONTROL #25 t=1.4060 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.773,0.000,0.635)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1546.940,0.000,2170.144)
+  Arg6 = 0.007677
+  RETURN = (1546.940,0.000,2170.144)
+  Arg4 vs CameraRight = -0.772754
+  Arg4 vs RootRight   = -0.740361
+  Arg4 vs CameraLook  = 0.634706
+  Arg4 vs RootLook    = 0.672209
+  Arg4 vs HumMove     = -0.048179
+
+ACCEL #45 t=1.4142 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1546.940,0.000,2170.144) mag= 2665.060547
+  WishDir    = (-0.807,0.000,0.590) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008335
+  Dot(Vel,Wish) = 31.593872
+  addSpeed = 150.406128
+  accelSpeed(x10) = 2760.995808
+  expectedAdd = 150.406128
+  RETURN     = (1425.509,0.000,2258.893)
+  DELTA      = (-121.431,0.000,88.749) mag= 150.406082
+  CameraLook = (0.590,0.000,0.807) angle= 90.000000
+  CameraRight= (-0.807,0.000,0.590) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.635,0.000,0.773) angle= 93.235838
+  RootRight  = (-0.773,0.000,0.635) dot= 0.998406
+  Wish(root basis): Right= 0.998406 Forward= -0.056446
+  HumMove    = (-0.098,0.000,0.995) angle= 48.236594
+
+AIRCONTROL #26 t=1.4142 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.807,0.000,0.590)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1425.509,0.000,2258.893)
+  Arg6 = 0.008335
+  RETURN = (1425.509,0.000,2258.893)
+  Arg4 vs CameraRight = -0.807356
+  Arg4 vs RootRight   = -0.772762
+  Arg4 vs CameraLook  = 0.590065
+  Arg4 vs RootLook    = 0.634696
+  Arg4 vs HumMove     = -0.097614
+
+ACCEL #46 t=1.4232 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1425.509,0.000,2258.893) mag= 2671.081055
+  WishDir    = (-0.829,0.000,0.559) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008828
+  Dot(Vel,Wish) = 80.510864
+  addSpeed = 101.489136
+  accelSpeed(x10) = 2924.297215
+  expectedAdd = 101.489136
+  RETURN     = (1341.353,0.000,2315.618)
+  DELTA      = (-84.156,0.000,56.725) mag= 101.489105
+  CameraLook = (0.559,0.000,0.829) angle= 90.000000
+  CameraRight= (-0.829,0.000,0.559) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.590,0.000,0.807) angle= 92.178859
+  RootRight  = (-0.807,0.000,0.590) dot= 0.999277
+  Wish(root basis): Right= 0.999277 Forward= -0.038019
+  HumMove    = (-0.154,0.000,0.988) angle= 47.179748
+
+AIRCONTROL #27 t=1.4232 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.829,0.000,0.559)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1341.353,0.000,2315.618)
+  Arg6 = 0.008828
+  RETURN = (1341.353,0.000,2315.618)
+  Arg4 vs CameraRight = -0.829215
+  Arg4 vs RootRight   = -0.807365
+  Arg4 vs CameraLook  = 0.558930
+  Arg4 vs RootLook    = 0.590052
+  Arg4 vs HumMove     = -0.153648
+
+ACCEL #47 t=1.4316 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1341.353,0.000,2315.618) mag= 2676.063477
+  WishDir    = (-0.847,0.000,0.532) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008486
+  Dot(Vel,Wish) = 95.738159
+  addSpeed = 86.261841
+  accelSpeed(x10) = 2810.861266
+  expectedAdd = 86.261841
+  RETURN     = (1268.304,0.000,2361.499)
+  DELTA      = (-73.048,0.000,45.881) mag= 86.261757
+  CameraLook = (0.532,0.000,0.847) angle= 90.000002
+  CameraRight= (-0.847,0.000,0.532) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.559,0.000,0.829) angle= 91.848753
+  RootRight  = (-0.829,0.000,0.559) dot= 0.999479
+  Wish(root basis): Right= 0.999479 Forward= -0.032261
+  HumMove    = (-0.191,0.000,0.982) angle= 46.849478
+
+AIRCONTROL #28 t=1.4317 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.847,0.000,0.532)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1268.304,0.000,2361.499)
+  Arg6 = 0.008486
+  RETURN = (1268.304,0.000,2361.499)
+  Arg4 vs CameraRight = -0.846822
+  Arg4 vs RootRight   = -0.829222
+  Arg4 vs CameraLook  = 0.531877
+  Arg4 vs RootLook    = 0.558920
+  Arg4 vs HumMove     = -0.191120
+
+ACCEL #48 t=1.4392 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1268.304,0.000,2361.499) mag= 2680.536133
+  WishDir    = (-0.869,0.000,0.495) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007750
+  Dot(Vel,Wish) = 67.794678
+  addSpeed = 114.205322
+  accelSpeed(x10) = 2567.248008
+  expectedAdd = 114.205322
+  RETURN     = (1169.091,0.000,2418.063)
+  DELTA      = (-99.214,0.000,56.564) mag= 114.205299
+  CameraLook = (0.495,0.000,0.869) angle= 89.999998
+  CameraRight= (-0.869,0.000,0.495) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.532,0.000,0.847) angle= 92.443363
+  RootRight  = (-0.847,0.000,0.532) dot= 0.999091
+  Wish(root basis): Right= 0.999091 Forward= -0.042632
+  HumMove    = (-0.223,0.000,0.975) angle= 47.443950
+
+AIRCONTROL #29 t=1.4392 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.869,0.000,0.495)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1169.091,0.000,2418.063)
+  Arg6 = 0.007750
+  RETURN = (1169.091,0.000,2418.063)
+  Arg4 vs CameraRight = -0.868732
+  Arg4 vs RootRight   = -0.846827
+  Arg4 vs CameraLook  = 0.495283
+  Arg4 vs RootLook    = 0.531868
+  Arg4 vs HumMove     = -0.222699
+
+ACCEL #49 t=1.4474 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1169.091,0.000,2418.063) mag= 2685.852051
+  WishDir    = (-0.886,0.000,0.463) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008237
+  Dot(Vel,Wish) = 83.042480
+  addSpeed = 98.957520
+  accelSpeed(x10) = 2728.327198
+  expectedAdd = 98.957520
+  RETURN     = (1081.374,0.000,2463.871)
+  DELTA      = (-87.717,0.000,45.808) mag= 98.957550
+  CameraLook = (0.463,0.000,0.886) angle= 90.000000
+  CameraRight= (-0.886,0.000,0.463) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.495,0.000,0.869) angle= 92.113017
+  RootRight  = (-0.869,0.000,0.495) dot= 0.999320
+  Wish(root basis): Right= 0.999320 Forward= -0.036871
+  HumMove    = (-0.264,0.000,0.965) angle= 47.113700
+
+AIRCONTROL #30 t=1.4474 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.886,0.000,0.463)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1081.374,0.000,2463.871)
+  Arg6 = 0.008237
+  RETURN = (1081.374,0.000,2463.871)
+  Arg4 vs CameraRight = -0.886408
+  Arg4 vs RootRight   = -0.868738
+  Arg4 vs CameraLook  = 0.462905
+  Arg4 vs RootLook    = 0.495273
+  Arg4 vs HumMove     = -0.264068
+
+ACCEL #50 t=1.4556 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1081.374,0.000,2463.871) mag= 2690.730225
+  WishDir    = (-0.904,0.000,0.428) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008344
+  Dot(Vel,Wish) = 76.661560
+  addSpeed = 105.338440
+  accelSpeed(x10) = 2763.783644
+  expectedAdd = 105.338440
+  RETURN     = (986.162,0.000,2508.936)
+  DELTA      = (-95.212,0.000,45.065) mag= 105.338402
+  CameraLook = (0.428,0.000,0.904) angle= 89.999998
+  CameraRight= (-0.904,0.000,0.428) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.463,0.000,0.886) angle= 92.245145
+  RootRight  = (-0.886,0.000,0.463) dot= 0.999232
+  Wish(root basis): Right= 0.999232 Forward= -0.039175
+  HumMove    = (-0.299,0.000,0.954) angle= 47.245790
+
+AIRCONTROL #31 t=1.4557 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.904,0.000,0.428)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (986.162,0.000,2508.936)
+  Arg6 = 0.008344
+  RETURN = (986.162,0.000,2508.936)
+  Arg4 vs CameraRight = -0.903867
+  Arg4 vs RootRight   = -0.886413
+  Arg4 vs CameraLook  = 0.427814
+  Arg4 vs RootLook    = 0.462895
+  Arg4 vs HumMove     = -0.299462
+
+ACCEL #51 t=1.4645 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (986.162,0.000,2508.936) mag= 2695.788330
+  WishDir    = (-0.921,0.000,0.389) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008346
+  Dot(Vel,Wish) = 67.142761
+  addSpeed = 114.857239
+  accelSpeed(x10) = 2764.667163
+  expectedAdd = 114.857239
+  RETURN     = (880.345,0.000,2553.602)
+  DELTA      = (-105.817,0.000,44.666) mag= 114.857262
+  CameraLook = (0.389,0.000,0.921) angle= 89.999998
+  CameraRight= (-0.921,0.000,0.389) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.428,0.000,0.904) angle= 92.443305
+  RootRight  = (-0.904,0.000,0.428) dot= 0.999091
+  Wish(root basis): Right= 0.999091 Forward= -0.042631
+  HumMove    = (-0.337,0.000,0.942) angle= 47.443950
+
+AIRCONTROL #32 t=1.4645 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.921,0.000,0.389)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (880.345,0.000,2553.602)
+  Arg6 = 0.008346
+  RETURN = (880.345,0.000,2553.602)
+  Arg4 vs CameraRight = -0.921287
+  Arg4 vs RootRight   = -0.903871
+  Arg4 vs CameraLook  = 0.388882
+  Arg4 vs RootLook    = 0.427804
+  Arg4 vs HumMove     = -0.336620
+
+ACCEL #52 t=1.4730 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (880.345,0.000,2553.602) mag= 2701.090820
+  WishDir    = (-0.934,0.000,0.357) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008829
+  Dot(Vel,Wish) = 88.704163
+  addSpeed = 93.295837
+  accelSpeed(x10) = 2924.462875
+  expectedAdd = 93.295837
+  RETURN     = (793.190,0.000,2586.889)
+  DELTA      = (-87.155,0.000,33.287) mag= 93.295830
+  CameraLook = (0.357,0.000,0.934) angle= 90.000002
+  CameraRight= (-0.934,0.000,0.357) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.389,0.000,0.921) angle= 91.980881
+  RootRight  = (-0.921,0.000,0.389) dot= 0.999402
+  Wish(root basis): Right= 0.999402 Forward= -0.034566
+  HumMove    = (-0.376,0.000,0.926) angle= 46.981580
+
+AIRCONTROL #33 t=1.4730 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.934,0.000,0.357)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (793.190,0.000,2586.889)
+  Arg6 = 0.008829
+  RETURN = (793.190,0.000,2586.889)
+  Arg4 vs CameraRight = -0.934183
+  Arg4 vs RootRight   = -0.921292
+  Arg4 vs CameraLook  = 0.356793
+  Arg4 vs RootLook    = 0.388871
+  Arg4 vs HumMove     = -0.376467
+
+ACCEL #53 t=1.4809 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (793.190,0.000,2586.889) mag= 2705.761963
+  WishDir    = (-0.945,0.000,0.326) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007838
+  Dot(Vel,Wish) = 94.777527
+  addSpeed = 87.222473
+  accelSpeed(x10) = 2596.217654
+  expectedAdd = 87.222473
+  RETURN     = (710.746,0.000,2615.364)
+  DELTA      = (-82.444,0.000,28.474) mag= 87.222458
+  CameraLook = (0.326,0.000,0.945) angle= 90.000000
+  CameraRight= (-0.945,0.000,0.326) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.357,0.000,0.934) angle= 91.848857
+  RootRight  = (-0.934,0.000,0.357) dot= 0.999479
+  Wish(root basis): Right= 0.999479 Forward= -0.032263
+  HumMove    = (-0.408,0.000,0.913) angle= 46.849474
+
+AIRCONTROL #34 t=1.4809 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.945,0.000,0.326)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (710.746,0.000,2615.364)
+  Arg6 = 0.007838
+  RETURN = (710.746,0.000,2615.364)
+  Arg4 vs CameraRight = -0.945212
+  Arg4 vs RootRight   = -0.934187
+  Arg4 vs CameraLook  = 0.326458
+  Arg4 vs RootLook    = 0.356783
+  Arg4 vs HumMove     = -0.408276
+
+ACCEL #54 t=1.4894 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (710.746,0.000,2615.364) mag= 2710.218994
+  WishDir    = (-0.955,0.000,0.297) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008370
+  Dot(Vel,Wish) = 97.755615
+  addSpeed = 84.244385
+  accelSpeed(x10) = 2772.464897
+  expectedAdd = 84.244385
+  RETURN     = (630.300,0.000,2640.375)
+  DELTA      = (-80.446,0.000,25.011) mag= 84.244370
+  CameraLook = (0.297,0.000,0.955) angle= 90.000000
+  CameraRight= (-0.955,0.000,0.297) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.326,0.000,0.945) angle= 91.782882
+  RootRight  = (-0.945,0.000,0.326) dot= 0.999516
+  Wish(root basis): Right= 0.999516 Forward= -0.031112
+  HumMove    = (-0.438,0.000,0.899) angle= 46.783426
+
+AIRCONTROL #35 t=1.4894 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.955,0.000,0.297)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (630.300,0.000,2640.375)
+  Arg6 = 0.008370
+  RETURN = (630.300,0.000,2640.375)
+  Arg4 vs CameraRight = -0.954914
+  Arg4 vs RootRight   = -0.945215
+  Arg4 vs CameraLook  = 0.296883
+  Arg4 vs RootLook    = 0.326449
+  Arg4 vs HumMove     = -0.437525
+
+ACCEL #55 t=1.4976 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (630.300,0.000,2640.375) mag= 2714.563477
+  WishDir    = (-0.967,0.000,0.256) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008289
+  Dot(Vel,Wish) = 66.340271
+  addSpeed = 115.659729
+  accelSpeed(x10) = 2745.786262
+  expectedAdd = 115.659729
+  RETURN     = (518.491,0.000,2669.971)
+  DELTA      = (-111.809,0.000,29.597) mag= 115.659760
+  CameraLook = (0.256,0.000,0.967) angle= 90.000000
+  CameraRight= (-0.967,0.000,0.256) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.297,0.000,0.955) angle= 92.443414
+  RootRight  = (-0.955,0.000,0.297) dot= 0.999091
+  Wish(root basis): Right= 0.999091 Forward= -0.042633
+  HumMove    = (-0.465,0.000,0.885) angle= 47.443950
+
+AIRCONTROL #36 t=1.4976 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.967,0.000,0.256)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (518.491,0.000,2669.971)
+  Arg6 = 0.008289
+  RETURN = (518.491,0.000,2669.971)
+  Arg4 vs CameraRight = -0.966705
+  Arg4 vs RootRight   = -0.954917
+  Arg4 vs CameraLook  = 0.255893
+  Arg4 vs RootLook    = 0.296874
+  Arg4 vs HumMove     = -0.465298
+
+ACCEL #56 t=1.5059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (518.491,0.000,2669.971) mag= 2719.849121
+  WishDir    = (-0.977,0.000,0.211) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008332
+  Dot(Vel,Wish) = 56.710297
+  addSpeed = 125.289703
+  accelSpeed(x10) = 2759.836498
+  expectedAdd = 125.289703
+  RETURN     = (396.024,0.000,2696.415)
+  DELTA      = (-122.467,0.000,26.444) mag= 125.289726
+  CameraLook = (0.211,0.000,0.977) angle= 90.000000
+  CameraRight= (-0.977,0.000,0.211) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.256,0.000,0.967) angle= 92.641438
+  RootRight  = (-0.967,0.000,0.256) dot= 0.998937
+  Wish(root basis): Right= 0.998937 Forward= -0.046085
+  HumMove    = (-0.503,0.000,0.865) angle= 47.642102
+
+AIRCONTROL #37 t=1.5059 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.977,0.000,0.211)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (396.024,0.000,2696.415)
+  Arg6 = 0.008332
+  RETURN = (396.024,0.000,2696.415)
+  Arg4 vs CameraRight = -0.977473
+  Arg4 vs RootRight   = -0.966708
+  Arg4 vs CameraLook  = 0.211059
+  Arg4 vs RootLook    = 0.255882
+  Arg4 vs HumMove     = -0.502620
+
+ACCEL #57 t=1.5147 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (396.024,0.000,2696.415) mag= 2725.341797
+  WishDir    = (-0.983,0.000,0.185) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008962
+  Dot(Vel,Wish) = 109.842682
+  addSpeed = 72.157318
+  accelSpeed(x10) = 2968.421032
+  expectedAdd = 72.157318
+  RETURN     = (325.113,0.000,2709.769)
+  DELTA      = (-70.911,0.000,13.354) mag= 72.157341
+  CameraLook = (0.185,0.000,0.983) angle= 89.999999
+  CameraRight= (-0.983,0.000,0.185) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.211,0.000,0.977) angle= 91.518460
+  RootRight  = (-0.977,0.000,0.211) dot= 0.999649
+  Wish(root basis): Right= 0.999649 Forward= -0.026499
+  HumMove    = (-0.542,0.000,0.840) angle= 46.519212
+
+AIRCONTROL #38 t=1.5148 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.983,0.000,0.185)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (325.113,0.000,2709.769)
+  Arg6 = 0.008962
+  RETURN = (325.113,0.000,2709.769)
+  Arg4 vs CameraRight = -0.982725
+  Arg4 vs RootRight   = -0.977476
+  Arg4 vs CameraLook  = 0.185070
+  Arg4 vs RootLook    = 0.211046
+  Arg4 vs HumMove     = -0.541937
+
+ACCEL #58 t=1.5225 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (325.113,0.000,2709.769) mag= 2729.202637
+  WishDir    = (-0.987,0.000,0.160) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007719
+  Dot(Vel,Wish) = 112.883575
+  addSpeed = 69.116425
+  accelSpeed(x10) = 2556.676011
+  expectedAdd = 69.116425
+  RETURN     = (256.888,0.000,2720.834)
+  DELTA      = (-68.225,0.000,11.065) mag= 69.116417
+  CameraLook = (0.160,0.000,0.987) angle= 90.000000
+  CameraRight= (-0.987,0.000,0.160) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.185,0.000,0.983) angle= 91.452615
+  RootRight  = (-0.983,0.000,0.185) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025350
+  HumMove    = (-0.564,0.000,0.826) angle= 46.453158
+
+AIRCONTROL #39 t=1.5226 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.987,0.000,0.160)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (256.888,0.000,2720.834)
+  Arg6 = 0.007719
+  RETURN = (256.888,0.000,2720.834)
+  Arg4 vs CameraRight = -0.987103
+  Arg4 vs RootRight   = -0.982727
+  Arg4 vs CameraLook  = 0.160089
+  Arg4 vs RootLook    = 0.185061
+  Arg4 vs HumMove     = -0.564028
+
+ACCEL #59 t=1.5309 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (256.888,0.000,2720.834) mag= 2732.933838
+  WishDir    = (-0.991,0.000,0.132) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008317
+  Dot(Vel,Wish) = 103.344299
+  addSpeed = 78.655701
+  accelSpeed(x10) = 2754.757497
+  expectedAdd = 78.655701
+  RETURN     = (178.916,0.000,2731.183)
+  DELTA      = (-77.972,0.000,10.349) mag= 78.655708
+  CameraLook = (0.132,0.000,0.991) angle= 90.000000
+  CameraRight= (-0.991,0.000,0.132) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.160,0.000,0.987) angle= 91.650866
+  RootRight  = (-0.987,0.000,0.160) dot= 0.999585
+  Wish(root basis): Right= 0.999585 Forward= -0.028809
+  HumMove    = (-0.585,0.000,0.811) angle= 46.651317
+
+AIRCONTROL #40 t=1.5309 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.991,0.000,0.132)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (178.916,0.000,2731.183)
+  Arg6 = 0.008317
+  RETURN = (178.916,0.000,2731.183)
+  Arg4 vs CameraRight = -0.991306
+  Arg4 vs RootRight   = -0.987104
+  Arg4 vs CameraLook  = 0.131577
+  Arg4 vs RootLook    = 0.160081
+  Arg4 vs HumMove     = -0.584787
+
+ACCEL #60 t=1.5393 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (178.916,0.000,2731.183) mag= 2737.037109
+  WishDir    = (-0.994,0.000,0.105) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008329
+  Dot(Vel,Wish) = 109.531921
+  addSpeed = 72.468079
+  accelSpeed(x10) = 2758.939405
+  expectedAdd = 72.468079
+  RETURN     = (106.851,0.000,2738.810)
+  DELTA      = (-72.066,0.000,7.627) mag= 72.468079
+  CameraLook = (0.105,0.000,0.994) angle= 90.000000
+  CameraRight= (-0.994,0.000,0.105) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.132,0.000,0.991) angle= 91.518736
+  RootRight  = (-0.991,0.000,0.132) dot= 0.999649
+  Wish(root basis): Right= 0.999649 Forward= -0.026504
+  HumMove    = (-0.608,0.000,0.794) angle= 46.519203
+
+AIRCONTROL #41 t=1.5393 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.994,0.000,0.105)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (106.851,0.000,2738.810)
+  Arg6 = 0.008329
+  RETURN = (106.851,0.000,2738.810)
+  Arg4 vs CameraRight = -0.994446
+  Arg4 vs RootRight   = -0.991307
+  Arg4 vs CameraLook  = 0.105249
+  Arg4 vs RootLook    = 0.131569
+  Arg4 vs HumMove     = -0.607920
+
+ACCEL #61 t=1.5475 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (106.851,0.000,2738.810) mag= 2740.893799
+  WishDir    = (-0.997,0.000,0.082) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008327
+  Dot(Vel,Wish) = 118.900604
+  addSpeed = 63.099396
+  accelSpeed(x10) = 2758.331986
+  expectedAdd = 63.099396
+  RETURN     = (43.965,0.000,2744.003)
+  DELTA      = (-62.885,0.000,5.193) mag= 63.099388
+  CameraLook = (0.082,0.000,0.997) angle= 90.000000
+  CameraRight= (-0.997,0.000,0.082) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.105,0.000,0.994) angle= 91.320608
+  RootRight  = (-0.994,0.000,0.105) dot= 0.999735
+  Wish(root basis): Right= 0.999735 Forward= -0.023047
+  HumMove    = (-0.629,0.000,0.778) angle= 46.321052
+
+AIRCONTROL #42 t=1.5476 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.997,0.000,0.082)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (43.965,0.000,2744.003)
+  Arg6 = 0.008327
+  RETURN = (43.965,0.000,2744.003)
+  Arg4 vs CameraRight = -0.996608
+  Arg4 vs RootRight   = -0.994447
+  Arg4 vs CameraLook  = 0.082294
+  Arg4 vs RootLook    = 0.105241
+  Arg4 vs HumMove     = -0.628757
+
+ACCEL #62 t=1.5558 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (43.965,0.000,2744.003) mag= 2744.355225
+  WishDir    = (-0.998,0.000,0.059) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008334
+  Dot(Vel,Wish) = 118.820602
+  addSpeed = 63.179398
+  accelSpeed(x10) = 2760.512711
+  expectedAdd = 63.179398
+  RETURN     = (-19.103,0.000,2747.749)
+  DELTA      = (-63.068,0.000,3.746) mag= 63.179405
+  CameraLook = (0.059,0.000,0.998) angle= 90.000000
+  CameraRight= (-0.998,0.000,0.059) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.082,0.000,0.997) angle= 91.320654
+  RootRight  = (-0.997,0.000,0.082) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023048
+  HumMove    = (-0.647,0.000,0.763) angle= 46.321052
+
+AIRCONTROL #43 t=1.5558 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.998,0.000,0.059)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-19.103,0.000,2747.749)
+  Arg6 = 0.008334
+  RETURN = (-19.103,0.000,2747.749)
+  Arg4 vs CameraRight = -0.998240
+  Arg4 vs RootRight   = -0.996609
+  Arg4 vs CameraLook  = 0.059296
+  Arg4 vs RootLook    = 0.082287
+  Arg4 vs HumMove     = -0.646517
+
+ACCEL #63 t=1.5642 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-19.103,0.000,2747.749) mag= 2747.815674
+  WishDir    = (-0.999,0.000,0.037) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008335
+  Dot(Vel,Wish) = 121.905197
+  addSpeed = 60.094803
+  accelSpeed(x10) = 2760.981926
+  expectedAdd = 60.094803
+  RETURN     = (-79.156,0.000,2749.998)
+  DELTA      = (-60.053,0.000,2.249) mag= 60.094795
+  CameraLook = (0.037,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,0.037) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.059,0.000,0.998) angle= 91.254609
+  RootRight  = (-0.998,0.000,0.059) dot= 0.999760
+  Wish(root basis): Right= 0.999760 Forward= -0.021895
+  HumMove    = (-0.664,0.000,0.748) angle= 46.255011
+
+AIRCONTROL #44 t=1.5643 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.999,0.000,0.037)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-79.156,0.000,2749.998)
+  Arg6 = 0.008335
+  RETURN = (-79.156,0.000,2749.998)
+  Arg4 vs CameraRight = -0.999300
+  Arg4 vs RootRight   = -0.998241
+  Arg4 vs CameraLook  = 0.037418
+  Arg4 vs RootLook    = 0.059289
+  Arg4 vs HumMove     = -0.663934
+
+ACCEL #64 t=1.5724 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-79.156,0.000,2749.998) mag= 2751.136719
+  WishDir    = (-1.000,0.000,0.019) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008317
+  Dot(Vel,Wish) = 131.337006
+  addSpeed = 50.662994
+  accelSpeed(x10) = 2754.854055
+  expectedAdd = 50.662994
+  RETURN     = (-129.810,0.000,2750.959)
+  DELTA      = (-50.654,0.000,0.962) mag= 50.662998
+  CameraLook = (0.019,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,0.019) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.037,0.000,0.999) angle= 91.056478
+  RootRight  = (-0.999,0.000,0.037) dot= 0.999830
+  Wish(root basis): Right= 0.999830 Forward= -0.018438
+  HumMove    = (-0.680,0.000,0.733) angle= 46.056846
+
+AIRCONTROL #45 t=1.5725 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-1.000,0.000,0.019)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-129.810,0.000,2750.959)
+  Arg6 = 0.008317
+  RETURN = (-129.810,0.000,2750.959)
+  Arg4 vs CameraRight = -0.999820
+  Arg4 vs RootRight   = -0.999300
+  Arg4 vs CameraLook  = 0.018980
+  Arg4 vs RootLook    = 0.037412
+  Arg4 vs HumMove     = -0.680153
+
+ACCEL #65 t=1.5809 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-129.810,0.000,2750.959) mag= 2754.020508
+  WishDir    = (-1.000,0.000,0.001) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008365
+  Dot(Vel,Wish) = 131.283707
+  addSpeed = 50.716293
+  accelSpeed(x10) = 2770.725932
+  expectedAdd = 50.716293
+  RETURN     = (-180.526,0.000,2750.987)
+  DELTA      = (-50.716,0.000,0.027) mag= 50.716286
+  CameraLook = (0.001,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,0.001) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.019,0.000,1.000) angle= 91.056525
+  RootRight  = (-1.000,0.000,0.019) dot= 0.999830
+  Wish(root basis): Right= 0.999830 Forward= -0.018439
+  HumMove    = (-0.694,0.000,0.720) angle= 46.056846
+
+AIRCONTROL #46 t=1.5810 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-1.000,0.000,0.001)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-180.526,0.000,2750.987)
+  Arg6 = 0.008365
+  RETURN = (-180.526,0.000,2750.987)
+  Arg4 vs CameraRight = -1.000000
+  Arg4 vs RootRight   = -0.999820
+  Arg4 vs CameraLook  = 0.000536
+  Arg4 vs RootLook    = 0.018975
+  Arg4 vs HumMove     = -0.693558
+
+AIRCONTROL #47 t=1.5893 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.000,0.000,0.000)
+  Arg3 = 0.000000
+  Arg4 = (0.000,0.000,-0.000)
+  Arg5 = (-180.526,0.000,2750.987)
+  Arg6 = 0.008336
+  RETURN = (-180.526,0.000,2750.987)
+  Arg4 vs CameraRight = 0.000000
+  Arg4 vs RootRight   = 0.000000
+  Arg4 vs CameraLook  = 0.000000
+  Arg4 vs RootLook    = 0.000000
+  Arg4 vs HumMove     = 0.000000
+
+ACCEL #66 t=1.5981 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-180.526,0.000,2750.987) mag= 2756.903320
+  WishDir    = (0.999,0.000,0.037) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008325
+  Dot(Vel,Wish) = -77.239906
+  addSpeed = 259.239906
+  accelSpeed(x10) = 2757.573097
+  expectedAdd = 259.239906
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (259.058,0.000,9.721) mag= 259.239899
+  CameraLook = (-0.037,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.037) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.031,0.000,1.000) angle= 89.603746
+  RootRight  = (-1.000,0.000,-0.031) dot= -0.999976
+  Wish(root basis): Right= -0.999976 Forward= 0.006916
+  HumMove    = (0.685,0.000,0.728) angle= 44.603690
+
+AIRCONTROL #48 t=1.5983 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.037)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.008325
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.999297
+  Arg4 vs RootRight   = 0.999532
+  Arg4 vs CameraLook  = 0.037499
+  Arg4 vs RootLook    = 0.030587
+  Arg4 vs HumMove     = -0.685148
+
+ACCEL #67 t=1.6056 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.037) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008349
+  Dot(Vel,Wish) = 181.999985
+  addSpeed = 0.000015
+  accelSpeed(x10) = 2765.481271
+  expectedAdd = 0.000015
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000015
+  CameraLook = (-0.037,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.037) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.037,0.000,0.999) angle= 89.998803
+  RootRight  = (-0.999,0.000,-0.037) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000021
+  HumMove    = (0.680,0.000,0.733) angle= 45.000001
+
+AIRCONTROL #49 t=1.6057 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.037)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.008349
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.999297
+  Arg4 vs RootRight   = 0.999298
+  Arg4 vs CameraLook  = 0.037499
+  Arg4 vs RootLook    = 0.037478
+  Arg4 vs HumMove     = -0.680094
+
+ACCEL #68 t=1.6146 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.042) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008796
+  Dot(Vel,Wish) = 194.705811
+  addSpeed = -12.705811
+  accelSpeed(x10) = 2913.504338
+  expectedAdd = 0.000000
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.042,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.042) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.037,0.000,0.999) angle= 89.735291
+  RootRight  = (-0.999,0.000,-0.037) dot= -0.999989
+  Wish(root basis): Right= -0.999989 Forward= 0.004620
+  HumMove    = (0.680,0.000,0.733) angle= 44.735797
+
+AIRCONTROL #50 t=1.6146 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.042)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.008796
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.999113
+  Arg4 vs RootRight   = 0.999297
+  Arg4 vs CameraLook  = 0.042106
+  Arg4 vs RootLook    = 0.037490
+  Arg4 vs HumMove     = -0.680094
+
+ACCEL #69 t=1.6225 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.046) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007874
+  Dot(Vel,Wish) = 204.232651
+  addSpeed = -22.232651
+  accelSpeed(x10) = 2608.308044
+  expectedAdd = 0.000000
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.046,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.046) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.042,0.000,0.999) angle= 89.801574
+  RootRight  = (-0.999,0.000,-0.042) dot= -0.999994
+  Wish(root basis): Right= -0.999994 Forward= 0.003463
+  HumMove    = (0.677,0.000,0.736) angle= 44.801839
+
+AIRCONTROL #51 t=1.6225 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.046)
+  Arg3 = 1619.999903
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.007874
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.998962
+  Arg4 vs RootRight   = 0.999113
+  Arg4 vs CameraLook  = 0.045562
+  Arg4 vs RootLook    = 0.042102
+  Arg4 vs HumMove     = -0.676706
+
+ACCEL #70 t=1.6313 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.047) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008925
+  Dot(Vel,Wish) = 207.407471
+  addSpeed = -25.407471
+  accelSpeed(x10) = 2956.192746
+  expectedAdd = 0.000000
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.047,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.047) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.046,0.000,0.999) angle= 89.933764
+  RootRight  = (-0.999,0.000,-0.046) dot= -0.999999
+  Wish(root basis): Right= -0.999999 Forward= 0.001156
+  HumMove    = (0.674,0.000,0.739) angle= 44.933951
+
+AIRCONTROL #52 t=1.6314 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.047)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.008925
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.998908
+  Arg4 vs RootRight   = 0.998962
+  Arg4 vs CameraLook  = 0.046713
+  Arg4 vs RootLook    = 0.045558
+  Arg4 vs HumMove     = -0.674156
+
+ACCEL #71 t=1.6394 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.047) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008208
+  Dot(Vel,Wish) = 207.407471
+  addSpeed = -25.407471
+  accelSpeed(x10) = 2718.790189
+  expectedAdd = 0.000000
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.047,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.047) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.047,0.000,0.999) angle= 89.999839
+  RootRight  = (-0.999,0.000,-0.047) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000003
+  HumMove    = (0.673,0.000,0.739) angle= 45.000001
+
+AIRCONTROL #53 t=1.6395 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.047)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.008208
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.998908
+  Arg4 vs RootRight   = 0.998908
+  Arg4 vs CameraLook  = 0.046713
+  Arg4 vs RootLook    = 0.046710
+  Arg4 vs HumMove     = -0.673304
+
+ACCEL #72 t=1.6482 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.047) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008528
+  Dot(Vel,Wish) = 207.407471
+  addSpeed = -25.407471
+  accelSpeed(x10) = 2824.980295
+  expectedAdd = 0.000000
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.047,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.047) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.047,0.000,0.999) angle= 89.999848
+  RootRight  = (-0.999,0.000,-0.047) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000003
+  HumMove    = (0.673,0.000,0.739) angle= 45.000001
+
+AIRCONTROL #54 t=1.6482 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.047)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.008528
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.998908
+  Arg4 vs RootRight   = 0.998908
+  Arg4 vs CameraLook  = 0.046713
+  Arg4 vs RootLook    = 0.046711
+  Arg4 vs HumMove     = -0.673304
+
+ACCEL #73 t=1.6560 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.044) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007696
+  Dot(Vel,Wish) = 201.056854
+  addSpeed = -19.056854
+  accelSpeed(x10) = 2549.347184
+  expectedAdd = 0.000000
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.044,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.044) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.047,0.000,0.999) angle= 90.131961
+  RootRight  = (-0.999,0.000,-0.047) dot= -0.999997
+  Wish(root basis): Right= -0.999997 Forward= -0.002303
+  HumMove    = (0.673,0.000,0.739) angle= 45.132109
+
+AIRCONTROL #55 t=1.6560 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.044)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.007696
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.999013
+  Arg4 vs RootRight   = 0.998908
+  Arg4 vs CameraLook  = 0.044410
+  Arg4 vs RootLook    = 0.046711
+  Arg4 vs HumMove     = -0.673304
+
+ACCEL #74 t=1.6642 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (0.999,0.000,0.037) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008301
+  Dot(Vel,Wish) = 181.999359
+  addSpeed = 0.000641
+  accelSpeed(x10) = 2749.719834
+  expectedAdd = 0.000641
+  RETURN     = (78.532,0.000,2760.708)
+  DELTA      = (0.001,0.000,0.000) mag= 0.000641
+  CameraLook = (-0.037,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.037) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.044,0.000,0.999) angle= 90.396167
+  RootRight  = (-0.999,0.000,-0.044) dot= -0.999976
+  Wish(root basis): Right= -0.999976 Forward= -0.006914
+  HumMove    = (0.675,0.000,0.738) angle= 45.396314
+
+AIRCONTROL #56 t=1.6643 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,0.037)
+  Arg3 = 1619.999903
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (78.532,0.000,2760.708)
+  Arg6 = 0.008301
+  RETURN = (78.532,0.000,2760.708)
+  Arg4 vs CameraRight = 0.999297
+  Arg4 vs RootRight   = 0.999014
+  Arg4 vs CameraLook  = 0.037499
+  Arg4 vs RootLook    = 0.044407
+  Arg4 vs HumMove     = -0.675007
+
+ACCEL #75 t=1.6731 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.532,0.000,2760.708) mag= 2761.824463
+  WishDir    = (1.000,0.000,0.028) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008928
+  Dot(Vel,Wish) = 156.576355
+  addSpeed = 25.423645
+  accelSpeed(x10) = 2957.421158
+  expectedAdd = 25.423645
+  RETURN     = (103.946,0.000,2761.427)
+  DELTA      = (25.413,0.000,0.719) mag= 25.423645
+  CameraLook = (-0.028,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,-0.028) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.037,0.000,0.999) angle= 90.528277
+  RootRight  = (-0.999,0.000,-0.037) dot= -0.999958
+  Wish(root basis): Right= -0.999958 Forward= -0.009220
+  HumMove    = (0.680,0.000,0.733) angle= 45.528425
+
+AIRCONTROL #57 t=1.6731 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (1.000,0.000,0.028)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (103.946,0.000,2761.427)
+  Arg6 = 0.008928
+  RETURN = (103.946,0.000,2761.427)
+  Arg4 vs CameraRight = 0.999600
+  Arg4 vs RootRight   = 0.999297
+  Arg4 vs CameraLook  = 0.028281
+  Arg4 vs RootLook    = 0.037496
+  Arg4 vs HumMove     = -0.680094
+
+ACCEL #76 t=1.6809 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (103.946,0.000,2761.427) mag= 2763.382324
+  WishDir    = (1.000,0.000,0.010) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007796
+  Dot(Vel,Wish) = 131.110657
+  addSpeed = 50.889343
+  accelSpeed(x10) = 2582.236674
+  expectedAdd = 50.889343
+  RETURN     = (154.833,0.000,2761.927)
+  DELTA      = (50.887,0.000,0.501) mag= 50.889343
+  CameraLook = (-0.010,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,-0.010) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.028,0.000,1.000) angle= 91.056588
+  RootRight  = (-1.000,0.000,-0.028) dot= -0.999830
+  Wish(root basis): Right= -0.999830 Forward= -0.018440
+  HumMove    = (0.687,0.000,0.727) angle= 46.056846
+
+AIRCONTROL #58 t=1.6809 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (1.000,0.000,0.010)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (154.833,0.000,2761.927)
+  Arg6 = 0.007796
+  RETURN = (154.833,0.000,2761.927)
+  Arg4 vs CameraRight = 0.999952
+  Arg4 vs RootRight   = 0.999600
+  Arg4 vs CameraLook  = 0.009839
+  Arg4 vs RootLook    = 0.028276
+  Arg4 vs HumMove     = -0.686826
+
+ACCEL #77 t=1.6897 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (154.833,0.000,2761.927) mag= 2766.263916
+  WishDir    = (1.000,0.000,-0.007) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008898
+  Dot(Vel,Wish) = 134.243011
+  addSpeed = 47.756989
+  accelSpeed(x10) = 2947.511493
+  expectedAdd = 47.756989
+  RETURN     = (202.588,0.000,2761.572)
+  DELTA      = (47.756,0.000,-0.356) mag= 47.756989
+  CameraLook = (0.007,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,0.007) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.010,0.000,1.000) angle= 90.990359
+  RootRight  = (-1.000,0.000,-0.010) dot= -0.999851
+  Wish(root basis): Right= -0.999851 Forward= -0.017284
+  HumMove    = (0.700,0.000,0.714) angle= 45.990787
+
+AIRCONTROL #59 t=1.6898 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (1.000,0.000,-0.007)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (202.588,0.000,2761.572)
+  Arg6 = 0.008898
+  RETURN = (202.588,0.000,2761.572)
+  Arg4 vs CameraRight = 0.999972
+  Arg4 vs RootRight   = 0.999952
+  Arg4 vs CameraLook  = -0.007453
+  Arg4 vs RootLook    = 0.009832
+  Arg4 vs HumMove     = -0.700115
+
+ACCEL #78 t=1.6976 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (202.588,0.000,2761.572) mag= 2768.992432
+  WishDir    = (1.000,0.000,-0.022) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007759
+  Dot(Vel,Wish) = 140.571976
+  addSpeed = 41.428024
+  accelSpeed(x10) = 2570.118828
+  expectedAdd = 41.428024
+  RETURN     = (244.006,0.000,2760.642)
+  DELTA      = (41.418,0.000,-0.930) mag= 41.428036
+  CameraLook = (0.022,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,0.022) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.007,0.000,1.000) angle= 90.858230
+  RootRight  = (-1.000,0.000,0.007) dot= -0.999888
+  Wish(root basis): Right= -0.999888 Forward= -0.014978
+  HumMove    = (0.712,0.000,0.702) angle= 45.858690
+
+AIRCONTROL #60 t=1.6976 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (1.000,0.000,-0.022)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (244.006,0.000,2760.642)
+  Arg6 = 0.007759
+  RETURN = (244.006,0.000,2760.642)
+  Arg4 vs CameraRight = 0.999748
+  Arg4 vs RootRight   = 0.999972
+  Arg4 vs CameraLook  = -0.022438
+  Arg4 vs RootLook    = -0.007461
+  Arg4 vs HumMove     = -0.712357
+
+ACCEL #79 t=1.7059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (244.006,0.000,2760.642) mag= 2771.404541
+  WishDir    = (0.999,0.000,-0.035) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008304
+  Dot(Vel,Wish) = 146.917358
+  addSpeed = 35.082642
+  accelSpeed(x10) = 2750.520369
+  expectedAdd = 35.082642
+  RETURN     = (279.067,0.000,2759.410)
+  DELTA      = (35.061,0.000,-1.232) mag= 35.082642
+  CameraLook = (0.035,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,0.035) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.022,0.000,1.000) angle= 90.726137
+  RootRight  = (-1.000,0.000,0.022) dot= -0.999920
+  Wish(root basis): Right= -0.999920 Forward= -0.012673
+  HumMove    = (0.723,0.000,0.691) angle= 45.726578
+
+AIRCONTROL #61 t=1.7059 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,-0.035)
+  Arg3 = 1619.999903
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (279.067,0.000,2759.410)
+  Arg6 = 0.008304
+  RETURN = (279.067,0.000,2759.410)
+  Arg4 vs CameraRight = 0.999383
+  Arg4 vs RootRight   = 0.999748
+  Arg4 vs CameraLook  = -0.035114
+  Arg4 vs RootLook    = -0.022446
+  Arg4 vs HumMove     = -0.722795
+
+ACCEL #80 t=1.7148 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (279.067,0.000,2759.410) mag= 2773.485352
+  WishDir    = (0.999,0.000,-0.045) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008977
+  Dot(Vel,Wish) = 153.276398
+  addSpeed = 28.723602
+  accelSpeed(x10) = 2973.569135
+  expectedAdd = 28.723602
+  RETURN     = (307.761,0.000,2758.104)
+  DELTA      = (28.694,0.000,-1.306) mag= 28.723602
+  CameraLook = (0.045,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,0.045) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.035,0.000,0.999) angle= 90.594057
+  RootRight  = (-0.999,0.000,0.035) dot= -0.999946
+  Wish(root basis): Right= -0.999946 Forward= -0.010368
+  HumMove    = (0.732,0.000,0.682) angle= 45.594474
+
+AIRCONTROL #62 t=1.7149 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.999,0.000,-0.045)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (307.761,0.000,2758.104)
+  Arg6 = 0.008977
+  RETURN = (307.761,0.000,2758.104)
+  Arg4 vs CameraRight = 0.998965
+  Arg4 vs RootRight   = 0.999383
+  Arg4 vs CameraLook  = -0.045481
+  Arg4 vs RootLook    = -0.035122
+  Arg4 vs HumMove     = -0.731500
+
+ACCEL #81 t=1.7229 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (307.761,0.000,2758.104) mag= 2775.221191
+  WishDir    = (0.998,0.000,-0.060) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007801
+  Dot(Vel,Wish) = 140.478455
+  addSpeed = 41.521545
+  accelSpeed(x10) = 2584.086079
+  expectedAdd = 41.521545
+  RETURN     = (349.207,0.000,2755.594)
+  DELTA      = (41.446,0.000,-2.510) mag= 41.521538
+  CameraLook = (0.060,0.000,0.998) angle= 90.000000
+  CameraRight= (-0.998,0.000,0.060) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.045,0.000,0.999) angle= 90.858309
+  RootRight  = (-0.999,0.000,0.045) dot= -0.999888
+  Wish(root basis): Right= -0.999888 Forward= -0.014980
+  HumMove    = (0.739,0.000,0.674) angle= 45.858694
+
+AIRCONTROL #63 t=1.7229 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.998,0.000,-0.060)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (349.207,0.000,2755.594)
+  Arg6 = 0.007801
+  RETURN = (349.207,0.000,2755.594)
+  Arg4 vs CameraRight = 0.998171
+  Arg4 vs RootRight   = 0.998965
+  Arg4 vs CameraLook  = -0.060447
+  Arg4 vs RootLook    = -0.045488
+  Arg4 vs HumMove     = -0.738535
+
+ACCEL #82 t=1.7316 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (349.207,0.000,2755.594) mag= 2777.632324
+  WishDir    = (0.997,0.000,-0.077) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008817
+  Dot(Vel,Wish) = 137.244278
+  addSpeed = 44.755722
+  accelSpeed(x10) = 2920.611978
+  expectedAdd = 44.755722
+  RETURN     = (393.831,0.000,2752.168)
+  DELTA      = (44.624,0.000,-3.426) mag= 44.755714
+  CameraLook = (0.077,0.000,0.997) angle= 90.000000
+  CameraRight= (-0.997,0.000,0.077) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.060,0.000,0.998) angle= 90.924326
+  RootRight  = (-0.998,0.000,0.060) dot= -0.999870
+  Wish(root basis): Right= -0.999870 Forward= -0.016132
+  HumMove    = (0.749,0.000,0.663) angle= 45.924735
+
+AIRCONTROL #64 t=1.7317 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.997,0.000,-0.077)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (393.831,0.000,2752.168)
+  Arg6 = 0.008817
+  RETURN = (393.831,0.000,2752.168)
+  Arg4 vs CameraRight = 0.997066
+  Arg4 vs RootRight   = 0.998171
+  Arg4 vs CameraLook  = -0.076549
+  Arg4 vs RootLook    = -0.060454
+  Arg4 vs HumMove     = -0.748556
+
+ACCEL #83 t=1.7399 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (393.831,0.000,2752.168) mag= 2780.203125
+  WishDir    = (0.995,0.000,-0.096) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008437
+  Dot(Vel,Wish) = 127.598267
+  addSpeed = 54.401733
+  accelSpeed(x10) = 2794.644187
+  expectedAdd = 54.401733
+  RETURN     = (447.981,0.000,2746.941)
+  DELTA      = (54.150,0.000,-5.227) mag= 54.401733
+  CameraLook = (0.096,0.000,0.995) angle= 90.000000
+  CameraRight= (-0.995,0.000,0.096) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.077,0.000,0.997) angle= 91.122455
+  RootRight  = (-0.997,0.000,0.077) dot= -0.999808
+  Wish(root basis): Right= -0.999808 Forward= -0.019589
+  HumMove    = (0.759,0.000,0.651) angle= 46.122889
+
+AIRCONTROL #65 t=1.7399 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.995,0.000,-0.096)
+  Arg3 = 1619.999903
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (447.981,0.000,2746.941)
+  Arg6 = 0.008437
+  RETURN = (447.981,0.000,2746.941)
+  Arg4 vs CameraRight = 0.995374
+  Arg4 vs RootRight   = 0.997065
+  Arg4 vs CameraLook  = -0.096074
+  Arg4 vs RootLook    = -0.076557
+  Arg4 vs HumMove     = -0.759160
+
+ACCEL #84 t=1.7478 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (447.981,0.000,2746.941) mag= 2783.230469
+  WishDir    = (0.993,0.000,-0.116) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007700
+  Dot(Vel,Wish) = 127.538849
+  addSpeed = 54.461151
+  accelSpeed(x10) = 2550.658426
+  expectedAdd = 54.461151
+  RETURN     = (502.077,0.000,2740.647)
+  DELTA      = (54.096,0.000,-6.294) mag= 54.461163
+  CameraLook = (0.116,0.000,0.993) angle= 90.000000
+  CameraRight= (-0.993,0.000,0.116) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.096,0.000,0.995) angle= 91.122393
+  RootRight  = (-0.995,0.000,0.096) dot= -0.999808
+  Wish(root basis): Right= -0.999808 Forward= -0.019588
+  HumMove    = (0.772,0.000,0.636) angle= 46.122898
+
+AIRCONTROL #66 t=1.7478 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.993,0.000,-0.116)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (502.077,0.000,2740.647)
+  Arg6 = 0.007700
+  RETURN = (502.077,0.000,2740.647)
+  Arg4 vs CameraRight = 0.993300
+  Arg4 vs RootRight   = 0.995373
+  Arg4 vs CameraLook  = -0.115562
+  Arg4 vs RootLook    = -0.096082
+  Arg4 vs HumMove     = -0.771770
+
+ACCEL #85 t=1.7561 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (502.077,0.000,2740.647) mag= 2786.257324
+  WishDir    = (0.991,0.000,-0.134) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008315
+  Dot(Vel,Wish) = 130.687866
+  addSpeed = 51.312134
+  accelSpeed(x10) = 2754.163960
+  expectedAdd = 51.312134
+  RETURN     = (552.928,0.000,2733.779)
+  DELTA      = (50.850,0.000,-6.869) mag= 51.312172
+  CameraLook = (0.134,0.000,0.991) angle= 90.000000
+  CameraRight= (-0.991,0.000,0.134) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.116,0.000,0.993) angle= 91.056336
+  RootRight  = (-0.993,0.000,0.116) dot= -0.999830
+  Wish(root basis): Right= -0.999830 Forward= -0.018435
+  HumMove    = (0.784,0.000,0.621) angle= 46.056841
+
+AIRCONTROL #67 t=1.7561 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.991,0.000,-0.134)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (552.928,0.000,2733.779)
+  Arg6 = 0.008315
+  RETURN = (552.928,0.000,2733.779)
+  Arg4 vs CameraRight = 0.991000
+  Arg4 vs RootRight   = 0.993299
+  Arg4 vs CameraLook  = -0.133863
+  Arg4 vs RootLook    = -0.115570
+  Arg4 vs HumMove     = -0.784084
+
+ACCEL #86 t=1.7643 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (552.928,0.000,2733.779) mag= 2789.135010
+  WishDir    = (0.987,0.000,-0.158) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008332
+  Dot(Vel,Wish) = 114.572998
+  addSpeed = 67.427002
+  accelSpeed(x10) = 2759.933056
+  expectedAdd = 67.427002
+  RETURN     = (619.510,0.000,2723.138)
+  DELTA      = (66.582,0.000,-10.641) mag= 67.427017
+  CameraLook = (0.158,0.000,0.987) angle= 90.000001
+  CameraRight= (-0.987,0.000,0.158) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.134,0.000,0.991) angle= 91.386611
+  RootRight  = (-0.991,0.000,0.134) dot= -0.999707
+  Wish(root basis): Right= -0.999707 Forward= -0.024199
+  HumMove    = (0.795,0.000,0.606) angle= 46.387110
+
+AIRCONTROL #68 t=1.7644 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.987,0.000,-0.158)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (619.510,0.000,2723.138)
+  Arg6 = 0.008332
+  RETURN = (619.510,0.000,2723.138)
+  Arg4 vs CameraRight = 0.987469
+  Arg4 vs RootRight   = 0.990999
+  Arg4 vs CameraLook  = -0.157813
+  Arg4 vs RootLook    = -0.133872
+  Arg4 vs HumMove     = -0.795398
+
+ACCEL #87 t=1.7811 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (619.510,0.000,2723.138) mag= 2792.717529
+  WishDir    = (0.982,0.000,-0.188) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.016640
+  Dot(Vel,Wish) = 95.182434
+  addSpeed = 86.817566
+  accelSpeed(x10) = 5511.833615
+  expectedAdd = 86.817566
+  RETURN     = (704.771,0.000,2706.775)
+  DELTA      = (85.262,0.000,-16.362) mag= 86.817543
+  CameraLook = (0.188,0.000,0.982) angle= 90.000000
+  CameraRight= (-0.982,0.000,0.188) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.158,0.000,0.987) angle= 91.782845
+  RootRight  = (-0.987,0.000,0.158) dot= -0.999516
+  Wish(root basis): Right= -0.999516 Forward= -0.031111
+  HumMove    = (0.810,0.000,0.587) angle= 46.783431
+
+AIRCONTROL #69 t=1.7812 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.982,0.000,-0.188)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (704.771,0.000,2706.775)
+  Arg6 = 0.016640
+  RETURN = (704.771,0.000,2706.775)
+  Arg4 vs CameraRight = 0.982079
+  Arg4 vs RootRight   = 0.987467
+  Arg4 vs CameraLook  = -0.188468
+  Arg4 vs RootLook    = -0.157823
+  Arg4 vs HumMove     = -0.809837
+
+ACCEL #88 t=1.7893 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (704.771,0.000,2706.775) mag= 2797.022705
+  WishDir    = (0.969,0.000,-0.247) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008336
+  Dot(Vel,Wish) = 14.454102
+  addSpeed = 167.545898
+  accelSpeed(x10) = 2761.327128
+  expectedAdd = 167.545898
+  RETURN     = (867.127,0.000,2665.397)
+  DELTA      = (162.356,0.000,-41.378) mag= 167.545914
+  CameraLook = (0.247,0.000,0.969) angle= 90.000000
+  CameraRight= (-0.969,0.000,0.247) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.188,0.000,0.982) angle= 93.433706
+  RootRight  = (-0.982,0.000,0.188) dot= -0.998205
+  Wish(root basis): Right= -0.998205 Forward= -0.059894
+  HumMove    = (0.828,0.000,0.561) angle= 48.434733
+
+AIRCONTROL #70 t=1.7893 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.969,0.000,-0.247)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (867.127,0.000,2665.397)
+  Arg6 = 0.008336
+  RETURN = (867.127,0.000,2665.397)
+  Arg4 vs CameraRight = 0.969024
+  Arg4 vs RootRight   = 0.982076
+  Arg4 vs CameraLook  = -0.246968
+  Arg4 vs RootLook    = -0.188486
+  Arg4 vs HumMove     = -0.827702
+
+ACCEL #89 t=1.7983 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (867.127,0.000,2665.397) mag= 2802.900391
+  WishDir    = (0.963,0.000,-0.269) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.009007
+  Dot(Vel,Wish) = 117.467957
+  addSpeed = 64.532043
+  accelSpeed(x10) = 2983.381934
+  expectedAdd = 64.532043
+  RETURN     = (929.276,0.000,2648.022)
+  DELTA      = (62.149,0.000,-17.375) mag= 64.532059
+  CameraLook = (0.269,0.000,0.963) angle= 90.000000
+  CameraRight= (-0.963,0.000,0.269) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.247,0.000,0.969) angle= 91.320074
+  RootRight  = (-0.969,0.000,0.247) dot= -0.999735
+  Wish(root basis): Right= -0.999735 Forward= -0.023038
+  HumMove    = (0.860,0.000,0.511) angle= 46.321052
+
+AIRCONTROL #71 t=1.7984 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.963,0.000,-0.269)
+  Arg3 = 1619.999903
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (929.276,0.000,2648.022)
+  Arg6 = 0.009007
+  RETURN = (929.276,0.000,2648.022)
+  Arg4 vs CameraRight = 0.963072
+  Arg4 vs RootRight   = 0.969019
+  Arg4 vs CameraLook  = -0.269243
+  Arg4 vs RootLook    = -0.246984
+  Arg4 vs HumMove     = -0.859836
+
+ACCEL #90 t=1.8066 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (929.276,0.000,2648.022) mag= 2806.345703
+  WishDir    = (0.957,0.000,-0.290) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008268
+  Dot(Vel,Wish) = 120.620544
+  addSpeed = 61.379456
+  accelSpeed(x10) = 2738.678623
+  expectedAdd = 61.379456
+  RETURN     = (988.013,0.000,2630.206)
+  DELTA      = (58.737,0.000,-17.817) mag= 61.379471
+  CameraLook = (0.290,0.000,0.957) angle= 89.999998
+  CameraRight= (-0.957,0.000,0.290) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.269,0.000,0.963) angle= 91.254266
+  RootRight  = (-0.963,0.000,0.269) dot= -0.999760
+  Wish(root basis): Right= -0.999760 Forward= -0.021889
+  HumMove    = (0.871,0.000,0.491) angle= 46.255001
+
+AIRCONTROL #72 t=1.8067 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.957,0.000,-0.290)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (988.013,0.000,2630.206)
+  Arg6 = 0.008268
+  RETURN = (988.013,0.000,2630.206)
+  Arg4 vs CameraRight = 0.956944
+  Arg4 vs RootRight   = 0.963069
+  Arg4 vs CameraLook  = -0.290271
+  Arg4 vs RootLook    = -0.269255
+  Arg4 vs HumMove     = -0.871378
+
+ACCEL #91 t=1.8144 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (988.013,0.000,2630.206) mag= 2809.653320
+  WishDir    = (0.946,0.000,-0.323) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007749
+  Dot(Vel,Wish) = 84.942017
+  addSpeed = 97.057983
+  accelSpeed(x10) = 2566.916842
+  expectedAdd = 97.057983
+  RETURN     = (1079.863,0.000,2598.838)
+  DELTA      = (91.849,0.000,-31.368) mag= 97.057983
+  CameraLook = (0.323,0.000,0.946) angle= 90.000002
+  CameraRight= (-0.946,0.000,0.323) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.290,0.000,0.957) angle= 91.980955
+  RootRight  = (-0.957,0.000,0.290) dot= -0.999402
+  Wish(root basis): Right= -0.999402 Forward= -0.034567
+  HumMove    = (0.882,0.000,0.471) angle= 46.981584
+
+AIRCONTROL #73 t=1.8144 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.946,0.000,-0.323)
+  Arg3 = 1619.999903
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1079.863,0.000,2598.838)
+  Arg6 = 0.007749
+  RETURN = (1079.863,0.000,2598.838)
+  Arg4 vs CameraRight = 0.946335
+  Arg4 vs RootRight   = 0.956941
+  Arg4 vs CameraLook  = -0.323187
+  Arg4 vs RootLook    = -0.290282
+  Arg4 vs HumMove     = -0.881915
+
+ACCEL #92 t=1.8227 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1079.863,0.000,2598.838) mag= 2814.260010
+  WishDir    = (0.934,0.000,-0.358) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008298
+  Dot(Vel,Wish) = 78.296875
+  addSpeed = 103.703125
+  accelSpeed(x10) = 2748.615744
+  expectedAdd = 103.703125
+  RETURN     = (1176.698,0.000,2561.725)
+  DELTA      = (96.835,0.000,-37.112) mag= 103.703102
+  CameraLook = (0.358,0.000,0.934) angle= 90.000000
+  CameraRight= (-0.934,0.000,0.358) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.323,0.000,0.946) angle= 92.112942
+  RootRight  = (-0.946,0.000,0.323) dot= -0.999320
+  Wish(root basis): Right= -0.999320 Forward= -0.036869
+  HumMove    = (0.898,0.000,0.441) angle= 47.113682
+
+AIRCONTROL #74 t=1.8228 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.934,0.000,-0.358)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1176.698,0.000,2561.725)
+  Arg6 = 0.008298
+  RETURN = (1176.698,0.000,2561.725)
+  Arg4 vs CameraRight = 0.933771
+  Arg4 vs RootRight   = 0.946331
+  Arg4 vs CameraLook  = -0.357871
+  Arg4 vs RootLook    = -0.323200
+  Arg4 vs HumMove     = -0.897688
+
+ACCEL #93 t=1.8308 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1176.698,0.000,2561.725) mag= 2819.051758
+  WishDir    = (0.920,0.000,-0.391) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008287
+  Dot(Vel,Wish) = 81.368164
+  addSpeed = 100.631836
+  accelSpeed(x10) = 2744.820376
+  expectedAdd = 100.631836
+  RETURN     = (1269.318,0.000,2522.378)
+  DELTA      = (92.620,0.000,-39.348) mag= 100.631851
+  CameraLook = (0.391,0.000,0.920) angle= 90.000000
+  CameraRight= (-0.920,0.000,0.391) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.358,0.000,0.934) angle= 92.046828
+  RootRight  = (-0.934,0.000,0.358) dot= -0.999362
+  Wish(root basis): Right= -0.999362 Forward= -0.035716
+  HumMove    = (0.913,0.000,0.407) angle= 47.047633
+
+AIRCONTROL #75 t=1.8308 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.920,0.000,-0.391)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1269.318,0.000,2522.378)
+  Arg6 = 0.008287
+  RETURN = (1269.318,0.000,2522.378)
+  Arg4 vs CameraRight = 0.920388
+  Arg4 vs RootRight   = 0.933766
+  Arg4 vs CameraLook  = -0.391006
+  Arg4 vs RootLook    = -0.357884
+  Arg4 vs HumMove     = -0.913329
+
+ACCEL #94 t=1.8396 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1269.318,0.000,2522.378) mag= 2823.748779
+  WishDir    = (0.906,0.000,-0.424) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008844
+  Dot(Vel,Wish) = 81.199951
+  addSpeed = 100.800049
+  accelSpeed(x10) = 2929.376215
+  expectedAdd = 100.800049
+  RETURN     = (1360.625,0.000,2479.675)
+  DELTA      = (91.308,0.000,-42.703) mag= 100.799988
+  CameraLook = (0.424,0.000,0.906) angle= 89.999998
+  CameraRight= (-0.906,0.000,0.424) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.391,0.000,0.920) angle= 92.046821
+  RootRight  = (-0.920,0.000,0.391) dot= -0.999362
+  Wish(root basis): Right= -0.999362 Forward= -0.035716
+  HumMove    = (0.927,0.000,0.374) angle= 47.047633
+
+AIRCONTROL #76 t=1.8396 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.906,0.000,-0.424)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1360.625,0.000,2479.675)
+  Arg6 = 0.008844
+  RETURN = (1360.625,0.000,2479.675)
+  Arg4 vs CameraRight = 0.905830
+  Arg4 vs RootRight   = 0.920382
+  Arg4 vs CameraLook  = -0.423642
+  Arg4 vs RootLook    = -0.391019
+  Arg4 vs HumMove     = -0.927296
+
+ACCEL #95 t=1.8477 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1360.625,0.000,2479.675) mag= 2828.442627
+  WishDir    = (0.890,0.000,-0.457) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007887
+  Dot(Vel,Wish) = 77.771973
+  addSpeed = 104.228027
+  accelSpeed(x10) = 2612.434732
+  expectedAdd = 104.228027
+  RETURN     = (1453.345,0.000,2432.067)
+  DELTA      = (92.720,0.000,-47.608) mag= 104.228027
+  CameraLook = (0.457,0.000,0.890) angle= 89.999998
+  CameraRight= (-0.890,0.000,0.457) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.424,0.000,0.906) angle= 92.112869
+  RootRight  = (-0.906,0.000,0.424) dot= -0.999320
+  Wish(root basis): Right= -0.999320 Forward= -0.036868
+  HumMove    = (0.940,0.000,0.341) angle= 47.113696
+
+AIRCONTROL #77 t=1.8477 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.890,0.000,-0.457)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1453.345,0.000,2432.067)
+  Arg6 = 0.007887
+  RETURN = (1453.345,0.000,2432.067)
+  Arg4 vs CameraRight = 0.889588
+  Arg4 vs RootRight   = 0.905823
+  Arg4 vs CameraLook  = -0.456763
+  Arg4 vs RootLook    = -0.423655
+  Arg4 vs HumMove     = -0.940079
+
+ACCEL #96 t=1.8559 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1453.345,0.000,2432.067) mag= 2833.224854
+  WishDir    = (0.875,0.000,-0.483) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008252
+  Dot(Vel,Wish) = 97.183960
+  addSpeed = 84.816040
+  accelSpeed(x10) = 2733.282185
+  expectedAdd = 84.816040
+  RETURN     = (1527.602,0.000,2391.082)
+  DELTA      = (74.256,0.000,-40.985) mag= 84.816055
+  CameraLook = (0.483,0.000,0.875) angle= 89.999998
+  CameraRight= (-0.875,0.000,0.483) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.457,0.000,0.890) angle= 91.716185
+  RootRight  = (-0.890,0.000,0.457) dot= -0.999552
+  Wish(root basis): Right= -0.999552 Forward= -0.029949
+  HumMove    = (0.952,0.000,0.306) angle= 46.717363
+
+AIRCONTROL #78 t=1.8559 state=Enum.HumanoidStateType.Landed callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.875,0.000,-0.483)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1527.602,0.000,2391.082)
+  Arg6 = 0.008252
+  RETURN = (1527.602,0.000,2391.082)
+  Arg4 vs CameraRight = 0.875500
+  Arg4 vs RootRight   = 0.889579
+  Arg4 vs CameraLook  = -0.483219
+  Arg4 vs RootLook    = -0.456782
+  Arg4 vs HumMove     = -0.952014
+
+ACCEL #97 t=1.8643 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1527.602,0.000,2391.082) mag= 2837.400635
+  WishDir    = (0.862,0.000,-0.506) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008368
+  Dot(Vel,Wish) = 106.865234
+  addSpeed = 75.134766
+  accelSpeed(x10) = 2771.885242
+  expectedAdd = 75.134766
+  RETURN     = (1592.397,0.000,2353.044)
+  DELTA      = (64.795,0.000,-38.038) mag= 75.134834
+  CameraLook = (0.506,0.000,0.862) angle= 89.999997
+  CameraRight= (-0.862,0.000,0.506) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.483,0.000,0.875) angle= 91.517840
+  RootRight  = (-0.875,0.000,0.483) dot= -0.999649
+  Wish(root basis): Right= -0.999649 Forward= -0.026488
+  HumMove    = (0.961,0.000,0.277) angle= 46.519212
+
+AIRCONTROL #79 t=1.8643 state=Enum.HumanoidStateType.Landed callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.862,0.000,-0.506)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1592.397,0.000,2353.044)
+  Arg6 = 0.008368
+  RETURN = (1592.397,0.000,2353.044)
+  Arg4 vs CameraRight = 0.862381
+  Arg4 vs RootRight   = 0.875488
+  Arg4 vs CameraLook  = -0.506260
+  Arg4 vs RootLook    = -0.483240
+  Arg4 vs HumMove     = -0.960759
+
+ACCEL #98 t=1.8730 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1592.397,0.000,2353.044) mag= 2841.222412
+  WishDir    = (0.836,0.000,-0.549) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008864
+  Dot(Vel,Wish) = 38.002808
+  addSpeed = 143.997192
+  accelSpeed(x10) = 2936.180299
+  expectedAdd = 143.997192
+  RETURN     = (1712.721,0.000,2273.942)
+  DELTA      = (120.324,0.000,-79.103) mag= 143.997177
+  CameraLook = (0.549,0.000,0.836) angle= 90.000002
+  CameraRight= (-0.836,0.000,0.549) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.506,0.000,0.862) angle= 92.905038
+  RootRight  = (-0.862,0.000,0.506) dot= -0.998715
+  Wish(root basis): Right= -0.998715 Forward= -0.050681
+  HumMove    = (0.968,0.000,0.252) angle= 47.906320
+
+AIRCONTROL #80 t=1.8730 state=Enum.HumanoidStateType.Landed callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.836,0.000,-0.549)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1712.721,0.000,2273.942)
+  Arg6 = 0.008864
+  RETURN = (1712.721,0.000,2273.942)
+  Arg4 vs CameraRight = 0.835603
+  Arg4 vs RootRight   = 0.862369
+  Arg4 vs CameraLook  = -0.549334
+  Arg4 vs RootLook    = -0.506279
+  Arg4 vs HumMove     = -0.967775
+
+ACCEL #99 t=1.8810 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1712.721,0.000,2273.942) mag= 2846.792236
+  WishDir    = (0.803,0.000,-0.597) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007832
+  Dot(Vel,Wish) = 18.029907
+  addSpeed = 163.970093
+  accelSpeed(x10) = 2594.326911
+  expectedAdd = 163.970093
+  RETURN     = (1844.318,0.000,2176.124)
+  DELTA      = (131.597,0.000,-97.818) mag= 163.970123
+  CameraLook = (0.597,0.000,0.803) angle= 90.000000
+  CameraRight= (-0.803,0.000,0.597) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.549,0.000,0.836) angle= 93.301099
+  RootRight  = (-0.836,0.000,0.549) dot= -0.998341
+  Wish(root basis): Right= -0.998341 Forward= -0.057583
+  HumMove    = (0.979,0.000,0.202) angle= 48.302627
+
+AIRCONTROL #81 t=1.8811 state=Enum.HumanoidStateType.Landed callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.803,0.000,-0.597)
+  Arg3 = 1620.000000
+  Arg4 = (-1.000,0.000,-0.000)
+  Arg5 = (1844.318,0.000,2176.124)
+  Arg6 = 0.007832
+  RETURN = (1844.318,0.000,2176.124)
+  Arg4 vs CameraRight = 0.802568
+  Arg4 vs RootRight   = 0.835588
+  Arg4 vs CameraLook  = -0.596561
+  Arg4 vs RootLook    = -0.549357
+  Arg4 vs HumMove     = -0.979298
+
+ACCEL #100 t=1.8893 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1767.109,0.000,2085.024) mag= 2733.129883
+  WishDir    = (1.000,0.000,0.030) mag= 1.000000
+  Accel      = 2858.321227
+  WishSpeed  = 20.400000
+  dt         = 0.008373
+  Dot(Vel,Wish) = 1828.024170
+  addSpeed = -1807.624170
+  accelSpeed(x10) = 4882.081051
+  expectedAdd = 0.000000
+  RETURN     = (2255.103,0.000,2099.468)
+  DELTA      = (487.994,0.000,14.444) mag= 488.208008
+  CameraLook = (0.625,0.000,0.781) angle= 49.632933
+  CameraRight= (-0.781,0.000,0.625) dot= -0.761911
+  Wish(cam basis): Right= -0.761911 Forward= 0.647682
+  RootLook   = (0.597,0.000,0.803) angle= 51.678825
+  RootRight  = (-0.803,0.000,0.597) dot= -0.784547
+  Wish(root basis): Right= -0.784547 Forward= 0.620069
+  HumMove    = (0.989,0.000,0.146) angle= 6.680521
+
+ACCEL #101 t=1.8975 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2161.923,0.000,2012.719) mag= 2953.802734
+  WishDir    = (1.000,0.000,-0.002) mag= 1.000000
+  Accel      = 2869.700811
+  WishSpeed  = 20.400000
+  dt         = 0.008264
+  Dot(Vel,Wish) = 2157.923096
+  addSpeed = -2137.523096
+  accelSpeed(x10) = 4837.853570
+  expectedAdd = 0.000000
+  RETURN     = (2645.708,0.000,2011.759)
+  DELTA      = (483.784,0.000,-0.960) mag= 483.785370
+  CameraLook = (0.650,0.000,0.760) angle= 49.592648
+  CameraRight= (-0.760,0.000,0.650) dot= -0.761455
+  Wish(cam basis): Right= -0.761455 Forward= 0.648218
+  RootLook   = (0.625,0.000,0.781) angle= 51.439203
+  RootRight  = (-0.781,0.000,0.625) dot= -0.781947
+  Wish(root basis): Right= -0.781947 Forward= 0.623345
+  HumMove    = (0.994,0.000,0.110) angle= 6.442112
+
+ACCEL #102 t=1.9059 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2535.119,0.000,1927.669) mag= 3184.766357
+  WishDir    = (1.000,0.000,-0.021) mag= 1.000000
+  Accel      = 2881.212302
+  WishSpeed  = 20.400000
+  dt         = 0.008360
+  Dot(Vel,Wish) = 2493.619873
+  addSpeed = -2473.219873
+  accelSpeed(x10) = 4913.636916
+  expectedAdd = 0.000000
+  RETURN     = (2922.625,0.000,1919.439)
+  DELTA      = (387.505,0.000,-8.229) mag= 387.592499
+  CameraLook = (0.665,0.000,0.747) angle= 49.572583
+  CameraRight= (-0.747,0.000,0.665) dot= -0.761228
+  Wish(cam basis): Right= -0.761228 Forward= 0.648484
+  RootLook   = (0.650,0.000,0.760) angle= 50.691984
+  RootRight  = (-0.760,0.000,0.650) dot= -0.773752
+  Wish(root basis): Right= -0.773752 Forward= 0.633489
+  HumMove    = (0.997,0.000,0.078) angle= 5.695433
+
+ACCEL #103 t=1.9150 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2792.234,0.000,1833.805) mag= 3340.570801
+  WishDir    = (0.999,0.000,-0.039) mag= 1.000000
+  Accel      = 2893.499043
+  WishSpeed  = 20.400000
+  dt         = 0.008923
+  Dot(Vel,Wish) = 2717.970947
+  addSpeed = -2697.570947
+  accelSpeed(x10) = 5266.914595
+  expectedAdd = 0.000000
+  RETURN     = (2967.626,0.000,1826.904)
+  DELTA      = (175.392,0.000,-6.902) mag= 175.528076
+  CameraLook = (0.678,0.000,0.735) angle= 49.552563
+  CameraRight= (-0.735,0.000,0.678) dot= -0.761001
+  Wish(cam basis): Right= -0.761001 Forward= 0.648750
+  RootLook   = (0.665,0.000,0.747) angle= 50.605930
+  RootRight  = (-0.747,0.000,0.665) dot= -0.772799
+  Wish(root basis): Right= -0.772799 Forward= 0.634651
+  HumMove    = (0.998,0.000,0.059) angle= 5.609373
+
+ACCEL #104 t=1.9225 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2852.466,0.000,1756.010) mag= 3349.646484
+  WishDir    = (0.998,0.000,-0.055) mag= 1.000000
+  Accel      = 2904.186112
+  WishSpeed  = 20.400000
+  dt         = 0.007761
+  Dot(Vel,Wish) = 2751.390381
+  addSpeed = -2730.990381
+  accelSpeed(x10) = 4598.109286
+  expectedAdd = 0.000000
+  RETURN     = (3005.030,0.000,1747.592)
+  DELTA      = (152.564,0.000,-8.418) mag= 152.795776
+  CameraLook = (0.690,0.000,0.724) angle= 49.532590
+  CameraRight= (-0.724,0.000,0.690) dot= -0.760775
+  Wish(cam basis): Right= -0.760775 Forward= 0.649015
+  RootLook   = (0.678,0.000,0.735) angle= 50.454614
+  RootRight  = (-0.735,0.000,0.678) dot= -0.771120
+  Wish(root basis): Right= -0.771120 Forward= 0.636689
+  HumMove    = (0.999,0.000,0.040) angle= 5.457292
+
+ACCEL #105 t=1.9316 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2871.943,0.000,1670.194) mag= 3322.289307
+  WishDir    = (0.998,0.000,-0.062) mag= 1.000000
+  Accel      = 2916.382831
+  WishSpeed  = 20.400000
+  dt         = 0.008858
+  Dot(Vel,Wish) = 2762.869873
+  addSpeed = -2742.469873
+  accelSpeed(x10) = 5269.749382
+  expectedAdd = 0.000000
+  RETURN     = (3025.161,0.000,1660.677)
+  DELTA      = (153.218,0.000,-9.517) mag= 153.512848
+  CameraLook = (0.695,0.000,0.719) angle= 49.532594
+  CameraRight= (-0.719,0.000,0.695) dot= -0.760775
+  Wish(cam basis): Right= -0.760775 Forward= 0.649015
+  RootLook   = (0.690,0.000,0.724) angle= 49.926552
+  RootRight  = (-0.724,0.000,0.690) dot= -0.765220
+  Wish(root basis): Right= -0.765220 Forward= 0.643769
+  HumMove    = (1.000,0.000,0.024) angle= 4.928792
+
+ACCEL #106 t=1.9397 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3249.662,0.000,1783.918) mag= 3707.110352
+  WishDir    = (0.998,0.000,-0.062) mag= 1.000000
+  Accel      = 2927.189355
+  WishSpeed  = 20.400000
+  dt         = 0.007848
+  Dot(Vel,Wish) = 3132.811523
+  addSpeed = -3112.411523
+  accelSpeed(x10) = 4686.332309
+  expectedAdd = 0.000000
+  RETURN     = (3249.662,0.000,1783.918)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.695,0.000,0.719) angle= 49.532594
+  CameraRight= (-0.719,0.000,0.695) dot= -0.760775
+  Wish(cam basis): Right= -0.760775 Forward= 0.649015
+  RootLook   = (0.695,0.000,0.719) angle= 49.530377
+  RootRight  = (-0.719,0.000,0.695) dot= -0.760750
+  Wish(root basis): Right= -0.760750 Forward= 0.649045
+  HumMove    = (1.000,0.000,0.017) angle= 4.532504
+
+ACCEL #107 t=1.9482 state=Enum.HumanoidStateType.Jumping callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3106.573,0.000,1705.369) mag= 3543.879395
+  WishDir    = (0.695,0.000,0.719) mag= 1.000000
+  Accel      = 2939.315557
+  WishSpeed  = 20.400000
+  dt         = 0.008806
+  Dot(Vel,Wish) = 3385.147705
+  addSpeed = -3364.747705
+  accelSpeed(x10) = 5280.481781
+  expectedAdd = 0.000000
+  RETURN     = (3106.573,0.000,1705.369)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.695,0.000,0.719) angle= 0.027976
+  CameraRight= (-0.719,0.000,0.695) dot= 0.000000
+  Wish(cam basis): Right= 0.000000 Forward= 1.000000
+  RootLook   = (0.695,0.000,0.719) angle= 0.000000
+  RootRight  = (-0.719,0.000,0.695) dot= 0.000047
+  Wish(root basis): Right= 0.000047 Forward= 1.000000
+  HumMove    = (0.695,0.000,0.719) angle= 0.000000
+
+AIRCONTROL #82 t=1.9561 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.000,0.000,0.000)
+  Arg3 = 0.000000
+  Arg4 = (0.000,0.000,-0.000)
+  Arg5 = (3106.573,0.000,1705.369)
+  Arg6 = 0.008181
+  RETURN = (3106.573,0.000,1705.369)
+  Arg4 vs CameraRight = 0.000000
+  Arg4 vs RootRight   = 0.000000
+  Arg4 vs CameraLook  = 0.000000
+  Arg4 vs RootLook    = 0.000000
+  Arg4 vs HumMove     = 0.000000
+
+AIRCONTROL #83 t=1.9645 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.000,0.000,0.000)
+  Arg3 = 0.000000
+  Arg4 = (0.000,0.000,-0.000)
+  Arg5 = (3106.573,0.000,1705.369)
+  Arg6 = 0.007971
+  RETURN = (3106.573,0.000,1705.369)
+  Arg4 vs CameraRight = 0.000000
+  Arg4 vs RootRight   = 0.000000
+  Arg4 vs CameraLook  = 0.000000
+  Arg4 vs RootLook    = 0.000000
+  Arg4 vs HumMove     = 0.000000
+
+AIRCONTROL #84 t=1.9726 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.000,0.000,0.000)
+  Arg3 = 0.000000
+  Arg4 = (0.000,0.000,-0.000)
+  Arg5 = (3106.573,0.000,1705.369)
+  Arg6 = 0.008376
+  RETURN = (3106.573,0.000,1705.369)
+  Arg4 vs CameraRight = 0.000000
+  Arg4 vs RootRight   = 0.000000
+  Arg4 vs CameraLook  = 0.000000
+  Arg4 vs RootLook    = 0.000000
+  Arg4 vs HumMove     = 0.000000
+
+AIRCONTROL #85 t=1.9809 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (0.000,0.000,0.000)
+  Arg3 = 0.000000
+  Arg4 = (0.000,0.000,-0.000)
+  Arg5 = (3106.573,0.000,1705.369)
+  Arg6 = 0.008318
+  RETURN = (3106.573,0.000,1705.369)
+  Arg4 vs CameraRight = 0.000000
+  Arg4 vs RootRight   = 0.000000
+  Arg4 vs CameraLook  = 0.000000
+  Arg4 vs RootLook    = 0.000000
+  Arg4 vs HumMove     = 0.000000
+
+ACCEL #108 t=1.9900 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3106.573,0.000,1705.369) mag= 3543.879395
+  WishDir    = (-0.763,0.000,0.646) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008291
+  Dot(Vel,Wish) = -1268.760254
+  addSpeed = 1450.760254
+  accelSpeed(x10) = 2746.158920
+  expectedAdd = 1450.760254
+  RETURN     = (2896.999,0.000,1882.830)
+  DELTA      = (-209.574,0.000,177.461) mag= 274.615875
+  CameraLook = (0.646,0.000,0.763) angle= 90.000000
+  CameraRight= (-0.763,0.000,0.646) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.675,0.000,0.738) angle= 92.180087
+  RootRight  = (-0.738,0.000,0.675) dot= 0.999276
+  Wish(root basis): Right= 0.999276 Forward= -0.038041
+  HumMove    = (-0.045,0.000,0.999) angle= 47.179743
+
+AIRCONTROL #86 t=1.9901 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.763,0.000,0.646)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2896.999,0.000,1882.830)
+  Arg6 = 0.008291
+  RETURN = (2896.999,0.000,1882.830)
+  Arg4 vs CameraRight = -0.763155
+  Arg4 vs RootRight   = -0.738020
+  Arg4 vs CameraLook  = 0.646216
+  Arg4 vs RootLook    = 0.674779
+  Arg4 vs HumMove     = -0.044724
+
+ACCEL #109 t=1.9983 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2896.999,0.000,1882.830) mag= 3455.090820
+  WishDir    = (-0.787,0.000,0.617) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008954
+  Dot(Vel,Wish) = -1119.281006
+  addSpeed = 1301.281006
+  accelSpeed(x10) = 2965.909296
+  expectedAdd = 1301.281006
+  RETURN     = (2663.528,0.000,2065.744)
+  DELTA      = (-233.471,0.000,182.914) mag= 296.590912
+  CameraLook = (0.617,0.000,0.787) angle= 89.999997
+  CameraRight= (-0.787,0.000,0.617) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.646,0.000,0.763) angle= 92.178865
+  RootRight  = (-0.763,0.000,0.646) dot= 0.999277
+  Wish(root basis): Right= 0.999277 Forward= -0.038019
+  HumMove    = (-0.083,0.000,0.997) angle= 47.179748
+
+AIRCONTROL #87 t=1.9983 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.787,0.000,0.617)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2663.528,0.000,2065.744)
+  Arg6 = 0.008954
+  RETURN = (2663.528,0.000,2065.744)
+  Arg4 vs CameraRight = -0.787181
+  Arg4 vs RootRight   = -0.763165
+  Arg4 vs CameraLook  = 0.616722
+  Arg4 vs RootLook    = 0.646204
+  Arg4 vs HumMove     = -0.082688
+
+ACCEL #110 t=2.0065 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2663.528,0.000,2065.744) mag= 3370.709473
+  WishDir    = (-0.807,0.000,0.591) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008341
+  Dot(Vel,Wish) = -927.756958
+  addSpeed = 1109.756958
+  accelSpeed(x10) = 2762.720891
+  expectedAdd = 1109.756958
+  RETURN     = (2440.667,0.000,2229.020)
+  DELTA      = (-222.862,0.000,163.275) mag= 276.272034
+  CameraLook = (0.591,0.000,0.807) angle= 90.000000
+  CameraRight= (-0.807,0.000,0.591) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.617,0.000,0.787) angle= 91.848044
+  RootRight  = (-0.787,0.000,0.617) dot= 0.999480
+  Wish(root basis): Right= 0.999480 Forward= -0.032249
+  HumMove    = (-0.121,0.000,0.993) angle= 46.849474
+
+AIRCONTROL #88 t=2.0066 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.807,0.000,0.591)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2440.667,0.000,2229.020)
+  Arg6 = 0.008341
+  RETURN = (2440.667,0.000,2229.020)
+  Arg4 vs CameraRight = -0.806675
+  Arg4 vs RootRight   = -0.787197
+  Arg4 vs CameraLook  = 0.590995
+  Arg4 vs RootLook    = 0.616702
+  Arg4 vs HumMove     = -0.120533
+
+ACCEL #111 t=2.0144 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2440.667,0.000,2229.020) mag= 3305.356445
+  WishDir    = (-0.824,0.000,0.567) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007783
+  Dot(Vel,Wish) = -748.308350
+  addSpeed = 930.308350
+  accelSpeed(x10) = 2578.123714
+  expectedAdd = 930.308350
+  RETURN     = (2228.223,0.000,2375.084)
+  DELTA      = (-212.444,0.000,146.065) mag= 257.812286
+  CameraLook = (0.567,0.000,0.824) angle= 90.000000
+  CameraRight= (-0.824,0.000,0.567) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.591,0.000,0.807) angle= 91.715812
+  RootRight  = (-0.807,0.000,0.591) dot= 0.999552
+  Wish(root basis): Right= 0.999552 Forward= -0.029942
+  HumMove    = (-0.153,0.000,0.988) angle= 46.717372
+
+AIRCONTROL #89 t=2.0144 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.824,0.000,0.567)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (2228.223,0.000,2375.084)
+  Arg6 = 0.007783
+  RETURN = (2228.223,0.000,2375.084)
+  Arg4 vs CameraRight = -0.824024
+  Arg4 vs RootRight   = -0.806691
+  Arg4 vs CameraLook  = 0.566554
+  Arg4 vs RootLook    = 0.590973
+  Arg4 vs HumMove     = -0.152509
+
+ACCEL #112 t=2.0229 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2228.223,0.000,2375.084) mag= 3256.685791
+  WishDir    = (-0.859,0.000,0.511) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008269
+  Dot(Vel,Wish) = -700.846680
+  addSpeed = 882.846680
+  accelSpeed(x10) = 2739.106500
+  expectedAdd = 882.846680
+  RETURN     = (1992.811,0.000,2515.114)
+  DELTA      = (-235.412,0.000,140.029) mag= 273.910675
+  CameraLook = (0.511,0.000,0.859) angle= 90.000002
+  CameraRight= (-0.859,0.000,0.511) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.567,0.000,0.824) angle= 93.763457
+  RootRight  = (-0.824,0.000,0.567) dot= 0.997844
+  Wish(root basis): Right= 0.997844 Forward= -0.065637
+  HumMove    = (-0.182,0.000,0.983) angle= 48.765007
+
+AIRCONTROL #90 t=2.0230 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.859,0.000,0.511)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1992.811,0.000,2515.114)
+  Arg6 = 0.008269
+  RETURN = (1992.811,0.000,2515.114)
+  Arg4 vs CameraRight = -0.859448
+  Arg4 vs RootRight   = -0.824040
+  Arg4 vs CameraLook  = 0.511222
+  Arg4 vs RootLook    = 0.566532
+  Arg4 vs HumMove     = -0.182059
+
+ACCEL #113 t=2.0317 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1992.811,0.000,2515.114) mag= 3208.907959
+  WishDir    = (-0.859,0.000,0.511) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008907
+  Dot(Vel,Wish) = -426.936035
+  addSpeed = 608.936035
+  accelSpeed(x10) = 2950.368431
+  expectedAdd = 608.936035
+  RETURN     = (1739.242,0.000,2665.943)
+  DELTA      = (-253.569,0.000,150.829) mag= 295.036804
+  CameraLook = (0.511,0.000,0.859) angle= 90.000002
+  CameraRight= (-0.859,0.000,0.511) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.511,0.000,0.859) angle= 89.998388
+  RootRight  = (-0.859,0.000,0.511) dot= 1.000000
+  Wish(root basis): Right= 1.000000 Forward= 0.000028
+  HumMove    = (-0.246,0.000,0.969) angle= 44.999996
+
+AIRCONTROL #91 t=2.0317 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.859,0.000,0.511)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1739.242,0.000,2665.943)
+  Arg6 = 0.008907
+  RETURN = (1739.242,0.000,2665.943)
+  Arg4 vs CameraRight = -0.859448
+  Arg4 vs RootRight   = -0.859463
+  Arg4 vs CameraLook  = 0.511222
+  Arg4 vs RootLook    = 0.511198
+  Arg4 vs HumMove     = -0.246233
+
+ACCEL #114 t=2.0393 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1739.242,0.000,2665.943) mag= 3183.113770
+  WishDir    = (-0.881,0.000,0.473) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007759
+  Dot(Vel,Wish) = -271.053223
+  addSpeed = 453.053223
+  accelSpeed(x10) = 2570.173894
+  expectedAdd = 453.053223
+  RETURN     = (1512.806,0.000,2787.536)
+  DELTA      = (-226.435,0.000,121.593) mag= 257.017365
+  CameraLook = (0.473,0.000,0.881) angle= 90.000000
+  CameraRight= (-0.881,0.000,0.473) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.511,0.000,0.859) angle= 92.508235
+  RootRight  = (-0.859,0.000,0.511) dot= 0.999042
+  Wish(root basis): Right= 0.999042 Forward= -0.043763
+  HumMove    = (-0.246,0.000,0.969) angle= 47.509994
+
+AIRCONTROL #92 t=2.0394 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.881,0.000,0.473)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1512.806,0.000,2787.536)
+  Arg6 = 0.007759
+  RETURN = (1512.806,0.000,2787.536)
+  Arg4 vs CameraRight = -0.881012
+  Arg4 vs RootRight   = -0.859464
+  Arg4 vs CameraLook  = 0.473093
+  Arg4 vs RootLook    = 0.511196
+  Arg4 vs HumMove     = -0.246233
+
+ACCEL #115 t=2.0475 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1512.806,0.000,2787.536) mag= 3171.583252
+  WishDir    = (-0.901,0.000,0.434) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008263
+  Dot(Vel,Wish) = -152.917358
+  addSpeed = 334.917358
+  accelSpeed(x10) = 2737.118891
+  expectedAdd = 334.917358
+  RETURN     = (1266.223,0.000,2906.343)
+  DELTA      = (-246.583,0.000,118.806) mag= 273.711884
+  CameraLook = (0.434,0.000,0.901) angle= 90.000000
+  CameraRight= (-0.901,0.000,0.434) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.473,0.000,0.881) angle= 92.508322
+  RootRight  = (-0.881,0.000,0.473) dot= 0.999042
+  Wish(root basis): Right= 0.999042 Forward= -0.043765
+  HumMove    = (-0.288,0.000,0.957) angle= 47.510013
+
+AIRCONTROL #93 t=2.0475 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.901,0.000,0.434)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1266.223,0.000,2906.343)
+  Arg6 = 0.008263
+  RETURN = (1266.223,0.000,2906.343)
+  Arg4 vs CameraRight = -0.900886
+  Arg4 vs RootRight   = -0.881026
+  Arg4 vs CameraLook  = 0.434057
+  Arg4 vs RootLook    = 0.473067
+  Arg4 vs HumMove     = -0.288442
+
+ACCEL #116 t=2.0558 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1266.223,0.000,2906.343) mag= 3170.196777
+  WishDir    = (-0.920,0.000,0.391) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008342
+  Dot(Vel,Wish) = -29.019775
+  addSpeed = 211.019775
+  accelSpeed(x10) = 2763.203989
+  expectedAdd = 211.019775
+  RETURN     = (1072.003,0.000,2988.853)
+  DELTA      = (-194.220,0.000,82.510) mag= 211.019775
+  CameraLook = (0.391,0.000,0.920) angle= 90.000000
+  CameraRight= (-0.920,0.000,0.391) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.434,0.000,0.901) angle= 92.706437
+  RootRight  = (-0.901,0.000,0.434) dot= 0.998885
+  Wish(root basis): Right= 0.998885 Forward= -0.047219
+  HumMove    = (-0.330,0.000,0.944) angle= 47.708164
+
+AIRCONTROL #94 t=2.0559 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.920,0.000,0.391)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (1072.003,0.000,2988.853)
+  Arg6 = 0.008342
+  RETURN = (1072.003,0.000,2988.853)
+  Arg4 vs CameraRight = -0.920388
+  Arg4 vs RootRight   = -0.900899
+  Arg4 vs CameraLook  = 0.391006
+  Arg4 vs RootLook    = 0.434029
+  Arg4 vs HumMove     = -0.330098
+
+ACCEL #117 t=2.0646 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1072.003,0.000,2988.853) mag= 3175.284424
+  WishDir    = (-0.936,0.000,0.351) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008895
+  Dot(Vel,Wish) = 46.656372
+  addSpeed = 135.343628
+  accelSpeed(x10) = 2946.531724
+  expectedAdd = 135.343628
+  RETURN     = (945.291,0.000,3036.413)
+  DELTA      = (-126.712,0.000,47.560) mag= 135.343582
+  CameraLook = (0.351,0.000,0.936) angle= 90.000000
+  CameraRight= (-0.936,0.000,0.351) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.391,0.000,0.920) angle= 92.442449
+  RootRight  = (-0.920,0.000,0.391) dot= 0.999092
+  Wish(root basis): Right= 0.999092 Forward= -0.042616
+  HumMove    = (-0.374,0.000,0.927) angle= 47.443950
+
+AIRCONTROL #95 t=2.0647 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.936,0.000,0.351)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (945.291,0.000,3036.413)
+  Arg6 = 0.008895
+  RETURN = (945.291,0.000,3036.413)
+  Arg4 vs CameraRight = -0.936224
+  Arg4 vs RootRight   = -0.920398
+  Arg4 vs CameraLook  = 0.351403
+  Arg4 vs RootLook    = 0.390982
+  Arg4 vs HumMove     = -0.374330
+
+ACCEL #118 t=2.0727 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (945.291,0.000,3036.413) mag= 3180.153564
+  WishDir    = (-0.949,0.000,0.317) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007839
+  Dot(Vel,Wish) = 64.776672
+  addSpeed = 117.223328
+  accelSpeed(x10) = 2596.493753
+  expectedAdd = 117.223328
+  RETURN     = (834.099,0.000,3073.530)
+  DELTA      = (-111.192,0.000,37.117) mag= 117.223366
+  CameraLook = (0.317,0.000,0.949) angle= 90.000002
+  CameraRight= (-0.949,0.000,0.317) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.351,0.000,0.936) angle= 92.112609
+  RootRight  = (-0.936,0.000,0.351) dot= 0.999320
+  Wish(root basis): Right= 0.999320 Forward= -0.036864
+  HumMove    = (-0.414,0.000,0.910) angle= 47.113682
+
+AIRCONTROL #96 t=2.0727 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.949,0.000,0.317)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (834.099,0.000,3073.530)
+  Arg6 = 0.007839
+  RETURN = (834.099,0.000,3073.530)
+  Arg4 vs CameraRight = -0.948548
+  Arg4 vs RootRight   = -0.936231
+  Arg4 vs CameraLook  = 0.316634
+  Arg4 vs RootLook    = 0.351385
+  Arg4 vs HumMove     = -0.413531
+
+ACCEL #119 t=2.0812 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (834.099,0.000,3073.530) mag= 3184.698730
+  WishDir    = (-0.958,0.000,0.286) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008279
+  Dot(Vel,Wish) = 79.290710
+  addSpeed = 102.709290
+  accelSpeed(x10) = 2742.404889
+  expectedAdd = 102.709290
+  RETURN     = (735.676,0.000,3102.890)
+  DELTA      = (-98.424,0.000,29.360) mag= 102.709320
+  CameraLook = (0.286,0.000,0.958) angle= 89.999998
+  CameraRight= (-0.958,0.000,0.286) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.317,0.000,0.949) angle= 91.848643
+  RootRight  = (-0.949,0.000,0.317) dot= 0.999480
+  Wish(root basis): Right= 0.999480 Forward= -0.032259
+  HumMove    = (-0.447,0.000,0.895) angle= 46.849478
+
+AIRCONTROL #97 t=2.0813 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.958,0.000,0.286)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (735.676,0.000,3102.890)
+  Arg6 = 0.008279
+  RETURN = (735.676,0.000,3102.890)
+  Arg4 vs CameraRight = -0.958273
+  Arg4 vs RootRight   = -0.948552
+  Arg4 vs CameraLook  = 0.285855
+  Arg4 vs RootLook    = 0.316620
+  Arg4 vs HumMove     = -0.446831
+
+ACCEL #120 t=2.0898 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (735.676,0.000,3102.890) mag= 3188.909424
+  WishDir    = (-0.966,0.000,0.258) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008884
+  Dot(Vel,Wish) = 90.179443
+  addSpeed = 91.820557
+  accelSpeed(x10) = 2942.680828
+  expectedAdd = 91.820557
+  RETURN     = (646.967,0.000,3126.591)
+  DELTA      = (-88.709,0.000,23.701) mag= 91.820572
+  CameraLook = (0.258,0.000,0.966) angle= 89.999999
+  CameraRight= (-0.966,0.000,0.258) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.286,0.000,0.958) angle= 91.650598
+  RootRight  = (-0.958,0.000,0.286) dot= 0.999585
+  Wish(root basis): Right= 0.999585 Forward= -0.028804
+  HumMove    = (-0.475,0.000,0.880) angle= 46.651313
+
+AIRCONTROL #98 t=2.0899 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.966,0.000,0.258)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (646.967,0.000,3126.591)
+  Arg6 = 0.008884
+  RETURN = (646.967,0.000,3126.591)
+  Arg4 vs CameraRight = -0.966112
+  Arg4 vs RootRight   = -0.958276
+  Arg4 vs CameraLook  = 0.258122
+  Arg4 vs RootLook    = 0.285843
+  Arg4 vs HumMove     = -0.475471
+
+ACCEL #121 t=2.0976 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (646.967,0.000,3126.591) mag= 3192.825439
+  WishDir    = (-0.975,0.000,0.221) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007798
+  Dot(Vel,Wish) = 60.627930
+  addSpeed = 121.372070
+  accelSpeed(x10) = 2583.078547
+  expectedAdd = 121.372070
+  RETURN     = (528.601,0.000,3153.437)
+  DELTA      = (-118.366,0.000,26.846) mag= 121.372063
+  CameraLook = (0.221,0.000,0.975) angle= 90.000001
+  CameraRight= (-0.975,0.000,0.221) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.258,0.000,0.966) angle= 92.179126
+  RootRight  = (-0.966,0.000,0.258) dot= 0.999277
+  Wish(root basis): Right= 0.999277 Forward= -0.038024
+  HumMove    = (-0.501,0.000,0.866) angle= 47.179743
+
+AIRCONTROL #99 t=2.0976 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.975,0.000,0.221)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (528.601,0.000,3153.437)
+  Arg6 = 0.007798
+  RETURN = (528.601,0.000,3153.437)
+  Arg4 vs CameraRight = -0.975231
+  Arg4 vs RootRight   = -0.966115
+  Arg4 vs CameraLook  = 0.221190
+  Arg4 vs RootLook    = 0.258112
+  Arg4 vs HumMove     = -0.500625
+
+ACCEL #122 t=2.1059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (528.601,0.000,3153.437) mag= 3197.433594
+  WishDir    = (-0.983,0.000,0.182) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008318
+  Dot(Vel,Wish) = 53.081238
+  addSpeed = 128.918762
+  accelSpeed(x10) = 2755.144037
+  expectedAdd = 128.918762
+  RETURN     = (401.827,0.000,3176.857)
+  DELTA      = (-126.773,0.000,23.421) mag= 128.918762
+  CameraLook = (0.182,0.000,0.983) angle= 90.000000
+  CameraRight= (-0.983,0.000,0.182) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.221,0.000,0.975) angle= 92.311117
+  RootRight  = (-0.975,0.000,0.221) dot= 0.999187
+  Wish(root basis): Right= 0.999187 Forward= -0.040326
+  HumMove    = (-0.533,0.000,0.846) angle= 47.311854
+
+AIRCONTROL #100 t=2.1060 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.983,0.000,0.182)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (401.827,0.000,3176.857)
+  Arg6 = 0.008318
+  RETURN = (401.827,0.000,3176.857)
+  Arg4 vs CameraRight = -0.983360
+  Arg4 vs RootRight   = -0.975234
+  Arg4 vs CameraLook  = 0.181670
+  Arg4 vs RootLook    = 0.221177
+  Arg4 vs HumMove     = -0.533188
+
+ACCEL #123 t=2.1146 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (401.827,0.000,3176.857) mag= 3202.169189
+  WishDir    = (-0.987,0.000,0.162) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008827
+  Dot(Vel,Wish) = 119.313629
+  addSpeed = 62.686371
+  accelSpeed(x10) = 2923.731133
+  expectedAdd = 62.686371
+  RETURN     = (339.973,0.000,3187.035)
+  DELTA      = (-61.855,0.000,10.178) mag= 62.686367
+  CameraLook = (0.162,0.000,0.987) angle= 90.000000
+  CameraRight= (-0.987,0.000,0.162) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.182,0.000,0.983) angle= 91.122090
+  RootRight  = (-0.983,0.000,0.182) dot= 0.999808
+  Wish(root basis): Right= 0.999808 Forward= -0.019583
+  HumMove    = (-0.567,0.000,0.824) angle= 46.122898
+
+AIRCONTROL #101 t=2.1146 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.987,0.000,0.162)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (339.973,0.000,3187.035)
+  Arg6 = 0.008827
+  RETURN = (339.973,0.000,3187.035)
+  Arg4 vs CameraRight = -0.986731
+  Arg4 vs RootRight   = -0.983362
+  Arg4 vs CameraLook  = 0.162365
+  Arg4 vs RootLook    = 0.181657
+  Arg4 vs HumMove     = -0.566880
+
+ACCEL #124 t=2.1230 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (339.973,0.000,3187.035) mag= 3205.117432
+  WishDir    = (-0.990,0.000,0.142) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008355
+  Dot(Vel,Wish) = 115.563507
+  addSpeed = 66.436493
+  accelSpeed(x10) = 2767.510219
+  expectedAdd = 66.436493
+  RETURN     = (274.208,0.000,3196.460)
+  DELTA      = (-65.765,0.000,9.424) mag= 66.436485
+  CameraLook = (0.142,0.000,0.990) angle= 89.999999
+  CameraRight= (-0.990,0.000,0.142) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.162,0.000,0.987) angle= 91.188437
+  RootRight  = (-0.987,0.000,0.162) dot= 0.999785
+  Wish(root basis): Right= 0.999785 Forward= -0.020741
+  HumMove    = (-0.583,0.000,0.813) angle= 46.188948
+
+AIRCONTROL #102 t=2.1230 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.990,0.000,0.142)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (274.208,0.000,3196.460)
+  Arg6 = 0.008355
+  RETURN = (274.208,0.000,3196.460)
+  Arg4 vs CameraRight = -0.989887
+  Arg4 vs RootRight   = -0.986732
+  Arg4 vs CameraLook  = 0.141855
+  Arg4 vs RootLook    = 0.162356
+  Arg4 vs HumMove     = -0.582915
+
+ACCEL #125 t=2.1309 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (274.208,0.000,3196.460) mag= 3208.199707
+  WishDir    = (-0.993,0.000,0.116) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007865
+  Dot(Vel,Wish) = 97.016724
+  addSpeed = 84.983276
+  accelSpeed(x10) = 2605.147243
+  expectedAdd = 84.983276
+  RETURN     = (189.794,0.000,3206.281)
+  DELTA      = (-84.414,0.000,9.821) mag= 84.983269
+  CameraLook = (0.116,0.000,0.993) angle= 90.000000
+  CameraRight= (-0.993,0.000,0.116) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.142,0.000,0.990) angle= 91.518782
+  RootRight  = (-0.990,0.000,0.142) dot= 0.999649
+  Wish(root basis): Right= 0.999649 Forward= -0.026505
+  HumMove    = (-0.600,0.000,0.800) angle= 46.519212
+
+AIRCONTROL #103 t=2.1310 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.993,0.000,0.116)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (189.794,0.000,3206.281)
+  Arg6 = 0.007865
+  RETURN = (189.794,0.000,3206.281)
+  Arg4 vs CameraRight = -0.993300
+  Arg4 vs RootRight   = -0.989889
+  Arg4 vs CameraLook  = 0.115562
+  Arg4 vs RootLook    = 0.141848
+  Arg4 vs HumMove     = -0.599649
+
+ACCEL #126 t=2.1396 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (189.794,0.000,3206.281) mag= 3211.893066
+  WishDir    = (-0.996,0.000,0.088) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008860
+  Dot(Vel,Wish) = 93.217026
+  addSpeed = 88.782974
+  accelSpeed(x10) = 2934.772653
+  expectedAdd = 88.782974
+  RETURN     = (101.356,0.000,3214.097)
+  DELTA      = (-88.438,0.000,7.816) mag= 88.782967
+  CameraLook = (0.088,0.000,0.996) angle= 90.000000
+  CameraRight= (-0.996,0.000,0.088) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.116,0.000,0.993) angle= 91.584771
+  RootRight  = (-0.993,0.000,0.116) dot= 0.999617
+  Wish(root basis): Right= 0.999617 Forward= -0.027656
+  HumMove    = (-0.621,0.000,0.784) angle= 46.585270
+
+AIRCONTROL #104 t=2.1397 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.996,0.000,0.088)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (101.356,0.000,3214.097)
+  Arg6 = 0.008860
+  RETURN = (101.356,0.000,3214.097)
+  Arg4 vs CameraRight = -0.996117
+  Arg4 vs RootRight   = -0.993301
+  Arg4 vs CameraLook  = 0.088038
+  Arg4 vs RootLook    = 0.115553
+  Arg4 vs HumMove     = -0.620655
+
+ACCEL #127 t=2.1475 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (101.356,0.000,3214.097) mag= 3215.694336
+  WishDir    = (-0.998,0.000,0.063) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007769
+  Dot(Vel,Wish) = 100.522903
+  addSpeed = 81.477097
+  accelSpeed(x10) = 2573.320813
+  expectedAdd = 81.477097
+  RETURN     = (20.040,0.000,3219.209)
+  DELTA      = (-81.317,0.000,5.113) mag= 81.477097
+  CameraLook = (0.063,0.000,0.998) angle= 90.000000
+  CameraRight= (-0.998,0.000,0.063) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.088,0.000,0.996) angle= 91.452629
+  RootRight  = (-0.996,0.000,0.088) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025350
+  HumMove    = (-0.642,0.000,0.767) angle= 46.453162
+
+AIRCONTROL #105 t=2.1476 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.998,0.000,0.063)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (20.040,0.000,3219.209)
+  Arg6 = 0.007769
+  RETURN = (20.040,0.000,3219.209)
+  Arg4 vs CameraRight = -0.998029
+  Arg4 vs RootRight   = -0.996118
+  Arg4 vs CameraLook  = 0.062748
+  Arg4 vs RootLook    = 0.088029
+  Arg4 vs HumMove     = -0.642109
+
+ACCEL #128 t=2.1558 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (20.040,0.000,3219.209) mag= 3219.271729
+  WishDir    = (-0.999,0.000,0.036) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008312
+  Dot(Vel,Wish) = 96.722755
+  addSpeed = 85.277245
+  accelSpeed(x10) = 2753.225529
+  expectedAdd = 85.277245
+  RETURN     = (-65.182,0.000,3222.302)
+  DELTA      = (-85.221,0.000,3.093) mag= 85.277260
+  CameraLook = (0.036,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,0.036) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.063,0.000,0.998) angle= 91.518691
+  RootRight  = (-0.998,0.000,0.063) dot= 0.999649
+  Wish(root basis): Right= 0.999649 Forward= -0.026503
+  HumMove    = (-0.661,0.000,0.750) angle= 46.519212
+
+AIRCONTROL #106 t=2.1559 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.999,0.000,0.036)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-65.182,0.000,3222.302)
+  Arg6 = 0.008312
+  RETURN = (-65.182,0.000,3222.302)
+  Arg4 vs CameraRight = -0.999342
+  Arg4 vs RootRight   = -0.998030
+  Arg4 vs CameraLook  = 0.036266
+  Arg4 vs RootLook    = 0.062739
+  Arg4 vs HumMove     = -0.661344
+
+ACCEL #129 t=2.1646 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-65.182,0.000,3222.302) mag= 3222.961182
+  WishDir    = (-1.000,0.000,0.011) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008864
+  Dot(Vel,Wish) = 100.338326
+  addSpeed = 81.661674
+  accelSpeed(x10) = 2936.069859
+  expectedAdd = 81.661674
+  RETURN     = (-146.838,0.000,3223.193)
+  DELTA      = (-81.657,0.000,0.891) mag= 81.661682
+  CameraLook = (0.011,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,0.011) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.036,0.000,0.999) angle= 91.452639
+  RootRight  = (-0.999,0.000,0.036) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025351
+  HumMove    = (-0.681,0.000,0.732) angle= 46.453162
+
+AIRCONTROL #107 t=2.1647 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-1.000,0.000,0.011)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-146.838,0.000,3223.193)
+  Arg6 = 0.008864
+  RETURN = (-146.838,0.000,3223.193)
+  Arg4 vs CameraRight = -0.999940
+  Arg4 vs RootRight   = -0.999343
+  Arg4 vs CameraLook  = 0.010912
+  Arg4 vs RootLook    = 0.036257
+  Arg4 vs HumMove     = -0.680997
+
+ACCEL #130 t=2.1726 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-146.838,0.000,3223.193) mag= 3226.536133
+  WishDir    = (-1.000,0.000,-0.012) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007844
+  Dot(Vel,Wish) = 107.683029
+  addSpeed = 74.316971
+  accelSpeed(x10) = 2598.343159
+  expectedAdd = 74.316971
+  RETURN     = (-221.150,0.000,3222.291)
+  DELTA      = (-74.311,0.000,-0.903) mag= 74.316971
+  CameraLook = (-0.012,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,-0.012) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.011,0.000,1.000) angle= 91.320540
+  RootRight  = (-1.000,0.000,0.011) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023046
+  HumMove    = (-0.699,0.000,0.715) angle= 46.321057
+
+AIRCONTROL #108 t=2.1726 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-1.000,0.000,-0.012)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-221.150,0.000,3222.291)
+  Arg6 = 0.007844
+  RETURN = (-221.150,0.000,3222.291)
+  Arg4 vs CameraRight = -0.999926
+  Arg4 vs RootRight   = -0.999941
+  Arg4 vs CameraLook  = -0.012145
+  Arg4 vs RootLook    = 0.010903
+  Arg4 vs HumMove     = -0.699349
+
+ACCEL #131 t=2.1809 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-221.150,0.000,3222.291) mag= 3229.870361
+  WishDir    = (-0.999,0.000,-0.033) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008321
+  Dot(Vel,Wish) = 115.049080
+  addSpeed = 66.950920
+  accelSpeed(x10) = 2756.123805
+  expectedAdd = 66.950920
+  RETURN     = (-288.065,0.000,3220.089)
+  DELTA      = (-66.915,0.000,-2.202) mag= 66.950920
+  CameraLook = (-0.033,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.033) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.012,0.000,1.000) angle= 91.188472
+  RootRight  = (-1.000,0.000,-0.012) dot= 0.999785
+  Wish(root basis): Right= 0.999785 Forward= -0.020741
+  HumMove    = (-0.716,0.000,0.698) angle= 46.188944
+
+AIRCONTROL #109 t=2.1809 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.999,0.000,-0.033)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-288.065,0.000,3220.089)
+  Arg6 = 0.008321
+  RETURN = (-288.065,0.000,3220.089)
+  Arg4 vs CameraRight = -0.999459
+  Arg4 vs RootRight   = -0.999926
+  Arg4 vs CameraLook  = -0.032890
+  Arg4 vs RootLook    = -0.012153
+  Arg4 vs HumMove     = -0.715642
+
+ACCEL #132 t=2.1892 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-288.065,0.000,3220.089) mag= 3232.947998
+  WishDir    = (-0.998,0.000,-0.069) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008341
+  Dot(Vel,Wish) = 66.552490
+  addSpeed = 115.447510
+  accelSpeed(x10) = 2762.914315
+  expectedAdd = 115.447510
+  RETURN     = (-403.240,0.000,3212.171)
+  DELTA      = (-115.176,0.000,-7.917) mag= 115.447533
+  CameraLook = (-0.069,0.000,0.998) angle= 90.000000
+  CameraRight= (-0.998,0.000,-0.069) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.033,0.000,0.999) angle= 92.047226
+  RootRight  = (-0.999,0.000,-0.033) dot= 0.999362
+  Wish(root basis): Right= 0.999362 Forward= -0.035723
+  HumMove    = (-0.730,0.000,0.683) angle= 47.047633
+
+AIRCONTROL #110 t=2.1893 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.998,0.000,-0.069)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-403.240,0.000,3212.171)
+  Arg6 = 0.008341
+  RETURN = (-403.240,0.000,3212.171)
+  Arg4 vs CameraRight = -0.997646
+  Arg4 vs RootRight   = -0.999459
+  Arg4 vs CameraLook  = -0.068580
+  Arg4 vs RootLook    = -0.032897
+  Arg4 vs HumMove     = -0.729981
+
+ACCEL #133 t=2.1979 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-403.240,0.000,3212.171) mag= 3237.382568
+  WishDir    = (-0.995,0.000,-0.102) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008816
+  Dot(Vel,Wish) = 73.856659
+  addSpeed = 108.143341
+  accelSpeed(x10) = 2920.322304
+  expectedAdd = 108.143341
+  RETURN     = (-510.821,0.000,3201.153)
+  DELTA      = (-107.581,0.000,-11.019) mag= 108.143356
+  CameraLook = (-0.102,0.000,0.995) angle= 90.000000
+  CameraRight= (-0.995,0.000,-0.102) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (-0.069,0.000,0.998) angle= 91.914929
+  RootRight  = (-0.998,0.000,-0.069) dot= 0.999442
+  Wish(root basis): Right= 0.999442 Forward= -0.033416
+  HumMove    = (-0.754,0.000,0.657) angle= 46.915515
+
+AIRCONTROL #111 t=2.1980 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.995,0.000,-0.102)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-510.821,0.000,3201.153)
+  Arg6 = 0.008816
+  RETURN = (-510.821,0.000,3201.153)
+  Arg4 vs CameraRight = -0.994796
+  Arg4 vs RootRight   = -0.997645
+  Arg4 vs CameraLook  = -0.101889
+  Arg4 vs RootLook    = -0.068590
+  Arg4 vs HumMove     = -0.753936
+
+ACCEL #134 t=2.2059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-510.821,0.000,3201.153) mag= 3241.653320
+  WishDir    = (-0.992,0.000,-0.125) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007885
+  Dot(Vel,Wish) = 107.334198
+  addSpeed = 74.665802
+  accelSpeed(x10) = 2611.951635
+  expectedAdd = 74.665802
+  RETURN     = (-584.903,0.000,3191.834)
+  DELTA      = (-74.082,0.000,-9.318) mag= 74.665810
+  CameraLook = (-0.125,0.000,0.992) angle= 90.000000
+  CameraRight= (-0.992,0.000,-0.125) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.102,0.000,0.995) angle= 91.320411
+  RootRight  = (-0.995,0.000,-0.102) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023043
+  HumMove    = (-0.775,0.000,0.631) angle= 46.321047
+
+AIRCONTROL #112 t=2.2060 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.992,0.000,-0.125)
+  Arg3 = 1619.999903
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-584.903,0.000,3191.834)
+  Arg6 = 0.007885
+  RETURN = (-584.903,0.000,3191.834)
+  Arg4 vs CameraRight = -0.992182
+  Arg4 vs RootRight   = -0.994795
+  Arg4 vs CameraLook  = -0.124797
+  Arg4 vs RootLook    = -0.101900
+  Arg4 vs HumMove     = -0.775473
+
+ACCEL #135 t=2.2142 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-584.903,0.000,3191.834) mag= 3244.983643
+  WishDir    = (-0.989,0.000,-0.149) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008266
+  Dot(Vel,Wish) = 103.518555
+  addSpeed = 78.481445
+  accelSpeed(x10) = 2737.933308
+  expectedAdd = 78.481445
+  RETURN     = (-662.511,0.000,3180.158)
+  DELTA      = (-77.608,0.000,-11.676) mag= 78.481415
+  CameraLook = (-0.149,0.000,0.989) angle= 90.000000
+  CameraRight= (-0.989,0.000,-0.149) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.125,0.000,0.992) angle= 91.386599
+  RootRight  = (-0.992,0.000,-0.125) dot= 0.999707
+  Wish(root basis): Right= 0.999707 Forward= -0.024198
+  HumMove    = (-0.790,0.000,0.613) angle= 46.387096
+
+AIRCONTROL #113 t=2.2142 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.989,0.000,-0.149)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-662.511,0.000,3180.158)
+  Arg6 = 0.008266
+  RETURN = (-662.511,0.000,3180.158)
+  Arg4 vs CameraRight = -0.988871
+  Arg4 vs RootRight   = -0.992181
+  Arg4 vs CameraLook  = -0.148778
+  Arg4 vs RootLook    = -0.124805
+  Arg4 vs HumMove     = -0.789824
+
+ACCEL #136 t=2.2227 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-662.511,0.000,3180.158) mag= 3248.434570
+  WishDir    = (-0.981,0.000,-0.195) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008339
+  Dot(Vel,Wish) = 28.552917
+  addSpeed = 153.447083
+  accelSpeed(x10) = 2762.293322
+  expectedAdd = 153.447083
+  RETURN     = (-813.002,0.000,3150.185)
+  DELTA      = (-150.491,0.000,-29.974) mag= 153.447067
+  CameraLook = (-0.195,0.000,0.981) angle= 90.000000
+  CameraRight= (-0.981,0.000,-0.195) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.149,0.000,0.989) angle= 92.707689
+  RootRight  = (-0.989,0.000,-0.149) dot= 0.998884
+  Wish(root basis): Right= 0.998884 Forward= -0.047240
+  HumMove    = (-0.804,0.000,0.594) angle= 47.708164
+
+AIRCONTROL #114 t=2.2227 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.981,0.000,-0.195)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-813.002,0.000,3150.185)
+  Arg6 = 0.008339
+  RETURN = (-813.002,0.000,3150.185)
+  Arg4 vs CameraRight = -0.980737
+  Arg4 vs RootRight   = -0.988869
+  Arg4 vs CameraLook  = -0.195335
+  Arg4 vs RootLook    = -0.148786
+  Arg4 vs HumMove     = -0.804439
+
+ACCEL #137 t=2.2313 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-813.002,0.000,3150.185) mag= 3253.403809
+  WishDir    = (-0.981,0.000,-0.195) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008921
+  Dot(Vel,Wish) = 181.999939
+  addSpeed = 0.000061
+  accelSpeed(x10) = 2954.867776
+  expectedAdd = 0.000061
+  RETURN     = (-813.002,0.000,3150.185)
+  DELTA      = (-0.000,0.000,0.000) mag= 0.000061
+  CameraLook = (-0.195,0.000,0.981) angle= 90.000000
+  CameraRight= (-0.981,0.000,-0.195) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.195,0.000,0.981) angle= 89.999180
+  RootRight  = (-0.981,0.000,-0.195) dot= 1.000000
+  Wish(root basis): Right= 1.000000 Forward= 0.000014
+  HumMove    = (-0.832,0.000,0.555) angle= 45.000001
+
+AIRCONTROL #115 t=2.2313 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.981,0.000,-0.195)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-813.002,0.000,3150.185)
+  Arg6 = 0.008921
+  RETURN = (-813.002,0.000,3150.185)
+  Arg4 vs CameraRight = -0.980737
+  Arg4 vs RootRight   = -0.980734
+  Arg4 vs CameraLook  = -0.195335
+  Arg4 vs RootLook    = -0.195349
+  Arg4 vs HumMove     = -0.831608
+
+ACCEL #138 t=2.2393 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-813.002,0.000,3150.185) mag= 3253.403809
+  WishDir    = (-0.976,0.000,-0.218) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007828
+  Dot(Vel,Wish) = 107.062866
+  addSpeed = 74.937134
+  accelSpeed(x10) = 2592.988058
+  expectedAdd = 74.937134
+  RETURN     = (-886.139,0.000,3133.856)
+  DELTA      = (-73.137,0.000,-16.328) mag= 74.937157
+  CameraLook = (-0.218,0.000,0.976) angle= 90.000001
+  CameraRight= (-0.976,0.000,-0.218) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (-0.195,0.000,0.981) angle= 91.320819
+  RootRight  = (-0.981,0.000,-0.195) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023051
+  HumMove    = (-0.832,0.000,0.555) angle= 46.321057
+
+AIRCONTROL #116 t=2.2394 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.976,0.000,-0.218)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-886.139,0.000,3133.856)
+  Arg6 = 0.007828
+  RETURN = (-886.139,0.000,3133.856)
+  Arg4 vs CameraRight = -0.975973
+  Arg4 vs RootRight   = -0.980736
+  Arg4 vs CameraLook  = -0.217894
+  Arg4 vs RootLook    = -0.195339
+  Arg4 vs HumMove     = -0.831608
+
+ACCEL #139 t=2.2476 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-886.139,0.000,3133.856) mag= 3256.730957
+  WishDir    = (-0.970,0.000,-0.241) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008268
+  Dot(Vel,Wish) = 103.233704
+  addSpeed = 78.766296
+  accelSpeed(x10) = 2738.706078
+  expectedAdd = 78.766296
+  RETURN     = (-962.575,0.000,3114.838)
+  DELTA      = (-76.436,0.000,-19.019) mag= 78.766281
+  CameraLook = (-0.241,0.000,0.970) angle= 90.000000
+  CameraRight= (-0.970,0.000,-0.241) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.218,0.000,0.976) angle= 91.386714
+  RootRight  = (-0.976,0.000,-0.218) dot= 0.999707
+  Wish(root basis): Right= 0.999707 Forward= -0.024200
+  HumMove    = (-0.844,0.000,0.536) angle= 46.387106
+
+AIRCONTROL #117 t=2.2476 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.970,0.000,-0.241)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-962.575,0.000,3114.838)
+  Arg6 = 0.008268
+  RETURN = (-962.575,0.000,3114.838)
+  Arg4 vs CameraRight = -0.970412
+  Arg4 vs RootRight   = -0.975971
+  Arg4 vs CameraLook  = -0.241455
+  Arg4 vs RootLook    = -0.217900
+  Arg4 vs HumMove     = -0.844191
+
+ACCEL #140 t=2.2559 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-962.575,0.000,3114.838) mag= 3260.178467
+  WishDir    = (-0.964,0.000,-0.266) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008409
+  Dot(Vel,Wish) = 99.393005
+  addSpeed = 82.606995
+  accelSpeed(x10) = 2785.548938
+  expectedAdd = 82.606995
+  RETURN     = (-1042.206,0.000,3092.865)
+  DELTA      = (-79.631,0.000,-21.972) mag= 82.606956
+  CameraLook = (-0.266,0.000,0.964) angle= 90.000000
+  CameraRight= (-0.964,0.000,-0.266) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.241,0.000,0.970) angle= 91.452735
+  RootRight  = (-0.970,0.000,-0.241) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025352
+  HumMove    = (-0.857,0.000,0.515) angle= 46.453162
+
+AIRCONTROL #118 t=2.2560 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.964,0.000,-0.266)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-1042.206,0.000,3092.865)
+  Arg6 = 0.008409
+  RETURN = (-1042.206,0.000,3092.865)
+  Arg4 vs CameraRight = -0.963977
+  Arg4 vs RootRight   = -0.970410
+  Arg4 vs CameraLook  = -0.265987
+  Arg4 vs RootLook    = -0.241462
+  Arg4 vs HumMove     = -0.856920
+
+ACCEL #141 t=2.2643 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1042.206,0.000,3092.865) mag= 3263.741455
+  WishDir    = (-0.960,0.000,-0.282) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008257
+  Dot(Vel,Wish) = 129.384583
+  addSpeed = 52.615417
+  accelSpeed(x10) = 2735.159046
+  expectedAdd = 52.615417
+  RETURN     = (-1092.693,0.000,3078.053)
+  DELTA      = (-50.488,0.000,-14.812) mag= 52.615406
+  CameraLook = (-0.282,0.000,0.960) angle= 90.000002
+  CameraRight= (-0.960,0.000,-0.282) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (-0.266,0.000,0.964) angle= 90.924272
+  RootRight  = (-0.964,0.000,-0.266) dot= 0.999870
+  Wish(root basis): Right= 0.999870 Forward= -0.016131
+  HumMove    = (-0.870,0.000,0.494) angle= 45.924735
+
+AIRCONTROL #119 t=2.2644 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.960,0.000,-0.282)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-1092.693,0.000,3078.053)
+  Arg6 = 0.008257
+  RETURN = (-1092.693,0.000,3078.053)
+  Arg4 vs CameraRight = -0.959558
+  Arg4 vs RootRight   = -0.963974
+  Arg4 vs CameraLook  = -0.281510
+  Arg4 vs RootLook    = -0.265995
+  Arg4 vs HumMove     = -0.869716
+
+ACCEL #142 t=2.2725 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1092.693,0.000,3078.053) mag= 3266.250488
+  WishDir    = (-0.955,0.000,-0.298) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008327
+  Dot(Vel,Wish) = 125.581665
+  addSpeed = 56.418335
+  accelSpeed(x10) = 2758.387206
+  expectedAdd = 56.418335
+  RETURN     = (-1146.547,0.000,3061.237)
+  DELTA      = (-53.854,0.000,-16.816) mag= 56.418407
+  CameraLook = (-0.298,0.000,0.955) angle= 90.000000
+  CameraRight= (-0.955,0.000,-0.298) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.282,0.000,0.960) angle= 90.990434
+  RootRight  = (-0.960,0.000,-0.282) dot= 0.999851
+  Wish(root basis): Right= 0.999851 Forward= -0.017285
+  HumMove    = (-0.878,0.000,0.479) angle= 45.990787
+
+AIRCONTROL #120 t=2.2726 state=Enum.HumanoidStateType.Freefall callerLine=474
+  callerSource = =Opiumware
+  Arg2 = (-0.955,0.000,-0.298)
+  Arg3 = 1620.000000
+  Arg4 = (1.000,0.000,-0.000)
+  Arg5 = (-1146.547,0.000,3061.237)
+  Arg6 = 0.008327
+  RETURN = (-1146.547,0.000,3061.237)
+  Arg4 vs CameraRight = -0.954547
+  Arg4 vs RootRight   = -0.959557
+  Arg4 vs CameraLook  = -0.298060
+  Arg4 vs RootLook    = -0.281516
+  Arg4 vs HumMove     = -0.877568
+
+ACCEL #143 t=2.2808 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1146.547,0.000,3061.237) mag= 3268.905762
+  WishDir    = (-0.950,0.000,-0.313) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008369
+  Dot(Vel,Wish) = 129.301208
+  addSpeed = 52.698792
+  accelSpeed(x10) = 2772.009564
+  expectedAdd = 52.698792
+  RETURN     = (-1196.591,0.000,3044.720)
+  DELTA      = (-50.043,0.000,-16.517) mag= 52.698860
+  CameraLook = (-0.313,0.000,0.950) angle= 90.000000
+  CameraRight= (-0.950,0.000,-0.313) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.298,0.000,0.955) angle= 90.924414
+  RootRight  = (-0.955,0.000,-0.298) dot= 0.999870
+  Wish(root basis): Right= 0.999870 Forward= -0.016133
+  HumMove    = (-0.886,0.000,0.464) angle= 45.924735
+
+ACCEL #144 t=2.2892 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1196.591,0.000,3044.720) mag= 3271.413818
+  WishDir    = (-0.946,0.000,-0.324) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008342
+  Dot(Vel,Wish) = 144.332764
+  addSpeed = 37.667236
+  accelSpeed(x10) = 2763.066093
+  expectedAdd = 37.667236
+  RETURN     = (-1232.221,0.000,3032.502)
+  DELTA      = (-35.631,0.000,-12.218) mag= 37.667194
+  CameraLook = (-0.324,0.000,0.946) angle= 90.000002
+  CameraRight= (-0.946,0.000,-0.324) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (-0.313,0.000,0.950) angle= 90.660231
+  RootRight  = (-0.950,0.000,-0.313) dot= 0.999934
+  Wish(root basis): Right= 0.999934 Forward= -0.011523
+  HumMove    = (-0.893,0.000,0.450) angle= 45.660535
+
+ACCEL #145 t=2.3066 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1232.221,0.000,3032.502) mag= 3273.291992
+  WishDir    = (0.945,0.000,0.328) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.009103
+  Dot(Vel,Wish) = -170.695801
+  addSpeed = 352.695801
+  accelSpeed(x10) = 3015.263892
+  expectedAdd = 352.695801
+  RETURN     = (-947.337,0.000,3131.290)
+  DELTA      = (284.885,0.000,98.787) mag= 301.526428
+  CameraLook = (-0.328,0.000,0.945) angle= 90.000000
+  CameraRight= (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.328,0.000,0.945) angle= 90.000041
+  RootRight  = (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= -0.000001
+  HumMove    = (0.436,0.000,0.900) angle= 44.999996
+
+ACCEL #146 t=2.3146 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-947.337,0.000,3131.290) mag= 3271.455566
+  WishDir    = (0.945,0.000,0.328) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008159
+  Dot(Vel,Wish) = 130.830627
+  addSpeed = 51.169373
+  accelSpeed(x10) = 2702.711315
+  expectedAdd = 51.169373
+  RETURN     = (-898.991,0.000,3148.054)
+  DELTA      = (48.345,0.000,16.764) mag= 51.169353
+  CameraLook = (-0.328,0.000,0.945) angle= 90.000000
+  CameraRight= (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.328,0.000,0.945) angle= 89.998572
+  RootRight  = (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000025
+  HumMove    = (0.436,0.000,0.900) angle= 44.999996
+
+ACCEL #147 t=2.3229 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-898.991,0.000,3148.054) mag= 3273.901123
+  WishDir    = (0.945,0.000,0.328) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008383
+  Dot(Vel,Wish) = 182.000061
+  addSpeed = -0.000061
+  accelSpeed(x10) = 2776.729789
+  expectedAdd = 0.000000
+  RETURN     = (-898.991,0.000,3148.054)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.328,0.000,0.945) angle= 90.000000
+  CameraRight= (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.328,0.000,0.945) angle= 89.999192
+  RootRight  = (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000014
+  HumMove    = (0.436,0.000,0.900) angle= 44.999996
+
+ACCEL #148 t=2.3308 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-898.991,0.000,3148.054) mag= 3273.901123
+  WishDir    = (0.945,0.000,0.328) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007824
+  Dot(Vel,Wish) = 182.000061
+  addSpeed = -0.000061
+  accelSpeed(x10) = 2591.663088
+  expectedAdd = 0.000000
+  RETURN     = (-898.991,0.000,3148.054)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.328,0.000,0.945) angle= 90.000000
+  CameraRight= (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.328,0.000,0.945) angle= 89.999513
+  RootRight  = (-0.945,0.000,-0.328) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000008
+  HumMove    = (0.436,0.000,0.900) angle= 44.999996
+
+ACCEL #149 t=2.3393 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-898.991,0.000,3148.054) mag= 3273.901123
+  WishDir    = (0.947,0.000,0.322) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008206
+  Dot(Vel,Wish) = 163.154785
+  addSpeed = 18.845215
+  accelSpeed(x10) = 2718.127858
+  expectedAdd = 18.845215
+  RETURN     = (-881.151,0.000,3154.125)
+  DELTA      = (17.840,0.000,6.071) mag= 18.845163
+  CameraLook = (-0.322,0.000,0.947) angle= 90.000002
+  CameraRight= (-0.947,0.000,-0.322) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.328,0.000,0.945) angle= 90.330168
+  RootRight  = (-0.945,0.000,-0.328) dot= -0.999983
+  Wish(root basis): Right= -0.999983 Forward= -0.005762
+  HumMove    = (0.436,0.000,0.900) angle= 45.330255
+
+ACCEL #150 t=2.3475 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-881.151,0.000,3154.125) mag= 3274.894287
+  WishDir    = (0.949,0.000,0.316) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008342
+  Dot(Vel,Wish) = 159.378357
+  addSpeed = 22.621643
+  accelSpeed(x10) = 2763.079975
+  expectedAdd = 22.621643
+  RETURN     = (-859.686,0.000,3161.265)
+  DELTA      = (21.465,0.000,7.140) mag= 22.621620
+  CameraLook = (-0.316,0.000,0.949) angle= 90.000000
+  CameraRight= (-0.949,0.000,-0.316) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.322,0.000,0.947) angle= 90.396062
+  RootRight  = (-0.947,0.000,-0.322) dot= -0.999976
+  Wish(root basis): Right= -0.999976 Forward= -0.006913
+  HumMove    = (0.442,0.000,0.897) angle= 45.396309
+
+ACCEL #151 t=2.3558 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-859.686,0.000,3161.265) mag= 3276.072754
+  WishDir    = (0.954,0.000,0.301) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008300
+  Dot(Vel,Wish) = 132.958618
+  addSpeed = 49.041382
+  accelSpeed(x10) = 2749.443735
+  expectedAdd = 49.041382
+  RETURN     = (-812.924,0.000,3176.044)
+  DELTA      = (46.761,0.000,14.779) mag= 49.041370
+  CameraLook = (-0.301,0.000,0.954) angle= 90.000002
+  CameraRight= (-0.954,0.000,-0.301) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.316,0.000,0.949) angle= 90.858408
+  RootRight  = (-0.949,0.000,-0.316) dot= -0.999888
+  Wish(root basis): Right= -0.999888 Forward= -0.014981
+  HumMove    = (0.448,0.000,0.894) angle= 45.858685
+
+ACCEL #152 t=2.3642 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-812.924,0.000,3176.044) mag= 3278.429443
+  WishDir    = (0.958,0.000,0.286) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008433
+  Dot(Vel,Wish) = 129.147156
+  addSpeed = 52.852844
+  accelSpeed(x10) = 2793.305643
+  expectedAdd = 52.852844
+  RETURN     = (-762.278,0.000,3191.156)
+  DELTA      = (50.646,0.000,15.112) mag= 52.852848
+  CameraLook = (-0.286,0.000,0.958) angle= 90.000000
+  CameraRight= (-0.958,0.000,-0.286) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.301,0.000,0.954) angle= 90.924320
+  RootRight  = (-0.954,0.000,-0.301) dot= -0.999870
+  Wish(root basis): Right= -0.999870 Forward= -0.016132
+  HumMove    = (0.461,0.000,0.887) angle= 45.924730
+
+ACCEL #153 t=2.3726 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-762.278,0.000,3191.156) mag= 3280.936523
+  WishDir    = (0.964,0.000,0.266) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008288
+  Dot(Vel,Wish) = 113.987915
+  addSpeed = 68.012085
+  accelSpeed(x10) = 2745.468825
+  expectedAdd = 68.012085
+  RETURN     = (-696.716,0.000,3209.246)
+  DELTA      = (65.562,0.000,18.090) mag= 68.012100
+  CameraLook = (-0.266,0.000,0.964) angle= 90.000000
+  CameraRight= (-0.964,0.000,-0.266) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.286,0.000,0.958) angle= 91.188477
+  RootRight  = (-0.958,0.000,-0.286) dot= -0.999785
+  Wish(root basis): Right= -0.999785 Forward= -0.020741
+  HumMove    = (0.475,0.000,0.880) angle= 46.188944
+
+ACCEL #154 t=2.3814 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-696.716,0.000,3209.246) mag= 3284.002930
+  WishDir    = (0.973,0.000,0.230) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008869
+  Dot(Vel,Wish) = 60.940369
+  addSpeed = 121.059631
+  accelSpeed(x10) = 2937.795251
+  expectedAdd = 121.059631
+  RETURN     = (-578.909,0.000,3237.121)
+  DELTA      = (117.807,0.000,27.874) mag= 121.059639
+  CameraLook = (-0.230,0.000,0.973) angle= 90.000001
+  CameraRight= (-0.973,0.000,-0.230) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.266,0.000,0.964) angle= 92.113130
+  RootRight  = (-0.964,0.000,-0.266) dot= -0.999320
+  Wish(root basis): Right= -0.999320 Forward= -0.036873
+  HumMove    = (0.494,0.000,0.870) angle= 47.113686
+
+ACCEL #155 t=2.3896 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-578.909,0.000,3237.121) mag= 3288.477783
+  WishDir    = (0.982,0.000,0.190) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008020
+  Dot(Vel,Wish) = 45.612427
+  addSpeed = 136.387573
+  accelSpeed(x10) = 2656.448110
+  expectedAdd = 136.387573
+  RETURN     = (-444.997,0.000,3262.990)
+  DELTA      = (133.912,0.000,25.870) mag= 136.387589
+  CameraLook = (-0.190,0.000,0.982) angle= 89.999999
+  CameraRight= (-0.982,0.000,-0.190) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.230,0.000,0.973) angle= 92.377076
+  RootRight  = (-0.973,0.000,-0.230) dot= -0.999140
+  Wish(root basis): Right= -0.999140 Forward= -0.041476
+  HumMove    = (0.525,0.000,0.851) angle= 47.377900
+
+ACCEL #156 t=2.3975 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-444.997,0.000,3262.990) mag= 3293.194580
+  WishDir    = (0.987,0.000,0.160) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008080
+  Dot(Vel,Wish) = 83.374603
+  addSpeed = 98.625397
+  accelSpeed(x10) = 2676.350117
+  expectedAdd = 98.625397
+  RETURN     = (-347.645,0.000,3278.787)
+  DELTA      = (97.352,0.000,15.797) mag= 98.625389
+  CameraLook = (-0.160,0.000,0.987) angle= 90.000001
+  CameraRight= (-0.987,0.000,-0.160) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.190,0.000,0.982) angle= 91.716369
+  RootRight  = (-0.982,0.000,-0.190) dot= -0.999551
+  Wish(root basis): Right= -0.999551 Forward= -0.029952
+  HumMove    = (0.560,0.000,0.828) angle= 46.717368
+
+ACCEL #157 t=2.4058 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-347.645,0.000,3278.787) mag= 3297.165771
+  WishDir    = (0.992,0.000,0.128) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008335
+  Dot(Vel,Wish) = 75.654999
+  addSpeed = 106.345001
+  accelSpeed(x10) = 2760.844030
+  expectedAdd = 106.345001
+  RETURN     = (-242.178,0.000,3292.423)
+  DELTA      = (105.467,0.000,13.636) mag= 106.344986
+  CameraLook = (-0.128,0.000,0.992) angle= 90.000000
+  CameraRight= (-0.992,0.000,-0.128) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.160,0.000,0.987) angle= 91.848606
+  RootRight  = (-0.987,0.000,-0.160) dot= -0.999480
+  Wish(root basis): Right= -0.999480 Forward= -0.032259
+  HumMove    = (0.585,0.000,0.811) angle= 46.849474
+
+ACCEL #158 t=2.4146 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-242.178,0.000,3292.423) mag= 3301.318115
+  WishDir    = (0.994,0.000,0.110) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008918
+  Dot(Vel,Wish) = 121.170685
+  addSpeed = 60.829315
+  accelSpeed(x10) = 2954.108887
+  expectedAdd = 60.829315
+  RETURN     = (-181.717,0.000,3299.109)
+  DELTA      = (60.461,0.000,6.686) mag= 60.829319
+  CameraLook = (-0.110,0.000,0.994) angle= 90.000000
+  CameraRight= (-0.994,0.000,-0.110) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.128,0.000,0.992) angle= 91.055975
+  RootRight  = (-0.992,0.000,-0.128) dot= -0.999830
+  Wish(root basis): Right= -0.999830 Forward= -0.018429
+  HumMove    = (0.611,0.000,0.792) angle= 46.056846
+
+ACCEL #159 t=2.4234 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-181.717,0.000,3299.109) mag= 3304.110107
+  WishDir    = (0.999,0.000,0.050) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008444
+  Dot(Vel,Wish) = -15.981689
+  addSpeed = 197.981689
+  accelSpeed(x10) = 2796.962808
+  expectedAdd = 197.981689
+  RETURN     = (16.015,0.000,3309.042)
+  DELTA      = (197.732,0.000,9.932) mag= 197.981705
+  CameraLook = (-0.050,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.050) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.110,0.000,0.994) angle= 93.433789
+  RootRight  = (-0.994,0.000,-0.110) dot= -0.998205
+  Wish(root basis): Right= -0.998205 Forward= -0.059895
+  HumMove    = (0.625,0.000,0.781) angle= 48.434747
+
+ACCEL #160 t=2.4307 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (16.015,0.000,3309.042) mag= 3309.080322
+  WishDir    = (0.999,0.000,0.050) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007649
+  Dot(Vel,Wish) = 182.000000
+  addSpeed = 0.000000
+  accelSpeed(x10) = 2533.585747
+  expectedAdd = 0.000000
+  RETURN     = (16.015,0.000,3309.042)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.050,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.050) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.050,0.000,0.999) angle= 90.000000
+  RootRight  = (-0.999,0.000,-0.050) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000000
+  HumMove    = (0.671,0.000,0.742) angle= 44.999996
+
+ACCEL #161 t=2.4392 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (16.015,0.000,3309.042) mag= 3309.080322
+  WishDir    = (1.000,0.000,0.019) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008293
+  Dot(Vel,Wish) = 79.083488
+  addSpeed = 102.916512
+  accelSpeed(x10) = 2746.973337
+  expectedAdd = 102.916512
+  RETURN     = (118.913,0.000,3311.003)
+  DELTA      = (102.898,0.000,1.962) mag= 102.916512
+  CameraLook = (-0.019,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,-0.019) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.050,0.000,0.999) angle= 91.782374
+  RootRight  = (-0.999,0.000,-0.050) dot= -0.999516
+  Wish(root basis): Right= -0.999516 Forward= -0.031103
+  HumMove    = (0.671,0.000,0.742) angle= 46.783431
+
+ACCEL #162 t=2.4481 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (118.913,0.000,3311.003) mag= 3313.137695
+  WishDir    = (1.000,0.000,-0.011) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008911
+  Dot(Vel,Wish) = 82.775681
+  addSpeed = 99.224319
+  accelSpeed(x10) = 2951.707283
+  expectedAdd = 99.224319
+  RETURN     = (218.131,0.000,3309.920)
+  DELTA      = (99.218,0.000,-1.083) mag= 99.224327
+  CameraLook = (0.011,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,0.011) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.019,0.000,1.000) angle= 91.716440
+  RootRight  = (-1.000,0.000,-0.019) dot= -0.999551
+  Wish(root basis): Right= -0.999551 Forward= -0.029953
+  HumMove    = (0.694,0.000,0.720) angle= 46.717372
+
+ACCEL #163 t=2.4560 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (218.131,0.000,3309.920) mag= 3317.100342
+  WishDir    = (0.999,0.000,-0.039) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007851
+  Dot(Vel,Wish) = 90.301979
+  addSpeed = 91.698021
+  accelSpeed(x10) = 2600.454782
+  expectedAdd = 91.698021
+  RETURN     = (309.761,0.000,3306.384)
+  DELTA      = (91.630,0.000,-3.537) mag= 91.698029
+  CameraLook = (0.039,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,0.039) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.011,0.000,1.000) angle= 91.584410
+  RootRight  = (-1.000,0.000,0.011) dot= -0.999618
+  Wish(root basis): Right= -0.999618 Forward= -0.027650
+  HumMove    = (0.715,0.000,0.699) angle= 46.585266
+
+ACCEL #164 t=2.4642 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (309.761,0.000,3306.384) mag= 3320.861816
+  WishDir    = (0.998,0.000,-0.058) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008287
+  Dot(Vel,Wish) = 116.983963
+  addSpeed = 65.016037
+  accelSpeed(x10) = 2745.054829
+  expectedAdd = 65.016037
+  RETURN     = (374.667,0.000,3302.603)
+  DELTA      = (64.906,0.000,-3.781) mag= 65.016045
+  CameraLook = (0.058,0.000,0.998) angle= 90.000000
+  CameraRight= (-0.998,0.000,0.058) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.039,0.000,0.999) angle= 91.122084
+  RootRight  = (-0.999,0.000,0.039) dot= -0.999808
+  Wish(root basis): Right= -0.999808 Forward= -0.019583
+  HumMove    = (0.734,0.000,0.679) angle= 46.122894
+
+ACCEL #165 t=2.4726 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (374.667,0.000,3302.603) mag= 3323.787354
+  WishDir    = (0.996,0.000,-0.088) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008349
+  Dot(Vel,Wish) = 82.456238
+  addSpeed = 99.543762
+  accelSpeed(x10) = 2765.398596
+  expectedAdd = 99.543762
+  RETURN     = (473.824,0.000,3293.839)
+  DELTA      = (99.157,0.000,-8.764) mag= 99.543777
+  CameraLook = (0.088,0.000,0.996) angle= 90.000000
+  CameraRight= (-0.996,0.000,0.088) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.058,0.000,0.998) angle= 91.716708
+  RootRight  = (-0.998,0.000,0.058) dot= -0.999551
+  Wish(root basis): Right= -0.999551 Forward= -0.029958
+  HumMove    = (0.747,0.000,0.665) angle= 46.717372
+
+ACCEL #166 t=2.4809 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (473.824,0.000,3293.839) mag= 3327.745117
+  WishDir    = (0.992,0.000,-0.122) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008331
+  Dot(Vel,Wish) = 66.995514
+  addSpeed = 115.004486
+  accelSpeed(x10) = 2759.615618
+  expectedAdd = 115.004486
+  RETURN     = (587.964,0.000,3279.759)
+  DELTA      = (114.139,0.000,-14.080) mag= 115.004486
+  CameraLook = (0.122,0.000,0.992) angle= 90.000000
+  CameraRight= (-0.992,0.000,0.122) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.088,0.000,0.996) angle= 91.980813
+  RootRight  = (-0.996,0.000,0.088) dot= -0.999403
+  Wish(root basis): Right= -0.999403 Forward= -0.034565
+  HumMove    = (0.767,0.000,0.642) angle= 46.981589
+
+ACCEL #167 t=2.4897 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (587.964,0.000,3279.759) mag= 3332.044678
+  WishDir    = (0.989,0.000,-0.149) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008862
+  Dot(Vel,Wish) = 93.728241
+  addSpeed = 88.271759
+  accelSpeed(x10) = 2935.297089
+  expectedAdd = 88.271759
+  RETURN     = (675.254,0.000,3266.633)
+  DELTA      = (87.290,0.000,-13.126) mag= 88.271774
+  CameraLook = (0.149,0.000,0.989) angle= 90.000000
+  CameraRight= (-0.989,0.000,0.149) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.122,0.000,0.992) angle= 91.518333
+  RootRight  = (-0.992,0.000,0.122) dot= -0.999649
+  Wish(root basis): Right= -0.999649 Forward= -0.026497
+  HumMove    = (0.788,0.000,0.615) angle= 46.519212
+
+ACCEL #168 t=2.4976 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (675.254,0.000,3266.633) mag= 3335.695068
+  WishDir    = (0.985,0.000,-0.173) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007795
+  Dot(Vel,Wish) = 101.318604
+  addSpeed = 80.681396
+  accelSpeed(x10) = 2582.029677
+  expectedAdd = 80.681396
+  RETURN     = (754.725,0.000,3252.708)
+  DELTA      = (79.471,0.000,-13.925) mag= 80.681351
+  CameraLook = (0.173,0.000,0.985) angle= 90.000001
+  CameraRight= (-0.985,0.000,0.173) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.149,0.000,0.989) angle= 91.386317
+  RootRight  = (-0.989,0.000,0.149) dot= -0.999707
+  Wish(root basis): Right= -0.999707 Forward= -0.024193
+  HumMove    = (0.804,0.000,0.594) angle= 46.387115
+
+ACCEL #169 t=2.5059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (754.725,0.000,3252.708) mag= 3339.119629
+  WishDir    = (0.983,0.000,-0.185) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008368
+  Dot(Vel,Wish) = 139.705139
+  addSpeed = 42.294861
+  accelSpeed(x10) = 2771.802566
+  expectedAdd = 42.294861
+  RETURN     = (796.289,0.000,3244.881)
+  DELTA      = (41.564,0.000,-7.828) mag= 42.294861
+  CameraLook = (0.185,0.000,0.983) angle= 90.000000
+  CameraRight= (-0.983,0.000,0.185) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.173,0.000,0.985) angle= 90.725853
+  RootRight  = (-0.985,0.000,0.173) dot= -0.999920
+  Wish(root basis): Right= -0.999920 Forward= -0.012668
+  HumMove    = (0.819,0.000,0.574) angle= 45.726578
+
+ACCEL #170 t=2.5142 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (796.289,0.000,3244.881) mag= 3341.156494
+  WishDir    = (0.979,0.000,-0.203) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008273
+  Dot(Vel,Wish) = 120.434753
+  addSpeed = 61.565247
+  accelSpeed(x10) = 2740.445044
+  expectedAdd = 61.565247
+  RETURN     = (856.570,0.000,3232.373)
+  DELTA      = (60.281,0.000,-12.508) mag= 61.565205
+  CameraLook = (0.203,0.000,0.979) angle= 90.000000
+  CameraRight= (-0.979,0.000,0.203) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.185,0.000,0.983) angle= 91.056318
+  RootRight  = (-0.983,0.000,0.185) dot= -0.999830
+  Wish(root basis): Right= -0.999830 Forward= -0.018435
+  HumMove    = (0.826,0.000,0.564) angle= 46.056846
+
+ACCEL #171 t=2.5230 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (856.570,0.000,3232.373) mag= 3343.941650
+  WishDir    = (0.973,0.000,-0.229) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008917
+  Dot(Vel,Wish) = 93.412415
+  addSpeed = 88.587585
+  accelSpeed(x10) = 2953.625790
+  expectedAdd = 88.587585
+  RETURN     = (942.802,0.000,3212.082)
+  DELTA      = (86.232,0.000,-20.291) mag= 88.587616
+  CameraLook = (0.229,0.000,0.973) angle= 89.999999
+  CameraRight= (-0.973,0.000,0.229) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.203,0.000,0.979) angle= 91.518649
+  RootRight  = (-0.979,0.000,0.203) dot= -0.999649
+  Wish(root basis): Right= -0.999649 Forward= -0.026502
+  HumMove    = (0.836,0.000,0.549) angle= 46.519212
+
+ACCEL #172 t=2.5310 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (942.802,0.000,3212.082) mag= 3347.587891
+  WishDir    = (0.965,0.000,-0.263) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007813
+  Dot(Vel,Wish) = 66.308350
+  addSpeed = 115.691650
+  accelSpeed(x10) = 2588.116055
+  expectedAdd = 115.691650
+  RETURN     = (1054.435,0.000,3181.704)
+  DELTA      = (111.632,0.000,-30.378) mag= 115.691628
+  CameraLook = (0.263,0.000,0.965) angle= 90.000000
+  CameraRight= (-0.965,0.000,0.263) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.229,0.000,0.973) angle= 91.980900
+  RootRight  = (-0.973,0.000,0.229) dot= -0.999402
+  Wish(root basis): Right= -0.999402 Forward= -0.034566
+  HumMove    = (0.850,0.000,0.526) angle= 46.981589
+
+ACCEL #173 t=2.5393 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1054.435,0.000,3181.704) mag= 3351.875977
+  WishDir    = (0.954,0.000,-0.301) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008290
+  Dot(Vel,Wish) = 46.842346
+  addSpeed = 135.157654
+  accelSpeed(x10) = 2746.117582
+  expectedAdd = 135.157654
+  RETURN     = (1183.312,0.000,3140.983)
+  DELTA      = (128.877,0.000,-40.721) mag= 135.157654
+  CameraLook = (0.301,0.000,0.954) angle= 90.000000
+  CameraRight= (-0.954,0.000,0.301) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.263,0.000,0.965) angle= 92.310976
+  RootRight  = (-0.965,0.000,0.263) dot= -0.999187
+  Wish(root basis): Right= -0.999187 Forward= -0.040323
+  HumMove    = (0.868,0.000,0.497) angle= 47.311845
+
+ACCEL #174 t=2.5475 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1183.312,0.000,3140.983) mag= 3356.486572
+  WishDir    = (0.945,0.000,-0.328) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008361
+  Dot(Vel,Wish) = 89.211548
+  addSpeed = 92.788452
+  accelSpeed(x10) = 2769.345742
+  expectedAdd = 92.788452
+  RETURN     = (1270.982,0.000,3110.590)
+  DELTA      = (87.670,0.000,-30.393) mag= 92.788368
+  CameraLook = (0.328,0.000,0.945) angle= 90.000000
+  CameraRight= (-0.945,0.000,0.328) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.301,0.000,0.954) angle= 91.584282
+  RootRight  = (-0.954,0.000,0.301) dot= -0.999618
+  Wish(root basis): Right= -0.999618 Forward= -0.027647
+  HumMove    = (0.887,0.000,0.461) angle= 46.585256
+
+ACCEL #175 t=2.5559 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1270.982,0.000,3110.590) mag= 3360.233154
+  WishDir    = (0.937,0.000,-0.350) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008376
+  Dot(Vel,Wish) = 100.724243
+  addSpeed = 81.275757
+  accelSpeed(x10) = 2774.618166
+  expectedAdd = 81.275757
+  RETURN     = (1347.107,0.000,3082.117)
+  DELTA      = (76.125,0.000,-28.473) mag= 81.275818
+  CameraLook = (0.350,0.000,0.937) angle= 90.000000
+  CameraRight= (-0.937,0.000,0.350) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.328,0.000,0.945) angle= 91.386267
+  RootRight  = (-0.945,0.000,0.328) dot= -0.999707
+  Wish(root basis): Right= -0.999707 Forward= -0.024193
+  HumMove    = (0.900,0.000,0.436) angle= 46.387106
+
+ACCEL #176 t=2.5647 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1347.107,0.000,3082.117) mag= 3363.650635
+  WishDir    = (0.925,0.000,-0.380) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008793
+  Dot(Vel,Wish) = 73.506226
+  addSpeed = 108.493774
+  accelSpeed(x10) = 2912.565599
+  expectedAdd = 108.493774
+  RETURN     = (1447.446,0.000,3040.850)
+  DELTA      = (100.339,0.000,-41.268) mag= 108.493767
+  CameraLook = (0.380,0.000,0.925) angle= 90.000000
+  CameraRight= (-0.925,0.000,0.380) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.350,0.000,0.937) angle= 91.848742
+  RootRight  = (-0.937,0.000,0.350) dot= -0.999479
+  Wish(root basis): Right= -0.999479 Forward= -0.032261
+  HumMove    = (0.910,0.000,0.415) angle= 46.849474
+
+ACCEL #177 t=2.5728 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1447.446,0.000,3040.850) mag= 3367.768555
+  WishDir    = (0.912,0.000,-0.410) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007864
+  Dot(Vel,Wish) = 73.373047
+  addSpeed = 108.626953
+  accelSpeed(x10) = 2604.705792
+  expectedAdd = 108.626953
+  RETURN     = (1546.522,0.000,2996.310)
+  DELTA      = (99.076,0.000,-44.539) mag= 108.627060
+  CameraLook = (0.410,0.000,0.912) angle= 90.000002
+  CameraRight= (-0.912,0.000,0.410) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.380,0.000,0.925) angle= 91.848652
+  RootRight  = (-0.925,0.000,0.380) dot= -0.999480
+  Wish(root basis): Right= -0.999480 Forward= -0.032259
+  HumMove    = (0.923,0.000,0.385) angle= 46.849478
+
+ACCEL #178 t=2.5808 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1546.522,0.000,2996.310) mag= 3371.884521
+  WishDir    = (0.898,0.000,-0.439) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008252
+  Dot(Vel,Wish) = 73.240234
+  addSpeed = 108.759766
+  accelSpeed(x10) = 2733.406198
+  expectedAdd = 108.759766
+  RETURN     = (1644.228,0.000,2948.538)
+  DELTA      = (97.706,0.000,-47.772) mag= 108.759743
+  CameraLook = (0.439,0.000,0.898) angle= 90.000002
+  CameraRight= (-0.898,0.000,0.439) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.410,0.000,0.912) angle= 91.848616
+  RootRight  = (-0.912,0.000,0.410) dot= -0.999480
+  Wish(root basis): Right= -0.999480 Forward= -0.032259
+  HumMove    = (0.935,0.000,0.355) angle= 46.849474
+
+ACCEL #179 t=2.5899 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1644.228,0.000,2948.538) mag= 3375.998291
+  WishDir    = (0.884,0.000,-0.468) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008981
+  Dot(Vel,Wish) = 73.106934
+  addSpeed = 108.893066
+  accelSpeed(x10) = 2974.852767
+  expectedAdd = 108.893066
+  RETURN     = (1740.460,0.000,2897.576)
+  DELTA      = (96.231,0.000,-50.963) mag= 108.892990
+  CameraLook = (0.468,0.000,0.884) angle= 90.000002
+  CameraRight= (-0.884,0.000,0.468) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.439,0.000,0.898) angle= 91.848324
+  RootRight  = (-0.898,0.000,0.439) dot= -0.999480
+  Wish(root basis): Right= -0.999480 Forward= -0.032254
+  HumMove    = (0.946,0.000,0.325) angle= 46.849478
+
+ACCEL #180 t=2.5977 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1740.460,0.000,2897.576) mag= 3380.110107
+  WishDir    = (0.868,0.000,-0.497) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007755
+  Dot(Vel,Wish) = 69.078613
+  addSpeed = 112.921387
+  accelSpeed(x10) = 2568.711028
+  expectedAdd = 112.921387
+  RETURN     = (1838.429,0.000,2841.422)
+  DELTA      = (97.969,0.000,-56.154) mag= 112.921318
+  CameraLook = (0.497,0.000,0.868) angle= 89.999998
+  CameraRight= (-0.868,0.000,0.497) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.468,0.000,0.884) angle= 91.914131
+  RootRight  = (-0.884,0.000,0.468) dot= -0.999442
+  Wish(root basis): Right= -0.999442 Forward= -0.033402
+  HumMove    = (0.956,0.000,0.294) angle= 46.915525
+
+ACCEL #181 t=2.6060 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1838.429,0.000,2841.422) mag= 3384.301758
+  WishDir    = (0.850,0.000,-0.526) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008297
+  Dot(Vel,Wish) = 68.937988
+  addSpeed = 113.062012
+  accelSpeed(x10) = 2748.284425
+  expectedAdd = 113.062012
+  RETURN     = (1934.586,0.000,2781.950)
+  DELTA      = (96.157,0.000,-59.471) mag= 113.062004
+  CameraLook = (0.526,0.000,0.850) angle= 90.000000
+  CameraRight= (-0.850,0.000,0.526) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.497,0.000,0.868) angle= 91.914129
+  RootRight  = (-0.868,0.000,0.497) dot= -0.999442
+  Wish(root basis): Right= -0.999442 Forward= -0.033402
+  HumMove    = (0.965,0.000,0.262) angle= 46.915525
+
+ACCEL #182 t=2.6143 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1934.586,0.000,2781.950) mag= 3388.490723
+  WishDir    = (0.832,0.000,-0.555) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008333
+  Dot(Vel,Wish) = 64.892090
+  addSpeed = 117.107910
+  accelSpeed(x10) = 2760.126171
+  expectedAdd = 117.107910
+  RETURN     = (2031.994,0.000,2716.943)
+  DELTA      = (97.408,0.000,-65.007) mag= 117.107941
+  CameraLook = (0.555,0.000,0.832) angle= 90.000000
+  CameraRight= (-0.832,0.000,0.555) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.526,0.000,0.850) angle= 91.980140
+  RootRight  = (-0.850,0.000,0.526) dot= -0.999403
+  Wish(root basis): Right= -0.999403 Forward= -0.034553
+  HumMove    = (0.973,0.000,0.229) angle= 46.981584
+
+ACCEL #183 t=2.6231 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2031.994,0.000,2716.943) mag= 3392.754150
+  WishDir    = (0.812,0.000,-0.584) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008900
+  Dot(Vel,Wish) = 64.744263
+  addSpeed = 117.255737
+  accelSpeed(x10) = 2948.091148
+  expectedAdd = 117.255737
+  RETURN     = (2127.217,0.000,2648.521)
+  DELTA      = (95.222,0.000,-68.422) mag= 117.255821
+  CameraLook = (0.584,0.000,0.812) angle= 90.000000
+  CameraRight= (-0.812,0.000,0.584) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.555,0.000,0.832) angle= 91.980107
+  RootRight  = (-0.832,0.000,0.555) dot= -0.999403
+  Wish(root basis): Right= -0.999403 Forward= -0.034553
+  HumMove    = (0.981,0.000,0.196) angle= 46.981589
+
+ACCEL #184 t=2.6315 state=Enum.HumanoidStateType.Landed callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2038.012,0.000,2537.456) mag= 3254.562256
+  WishDir    = (0.999,0.000,0.034) mag= 1.000000
+  Accel      = 3240.000000
+  WishSpeed  = 20.400000
+  dt         = 0.008387
+  Dot(Vel,Wish) = 2122.168945
+  addSpeed = -2101.768945
+  accelSpeed(x10) = 5543.444018
+  expectedAdd = 0.000000
+  RETURN     = (2592.043,0.000,2556.093)
+  DELTA      = (554.031,0.000,18.637) mag= 554.344360
+  CameraLook = (0.611,0.000,0.791) angle= 50.392509
+  CameraRight= (-0.791,0.000,0.611) dot= -0.770430
+  Wish(cam basis): Right= -0.770430 Forward= 0.637525
+  RootLook   = (0.584,0.000,0.812) angle= 52.372534
+  RootRight  = (-0.812,0.000,0.584) dot= -0.791997
+  Wish(root basis): Right= -0.791997 Forward= 0.610525
+  HumMove    = (0.987,0.000,0.162) angle= 7.374057
+
+ACCEL #185 t=2.6394 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2491.612,0.000,2457.055) mag= 3499.321533
+  WishDir    = (1.000,0.000,-0.018) mag= 1.000000
+  Accel      = 3240.000000
+  WishSpeed  = 20.400000
+  dt         = 0.007749
+  Dot(Vel,Wish) = 2446.354492
+  addSpeed = -2425.954492
+  accelSpeed(x10) = 5121.889292
+  expectedAdd = 0.000000
+  RETURN     = (3003.716,0.000,2447.707)
+  DELTA      = (512.104,0.000,-9.348) mag= 512.188782
+  CameraLook = (0.651,0.000,0.759) angle= 50.392513
+  CameraRight= (-0.759,0.000,0.651) dot= -0.770430
+  Wish(cam basis): Right= -0.770430 Forward= 0.637525
+  RootLook   = (0.611,0.000,0.791) angle= 53.361827
+  RootRight  = (-0.791,0.000,0.611) dot= -0.802420
+  Wish(root basis): Right= -0.802420 Forward= 0.596760
+  HumMove    = (0.992,0.000,0.127) angle= 8.364851
+
+ACCEL #186 t=2.6483 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2870.682,0.000,2339.299) mag= 3703.125000
+  WishDir    = (0.998,0.000,-0.067) mag= 1.000000
+  Accel      = 3240.000000
+  WishSpeed  = 20.400000
+  dt         = 0.008858
+  Dot(Vel,Wish) = 2706.513916
+  addSpeed = -2686.113916
+  accelSpeed(x10) = 5854.755932
+  expectedAdd = 0.000000
+  RETURN     = (3402.955,0.000,2303.348)
+  DELTA      = (532.273,0.000,-35.951) mag= 533.486145
+  CameraLook = (0.688,0.000,0.725) angle= 50.370528
+  CameraRight= (-0.725,0.000,0.688) dot= -0.770185
+  Wish(cam basis): Right= -0.770185 Forward= 0.637820
+  RootLook   = (0.652,0.000,0.759) angle= 53.207200
+  RootRight  = (-0.759,0.000,0.652) dot= -0.800807
+  Wish(root basis): Right= -0.800807 Forward= 0.598923
+  HumMove    = (0.997,0.000,0.076) angle= 8.210759
+
+ACCEL #187 t=2.6561 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3269.608,0.000,2213.089) mag= 3948.176514
+  WishDir    = (0.995,0.000,-0.099) mag= 1.000000
+  Accel      = 3239.999807
+  WishSpeed  = 20.400000
+  dt         = 0.007837
+  Dot(Vel,Wish) = 3034.009766
+  addSpeed = -3013.609766
+  accelSpeed(x10) = 5180.053598
+  expectedAdd = 0.000000
+  RETURN     = (3474.582,0.000,2192.661)
+  DELTA      = (204.975,0.000,-20.429) mag= 205.990097
+  CameraLook = (0.711,0.000,0.703) angle= 50.348589
+  CameraRight= (-0.703,0.000,0.711) dot= -0.769941
+  Wish(cam basis): Right= -0.769941 Forward= 0.638115
+  RootLook   = (0.688,0.000,0.725) angle= 52.194226
+  RootRight  = (-0.725,0.000,0.688) dot= -0.790093
+  Wish(root basis): Right= -0.790093 Forward= 0.612987
+  HumMove    = (1.000,0.000,0.026) angle= 7.197974
+
+ACCEL #188 t=2.6650 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3319.732,0.000,2094.941) mag= 3925.480469
+  WishDir    = (0.991,0.000,-0.133) mag= 1.000000
+  Accel      = 3240.000000
+  WishSpeed  = 20.400000
+  dt         = 0.008913
+  Dot(Vel,Wish) = 3011.248291
+  addSpeed = -2990.848291
+  accelSpeed(x10) = 5891.356928
+  expectedAdd = 0.000000
+  RETURN     = (3546.447,0.000,2064.484)
+  DELTA      = (226.715,0.000,-30.457) mag= 228.751709
+  CameraLook = (0.735,0.000,0.678) angle= 50.326709
+  CameraRight= (-0.678,0.000,0.735) dot= -0.769697
+  Wish(cam basis): Right= -0.769697 Forward= 0.638409
+  RootLook   = (0.711,0.000,0.703) angle= 52.305530
+  RootRight  = (-0.703,0.000,0.711) dot= -0.791283
+  Wish(root basis): Right= -0.791283 Forward= 0.611451
+  HumMove    = (1.000,0.000,-0.006) angle= 7.308282
+
+ACCEL #189 t=2.6731 state=Enum.HumanoidStateType.Running callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3721.680,0.000,2166.492) mag= 4306.343262
+  WishDir    = (0.977,0.000,-0.211) mag= 1.000000
+  Accel      = 3240.000000
+  WishSpeed  = 20.400000
+  dt         = 0.007711
+  Dot(Vel,Wish) = 3180.407227
+  addSpeed = -3160.007227
+  accelSpeed(x10) = 5096.359575
+  expectedAdd = 0.000000
+  RETURN     = (3779.930,0.000,2153.911)
+  DELTA      = (58.250,0.000,-12.581) mag= 59.592690
+  CameraLook = (0.787,0.000,0.616) angle= 50.239677
+  CameraRight= (-0.616,0.000,0.787) dot= -0.768727
+  Wish(cam basis): Right= -0.768727 Forward= 0.639578
+  RootLook   = (0.735,0.000,0.678) angle= 54.860855
+  RootRight  = (-0.678,0.000,0.735) dot= -0.817757
+  Wish(root basis): Right= -0.817757 Forward= 0.575564
+  HumMove    = (0.999,0.000,-0.041) angle= 9.863383
+
+ACCEL #190 t=2.6816 state=Enum.HumanoidStateType.Jumping callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3610.846,0.000,2057.563) mag= 4155.933105
+  WishDir    = (0.977,0.000,-0.211) mag= 1.000000
+  Accel      = 3240.000000
+  WishSpeed  = 20.400000
+  dt         = 0.008946
+  Dot(Vel,Wish) = 3095.068604
+  addSpeed = -3074.668604
+  accelSpeed(x10) = 5913.196013
+  expectedAdd = 0.000000
+  RETURN     = (3752.511,0.000,2026.965)
+  DELTA      = (141.665,0.000,-30.598) mag= 144.931503
+  CameraLook = (0.787,0.000,0.616) angle= 50.239677
+  CameraRight= (-0.616,0.000,0.787) dot= -0.768727
+  Wish(cam basis): Right= -0.768727 Forward= 0.639578
+  RootLook   = (0.787,0.000,0.616) angle= 50.236763
+  RootRight  = (-0.616,0.000,0.787) dot= -0.768694
+  Wish(root basis): Right= -0.768694 Forward= 0.639617
+  HumMove    = (0.993,0.000,-0.121) angle= 5.239665
+
+ACCEL #191 t=2.6893 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3752.511,0.000,2026.965) mag= 4264.965332
+  WishDir    = (0.587,0.000,-0.810) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007729
+  Dot(Vel,Wish) = 561.251099
+  addSpeed = -379.251099
+  accelSpeed(x10) = 2560.264382
+  expectedAdd = 0.000000
+  RETURN     = (3752.511,0.000,2026.965)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.810,0.000,0.587) angle= 90.000000
+  CameraRight= (-0.587,0.000,0.810) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.787,0.000,0.616) angle= 92.111915
+  RootRight  = (-0.616,0.000,0.787) dot= -0.999321
+  Wish(root basis): Right= -0.999321 Forward= -0.036852
+  HumMove    = (0.993,0.000,-0.121) angle= 47.113682
+
+ACCEL #192 t=2.6983 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3752.511,0.000,2026.965) mag= 4264.965332
+  WishDir    = (0.562,0.000,-0.827) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008850
+  Dot(Vel,Wish) = 434.292969
+  addSpeed = -252.292969
+  accelSpeed(x10) = 2931.391280
+  expectedAdd = 0.000000
+  RETURN     = (3752.511,0.000,2026.965)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.827,0.000,0.562) angle= 90.000003
+  CameraRight= (-0.562,0.000,0.827) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (0.810,0.000,0.587) angle= 91.716637
+  RootRight  = (-0.587,0.000,0.810) dot= -0.999551
+  Wish(root basis): Right= -0.999551 Forward= -0.029956
+  HumMove    = (0.988,0.000,-0.158) angle= 46.717358
+
+ACCEL #193 t=2.7059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3752.511,0.000,2026.965) mag= 4264.965332
+  WishDir    = (0.539,0.000,-0.842) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007821
+  Dot(Vel,Wish) = 316.752075
+  addSpeed = -134.752075
+  accelSpeed(x10) = 2590.489896
+  expectedAdd = 0.000000
+  RETURN     = (3752.511,0.000,2026.965)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.842,0.000,0.539) angle= 90.000000
+  CameraRight= (-0.539,0.000,0.842) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (0.827,0.000,0.562) angle= 91.584888
+  RootRight  = (-0.562,0.000,0.827) dot= -0.999617
+  Wish(root basis): Right= -0.999617 Forward= -0.027658
+  HumMove    = (0.982,0.000,-0.187) angle= 46.585261
+
+ACCEL #194 t=2.7231 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3752.511,0.000,2026.965) mag= 4264.965332
+  WishDir    = (-0.512,0.000,0.859) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008336
+  Dot(Vel,Wish) = -179.320068
+  addSpeed = 361.320068
+  accelSpeed(x10) = 2761.064910
+  expectedAdd = 361.320068
+  RETURN     = (3611.191,0.000,2264.164)
+  DELTA      = (-141.320,0.000,237.199) mag= 276.106567
+  CameraLook = (0.859,0.000,0.512) angle= 90.000000
+  CameraRight= (-0.512,0.000,0.859) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.858,0.000,0.514) angle= 89.868068
+  RootRight  = (-0.514,0.000,0.858) dot= 0.999997
+  Wish(root basis): Right= 0.999997 Forward= 0.002303
+  HumMove    = (0.243,0.000,0.970) angle= 44.867892
+
+ACCEL #195 t=2.7306 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3611.191,0.000,2264.164) mag= 4262.292969
+  WishDir    = (-0.512,0.000,0.859) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008334
+  Dot(Vel,Wish) = 96.786621
+  addSpeed = 85.213379
+  accelSpeed(x10) = 2760.416153
+  expectedAdd = 85.213379
+  RETURN     = (3567.576,0.000,2337.370)
+  DELTA      = (-43.615,0.000,73.206) mag= 85.213394
+  CameraLook = (0.859,0.000,0.512) angle= 90.000000
+  CameraRight= (-0.512,0.000,0.859) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.859,0.000,0.512) angle= 89.998870
+  RootRight  = (-0.512,0.000,0.859) dot= 1.000000
+  Wish(root basis): Right= 1.000000 Forward= 0.000020
+  HumMove    = (0.246,0.000,0.969) angle= 44.999996
+
+ACCEL #196 t=2.7393 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3567.576,0.000,2337.370) mag= 4265.078613
+  WishDir    = (-0.511,0.000,0.860) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008295
+  Dot(Vel,Wish) = 186.911987
+  addSpeed = -4.911987
+  accelSpeed(x10) = 2747.732534
+  expectedAdd = 0.000000
+  RETURN     = (3567.576,0.000,2337.370)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.860,0.000,0.511) angle= 90.000000
+  CameraRight= (-0.511,0.000,0.860) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.859,0.000,0.512) angle= 89.933225
+  RootRight  = (-0.512,0.000,0.859) dot= 0.999999
+  Wish(root basis): Right= 0.999999 Forward= 0.001165
+  HumMove    = (0.246,0.000,0.969) angle= 44.933946
+
+ACCEL #197 t=2.7475 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3567.576,0.000,2337.370) mag= 4265.078613
+  WishDir    = (-0.511,0.000,0.860) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008343
+  Dot(Vel,Wish) = 186.911987
+  addSpeed = -4.911987
+  accelSpeed(x10) = 2763.493971
+  expectedAdd = 0.000000
+  RETURN     = (3567.576,0.000,2337.370)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (0.860,0.000,0.511) angle= 90.000000
+  CameraRight= (-0.511,0.000,0.860) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.860,0.000,0.511) angle= 89.999797
+  RootRight  = (-0.511,0.000,0.860) dot= 1.000000
+  Wish(root basis): Right= 1.000000 Forward= 0.000004
+  HumMove    = (0.247,0.000,0.969) angle= 44.999996
+
+ACCEL #198 t=2.7566 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3567.576,0.000,2337.370) mag= 4265.078613
+  WishDir    = (-0.513,0.000,0.858) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008984
+  Dot(Vel,Wish) = 177.086548
+  addSpeed = 4.913452
+  accelSpeed(x10) = 2975.984313
+  expectedAdd = 4.913452
+  RETURN     = (3565.056,0.000,2341.588)
+  DELTA      = (-2.520,0.000,4.218) mag= 4.913553
+  CameraLook = (0.858,0.000,0.513) angle= 90.000000
+  CameraRight= (-0.513,0.000,0.858) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.860,0.000,0.511) angle= 90.132086
+  RootRight  = (-0.511,0.000,0.860) dot= 0.999997
+  Wish(root basis): Right= 0.999997 Forward= -0.002305
+  HumMove    = (0.247,0.000,0.969) angle= 45.132105
+
+ACCEL #199 t=2.7641 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3565.056,0.000,2341.588) mag= 4265.285645
+  WishDir    = (-0.520,0.000,0.854) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007716
+  Dot(Vel,Wish) = 147.605225
+  addSpeed = 34.394775
+  accelSpeed(x10) = 2555.723699
+  expectedAdd = 34.394775
+  RETURN     = (3547.180,0.000,2370.973)
+  DELTA      = (-17.876,0.000,29.385) mag= 34.394901
+  CameraLook = (0.854,0.000,0.520) angle= 90.000002
+  CameraRight= (-0.520,0.000,0.854) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.858,0.000,0.513) angle= 90.462388
+  RootRight  = (-0.513,0.000,0.858) dot= 0.999967
+  Wish(root basis): Right= 0.999967 Forward= -0.008070
+  HumMove    = (0.244,0.000,0.970) angle= 45.462369
+
+ACCEL #200 t=2.7725 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3547.180,0.000,2370.973) mag= 4266.614258
+  WishDir    = (-0.535,0.000,0.845) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008372
+  Dot(Vel,Wish) = 103.345459
+  addSpeed = 78.654541
+  accelSpeed(x10) = 2773.141419
+  expectedAdd = 78.654541
+  RETURN     = (3505.068,0.000,2437.404)
+  DELTA      = (-42.112,0.000,66.431) mag= 78.654533
+  CameraLook = (0.845,0.000,0.535) angle= 90.000000
+  CameraRight= (-0.535,0.000,0.845) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.854,0.000,0.520) angle= 91.056735
+  RootRight  = (-0.520,0.000,0.854) dot= 0.999830
+  Wish(root basis): Right= 0.999830 Forward= -0.018442
+  HumMove    = (0.237,0.000,0.972) angle= 46.056846
+
+ACCEL #201 t=2.7810 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3505.068,0.000,2437.404) mag= 4269.243652
+  WishDir    = (-0.554,0.000,0.833) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008243
+  Dot(Vel,Wish) = 88.535278
+  addSpeed = 93.464722
+  accelSpeed(x10) = 2730.535687
+  expectedAdd = 93.464722
+  RETURN     = (3453.310,0.000,2515.229)
+  DELTA      = (-51.758,0.000,77.825) mag= 93.464668
+  CameraLook = (0.833,0.000,0.554) angle= 90.000000
+  CameraRight= (-0.554,0.000,0.833) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.845,0.000,0.535) angle= 91.254644
+  RootRight  = (-0.535,0.000,0.845) dot= 0.999760
+  Wish(root basis): Right= 0.999760 Forward= -0.021896
+  HumMove    = (0.219,0.000,0.976) angle= 46.255006
+
+ACCEL #202 t=2.7897 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3453.310,0.000,2515.229) mag= 4272.204102
+  WishDir    = (-0.578,0.000,0.816) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008857
+  Dot(Vel,Wish) = 53.999634
+  addSpeed = 128.000366
+  accelSpeed(x10) = 2933.820341
+  expectedAdd = 128.000366
+  RETURN     = (3379.264,0.000,2619.639)
+  DELTA      = (-74.045,0.000,104.410) mag= 128.000397
+  CameraLook = (0.816,0.000,0.578) angle= 90.000000
+  CameraRight= (-0.578,0.000,0.816) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.833,0.000,0.554) angle= 91.716882
+  RootRight  = (-0.554,0.000,0.833) dot= 0.999551
+  Wish(root basis): Right= 0.999551 Forward= -0.029961
+  HumMove    = (0.197,0.000,0.980) angle= 46.717363
+
+ACCEL #203 t=2.7976 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3379.264,0.000,2619.639) mag= 4275.738281
+  WishDir    = (-0.602,0.000,0.799) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007906
+  Dot(Vel,Wish) = 58.822144
+  addSpeed = 123.177856
+  accelSpeed(x10) = 2618.921379
+  expectedAdd = 123.177856
+  RETURN     = (3305.143,0.000,2718.020)
+  DELTA      = (-74.122,0.000,98.381) mag= 123.177933
+  CameraLook = (0.799,0.000,0.602) angle= 90.000003
+  CameraRight= (-0.602,0.000,0.799) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.816,0.000,0.578) angle= 91.650621
+  RootRight  = (-0.578,0.000,0.816) dot= 0.999585
+  Wish(root basis): Right= 0.999585 Forward= -0.028805
+  HumMove    = (0.168,0.000,0.986) angle= 46.651317
+
+ACCEL #204 t=2.8064 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3305.143,0.000,2718.020) mag= 4279.205566
+  WishDir    = (-0.620,0.000,0.785) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008377
+  Dot(Vel,Wish) = 83.385010
+  addSpeed = 98.614990
+  accelSpeed(x10) = 2774.700842
+  expectedAdd = 98.614990
+  RETURN     = (3244.002,0.000,2795.393)
+  DELTA      = (-61.141,0.000,77.374) mag= 98.614906
+  CameraLook = (0.785,0.000,0.620) angle= 90.000002
+  CameraRight= (-0.620,0.000,0.785) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.799,0.000,0.602) angle= 91.320292
+  RootRight  = (-0.602,0.000,0.799) dot= 0.999735
+  Wish(root basis): Right= 0.999735 Forward= -0.023041
+  HumMove    = (0.139,0.000,0.990) angle= 46.321052
+
+ACCEL #205 t=2.8146 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3244.002,0.000,2795.393) mag= 4282.262207
+  WishDir    = (-0.641,0.000,0.767) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008783
+  Dot(Vel,Wish) = 63.569824
+  addSpeed = 118.430176
+  accelSpeed(x10) = 2909.349886
+  expectedAdd = 118.430176
+  RETURN     = (3168.033,0.000,2886.247)
+  DELTA      = (-75.969,0.000,90.854) mag= 118.430122
+  CameraLook = (0.767,0.000,0.641) angle= 89.999997
+  CameraRight= (-0.641,0.000,0.767) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.785,0.000,0.620) angle= 91.584628
+  RootRight  = (-0.620,0.000,0.785) dot= 0.999618
+  Wish(root basis): Right= 0.999618 Forward= -0.027653
+  HumMove    = (0.116,0.000,0.993) angle= 46.585270
+
+ACCEL #206 t=2.8231 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3168.033,0.000,2886.247) mag= 4285.656738
+  WishDir    = (-0.668,0.000,0.744) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008417
+  Dot(Vel,Wish) = 28.893799
+  addSpeed = 153.106201
+  accelSpeed(x10) = 2788.074557
+  expectedAdd = 153.106201
+  RETURN     = (3065.686,0.000,3000.118)
+  DELTA      = (-102.346,0.000,113.871) mag= 153.106094
+  CameraLook = (0.744,0.000,0.668) angle= 90.000002
+  CameraRight= (-0.668,0.000,0.744) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.767,0.000,0.641) angle= 92.046931
+  RootRight  = (-0.641,0.000,0.767) dot= 0.999362
+  Wish(root basis): Right= 0.999362 Forward= -0.035718
+  HumMove    = (0.089,0.000,0.996) angle= 47.047633
+
+ACCEL #207 t=2.8308 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (3065.686,0.000,3000.118) mag= 4289.421875
+  WishDir    = (-0.695,0.000,0.719) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007714
+  Dot(Vel,Wish) = 23.814453
+  addSpeed = 158.185547
+  accelSpeed(x10) = 2555.088824
+  expectedAdd = 158.185547
+  RETURN     = (2955.677,0.000,3113.787)
+  DELTA      = (-110.009,0.000,113.669) mag= 158.185394
+  CameraLook = (0.719,0.000,0.695) angle= 89.999998
+  CameraRight= (-0.695,0.000,0.719) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.744,0.000,0.668) angle= 92.112814
+  RootRight  = (-0.668,0.000,0.744) dot= 0.999320
+  Wish(root basis): Right= 0.999320 Forward= -0.036867
+  HumMove    = (0.053,0.000,0.999) angle= 47.113682
+
+ACCEL #208 t=2.8390 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2955.677,0.000,3113.787) mag= 4293.215332
+  WishDir    = (-0.721,0.000,0.692) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008327
+  Dot(Vel,Wish) = 23.673584
+  addSpeed = 158.326416
+  accelSpeed(x10) = 2758.401088
+  expectedAdd = 158.326416
+  RETURN     = (2841.449,0.000,3223.419)
+  DELTA      = (-114.228,0.000,109.632) mag= 158.326370
+  CameraLook = (0.692,0.000,0.721) angle= 90.000000
+  CameraRight= (-0.721,0.000,0.692) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.719,0.000,0.695) angle= 92.112734
+  RootRight  = (-0.695,0.000,0.719) dot= 0.999320
+  Wish(root basis): Right= 0.999320 Forward= -0.036866
+  HumMove    = (0.016,0.000,1.000) angle= 47.113696
+
+ACCEL #209 t=2.8482 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2841.449,0.000,3223.419) mag= 4297.006348
+  WishDir    = (-0.739,0.000,0.674) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008879
+  Dot(Vel,Wish) = 73.067871
+  addSpeed = 108.932129
+  accelSpeed(x10) = 2940.941862
+  expectedAdd = 108.932129
+  RETURN     = (2760.970,0.000,3296.831)
+  DELTA      = (-80.479,0.000,73.412) mag= 108.932137
+  CameraLook = (0.674,0.000,0.739) angle= 90.000000
+  CameraRight= (-0.739,0.000,0.674) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.692,0.000,0.721) angle= 91.452196
+  RootRight  = (-0.721,0.000,0.692) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025343
+  HumMove    = (-0.021,0.000,1.000) angle= 46.453158
+
+ACCEL #210 t=2.8559 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2760.970,0.000,3296.831) mag= 4300.238281
+  WishDir    = (-0.753,0.000,0.658) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007754
+  Dot(Vel,Wish) = 87.855957
+  addSpeed = 94.144043
+  accelSpeed(x10) = 2568.545368
+  expectedAdd = 94.144043
+  RETURN     = (2690.043,0.000,3358.738)
+  DELTA      = (-70.927,0.000,61.907) mag= 94.144089
+  CameraLook = (0.658,0.000,0.753) angle= 90.000002
+  CameraRight= (-0.753,0.000,0.658) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.674,0.000,0.739) angle= 91.254230
+  RootRight  = (-0.739,0.000,0.674) dot= 0.999760
+  Wish(root basis): Right= 0.999760 Forward= -0.021889
+  HumMove    = (-0.046,0.000,0.999) angle= 46.255001
+
+ACCEL #211 t=2.8641 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2690.043,0.000,3358.738) mag= 4303.190918
+  WishDir    = (-0.775,0.000,0.632) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008337
+  Dot(Vel,Wish) = 38.188477
+  addSpeed = 143.811523
+  accelSpeed(x10) = 2761.672021
+  expectedAdd = 143.811523
+  RETURN     = (2578.597,0.000,3449.631)
+  DELTA      = (-111.446,0.000,90.893) mag= 143.811386
+  CameraLook = (0.632,0.000,0.775) angle= 90.000002
+  CameraRight= (-0.775,0.000,0.632) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.658,0.000,0.753) angle= 91.914881
+  RootRight  = (-0.753,0.000,0.658) dot= 0.999442
+  Wish(root basis): Right= 0.999442 Forward= -0.033415
+  HumMove    = (-0.068,0.000,0.998) angle= 46.915529
+
+ACCEL #212 t=2.8723 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2578.597,0.000,3449.631) mag= 4306.868652
+  WishDir    = (-0.795,0.000,0.607) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008333
+  Dot(Vel,Wish) = 43.029785
+  addSpeed = 138.970215
+  accelSpeed(x10) = 2760.153935
+  expectedAdd = 138.970215
+  RETURN     = (2468.124,0.000,3533.943)
+  DELTA      = (-110.473,0.000,84.312) mag= 138.970276
+  CameraLook = (0.607,0.000,0.795) angle= 89.999998
+  CameraRight= (-0.795,0.000,0.607) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.632,0.000,0.775) angle= 91.848669
+  RootRight  = (-0.775,0.000,0.632) dot= 0.999480
+  Wish(root basis): Right= 0.999480 Forward= -0.032260
+  HumMove    = (-0.101,0.000,0.995) angle= 46.849483
+
+ACCEL #213 t=2.8816 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2468.124,0.000,3533.943) mag= 4310.497559
+  WishDir    = (-0.810,0.000,0.586) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008940
+  Dot(Vel,Wish) = 72.725708
+  addSpeed = 109.274292
+  accelSpeed(x10) = 2961.396069
+  expectedAdd = 109.274292
+  RETURN     = (2379.604,0.000,3598.014)
+  DELTA      = (-88.520,0.000,64.071) mag= 109.274338
+  CameraLook = (0.586,0.000,0.810) angle= 90.000002
+  CameraRight= (-0.810,0.000,0.586) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.607,0.000,0.795) angle= 91.452303
+  RootRight  = (-0.795,0.000,0.607) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025345
+  HumMove    = (-0.133,0.000,0.991) angle= 46.453153
+
+ACCEL #214 t=2.8891 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2379.604,0.000,3598.014) mag= 4313.725098
+  WishDir    = (-0.826,0.000,0.564) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007810
+  Dot(Vel,Wish) = 62.698730
+  addSpeed = 119.301270
+  accelSpeed(x10) = 2587.108677
+  expectedAdd = 119.301270
+  RETURN     = (2281.064,0.000,3665.264)
+  DELTA      = (-98.540,0.000,67.250) mag= 119.301231
+  CameraLook = (0.564,0.000,0.826) angle= 90.000000
+  CameraRight= (-0.826,0.000,0.564) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.586,0.000,0.810) angle= 91.584541
+  RootRight  = (-0.810,0.000,0.586) dot= 0.999618
+  Wish(root basis): Right= 0.999618 Forward= -0.027652
+  HumMove    = (-0.158,0.000,0.987) angle= 46.585275
+
+ACCEL #215 t=2.8973 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2281.064,0.000,3665.264) mag= 4317.107422
+  WishDir    = (-0.843,0.000,0.538) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008275
+  Dot(Vel,Wish) = 47.675537
+  addSpeed = 134.324463
+  accelSpeed(x10) = 2741.011125
+  expectedAdd = 134.324463
+  RETURN     = (2167.812,0.000,3737.494)
+  DELTA      = (-113.252,0.000,72.229) mag= 134.324493
+  CameraLook = (0.538,0.000,0.843) angle= 89.999997
+  CameraRight= (-0.843,0.000,0.538) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.564,0.000,0.826) angle= 91.782685
+  RootRight  = (-0.826,0.000,0.564) dot= 0.999516
+  Wish(root basis): Right= 0.999516 Forward= -0.031109
+  HumMove    = (-0.185,0.000,0.983) angle= 46.783426
+
+ACCEL #216 t=2.9061 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2167.812,0.000,3737.494) mag= 4320.679199
+  WishDir    = (-0.863,0.000,0.505) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008292
+  Dot(Vel,Wish) = 17.679077
+  addSpeed = 164.320923
+  accelSpeed(x10) = 2746.738575
+  expectedAdd = 164.320923
+  RETURN     = (2026.009,0.000,3820.519)
+  DELTA      = (-141.803,0.000,83.026) mag= 164.320953
+  CameraLook = (0.505,0.000,0.863) angle= 90.000000
+  CameraRight= (-0.863,0.000,0.505) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.538,0.000,0.843) angle= 92.178953
+  RootRight  = (-0.843,0.000,0.538) dot= 0.999277
+  Wish(root basis): Right= 0.999277 Forward= -0.038021
+  HumMove    = (-0.216,0.000,0.976) angle= 47.179743
+
+ACCEL #217 t=2.9149 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (2026.009,0.000,3820.519) mag= 4324.474609
+  WishDir    = (-0.883,0.000,0.469) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.009011
+  Dot(Vel,Wish) = 2.578369
+  addSpeed = 179.421631
+  accelSpeed(x10) = 2984.913902
+  expectedAdd = 179.421631
+  RETURN     = (1867.547,0.000,3904.673)
+  DELTA      = (-158.463,0.000,84.153) mag= 179.421722
+  CameraLook = (0.469,0.000,0.883) angle= 89.999998
+  CameraRight= (-0.883,0.000,0.469) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.505,0.000,0.863) angle= 92.376942
+  RootRight  = (-0.863,0.000,0.505) dot= 0.999140
+  Wish(root basis): Right= 0.999140 Forward= -0.041474
+  HumMove    = (-0.253,0.000,0.967) angle= 47.377905
+
+ACCEL #218 t=2.9224 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1867.547,0.000,3904.673) mag= 4328.301758
+  WishDir    = (-0.894,0.000,0.448) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007725
+  Dot(Vel,Wish) = 77.263672
+  addSpeed = 104.736328
+  accelSpeed(x10) = 2558.760024
+  expectedAdd = 104.736328
+  RETURN     = (1773.883,0.000,3951.543)
+  DELTA      = (-93.664,0.000,46.870) mag= 104.736320
+  CameraLook = (0.448,0.000,0.894) angle= 90.000000
+  CameraRight= (-0.894,0.000,0.448) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.469,0.000,0.883) angle= 91.386006
+  RootRight  = (-0.883,0.000,0.469) dot= 0.999707
+  Wish(root basis): Right= 0.999707 Forward= -0.024188
+  HumMove    = (-0.293,0.000,0.956) angle= 46.387101
+
+ACCEL #219 t=2.9308 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1773.883,0.000,3951.543) mag= 4331.437500
+  WishDir    = (-0.902,0.000,0.431) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008302
+  Dot(Vel,Wish) = 102.148804
+  addSpeed = 79.851196
+  accelSpeed(x10) = 2749.802510
+  expectedAdd = 79.851196
+  RETURN     = (1701.827,0.000,3985.954)
+  DELTA      = (-72.056,0.000,34.411) mag= 79.851212
+  CameraLook = (0.431,0.000,0.902) angle= 90.000000
+  CameraRight= (-0.902,0.000,0.431) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.447,0.000,0.894) angle= 91.056038
+  RootRight  = (-0.894,0.000,0.447) dot= 0.999830
+  Wish(root basis): Right= 0.999830 Forward= -0.018430
+  HumMove    = (-0.316,0.000,0.949) angle= 46.056846
+
+ACCEL #220 t=2.9394 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1701.827,0.000,3985.954) mag= 4334.056152
+  WishDir    = (-0.912,0.000,0.410) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008339
+  Dot(Vel,Wish) = 82.119385
+  addSpeed = 99.880615
+  accelSpeed(x10) = 2762.348234
+  expectedAdd = 99.880615
+  RETURN     = (1610.728,0.000,4026.907)
+  DELTA      = (-91.099,0.000,40.953) mag= 99.880653
+  CameraLook = (0.410,0.000,0.912) angle= 90.000000
+  CameraRight= (-0.912,0.000,0.410) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.431,0.000,0.902) angle= 91.320476
+  RootRight  = (-0.902,0.000,0.431) dot= 0.999735
+  Wish(root basis): Right= 0.999735 Forward= -0.023045
+  HumMove    = (-0.333,0.000,0.943) angle= 46.321052
+
+ACCEL #221 t=2.9474 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1610.728,0.000,4026.907) mag= 4337.098145
+  WishDir    = (-0.921,0.000,0.389) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008313
+  Dot(Vel,Wish) = 82.049072
+  addSpeed = 99.950928
+  accelSpeed(x10) = 2753.666981
+  expectedAdd = 99.950928
+  RETURN     = (1518.644,0.000,4065.776)
+  DELTA      = (-92.083,0.000,38.869) mag= 99.950890
+  CameraLook = (0.389,0.000,0.921) angle= 90.000000
+  CameraRight= (-0.921,0.000,0.389) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.410,0.000,0.912) angle= 91.320457
+  RootRight  = (-0.912,0.000,0.410) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023044
+  HumMove    = (-0.355,0.000,0.935) angle= 46.321052
+
+ACCEL #222 t=2.9567 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1518.644,0.000,4065.776) mag= 4340.139648
+  WishDir    = (-0.929,0.000,0.371) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008987
+  Dot(Vel,Wish) = 96.986206
+  addSpeed = 85.013794
+  accelSpeed(x10) = 2976.702173
+  expectedAdd = 85.013794
+  RETURN     = (1439.689,0.000,4097.295)
+  DELTA      = (-78.955,0.000,31.519) mag= 85.013741
+  CameraLook = (0.371,0.000,0.929) angle= 90.000002
+  CameraRight= (-0.929,0.000,0.371) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.389,0.000,0.921) angle= 91.122279
+  RootRight  = (-0.921,0.000,0.389) dot= 0.999808
+  Wish(root basis): Right= 0.999808 Forward= -0.019586
+  HumMove    = (-0.376,0.000,0.926) angle= 46.122889
+
+ACCEL #223 t=2.9641 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1439.689,0.000,4097.295) mag= 4342.871582
+  WishDir    = (-0.937,0.000,0.350) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007726
+  Dot(Vel,Wish) = 86.921265
+  addSpeed = 95.078735
+  accelSpeed(x10) = 2559.022242
+  expectedAdd = 95.078735
+  RETURN     = (1350.636,0.000,4130.603)
+  DELTA      = (-89.053,0.000,33.308) mag= 95.078651
+  CameraLook = (0.350,0.000,0.937) angle= 90.000002
+  CameraRight= (-0.937,0.000,0.350) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.371,0.000,0.929) angle= 91.254468
+  RootRight  = (-0.929,0.000,0.371) dot= 0.999760
+  Wish(root basis): Right= 0.999760 Forward= -0.021893
+  HumMove    = (-0.395,0.000,0.919) angle= 46.255006
+
+ACCEL #224 t=2.9729 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1350.636,0.000,4130.603) mag= 4345.813965
+  WishDir    = (-0.944,0.000,0.329) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008336
+  Dot(Vel,Wish) = 81.848022
+  addSpeed = 100.151978
+  accelSpeed(x10) = 2761.313246
+  expectedAdd = 100.151978
+  RETURN     = (1256.047,0.000,4163.517)
+  DELTA      = (-94.589,0.000,32.914) mag= 100.152016
+  CameraLook = (0.329,0.000,0.944) angle= 90.000000
+  CameraRight= (-0.944,0.000,0.329) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.350,0.000,0.937) angle= 91.320492
+  RootRight  = (-0.937,0.000,0.350) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023045
+  HumMove    = (-0.415,0.000,0.910) angle= 46.321057
+
+ACCEL #225 t=2.9811 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1256.047,0.000,4163.517) mag= 4348.853027
+  WishDir    = (-0.952,0.000,0.305) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008335
+  Dot(Vel,Wish) = 71.752075
+  addSpeed = 110.247925
+  accelSpeed(x10) = 2760.816266
+  expectedAdd = 110.247925
+  RETURN     = (1151.037,0.000,4197.096)
+  DELTA      = (-105.010,0.000,33.579) mag= 110.247932
+  CameraLook = (0.305,0.000,0.952) angle= 90.000000
+  CameraRight= (-0.952,0.000,0.305) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.329,0.000,0.944) angle= 91.452592
+  RootRight  = (-0.944,0.000,0.329) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025350
+  HumMove    = (-0.435,0.000,0.900) angle= 46.453158
+
+ACCEL #226 t=2.9897 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1151.037,0.000,4197.096) mag= 4352.068359
+  WishDir    = (-0.960,0.000,0.281) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008858
+  Dot(Vel,Wish) = 76.687866
+  addSpeed = 105.312134
+  accelSpeed(x10) = 2934.192998
+  expectedAdd = 105.312134
+  RETURN     = (1049.981,0.000,4226.734)
+  DELTA      = (-101.056,0.000,29.638) mag= 105.312126
+  CameraLook = (0.281,0.000,0.960) angle= 89.999998
+  CameraRight= (-0.960,0.000,0.281) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.305,0.000,0.952) angle= 91.386469
+  RootRight  = (-0.952,0.000,0.305) dot= 0.999707
+  Wish(root basis): Right= 0.999707 Forward= -0.024196
+  HumMove    = (-0.458,0.000,0.889) angle= 46.387096
+
+ACCEL #227 t=2.9981 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (1049.981,0.000,4226.734) mag= 4355.196777
+  WishDir    = (-0.967,0.000,0.256) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008052
+  Dot(Vel,Wish) = 66.571228
+  addSpeed = 115.428772
+  accelSpeed(x10) = 2667.061753
+  expectedAdd = 115.428772
+  RETURN     = (938.396,0.000,4256.271)
+  DELTA      = (-111.586,0.000,29.538) mag= 115.428810
+  CameraLook = (0.256,0.000,0.967) angle= 90.000001
+  CameraRight= (-0.967,0.000,0.256) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.281,0.000,0.960) angle= 91.518549
+  RootRight  = (-0.960,0.000,0.281) dot= 0.999649
+  Wish(root basis): Right= 0.999649 Forward= -0.026501
+  HumMove    = (-0.480,0.000,0.878) angle= 46.519212
+
+ACCEL #228 t=3.0059 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (938.396,0.000,4256.271) mag= 4358.489746
+  WishDir    = (-0.973,0.000,0.230) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008057
+  Dot(Vel,Wish) = 66.483887
+  addSpeed = 115.516113
+  accelSpeed(x10) = 2668.952496
+  expectedAdd = 115.516113
+  RETURN     = (825.981,0.000,4282.860)
+  DELTA      = (-112.414,0.000,26.589) mag= 115.516113
+  CameraLook = (0.230,0.000,0.973) angle= 90.000001
+  CameraRight= (-0.973,0.000,0.230) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.256,0.000,0.967) angle= 91.518507
+  RootRight  = (-0.967,0.000,0.256) dot= 0.999649
+  Wish(root basis): Right= 0.999649 Forward= -0.026500
+  HumMove    = (-0.503,0.000,0.865) angle= 46.519203
+
+ACCEL #229 t=3.0141 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (825.981,0.000,4282.860) mag= 4361.781738
+  WishDir    = (-0.981,0.000,0.194) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008331
+  Dot(Vel,Wish) = 21.143494
+  addSpeed = 160.856506
+  accelSpeed(x10) = 2759.643382
+  expectedAdd = 160.856506
+  RETURN     = (668.185,0.000,4314.087)
+  DELTA      = (-157.797,0.000,31.227) mag= 160.856567
+  CameraLook = (0.194,0.000,0.981) angle= 90.000000
+  CameraRight= (-0.981,0.000,0.194) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.230,0.000,0.973) angle= 92.112954
+  RootRight  = (-0.973,0.000,0.230) dot= 0.999320
+  Wish(root basis): Right= 0.999320 Forward= -0.036870
+  HumMove    = (-0.525,0.000,0.851) angle= 47.113686
+
+ACCEL #230 t=3.0226 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (668.185,0.000,4314.087) mag= 4365.525879
+  WishDir    = (-0.987,0.000,0.162) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008326
+  Dot(Vel,Wish) = 41.135193
+  addSpeed = 140.864807
+  accelSpeed(x10) = 2758.069768
+  expectedAdd = 140.864807
+  RETURN     = (529.189,0.000,4336.958)
+  DELTA      = (-138.996,0.000,22.872) mag= 140.864838
+  CameraLook = (0.162,0.000,0.987) angle= 90.000000
+  CameraRight= (-0.987,0.000,0.162) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.194,0.000,0.981) angle= 91.848542
+  RootRight  = (-0.981,0.000,0.194) dot= 0.999480
+  Wish(root basis): Right= 0.999480 Forward= -0.032258
+  HumMove    = (-0.556,0.000,0.831) angle= 46.849478
+
+ACCEL #231 t=3.0312 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (529.189,0.000,4336.958) mag= 4369.124512
+  WishDir    = (-0.990,0.000,0.144) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008347
+  Dot(Vel,Wish) = 101.452942
+  addSpeed = 80.547058
+  accelSpeed(x10) = 2764.915498
+  expectedAdd = 80.547058
+  RETURN     = (449.483,0.000,4348.568)
+  DELTA      = (-79.706,0.000,11.610) mag= 80.547066
+  CameraLook = (0.144,0.000,0.990) angle= 90.000001
+  CameraRight= (-0.990,0.000,0.144) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.162,0.000,0.987) angle= 91.055947
+  RootRight  = (-0.987,0.000,0.162) dot= 0.999830
+  Wish(root basis): Right= 0.999830 Forward= -0.018429
+  HumMove    = (-0.583,0.000,0.813) angle= 46.056846
+
+ACCEL #232 t=3.0393 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (449.483,0.000,4348.568) mag= 4371.736816
+  WishDir    = (-0.992,0.000,0.125) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008311
+  Dot(Vel,Wish) = 96.366455
+  addSpeed = 85.633545
+  accelSpeed(x10) = 2753.045988
+  expectedAdd = 85.633545
+  RETURN     = (364.518,0.000,4359.249)
+  DELTA      = (-84.965,0.000,10.680) mag= 85.633591
+  CameraLook = (0.125,0.000,0.992) angle= 90.000000
+  CameraRight= (-0.992,0.000,0.125) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.144,0.000,0.990) angle= 91.122275
+  RootRight  = (-0.990,0.000,0.144) dot= 0.999808
+  Wish(root basis): Right= 0.999808 Forward= -0.019586
+  HumMove    = (-0.598,0.000,0.802) angle= 46.122894
+
+ACCEL #233 t=3.0476 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (364.518,0.000,4359.249) mag= 4374.462402
+  WishDir    = (-0.995,0.000,0.102) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008389
+  Dot(Vel,Wish) = 81.187073
+  addSpeed = 100.812927
+  accelSpeed(x10) = 2778.634415
+  expectedAdd = 100.812927
+  RETURN     = (264.229,0.000,4369.512)
+  DELTA      = (-100.289,0.000,10.264) mag= 100.812920
+  CameraLook = (0.102,0.000,0.995) angle= 90.000000
+  CameraRight= (-0.995,0.000,0.102) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.125,0.000,0.992) angle= 91.320494
+  RootRight  = (-0.992,0.000,0.125) dot= 0.999734
+  Wish(root basis): Right= 0.999734 Forward= -0.023045
+  HumMove    = (-0.613,0.000,0.790) angle= 46.321052
+
+ACCEL #234 t=3.0562 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (264.229,0.000,4369.512) mag= 4377.494141
+  WishDir    = (-0.997,0.000,0.080) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008738
+  Dot(Vel,Wish) = 86.162323
+  addSpeed = 95.837677
+  accelSpeed(x10) = 2894.361220
+  expectedAdd = 95.837677
+  RETURN     = (168.699,0.000,4377.179)
+  DELTA      = (-95.531,0.000,7.667) mag= 95.837669
+  CameraLook = (0.080,0.000,0.997) angle= 90.000000
+  CameraRight= (-0.997,0.000,0.080) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.102,0.000,0.995) angle= 91.254411
+  RootRight  = (-0.995,0.000,0.102) dot= 0.999760
+  Wish(root basis): Right= 0.999760 Forward= -0.021892
+  HumMove    = (-0.631,0.000,0.775) angle= 46.255001
+
+ACCEL #235 t=3.0643 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (168.699,0.000,4377.179) mag= 4380.428711
+  WishDir    = (-0.998,0.000,0.059) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007920
+  Dot(Vel,Wish) = 91.147522
+  addSpeed = 90.852478
+  accelSpeed(x10) = 2623.296711
+  expectedAdd = 90.852478
+  RETURN     = (78.006,0.000,4382.566)
+  DELTA      = (-90.693,0.000,5.387) mag= 90.852486
+  CameraLook = (0.059,0.000,0.998) angle= 90.000000
+  CameraRight= (-0.998,0.000,0.059) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.080,0.000,0.997) angle= 91.188352
+  RootRight  = (-0.997,0.000,0.080) dot= 0.999785
+  Wish(root basis): Right= 0.999785 Forward= -0.020739
+  HumMove    = (-0.648,0.000,0.761) angle= 46.188934
+
+ACCEL #236 t=3.0724 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (78.006,0.000,4382.566) mag= 4383.259766
+  WishDir    = (-0.999,0.000,0.037) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008308
+  Dot(Vel,Wish) = 86.035927
+  addSpeed = 95.964073
+  accelSpeed(x10) = 2752.038455
+  expectedAdd = 95.964073
+  RETURN     = (-17.891,0.000,4386.157)
+  DELTA      = (-95.897,0.000,3.591) mag= 95.964073
+  CameraLook = (0.037,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,0.037) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.059,0.000,0.998) angle= 91.254426
+  RootRight  = (-0.998,0.000,0.059) dot= 0.999760
+  Wish(root basis): Right= 0.999760 Forward= -0.021892
+  HumMove    = (-0.664,0.000,0.748) angle= 46.255011
+
+ACCEL #237 t=3.0815 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-17.891,0.000,4386.157) mag= 4386.192871
+  WishDir    = (-1.000,0.000,0.014) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008964
+  Dot(Vel,Wish) = 80.916336
+  addSpeed = 101.083664
+  accelSpeed(x10) = 2969.166347
+  expectedAdd = 101.083664
+  RETURN     = (-118.964,0.000,4387.609)
+  DELTA      = (-101.073,0.000,1.453) mag= 101.083664
+  CameraLook = (0.014,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,0.014) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (0.037,0.000,0.999) angle= 91.320467
+  RootRight  = (-0.999,0.000,0.037) dot= 0.999735
+  Wish(root basis): Right= 0.999735 Forward= -0.023044
+  HumMove    = (-0.680,0.000,0.733) angle= 46.321052
+
+ACCEL #238 t=3.0892 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-118.964,0.000,4387.609) mag= 4389.221680
+  WishDir    = (-1.000,0.000,-0.010) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007710
+  Dot(Vel,Wish) = 75.787292
+  addSpeed = 106.212708
+  accelSpeed(x10) = 2553.984579
+  expectedAdd = 106.212708
+  RETURN     = (-225.172,0.000,4386.564)
+  DELTA      = (-106.208,0.000,-1.045) mag= 106.212708
+  CameraLook = (-0.010,0.000,1.000) angle= 90.000000
+  CameraRight= (-1.000,0.000,-0.010) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (0.014,0.000,1.000) angle= 91.386485
+  RootRight  = (-1.000,0.000,0.014) dot= 0.999707
+  Wish(root basis): Right= 0.999707 Forward= -0.024196
+  HumMove    = (-0.697,0.000,0.717) angle= 46.387106
+
+ACCEL #239 t=3.0983 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-225.172,0.000,4386.564) mag= 4392.339844
+  WishDir    = (-0.999,0.000,-0.035) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008895
+  Dot(Vel,Wish) = 70.648392
+  addSpeed = 111.351608
+  accelSpeed(x10) = 2946.545298
+  expectedAdd = 111.351608
+  RETURN     = (-336.454,0.000,4382.646)
+  DELTA      = (-111.283,0.000,-3.919) mag= 111.351639
+  CameraLook = (-0.035,0.000,0.999) angle= 90.000000
+  CameraRight= (-0.999,0.000,-0.035) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.010,0.000,1.000) angle= 91.452516
+  RootRight  = (-1.000,0.000,-0.010) dot= 0.999679
+  Wish(root basis): Right= 0.999679 Forward= -0.025348
+  HumMove    = (-0.714,0.000,0.700) angle= 46.453162
+
+ACCEL #240 t=3.1064 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-336.454,0.000,4382.646) mag= 4395.541504
+  WishDir    = (-0.998,0.000,-0.055) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008139
+  Dot(Vel,Wish) = 95.899567
+  addSpeed = 86.100433
+  accelSpeed(x10) = 2695.824247
+  expectedAdd = 86.100433
+  RETURN     = (-422.425,0.000,4377.930)
+  DELTA      = (-85.971,0.000,-4.716) mag= 86.100433
+  CameraLook = (-0.055,0.000,0.998) angle= 90.000000
+  CameraRight= (-0.998,0.000,-0.055) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.035,0.000,0.999) angle= 91.122238
+  RootRight  = (-0.999,0.000,-0.035) dot= 0.999808
+  Wish(root basis): Right= 0.999808 Forward= -0.019585
+  HumMove    = (-0.732,0.000,0.682) angle= 46.122894
+
+ACCEL #241 t=3.1142 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-422.425,0.000,4377.930) mag= 4398.262207
+  WishDir    = (-0.995,0.000,-0.102) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008011
+  Dot(Vel,Wish) = -25.838257
+  addSpeed = 207.838257
+  accelSpeed(x10) = 2653.674156
+  expectedAdd = 207.838257
+  RETURN     = (-629.182,0.000,4356.753)
+  DELTA      = (-206.757,0.000,-21.177) mag= 207.838257
+  CameraLook = (-0.102,0.000,0.995) angle= 90.000001
+  CameraRight= (-0.995,0.000,-0.102) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (-0.055,0.000,0.998) angle= 92.707607
+  RootRight  = (-0.998,0.000,-0.055) dot= 0.998884
+  Wish(root basis): Right= 0.998884 Forward= -0.047239
+  HumMove    = (-0.745,0.000,0.667) angle= 47.708169
+
+ACCEL #242 t=3.1226 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-629.182,0.000,4356.753) mag= 4401.950195
+  WishDir    = (-0.993,0.000,-0.117) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008318
+  Dot(Vel,Wish) = 116.066437
+  addSpeed = 65.933563
+  accelSpeed(x10) = 2755.295815
+  expectedAdd = 65.933563
+  RETURN     = (-694.664,0.000,4349.053)
+  DELTA      = (-65.482,0.000,-7.700) mag= 65.933548
+  CameraLook = (-0.117,0.000,0.993) angle= 90.000000
+  CameraRight= (-0.993,0.000,-0.117) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.102,0.000,0.995) angle= 90.857619
+  RootRight  = (-0.995,0.000,-0.102) dot= 0.999888
+  Wish(root basis): Right= 0.999888 Forward= -0.014968
+  HumMove    = (-0.775,0.000,0.631) angle= 45.858690
+
+ACCEL #243 t=3.1317 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-694.664,0.000,4349.053) mag= 4404.181641
+  WishDir    = (-0.991,0.000,-0.132) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.009071
+  Dot(Vel,Wish) = 116.033020
+  addSpeed = 65.966980
+  accelSpeed(x10) = 3004.581456
+  expectedAdd = 65.966980
+  RETURN     = (-760.057,0.000,4340.368)
+  DELTA      = (-65.393,0.000,-8.685) mag= 65.966988
+  CameraLook = (-0.132,0.000,0.991) angle= 90.000000
+  CameraRight= (-0.991,0.000,-0.132) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.117,0.000,0.993) angle= 90.858070
+  RootRight  = (-0.993,0.000,-0.117) dot= 0.999888
+  Wish(root basis): Right= 0.999888 Forward= -0.014976
+  HumMove    = (-0.785,0.000,0.620) angle= 45.858685
+
+ACCEL #244 t=3.1391 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-760.057,0.000,4340.368) mag= 4406.413086
+  WishDir    = (-0.990,0.000,-0.140) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007594
+  Dot(Vel,Wish) = 146.466064
+  addSpeed = 35.533936
+  accelSpeed(x10) = 2515.519417
+  expectedAdd = 35.533936
+  RETURN     = (-795.243,0.000,4335.405)
+  DELTA      = (-35.186,0.000,-4.962) mag= 35.533943
+  CameraLook = (-0.140,0.000,0.990) angle= 90.000000
+  CameraRight= (-0.990,0.000,-0.140) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.132,0.000,0.991) angle= 90.461908
+  RootRight  = (-0.991,0.000,-0.132) dot= 0.999968
+  Wish(root basis): Right= 0.999968 Forward= -0.008062
+  HumMove    = (-0.794,0.000,0.608) angle= 45.462369
+
+ACCEL #245 t=3.1474 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-795.243,0.000,4335.405) mag= 4407.737305
+  WishDir    = (-0.987,0.000,-0.164) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008288
+  Dot(Vel,Wish) = 75.339050
+  addSpeed = 106.660950
+  accelSpeed(x10) = 2745.413605
+  expectedAdd = 106.660950
+  RETURN     = (-900.467,0.000,4317.958)
+  DELTA      = (-105.224,0.000,-17.448) mag= 106.660927
+  CameraLook = (-0.164,0.000,0.987) angle= 89.999999
+  CameraRight= (-0.987,0.000,-0.164) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.140,0.000,0.990) angle= 91.386839
+  RootRight  = (-0.990,0.000,-0.140) dot= 0.999707
+  Wish(root basis): Right= 0.999707 Forward= -0.024203
+  HumMove    = (-0.799,0.000,0.601) angle= 46.387096
+
+ACCEL #246 t=3.1557 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-900.467,0.000,4317.958) mag= 4410.850098
+  WishDir    = (-0.984,0.000,-0.181) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008344
+  Dot(Vel,Wish) = 105.766907
+  addSpeed = 76.233093
+  accelSpeed(x10) = 2763.894084
+  expectedAdd = 76.233093
+  RETURN     = (-975.446,0.000,4304.188)
+  DELTA      = (-74.979,0.000,-13.769) mag= 76.233147
+  CameraLook = (-0.181,0.000,0.984) angle= 90.000000
+  CameraRight= (-0.984,0.000,-0.181) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.164,0.000,0.987) angle= 90.990259
+  RootRight  = (-0.987,0.000,-0.164) dot= 0.999851
+  Wish(root basis): Right= 0.999851 Forward= -0.017282
+  HumMove    = (-0.813,0.000,0.582) angle= 45.990787
+
+ACCEL #247 t=3.1642 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-975.446,0.000,4304.188) mag= 4413.335938
+  WishDir    = (-0.981,0.000,-0.192) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008326
+  Dot(Vel,Wish) = 131.153137
+  addSpeed = 50.846863
+  accelSpeed(x10) = 2757.780095
+  expectedAdd = 50.846863
+  RETURN     = (-1025.348,0.000,4294.429)
+  DELTA      = (-49.901,0.000,-9.760) mag= 50.846943
+  CameraLook = (-0.192,0.000,0.981) angle= 90.000000
+  CameraRight= (-0.981,0.000,-0.192) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.181,0.000,0.984) angle= 90.660062
+  RootRight  = (-0.984,0.000,-0.181) dot= 0.999934
+  Wish(root basis): Right= 0.999934 Forward= -0.011520
+  HumMove    = (-0.823,0.000,0.568) angle= 45.660525
+
+ACCEL #248 t=3.1727 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1025.348,0.000,4294.429) mag= 4415.139648
+  WishDir    = (-0.979,0.000,-0.203) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008348
+  Dot(Vel,Wish) = 131.132507
+  addSpeed = 50.867493
+  accelSpeed(x10) = 2765.260392
+  expectedAdd = 50.867493
+  RETURN     = (-1075.154,0.000,4284.090)
+  DELTA      = (-49.806,0.000,-10.338) mag= 50.867458
+  CameraLook = (-0.203,0.000,0.979) angle= 89.999999
+  CameraRight= (-0.979,0.000,-0.203) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.192,0.000,0.981) angle= 90.660194
+  RootRight  = (-0.981,0.000,-0.192) dot= 0.999934
+  Wish(root basis): Right= 0.999934 Forward= -0.011522
+  HumMove    = (-0.830,0.000,0.558) angle= 45.660535
+
+ACCEL #249 t=3.1814 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1075.154,0.000,4284.090) mag= 4416.942871
+  WishDir    = (-0.977,0.000,-0.215) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008919
+  Dot(Vel,Wish) = 131.111572
+  addSpeed = 50.888428
+  accelSpeed(x10) = 2954.315885
+  expectedAdd = 50.888428
+  RETURN     = (-1124.857,0.000,4273.174)
+  DELTA      = (-49.704,0.000,-10.917) mag= 50.888424
+  CameraLook = (-0.215,0.000,0.977) angle= 90.000000
+  CameraRight= (-0.977,0.000,-0.215) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.203,0.000,0.979) angle= 90.660234
+  RootRight  = (-0.979,0.000,-0.203) dot= 0.999934
+  Wish(root basis): Right= 0.999934 Forward= -0.011523
+  HumMove    = (-0.836,0.000,0.549) angle= 45.660530
+
+ACCEL #250 t=3.1892 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1124.857,0.000,4273.174) mag= 4418.746094
+  WishDir    = (-0.974,0.000,-0.227) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.007798
+  Dot(Vel,Wish) = 125.999207
+  addSpeed = 56.000793
+  accelSpeed(x10) = 2582.981989
+  expectedAdd = 56.000793
+  RETURN     = (-1179.398,0.000,4260.468)
+  DELTA      = (-54.540,0.000,-12.706) mag= 56.000778
+  CameraLook = (-0.227,0.000,0.974) angle= 90.000000
+  CameraRight= (-0.974,0.000,-0.227) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.215,0.000,0.977) angle= 90.726288
+  RootRight  = (-0.977,0.000,-0.215) dot= 0.999920
+  Wish(root basis): Right= 0.999920 Forward= -0.012676
+  HumMove    = (-0.842,0.000,0.539) angle= 45.726583
+
+ACCEL #251 t=3.1977 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1179.398,0.000,4260.468) mag= 4420.697754
+  WishDir    = (-0.971,0.000,-0.240) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008337
+  Dot(Vel,Wish) = 120.880493
+  addSpeed = 61.119507
+  accelSpeed(x10) = 2761.520243
+  expectedAdd = 61.119507
+  RETURN     = (-1238.726,0.000,4245.779)
+  DELTA      = (-59.328,0.000,-14.689) mag= 61.119606
+  CameraLook = (-0.240,0.000,0.971) angle= 90.000000
+  CameraRight= (-0.971,0.000,-0.240) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= 0.000000
+  RootLook   = (-0.227,0.000,0.974) angle= 90.792308
+  RootRight  = (-0.974,0.000,-0.227) dot= 0.999904
+  Wish(root basis): Right= 0.999904 Forward= -0.013828
+  HumMove    = (-0.849,0.000,0.528) angle= 45.792623
+
+ACCEL #252 t=3.2058 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1238.726,0.000,4245.779) mag= 4422.791016
+  WishDir    = (-0.969,0.000,-0.246) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008261
+  Dot(Vel,Wish) = 156.524780
+  addSpeed = 25.475220
+  accelSpeed(x10) = 2736.249562
+  expectedAdd = 25.475220
+  RETURN     = (-1263.419,0.000,4239.514)
+  DELTA      = (-24.693,0.000,-6.265) mag= 25.475279
+  CameraLook = (-0.246,0.000,0.969) angle= 90.000001
+  CameraRight= (-0.969,0.000,-0.246) dot= 1.000000
+  Wish(cam basis): Right= 1.000000 Forward= -0.000000
+  RootLook   = (-0.240,0.000,0.971) angle= 90.329946
+  RootRight  = (-0.971,0.000,-0.240) dot= 0.999983
+  Wish(root basis): Right= 0.999983 Forward= -0.005759
+  HumMove    = (-0.856,0.000,0.516) angle= 45.330265
+
+ACCEL #253 t=3.2230 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-1263.419,0.000,4239.514) mag= 4423.765625
+  WishDir    = (0.969,0.000,0.246) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008829
+  Dot(Vel,Wish) = -182.000000
+  addSpeed = 364.000000
+  accelSpeed(x10) = 2924.366008
+  expectedAdd = 364.000000
+  RETURN     = (-979.964,0.000,4311.432)
+  DELTA      = (283.455,0.000,71.918) mag= 292.436646
+  CameraLook = (-0.246,0.000,0.969) angle= 89.999999
+  CameraRight= (-0.969,0.000,-0.246) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.246,0.000,0.969) angle= 89.999994
+  RootRight  = (-0.969,0.000,-0.246) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000000
+  HumMove    = (0.511,0.000,0.859) angle= 45.000001
+
+ACCEL #254 t=3.2311 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-979.964,0.000,4311.432) mag= 4421.399902
+  WishDir    = (0.969,0.000,0.246) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008221
+  Dot(Vel,Wish) = 110.436584
+  addSpeed = 71.563416
+  accelSpeed(x10) = 2723.192977
+  expectedAdd = 71.563416
+  RETURN     = (-910.598,0.000,4329.032)
+  DELTA      = (69.366,0.000,17.600) mag= 71.563431
+  CameraLook = (-0.246,0.000,0.969) angle= 89.999999
+  CameraRight= (-0.969,0.000,-0.246) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.246,0.000,0.969) angle= 89.998620
+  RootRight  = (-0.969,0.000,-0.246) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000024
+  HumMove    = (0.511,0.000,0.859) angle= 45.000001
+
+ACCEL #255 t=3.2395 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-910.598,0.000,4329.032) mag= 4423.765625
+  WishDir    = (0.969,0.000,0.246) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008023
+  Dot(Vel,Wish) = 182.000061
+  addSpeed = -0.000061
+  accelSpeed(x10) = 2657.455643
+  expectedAdd = 0.000000
+  RETURN     = (-910.598,0.000,4329.032)
+  DELTA      = (0.000,0.000,0.000) mag= 0.000000
+  CameraLook = (-0.246,0.000,0.969) angle= 89.999999
+  CameraRight= (-0.969,0.000,-0.246) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.246,0.000,0.969) angle= 89.998884
+  RootRight  = (-0.969,0.000,-0.246) dot= -1.000000
+  Wish(root basis): Right= -1.000000 Forward= 0.000019
+  HumMove    = (0.511,0.000,0.859) angle= 45.000001
+
+ACCEL #256 t=3.2476 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-910.598,0.000,4329.032) mag= 4423.765625
+  WishDir    = (0.970,0.000,0.245) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008326
+  Dot(Vel,Wish) = 176.904663
+  addSpeed = 5.095337
+  accelSpeed(x10) = 2758.069768
+  expectedAdd = 5.095337
+  RETURN     = (-905.658,0.000,4330.279)
+  DELTA      = (4.940,0.000,1.248) mag= 5.095394
+  CameraLook = (-0.245,0.000,0.970) angle= 90.000000
+  CameraRight= (-0.970,0.000,-0.245) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.246,0.000,0.969) angle= 90.065881
+  RootRight  = (-0.969,0.000,-0.246) dot= -0.999999
+  Wish(root basis): Right= -0.999999 Forward= -0.001150
+  HumMove    = (0.511,0.000,0.859) angle= 45.066047
+
+ACCEL #257 t=3.2558 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-905.658,0.000,4330.279) mag= 4423.972656
+  WishDir    = (0.972,0.000,0.235) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008293
+  Dot(Vel,Wish) = 136.129089
+  addSpeed = 45.870911
+  accelSpeed(x10) = 2747.056012
+  expectedAdd = 45.870911
+  RETURN     = (-861.068,0.000,4341.047)
+  DELTA      = (44.589,0.000,10.768) mag= 45.870911
+  CameraLook = (-0.235,0.000,0.972) angle= 90.000000
+  CameraRight= (-0.972,0.000,-0.235) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.245,0.000,0.970) angle= 90.594214
+  RootRight  = (-0.970,0.000,-0.245) dot= -0.999946
+  Wish(root basis): Right= -0.999946 Forward= -0.010371
+  HumMove    = (0.512,0.000,0.859) angle= 45.594465
+
+ACCEL #258 t=3.2642 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-861.068,0.000,4341.047) mag= 4425.621582
+  WishDir    = (0.975,0.000,0.220) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008369
+  Dot(Vel,Wish) = 115.711426
+  addSpeed = 66.288574
+  accelSpeed(x10) = 2772.106122
+  expectedAdd = 66.288574
+  RETURN     = (-796.406,0.000,4355.640)
+  DELTA      = (64.662,0.000,14.593) mag= 66.288635
+  CameraLook = (-0.220,0.000,0.975) angle= 90.000000
+  CameraRight= (-0.975,0.000,-0.220) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.235,0.000,0.972) angle= 90.858316
+  RootRight  = (-0.972,0.000,-0.235) dot= -0.999888
+  Wish(root basis): Right= -0.999888 Forward= -0.014980
+  HumMove    = (0.521,0.000,0.853) angle= 45.858690
+
+ACCEL #259 t=3.2725 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-796.406,0.000,4355.640) mag= 4427.851074
+  WishDir    = (0.980,0.000,0.200) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008327
+  Dot(Vel,Wish) = 90.162781
+  addSpeed = 91.837219
+  accelSpeed(x10) = 2758.111415
+  expectedAdd = 91.837219
+  RETURN     = (-706.422,0.000,4373.994)
+  DELTA      = (89.984,0.000,18.354) mag= 91.837181
+  CameraLook = (-0.200,0.000,0.980) angle= 90.000000
+  CameraRight= (-0.980,0.000,-0.200) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= 0.000000
+  RootLook   = (-0.220,0.000,0.975) angle= 91.188434
+  RootRight  = (-0.975,0.000,-0.220) dot= -0.999785
+  Wish(root basis): Right= -0.999785 Forward= -0.020741
+  HumMove    = (0.534,0.000,0.845) angle= 46.188934
+
+ACCEL #260 t=3.2809 state=Enum.HumanoidStateType.Freefall callerLine=305
+  callerSource = =Opiumware
+  Velocity   = (-706.422,0.000,4373.994) mag= 4430.672363
+  WishDir    = (0.984,0.000,0.177) mag= 1.000000
+  Accel      = 182.000000
+  WishSpeed  = 182.000000
+  dt         = 0.008280
+  Dot(Vel,Wish) = 79.889954
+  addSpeed = 102.110046
+  accelSpeed(x10) = 2742.736209
+  expectedAdd = 102.110046
+  RETURN     = (-605.928,0.000,4392.089)
+  DELTA      = (100.494,0.000,18.095) mag= 102.110039
+  CameraLook = (-0.177,0.000,0.984) angle= 90.000001
+  CameraRight= (-0.984,0.000,-0.177) dot= -1.000000
+  Wish(cam basis): Right= -1.000000 Forward= -0.000000
+  RootLook   = (-0.200,0.000,0.980) angle= 91.320373
+  RootRight  = (-0.980,0.000,-0.200) dot= -0.999735
+  Wish(root basis): Right= -0.999735 Forward= -0.023043
+  HumMove    = (0.552,0.000,0.834) angle= 46.321052
