@@ -1,5029 +1,8962 @@
 ==============================================
-MOVEMENT FUNCTION RUNTIME TRACE
+PASSIVE VELOCITY TRACE
 ==============================================
-line 109 = function: 0x1e849410d946067c
-line 190 = function: 0xb1474257850cb311
-F8 = STOP + COPY
-==============================================
+БЕЗ ХУКОВ
+БЕЗ Get / Set
+F6 = STOP + COPY
+
+LIVE REGISTRY FOUND
+REGISTRY = table: 0x9da1031f448a4d91
+PARENT = table: 0x877163aabed5f0b5
+NAME = DEN919191
+LOCAL = true
+
+INITIAL VALUES:
+ Data.Velocity = Vector3(0.000000, 0.000000, 0.000000)
+ Data.Velocity MAG = 0.000000
+ Movement.Velocity = Vector3(0.000000, 0.000000, 0.000000)
+ Movement.Velocity MAG = 0.000000
+ Data.ActualVelocity = Vector3(0.000000, 0.000624, 0.000000)
+ ActualVelocityMagnitude = 0.000624237465672195
+
+TRACE ACTIVE.
+
 
 ==============================================
-HOOKS INSTALLED
-Делай прыжок + air-strafe
-Когда поймаешь разгон — F8
+EVENT #1 | FRAME #122
 ==============================================
-
-================ EVENT #1 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008366749621927738)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.565161, 0.000000, -0.824981) mag=1.000000
- HRP Velocity = Vector3(19.195826, 16.695511, -25.594828) mag=36.087601
-
-RETURN:
- Type = table
- Value = table:table: 0x74e3177a8eca3588
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.565161, 0.000000, -0.824981) mag=1.000000
- HRP Velocity = Vector3(19.195826, 16.695511, -25.594828) mag=36.087601
-
-================ EVENT #2 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008950041607022285)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.565161, 0.000000, -0.824981) mag=1.000000
- HRP Velocity = Vector3(19.195826, 16.278843, -25.594828) mag=35.896736
-
-RETURN:
- Type = table
- Value = table:table: 0xacb437685d748e2e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.565161, 0.000000, -0.824981) mag=1.000000
- HRP Velocity = Vector3(19.195826, 16.278843, -25.594828) mag=35.896736
-
-================ EVENT #3 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.0076574585400521755)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.563257, 0.000000, -0.826281) mag=1.000000
- HRP Velocity = Vector3(19.195826, 15.862176, -25.594828) mag=35.709713
-
-RETURN:
- Type = table
- Value = table:table: 0x7e71d66f54ccc86a
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.563257, 0.000000, -0.826281) mag=1.000000
- HRP Velocity = Vector3(19.195826, 15.862176, -25.594828) mag=35.709713
-
-================ EVENT #4 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008368374779820442)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.562305, 0.000000, -0.826930) mag=1.000000
- HRP Velocity = Vector3(19.195826, 15.445510, -25.594828) mag=35.526592
-
-RETURN:
- Type = table
- Value = table:table: 0xe7e9b18529383b2c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.562305, 0.000000, -0.826930) mag=1.000000
- HRP Velocity = Vector3(19.195826, 15.445510, -25.594828) mag=35.526592
-
-================ EVENT #5 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008291583508253098)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.189383, 0.000000, -0.981903) mag=1.000000
- HRP Velocity = Vector3(19.195826, 15.028844, -25.594828) mag=35.347435
-
-RETURN:
- Type = table
- Value = table:table: 0x2359233194f494c1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.189383, 0.000000, -0.981903) mag=1.000000
- HRP Velocity = Vector3(19.195826, 15.028844, -25.594828) mag=35.347435
-
-================ EVENT #6 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008306416682898998)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.190515, 0.000000, -0.981684) mag=1.000000
- HRP Velocity = Vector3(16.666386, 14.403845, -27.302057) mag=35.080502
-
-RETURN:
- Type = table
- Value = table:table: 0x9f6d0552073cb4e6
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.190515, 0.000000, -0.981684) mag=1.000000
- HRP Velocity = Vector3(16.666386, 14.403845, -27.302057) mag=35.080502
-
-================ EVENT #7 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00827216636389494)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.191647, 0.000000, -0.981464) mag=1.000000
- HRP Velocity = Vector3(16.659893, 14.195512, -27.302187) mag=34.992485
-
-RETURN:
- Type = table
- Value = table:table: 0xb0ba5800aca4a8fe
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.191647, 0.000000, -0.981464) mag=1.000000
- HRP Velocity = Vector3(16.659893, 14.195512, -27.302187) mag=34.992485
-
-================ EVENT #8 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008875000290572643)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.191647, 0.000000, -0.981464) mag=1.000000
- HRP Velocity = Vector3(16.670349, 13.778846, -27.295149) mag=34.825024
-
-RETURN:
- Type = table
- Value = table:table: 0x874e8ef86ccd8cc1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.191647, 0.000000, -0.981464) mag=1.000000
- HRP Velocity = Vector3(16.670349, 13.778846, -27.295149) mag=34.825024
-
-================ EVENT #9 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008393875323235989)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.193909, 0.000000, -0.981020) mag=1.000000
- HRP Velocity = Vector3(16.482107, 13.362180, -27.412807) mag=34.665108
-
-RETURN:
- Type = table
- Value = table:table: 0xaa080550ecc7a665
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.193909, 0.000000, -0.981020) mag=1.000000
- HRP Velocity = Vector3(16.482107, 13.362180, -27.412807) mag=34.665108
-
-================ EVENT #10 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007821374572813511)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.195040, 0.000000, -0.980795) mag=1.000000
- HRP Velocity = Vector3(16.627239, 12.945514, -27.311291) mag=34.495770
-
-RETURN:
- Type = table
- Value = table:table: 0x96a161a6350030f3
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.195040, 0.000000, -0.980795) mag=1.000000
- HRP Velocity = Vector3(16.627239, 12.945514, -27.311291) mag=34.495770
-
-================ EVENT #11 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008315250277519226)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.196170, 0.000000, -0.980570) mag=1.000000
- HRP Velocity = Vector3(16.800587, 12.528848, -27.191462) mag=34.330853
-
-RETURN:
- Type = table
- Value = table:table: 0xd06b07d06900be9d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.196170, 0.000000, -0.980570) mag=1.000000
- HRP Velocity = Vector3(16.800587, 12.528848, -27.191462) mag=34.330853
-
-================ EVENT #12 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008974749594926834)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.196170, 0.000000, -0.980570) mag=1.000000
- HRP Velocity = Vector3(16.649340, 12.112182, -27.292278) mag=34.187336
-
-RETURN:
- Type = table
- Value = table:table: 0x1ce858348af055fb
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.196170, 0.000000, -0.980570) mag=1.000000
- HRP Velocity = Vector3(16.649340, 12.112182, -27.292278) mag=34.187336
-
-================ EVENT #13 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008228791877627373)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.196170, 0.000000, -0.980570) mag=1.000000
- HRP Velocity = Vector3(16.447374, 11.695516, -27.426908) mag=34.051968
-
-RETURN:
- Type = table
- Value = table:table: 0xf9d3d00418e22895
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.196170, 0.000000, -0.980570) mag=1.000000
- HRP Velocity = Vector3(16.447374, 11.695516, -27.426908) mag=34.051968
-
-================ EVENT #14 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007925708778202534)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.197301, 0.000000, -0.980343) mag=1.000000
- HRP Velocity = Vector3(16.673883, 11.278850, -27.271725) mag=33.896576
-
-RETURN:
- Type = table
- Value = table:table: 0x4b457aceefb176ee
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.197301, 0.000000, -0.980343) mag=1.000000
- HRP Velocity = Vector3(16.673883, 11.278850, -27.271725) mag=33.896576
-
-================ EVENT #15 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008670666255056858)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.197301, 0.000000, -0.980343) mag=1.000000
- HRP Velocity = Vector3(16.766771, 10.862184, -27.209959) mag=33.756386
-
-RETURN:
- Type = table
- Value = table:table: 0xd7046752b505a25f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.197301, 0.000000, -0.980343) mag=1.000000
- HRP Velocity = Vector3(16.766771, 10.862184, -27.209959) mag=33.756386
-
-================ EVENT #16 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008208333514630795)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.553695, 0.000000, -0.832720) mag=1.000000
- HRP Velocity = Vector3(16.538458, 10.445518, -27.361771) mag=33.634743
-
-RETURN:
- Type = table
- Value = table:table: 0x617d75888993b94f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.553695, 0.000000, -0.832720) mag=1.000000
- HRP Velocity = Vector3(16.538458, 10.445518, -27.361771) mag=33.634743
-
-================ EVENT #17 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00841608364135027)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.553695, 0.000000, -0.832720) mag=1.000000
- HRP Velocity = Vector3(19.195826, 10.028852, -25.594828) mag=33.528389
-
-RETURN:
- Type = table
- Value = table:table: 0x8733ba0c0d1ddd04
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.553695, 0.000000, -0.832720) mag=1.000000
- HRP Velocity = Vector3(19.195826, 10.028852, -25.594828) mag=33.528389
-
-================ EVENT #18 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007990875281393528)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.553695, 0.000000, -0.832720) mag=1.000000
- HRP Velocity = Vector3(19.195826, 9.612185, -25.594828) mag=33.406120
-
-RETURN:
- Type = table
- Value = table:table: 0x5093879dfd559b59
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.553695, 0.000000, -0.832720) mag=1.000000
- HRP Velocity = Vector3(19.195826, 9.612185, -25.594828) mag=33.406120
-
-================ EVENT #19 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008282583206892014)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980343, 0.000000, -0.197301) mag=1.000000
- HRP Velocity = Vector3(19.195826, 9.195519, -25.594828) mag=33.288624
-
-RETURN:
- Type = table
- Value = table:table: 0x78ead4ed6b7c7faf
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980343, 0.000000, -0.197301) mag=1.000000
- HRP Velocity = Vector3(19.195826, 9.195519, -25.594828) mag=33.288624
-
-================ EVENT #20 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008642458356916904)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980343, 0.000000, -0.197301) mag=1.000000
- HRP Velocity = Vector3(19.370026, 8.570520, -25.478996) mag=33.133533
-
-RETURN:
- Type = table
- Value = table:table: 0x198130180d8cab08
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980343, 0.000000, -0.197301) mag=1.000000
- HRP Velocity = Vector3(19.370026, 8.570520, -25.478996) mag=33.133533
-
-================ EVENT #21 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007970999926328659)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980343, 0.000000, -0.197301) mag=1.000000
- HRP Velocity = Vector3(19.370026, 8.153854, -25.478996) mag=33.028210
-
-RETURN:
- Type = table
- Value = table:table: 0x58353e5e823e6273
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980343, 0.000000, -0.197301) mag=1.000000
- HRP Velocity = Vector3(19.370026, 8.153854, -25.478996) mag=33.028210
-
-================ EVENT #22 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008343083783984184)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980570, 0.000000, -0.196170) mag=1.000000
- HRP Velocity = Vector3(19.400534, 7.945521, -25.458372) mag=32.979401
-
-RETURN:
- Type = table
- Value = table:table: 0x953053be7545b653
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980570, 0.000000, -0.196170) mag=1.000000
- HRP Velocity = Vector3(19.400534, 7.945521, -25.458372) mag=32.979401
-
-================ EVENT #23 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008284708485007286)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980795, 0.000000, -0.195040) mag=1.000000
- HRP Velocity = Vector3(19.430996, 7.528854, -25.437672) mag=32.883469
-
-RETURN:
- Type = table
- Value = table:table: 0x353f0500c315d8ca
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980795, 0.000000, -0.195040) mag=1.000000
- HRP Velocity = Vector3(19.430996, 7.528854, -25.437672) mag=32.883469
-
-================ EVENT #24 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008991374634206295)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980795, 0.000000, -0.195040) mag=1.000000
- HRP Velocity = Vector3(19.430996, 7.112187, -25.437672) mag=32.790577
-
-RETURN:
- Type = table
- Value = table:table: 0x81015f0bee937ef5
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980795, 0.000000, -0.195040) mag=1.000000
- HRP Velocity = Vector3(19.430996, 7.112187, -25.437672) mag=32.790577
-
-================ EVENT #25 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007762041874229908)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.982121, 0.000000, -0.188251) mag=1.000000
- HRP Velocity = Vector3(19.612810, 6.487186, -25.311983) mag=32.671738
-
-RETURN:
- Type = table
- Value = table:table: 0x4f97994cc468a58a
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.982121, 0.000000, -0.188251) mag=1.000000
- HRP Velocity = Vector3(19.612810, 6.487186, -25.311983) mag=32.671738
-
-================ EVENT #26 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008343875408172607)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.982337, 0.000000, -0.187119) mag=1.000000
- HRP Velocity = Vector3(19.642950, 6.278853, -25.290785) mag=32.632702
-
-RETURN:
- Type = table
- Value = table:table: 0xe726adb26d8ec50b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.982337, 0.000000, -0.187119) mag=1.000000
- HRP Velocity = Vector3(19.642950, 6.278853, -25.290785) mag=32.632702
-
-================ EVENT #27 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008984374813735485)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.982979, 0.000000, -0.183720) mag=1.000000
- HRP Velocity = Vector3(19.733088, 5.862186, -25.226768) mag=32.559940
-
-RETURN:
- Type = table
- Value = table:table: 0x110268662f88cd61
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.982979, 0.000000, -0.183720) mag=1.000000
- HRP Velocity = Vector3(19.733088, 5.862186, -25.226768) mag=32.559940
-
-================ EVENT #28 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.0076707499101758)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.983608, 0.000000, -0.180319) mag=1.000000
- HRP Velocity = Vector3(19.822800, 5.445519, -25.162117) mag=32.491989
-
-RETURN:
- Type = table
- Value = table:table: 0xd72d3c16f3674ee8
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.983608, 0.000000, -0.180319) mag=1.000000
- HRP Velocity = Vector3(19.822800, 5.445519, -25.162117) mag=32.491989
-
-================ EVENT #29 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00841437466442585)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.984429, 0.000000, -0.175782) mag=1.000000
- HRP Velocity = Vector3(19.941748, 5.028852, -25.074930) mag=32.430153
-
-RETURN:
- Type = table
- Value = table:table: 0xc574a892eb0de6b4
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.984429, 0.000000, -0.175782) mag=1.000000
- HRP Velocity = Vector3(19.941748, 5.028852, -25.074930) mag=32.430153
-
-================ EVENT #30 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008887792006134987)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.984429, 0.000000, -0.175782) mag=1.000000
- HRP Velocity = Vector3(19.941748, 4.612185, -25.074930) mag=32.368160
-
-RETURN:
- Type = table
- Value = table:table: 0xd6a07384e0dbaeba
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.984429, 0.000000, -0.175782) mag=1.000000
- HRP Velocity = Vector3(19.941748, 4.612185, -25.074930) mag=32.368160
-
-================ EVENT #31 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007669833488762379)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986579, 0.000000, -0.163284) mag=1.000000
- HRP Velocity = Vector3(20.264839, 4.195518, -24.829420) mag=32.322842
-
-RETURN:
- Type = table
- Value = table:table: 0x664aad9247aafdbd
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986579, 0.000000, -0.163284) mag=1.000000
- HRP Velocity = Vector3(20.264839, 4.195518, -24.829420) mag=32.322842
-
-================ EVENT #32 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008991916663944721)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.987865, 0.000000, -0.155317) mag=1.000000
- HRP Velocity = Vector3(20.467297, 3.778852, -24.668850) mag=32.276031
-
-RETURN:
- Type = table
- Value = table:table: 0x8c4055ecd19c3148
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.987865, 0.000000, -0.155317) mag=1.000000
- HRP Velocity = Vector3(20.467297, 3.778852, -24.668850) mag=32.276031
-
-================ EVENT #33 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00771287502720952)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.988915, 0.000000, -0.148480) mag=1.000000
- HRP Velocity = Vector3(20.638834, 3.362185, -24.528570) mag=32.232227
-
-RETURN:
- Type = table
- Value = table:table: 0xf4aceb99e516f821
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.988915, 0.000000, -0.148480) mag=1.000000
- HRP Velocity = Vector3(20.638834, 3.362185, -24.528570) mag=32.232227
-
-================ EVENT #34 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008273250423371792)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.990243, 0.000000, -0.139354) mag=1.000000
- HRP Velocity = Vector3(20.864618, 2.945518, -24.337776) mag=32.192169
-
-RETURN:
- Type = table
- Value = table:table: 0x0a66be09d5327c88
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.990243, 0.000000, -0.139354) mag=1.000000
- HRP Velocity = Vector3(20.864618, 2.945518, -24.337776) mag=32.192169
-
-================ EVENT #35 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008313124999403954)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.991930, 0.000000, -0.126785) mag=1.000000
- HRP Velocity = Vector3(21.169474, 2.528852, -24.068531) mag=32.153320
-
-RETURN:
- Type = table
- Value = table:table: 0x629cc343125872fc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.991930, 0.000000, -0.126785) mag=1.000000
- HRP Velocity = Vector3(21.169474, 2.528852, -24.068531) mag=32.153320
-
-================ EVENT #36 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008426000364124775)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.993589, 0.000000, -0.113051) mag=1.000000
- HRP Velocity = Vector3(21.494425, 1.903852, -23.765863) mag=32.100643
-
-RETURN:
- Type = table
- Value = table:table: 0x5d4d05781e6e156f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.993589, 0.000000, -0.113051) mag=1.000000
- HRP Velocity = Vector3(21.494425, 1.903852, -23.765863) mag=32.100643
-
-================ EVENT #37 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.009077374823391438)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.994943, 0.000000, -0.100443) mag=1.000000
- HRP Velocity = Vector3(21.597826, 1.695519, -23.633333) mag=32.060493
-
-RETURN:
- Type = table
- Value = table:table: 0x699263b7c66f1f03
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.994943, 0.000000, -0.100443) mag=1.000000
- HRP Velocity = Vector3(21.597826, 1.695519, -23.633333) mag=32.060493
-
-================ EVENT #38 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007566874846816063)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.995931, 0.000000, -0.090114) mag=1.000000
- HRP Velocity = Vector3(21.761452, 1.278852, -23.454964) mag=32.020798
-
-RETURN:
- Type = table
- Value = table:table: 0x8f90df1281efc8eb
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.995931, 0.000000, -0.090114) mag=1.000000
- HRP Velocity = Vector3(21.761452, 1.278852, -23.454964) mag=32.020798
-
-================ EVENT #39 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008307750336825848)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.996626, 0.000000, -0.082074) mag=1.000000
- HRP Velocity = Vector3(21.320061, 0.862185, -23.793842) mag=31.959902
-
-RETURN:
- Type = table
- Value = table:table: 0x2d96e343af9f7496
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.996626, 0.000000, -0.082074) mag=1.000000
- HRP Velocity = Vector3(21.320061, 0.862185, -23.793842) mag=31.959902
-
-================ EVENT #40 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.009061458520591259)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.997971, 0.000000, -0.063678) mag=1.000000
- HRP Velocity = Vector3(21.491177, 0.445519, -23.574827) mag=31.903629
-
-RETURN:
- Type = table
- Value = table:table: 0x621b485d1d4bf47d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.997971, 0.000000, -0.063678) mag=1.000000
- HRP Velocity = Vector3(21.491177, 0.445519, -23.574827) mag=31.903629
-
-================ EVENT #41 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007609916850924492)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998922, 0.000000, -0.046412) mag=1.000000
- HRP Velocity = Vector3(21.660948, 0.028852, -23.348602) mag=31.848936
-
-RETURN:
- Type = table
- Value = table:table: 0x7ea4a68105d19d0d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998922, 0.000000, -0.046412) mag=1.000000
- HRP Velocity = Vector3(21.660948, 0.028852, -23.348602) mag=31.848936
-
-================ EVENT #42 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008276499807834625)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999541, 0.000000, -0.030284) mag=1.000000
- HRP Velocity = Vector3(21.235348, -0.387815, -23.675255) mag=31.805788
-
-RETURN:
- Type = table
- Value = table:table: 0xeb94e57bac5a0c6d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999541, 0.000000, -0.030284) mag=1.000000
- HRP Velocity = Vector3(21.235348, -0.387815, -23.675255) mag=31.805788
-
-================ EVENT #43 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008306625299155712)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999883, 0.000000, -0.015301) mag=1.000000
- HRP Velocity = Vector3(21.382463, -0.804482, -23.474106) mag=31.763039
-
-RETURN:
- Type = table
- Value = table:table: 0x68344b7713ef7224
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999883, 0.000000, -0.015301) mag=1.000000
- HRP Velocity = Vector3(21.382463, -0.804482, -23.474106) mag=31.763039
-
-================ EVENT #44 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008369541727006435)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999883, 0.000000, -0.015301) mag=1.000000
- HRP Velocity = Vector3(21.390421, -1.221148, -23.466387) mag=31.775976
-
-RETURN:
- Type = table
- Value = table:table: 0xd2eff55d65549618
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999883, 0.000000, -0.015301) mag=1.000000
- HRP Velocity = Vector3(21.390421, -1.221148, -23.466387) mag=31.775976
-
-================ EVENT #45 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008334708400070667)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999875, 0.000000, 0.015824) mag=1.000000
- HRP Velocity = Vector3(21.339230, -1.637815, -23.382486) mag=31.698357
-
-RETURN:
- Type = table
- Value = table:table: 0x304c706f8b25e935
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999875, 0.000000, 0.015824) mag=1.000000
- HRP Velocity = Vector3(21.339230, -1.637815, -23.382486) mag=31.698357
-
-================ EVENT #46 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008901000022888184)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999288, 0.000000, 0.037720) mag=1.000000
- HRP Velocity = Vector3(21.281544, -2.054482, -23.345472) mag=31.656534
-
-RETURN:
- Type = table
- Value = table:table: 0x36a6f4a7863f46a4
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999288, 0.000000, 0.037720) mag=1.000000
- HRP Velocity = Vector3(21.281544, -2.054482, -23.345472) mag=31.656534
-
-================ EVENT #47 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007783416658639908)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998291, 0.000000, 0.058446) mag=1.000000
- HRP Velocity = Vector3(21.372932, -2.471148, -23.146942) mag=31.602053
-
-RETURN:
- Type = table
- Value = table:table: 0xa8687833fca67390
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998291, 0.000000, 0.058446) mag=1.000000
- HRP Velocity = Vector3(21.372932, -2.471148, -23.146942) mag=31.602053
-
-================ EVENT #48 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008304791525006294)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.996863, 0.000000, 0.079148) mag=1.000000
- HRP Velocity = Vector3(21.054756, -2.887815, -23.415251) mag=31.621452
-
-RETURN:
- Type = table
- Value = table:table: 0xc7ce607170d98dc5
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.996863, 0.000000, 0.079148) mag=1.000000
- HRP Velocity = Vector3(21.054756, -2.887815, -23.415251) mag=31.621452
-
-================ EVENT #49 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008333583362400532)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.996863, 0.000000, 0.079148) mag=1.000000
- HRP Velocity = Vector3(21.179277, -3.304481, -23.269249) mag=31.637625
-
-RETURN:
- Type = table
- Value = table:table: 0xeb36543dc7677dbc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.996863, 0.000000, 0.079148) mag=1.000000
- HRP Velocity = Vector3(21.179277, -3.304481, -23.269249) mag=31.637625
-
-================ EVENT #50 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008294207975268364)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.994043, 0.000000, 0.108988) mag=1.000000
- HRP Velocity = Vector3(21.115322, -3.721148, -23.202589) mag=31.592150
-
-RETURN:
- Type = table
- Value = table:table: 0x85359edca8288542
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.994043, 0.000000, 0.108988) mag=1.000000
- HRP Velocity = Vector3(21.115322, -3.721148, -23.202589) mag=31.592150
-
-================ EVENT #51 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008359874598681927)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.990648, 0.000000, 0.136446) mag=1.000000
- HRP Velocity = Vector3(21.039654, -4.137815, -23.161953) mag=31.563660
-
-RETURN:
- Type = table
- Value = table:table: 0x448d01c86d55454c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.990648, 0.000000, 0.136446) mag=1.000000
- HRP Velocity = Vector3(21.039654, -4.137815, -23.161953) mag=31.563660
-
-================ EVENT #52 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008371500298380852)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986304, 0.000000, 0.164936) mag=1.000000
- HRP Velocity = Vector3(20.982817, -4.554482, -23.090153) mag=31.530573
-
-RETURN:
- Type = table
- Value = table:table: 0x8bcf7f13dcb7c3dc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986304, 0.000000, 0.164936) mag=1.000000
- HRP Velocity = Vector3(20.982817, -4.554482, -23.090153) mag=31.530573
-
-================ EVENT #53 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00829608365893364)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986304, 0.000000, 0.164936) mag=1.000000
- HRP Velocity = Vector3(20.985302, -4.971148, -23.086670) mag=31.592556
-
-RETURN:
- Type = table
- Value = table:table: 0x80abb7f8117f8e03
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986304, 0.000000, 0.164936) mag=1.000000
- HRP Velocity = Vector3(20.985302, -4.971148, -23.086670) mag=31.592556
-
-================ EVENT #54 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00833125039935112)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.974392, 0.000000, 0.224855) mag=1.000000
- HRP Velocity = Vector3(20.814096, -5.387815, -23.005619) mag=31.488310
-
-RETURN:
- Type = table
- Value = table:table: 0x9b14953557d0f5cc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.974392, 0.000000, 0.224855) mag=1.000000
- HRP Velocity = Vector3(20.814096, -5.387815, -23.005619) mag=31.488310
-
-================ EVENT #55 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008385375142097473)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.967508, 0.000000, 0.252840) mag=1.000000
- HRP Velocity = Vector3(20.745352, -5.804482, -22.948891) mag=31.475597
-
-RETURN:
- Type = table
- Value = table:table: 0x5d5a85069f5e7232
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.967508, 0.000000, 0.252840) mag=1.000000
- HRP Velocity = Vector3(20.745352, -5.804482, -22.948891) mag=31.475597
-
-================ EVENT #56 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008309458382427692)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.967508, 0.000000, 0.252840) mag=1.000000
- HRP Velocity = Vector3(20.755419, -6.221149, -22.931700) mag=31.549215
-
-RETURN:
- Type = table
- Value = table:table: 0x4fe0d4d583d51799
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.967508, 0.000000, 0.252840) mag=1.000000
- HRP Velocity = Vector3(20.755419, -6.221149, -22.931700) mag=31.549215
-
-================ EVENT #57 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.0083256671205163)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.954824, 0.000000, 0.297171) mag=1.000000
- HRP Velocity = Vector3(20.618006, -6.637816, -22.887375) mag=31.511818
-
-RETURN:
- Type = table
- Value = table:table: 0x2e8a5a03239a4096
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.954824, 0.000000, 0.297171) mag=1.000000
- HRP Velocity = Vector3(20.618006, -6.637816, -22.887375) mag=31.511818
-
-================ EVENT #58 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008870500139892101)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.954824, 0.000000, 0.297171) mag=1.000000
- HRP Velocity = Vector3(20.620779, -7.054483, -22.882093) mag=31.600199
-
-RETURN:
- Type = table
- Value = table:table: 0x93c04cbb0503b164
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.954824, 0.000000, 0.297171) mag=1.000000
- HRP Velocity = Vector3(20.620779, -7.054483, -22.882093) mag=31.600199
-
-================ EVENT #59 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007837041281163692)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.935712, 0.000000, 0.352764) mag=1.000000
- HRP Velocity = Vector3(20.541573, -7.471150, -22.620356) mag=31.455601
-
-RETURN:
- Type = table
- Value = table:table: 0x30c4f03e3db5d8fd
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.935712, 0.000000, 0.352764) mag=1.000000
- HRP Velocity = Vector3(20.541573, -7.471150, -22.620356) mag=31.455601
-
-================ EVENT #60 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008349833078682423)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.926031, 0.000000, 0.377448) mag=1.000000
- HRP Velocity = Vector3(20.314695, -7.887817, -22.936298) mag=31.638241
-
-RETURN:
- Type = table
- Value = table:table: 0x14457716d0143b31
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.926031, 0.000000, 0.377448) mag=1.000000
- HRP Velocity = Vector3(20.314695, -7.887817, -22.936298) mag=31.638241
-
-================ EVENT #61 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008294583298265934)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.926031, 0.000000, 0.377448) mag=1.000000
- HRP Velocity = Vector3(20.387905, -8.304483, -22.762346) mag=31.666315
-
-RETURN:
- Type = table
- Value = table:table: 0x638912c0a833c40b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.926031, 0.000000, 0.377448) mag=1.000000
- HRP Velocity = Vector3(20.387905, -8.304483, -22.762346) mag=31.666315
-
-================ EVENT #62 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008959583006799221)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.903244, 0.000000, 0.429128) mag=1.000000
- HRP Velocity = Vector3(20.219267, -8.721149, -22.718718) mag=31.638859
-
-RETURN:
- Type = table
- Value = table:table: 0x577ff8f72de79590
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.903244, 0.000000, 0.429128) mag=1.000000
- HRP Velocity = Vector3(20.219267, -8.721149, -22.718718) mag=31.638859
-
-================ EVENT #63 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007772250100970268)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.888395, 0.000000, 0.459080) mag=1.000000
- HRP Velocity = Vector3(20.196856, -9.137815, -22.452917) mag=31.552277
-
-RETURN:
- Type = table
- Value = table:table: 0xc080ebc5f5d4c550
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.888395, 0.000000, 0.459080) mag=1.000000
- HRP Velocity = Vector3(20.196856, -9.137815, -22.452917) mag=31.552277
-
-================ EVENT #64 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008279083296656609)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.871424, 0.000000, 0.490530) mag=1.000000
- HRP Velocity = Vector3(19.966259, -9.554482, -22.839998) mag=31.805740
-
-RETURN:
- Type = table
- Value = table:table: 0x9067abf89471ecd8
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.871424, 0.000000, 0.490530) mag=1.000000
- HRP Velocity = Vector3(19.966259, -9.554482, -22.839998) mag=31.805740
-
-================ EVENT #65 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008895332925021648)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.849714, 0.000000, 0.527243) mag=1.000000
- HRP Velocity = Vector3(19.890621, -9.971148, -22.628027) mag=31.734653
-
-RETURN:
- Type = table
- Value = table:table: 0x5073d0a7db940af2
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.849714, 0.000000, 0.527243) mag=1.000000
- HRP Velocity = Vector3(19.890621, -9.971148, -22.628027) mag=31.734653
-
-================ EVENT #66 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007743708323687315)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.849714, 0.000000, 0.527243) mag=1.000000
- HRP Velocity = Vector3(19.942339, -10.387814, -22.407196) mag=31.744070
-
-RETURN:
- Type = table
- Value = table:table: 0xe2623f07e3e09f6d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.849714, 0.000000, 0.527243) mag=1.000000
- HRP Velocity = Vector3(19.942339, -10.387814, -22.407196) mag=31.744070
-
-================ EVENT #67 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008998916484415531)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.809892, 0.000000, 0.586580) mag=1.000000
- HRP Velocity = Vector3(19.645859, -10.804480, -22.780554) mag=31.963263
-
-RETURN:
- Type = table
- Value = table:table: 0x4d32b0e7f5db53a4
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.809892, 0.000000, 0.586580) mag=1.000000
- HRP Velocity = Vector3(19.645859, -10.804480, -22.780554) mag=31.963263
-
-================ EVENT #68 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007716583553701639)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.809892, 0.000000, 0.586580) mag=1.000000
- HRP Velocity = Vector3(19.718807, -11.221146, -22.324377) mag=31.829597
-
-RETURN:
- Type = table
- Value = table:table: 0x15d9563a024aa58e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.809892, 0.000000, 0.586580) mag=1.000000
- HRP Velocity = Vector3(19.718807, -11.221146, -22.324377) mag=31.829597
-
-================ EVENT #69 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008266458287835121)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.778385, 0.000000, 0.627787) mag=1.000000
- HRP Velocity = Vector3(19.498259, -11.637812, -22.770931) mag=32.157986
-
-RETURN:
- Type = table
- Value = table:table: 0x4628a7910ef04236
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.778385, 0.000000, 0.627787) mag=1.000000
- HRP Velocity = Vector3(19.498259, -11.637812, -22.770931) mag=32.157986
-
-================ EVENT #70 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008939624764025211)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.778385, 0.000000, 0.627787) mag=1.000000
- HRP Velocity = Vector3(19.519810, -12.054478, -22.569702) mag=32.182678
-
-RETURN:
- Type = table
- Value = table:table: 0xea433faf7bf2ce91
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.778385, 0.000000, 0.627787) mag=1.000000
- HRP Velocity = Vector3(19.519810, -12.054478, -22.569702) mag=32.182678
-
-================ EVENT #71 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00782045815140009)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.742472, 0.000000, 0.669877) mag=1.000000
- HRP Velocity = Vector3(19.364717, -12.471144, -22.308987) mag=32.065754
-
-RETURN:
- Type = table
- Value = table:table: 0xd376d574111584ea
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.742472, 0.000000, 0.669877) mag=1.000000
- HRP Velocity = Vector3(19.364717, -12.471144, -22.308987) mag=32.065754
-
-================ EVENT #72 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008288291282951832)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.723656, 0.000000, 0.690161) mag=1.000000
- HRP Velocity = Vector3(19.263996, -12.887810, -22.717360) mag=32.454208
-
-RETURN:
- Type = table
- Value = table:table: 0x86163f2c865d72d2
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.723656, 0.000000, 0.690161) mag=1.000000
- HRP Velocity = Vector3(19.263996, -12.887810, -22.717360) mag=32.454208
-
-================ EVENT #73 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008928624913096428)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.703467, 0.000000, 0.710728) mag=1.000000
- HRP Velocity = Vector3(19.180164, -13.304476, -22.544409) mag=32.452091
-
-RETURN:
- Type = table
- Value = table:table: 0x82f77658e4e20d1c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.703467, 0.000000, 0.710728) mag=1.000000
- HRP Velocity = Vector3(19.180164, -13.304476, -22.544409) mag=32.452091
-
-================ EVENT #74 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008270916528999805)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.703467, 0.000000, 0.710728) mag=1.000000
- HRP Velocity = Vector3(19.178953, -13.721142, -22.308741) mag=32.462006
-
-RETURN:
- Type = table
- Value = table:table: 0x27c179b0df4308bc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.703467, 0.000000, 0.710728) mag=1.000000
- HRP Velocity = Vector3(19.178953, -13.721142, -22.308741) mag=32.462006
-
-================ EVENT #75 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007791250012814999)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.657888, 0.000000, 0.753116) mag=1.000000
- HRP Velocity = Vector3(18.990849, -14.137808, -22.557673) mag=32.701355
-
-RETURN:
- Type = table
- Value = table:table: 0x985ff31cc40a9bde
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.657888, 0.000000, 0.753116) mag=1.000000
- HRP Velocity = Vector3(18.990849, -14.137808, -22.557673) mag=32.701355
-
-================ EVENT #76 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008936874568462372)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.617950, 0.000000, 0.786217) mag=1.000000
- HRP Velocity = Vector3(18.854639, -14.554474, -22.747669) mag=32.936100
-
-RETURN:
- Type = table
- Value = table:table: 0x8365933bad1fb5e8
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.617950, 0.000000, 0.786217) mag=1.000000
- HRP Velocity = Vector3(18.854639, -14.554474, -22.747669) mag=32.936100
-
-================ EVENT #77 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007754708174616098)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.579173, 0.000000, 0.815205) mag=1.000000
- HRP Velocity = Vector3(18.646854, -14.971140, -22.351782) mag=32.732895
-
-RETURN:
- Type = table
- Value = table:table: 0x957d733f58dce271
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.579173, 0.000000, 0.815205) mag=1.000000
- HRP Velocity = Vector3(18.646854, -14.971140, -22.351782) mag=32.732895
-
-================ EVENT #78 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00832774955779314)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.555441, 0.000000, 0.831556) mag=1.000000
- HRP Velocity = Vector3(18.638577, -15.387806, -22.795662) mag=33.223839
-
-RETURN:
- Type = table
- Value = table:table: 0x8f28e519a9df830c
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.555441, 0.000000, 0.831556) mag=1.000000
- HRP Velocity = Vector3(18.638577, -15.387806, -22.795662) mag=33.223839
-
-================ EVENT #79 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008309000171720982)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.524393, 0.000000, 0.851476) mag=1.000000
- HRP Velocity = Vector3(18.486937, -16.012806, -22.612932) mag=33.309479
-
-RETURN:
- Type = table
- Value = table:table: 0x8203b10d5386f875
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.524393, 0.000000, 0.851476) mag=1.000000
- HRP Velocity = Vector3(18.486937, -16.012806, -22.612932) mag=33.309479
-
-================ EVENT #80 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008338499814271927)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.481557, 0.000000, 0.876415) mag=1.000000
- HRP Velocity = Vector3(18.341980, -16.221140, -22.658346) mag=33.360970
-
-RETURN:
- Type = table
- Value = table:table: 0x9c7ecadb0080429a
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.481557, 0.000000, 0.876415) mag=1.000000
- HRP Velocity = Vector3(18.341980, -16.221140, -22.658346) mag=33.360970
-
-================ EVENT #81 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008343249559402466)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.481557, 0.000000, 0.876415) mag=1.000000
- HRP Velocity = Vector3(18.338945, -16.637808, -22.647923) mag=33.556847
-
-RETURN:
- Type = table
- Value = table:table: 0xdb7551d1ae284af5
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.481557, 0.000000, 0.876415) mag=1.000000
- HRP Velocity = Vector3(18.338945, -16.637808, -22.647923) mag=33.556847
-
-================ EVENT #82 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008333958685398102)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.403400, 0.000000, 0.915024) mag=1.000000
- HRP Velocity = Vector3(2.458856, 16.695509, 32.436413) mag=36.563736
-
-RETURN:
- Type = table
- Value = table:table: 0xc2ff06c7157b7303
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.403400, 0.000000, 0.915024) mag=1.000000
- HRP Velocity = Vector3(2.458856, 16.695509, 32.436413) mag=36.563736
-
-================ EVENT #83 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008851874619722366)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.476862, 0.000000, 0.878978) mag=1.000000
- HRP Velocity = Vector3(2.458855, 16.278841, 32.436413) mag=36.375370
-
-RETURN:
- Type = table
- Value = table:table: 0x46a7c4fe30e82d12
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.476862, 0.000000, 0.878978) mag=1.000000
- HRP Velocity = Vector3(2.458855, 16.278841, 32.436413) mag=36.375370
-
-================ EVENT #84 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007825249806046486)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.476862, 0.000000, 0.878978) mag=1.000000
- HRP Velocity = Vector3(2.458855, 15.862174, 32.436413) mag=36.190819
-
-RETURN:
- Type = table
- Value = table:table: 0x1f8ee4f0a47e8c4a
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.476862, 0.000000, 0.878978) mag=1.000000
- HRP Velocity = Vector3(2.458855, 15.862174, 32.436413) mag=36.190819
-
-================ EVENT #85 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00831091683357954)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.538417, 0.000000, 0.842679) mag=1.000000
- HRP Velocity = Vector3(2.458855, 15.445508, 32.436413) mag=36.010143
-
-RETURN:
- Type = table
- Value = table:table: 0x6eefcab08ab5059f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.538417, 0.000000, 0.842679) mag=1.000000
- HRP Velocity = Vector3(2.458855, 15.445508, 32.436413) mag=36.010143
-
-================ EVENT #86 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008348500356078148)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.577631, 0.000000, 0.816298) mag=1.000000
- HRP Velocity = Vector3(2.458854, 15.028842, 32.436413) mag=35.833405
-
-RETURN:
- Type = table
- Value = table:table: 0x7356871307530105
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.577631, 0.000000, 0.816298) mag=1.000000
- HRP Velocity = Vector3(2.458854, 15.028842, 32.436413) mag=35.833405
-
-================ EVENT #87 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.009123541414737701)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.577631, 0.000000, 0.816298) mag=1.000000
- HRP Velocity = Vector3(2.458854, 14.612176, 32.436413) mag=35.660656
-
-RETURN:
- Type = table
- Value = table:table: 0x83243d29ec337864
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.577631, 0.000000, 0.816298) mag=1.000000
- HRP Velocity = Vector3(2.458854, 14.612176, 32.436413) mag=35.660656
-
-================ EVENT #88 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.015941375866532326)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.654722, 0.000000, 0.755870) mag=1.000000
- HRP Velocity = Vector3(0.309521, 13.987177, 32.590534) mag=35.466602
-
-RETURN:
- Type = table
- Value = table:table: 0x9d4e36ac117eeb97
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.654722, 0.000000, 0.755870) mag=1.000000
- HRP Velocity = Vector3(0.309521, 13.987177, 32.590534) mag=35.466602
-
-================ EVENT #89 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008296458050608635)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.654722, 0.000000, 0.755870) mag=1.000000
- HRP Velocity = Vector3(0.309521, 13.153845, 32.590534) mag=35.146301
-
-RETURN:
- Type = table
- Value = table:table: 0xe6766d66397182e3
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.654722, 0.000000, 0.755870) mag=1.000000
- HRP Velocity = Vector3(0.309521, 13.153845, 32.590534) mag=35.146301
-
-================ EVENT #90 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008341499604284763)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.695525, 0.000000, 0.718501) mag=1.000000
- HRP Velocity = Vector3(-0.594195, 12.945512, 32.486023) mag=34.975433
-
-RETURN:
- Type = table
- Value = table:table: 0x0a82016c03a84e21
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.695525, 0.000000, 0.718501) mag=1.000000
- HRP Velocity = Vector3(-0.594195, 12.945512, 32.486023) mag=34.975433
-
-================ EVENT #91 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008311666548252106)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.695525, 0.000000, 0.718501) mag=1.000000
- HRP Velocity = Vector3(-0.610782, 12.528846, 32.486290) mag=34.823902
-
-RETURN:
- Type = table
- Value = table:table: 0x9872f2cdac0e53fb
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.695525, 0.000000, 0.718501) mag=1.000000
- HRP Velocity = Vector3(-0.610782, 12.528846, 32.486290) mag=34.823902
-
-================ EVENT #92 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008298291824758053)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.734200, 0.000000, 0.678934) mag=1.000000
- HRP Velocity = Vector3(-0.597871, 12.112180, 32.316868) mag=34.517277
-
-RETURN:
- Type = table
- Value = table:table: 0x46196f926efd943c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.734200, 0.000000, 0.678934) mag=1.000000
- HRP Velocity = Vector3(-0.597871, 12.112180, 32.316868) mag=34.517277
-
-================ EVENT #93 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008354250341653824)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.750420, 0.000000, 0.660962) mag=1.000000
- HRP Velocity = Vector3(-0.589169, 11.695514, 32.243221) mag=34.303902
-
-RETURN:
- Type = table
- Value = table:table: 0xf7671cd13fe9b347
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.750420, 0.000000, 0.660962) mag=1.000000
- HRP Velocity = Vector3(-0.589169, 11.695514, 32.243221) mag=34.303902
-
-================ EVENT #94 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008314291946589947)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.750420, 0.000000, 0.660962) mag=1.000000
- HRP Velocity = Vector3(-0.609723, 11.278848, 32.241917) mag=34.163216
-
-RETURN:
- Type = table
- Value = table:table: 0x7f254e171672df25
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.750420, 0.000000, 0.660962) mag=1.000000
- HRP Velocity = Vector3(-0.609723, 11.278848, 32.241917) mag=34.163216
-
-================ EVENT #95 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.009058833122253418)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.780091, 0.000000, 0.625667) mag=1.000000
- HRP Velocity = Vector3(-0.582876, 10.862182, 32.102276) mag=33.895176
-
-RETURN:
- Type = table
- Value = table:table: 0xa70afa98c8dba41e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.780091, 0.000000, 0.625667) mag=1.000000
- HRP Velocity = Vector3(-0.582876, 10.862182, 32.102276) mag=33.895176
-
-================ EVENT #96 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007612041663378477)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.780091, 0.000000, 0.625667) mag=1.000000
- HRP Velocity = Vector3(-0.855262, 10.445516, 32.072353) mag=33.741310
-
-RETURN:
- Type = table
- Value = table:table: 0x8417e399029f07a8
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.780091, 0.000000, 0.625667) mag=1.000000
- HRP Velocity = Vector3(-0.855262, 10.445516, 32.072353) mag=33.741310
-
-================ EVENT #97 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.0083360830321908)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.808781, 0.000000, 0.588109) mag=1.000000
- HRP Velocity = Vector3(-0.308399, 10.028850, 31.999260) mag=33.535439
-
-RETURN:
- Type = table
- Value = table:table: 0x336d0a13b39d7c1d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.808781, 0.000000, 0.588109) mag=1.000000
- HRP Velocity = Vector3(-0.308399, 10.028850, 31.999260) mag=33.535439
-
-================ EVENT #98 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008303666487336159)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.818830, 0.000000, 0.574036) mag=1.000000
- HRP Velocity = Vector3(-0.562882, 9.612184, 31.905348) mag=33.326599
-
-RETURN:
- Type = table
- Value = table:table: 0x562f9e62947137b0
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.818830, 0.000000, 0.574036) mag=1.000000
- HRP Velocity = Vector3(-0.562882, 9.612184, 31.905348) mag=33.326599
-
-================ EVENT #99 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008415041491389275)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.818830, 0.000000, 0.574036) mag=1.000000
- HRP Velocity = Vector3(-0.551132, 9.195518, 31.907415) mag=33.210609
-
-RETURN:
- Type = table
- Value = table:table: 0x3c9cc04ce26f1f5b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.818830, 0.000000, 0.574036) mag=1.000000
- HRP Velocity = Vector3(-0.551132, 9.195518, 31.907415) mag=33.210609
-
-================ EVENT #100 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00889566633850336)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.841942, 0.000000, 0.539569) mag=1.000000
- HRP Velocity = Vector3(-0.566634, 8.778852, 31.774220) mag=32.969536
-
-RETURN:
- Type = table
- Value = table:table: 0x4a00404477eafd70
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.841942, 0.000000, 0.539569) mag=1.000000
- HRP Velocity = Vector3(-0.566634, 8.778852, 31.774220) mag=32.969536
-
-================ EVENT #101 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007764541544020176)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.841942, 0.000000, 0.539569) mag=1.000000
- HRP Velocity = Vector3(-0.739435, 8.362185, 31.736401) mag=32.827915
-
-RETURN:
- Type = table
- Value = table:table: 0xaa4ea6da55cfd3ee
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.841942, 0.000000, 0.539569) mag=1.000000
- HRP Velocity = Vector3(-0.739435, 8.362185, 31.736401) mag=32.827915
-
-================ EVENT #102 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00828312523663044)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.862439, 0.000000, 0.506161) mag=1.000000
- HRP Velocity = Vector3(-0.306671, 7.945519, 31.716486) mag=32.698025
-
-RETURN:
- Type = table
- Value = table:table: 0xa94f602aee48f8bc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.862439, 0.000000, 0.506161) mag=1.000000
- HRP Velocity = Vector3(-0.306671, 7.945519, 31.716486) mag=32.698025
-
-================ EVENT #103 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00841674953699112)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.871062, 0.000000, 0.491173) mag=1.000000
- HRP Velocity = Vector3(-0.477655, 7.528852, 31.617504) mag=32.505051
-
-RETURN:
- Type = table
- Value = table:table: 0xbac244e498534e43
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.871062, 0.000000, 0.491173) mag=1.000000
- HRP Velocity = Vector3(-0.477655, 7.528852, 31.617504) mag=32.505051
-
-================ EVENT #104 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008271041326224804)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.871062, 0.000000, 0.491173) mag=1.000000
- HRP Velocity = Vector3(-0.525027, 7.112185, 31.604292) mag=32.398922
-
-RETURN:
- Type = table
- Value = table:table: 0xa0d9eb2d7430c7e8
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.871062, 0.000000, 0.491173) mag=1.000000
- HRP Velocity = Vector3(-0.525027, 7.112185, 31.604292) mag=32.398922
-
-================ EVENT #105 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008330333046615124)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.884317, 0.000000, 0.466887) mag=1.000000
- HRP Velocity = Vector3(-0.449628, 6.695518, 31.537891) mag=32.243927
-
-RETURN:
- Type = table
- Value = table:table: 0x3aa5520cef3f373e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.884317, 0.000000, 0.466887) mag=1.000000
- HRP Velocity = Vector3(-0.449628, 6.695518, 31.537891) mag=32.243927
-
-================ EVENT #106 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008956916630268097)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.889641, 0.000000, 0.456662) mag=1.000000
- HRP Velocity = Vector3(-0.459850, 6.278851, 31.497742) mag=32.120758
-
-RETURN:
- Type = table
- Value = table:table: 0x2ba13681eca291bd
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.889641, 0.000000, 0.456662) mag=1.000000
- HRP Velocity = Vector3(-0.459850, 6.278851, 31.497742) mag=32.120758
-
-================ EVENT #107 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007779916748404503)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.896895, 0.000000, 0.442244) mag=1.000000
- HRP Velocity = Vector3(-0.662689, 5.862184, 31.376621) mag=31.926428
-
-RETURN:
- Type = table
- Value = table:table: 0x267ecab5f580060c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.896895, 0.000000, 0.442244) mag=1.000000
- HRP Velocity = Vector3(-0.662689, 5.862184, 31.376621) mag=31.926428
-
-================ EVENT #108 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00826779194176197)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.902927, 0.000000, 0.429795) mag=1.000000
- HRP Velocity = Vector3(-0.239503, 5.445517, 31.478466) mag=31.946905
-
-RETURN:
- Type = table
- Value = table:table: 0x3afcdd814874aeb7
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.902927, 0.000000, 0.429795) mag=1.000000
- HRP Velocity = Vector3(-0.239503, 5.445517, 31.478466) mag=31.946905
-
-================ EVENT #109 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008829250000417233)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.902927, 0.000000, 0.429795) mag=1.000000
- HRP Velocity = Vector3(-0.408716, 5.028850, 31.418390) mag=31.820930
-
-RETURN:
- Type = table
- Value = table:table: 0xd5178231f074e6b1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.902927, 0.000000, 0.429795) mag=1.000000
- HRP Velocity = Vector3(-0.408716, 5.028850, 31.418390) mag=31.820930
-
-================ EVENT #110 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007871082983911037)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.910223, 0.000000, 0.414117) mag=1.000000
- HRP Velocity = Vector3(-0.584193, 4.612183, 31.296469) mag=31.639887
-
-RETURN:
- Type = table
- Value = table:table: 0x9c1be03a36bdaa77
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.910223, 0.000000, 0.414117) mag=1.000000
- HRP Velocity = Vector3(-0.584193, 4.612183, 31.296469) mag=31.639887
-
-================ EVENT #111 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008276541717350483)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.914004, 0.000000, 0.405705) mag=1.000000
- HRP Velocity = Vector3(-0.244468, 4.195516, 31.395203) mag=31.675241
-
-RETURN:
- Type = table
- Value = table:table: 0x683a4ae73896a32a
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.914004, 0.000000, 0.405705) mag=1.000000
- HRP Velocity = Vector3(-0.244468, 4.195516, 31.395203) mag=31.675241
-
-================ EVENT #112 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008372750133275986)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.918164, 0.000000, 0.396200) mag=1.000000
- HRP Velocity = Vector3(-0.372211, 3.778850, 31.312132) mag=31.541527
-
-RETURN:
- Type = table
- Value = table:table: 0x9cca615ad964b378
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.918164, 0.000000, 0.396200) mag=1.000000
- HRP Velocity = Vector3(-0.372211, 3.778850, 31.312132) mag=31.541527
-
-================ EVENT #113 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008859333582222462)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.922225, 0.000000, 0.386653) mag=1.000000
- HRP Velocity = Vector3(-0.393165, 3.362183, 31.269411) mag=31.452105
-
-RETURN:
- Type = table
- Value = table:table: 0x1b4f47bcae2c935a
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.922225, 0.000000, 0.386653) mag=1.000000
- HRP Velocity = Vector3(-0.393165, 3.362183, 31.269411) mag=31.452105
-
-================ EVENT #114 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007801958359777927)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.922225, 0.000000, 0.386653) mag=1.000000
- HRP Velocity = Vector3(-0.558911, 2.945517, 31.201591) mag=31.345299
-
-RETURN:
- Type = table
- Value = table:table: 0x41bee64f3bfdb813
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.922225, 0.000000, 0.386653) mag=1.000000
- HRP Velocity = Vector3(-0.558911, 2.945517, 31.201591) mag=31.345299
-
-================ EVENT #115 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008289958350360394)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.929200, 0.000000, 0.369577) mag=1.000000
- HRP Velocity = Vector3(-0.178226, 2.528850, 31.300135) mag=31.402632
-
-RETURN:
- Type = table
- Value = table:table: 0xffb4ed8dd8d1636e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.929200, 0.000000, 0.369577) mag=1.000000
- HRP Velocity = Vector3(-0.178226, 2.528850, 31.300135) mag=31.402632
-
-================ EVENT #116 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00890020839869976)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.929200, 0.000000, 0.369577) mag=1.000000
- HRP Velocity = Vector3(-0.343172, 2.112184, 31.229063) mag=31.302292
-
-RETURN:
- Type = table
- Value = table:table: 0x4f6138ecd24e18f2
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.929200, 0.000000, 0.369577) mag=1.000000
- HRP Velocity = Vector3(-0.343172, 2.112184, 31.229063) mag=31.302292
-
-================ EVENT #117 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008543583564460278)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.935859, 0.000000, 0.352375) mag=1.000000
- HRP Velocity = Vector3(-0.525018, 1.695517, 31.084921) mag=31.135553
-
-RETURN:
- Type = table
- Value = table:table: 0x43fb8fce0ccde23f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.935859, 0.000000, 0.352375) mag=1.000000
- HRP Velocity = Vector3(-0.525018, 1.695517, 31.084921) mag=31.135553
-
-================ EVENT #118 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007659083232283592)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.938672, 0.000000, 0.344812) mag=1.000000
- HRP Velocity = Vector3(-0.394894, 1.278850, 31.116003) mag=31.144775
-
-RETURN:
- Type = table
- Value = table:table: 0x0ef46fd823473da2
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.938672, 0.000000, 0.344812) mag=1.000000
- HRP Velocity = Vector3(-0.394894, 1.278850, 31.116003) mag=31.144775
-
-================ EVENT #119 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.010682875290513039)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.942199, 0.000000, 0.335054) mag=1.000000
- HRP Velocity = Vector3(-0.087032, 0.653850, 31.226221) mag=31.233189
-
-RETURN:
- Type = table
- Value = table:table: 0xba0e4ad0f34e18da
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.942199, 0.000000, 0.335054) mag=1.000000
- HRP Velocity = Vector3(-0.087032, 0.653850, 31.226221) mag=31.233189
-
-================ EVENT #120 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.0064014168456196785)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.948584, 0.000000, 0.316526) mag=1.000000
- HRP Velocity = Vector3(-1.058381, 0.237183, 30.679176) mag=30.698343
-
-RETURN:
- Type = table
- Value = table:table: 0xcab05cb9b751c18e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.948584, 0.000000, 0.316526) mag=1.000000
- HRP Velocity = Vector3(-1.058381, 0.237183, 30.679176) mag=30.698343
-
-================ EVENT #121 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008500291965901852)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.948584, 0.000000, 0.316526) mag=1.000000
- HRP Velocity = Vector3(0.351229, 0.028850, 31.383429) mag=31.385408
-
-RETURN:
- Type = table
- Value = table:table: 0x6828b7c0541dc7fc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.948584, 0.000000, 0.316526) mag=1.000000
- HRP Velocity = Vector3(0.351229, 0.028850, 31.383429) mag=31.385408
-
-================ EVENT #122 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007687541656196117)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.948584, 0.000000, 0.316526) mag=1.000000
- HRP Velocity = Vector3(-0.339787, -0.387817, 31.038191) mag=31.042473
-
-RETURN:
- Type = table
- Value = table:table: 0x84a3ee5166e3491b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.948584, 0.000000, 0.316526) mag=1.000000
- HRP Velocity = Vector3(-0.339787, -0.387817, 31.038191) mag=31.042473
-
-================ EVENT #123 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008306666277348995)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.953915, 0.000000, 0.300076) mag=1.000000
- HRP Velocity = Vector3(-0.049952, -0.804483, 31.128304) mag=31.138737
-
-RETURN:
- Type = table
- Value = table:table: 0xfc9847ccc6c3272a
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.953915, 0.000000, 0.300076) mag=1.000000
- HRP Velocity = Vector3(-0.049952, -0.804483, 31.128304) mag=31.138737
-
-================ EVENT #124 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008900499902665615)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.956977, 0.000000, 0.290162) mag=1.000000
- HRP Velocity = Vector3(-0.237190, -1.221150, 30.994904) mag=31.019857
-
-RETURN:
- Type = table
- Value = table:table: 0xff3cdb5917c1693c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.956977, 0.000000, 0.290162) mag=1.000000
- HRP Velocity = Vector3(-0.237190, -1.221150, 30.994904) mag=31.019857
-
-================ EVENT #125 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00833087507635355)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.959936, 0.000000, 0.280218) mag=1.000000
- HRP Velocity = Vector3(-0.413747, -1.637817, 30.861963) mag=30.908161
-
-RETURN:
- Type = table
- Value = table:table: 0xc10b555cd2061aae
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.959936, 0.000000, 0.280218) mag=1.000000
- HRP Velocity = Vector3(-0.413747, -1.637817, 30.861963) mag=30.908161
-
-================ EVENT #126 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008405249565839767)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.962792, 0.000000, 0.270243) mag=1.000000
- HRP Velocity = Vector3(-0.214468, -2.054484, 30.934910) mag=31.003799
-
-RETURN:
- Type = table
- Value = table:table: 0x5d1008a75418575b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.962792, 0.000000, 0.270243) mag=1.000000
- HRP Velocity = Vector3(-0.214468, -2.054484, 30.934910) mag=31.003799
-
-================ EVENT #127 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007800291758030653)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.965844, 0.000000, 0.259126) mag=1.000000
- HRP Velocity = Vector3(-0.220691, -2.679483, 30.890512) mag=31.007292
-
-RETURN:
- Type = table
- Value = table:table: 0x80691fb600751248
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.965844, 0.000000, 0.259126) mag=1.000000
- HRP Velocity = Vector3(-0.220691, -2.679483, 30.890512) mag=31.007292
-
-================ EVENT #128 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008250582963228226)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.968480, 0.000000, 0.249091) mag=1.000000
- HRP Velocity = Vector3(-0.012818, -2.887817, 30.976051) mag=31.110374
-
-RETURN:
- Type = table
- Value = table:table: 0x2fdb1f997d75dcbd
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.968480, 0.000000, 0.249091) mag=1.000000
- HRP Velocity = Vector3(-0.012818, -2.887817, 30.976051) mag=31.110374
-
-================ EVENT #129 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008983124978840351)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.971012, 0.000000, 0.239029) mag=1.000000
- HRP Velocity = Vector3(-0.139331, -3.304483, 30.864710) mag=31.041412
-
-RETURN:
- Type = table
- Value = table:table: 0x674a678dd24891f1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.971012, 0.000000, 0.239029) mag=1.000000
- HRP Velocity = Vector3(-0.139331, -3.304483, 30.864710) mag=31.041412
-
-================ EVENT #130 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008330041542649269)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.971012, 0.000000, 0.239029) mag=1.000000
- HRP Velocity = Vector3(-0.370016, -3.721150, 30.725161) mag=30.951889
-
-RETURN:
- Type = table
- Value = table:table: 0xfb8b9e30f239f958
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.971012, 0.000000, 0.239029) mag=1.000000
- HRP Velocity = Vector3(-0.370016, -3.721150, 30.725161) mag=30.951889
-
-================ EVENT #131 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007724166847765446)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.978460, 0.000000, 0.206439) mag=1.000000
- HRP Velocity = Vector3(-0.109846, -4.137816, 30.762775) mag=31.040005
-
-RETURN:
- Type = table
- Value = table:table: 0x8733ba0c0d1ddd04
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.978460, 0.000000, 0.206439) mag=1.000000
- HRP Velocity = Vector3(-0.109846, -4.137816, 30.762775) mag=31.040005
-
-================ EVENT #132 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008835542015731335)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.980549, 0.000000, 0.196276) mag=1.000000
- HRP Velocity = Vector3(0.093215, -4.554483, 30.859875) mag=31.194292
-
-RETURN:
- Type = table
- Value = table:table: 0x46f675ba7185a9e2
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.980549, 0.000000, 0.196276) mag=1.000000
- HRP Velocity = Vector3(0.093215, -4.554483, 30.859875) mag=31.194292
-
-================ EVENT #133 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007834916934370995)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.982532, 0.000000, 0.186092) mag=1.000000
- HRP Velocity = Vector3(-0.228304, -4.971150, 30.605061) mag=31.007002
-
-RETURN:
- Type = table
- Value = table:table: 0x2a9be629c2b7a7d1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.982532, 0.000000, 0.186092) mag=1.000000
- HRP Velocity = Vector3(-0.228304, -4.971150, 30.605061) mag=31.007002
-
-================ EVENT #134 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008256458677351475)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.984410, 0.000000, 0.175888) mag=1.000000
- HRP Velocity = Vector3(0.092994, -5.387817, 30.787827) mag=31.255838
-
-RETURN:
- Type = table
- Value = table:table: 0xa9e1276503de7637
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.984410, 0.000000, 0.175888) mag=1.000000
- HRP Velocity = Vector3(0.092994, -5.387817, 30.787827) mag=31.255838
-
-================ EVENT #135 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008372541517019272)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.986182, 0.000000, 0.165665) mag=1.000000
- HRP Velocity = Vector3(-0.016137, -5.804484, 30.673355) mag=31.217737
-
-RETURN:
- Type = table
- Value = table:table: 0x5cd51a189d4915cc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.986182, 0.000000, 0.165665) mag=1.000000
- HRP Velocity = Vector3(-0.016137, -5.804484, 30.673355) mag=31.217737
-
-================ EVENT #136 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008942583575844765)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.988204, 0.000000, 0.153146) mag=1.000000
- HRP Velocity = Vector3(-0.028061, -6.429485, 30.616882) mag=31.284702
-
-RETURN:
- Type = table
- Value = table:table: 0x7f04d92da92f1bf0
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.988204, 0.000000, 0.153146) mag=1.000000
- HRP Velocity = Vector3(-0.028061, -6.429485, 30.616882) mag=31.284702
-
-================ EVENT #137 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.0077731250785291195)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.989739, 0.000000, 0.142884) mag=1.000000
- HRP Velocity = Vector3(-0.177076, -6.846152, 30.465548) mag=31.225803
-
-RETURN:
- Type = table
- Value = table:table: 0xcb67fa8761374288
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.989739, 0.000000, 0.142884) mag=1.000000
- HRP Velocity = Vector3(-0.177076, -6.846152, 30.465548) mag=31.225803
-
-================ EVENT #138 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008465958759188652)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.991472, 0.000000, 0.130322) mag=1.000000
- HRP Velocity = Vector3(0.189539, -7.054485, 30.694363) mag=31.495169
-
-RETURN:
- Type = table
- Value = table:table: 0x22ca0fff3dc9666f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.991472, 0.000000, 0.130322) mag=1.000000
- HRP Velocity = Vector3(0.189539, -7.054485, 30.694363) mag=31.495169
-
-================ EVENT #139 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008670125156641006)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.992908, 0.000000, 0.118884) mag=1.000000
- HRP Velocity = Vector3(0.009313, -7.471152, 30.510731) mag=31.412146
-
-RETURN:
- Type = table
- Value = table:table: 0xb147b774bf0569fc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.992908, 0.000000, 0.118884) mag=1.000000
- HRP Velocity = Vector3(0.009313, -7.471152, 30.510731) mag=31.412146
-
-================ EVENT #140 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007909958250820637)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.993962, 0.000000, 0.109721) mag=1.000000
- HRP Velocity = Vector3(-0.031466, -7.887819, 30.441236) mag=31.446583
-
-RETURN:
- Type = table
- Value = table:table: 0xdacbbae838c5187b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.993962, 0.000000, 0.109721) mag=1.000000
- HRP Velocity = Vector3(-0.031466, -7.887819, 30.441236) mag=31.446583
-
-================ EVENT #141 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008340667001903057)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.994578, 0.000000, 0.103990) mag=1.000000
- HRP Velocity = Vector3(0.197407, -8.304485, 30.603102) mag=31.710461
-
-RETURN:
- Type = table
- Value = table:table: 0x26428baa7878fdef
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.994578, 0.000000, 0.103990) mag=1.000000
- HRP Velocity = Vector3(0.197407, -8.304485, 30.603102) mag=31.710461
-
-================ EVENT #142 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008833499625325203)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.994578, 0.000000, 0.103990) mag=1.000000
- HRP Velocity = Vector3(0.074268, -8.721151, 30.503275) mag=31.725601
-
-RETURN:
- Type = table
- Value = table:table: 0xe845d2ef90be4650
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.994578, 0.000000, 0.103990) mag=1.000000
- HRP Velocity = Vector3(0.074268, -8.721151, 30.503275) mag=31.725601
-
-================ EVENT #143 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008237708359956741)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995274, 0.000000, 0.097108) mag=1.000000
- HRP Velocity = Vector3(-0.052410, -9.346150, 30.371630) mag=31.777180
-
-RETURN:
- Type = table
- Value = table:table: 0x95b63214f76f9611
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995274, 0.000000, 0.097108) mag=1.000000
- HRP Velocity = Vector3(-0.052410, -9.346150, 30.371630) mag=31.777180
-
-================ EVENT #144 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00825266633182764)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.119185, -9.554483, 30.508194) mag=31.969551
-
-RETURN:
- Type = table
- Value = table:table: 0x21fc1296d78f1bc3
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.119185, -9.554483, 30.508194) mag=31.969551
-
-================ EVENT #145 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008441999554634094)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.114939, -9.971149, 30.504694) mag=32.093197
-
-RETURN:
- Type = table
- Value = table:table: 0x277ab1d83a4a6d60
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.114939, -9.971149, 30.504694) mag=32.093197
-
-================ EVENT #146 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007860291749238968)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.061165, -10.387815, 30.460377) mag=32.182991
-
-RETURN:
- Type = table
- Value = table:table: 0x8989ad003067b77c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.061165, -10.387815, 30.460377) mag=32.182991
-
-================ EVENT #147 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008275291882455349)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.226381, -10.804482, 30.596537) mag=32.448978
-
-RETURN:
- Type = table
- Value = table:table: 0xcd547eeee4254f6b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.226381, -10.804482, 30.596537) mag=32.448978
-
-================ EVENT #148 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008830291219055653)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.108513, -11.429481, 30.499395) mag=32.570812
-
-RETURN:
- Type = table
- Value = table:table: 0x771922a18375f43b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.995385, 0.000000, 0.095961) mag=1.000000
- HRP Velocity = Vector3(0.108513, -11.429481, 30.499395) mag=32.570812
-
-================ EVENT #149 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007835833355784416)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.635989, 0.000000, 0.771698) mag=1.000000
- HRP Velocity = Vector3(-0.049115, -11.637814, 30.369488) mag=32.523022
-
-RETURN:
- Type = table
- Value = table:table: 0xa2dc9b77da157ba3
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.635989, 0.000000, 0.771698) mag=1.000000
- HRP Velocity = Vector3(-0.049115, -11.637814, 30.369488) mag=32.523022
-
-================ EVENT #150 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.009004208259284496)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.635989, 0.000000, 0.771698) mag=1.000000
- HRP Velocity = Vector3(2.458853, -12.054480, 32.436409) mag=34.691166
-
-RETURN:
- Type = table
- Value = table:table: 0xb19e3fc6debe7c4c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.635989, 0.000000, 0.771698) mag=1.000000
- HRP Velocity = Vector3(2.458853, -12.054480, 32.436409) mag=34.691166
-
-================ EVENT #151 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00771841686218977)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.629741, 0.000000, 0.776805) mag=1.000000
- HRP Velocity = Vector3(2.458854, -12.471146, 32.436413) mag=34.838142
-
-RETURN:
- Type = table
- Value = table:table: 0xfff942144e5ae68d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.629741, 0.000000, 0.776805) mag=1.000000
- HRP Velocity = Vector3(2.458854, -12.471146, 32.436413) mag=34.838142
-
-================ EVENT #152 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008304541930556297)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.108575, 0.000000, 0.994088) mag=1.000000
- HRP Velocity = Vector3(2.458854, -13.096145, 32.436413) mag=35.066734
-
-RETURN:
- Type = table
- Value = table:table: 0xeb4d41a00ae4a18b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.108575, 0.000000, 0.994088) mag=1.000000
- HRP Velocity = Vector3(2.458854, -13.096145, 32.436413) mag=35.066734
-
-================ EVENT #153 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008851291611790657)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.116594, 0.000000, 0.993180) mag=1.000000
- HRP Velocity = Vector3(2.458854, -13.304478, 32.436413) mag=35.145069
-
-RETURN:
- Type = table
- Value = table:table: 0x1cfe3f62df63d407
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.116594, 0.000000, 0.993180) mag=1.000000
- HRP Velocity = Vector3(2.458854, -13.304478, 32.436413) mag=35.145069
-
-================ EVENT #154 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00780370831489563)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.130322, 0.000000, 0.991472) mag=1.000000
- HRP Velocity = Vector3(2.458854, -13.929477, 32.436413) mag=35.386398
-
-RETURN:
- Type = table
- Value = table:table: 0x93ce4cbe9e68a030
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.130322, 0.000000, 0.991472) mag=1.000000
- HRP Velocity = Vector3(2.458854, -13.929477, 32.436413) mag=35.386398
-
-================ EVENT #155 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008358041755855083)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.147447, 0.000000, 0.989070) mag=1.000000
- HRP Velocity = Vector3(2.458854, -14.137810, 32.436413) mag=35.468922
-
-RETURN:
- Type = table
- Value = table:table: 0x8a82e4eab46007a1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.147447, 0.000000, 0.989070) mag=1.000000
- HRP Velocity = Vector3(2.458854, -14.137810, 32.436413) mag=35.468922
-
-================ EVENT #156 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00880074966698885)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.166801, 0.000000, 0.985991) mag=1.000000
- HRP Velocity = Vector3(2.458854, -14.554476, 32.436413) mag=35.637051
-
-RETURN:
- Type = table
- Value = table:table: 0xeaa5e1f5b8584709
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.166801, 0.000000, 0.985991) mag=1.000000
- HRP Velocity = Vector3(2.458854, -14.554476, 32.436413) mag=35.637051
-
-================ EVENT #157 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007861957885324955)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.189488, 0.000000, 0.981883) mag=1.000000
- HRP Velocity = Vector3(2.458853, -14.971142, 32.436398) mag=35.809231
-
-RETURN:
- Type = table
- Value = table:table: 0x58715a12dc661c2c
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.189488, 0.000000, 0.981883) mag=1.000000
- HRP Velocity = Vector3(2.458853, -14.971142, 32.436398) mag=35.809231
-
-================ EVENT #158 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008894833736121655)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.213202, 0.000000, 0.977008) mag=1.000000
- HRP Velocity = Vector3(2.458852, -15.387808, 32.436398) mag=35.985420
-
-RETURN:
- Type = table
- Value = table:table: 0x43fa84caa9a890a1
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.213202, 0.000000, 0.977008) mag=1.000000
- HRP Velocity = Vector3(2.458852, -15.387808, 32.436398) mag=35.985420
-
-================ EVENT #159 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007772750221192837)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.228942, 0.000000, 0.973440) mag=1.000000
- HRP Velocity = Vector3(2.458852, -15.804474, 32.436398) mag=36.165554
-
-RETURN:
- Type = table
- Value = table:table: 0x6831b3fdef571cf1
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.228942, 0.000000, 0.973440) mag=1.000000
- HRP Velocity = Vector3(2.458852, -15.804474, 32.436398) mag=36.165554
-
-================ EVENT #160 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008285291492938995)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.246857, 0.000000, 0.969052) mag=1.000000
- HRP Velocity = Vector3(2.458852, -16.221142, 32.436398) mag=36.349571
-
-RETURN:
- Type = table
- Value = table:table: 0x3ebb9d1953161f79
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.246857, 0.000000, 0.969052) mag=1.000000
- HRP Velocity = Vector3(2.458852, -16.221142, 32.436398) mag=36.349571
-
-================ EVENT #161 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008372499607503414)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.271353, 0.000000, 0.962480) mag=1.000000
- HRP Velocity = Vector3(2.458852, -16.637810, 32.436398) mag=36.537415
-
-RETURN:
- Type = table
- Value = table:table: 0x65d5ea5e8f09fca3
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(0.271353, 0.000000, 0.962480) mag=1.000000
- HRP Velocity = Vector3(2.458852, -16.637810, 32.436398) mag=36.537415
-
-================ EVENT #162 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008350291289389133)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.788803, 0.000000, 0.614646) mag=1.000000
- HRP Velocity = Vector3(14.104387, 16.695509, 31.190643) mag=38.085823
-
-RETURN:
- Type = table
- Value = table:table: 0x66b5a23d51184440
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.788803, 0.000000, 0.614646) mag=1.000000
- HRP Velocity = Vector3(14.104387, 16.695509, 31.190643) mag=38.085823
-
-================ EVENT #163 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00892754178494215)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.846383, 0.000000, 0.532575) mag=1.000000
- HRP Velocity = Vector3(14.104387, 16.278841, 31.190643) mag=37.905022
-
-RETURN:
- Type = table
- Value = table:table: 0x66e7b66bc397e2a1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.846383, 0.000000, 0.532575) mag=1.000000
- HRP Velocity = Vector3(14.104387, 16.278841, 31.190643) mag=37.905022
-
-================ EVENT #164 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008539208211004734)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.846383, 0.000000, 0.532575) mag=1.000000
- HRP Velocity = Vector3(14.104388, 15.862174, 31.190643) mag=37.727955
-
-RETURN:
- Type = table
- Value = table:table: 0x6749708a06882447
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.846383, 0.000000, 0.532575) mag=1.000000
- HRP Velocity = Vector3(14.104388, 15.862174, 31.190643) mag=37.727955
-
-================ EVENT #165 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007606291677802801)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.902026, 0.000000, 0.431681) mag=1.000000
- HRP Velocity = Vector3(14.104389, 15.445508, 31.190643) mag=37.554676
-
-RETURN:
- Type = table
- Value = table:table: 0x6c0c6b394751daa1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.902026, 0.000000, 0.431681) mag=1.000000
- HRP Velocity = Vector3(14.104389, 15.445508, 31.190643) mag=37.554676
-
-================ EVENT #166 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00832029152661562)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.929280, 0.000000, 0.369377) mag=1.000000
- HRP Velocity = Vector3(15.407485, 15.028842, 30.628824) mag=37.435032
-
-RETURN:
- Type = table
- Value = table:table: 0xf44cf15f557c0443
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.929280, 0.000000, 0.369377) mag=1.000000
- HRP Velocity = Vector3(15.407485, 15.028842, 30.628824) mag=37.435032
-
-================ EVENT #167 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008283750154078007)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.957374, 0.000000, 0.288853) mag=1.000000
- HRP Velocity = Vector3(16.802877, 14.612176, 29.743076) mag=37.155121
-
-RETURN:
- Type = table
- Value = table:table: 0xb89158aff7b40392
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.957374, 0.000000, 0.288853) mag=1.000000
- HRP Velocity = Vector3(16.802877, 14.612176, 29.743076) mag=37.155121
-
-================ EVENT #168 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00836162455379963)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.972693, 0.000000, 0.232097) mag=1.000000
- HRP Velocity = Vector3(16.701698, 14.195510, 29.594053) mag=36.827534
-
-RETURN:
- Type = table
- Value = table:table: 0xa2dfcf0626aff6d0
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.972693, 0.000000, 0.232097) mag=1.000000
- HRP Velocity = Vector3(16.701698, 14.195510, 29.594053) mag=36.827534
-
-================ EVENT #169 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008896375074982643)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980591, 0.000000, 0.196064) mag=1.000000
- HRP Velocity = Vector3(16.664890, 13.778844, 29.483446) mag=36.562943
-
-RETURN:
- Type = table
- Value = table:table: 0xba112a621c1b52d7
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980591, 0.000000, 0.196064) mag=1.000000
- HRP Velocity = Vector3(16.664890, 13.778844, 29.483446) mag=36.562943
-
-================ EVENT #170 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007761666551232338)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980591, 0.000000, 0.196064) mag=1.000000
- HRP Velocity = Vector3(16.828642, 13.362178, 29.374266) mag=36.395031
-
-RETURN:
- Type = table
- Value = table:table: 0x4628a7910ef04236
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.980591, 0.000000, 0.196064) mag=1.000000
- HRP Velocity = Vector3(16.828642, 13.362178, 29.374266) mag=36.395031
-
-================ EVENT #171 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00832216627895832)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.993471, 0.000000, 0.114089) mag=1.000000
- HRP Velocity = Vector3(16.341602, 12.945512, 29.414337) mag=36.053261
-
-RETURN:
- Type = table
- Value = table:table: 0x6a7059967e6a99dd
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.993471, 0.000000, 0.114089) mag=1.000000
- HRP Velocity = Vector3(16.341602, 12.945512, 29.414337) mag=36.053261
-
-================ EVENT #172 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008343249559402466)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.993471, 0.000000, 0.114089) mag=1.000000
- HRP Velocity = Vector3(16.503160, 12.528846, 29.286064) mag=35.874779
-
-RETURN:
- Type = table
- Value = table:table: 0x925c82b463b0743c
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.993471, 0.000000, 0.114089) mag=1.000000
- HRP Velocity = Vector3(16.503160, 12.528846, 29.286064) mag=35.874779
-
-================ EVENT #173 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008345208130776882)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999579, 0.000000, 0.029024) mag=1.000000
- HRP Velocity = Vector3(16.337797, 12.112180, 29.083273) mag=35.488945
-
-RETURN:
- Type = table
- Value = table:table: 0x22f48cc974e0cd1d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999579, 0.000000, 0.029024) mag=1.000000
- HRP Velocity = Vector3(16.337797, 12.112180, 29.083273) mag=35.488945
-
-================ EVENT #174 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00829391647130251)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999579, 0.000000, 0.029024) mag=1.000000
- HRP Velocity = Vector3(16.338322, 11.695514, 29.082779) mag=35.348747
-
-RETURN:
- Type = table
- Value = table:table: 0x6b1316d94001688e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.999579, 0.000000, 0.029024) mag=1.000000
- HRP Velocity = Vector3(16.338322, 11.695514, 29.082779) mag=35.348747
-
-================ EVENT #175 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008635041303932667)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998076, 0.000000, -0.062006) mag=1.000000
- HRP Velocity = Vector3(16.124861, 11.278848, 28.902491) mag=34.965378
-
-RETURN:
- Type = table
- Value = table:table: 0x1115e7faf94c0300
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998076, 0.000000, -0.062006) mag=1.000000
- HRP Velocity = Vector3(16.124861, 11.278848, 28.902491) mag=34.965378
-
-================ EVENT #176 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00874920841306448)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998076, 0.000000, -0.062006) mag=1.000000
- HRP Velocity = Vector3(16.207962, 10.862182, 28.808380) mag=34.793789
-
-RETURN:
- Type = table
- Value = table:table: 0xcb20a76920804f00
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.998076, 0.000000, -0.062006) mag=1.000000
- HRP Velocity = Vector3(16.207962, 10.862182, 28.808380) mag=34.793789
-
-================ EVENT #177 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007658833172172308)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986476, 0.000000, -0.163906) mag=1.000000
- HRP Velocity = Vector3(15.977342, 10.445516, 28.571278) mag=34.361347
-
-RETURN:
- Type = table
- Value = table:table: 0x48fe9863b1fd880f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.986476, 0.000000, -0.163906) mag=1.000000
- HRP Velocity = Vector3(15.977342, 10.445516, 28.571278) mag=34.361347
-
-================ EVENT #178 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.009085999801754951)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.974108, 0.000000, -0.226084) mag=1.000000
- HRP Velocity = Vector3(15.595341, 10.028850, 28.798435) mag=34.251167
-
-RETURN:
- Type = table
- Value = table:table: 0x7f511c47e6de8865
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.974108, 0.000000, -0.226084) mag=1.000000
- HRP Velocity = Vector3(15.595341, 10.028850, 28.798435) mag=34.251167
-
-================ EVENT #179 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007557083386927843)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.974108, 0.000000, -0.226084) mag=1.000000
- HRP Velocity = Vector3(15.873168, 9.612184, 28.352667) mag=33.885471
-
-RETURN:
- Type = table
- Value = table:table: 0x2906f12feca9d93f
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.974108, 0.000000, -0.226084) mag=1.000000
- HRP Velocity = Vector3(15.873168, 9.612184, 28.352667) mag=33.885471
-
-================ EVENT #180 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008382708765566349)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.954792, 0.000000, -0.297275) mag=1.000000
- HRP Velocity = Vector3(15.397532, 9.195518, 28.728193) mag=33.866661
-
-RETURN:
- Type = table
- Value = table:table: 0x55d3504ba2ee2677
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.954792, 0.000000, -0.297275) mag=1.000000
- HRP Velocity = Vector3(15.397532, 9.195518, 28.728193) mag=33.866661
-
-================ EVENT #181 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008236708119511604)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.939680, 0.000000, -0.342055) mag=1.000000
- HRP Velocity = Vector3(15.408150, 8.778852, 28.394444) mag=33.477211
-
-RETURN:
- Type = table
- Value = table:table: 0xfb04a2b87bdee988
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.939680, 0.000000, -0.342055) mag=1.000000
- HRP Velocity = Vector3(15.408150, 8.778852, 28.394444) mag=33.477211
-
-================ EVENT #182 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008936542086303234)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.921576, 0.000000, -0.388198) mag=1.000000
- HRP Velocity = Vector3(15.247725, 8.362185, 28.383041) mag=33.286880
-
-RETURN:
- Type = table
- Value = table:table: 0xf035f82f5055e644
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.921576, 0.000000, -0.388198) mag=1.000000
- HRP Velocity = Vector3(15.247725, 8.362185, 28.383041) mag=33.286880
-
-================ EVENT #183 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007796541787683964)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.921576, 0.000000, -0.388198) mag=1.000000
- HRP Velocity = Vector3(15.344869, 7.945519, 28.144495) mag=33.025883
-
-RETURN:
- Type = table
- Value = table:table: 0xe9bfcfcb2394e990
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.921576, 0.000000, -0.388198) mag=1.000000
- HRP Velocity = Vector3(15.344869, 7.945519, 28.144495) mag=33.025883
-
-================ EVENT #184 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008305416442453861)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.880272, 0.000000, -0.474469) mag=1.000000
- HRP Velocity = Vector3(14.927772, 7.528852, 28.441839) mag=32.991821
-
-RETURN:
- Type = table
- Value = table:table: 0xa4e5fd3aa050daf0
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.880272, 0.000000, -0.474469) mag=1.000000
- HRP Velocity = Vector3(14.927772, 7.528852, 28.441839) mag=32.991821
-
-================ EVENT #185 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008309749886393547)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.880272, 0.000000, -0.474469) mag=1.000000
- HRP Velocity = Vector3(14.981514, 7.112185, 28.262428) mag=32.768791
-
-RETURN:
- Type = table
- Value = table:table: 0xc883f6333feaffdc
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.880272, 0.000000, -0.474469) mag=1.000000
- HRP Velocity = Vector3(14.981514, 7.112185, 28.262428) mag=32.768791
-
-================ EVENT #186 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008947250433266163)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.828340, 0.000000, -0.560226) mag=1.000000
- HRP Velocity = Vector3(14.684209, 6.695518, 28.187750) mag=32.480843
-
-RETURN:
- Type = table
- Value = table:table: 0xa0d931eb29aef393
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.828340, 0.000000, -0.560226) mag=1.000000
- HRP Velocity = Vector3(14.684209, 6.695518, 28.187750) mag=32.480843
-
-================ EVENT #187 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007792000193148851)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.799562, 0.000000, -0.600583) mag=1.000000
- HRP Velocity = Vector3(14.567710, 6.278851, 27.930412) mag=32.120865
-
-RETURN:
- Type = table
- Value = table:table: 0xcefec37943cc17b0
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.799562, 0.000000, -0.600583) mag=1.000000
- HRP Velocity = Vector3(14.567710, 6.278851, 27.930412) mag=32.120865
-
-================ EVENT #188 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008320208638906479)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.768082, 0.000000, -0.640351) mag=1.000000
- HRP Velocity = Vector3(14.363408, 5.862184, 28.334560) mag=32.303562
-
-RETURN:
- Type = table
- Value = table:table: 0x8232c2030bf04e8e
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.768082, 0.000000, -0.640351) mag=1.000000
- HRP Velocity = Vector3(14.363408, 5.862184, 28.334560) mag=32.303562
-
-================ EVENT #189 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008798125199973583)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.733844, 0.000000, -0.679318) mag=1.000000
- HRP Velocity = Vector3(14.222455, 5.445517, 28.130711) mag=31.988571
-
-RETURN:
- Type = table
- Value = table:table: 0x5d065bea5d7ae9f8
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.733844, 0.000000, -0.679318) mag=1.000000
- HRP Velocity = Vector3(14.222455, 5.445517, 28.130711) mag=31.988571
-
-================ EVENT #190 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007862291298806667)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.733844, 0.000000, -0.679318) mag=1.000000
- HRP Velocity = Vector3(14.229237, 5.028850, 27.954948) mag=31.768532
-
-RETURN:
- Type = table
- Value = table:table: 0xe0c75a9fcf7a9921
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.733844, 0.000000, -0.679318) mag=1.000000
- HRP Velocity = Vector3(14.229237, 5.028850, 27.954948) mag=31.768532
-
-================ EVENT #191 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008879666216671467)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.625090, 0.000000, -0.780552) mag=1.000000
- HRP Velocity = Vector3(13.786292, 4.612183, 28.314507) mag=31.828375
-
-RETURN:
- Type = table
- Value = table:table: 0x52138f3016ff93a5
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.625090, 0.000000, -0.780552) mag=1.000000
- HRP Velocity = Vector3(13.786292, 4.612183, 28.314507) mag=31.828375
-
-================ EVENT #192 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007818374782800674)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.587512, 0.000000, -0.809215) mag=1.000000
- HRP Velocity = Vector3(13.592053, 4.195516, 27.962938) mag=31.373112
-
-RETURN:
- Type = table
- Value = table:table: 0x4ec458af2b85d878
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.587512, 0.000000, -0.809215) mag=1.000000
- HRP Velocity = Vector3(13.592053, 4.195516, 27.962938) mag=31.373112
-
-================ EVENT #193 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008302208036184311)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.545727, 0.000000, -0.837963) mag=1.000000
- HRP Velocity = Vector3(13.509773, 3.778850, 28.375240) mag=31.653561
-
-RETURN:
- Type = table
- Value = table:table: 0xd983286babf33123
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.545727, 0.000000, -0.837963) mag=1.000000
- HRP Velocity = Vector3(13.509773, 3.778850, 28.375240) mag=31.653561
-
-================ EVENT #194 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008897458203136921)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.545727, 0.000000, -0.837963) mag=1.000000
- HRP Velocity = Vector3(13.472976, 3.362183, 28.201010) mag=31.434412
-
-RETURN:
- Type = table
- Value = table:table: 0xffef9447fb2e3353
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.545727, 0.000000, -0.837963) mag=1.000000
- HRP Velocity = Vector3(13.472976, 3.362183, 28.201010) mag=31.434412
-
-================ EVENT #195 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00779950013384223)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.443649, 0.000000, -0.896201) mag=1.000000
- HRP Velocity = Vector3(13.056491, 2.945517, 28.088175) mag=31.114202
-
-RETURN:
- Type = table
- Value = table:table: 0x1c51cc6781ee4e1b
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.443649, 0.000000, -0.896201) mag=1.000000
- HRP Velocity = Vector3(13.056491, 2.945517, 28.088175) mag=31.114202
-
-================ EVENT #196 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008242333307862282)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.391282, 0.000000, -0.920271) mag=1.000000
- HRP Velocity = Vector3(13.030650, 2.528850, 28.528461) mag=31.465315
-
-RETURN:
- Type = table
- Value = table:table: 0xea65a0f65a982340
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.391282, 0.000000, -0.920271) mag=1.000000
- HRP Velocity = Vector3(13.030650, 2.528850, 28.528461) mag=31.465315
-
-================ EVENT #197 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008905291557312012)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.391282, 0.000000, -0.920271) mag=1.000000
- HRP Velocity = Vector3(12.969687, 2.112184, 28.377310) mag=31.272125
-
-RETURN:
- Type = table
- Value = table:table: 0xd895548ca08af7b7
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.391282, 0.000000, -0.920271) mag=1.000000
- HRP Velocity = Vector3(12.969687, 2.112184, 28.377310) mag=31.272125
-
-================ EVENT #198 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008321874774992466)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.293866, 0.000000, -0.955847) mag=1.000000
- HRP Velocity = Vector3(12.570202, 1.695517, 28.294342) mag=31.007330
-
-RETURN:
- Type = table
- Value = table:table: 0xdb1e3a265449eb2a
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.293866, 0.000000, -0.955847) mag=1.000000
- HRP Velocity = Vector3(12.570202, 1.695517, 28.294342) mag=31.007330
-
-================ EVENT #199 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00786158349364996)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.242788, 0.000000, -0.970080) mag=1.000000
- HRP Velocity = Vector3(12.529263, 1.278850, 28.563887) mag=31.217199
-
-RETURN:
- Type = table
- Value = table:table: 0x676ae6f8085f13c1
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.242788, 0.000000, -0.970080) mag=1.000000
- HRP Velocity = Vector3(12.529263, 1.278850, 28.563887) mag=31.217199
-
-================ EVENT #200 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008266249671578407)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.184232, 0.000000, -0.982883) mag=1.000000
- HRP Velocity = Vector3(12.470388, 0.862183, 28.802782) mag=31.398315
-
-RETURN:
- Type = table
- Value = table:table: 0x193f0984bb7b34f8
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.184232, 0.000000, -0.982883) mag=1.000000
- HRP Velocity = Vector3(12.470388, 0.862183, 28.802782) mag=31.398315
-
-================ EVENT #201 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008315041661262512)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.184232, 0.000000, -0.982883) mag=1.000000
- HRP Velocity = Vector3(12.386281, 0.445517, 28.679871) mag=31.243454
-
-RETURN:
- Type = table
- Value = table:table: 0x8e0043d1307a844d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.184232, 0.000000, -0.982883) mag=1.000000
- HRP Velocity = Vector3(12.386281, 0.445517, 28.679871) mag=31.243454
-
-================ EVENT #202 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008344458416104317)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.027348, 0.000000, -0.999626) mag=1.000000
- HRP Velocity = Vector3(12.000418, 0.028850, 28.968309) mag=31.355602
-
-RETURN:
- Type = table
- Value = table:table: 0xb7348042de0aa2d9
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.027348, 0.000000, -0.999626) mag=1.000000
- HRP Velocity = Vector3(12.000418, 0.028850, 28.968309) mag=31.355602
-
-================ EVENT #203 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008335208520293236)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.027348, 0.000000, -0.999626) mag=1.000000
- HRP Velocity = Vector3(11.992974, -0.387817, 28.960447) mag=31.347876
-
-RETURN:
- Type = table
- Value = table:table: 0xe7a65968f33bac03
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(0.027348, 0.000000, -0.999626) mag=1.000000
- HRP Velocity = Vector3(11.992974, -0.387817, 28.960447) mag=31.347876
-
-================ EVENT #204 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008780124597251415)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.092411, 0.000000, -0.995721) mag=1.000000
- HRP Velocity = Vector3(11.744001, -0.804483, 29.231173) mag=31.512381
-
-RETURN:
- Type = table
- Value = table:table: 0xabf9ac422d85e072
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.092411, 0.000000, -0.995721) mag=1.000000
- HRP Velocity = Vector3(11.744001, -0.804483, 29.231173) mag=31.512381
-
-================ EVENT #205 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.007989541627466679)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.164422, 0.000000, -0.986390) mag=1.000000
- HRP Velocity = Vector3(11.474785, -1.221150, 29.312447) mag=31.502087
-
-RETURN:
- Type = table
- Value = table:table: 0xa9c81b580db7f00d
-
-AFTER:
- State = Enum.HumanoidStateType.Freefall
- MoveDirection = Vector3(-0.164422, 0.000000, -0.986390) mag=1.000000
- HRP Velocity = Vector3(11.474785, -1.221150, 29.312447) mag=31.502087
-
-================ EVENT #206 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008240167051553726)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.222099, 0.000000, -0.975024) mag=1.000000
- HRP Velocity = Vector3(11.615261, -5.657768, 29.625109) mag=32.319836
-
-RETURN:
- Type = table
- Value = table:table: 0x65b00cb1ba35f486
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.222099, 0.000000, -0.975024) mag=1.000000
- HRP Velocity = Vector3(11.615261, -5.657768, 29.625109) mag=32.319836
-
-================ EVENT #207 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00837587472051382)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.275686, 0.000000, -0.961248) mag=1.000000
- HRP Velocity = Vector3(11.451806, -6.959485, 29.720455) mag=32.601898
-
-RETURN:
- Type = table
- Value = table:table: 0x48bba7acb455b8d8
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.275686, 0.000000, -0.961248) mag=1.000000
- HRP Velocity = Vector3(11.451806, -6.959485, 29.720455) mag=32.601898
-
-================ EVENT #208 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.008835582993924618)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.333868, 0.000000, -0.942620) mag=1.000000
- HRP Velocity = Vector3(11.321901, -7.415555, 29.863672) mag=32.787418
-
-RETURN:
- Type = table
- Value = table:table: 0xbf191587ac3fc756
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.333868, 0.000000, -0.942620) mag=1.000000
- HRP Velocity = Vector3(11.321901, -7.415555, 29.863672) mag=32.787418
-
-================ EVENT #209 | FUNCTION LINE_109 ================
-SOURCE = =Opiumware | LINE = 1
-
-ARGUMENTS:
- ARG[01] = number(0.00857833307236433)
- ARG[02] = table:table: 0xc881b79a3d7885fd
- ARG[03] = table:table: 0xe7d42328bfc3b8b3
- ARG[04] = Instance(DEN919191)
- ARG[05] = table:table: 0x01df97f8cbcf2011
-
-BEFORE:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.389742, 0.000000, -0.920924) mag=1.000000
- HRP Velocity = Vector3(11.090595, -7.832222, 29.969212) mag=32.901348
-
-RETURN:
- Type = table
- Value = table:table: 0x3d752805d2572464
-
-AFTER:
- State = Enum.HumanoidStateType.Landed
- MoveDirection = Vector3(-0.389742, 0.000000, -0.920924) mag=1.000000
- HRP Velocity = Vector3(11.090595, -7.832222, 29.969212) mag=32.901348
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.019597, 0.000000, -0.999808)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(0.000000, 0.000000, 0.000000)
+ NEW = Vector3(5.327763, 0.000000, -271.813812)
+ OLD MAG = 0.000000
+ NEW MAG = 271.866028
+ DELTA MAG = 271.866028
+ DELTA = Vector3(5.327763, 0.000000, -271.813812)
+
+HRP = Vector3(0.059197, 0.000624, -3.020141)
+
+REGISTRY OTHER DATA:
+ Speed = 3
+ Sprint = 1.0069442168343812
+ State = Idle
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.018613, -0.312942, -0.949590)
+ RelativeMoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+
+==============================================
+EVENT #2 | FRAME #123
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.019597, 0.000000, -0.999808)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(5.327763, 0.000000, -271.813812)
+ NEW = Vector3(9.718453, 0.000000, -495.819702)
+ OLD MAG = 271.866028
+ NEW MAG = 495.914948
+ DELTA MAG = 224.048920
+ DELTA = Vector3(4.390690, 0.000000, -224.005890)
+ DIRECTION DOT = 0.999999881
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.000000, 0.000624, 0.000000)
+ NEW = Vector3(0.059197, 0.000624, -3.020141)
+ OLD MAG = 0.000624
+ NEW MAG = 3.020721
+
+HRP = Vector3(0.107983, 0.000624, -5.509092)
+
+REGISTRY OTHER DATA:
+ Speed = 5.5
+ Sprint = 1.0138553192373365
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.018613, -0.312942, -0.949590)
+ RelativeMoveDirection = Vector3(0.000004, -0.000000, -1.000000)
+
+==============================================
+EVENT #3 | FRAME #124
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.019597, 0.000000, -0.999808)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(9.718453, 0.000000, -495.819702)
+ NEW = Vector3(15.876211, 0.000000, -740.157532)
+ OLD MAG = 495.914948
+ NEW MAG = 740.327820
+ DELTA MAG = 244.412872
+ DELTA = Vector3(6.157758, 0.000000, -244.337830)
+ DIRECTION DOT = 0.999998212
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.059197, 0.000624, -3.020141)
+ NEW = Vector3(0.107983, 0.000624, -5.509092)
+ OLD MAG = 3.020721
+ NEW MAG = 5.510150
+
+HRP = Vector3(0.176402, 0.000624, -8.223955)
+
+REGISTRY OTHER DATA:
+ Speed = 8.2
+ Sprint = 1.0213276689406485
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.022974, -0.315131, -0.948770)
+ RelativeMoveDirection = Vector3(0.001855, -0.000000, -0.999998)
+
+==============================================
+EVENT #4 | FRAME #125
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.024207, 0.000000, -0.999707)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(15.876211, 0.000000, -740.157532)
+ NEW = Vector3(23.141104, 0.000000, -959.017944)
+ OLD MAG = 740.327820
+ NEW MAG = 959.297119
+ DELTA MAG = 218.969299
+ DELTA = Vector3(7.264893, 0.000000, -218.860413)
+ DIRECTION DOT = 0.999996364
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.107983, 0.000624, -5.509092)
+ NEW = Vector3(0.176402, 0.000624, -8.223955)
+ OLD MAG = 5.510150
+ NEW MAG = 8.225847
+
+HRP = Vector3(0.257123, 0.000624, -10.655736)
+
+REGISTRY OTHER DATA:
+ Speed = 10.6
+ Sprint = 1.0279699231032282
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.029479, -0.320596, -0.946757)
+ RelativeMoveDirection = Vector3(-0.000076, -0.000000, -1.000000)
+
+==============================================
+EVENT #5 | FRAME #126
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.031122, 0.000000, -0.999516)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(23.141104, 0.000000, -959.017944)
+ NEW = Vector3(34.900314, 0.000000, -1211.427490)
+ OLD MAG = 959.297119
+ NEW MAG = 1211.930176
+ DELTA MAG = 252.633057
+ DELTA = Vector3(11.759211, 0.000000, -252.409546)
+ DIRECTION DOT = 0.999989033
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.176402, 0.000624, -8.223955)
+ NEW = Vector3(0.257123, 0.000624, -10.655736)
+ OLD MAG = 8.225847
+ NEW MAG = 10.658838
+
+HRP = Vector3(0.387781, 0.000624, -13.460286)
+
+REGISTRY OTHER DATA:
+ Speed = 13.4
+ Sprint = 1.03556616040878
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.040280, -0.328229, -0.943739)
+ RelativeMoveDirection = Vector3(-0.002316, -0.000000, -0.999997)
+
+==============================================
+EVENT #6 | FRAME #127
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.042642, 0.000000, -0.999090)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(34.900314, 0.000000, -1211.427490)
+ NEW = Vector3(47.646469, 0.000000, -1430.174927)
+ OLD MAG = 1211.930176
+ NEW MAG = 1430.968384
+ DELTA MAG = 219.038208
+ DELTA = Vector3(12.746155, 0.000000, -218.747437)
+ DIRECTION DOT = 0.999989808
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.257123, 0.000624, -10.655736)
+ NEW = Vector3(0.387781, 0.000624, -13.460286)
+ OLD MAG = 10.658838
+ NEW MAG = 13.465871
+
+HRP = Vector3(0.529405, 0.000624, -15.890812)
+
+REGISTRY OTHER DATA:
+ Speed = 15.8
+ Sprint = 1.0421282665804028
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.049948, -0.334755, -0.940980)
+ RelativeMoveDirection = Vector3(-0.009342, -0.000000, -0.999956)
+
+==============================================
+EVENT #7 | FRAME #128
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.053006, 0.000000, -0.998594)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(47.646469, 0.000000, -1430.174927)
+ NEW = Vector3(63.162201, 0.000000, -1656.903931)
+ OLD MAG = 1430.968384
+ NEW MAG = 1658.107422
+ DELTA MAG = 227.139038
+ DELTA = Vector3(15.515732, 0.000000, -226.729004)
+ DIRECTION DOT = 0.999988496
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.387781, 0.000624, -13.460286)
+ NEW = Vector3(0.529405, 0.000624, -15.890812)
+ OLD MAG = 13.465871
+ NEW MAG = 15.899628
+
+HRP = Vector3(0.701802, 0.000624, -18.410023)
+
+REGISTRY OTHER DATA:
+ Speed = 18.4
+ Sprint = 1.0491473188158125
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.057445, -0.339097, -0.938996)
+ RelativeMoveDirection = Vector3(-0.014918, -0.000000, -0.999889)
+
+==============================================
+EVENT #8 | FRAME #129
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.061062, 0.000000, -0.998134)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(63.162201, 0.000000, -1656.903931)
+ NEW = Vector3(68.600082, 0.000000, -1710.340576)
+ OLD MAG = 1658.107422
+ NEW MAG = 1711.715820
+ DELTA MAG = 53.608398
+ DELTA = Vector3(5.437881, 0.000000, -53.436646)
+ DIRECTION DOT = 0.999997973
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.529405, 0.000624, -15.890812)
+ NEW = Vector3(0.701802, 0.000624, -18.410023)
+ OLD MAG = 15.899628
+ NEW MAG = 18.423393
+
+HRP = Vector3(0.762223, 0.000624, -19.003763)
+
+REGISTRY OTHER DATA:
+ Speed = 19
+ Sprint = 1.0562678042333573
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.061723, -0.341265, -0.937938)
+ RelativeMoveDirection = Vector3(-0.021002, -0.000000, -0.999779)
+
+==============================================
+EVENT #9 | FRAME #130
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.065665, 0.000000, -0.997842)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(68.600082, 0.000000, -1710.340576)
+ NEW = Vector3(71.863220, 0.000000, -1722.613159)
+ OLD MAG = 1711.715820
+ NEW MAG = 1724.111450
+ DELTA MAG = 12.395630
+ DELTA = Vector3(3.263138, 0.000000, -12.272583)
+ DIRECTION DOT = 0.999998689
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.701802, 0.000624, -18.410023)
+ NEW = Vector3(0.762223, 0.000624, -19.003763)
+ OLD MAG = 18.423393
+ NEW MAG = 19.019043
+
+HRP = Vector3(0.798480, 0.000624, -19.140123)
+
+REGISTRY OTHER DATA:
+ Speed = 19.1
+ Sprint = 1.0637943770270795
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.067072, -0.343432, -0.936780)
+ RelativeMoveDirection = Vector3(-0.024008, -0.000000, -0.999712)
+
+==============================================
+EVENT #10 | FRAME #131
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.071415, 0.000000, -0.997447)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(71.863220, 0.000000, -1722.613159)
+ NEW = Vector3(75.894325, 0.000000, -1734.470093)
+ OLD MAG = 1724.111450
+ NEW MAG = 1736.129761
+ DELTA MAG = 12.018311
+ DELTA = Vector3(4.031105, 0.000000, -11.856934)
+ DIRECTION DOT = 0.999997914
+
+HRP = Vector3(0.843270, 0.000624, -19.271868)
+
+REGISTRY OTHER DATA:
+ Speed = 19.2
+ Sprint = 1.0708093563560397
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.078778, -0.348839, -0.933866)
+ RelativeMoveDirection = Vector3(-0.027737, -0.000000, -0.999615)
+
+==============================================
+EVENT #11 | FRAME #132
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.084058, 0.000000, -0.996461)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(75.894325, 0.000000, -1734.470093)
+ NEW = Vector3(81.143303, 0.000000, -1746.738647)
+ OLD MAG = 1736.129761
+ NEW MAG = 1748.622437
+ DELTA MAG = 12.492676
+ DELTA = Vector3(5.248978, 0.000000, -12.268555)
+ DIRECTION DOT = 0.999996245
+
+HRP = Vector3(0.901592, 0.000624, -19.408184)
+
+REGISTRY OTHER DATA:
+ Speed = 19.4
+ Sprint = 1.0778965856414289
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.092604, -0.353157, -0.930970)
+ RelativeMoveDirection = Vector3(-0.037721, -0.000000, -0.999288)
+
+==============================================
+EVENT #12 | FRAME #133
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.098982, 0.000000, -0.995089)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(81.143303, 0.000000, -1746.738647)
+ NEW = Vector3(87.583595, 0.000000, -1759.035278)
+ OLD MAG = 1748.622437
+ NEW MAG = 1761.214355
+ DELTA MAG = 12.591919
+ DELTA = Vector3(6.440292, 0.000000, -12.296631)
+ DIRECTION DOT = 0.999994397
+
+HRP = Vector3(0.973150, 0.000624, -19.544815)
+
+REGISTRY OTHER DATA:
+ Speed = 19.5
+ Sprint = 1.0846685711760073
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.109470, -0.359620, -0.926655)
+ RelativeMoveDirection = Vector3(-0.049368, -0.000000, -0.998781)
+
+==============================================
+EVENT #13 | FRAME #134
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.117319, 0.000000, -0.993094)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(87.583595, 0.000000, -1759.035278)
+ NEW = Vector3(96.165283, 0.000000, -1772.612427)
+ OLD MAG = 1761.214355
+ NEW MAG = 1775.218994
+ DELTA MAG = 14.004639
+ DELTA = Vector3(8.581688, 0.000000, -13.577148)
+ DIRECTION DOT = 0.999990165
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.901592, 0.000624, -19.408184)
+ NEW = Vector3(0.973150, 0.000624, -19.544815)
+ OLD MAG = 19.429113
+ NEW MAG = 19.569027
+
+HRP = Vector3(1.068502, 0.000624, -19.695671)
+
+REGISTRY OTHER DATA:
+ Speed = 19.7
+ Sprint = 1.0922492958139627
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.125196, -0.364993, -0.922554)
+ RelativeMoveDirection = Vector3(-0.063342, -0.000000, -0.997992)
+
+==============================================
+EVENT #14 | FRAME #135
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.134474, 0.000000, -0.990917)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(96.165283, 0.000000, -1772.612427)
+ NEW = Vector3(104.589348, 0.000000, -1784.511841)
+ OLD MAG = 1775.218994
+ NEW MAG = 1787.574219
+ DELTA MAG = 12.355225
+ DELTA = Vector3(8.424065, 0.000000, -11.899414)
+ DIRECTION DOT = 0.999990642
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.973150, 0.000624, -19.544815)
+ NEW = Vector3(1.068502, 0.000624, -19.695671)
+ OLD MAG = 19.569027
+ NEW MAG = 19.724634
+
+HRP = Vector3(1.162103, 0.000624, -19.827888)
+
+REGISTRY OTHER DATA:
+ Speed = 19.8
+ Sprint = 1.0987256583990528
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.139750, -0.370353, -0.918318)
+ RelativeMoveDirection = Vector3(-0.076258, 0.000000, -0.997088)
+
+==============================================
+EVENT #15 | FRAME #136
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.150448, 0.000000, -0.988618)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(104.589348, 0.000000, -1784.511841)
+ NEW = Vector3(115.785835, 0.000000, -1798.551270)
+ OLD MAG = 1787.574219
+ NEW MAG = 1802.274414
+ DELTA MAG = 14.700195
+ DELTA = Vector3(11.196487, 0.000000, -14.039429)
+ DIRECTION DOT = 0.999983430
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.068502, 0.000624, -19.695671)
+ NEW = Vector3(1.162103, 0.000624, -19.827888)
+ OLD MAG = 19.724634
+ NEW MAG = 19.861916
+
+HRP = Vector3(1.286508, 0.000624, -19.983881)
+
+REGISTRY OTHER DATA:
+ Speed = 20
+ Sprint = 1.1058167128125205
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.160362, -0.377837, -0.911879)
+ RelativeMoveDirection = Vector3(-0.086617, 0.000000, -0.996242)
+
+==============================================
+EVENT #16 | FRAME #137
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.173201, 0.000000, -0.984887)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(115.785835, 0.000000, -1798.551270)
+ NEW = Vector3(130.024445, 0.000000, -1813.980835)
+ OLD MAG = 1802.274414
+ NEW MAG = 1818.634888
+ DELTA MAG = 16.360474
+ DELTA = Vector3(14.238609, 0.000000, -15.429565)
+ DIRECTION DOT = 0.999973536
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.162103, 0.000624, -19.827888)
+ NEW = Vector3(1.286508, 0.000624, -19.983881)
+ OLD MAG = 19.861916
+ NEW MAG = 20.025249
+
+HRP = Vector3(1.444715, 0.000624, -20.155321)
+
+REGISTRY OTHER DATA:
+ Speed = 20.2
+ Sprint = 1.1134468086762352
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.182737, -0.386360, -0.904065)
+ RelativeMoveDirection = Vector3(-0.102334, 0.000000, -0.994750)
+
+==============================================
+EVENT #17 | FRAME #138
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.198122, 0.000000, -0.980177)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(130.024445, 0.000000, -1813.980835)
+ NEW = Vector3(144.099396, 0.000000, -1827.150146)
+ OLD MAG = 1818.634888
+ NEW MAG = 1832.823608
+ DELTA MAG = 14.188721
+ DELTA = Vector3(14.074951, 0.000000, -13.169312)
+ DIRECTION DOT = 0.999974430
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.286508, 0.000624, -19.983881)
+ NEW = Vector3(1.444715, 0.000624, -20.155321)
+ OLD MAG = 20.025249
+ NEW MAG = 20.207033
+
+HRP = Vector3(1.601103, 0.000624, -20.301645)
+
+REGISTRY OTHER DATA:
+ Speed = 20.3
+ Sprint = 1.1204317901981993
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.198896, -0.391670, -0.898351)
+ RelativeMoveDirection = Vector3(-0.120436, 0.000000, -0.992721)
+
+==============================================
+EVENT #18 | FRAME #139
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.216167, 0.000000, -0.976357)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(144.099396, 0.000000, -1827.150146)
+ NEW = Vector3(158.595947, 0.000000, -1839.582397)
+ OLD MAG = 1832.823608
+ NEW MAG = 1846.406250
+ DELTA MAG = 13.582642
+ DELTA = Vector3(14.496552, 0.000000, -12.432251)
+ DIRECTION DOT = 0.999973357
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.444715, 0.000624, -20.155321)
+ NEW = Vector3(1.601103, 0.000624, -20.301645)
+ OLD MAG = 20.207033
+ NEW MAG = 20.364683
+
+HRP = Vector3(1.762176, 0.000624, -20.439781)
+
+REGISTRY OTHER DATA:
+ Speed = 20.5
+ Sprint = 1.1270982340211047
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.213871, -0.396967, -0.892567)
+ RelativeMoveDirection = Vector3(-0.131495, 0.000000, -0.991317)
+
+==============================================
+EVENT #19 | FRAME #140
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.233017, 0.000000, -0.972473)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(158.595947, 0.000000, -1839.582397)
+ NEW = Vector3(175.412048, 0.000000, -1852.156860)
+ OLD MAG = 1846.406250
+ NEW MAG = 1860.444702
+ DELTA MAG = 14.038452
+ DELTA = Vector3(16.816101, 0.000000, -12.574463)
+ DIRECTION DOT = 0.999964416
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.601103, 0.000624, -20.301645)
+ NEW = Vector3(1.762176, 0.000624, -20.439781)
+ OLD MAG = 20.364683
+ NEW MAG = 20.515602
+
+HRP = Vector3(1.949021, 0.000624, -20.579498)
+
+REGISTRY OTHER DATA:
+ Speed = 20.6
+ Sprint = 1.1345232319319618
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.226767, -0.401195, -0.887479)
+ RelativeMoveDirection = Vector3(-0.140280, 0.000000, -0.990112)
+
+==============================================
+EVENT #20 | FRAME #141
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.247565, 0.000000, -0.968871)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(175.412048, 0.000000, -1852.156860)
+ NEW = Vector3(192.355820, 0.000000, -1863.748779)
+ OLD MAG = 1860.444702
+ NEW MAG = 1873.648926
+ DELTA MAG = 13.204224
+ DELTA = Vector3(16.943771, 0.000000, -11.591919)
+ DIRECTION DOT = 0.999964535
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.762176, 0.000624, -20.439781)
+ NEW = Vector3(1.949021, 0.000624, -20.579498)
+ OLD MAG = 20.515602
+ NEW MAG = 20.671585
+
+HRP = Vector3(2.137285, -0.582694, -20.708298)
+
+REGISTRY OTHER DATA:
+ Speed = 20.8
+ Sprint = 1.1418004716048014
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.237641, -0.404361, -0.883187)
+ RelativeMoveDirection = Vector3(-0.146779, 0.000000, -0.989169)
+
+==============================================
+EVENT #21 | FRAME #142
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.259831, 0.000000, -0.965654)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(192.355820, 0.000000, -1863.748779)
+ NEW = Vector3(207.976608, 0.000000, -1873.792725)
+ OLD MAG = 1873.648926
+ NEW MAG = 1885.299316
+ DELTA MAG = 11.650391
+ DELTA = Vector3(15.620789, 0.000000, -10.043945)
+ DIRECTION DOT = 0.999970376
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.949021, 0.000624, -20.579498)
+ NEW = Vector3(2.137285, -0.582694, -20.708298)
+ OLD MAG = 20.671585
+ NEW MAG = 20.826452
+
+HRP = Vector3(2.310849, -0.999361, -20.819897)
+
+REGISTRY OTHER DATA:
+ Speed = 20.9
+ Sprint = 1.1483990926295515
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.246413, -0.407522, -0.879322)
+ RelativeMoveDirection = Vector3(-0.151709, 0.000000, -0.988425)
+
+==============================================
+EVENT #22 | FRAME #143
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.269836, 0.000000, -0.962906)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(207.976608, 0.000000, -1873.792725)
+ NEW = Vector3(225.319305, 0.000000, -1884.718384)
+ OLD MAG = 1885.299316
+ NEW MAG = 1898.139160
+ DELTA MAG = 12.839844
+ DELTA = Vector3(17.342697, 0.000000, -10.925659)
+ DIRECTION DOT = 0.999964297
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.137285, -0.582694, -20.708298)
+ NEW = Vector3(2.310849, -0.999361, -20.819897)
+ OLD MAG = 20.826452
+ NEW MAG = 20.971573
+
+HRP = Vector3(2.503546, -1.416027, -20.941296)
+
+REGISTRY OTHER DATA:
+ Speed = 21
+ Sprint = 1.1554061026778069
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.257145, -0.410678, -0.874769)
+ RelativeMoveDirection = Vector3(-0.153616, 0.000000, -0.988131)
+
+==============================================
+EVENT #23 | FRAME #144
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.282025, 0.000000, -0.959407)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(225.319305, 0.000000, -1884.718384)
+ NEW = Vector3(244.011749, 0.000000, -1896.462524)
+ OLD MAG = 1898.139160
+ NEW MAG = 1912.096191
+ DELTA MAG = 13.957031
+ DELTA = Vector3(18.692444, 0.000000, -11.744141)
+ DIRECTION DOT = 0.999959707
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.310849, -0.999361, -20.819897)
+ NEW = Vector3(2.503546, -1.416027, -20.941296)
+ OLD MAG = 20.971573
+ NEW MAG = 21.137899
+
+HRP = Vector3(2.711239, -1.832694, -21.071785)
+
+REGISTRY OTHER DATA:
+ Speed = 21.2
+ Sprint = 1.162467548763379
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.270805, -0.413829, -0.869144)
+ RelativeMoveDirection = Vector3(-0.157274, 0.000000, -0.987555)
+
+==============================================
+EVENT #24 | FRAME #145
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.297472, 0.000000, -0.954731)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(244.011749, 0.000000, -1896.462524)
+ NEW = Vector3(263.414673, 0.000000, -1907.609375)
+ OLD MAG = 1912.096191
+ NEW MAG = 1925.710449
+ DELTA MAG = 13.614258
+ DELTA = Vector3(19.402924, 0.000000, -11.146851)
+ DIRECTION DOT = 0.999957204
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.503546, -1.416027, -20.941296)
+ NEW = Vector3(2.711239, -1.832694, -21.071785)
+ OLD MAG = 21.137899
+ NEW MAG = 21.324392
+
+HRP = Vector3(2.926827, -2.249361, -21.195639)
+
+REGISTRY OTHER DATA:
+ Speed = 21.3
+ Sprint = 1.1695449674502012
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.283352, -0.416975, -0.863622)
+ RelativeMoveDirection = Vector3(-0.164070, 0.000000, -0.986449)
+
+==============================================
+EVENT #25 | FRAME #146
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.311747, 0.000000, -0.950165)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(263.414673, 0.000000, -1907.609375)
+ NEW = Vector3(283.908112, 0.000000, -1918.575562)
+ OLD MAG = 1925.710449
+ NEW MAG = 1939.468018
+ DELTA MAG = 13.757568
+ DELTA = Vector3(20.493439, 0.000000, -10.966187)
+ DIRECTION DOT = 0.999953091
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.711239, -1.832694, -21.071785)
+ NEW = Vector3(2.926827, -2.249361, -21.195639)
+ OLD MAG = 21.324392
+ NEW MAG = 21.514671
+
+HRP = Vector3(3.154532, -1.269834, -21.317486)
+
+REGISTRY OTHER DATA:
+ Speed = 21.5
+ Sprint = 1.1767505944240835
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.295949, -0.419069, -0.858368)
+ RelativeMoveDirection = Vector3(-0.169288, 0.000000, -0.985567)
+
+==============================================
+EVENT #26 | FRAME #147
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.325951, 0.000000, -0.945387)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(283.908112, 0.000000, -1918.575562)
+ NEW = Vector3(305.006165, 0.000000, -1928.331177)
+ OLD MAG = 1939.468018
+ NEW MAG = 1952.303711
+ DELTA MAG = 12.835693
+ DELTA = Vector3(21.098053, 0.000000, -9.755615)
+ DIRECTION DOT = 0.999950349
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.926827, -2.249361, -21.195639)
+ NEW = Vector3(3.154532, -1.269834, -21.317486)
+ OLD MAG = 21.514671
+ NEW MAG = 21.587004
+
+HRP = Vector3(3.388954, -0.146818, -21.425882)
+
+REGISTRY OTHER DATA:
+ Speed = 21.6
+ Sprint = 1.1841889446601268
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.305498, -0.421162, -0.853987)
+ RelativeMoveDirection = Vector3(-0.174241, 0.000000, -0.984703)
+
+==============================================
+EVENT #27 | FRAME #148
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.336828, 0.000000, -0.941566)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(305.006165, 0.000000, -1928.331177)
+ NEW = Vector3(325.647644, 0.000000, -1937.595093)
+ OLD MAG = 1952.303711
+ NEW MAG = 1964.770020
+ DELTA MAG = 12.466309
+ DELTA = Vector3(20.641479, 0.000000, -9.263916)
+ DIRECTION DOT = 0.999953389
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.154532, -1.269834, -21.317486)
+ NEW = Vector3(3.388954, -0.146818, -21.425882)
+ OLD MAG = 21.587004
+ NEW MAG = 21.692739
+
+HRP = Vector3(3.618304, 0.205860, -21.528814)
+
+REGISTRY OTHER DATA:
+ Speed = 21.8
+ Sprint = 1.191323384037241
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.314984, -0.423252, -0.849496)
+ RelativeMoveDirection = Vector3(-0.176100, 0.000000, -0.984372)
+
+==============================================
+EVENT #28 | FRAME #149
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.347660, 0.000000, -0.937621)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(325.647644, 0.000000, -1937.595093)
+ NEW = Vector3(346.565247, 0.000000, -1948.101562)
+ OLD MAG = 1964.770020
+ NEW MAG = 1978.688232
+ DELTA MAG = 13.918213
+ DELTA = Vector3(20.917603, 0.000000, -10.506470)
+ DIRECTION DOT = 0.999954402
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.388954, -0.146818, -21.425882)
+ NEW = Vector3(3.618304, 0.205860, -21.528814)
+ OLD MAG = 21.692739
+ NEW MAG = 21.831728
+
+HRP = Vector3(3.850722, -0.322561, -21.645552)
+
+REGISTRY OTHER DATA:
+ Speed = 21.9
+ Sprint = 1.1979529235279185
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.328913, -0.427425, -0.842095)
+ RelativeMoveDirection = Vector3(-0.178052, 0.000000, -0.984021)
+
+==============================================
+EVENT #29 | FRAME #150
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.363821, 0.000000, -0.931469)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(346.565247, 0.000000, -1948.101562)
+ NEW = Vector3(369.245056, 0.000000, -1958.093140)
+ OLD MAG = 1978.688232
+ NEW MAG = 1992.604004
+ DELTA MAG = 13.915771
+ DELTA = Vector3(22.679810, 0.000000, -9.991577)
+ DIRECTION DOT = 0.999946654
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.618304, 0.205860, -21.528814)
+ NEW = Vector3(3.850722, -0.322561, -21.645552)
+ OLD MAG = 21.831728
+ NEW MAG = 21.987770
+
+HRP = Vector3(4.102719, -0.739227, -21.756571)
+
+REGISTRY OTHER DATA:
+ Speed = 22.1
+ Sprint = 1.2049631919013333
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.341899, -0.430549, -0.835304)
+ RelativeMoveDirection = Vector3(-0.184901, -0.000000, -0.982757)
+
+==============================================
+EVENT #30 | FRAME #151
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.378807, 0.000000, -0.925476)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(369.245056, 0.000000, -1958.093140)
+ NEW = Vector3(390.400177, 0.000000, -1964.269653)
+ OLD MAG = 1992.604004
+ NEW MAG = 2002.690063
+ DELTA MAG = 10.086060
+ DELTA = Vector3(21.155121, 0.000000, -6.176514)
+ DIRECTION DOT = 0.999951780
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.850722, -0.322561, -21.645552)
+ NEW = Vector3(4.102719, -0.739227, -21.756571)
+ OLD MAG = 21.987770
+ NEW MAG = 22.152363
+
+HRP = Vector3(4.337776, -1.155894, -21.825197)
+
+REGISTRY OTHER DATA:
+ Speed = 22.2
+ Sprint = 1.212056335411034
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.346517, -0.431590, -0.832860)
+ RelativeMoveDirection = Vector3(-0.191118, -0.000000, -0.981567)
+
+==============================================
+EVENT #31 | FRAME #152
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.384135, 0.000000, -0.923277)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(390.400177, 0.000000, -1964.269653)
+ NEW = Vector3(413.927460, 0.000000, -1973.787964)
+ OLD MAG = 2002.690063
+ NEW MAG = 2016.723877
+ DELTA MAG = 14.033813
+ DELTA = Vector3(23.527283, 0.000000, -9.518311)
+ DIRECTION DOT = 0.999944568
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.102719, -0.739227, -21.756571)
+ NEW = Vector3(4.337776, -1.155894, -21.825197)
+ OLD MAG = 22.152363
+ NEW MAG = 22.282093
+
+HRP = Vector3(4.599190, -0.695278, -21.930958)
+
+REGISTRY OTHER DATA:
+ Speed = 22.4
+ Sprint = 1.2191543664084743
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.359316, -0.434707, -0.825786)
+ RelativeMoveDirection = Vector3(-0.186446, -0.000000, -0.982465)
+
+==============================================
+EVENT #32 | FRAME #153
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.398986, 0.000000, -0.916957)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(413.927460, 0.000000, -1973.787964)
+ NEW = Vector3(436.405151, 0.000000, -1980.548584)
+ OLD MAG = 2016.723877
+ NEW MAG = 2028.058716
+ DELTA MAG = 11.334839
+ DELTA = Vector3(22.477692, 0.000000, -6.760620)
+ DIRECTION DOT = 0.999948442
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.337776, -1.155894, -21.825197)
+ NEW = Vector3(4.599190, -0.695278, -21.930958)
+ OLD MAG = 22.282093
+ NEW MAG = 22.418806
+
+HRP = Vector3(4.848942, -1.111945, -22.006075)
+
+REGISTRY OTHER DATA:
+ Speed = 22.5
+ Sprint = 1.2262442515930156
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.366712, -0.435745, -0.821979)
+ RelativeMoveDirection = Vector3(-0.192314, -0.000000, -0.981334)
+
+==============================================
+EVENT #33 | FRAME #154
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.407426, 0.000000, -0.913238)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(436.405151, 0.000000, -1980.548584)
+ NEW = Vector3(460.085663, 0.000000, -1988.625122)
+ OLD MAG = 2028.058716
+ NEW MAG = 2041.153809
+ DELTA MAG = 13.095093
+ DELTA = Vector3(23.680511, 0.000000, -8.076538)
+ DIRECTION DOT = 0.999945164
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.599190, -0.695278, -21.930958)
+ NEW = Vector3(4.848942, -1.111945, -22.006075)
+ OLD MAG = 22.418806
+ NEW MAG = 22.561382
+
+HRP = Vector3(5.112058, -1.528612, -22.095814)
+
+REGISTRY OTHER DATA:
+ Speed = 22.6
+ Sprint = 1.2333036790369074
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.377625, -0.437819, -0.815913)
+ RelativeMoveDirection = Vector3(-0.191081, -0.000000, -0.981574)
+
+==============================================
+EVENT #34 | FRAME #155
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.420020, 0.000000, -0.907515)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(460.085663, 0.000000, -1988.625122)
+ NEW = Vector3(484.241608, 0.000000, -1994.561035)
+ OLD MAG = 2041.153809
+ NEW MAG = 2052.501709
+ DELTA MAG = 11.347900
+ DELTA = Vector3(24.155945, 0.000000, -5.935913)
+ DIRECTION DOT = 0.999941528
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.848942, -1.111945, -22.006075)
+ NEW = Vector3(5.112058, -1.528612, -22.095814)
+ OLD MAG = 22.561382
+ NEW MAG = 22.730921
+
+HRP = Vector3(5.380458, -0.892208, -22.161768)
+
+REGISTRY OTHER DATA:
+ Speed = 22.8
+ Sprint = 1.2408674747915933
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.383981, -0.438855, -0.812382)
+ RelativeMoveDirection = Vector3(-0.194044, -0.000000, -0.980993)
+
+==============================================
+EVENT #35 | FRAME #156
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.427330, 0.000000, -0.904096)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(484.241608, 0.000000, -1994.561035)
+ NEW = Vector3(507.369995, 0.000000, -2000.914795)
+ OLD MAG = 2052.501709
+ NEW MAG = 2064.239502
+ DELTA MAG = 11.737793
+ DELTA = Vector3(23.128387, 0.000000, -6.353760)
+ DIRECTION DOT = 0.999948382
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.112058, -1.528612, -22.095814)
+ NEW = Vector3(5.380458, -0.892208, -22.161768)
+ OLD MAG = 22.730921
+ NEW MAG = 22.822998
+
+HRP = Vector3(5.637439, -0.094975, -22.232367)
+
+REGISTRY OTHER DATA:
+ Speed = 22.9
+ Sprint = 1.2479084850987414
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.391946, -0.440926, -0.807442)
+ RelativeMoveDirection = Vector3(-0.191992, -0.000000, -0.981396)
+
+==============================================
+EVENT #36 | FRAME #157
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.436687, 0.000000, -0.899613)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(507.369995, 0.000000, -2000.914795)
+ NEW = Vector3(536.353577, 0.000000, -2013.737549)
+ OLD MAG = 2064.239502
+ NEW MAG = 2083.941895
+ DELTA MAG = 19.702393
+ DELTA = Vector3(28.983582, 0.000000, -12.822754)
+ DIRECTION DOT = 0.999928296
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.380458, -0.892208, -22.161768)
+ NEW = Vector3(5.637439, -0.094975, -22.232367)
+ OLD MAG = 22.822998
+ NEW MAG = 22.936169
+
+HRP = Vector3(5.959479, -0.514409, -22.374842)
+
+REGISTRY OTHER DATA:
+ Speed = 23.1
+ Sprint = 1.2549329560017208
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.415022, -0.445060, -0.793523)
+ RelativeMoveDirection = Vector3(-0.190427, -0.000000, -0.981701)
+
+==============================================
+EVENT #37 | FRAME #158
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.463452, 0.000000, -0.886122)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(536.353577, 0.000000, -2013.737549)
+ NEW = Vector3(560.508911, 0.000000, -2018.666016)
+ OLD MAG = 2083.941895
+ NEW MAG = 2095.037598
+ DELTA MAG = 11.095703
+ DELTA = Vector3(24.155334, 0.000000, -4.928467)
+ DIRECTION DOT = 0.999944448
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.637439, -0.094975, -22.232367)
+ NEW = Vector3(5.959479, -0.514409, -22.374842)
+ OLD MAG = 22.936169
+ NEW MAG = 23.160604
+
+HRP = Vector3(6.227871, -0.931076, -22.429602)
+
+REGISTRY OTHER DATA:
+ Speed = 23.2
+ Sprint = 1.2616603517206382
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.422746, -0.447123, -0.788268)
+ RelativeMoveDirection = Vector3(-0.209472, -0.000000, -0.977815)
+
+==============================================
+EVENT #38 | FRAME #159
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.472621, 0.000000, -0.881266)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(560.508911, 0.000000, -2018.666016)
+ NEW = Vector3(585.703430, 0.000000, -2021.749634)
+ OLD MAG = 2095.037598
+ NEW MAG = 2104.880127
+ DELTA MAG = 9.842529
+ DELTA = Vector3(25.194519, 0.000000, -3.083618)
+ DIRECTION DOT = 0.999937892
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.959479, -0.514409, -22.374842)
+ NEW = Vector3(6.227871, -0.931076, -22.429602)
+ OLD MAG = 23.160604
+ NEW MAG = 23.296787
+
+HRP = Vector3(6.507810, -1.347742, -22.463865)
+
+REGISTRY OTHER DATA:
+ Speed = 23.3
+ Sprint = 1.2691037311451505
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.427036, -0.448154, -0.785365)
+ RelativeMoveDirection = Vector3(-0.208722, -0.000000, -0.977975)
+
+==============================================
+EVENT #39 | FRAME #160
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.477693, 0.000000, -0.878527)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(585.703430, 0.000000, -2021.749634)
+ NEW = Vector3(608.987305, 0.000000, -2025.551514)
+ OLD MAG = 2104.880127
+ NEW MAG = 2115.118164
+ DELTA MAG = 10.238037
+ DELTA = Vector3(23.283875, 0.000000, -3.801880)
+ DIRECTION DOT = 0.999949217
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.227871, -0.931076, -22.429602)
+ NEW = Vector3(6.507810, -1.347742, -22.463865)
+ OLD MAG = 23.296787
+ NEW MAG = 23.426336
+
+HRP = Vector3(6.766520, -0.351837, -22.506107)
+
+REGISTRY OTHER DATA:
+ Speed = 23.5
+ Sprint = 1.275834774668328
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.433109, -0.449185, -0.781441)
+ RelativeMoveDirection = Vector3(-0.204506, -0.000000, -0.978865)
+
+==============================================
+EVENT #40 | FRAME #161
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.484767, 0.000000, -0.874644)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(608.987305, 0.000000, -2025.551514)
+ NEW = Vector3(632.435303, 0.000000, -2028.425903)
+ OLD MAG = 2115.118164
+ NEW MAG = 2124.731934
+ DELTA MAG = 9.613770
+ DELTA = Vector3(23.447998, 0.000000, -2.874390)
+ DIRECTION DOT = 0.999948263
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.507810, -1.347742, -22.463865)
+ NEW = Vector3(6.766520, -0.351837, -22.506107)
+ OLD MAG = 23.426336
+ NEW MAG = 23.503923
+
+HRP = Vector3(7.027053, -0.004127, -22.538046)
+
+REGISTRY OTHER DATA:
+ Speed = 23.6
+ Sprint = 1.2828514187829565
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.437353, -0.450214, -0.778479)
+ RelativeMoveDirection = Vector3(-0.202441, -0.000000, -0.979294)
+
+==============================================
+EVENT #41 | FRAME #162
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.489800, 0.000000, -0.871835)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(632.435303, 0.000000, -2028.425903)
+ NEW = Vector3(657.452881, 0.000000, -2031.324463)
+ OLD MAG = 2124.731934
+ NEW MAG = 2135.069824
+ DELTA MAG = 10.337891
+ DELTA = Vector3(25.017578, 0.000000, -2.898560)
+ DIRECTION DOT = 0.999941945
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.766520, -0.351837, -22.506107)
+ NEW = Vector3(7.027053, -0.004127, -22.538046)
+ OLD MAG = 23.503923
+ NEW MAG = 23.608114
+
+HRP = Vector3(7.305026, 0.098516, -22.570251)
+
+REGISTRY OTHER DATA:
+ Speed = 23.7
+ Sprint = 1.2904530043015252
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.441575, -0.451244, -0.775494)
+ RelativeMoveDirection = Vector3(-0.197524, -0.000000, -0.980298)
+
+==============================================
+EVENT #42 | FRAME #163
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.494817, 0.000000, -0.868997)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(657.452881, 0.000000, -2031.324463)
+ NEW = Vector3(679.259766, 0.000000, -2032.716919)
+ OLD MAG = 2135.069824
+ NEW MAG = 2143.206055
+ DELTA MAG = 8.136230
+ DELTA = Vector3(21.806885, 0.000000, -1.392456)
+ DIRECTION DOT = 0.999955058
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.027053, -0.004127, -22.538046)
+ NEW = Vector3(7.305026, 0.098516, -22.570251)
+ OLD MAG = 23.608114
+ NEW MAG = 23.723183
+
+HRP = Vector3(7.547324, 0.113067, -22.585724)
+
+REGISTRY OTHER DATA:
+ Speed = 23.8
+ Sprint = 1.2975641754688692
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.442469, -0.451244, -0.774984)
+ RelativeMoveDirection = Vector3(-0.193880, -0.000000, -0.981025)
+
+==============================================
+EVENT #43 | FRAME #164
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.495819, 0.000000, -0.868426)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(679.259766, 0.000000, -2032.716919)
+ NEW = Vector3(699.340271, 0.000000, -2034.660889)
+ OLD MAG = 2143.206055
+ NEW MAG = 2151.492920
+ DELTA MAG = 8.286865
+ DELTA = Vector3(20.080505, 0.000000, -1.943970)
+ DIRECTION DOT = 0.999963284
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.305026, 0.098516, -22.570251)
+ NEW = Vector3(7.547324, 0.113067, -22.585724)
+ OLD MAG = 23.723183
+ NEW MAG = 23.813648
+
+HRP = Vector3(7.770441, 0.099442, -22.607323)
+
+REGISTRY OTHER DATA:
+ Speed = 23.9
+ Sprint = 1.3041772107826541
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.443996, -0.452272, -0.773510)
+ RelativeMoveDirection = Vector3(-0.186603, -0.000000, -0.982435)
+
+==============================================
+EVENT #44 | FRAME #165
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.497820, 0.000000, -0.867280)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(699.340271, 0.000000, -2034.660889)
+ NEW = Vector3(719.812256, 0.000000, -2036.189453)
+ OLD MAG = 2151.492920
+ NEW MAG = 2159.675293
+ DELTA MAG = 8.182373
+ DELTA = Vector3(20.471985, 0.000000, -1.528564)
+ DIRECTION DOT = 0.999961793
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.547324, 0.113067, -22.585724)
+ NEW = Vector3(7.770441, 0.099442, -22.607323)
+ OLD MAG = 23.813648
+ NEW MAG = 23.905661
+
+HRP = Vector3(7.997907, 0.079785, -22.624308)
+
+REGISTRY OTHER DATA:
+ Speed = 23.9
+ Sprint = 1.3112864693859587
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.443996, -0.452272, -0.773510)
+ RelativeMoveDirection = Vector3(-0.180283, -0.000000, -0.983615)
+
+==============================================
+EVENT #45 | FRAME #166
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.497820, 0.000000, -0.867280)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(719.812256, 0.000000, -2036.189453)
+ NEW = Vector3(740.618530, 0.000000, -2038.161743)
+ OLD MAG = 2159.675293
+ NEW MAG = 2168.552246
+ DELTA MAG = 8.876953
+ DELTA = Vector3(20.806274, 0.000000, -1.972290)
+ DIRECTION DOT = 0.999961793
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.770441, 0.099442, -22.607323)
+ NEW = Vector3(7.997907, 0.079785, -22.624308)
+ OLD MAG = 23.905661
+ NEW MAG = 23.996504
+
+HRP = Vector3(8.229087, 0.061393, -22.646221)
+
+REGISTRY OTHER DATA:
+ Speed = 24
+ Sprint = 1.3187361176824193
+ State = Move
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.443996, -0.452272, -0.773510)
+ RelativeMoveDirection = Vector3(-0.171677, -0.000000, -0.985153)
+
+==============================================
+EVENT #46 | FRAME #167
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(740.618530, 0.000000, -2038.161743)
+ NEW = Vector3(597.355347, 0.000000, -2294.398926)
+ OLD MAG = 2168.552246
+ NEW MAG = 2370.885986
+ DELTA MAG = 202.333740
+ DELTA = Vector3(-143.263184, 0.000000, -256.237183)
+ DIRECTION DOT = 0.995600104
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.997907, 0.079785, -22.624308)
+ NEW = Vector3(8.229087, 0.061393, -22.646221)
+ OLD MAG = 23.996504
+ NEW MAG = 24.095081
+
+HRP = Vector3(6.637277, 0.046270, -25.493301)
+
+REGISTRY OTHER DATA:
+ Speed = 26.3
+ Sprint = 1.3256776073714713
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
+ RelativeMoveDirection = Vector3(-0.263234, 0.000000, -0.964732)
+
+==============================================
+EVENT #47 | FRAME #168
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(597.355347, 0.000000, -2294.398926)
+ NEW = Vector3(492.679840, 0.000000, -2439.554932)
+ OLD MAG = 2370.885986
+ NEW MAG = 2488.807373
+ DELTA MAG = 117.921387
+ DELTA = Vector3(-104.675507, 0.000000, -145.156006)
+ DIRECTION DOT = 0.998464346
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(8.229087, 0.061393, -22.646221)
+ NEW = Vector3(6.637277, 0.046270, -25.493301)
+ OLD MAG = 24.095081
+ NEW MAG = 26.343197
+
+HRP = Vector3(5.474218, 0.034560, -27.106144)
+
+REGISTRY OTHER DATA:
+ Speed = 27.6
+ Sprint = 1.3327143326168875
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
+ RelativeMoveDirection = Vector3(-0.316251, 0.000000, -0.948676)
+
+==============================================
+EVENT #48 | FRAME #169
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(492.679840, 0.000000, -2439.554932)
+ NEW = Vector3(440.172821, 0.000000, -2434.152832)
+ OLD MAG = 2488.807373
+ NEW MAG = 2473.631348
+ DELTA MAG = -15.176025
+ DELTA = Vector3(-52.507019, 0.000000, 5.402100)
+ DIRECTION DOT = 0.999792397
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.637277, 0.046270, -25.493301)
+ NEW = Vector3(5.474218, 0.034560, -27.106144)
+ OLD MAG = 26.343197
+ NEW MAG = 27.653414
+
+HRP = Vector3(4.890806, 0.025669, -27.046120)
+
+REGISTRY OTHER DATA:
+ Speed = 27.4
+ Sprint = 1.339789059781469
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
+ RelativeMoveDirection = Vector3(-0.335512, 0.000000, -0.942036)
+
+==============================================
+EVENT #49 | FRAME #170
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(440.172821, 0.000000, -2434.152832)
+ NEW = Vector3(387.218658, 0.000000, -2429.195312)
+ OLD MAG = 2473.631348
+ NEW MAG = 2459.863525
+ DELTA MAG = -13.767822
+ DELTA = Vector3(-52.954163, 0.000000, 4.957520)
+ DIRECTION DOT = 0.999783099
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.474218, 0.034560, -27.106144)
+ NEW = Vector3(4.890806, 0.025669, -27.046120)
+ OLD MAG = 27.653414
+ NEW MAG = 27.484783
+
+HRP = Vector3(4.302427, 0.019031, -26.991037)
+
+REGISTRY OTHER DATA:
+ Speed = 27.3
+ Sprint = 1.347211649571545
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
+ RelativeMoveDirection = Vector3(-0.355065, 0.000000, -0.934841)
+
+==============================================
+EVENT #50 | FRAME #171
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(387.218658, 0.000000, -2429.195312)
+ NEW = Vector3(342.602356, 0.000000, -2425.469482)
+ OLD MAG = 2459.863525
+ NEW MAG = 2449.546631
+ DELTA MAG = -10.316895
+ DELTA = Vector3(-44.616302, 0.000000, 3.725830)
+ DIRECTION DOT = 0.999842465
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.890806, 0.025669, -27.046120)
+ NEW = Vector3(4.302427, 0.019031, -26.991037)
+ OLD MAG = 27.484783
+ NEW MAG = 27.331800
+
+HRP = Vector3(3.806691, 0.014135, -26.949638)
+
+REGISTRY OTHER DATA:
+ Speed = 27.2
+ Sprint = 1.353729697503149
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.423285, -0.452272, -1.271330)
+ RelativeMoveDirection = Vector3(-0.371603, 0.000000, -0.928392)
+
+==============================================
+EVENT #51 | FRAME #172
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.261248, 0.000000, -0.965272)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(342.602356, 0.000000, -2425.469482)
+ NEW = Vector3(294.640076, 0.000000, -2424.483643)
+ OLD MAG = 2449.546631
+ NEW MAG = 2442.321533
+ DELTA MAG = -7.225098
+ DELTA = Vector3(-47.962280, 0.000000, 0.985840)
+ DIRECTION DOT = 0.999811947
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.302427, 0.019031, -26.991037)
+ NEW = Vector3(3.806691, 0.014135, -26.949638)
+ OLD MAG = 27.331800
+ NEW MAG = 27.217165
+
+HRP = Vector3(3.273777, 0.010390, -26.938684)
+
+REGISTRY OTHER DATA:
+ Speed = 27.1
+ Sprint = 1.3608245770446952
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.426474, -0.453300, -1.269897)
+ RelativeMoveDirection = Vector3(-0.389534, 0.000000, -0.921012)
+
+==============================================
+EVENT #52 | FRAME #173
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.263473, 0.000000, -0.964667)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(294.640076, 0.000000, -2424.483643)
+ NEW = Vector3(247.909668, 0.000000, -2425.166992)
+ OLD MAG = 2442.321533
+ NEW MAG = 2437.805176
+ DELTA MAG = -4.516357
+ DELTA = Vector3(-46.730408, 0.000000, -0.683350)
+ DIRECTION DOT = 0.999818146
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.806691, 0.014135, -26.949638)
+ NEW = Vector3(3.273777, 0.010390, -26.938684)
+ OLD MAG = 27.217165
+ NEW MAG = 27.136885
+
+HRP = Vector3(2.754551, 0.007570, -26.946278)
+
+REGISTRY OTHER DATA:
+ Speed = 27
+ Sprint = 1.3678836498409506
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.431380, -0.455354, -1.267503)
+ RelativeMoveDirection = Vector3(-0.404913, 0.000000, -0.914355)
+
+==============================================
+EVENT #53 | FRAME #174
+==============================================
+STATE = Enum.HumanoidStateType.Jumping
+MOVE DIRECTION = Vector3(-0.266808, 0.000000, -0.963750)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(247.909668, 0.000000, -2425.166992)
+ NEW = Vector3(262.570404, 0.000000, -2568.585205)
+ OLD MAG = 2437.805176
+ NEW MAG = 2581.970703
+ DELTA MAG = 144.165527
+ DELTA = Vector3(14.660736, 0.000000, -143.418213)
+ DIRECTION DOT = 1.000000000
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.273777, 0.010390, -26.938684)
+ NEW = Vector3(2.754551, 0.007570, -26.946278)
+ OLD MAG = 27.136885
+ NEW MAG = 27.086702
+
+HRP = Vector3(2.917451, 17.112175, -28.539835)
+
+REGISTRY OTHER DATA:
+ Speed = 28.6
+ Sprint = 1.3749862849246706
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.445271, -0.458430, -1.261576)
+ RelativeMoveDirection = Vector3(-0.401748, 0.000000, -0.915750)
+
+==============================================
+EVENT #54 | FRAME #175
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.276793, 0.000000, -0.960930)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(262.570404, 0.000000, -2568.585205)
+ NEW = Vector3(251.313477, 0.000000, -2462.972412)
+ OLD MAG = 2581.970703
+ NEW MAG = 2475.760742
+ DELTA MAG = -106.209961
+ DELTA = Vector3(-11.256927, 0.000000, 105.612793)
+ DIRECTION DOT = 1.000000000
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.754551, 0.007570, -26.946278)
+ NEW = Vector3(2.917451, 17.112175, -28.539835)
+ OLD MAG = 27.086702
+ NEW MAG = 33.404495
+
+HRP = Vector3(2.792372, 16.695507, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.3820431973785157
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.445271, -0.458430, -1.261576)
+ RelativeMoveDirection = Vector3(-0.392389, 0.000000, -0.919799)
+
+==============================================
+EVENT #55 | FRAME #176
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.276793, 0.000000, -0.960930)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.917451, 17.112175, -28.539835)
+ NEW = Vector3(2.792372, 16.695507, -27.366354)
+ OLD MAG = 33.404495
+ NEW MAG = 32.178482
+
+HRP = Vector3(2.792372, 16.278839, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.458840, -0.460478, -1.255956)
+ RelativeMoveDirection = Vector3(-0.392405, 0.000000, -0.919792)
+
+==============================================
+EVENT #56 | FRAME #177
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.286748, 0.000000, -0.958006)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 16.695507, -27.366354)
+ NEW = Vector3(2.792372, 16.278839, -27.366354)
+ OLD MAG = 32.178482
+ NEW MAG = 31.964283
+
+HRP = Vector3(2.792372, 15.862172, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.466571, -0.462524, -1.252351)
+ RelativeMoveDirection = Vector3(-0.382845, 0.000000, -0.923813)
+
+==============================================
+EVENT #57 | FRAME #178
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.292265, 0.000000, -0.956337)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 16.278839, -27.366354)
+ NEW = Vector3(2.792372, 15.862172, -27.366354)
+ OLD MAG = 31.964283
+ NEW MAG = 31.754107
+
+HRP = Vector3(2.792372, 15.445506, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.466571, -0.462524, -1.252351)
+ RelativeMoveDirection = Vector3(-0.377515, 0.000000, -0.926003)
+
+==============================================
+EVENT #58 | FRAME #179
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.292265, 0.000000, -0.956337)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 15.862172, -27.366354)
+ NEW = Vector3(2.792372, 15.445506, -27.366354)
+ OLD MAG = 31.754107
+ NEW MAG = 31.548033
+
+HRP = Vector3(2.792372, 15.028840, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.501046, -0.468645, -1.236659)
+ RelativeMoveDirection = Vector3(-0.377516, 0.000000, -0.926003)
+
+==============================================
+EVENT #59 | FRAME #180
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.317517, 0.000000, -0.948253)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 15.445506, -27.366354)
+ NEW = Vector3(2.792372, 15.028840, -27.366354)
+ OLD MAG = 31.548033
+ NEW MAG = 31.346144
+
+HRP = Vector3(2.792372, 14.612174, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.527526, -0.472714, -1.224033)
+ RelativeMoveDirection = Vector3(-0.352833, 0.000000, -0.935686)
+
+==============================================
+EVENT #60 | FRAME #181
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.337124, 0.000000, -0.941460)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 15.028840, -27.366354)
+ NEW = Vector3(2.792372, 14.612174, -27.366354)
+ OLD MAG = 31.346144
+ NEW MAG = 31.148521
+
+HRP = Vector3(2.792372, 14.195508, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.581381, -0.482841, -1.195350)
+ RelativeMoveDirection = Vector3(-0.333342, 0.000000, -0.942806)
+
+==============================================
+EVENT #61 | FRAME #182
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.376964, 0.000000, -0.926228)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 14.612174, -27.366354)
+ NEW = Vector3(2.792372, 14.195508, -27.366354)
+ OLD MAG = 31.148521
+ NEW MAG = 30.955244
+
+HRP = Vector3(2.792372, 13.778842, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.581381, -0.482841, -1.195350)
+ RelativeMoveDirection = Vector3(-0.292836, 0.000000, -0.956163)
+
+==============================================
+EVENT #62 | FRAME #183
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.376964, 0.000000, -0.926228)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 14.195508, -27.366354)
+ NEW = Vector3(2.792372, 13.778842, -27.366354)
+ OLD MAG = 30.955244
+ NEW MAG = 30.766397
+
+HRP = Vector3(2.792372, 13.362176, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.598490, -0.485867, -1.185640)
+ RelativeMoveDirection = Vector3(-0.292836, 0.000000, -0.956163)
+
+==============================================
+EVENT #63 | FRAME #184
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.389741, 0.000000, -0.920925)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 13.778842, -27.366354)
+ NEW = Vector3(2.792372, 13.362176, -27.366354)
+ OLD MAG = 30.766397
+ NEW MAG = 30.582062
+
+HRP = Vector3(2.792372, 12.945510, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.617005, -0.489892, -1.174440)
+ RelativeMoveDirection = Vector3(-0.279581, 0.000000, -0.960122)
+
+==============================================
+EVENT #64 | FRAME #185
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.403498, 0.000000, -0.914981)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 13.362176, -27.366354)
+ NEW = Vector3(2.792372, 12.945510, -27.366354)
+ OLD MAG = 30.582062
+ NEW MAG = 30.402317
+
+HRP = Vector3(2.792372, 12.528844, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.654581, -0.496912, -1.150914)
+ RelativeMoveDirection = Vector3(-0.265161, 0.000000, -0.964204)
+
+==============================================
+EVENT #65 | FRAME #186
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.431778, 0.000000, -0.901980)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 12.945510, -27.366354)
+ NEW = Vector3(2.792372, 12.528844, -27.366354)
+ OLD MAG = 30.402317
+ NEW MAG = 30.227249
+
+HRP = Vector3(2.792372, 12.112178, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.688530, -0.502902, -1.128280)
+ RelativeMoveDirection = Vector3(-0.235026, 0.000000, -0.971989)
+
+==============================================
+EVENT #66 | FRAME #187
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.457591, 0.000000, -0.889163)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 12.528844, -27.366354)
+ NEW = Vector3(2.792372, 12.112178, -27.366354)
+ OLD MAG = 30.227249
+ NEW MAG = 30.056938
+
+HRP = Vector3(2.792372, 11.695512, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.709725, -0.505889, -1.113718)
+ RelativeMoveDirection = Vector3(-0.206919, 0.000000, -0.978358)
+
+==============================================
+EVENT #67 | FRAME #188
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.473914, 0.000000, -0.880571)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 12.112178, -27.366354)
+ NEW = Vector3(2.792372, 11.695512, -27.366354)
+ OLD MAG = 30.056938
+ NEW MAG = 29.891466
+
+HRP = Vector3(2.792372, 11.278846, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.768872, -0.513823, -1.069964)
+ RelativeMoveDirection = Vector3(-0.188838, 0.000000, -0.982008)
+
+==============================================
+EVENT #68 | FRAME #189
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.519923, 0.000000, -0.854213)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 11.695512, -27.366354)
+ NEW = Vector3(2.792372, 11.278846, -27.366354)
+ OLD MAG = 29.891466
+ NEW MAG = 29.730911
+
+HRP = Vector3(2.792372, 10.862180, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.768872, -0.513823, -1.069964)
+ RelativeMoveDirection = Vector3(-0.136521, 0.000000, -0.990637)
+
+==============================================
+EVENT #69 | FRAME #190
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.519923, 0.000000, -0.854213)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 11.278846, -27.366354)
+ NEW = Vector3(2.792372, 10.862180, -27.366354)
+ OLD MAG = 29.730911
+ NEW MAG = 29.575356
+
+HRP = Vector3(2.792372, 10.445514, -27.366354)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.806013, -0.518759, -1.039823)
+ RelativeMoveDirection = Vector3(-0.136522, 0.000000, -0.990637)
+
+==============================================
+EVENT #70 | FRAME #191
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.549149, 0.000000, -0.835724)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(251.313477, 0.000000, -2462.972412)
+ NEW = Vector3(228.768921, 0.000000, -2466.749756)
+ OLD MAG = 2475.760742
+ NEW MAG = 2477.335205
+ DELTA MAG = 1.574463
+ DELTA = Vector3(-22.544556, 0.000000, -3.777344)
+ DIRECTION DOT = 0.999957621
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 10.862180, -27.366354)
+ NEW = Vector3(2.792372, 10.445514, -27.366354)
+ OLD MAG = 29.575356
+ NEW MAG = 29.424879
+
+HRP = Vector3(2.541877, 10.028848, -27.408323)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.528247371720679
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.845475, -0.523678, -1.005451)
+ RelativeMoveDirection = Vector3(-0.111341, 0.000000, -0.993782)
+
+==============================================
+EVENT #71 | FRAME #192
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.580538, 0.000000, -0.814233)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(228.768921, 0.000000, -2466.749756)
+ NEW = Vector3(109.803085, 0.000000, -2480.803711)
+ OLD MAG = 2477.335205
+ NEW MAG = 2483.232422
+ DELTA MAG = 5.897217
+ DELTA = Vector3(-118.965836, 0.000000, -14.053955)
+ DIRECTION DOT = 0.998836517
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.792372, 10.445514, -27.366354)
+ NEW = Vector3(2.541877, 10.028848, -27.408323)
+ OLD MAG = 29.424879
+ NEW MAG = 29.295992
+
+HRP = Vector3(1.220035, 9.612182, -27.564478)
+
+REGISTRY OTHER DATA:
+ Speed = 27.5
+ Sprint = 1.5292192623939043
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.893719, -0.531513, -0.958519)
+ RelativeMoveDirection = Vector3(-0.121471, 0.000000, -0.992595)
+
+==============================================
+EVENT #72 | FRAME #193
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.619267, 0.000000, -0.785181)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(109.803085, 0.000000, -2480.803711)
+ NEW = Vector3(-9.989059, 0.000000, -2489.103027)
+ OLD MAG = 2483.232422
+ NEW MAG = 2489.123047
+ DELTA MAG = 5.890625
+ DELTA = Vector3(-119.792145, 0.000000, -8.299316)
+ DIRECTION DOT = 0.998836517
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.541877, 10.028848, -27.408323)
+ NEW = Vector3(1.220035, 9.612182, -27.564478)
+ OLD MAG = 29.295992
+ NEW MAG = 29.217854
+
+HRP = Vector3(-0.110989, 9.195516, -27.656693)
+
+REGISTRY OTHER DATA:
+ Speed = 27.6
+ Sprint = 1.5328595196759258
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.939406, -0.539302, -0.909214)
+ RelativeMoveDirection = Vector3(-0.121291, 0.000000, -0.992617)
+
+==============================================
+EVENT #73 | FRAME #194
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.656544, 0.000000, -0.754288)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-9.989059, 0.000000, -2489.103027)
+ NEW = Vector3(-72.941681, 0.000000, -2491.862549)
+ OLD MAG = 2489.123047
+ NEW MAG = 2492.929932
+ DELTA MAG = 3.806885
+ DELTA = Vector3(-62.952621, 0.000000, -2.759521)
+ DIRECTION DOT = 0.999681234
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.220035, 9.612182, -27.564478)
+ NEW = Vector3(-0.110989, 9.195516, -27.656693)
+ OLD MAG = 29.217854
+ NEW MAG = 29.145540
+
+HRP = Vector3(-0.810462, 8.778850, -27.687355)
+
+REGISTRY OTHER DATA:
+ Speed = 27.6
+ Sprint = 1.5364957079475308
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.962271, -0.543180, -0.882605)
+ RelativeMoveDirection = Vector3(-0.098260, 0.000000, -0.995161)
+
+==============================================
+EVENT #74 | FRAME #195
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.675461, 0.000000, -0.737395)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-72.941681, 0.000000, -2491.862549)
+ NEW = Vector3(-141.784241, 0.000000, -2492.973633)
+ OLD MAG = 2492.929932
+ NEW MAG = 2497.002197
+ DELTA MAG = 4.072266
+ DELTA = Vector3(-68.842560, 0.000000, -1.111084)
+ DIRECTION DOT = 0.999620676
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-0.110989, 9.195516, -27.656693)
+ NEW = Vector3(-0.810462, 8.778850, -27.687355)
+ OLD MAG = 29.145540
+ NEW MAG = 29.057093
+
+HRP = Vector3(-1.575379, 8.362184, -27.699699)
+
+REGISTRY OTHER DATA:
+ Speed = 27.7
+ Sprint = 1.5388456368152006
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.986370, -0.548011, -0.852502)
+ RelativeMoveDirection = Vector3(-0.100439, 0.000000, -0.994943)
+
+==============================================
+EVENT #75 | FRAME #196
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.695603, 0.000000, -0.718427)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-141.784241, 0.000000, -2492.973633)
+ NEW = Vector3(-225.116516, 0.000000, -2491.532471)
+ OLD MAG = 2497.002197
+ NEW MAG = 2501.681641
+ DELTA MAG = 4.679443
+ DELTA = Vector3(-83.332275, 0.000000, 1.441162)
+ DIRECTION DOT = 0.999445856
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-0.810462, 8.778850, -27.687355)
+ NEW = Vector3(-1.575379, 8.362184, -27.699699)
+ OLD MAG = 29.057093
+ NEW MAG = 28.977255
+
+HRP = Vector3(-2.501293, 7.945517, -27.683687)
+
+REGISTRY OTHER DATA:
+ Speed = 27.7
+ Sprint = 1.5413593810281636
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.014260, -0.552823, -0.815882)
+ RelativeMoveDirection = Vector3(-0.106037, 0.000000, -0.994362)
+
+==============================================
+EVENT #76 | FRAME #197
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.719228, 0.000000, -0.694774)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-225.116516, 0.000000, -2491.532471)
+ NEW = Vector3(-308.510712, 0.000000, -2487.298584)
+ OLD MAG = 2501.681641
+ NEW MAG = 2506.358398
+ DELTA MAG = 4.676758
+ DELTA = Vector3(-83.394196, 0.000000, 4.233887)
+ DIRECTION DOT = 0.999445856
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-1.575379, 8.362184, -27.699699)
+ NEW = Vector3(-2.501293, 7.945517, -27.683687)
+ OLD MAG = 28.977255
+ NEW MAG = 28.909760
+
+HRP = Vector3(-3.427896, 7.528850, -27.636644)
+
+REGISTRY OTHER DATA:
+ Speed = 27.8
+ Sprint = 1.5442479263117284
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.040802, -0.557617, -0.778327)
+ RelativeMoveDirection = Vector3(-0.105900, 0.000000, -0.994377)
+
+==============================================
+EVENT #77 | FRAME #198
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.742050, 0.000000, -0.670345)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-308.510712, 0.000000, -2487.298584)
+ NEW = Vector3(-397.609619, 0.000000, -2479.575684)
+ OLD MAG = 2506.358398
+ NEW MAG = 2511.252441
+ DELTA MAG = 4.894043
+ DELTA = Vector3(-89.098907, 0.000000, 7.722900)
+ DIRECTION DOT = 0.999366581
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-2.501293, 7.945517, -27.683687)
+ NEW = Vector3(-3.427896, 7.528850, -27.636644)
+ OLD MAG = 28.909760
+ NEW MAG = 28.848192
+
+HRP = Vector3(-4.417883, 7.112183, -27.550835)
+
+REGISTRY OTHER DATA:
+ Speed = 27.9
+ Sprint = 1.5471348138503087
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.067613, -0.563346, -0.736780)
+ RelativeMoveDirection = Vector3(-0.108051, 0.000000, -0.994145)
+
+==============================================
+EVENT #78 | FRAME #199
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.765528, 0.000000, -0.643403)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-397.609619, 0.000000, -2479.575684)
+ NEW = Vector3(-497.978821, 0.000000, -2466.779053)
+ OLD MAG = 2511.252441
+ NEW MAG = 2516.541748
+ DELTA MAG = 5.289307
+ DELTA = Vector3(-100.369202, 0.000000, 12.796631)
+ DIRECTION DOT = 0.999192238
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-3.427896, 7.528850, -27.636644)
+ NEW = Vector3(-4.417883, 7.112183, -27.550835)
+ OLD MAG = 28.848192
+ NEW MAG = 28.794952
+
+HRP = Vector3(-5.533096, 6.695516, -27.408649)
+
+REGISTRY OTHER DATA:
+ Speed = 27.9
+ Sprint = 1.5501558280285495
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.096052, -0.568099, -0.689880)
+ RelativeMoveDirection = Vector3(-0.112482, 0.000000, -0.993654)
+
+==============================================
+EVENT #79 | FRAME #200
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.790858, 0.000000, -0.611999)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-497.978821, 0.000000, -2466.779053)
+ NEW = Vector3(-603.638428, 0.000000, -2448.699707)
+ OLD MAG = 2516.541748
+ NEW MAG = 2522.005127
+ DELTA MAG = 5.463379
+ DELTA = Vector3(-105.659607, 0.000000, 18.079346)
+ DIRECTION DOT = 0.999096930
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-4.417883, 7.112183, -27.550835)
+ NEW = Vector3(-5.533096, 6.695516, -27.408649)
+ OLD MAG = 28.794952
+ NEW MAG = 28.752028
+
+HRP = Vector3(-6.707091, 6.278849, -27.207767)
+
+REGISTRY OTHER DATA:
+ Speed = 28
+ Sprint = 1.5534208321277005
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.123918, -0.572833, -0.639273)
+ RelativeMoveDirection = Vector3(-0.114616, 0.000000, -0.993410)
+
+==============================================
+EVENT #80 | FRAME #201
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.816236, 0.000000, -0.577719)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-603.638428, 0.000000, -2448.699707)
+ NEW = Vector3(-700.207825, 0.000000, -2428.251465)
+ OLD MAG = 2522.005127
+ NEW MAG = 2527.191406
+ DELTA MAG = 5.186279
+ DELTA = Vector3(-96.569397, 0.000000, 20.448242)
+ DIRECTION DOT = 0.999237657
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-5.533096, 6.695516, -27.408649)
+ NEW = Vector3(-6.707091, 6.278849, -27.207767)
+ OLD MAG = 28.752028
+ NEW MAG = 28.717096
+
+HRP = Vector3(-7.780084, 5.862182, -26.980564)
+
+REGISTRY OTHER DATA:
+ Speed = 28
+ Sprint = 1.5567932882426698
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.147419, -0.577548, -0.591496)
+ RelativeMoveDirection = Vector3(-0.111031, 0.000000, -0.993817)
+
+==============================================
+EVENT #81 | FRAME #202
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.838248, 0.000000, -0.545289)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-700.207825, 0.000000, -2428.251465)
+ NEW = Vector3(-801.685791, 0.000000, -2402.322021)
+ OLD MAG = 2527.191406
+ NEW MAG = 2532.558105
+ DELTA MAG = 5.366699
+ DELTA = Vector3(-101.477966, 0.000000, 25.929443)
+ DIRECTION DOT = 0.999145210
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-6.707091, 6.278849, -27.207767)
+ NEW = Vector3(-7.780084, 5.862182, -26.980564)
+ OLD MAG = 28.717096
+ NEW MAG = 28.685287
+
+HRP = Vector3(-8.907618, 5.237182, -26.692459)
+
+REGISTRY OTHER DATA:
+ Speed = 28.1
+ Sprint = 1.5599946952160493
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.170145, -0.582244, -0.540141)
+ RelativeMoveDirection = Vector3(-0.113170, 0.000000, -0.993576)
+
+==============================================
+EVENT #82 | FRAME #203
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.860150, 0.000000, -0.510041)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-801.685791, 0.000000, -2402.322021)
+ NEW = Vector3(-965.148438, 0.000000, -2348.481689)
+ OLD MAG = 2532.558105
+ NEW MAG = 2539.070312
+ DELTA MAG = 6.512207
+ DELTA = Vector3(-163.462646, 0.000000, 53.840332)
+ DIRECTION DOT = 0.997700214
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-7.780084, 5.862182, -26.980564)
+ NEW = Vector3(-8.907618, 5.237182, -26.692459)
+ OLD MAG = 28.685287
+ NEW MAG = 28.622738
+
+HRP = Vector3(-10.723845, 5.028848, -26.094242)
+
+REGISTRY OTHER DATA:
+ Speed = 28.2
+ Sprint = 1.563307472511574
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.202672, -0.588786, -0.454875)
+ RelativeMoveDirection = Vector3(-0.139285, 0.000000, -0.990252)
+
+==============================================
+EVENT #83 | FRAME #204
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.892826, 0.000000, -0.450401)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-965.148438, 0.000000, -2348.481689)
+ NEW = Vector3(-1106.462280, 0.000000, -2292.345215)
+ OLD MAG = 2539.070312
+ NEW MAG = 2545.408691
+ DELTA MAG = 6.338379
+ DELTA = Vector3(-141.313843, 0.000000, 56.136475)
+ DIRECTION DOT = 0.998214304
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-8.907618, 5.237182, -26.692459)
+ NEW = Vector3(-10.723845, 5.028848, -26.094242)
+ OLD MAG = 28.622738
+ NEW MAG = 28.656582
+
+HRP = Vector3(-12.294021, 4.612181, -25.470495)
+
+REGISTRY OTHER DATA:
+ Speed = 28.2
+ Sprint = 1.5673273533950618
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.226506, -0.593435, -0.378837)
+ RelativeMoveDirection = Vector3(-0.131120, 0.000000, -0.991366)
+
+==============================================
+EVENT #84 | FRAME #205
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.918207, 0.000000, -0.396101)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1106.462280, 0.000000, -2292.345215)
+ NEW = Vector3(-1194.905762, 0.000000, -2253.253906)
+ OLD MAG = 2545.408691
+ NEW MAG = 2550.480957
+ DELTA MAG = 5.072266
+ DELTA = Vector3(-88.443481, 0.000000, 39.091309)
+ DIRECTION DOT = 0.999281764
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-10.723845, 5.028848, -26.094242)
+ NEW = Vector3(-12.294021, 4.612181, -25.470495)
+ OLD MAG = 28.656582
+ NEW MAG = 28.655912
+
+HRP = Vector3(-13.276726, 4.195514, -25.036148)
+
+REGISTRY OTHER DATA:
+ Speed = 28.3
+ Sprint = 1.571239932966821
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.239196, -0.596216, -0.330032)
+ RelativeMoveDirection = Vector3(-0.109222, 0.000000, -0.994017)
+
+==============================================
+EVENT #85 | FRAME #206
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.932608, 0.000000, -0.360891)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1194.905762, 0.000000, -2253.253906)
+ NEW = Vector3(-1294.892822, 0.000000, -2203.717529)
+ OLD MAG = 2550.480957
+ NEW MAG = 2555.996582
+ DELTA MAG = 5.515625
+ DELTA = Vector3(-99.987061, 0.000000, 49.536377)
+ DIRECTION DOT = 0.999047220
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-12.294021, 4.612181, -25.470495)
+ NEW = Vector3(-13.276726, 4.195514, -25.036148)
+ OLD MAG = 28.655912
+ NEW MAG = 28.647556
+
+HRP = Vector3(-14.387693, 3.778848, -24.485743)
+
+REGISTRY OTHER DATA:
+ Speed = 28.3
+ Sprint = 1.5743709611304013
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.251236, -0.599911, -0.272975)
+ RelativeMoveDirection = Vector3(-0.114802, 0.000000, -0.993388)
+
+==============================================
+EVENT #86 | FRAME #207
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.947518, 0.000000, -0.319703)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1294.892822, 0.000000, -2203.717529)
+ NEW = Vector3(-1400.363647, 0.000000, -2145.101807)
+ OLD MAG = 2555.996582
+ NEW MAG = 2561.733887
+ DELTA MAG = 5.737305
+ DELTA = Vector3(-105.470825, 0.000000, 58.615723)
+ DIRECTION DOT = 0.998890638
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-13.276726, 4.195514, -25.036148)
+ NEW = Vector3(-14.387693, 3.778848, -24.485743)
+ OLD MAG = 28.647556
+ NEW MAG = 28.650253
+
+HRP = Vector3(-15.559590, 3.362181, -23.834459)
+
+REGISTRY OTHER DATA:
+ Speed = 28.4
+ Sprint = 1.5777756679205246
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.261388, -0.603594, -0.211125)
+ RelativeMoveDirection = Vector3(-0.118079, 0.000000, -0.993004)
+
+==============================================
+EVENT #87 | FRAME #208
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.961565, 0.000000, -0.274576)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1400.363647, 0.000000, -2145.101807)
+ NEW = Vector3(-1495.852173, 0.000000, -2086.418457)
+ OLD MAG = 2561.733887
+ NEW MAG = 2567.239014
+ DELTA MAG = 5.505127
+ DELTA = Vector3(-95.488525, 0.000000, 58.683350)
+ DIRECTION DOT = 0.999047160
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-14.387693, 3.778848, -24.485743)
+ NEW = Vector3(-15.559590, 3.362181, -23.834459)
+ OLD MAG = 28.650253
+ NEW MAG = 28.661587
+
+HRP = Vector3(-16.620577, 2.945515, -23.182423)
+
+REGISTRY OTHER DATA:
+ Speed = 28.5
+ Sprint = 1.5813172140239198
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.267962, -0.607265, -0.153303)
+ RelativeMoveDirection = Vector3(-0.114492, 0.000000, -0.993424)
+
+==============================================
+EVENT #88 | FRAME #209
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.972668, 0.000000, -0.232202)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1495.852173, 0.000000, -2086.418457)
+ NEW = Vector3(-1586.499634, 0.000000, -2025.236328)
+ OLD MAG = 2567.239014
+ NEW MAG = 2572.656738
+ DELTA MAG = 5.417725
+ DELTA = Vector3(-90.647461, 0.000000, 61.182129)
+ DIRECTION DOT = 0.999096870
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-15.559590, 3.362181, -23.834459)
+ NEW = Vector3(-16.620577, 2.945515, -23.182423)
+ OLD MAG = 28.661587
+ NEW MAG = 28.676548
+
+HRP = Vector3(-17.627768, 2.528848, -22.502621)
+
+REGISTRY OTHER DATA:
+ Speed = 28.5
+ Sprint = 1.5847154405381945
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.271775, -0.610922, -0.096767)
+ RelativeMoveDirection = Vector3(-0.113199, 0.000000, -0.993572)
+
+==============================================
+EVENT #89 | FRAME #210
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.981684, 0.000000, -0.190514)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1586.499634, 0.000000, -2025.236328)
+ NEW = Vector3(-1658.377197, 0.000000, -1973.016602)
+ OLD MAG = 2572.656738
+ NEW MAG = 2577.403564
+ DELTA MAG = 4.746826
+ DELTA = Vector3(-71.877563, 0.000000, 52.219727)
+ DIRECTION DOT = 0.999406636
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-16.620577, 2.945515, -23.182423)
+ NEW = Vector3(-17.627768, 2.528848, -22.502621)
+ OLD MAG = 28.676548
+ NEW MAG = 28.696711
+
+HRP = Vector3(-18.426409, 2.112182, -21.922401)
+
+REGISTRY OTHER DATA:
+ Speed = 28.6
+ Sprint = 1.588059714988426
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.273115, -0.613656, -0.051020)
+ RelativeMoveDirection = Vector3(-0.105048, 0.000000, -0.994467)
+
+==============================================
+EVENT #90 | FRAME #211
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.987685, 0.000000, -0.156456)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1658.377197, 0.000000, -1973.016602)
+ NEW = Vector3(-1723.972534, 0.000000, -1922.047119)
+ OLD MAG = 2577.403564
+ NEW MAG = 2581.927002
+ DELTA MAG = 4.523438
+ DELTA = Vector3(-65.595337, 0.000000, 50.969482)
+ DIRECTION DOT = 0.999482989
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.627768, 2.528848, -22.502621)
+ NEW = Vector3(-18.426409, 2.112182, -21.922401)
+ OLD MAG = 28.696711
+ NEW MAG = 28.715597
+
+HRP = Vector3(-19.155245, 1.695515, -21.356073)
+
+REGISTRY OTHER DATA:
+ Speed = 28.6
+ Sprint = 1.5909898546006944
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.273229, -0.615475, -0.008786)
+ RelativeMoveDirection = Vector3(-0.102633, 0.000000, -0.994719)
+
+==============================================
+EVENT #91 | FRAME #212
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.992220, 0.000000, -0.124498)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1723.972534, 0.000000, -1922.047119)
+ NEW = Vector3(-1772.303955, 0.000000, -1882.579224)
+ OLD MAG = 2581.927002
+ NEW MAG = 2585.568848
+ DELTA MAG = 3.641846
+ DELTA = Vector3(-48.331421, 0.000000, 39.467896)
+ DIRECTION DOT = 0.999709249
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-18.426409, 2.112182, -21.922401)
+ NEW = Vector3(-19.155245, 1.695515, -21.356073)
+ OLD MAG = 28.715597
+ NEW MAG = 28.738129
+
+HRP = Vector3(-19.692261, 1.278848, -20.917542)
+
+REGISTRY OTHER DATA:
+ Speed = 28.7
+ Sprint = 1.5937820999710648
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.271720, -0.618197, 0.023690)
+ RelativeMoveDirection = Vector3(-0.094504, 0.000000, -0.995524)
+
+==============================================
+EVENT #92 | FRAME #213
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.994943, 0.000000, -0.100442)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1772.303955, 0.000000, -1882.579224)
+ NEW = Vector3(-1813.073730, 0.000000, -1847.851562)
+ OLD MAG = 2585.568848
+ NEW MAG = 2588.781982
+ DELTA MAG = 3.213135
+ DELTA = Vector3(-40.769775, 0.000000, 34.727661)
+ DIRECTION DOT = 0.999786496
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-19.155245, 1.695515, -21.356073)
+ NEW = Vector3(-19.692261, 1.278848, -20.917542)
+ OLD MAG = 28.738129
+ NEW MAG = 28.756983
+
+HRP = Vector3(-20.145258, 0.862181, -20.531679)
+
+REGISTRY OTHER DATA:
+ Speed = 28.7
+ Sprint = 1.5960301528742284
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.270029, -0.620008, 0.051159)
+ RelativeMoveDirection = Vector3(-0.090975, 0.000000, -0.995853)
+
+==============================================
+EVENT #93 | FRAME #214
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.996813, 0.000000, -0.079776)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1813.073730, 0.000000, -1847.851562)
+ NEW = Vector3(-1833.296387, 0.000000, -1830.260620)
+ OLD MAG = 2588.781982
+ NEW MAG = 2590.526855
+ DELTA MAG = 1.744873
+ DELTA = Vector3(-20.222656, 0.000000, 17.590942)
+ DIRECTION DOT = 0.999946713
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-19.692261, 1.278848, -20.917542)
+ NEW = Vector3(-20.145258, 0.862181, -20.531679)
+ OLD MAG = 28.756983
+ NEW MAG = 28.777155
+
+HRP = Vector3(-20.369955, 0.445515, -20.336224)
+
+REGISTRY OTHER DATA:
+ Speed = 28.7
+ Sprint = 1.5980135693962192
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.268960, -0.620912, 0.064873)
+ RelativeMoveDirection = Vector3(-0.080592, 0.000000, -0.996747)
+
+==============================================
+EVENT #94 | FRAME #215
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.997587, 0.000000, -0.069429)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1833.296387, 0.000000, -1830.260620)
+ NEW = Vector3(-1848.923584, 0.000000, -1816.443970)
+ OLD MAG = 2590.526855
+ NEW MAG = 2591.907959
+ DELTA MAG = 1.381104
+ DELTA = Vector3(-15.627197, 0.000000, 13.816650)
+ DIRECTION DOT = 0.999967813
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-20.145258, 0.862181, -20.531679)
+ NEW = Vector3(-20.369955, 0.445515, -20.336224)
+ OLD MAG = 28.777155
+ NEW MAG = 28.787073
+
+HRP = Vector3(-20.543591, -0.387819, -20.182705)
+
+REGISTRY OTHER DATA:
+ Speed = 28.7
+ Sprint = 1.5990906515239198
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.268395, -0.620912, 0.075112)
+ RelativeMoveDirection = Vector3(-0.078259, 0.000000, -0.996933)
+
+==============================================
+EVENT #95 | FRAME #216
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.998115, 0.000000, -0.061377)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1848.923584, 0.000000, -1816.443970)
+ NEW = Vector3(-1857.820679, 0.000000, -1808.504272)
+ OLD MAG = 2591.907959
+ NEW MAG = 2592.717773
+ DELTA MAG = 0.809814
+ DELTA = Vector3(-8.897095, 0.000000, 7.939697)
+ DIRECTION DOT = 0.999989510
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-20.369955, 0.445515, -20.336224)
+ NEW = Vector3(-20.543591, -0.387819, -20.182705)
+ OLD MAG = 28.787073
+ NEW MAG = 28.801582
+
+HRP = Vector3(-20.642447, -0.804485, -20.094486)
+
+REGISTRY OTHER DATA:
+ Speed = 28.8
+ Sprint = 1.5999431845582561
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.267558, -0.621816, 0.081494)
+ RelativeMoveDirection = Vector3(-0.074786, 0.000000, -0.997200)
+
+==============================================
+EVENT #96 | FRAME #217
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.665821, 0.000000, -0.746111)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-20.543591, -0.387819, -20.182705)
+ NEW = Vector3(-20.642447, -0.804485, -20.094486)
+ OLD MAG = 28.801582
+ NEW MAG = 28.819197
+
+HRP = Vector3(-20.642447, -1.221152, -20.094486)
+
+REGISTRY OTHER DATA:
+ Speed = 28.8
+ Sprint = 1.6004430700231482
+ State = Air
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.520969, -0.622718, -0.583792)
+ RelativeMoveDirection = Vector3(-0.070193, 0.000000, -0.997533)
+
+==============================================
+EVENT #97 | FRAME #218
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.056773, 0.000000, -0.998387)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1857.820679, 0.000000, -1808.504272)
+ NEW = Vector3(-1652.604736, 0.000000, -1991.212158)
+ OLD MAG = 2592.717773
+ NEW MAG = 2587.668457
+ DELTA MAG = -5.049316
+ DELTA = Vector3(205.215942, 0.000000, -182.707886)
+ DIRECTION DOT = 0.994375527
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-20.642447, -0.804485, -20.094486)
+ NEW = Vector3(-20.642447, -1.221152, -20.094486)
+ OLD MAG = 28.819197
+ NEW MAG = 28.833838
+
+HRP = Vector3(-18.362270, -1.637819, -22.124575)
+
+REGISTRY OTHER DATA:
+ Speed = 28.7
+ Sprint = 1.6004430700231482
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.226582, -0.622718, -1.249353)
+ RelativeMoveDirection = Vector3(0.035852, 0.000000, -0.999357)
+
+==============================================
+EVENT #98 | FRAME #219
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.057924, 0.000000, -0.998321)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1652.604736, 0.000000, -1991.212158)
+ NEW = Vector3(-1583.730225, 0.000000, -2052.532471)
+ OLD MAG = 2587.668457
+ NEW MAG = 2592.506592
+ DELTA MAG = 4.838135
+ DELTA = Vector3(68.874512, 0.000000, -61.320312)
+ DIRECTION DOT = 0.999368072
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-20.642447, -1.221152, -20.094486)
+ NEW = Vector3(-18.362270, -1.637819, -22.124575)
+ OLD MAG = 28.833838
+ NEW MAG = 28.798477
+
+HRP = Vector3(-17.596996, -2.054486, -22.805912)
+
+REGISTRY OTHER DATA:
+ Speed = 28.8
+ Sprint = 1.5973262080439814
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.226582, -0.622718, -1.249353)
+ RelativeMoveDirection = Vector3(0.070183, 0.000000, -0.997534)
+
+==============================================
+EVENT #99 | FRAME #220
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.057924, 0.000000, -0.998321)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1583.730225, 0.000000, -2052.532471)
+ NEW = Vector3(-1572.537354, 0.000000, -2062.382568)
+ OLD MAG = 2592.506592
+ NEW MAG = 2593.510254
+ DELTA MAG = 1.003662
+ DELTA = Vector3(11.192871, 0.000000, -9.850098)
+ DIRECTION DOT = 0.999983668
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-18.362270, -1.637819, -22.124575)
+ NEW = Vector3(-17.596996, -2.054486, -22.805912)
+ OLD MAG = 28.798477
+ NEW MAG = 28.878796
+
+HRP = Vector3(-17.472631, -2.471152, -22.915358)
+
+REGISTRY OTHER DATA:
+ Speed = 28.8
+ Sprint = 1.6003127109857254
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.234730, -0.624521, -1.246947)
+ RelativeMoveDirection = Vector3(0.075911, 0.000000, -0.997115)
+
+==============================================
+EVENT #100 | FRAME #221
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.063678, 0.000000, -0.997971)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1572.537354, 0.000000, -2062.382568)
+ NEW = Vector3(-1563.543579, 0.000000, -2070.224121)
+ OLD MAG = 2593.510254
+ NEW MAG = 2594.320068
+ DELTA MAG = 0.809814
+ DELTA = Vector3(8.993774, 0.000000, -7.841553)
+ DIRECTION DOT = 0.999989510
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.596996, -2.054486, -22.805912)
+ NEW = Vector3(-17.472631, -2.471152, -22.915358)
+ OLD MAG = 28.878796
+ NEW MAG = 28.922535
+
+HRP = Vector3(-17.372702, -2.887819, -23.002485)
+
+REGISTRY OTHER DATA:
+ Speed = 28.8
+ Sprint = 1.6009322554976853
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.240951, -0.625421, -1.245308)
+ RelativeMoveDirection = Vector3(0.074748, 0.000000, -0.997202)
+
+==============================================
+EVENT #101 | FRAME #222
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.068279, 0.000000, -0.997666)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.472631, -2.471152, -22.915358)
+ NEW = Vector3(-17.372702, -2.887819, -23.002485)
+ OLD MAG = 28.922535
+ NEW MAG = 28.970064
+
+HRP = Vector3(-17.372700, -3.304485, -23.002485)
+
+REGISTRY OTHER DATA:
+ Speed = 28.8
+ Sprint = 1.6014321409625771
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.240951, -0.625421, -1.245308)
+ RelativeMoveDirection = Vector3(0.070151, 0.000000, -0.997536)
+
+==============================================
+EVENT #102 | FRAME #223
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.068279, 0.000000, -0.997666)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1563.543457, 0.000000, -2070.224121)
+ NEW = Vector3(-1498.777100, 0.000000, -2123.112793)
+ OLD MAG = 2594.320068
+ NEW MAG = 2598.834473
+ DELTA MAG = 4.514404
+ DELTA = Vector3(64.766357, 0.000000, -52.888672)
+ DIRECTION DOT = 0.999482989
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.372702, -2.887819, -23.002485)
+ NEW = Vector3(-17.372700, -3.304485, -23.002485)
+ OLD MAG = 28.970064
+ NEW MAG = 29.014559
+
+HRP = Vector3(-16.653076, -3.721152, -23.590137)
+
+REGISTRY OTHER DATA:
+ Speed = 28.8
+ Sprint = 1.6014321409625771
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.282846, -0.629012, -1.234642)
+ RelativeMoveDirection = Vector3(0.102189, 0.000000, -0.994765)
+
+==============================================
+EVENT #103 | FRAME #224
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.100442, 0.000000, -0.994943)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1498.777100, 0.000000, -2123.112793)
+ NEW = Vector3(-1456.384277, 0.000000, -2156.289062)
+ OLD MAG = 2598.834473
+ NEW MAG = 2602.044922
+ DELTA MAG = 3.210449
+ DELTA = Vector3(42.392822, 0.000000, -33.176270)
+ DIRECTION DOT = 0.999786496
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.372700, -3.304485, -23.002485)
+ NEW = Vector3(-16.653076, -3.721152, -23.590137)
+ OLD MAG = 29.014559
+ NEW MAG = 29.114714
+
+HRP = Vector3(-16.182045, -4.137818, -23.958763)
+
+REGISTRY OTHER DATA:
+ Speed = 28.9
+ Sprint = 1.6042188102816357
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.309747, -0.631697, -1.226791)
+ RelativeMoveDirection = Vector3(0.090623, 0.000000, -0.995885)
+
+==============================================
+EVENT #104 | FRAME #225
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.121065, 0.000000, -0.992645)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1456.384277, 0.000000, -2156.289062)
+ NEW = Vector3(-1405.935913, 0.000000, -2193.836426)
+ OLD MAG = 2602.044922
+ NEW MAG = 2605.681152
+ DELTA MAG = 3.636230
+ DELTA = Vector3(50.448364, 0.000000, -37.547363)
+ DIRECTION DOT = 0.999709308
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-16.653076, -3.721152, -23.590137)
+ NEW = Vector3(-16.182045, -4.137818, -23.958763)
+ OLD MAG = 29.114714
+ NEW MAG = 29.206205
+
+HRP = Vector3(-15.621506, -4.554485, -24.375954)
+
+REGISTRY OTHER DATA:
+ Speed = 28.9
+ Sprint = 1.606200569058642
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.340224, -0.633483, -1.217763)
+ RelativeMoveDirection = Vector3(0.093969, 0.000000, -0.995575)
+
+==============================================
+EVENT #105 | FRAME #226
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.145059, 0.000000, -0.989423)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1405.935913, 0.000000, -2193.836426)
+ NEW = Vector3(-1354.521362, 0.000000, -2230.202393)
+ OLD MAG = 2605.681152
+ NEW MAG = 2609.316162
+ DELTA MAG = 3.635010
+ DELTA = Vector3(51.414551, 0.000000, -36.365967)
+ DIRECTION DOT = 0.999709368
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-16.182045, -4.137818, -23.958763)
+ NEW = Vector3(-15.621506, -4.554485, -24.375954)
+ OLD MAG = 29.206205
+ NEW MAG = 29.308052
+
+HRP = Vector3(-15.050234, -4.971152, -24.780020)
+
+REGISTRY OTHER DATA:
+ Speed = 28.9
+ Sprint = 1.6084451557677468
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.370871, -0.636155, -1.207378)
+ RelativeMoveDirection = Vector3(0.093872, 0.000000, -0.995584)
+
+==============================================
+EVENT #106 | FRAME #227
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.168968, 0.000000, -0.985622)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1354.521362, 0.000000, -2230.202393)
+ NEW = Vector3(-1307.231079, 0.000000, -2262.120850)
+ OLD MAG = 2609.316162
+ NEW MAG = 2612.669922
+ DELTA MAG = 3.353760
+ DELTA = Vector3(47.290283, 0.000000, -31.918457)
+ DIRECTION DOT = 0.999762058
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-15.621506, -4.554485, -24.375954)
+ NEW = Vector3(-15.050234, -4.971152, -24.780020)
+ OLD MAG = 29.308052
+ NEW MAG = 29.415493
+
+HRP = Vector3(-14.524786, -5.387819, -25.134668)
+
+REGISTRY OTHER DATA:
+ Speed = 29
+ Sprint = 1.6106889889564042
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.397637, -0.637044, -1.198357)
+ RelativeMoveDirection = Vector3(0.091486, 0.000000, -0.995806)
+
+==============================================
+EVENT #107 | FRAME #228
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.190515, 0.000000, -0.981684)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1307.231079, 0.000000, -2262.120850)
+ NEW = Vector3(-1264.314453, 0.000000, -2289.878906)
+ OLD MAG = 2612.669922
+ NEW MAG = 2615.728760
+ DELTA MAG = 3.058838
+ DELTA = Vector3(42.916626, 0.000000, -27.758057)
+ DIRECTION DOT = 0.999809563
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-15.050234, -4.971152, -24.780020)
+ NEW = Vector3(-14.524786, -5.387819, -25.134668)
+ OLD MAG = 29.415493
+ NEW MAG = 29.525404
+
+HRP = Vector3(-14.047935, -5.804486, -25.443092)
+
+REGISTRY OTHER DATA:
+ Speed = 29
+ Sprint = 1.6127592110339506
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.421444, -0.637932, -1.189717)
+ RelativeMoveDirection = Vector3(0.089109, 0.000000, -0.996022)
+
+==============================================
+EVENT #108 | FRAME #229
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.209716, 0.000000, -0.977762)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1264.314453, 0.000000, -2289.878906)
+ NEW = Vector3(-1202.579224, 0.000000, -2327.427734)
+ OLD MAG = 2615.728760
+ NEW MAG = 2619.755127
+ DELTA MAG = 4.026367
+ DELTA = Vector3(61.735229, 0.000000, -37.548828)
+ DIRECTION DOT = 0.999620199
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-14.524786, -5.387819, -25.134668)
+ NEW = Vector3(-14.047935, -5.804486, -25.443092)
+ OLD MAG = 29.525404
+ NEW MAG = 29.637602
+
+HRP = Vector3(-13.361988, -6.221153, -25.860302)
+
+REGISTRY OTHER DATA:
+ Speed = 29.1
+ Sprint = 1.6146473825713734
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.454961, -0.639706, -1.176344)
+ RelativeMoveDirection = Vector3(0.097038, 0.000000, -0.995281)
+
+==============================================
+EVENT #109 | FRAME #230
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.236685, 0.000000, -0.971586)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1202.579224, 0.000000, -2327.427734)
+ NEW = Vector3(-1066.634644, 0.000000, -2399.529297)
+ OLD MAG = 2619.755127
+ NEW MAG = 2625.918945
+ DELTA MAG = 6.163818
+ DELTA = Vector3(135.944580, 0.000000, -72.101562)
+ DIRECTION DOT = 0.998281658
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-14.047935, -5.804486, -25.443092)
+ NEW = Vector3(-13.361988, -6.221153, -25.860302)
+ OLD MAG = 29.637602
+ NEW MAG = 29.765764
+
+HRP = Vector3(-11.851495, -6.637820, -26.661430)
+
+REGISTRY OTHER DATA:
+ Speed = 29.1
+ Sprint = 1.6171327944155092
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.525032, -0.644126, -1.144309)
+ RelativeMoveDirection = Vector3(0.127802, 0.000000, -0.991800)
+
+==============================================
+EVENT #110 | FRAME #231
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.293368, 0.000000, -0.956000)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-13.361988, -6.221153, -25.860302)
+ NEW = Vector3(-11.851495, -6.637820, -26.661430)
+ OLD MAG = 29.765764
+ NEW MAG = 29.922407
+
+HRP = Vector3(-11.851494, -7.054487, -26.661430)
+
+REGISTRY OTHER DATA:
+ Speed = 29.1
+ Sprint = 1.6209376205632715
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.525032, -0.644126, -1.144309)
+ RelativeMoveDirection = Vector3(0.069295, 0.000000, -0.997596)
+
+==============================================
+EVENT #111 | FRAME #232
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.293368, 0.000000, -0.956000)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1066.634644, 0.000000, -2399.529297)
+ NEW = Vector3(-1009.862305, 0.000000, -2427.900879)
+ OLD MAG = 2625.918945
+ NEW MAG = 2629.548340
+ DELTA MAG = 3.629395
+ DELTA = Vector3(56.772339, 0.000000, -28.371582)
+ DIRECTION DOT = 0.999709189
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-11.851495, -6.637820, -26.661430)
+ NEW = Vector3(-11.851494, -7.054487, -26.661430)
+ OLD MAG = 29.922407
+ NEW MAG = 30.017588
+
+HRP = Vector3(-11.220690, -7.471154, -26.976669)
+
+REGISTRY OTHER DATA:
+ Speed = 29.2
+ Sprint = 1.6209376205632715
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.553243, -0.645888, -1.129934)
+ RelativeMoveDirection = Vector3(0.093338, 0.000000, -0.995634)
+
+==============================================
+EVENT #112 | FRAME #233
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.316424, 0.000000, -0.948618)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1009.862305, 0.000000, -2427.900879)
+ NEW = Vector3(-966.162415, 0.000000, -2448.741211)
+ OLD MAG = 2629.548340
+ NEW MAG = 2632.451904
+ DELTA MAG = 2.903564
+ DELTA = Vector3(43.699890, 0.000000, -20.840332)
+ DIRECTION DOT = 0.999831259
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-11.851494, -7.054487, -26.661430)
+ NEW = Vector3(-11.220690, -7.471154, -26.976669)
+ OLD MAG = 30.017588
+ NEW MAG = 30.157299
+
+HRP = Vector3(-10.735135, -7.887821, -27.208229)
+
+REGISTRY OTHER DATA:
+ Speed = 29.2
+ Sprint = 1.6231779875578705
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.574632, -0.647647, -1.118191)
+ RelativeMoveDirection = Vector3(0.087520, 0.000000, -0.996163)
+
+==============================================
+EVENT #113 | FRAME #234
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.333867, 0.000000, -0.942620)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-966.162415, 0.000000, -2448.741211)
+ NEW = Vector3(-910.882935, 0.000000, -2473.556152)
+ OLD MAG = 2632.451904
+ NEW MAG = 2635.941650
+ DELTA MAG = 3.489746
+ DELTA = Vector3(55.279480, 0.000000, -24.814941)
+ DIRECTION DOT = 0.999736309
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-11.220690, -7.471154, -26.976669)
+ NEW = Vector3(-10.735135, -7.887821, -27.208229)
+ OLD MAG = 30.157299
+ NEW MAG = 30.294365
+
+HRP = Vector3(-10.120919, -8.304487, -27.483950)
+
+REGISTRY OTHER DATA:
+ Speed = 29.2
+ Sprint = 1.6249703112943672
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.600565, -0.648525, -1.103965)
+ RelativeMoveDirection = Vector3(0.092022, 0.000000, -0.995757)
+
+==============================================
+EVENT #114 | FRAME #235
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.355510, 0.000000, -0.934673)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-910.882935, 0.000000, -2473.556152)
+ NEW = Vector3(-846.486023, 0.000000, -2500.436035)
+ OLD MAG = 2635.941650
+ NEW MAG = 2639.833252
+ DELTA MAG = 3.891602
+ DELTA = Vector3(64.396912, 0.000000, -26.879883)
+ DIRECTION DOT = 0.999651134
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-10.735135, -7.887821, -27.208229)
+ NEW = Vector3(-10.120919, -8.304487, -27.483950)
+ OLD MAG = 30.294365
+ NEW MAG = 30.442816
+
+HRP = Vector3(-9.405397, -8.721153, -27.782616)
+
+REGISTRY OTHER DATA:
+ Speed = 29.3
+ Sprint = 1.6271244755497685
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.629911, -0.649402, -1.086964)
+ RelativeMoveDirection = Vector3(0.095363, 0.000000, -0.995443)
+
+==============================================
+EVENT #115 | FRAME #236
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.380165, 0.000000, -0.924919)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-846.486023, 0.000000, -2500.436035)
+ NEW = Vector3(-749.634460, 0.000000, -2536.474609)
+ OLD MAG = 2639.833252
+ NEW MAG = 2644.930176
+ DELTA MAG = 5.096924
+ DELTA = Vector3(96.851562, 0.000000, -36.038574)
+ DIRECTION DOT = 0.999237061
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-10.120919, -8.304487, -27.483950)
+ NEW = Vector3(-9.405397, -8.721153, -27.782616)
+ OLD MAG = 30.442816
+ NEW MAG = 30.600552
+
+HRP = Vector3(-8.329270, -9.137819, -28.183044)
+
+REGISTRY OTHER DATA:
+ Speed = 29.3
+ Sprint = 1.629526698736497
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.672282, -0.650278, -1.060743)
+ RelativeMoveDirection = Vector3(0.107845, 0.000000, -0.994168)
+
+==============================================
+EVENT #116 | FRAME #237
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.416117, 0.000000, -0.909311)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-749.634460, 0.000000, -2536.474609)
+ NEW = Vector3(-648.320435, 0.000000, -2569.586182)
+ OLD MAG = 2644.930176
+ NEW MAG = 2650.111816
+ DELTA MAG = 5.181641
+ DELTA = Vector3(101.314026, 0.000000, -33.111572)
+ DIRECTION DOT = 0.999191523
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-9.405397, -8.721153, -27.782616)
+ NEW = Vector3(-8.329270, -9.137819, -28.183044)
+ OLD MAG = 30.600552
+ NEW MAG = 30.775972
+
+HRP = Vector3(-7.203559, -9.554485, -28.550951)
+
+REGISTRY OTHER DATA:
+ Speed = 29.4
+ Sprint = 1.6326729480131172
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.714757, -0.651153, -1.032048)
+ RelativeMoveDirection = Vector3(0.108854, 0.000000, -0.994058)
+
+==============================================
+EVENT #117 | FRAME #238
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.452459, 0.000000, -0.891785)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-648.320435, 0.000000, -2569.586182)
+ NEW = Vector3(-572.223816, 0.000000, -2591.955322)
+ OLD MAG = 2650.111816
+ NEW MAG = 2654.368652
+ DELTA MAG = 4.256836
+ DELTA = Vector3(76.096619, 0.000000, -22.369141)
+ DIRECTION DOT = 0.999554098
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-8.329270, -9.137819, -28.183044)
+ NEW = Vector3(-7.203559, -9.554485, -28.550951)
+ OLD MAG = 30.775972
+ NEW MAG = 30.957006
+
+HRP = Vector3(-6.358041, -9.971151, -28.799496)
+
+REGISTRY OTHER DATA:
+ Speed = 29.4
+ Sprint = 1.6358714916087962
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.745577, -0.652028, -1.009443)
+ RelativeMoveDirection = Vector3(0.098423, 0.000000, -0.995145)
+
+==============================================
+EVENT #118 | FRAME #239
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.478982, 0.000000, -0.877825)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-572.223816, 0.000000, -2591.955322)
+ NEW = Vector3(-492.384949, 0.000000, -2612.748291)
+ OLD MAG = 2654.368652
+ NEW MAG = 2658.739746
+ DELTA MAG = 4.371094
+ DELTA = Vector3(79.838867, 0.000000, -20.792969)
+ DIRECTION DOT = 0.999519050
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-7.203559, -9.554485, -28.550951)
+ NEW = Vector3(-6.358041, -9.971151, -28.799496)
+ OLD MAG = 30.957006
+ NEW MAG = 31.132933
+
+HRP = Vector3(-5.470943, -10.387817, -29.030529)
+
+REGISTRY OTHER DATA:
+ Speed = 29.5
+ Sprint = 1.638499168113426
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.776632, -0.652028, -0.985750)
+ RelativeMoveDirection = Vector3(0.099460, 0.000000, -0.995042)
+
+==============================================
+EVENT #119 | FRAME #240
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.506069, 0.000000, -0.862493)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-492.384949, 0.000000, -2612.748291)
+ NEW = Vector3(-399.761108, 0.000000, -2633.367432)
+ OLD MAG = 2658.739746
+ NEW MAG = 2663.537598
+ DELTA MAG = 4.797852
+ DELTA = Vector3(92.623840, 0.000000, -20.619141)
+ DIRECTION DOT = 0.999365866
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-6.358041, -9.971151, -28.799496)
+ NEW = Vector3(-5.470943, -10.387817, -29.030529)
+ OLD MAG = 31.132933
+ NEW MAG = 31.314686
+
+HRP = Vector3(-4.441789, -10.804483, -29.259632)
+
+REGISTRY OTHER DATA:
+ Speed = 29.5
+ Sprint = 1.6411973741319446
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.811357, -0.652028, -0.957371)
+ RelativeMoveDirection = Vector3(0.103924, 0.000000, -0.994585)
+
+==============================================
+EVENT #120 | FRAME #241
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.536563, 0.000000, -0.843860)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-399.761108, 0.000000, -2633.367432)
+ NEW = Vector3(-315.397369, 0.000000, -2649.308838)
+ OLD MAG = 2663.537598
+ NEW MAG = 2668.016602
+ DELTA MAG = 4.479004
+ DELTA = Vector3(84.363739, 0.000000, -15.941406)
+ DIRECTION DOT = 0.999482870
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-5.470943, -10.387817, -29.030529)
+ NEW = Vector3(-4.441789, -10.804483, -29.259632)
+ OLD MAG = 31.314686
+ NEW MAG = 31.505436
+
+HRP = Vector3(-3.504415, -11.221149, -29.436758)
+
+REGISTRY OTHER DATA:
+ Speed = 29.6
+ Sprint = 1.6441590108989197
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.841972, -0.652901, -0.929948)
+ RelativeMoveDirection = Vector3(0.100369, 0.000000, -0.994950)
+
+==============================================
+EVENT #121 | FRAME #242
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.563518, 0.000000, -0.826104)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-315.397369, 0.000000, -2649.308838)
+ NEW = Vector3(-236.522736, 0.000000, -2661.777588)
+ OLD MAG = 2668.016602
+ NEW MAG = 2672.265625
+ DELTA MAG = 4.249023
+ DELTA = Vector3(78.874634, 0.000000, -12.468750)
+ DIRECTION DOT = 0.999554098
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-4.441789, -10.804483, -29.259632)
+ NEW = Vector3(-3.504415, -11.221149, -29.436758)
+ OLD MAG = 31.505436
+ NEW MAG = 31.697285
+
+HRP = Vector3(-2.628030, -11.637815, -29.575300)
+
+REGISTRY OTHER DATA:
+ Speed = 29.6
+ Sprint = 1.646923828125
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.869464, -0.652901, -0.904297)
+ RelativeMoveDirection = Vector3(0.097967, 0.000000, -0.995190)
+
+==============================================
+EVENT #122 | FRAME #243
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.588023, 0.000000, -0.808844)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-236.522736, 0.000000, -2661.777588)
+ NEW = Vector3(-163.312119, 0.000000, -2671.283203)
+ OLD MAG = 2672.265625
+ NEW MAG = 2676.270752
+ DELTA MAG = 4.005127
+ DELTA = Vector3(73.210617, 0.000000, -9.505615)
+ DIRECTION DOT = 0.999620020
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-3.504415, -11.221149, -29.436758)
+ NEW = Vector3(-2.628030, -11.637815, -29.575300)
+ OLD MAG = 31.697285
+ NEW MAG = 31.891121
+
+HRP = Vector3(-1.814579, -12.054482, -29.680918)
+
+REGISTRY OTHER DATA:
+ Speed = 29.7
+ Sprint = 1.6495466820987654
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.894245, -0.653774, -0.879150)
+ RelativeMoveDirection = Vector3(0.095571, 0.000000, -0.995423)
+
+==============================================
+EVENT #123 | FRAME #244
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.610174, 0.000000, -0.792267)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-163.312119, 0.000000, -2671.283203)
+ NEW = Vector3(-89.756035, 0.000000, -2678.771240)
+ OLD MAG = 2676.270752
+ NEW MAG = 2680.274414
+ DELTA MAG = 4.003662
+ DELTA = Vector3(73.556084, 0.000000, -7.488037)
+ DIRECTION DOT = 0.999620140
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-2.628030, -11.637815, -29.575300)
+ NEW = Vector3(-1.814579, -12.054482, -29.680918)
+ OLD MAG = 31.891121
+ NEW MAG = 32.086758
+
+HRP = Vector3(-0.997289, -12.471148, -29.764118)
+
+REGISTRY OTHER DATA:
+ Speed = 29.7
+ Sprint = 1.6520189826871141
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.918224, -0.653774, -0.854075)
+ RelativeMoveDirection = Vector3(0.095470, 0.000000, -0.995432)
+
+==============================================
+EVENT #124 | FRAME #245
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.631858, 0.000000, -0.775084)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-89.756035, 0.000000, -2678.771240)
+ NEW = Vector3(-6.651810, 0.000000, -2684.625000)
+ OLD MAG = 2680.274414
+ NEW MAG = 2684.633301
+ DELTA MAG = 4.358887
+ DELTA = Vector3(83.104225, 0.000000, -5.853760)
+ DIRECTION DOT = 0.999519050
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-1.814579, -12.054482, -29.680918)
+ NEW = Vector3(-0.997289, -12.471148, -29.764118)
+ OLD MAG = 32.086758
+ NEW MAG = 32.286633
+
+HRP = Vector3(-0.073909, -12.887814, -29.829161)
+
+REGISTRY OTHER DATA:
+ Speed = 29.8
+ Sprint = 1.654490379050926
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.944466, -0.655517, -0.823579)
+ RelativeMoveDirection = Vector3(0.098802, 0.000000, -0.995107)
+
+==============================================
+EVENT #125 | FRAME #246
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.655674, 0.000000, -0.755044)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-6.651810, 0.000000, -2684.625000)
+ NEW = Vector3(79.824585, 0.000000, -2687.916504)
+ OLD MAG = 2684.633301
+ NEW MAG = 2689.101562
+ DELTA MAG = 4.468262
+ DELTA = Vector3(86.476395, 0.000000, -3.291504)
+ DIRECTION DOT = 0.999482632
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-0.997289, -12.471148, -29.764118)
+ NEW = Vector3(-0.073909, -12.887814, -29.829161)
+ OLD MAG = 32.286633
+ NEW MAG = 32.494308
+
+HRP = Vector3(0.886939, -13.304480, -29.865732)
+
+REGISTRY OTHER DATA:
+ Speed = 29.8
+ Sprint = 1.657181049864969
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.970611, -0.657257, -0.791156)
+ RelativeMoveDirection = Vector3(0.099837, 0.000000, -0.995004)
+
+==============================================
+EVENT #126 | FRAME #247
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.679701, 0.000000, -0.733490)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(79.824585, 0.000000, -2687.916504)
+ NEW = Vector3(191.296402, 0.000000, -2687.531006)
+ OLD MAG = 2689.101562
+ NEW MAG = 2694.330566
+ DELTA MAG = 5.229004
+ DELTA = Vector3(111.471817, 0.000000, 0.385498)
+ DIRECTION DOT = 0.999144316
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-0.073909, -12.887814, -29.829161)
+ NEW = Vector3(0.886939, -13.304480, -29.865732)
+ OLD MAG = 32.494308
+ NEW MAG = 32.707153
+
+HRP = Vector3(2.125515, -13.721146, -29.861448)
+
+REGISTRY OTHER DATA:
+ Speed = 29.9
+ Sprint = 1.6599392361111112
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.002595, -0.658993, -0.748686)
+ RelativeMoveDirection = Vector3(0.108877, 0.000000, -0.994055)
+
+==============================================
+EVENT #127 | FRAME #248
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.709548, 0.000000, -0.704657)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(191.296402, 0.000000, -2687.531006)
+ NEW = Vector3(287.388367, 0.000000, -2683.762695)
+ OLD MAG = 2694.330566
+ NEW MAG = 2699.106201
+ DELTA MAG = 4.775635
+ DELTA = Vector3(96.091965, 0.000000, 3.768311)
+ DIRECTION DOT = 0.999365747
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.886939, -13.304480, -29.865732)
+ NEW = Vector3(2.125515, -13.721146, -29.861448)
+ OLD MAG = 32.707153
+ NEW MAG = 32.931652
+
+HRP = Vector3(3.193203, -14.137812, -29.819578)
+
+REGISTRY OTHER DATA:
+ Speed = 29.9
+ Sprint = 1.6631670163001544
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.028646, -0.660725, -0.710865)
+ RelativeMoveDirection = Vector3(0.103024, 0.000000, -0.994679)
+
+==============================================
+EVENT #128 | FRAME #249
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.734273, 0.000000, -0.678855)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(287.388367, 0.000000, -2683.762695)
+ NEW = Vector3(420.526764, 0.000000, -2671.913086)
+ OLD MAG = 2699.106201
+ NEW MAG = 2704.803711
+ DELTA MAG = 5.697510
+ DELTA = Vector3(133.138397, 0.000000, 11.849609)
+ DIRECTION DOT = 0.998778582
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.125515, -13.721146, -29.861448)
+ NEW = Vector3(3.193203, -14.137812, -29.819578)
+ OLD MAG = 32.931652
+ NEW MAG = 33.155415
+
+HRP = Vector3(4.672518, -14.554478, -29.687916)
+
+REGISTRY OTHER DATA:
+ Speed = 30
+ Sprint = 1.6661149389949845
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.062405, -0.663317, -0.656740)
+ RelativeMoveDirection = Vector3(0.116634, 0.000000, -0.993175)
+
+==============================================
+EVENT #129 | FRAME #250
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(0.767009, 0.000000, -0.641636)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.193203, -14.137812, -29.819578)
+ NEW = Vector3(4.672518, -14.554478, -29.687916)
+ OLD MAG = 33.155415
+ NEW MAG = 33.392178
+
+HRP = Vector3(4.672516, -14.971144, -29.687901)
+
+REGISTRY OTHER DATA:
+ Speed = 30
+ Sprint = 1.6696319203317902
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.062405, -0.663317, -0.656740)
+ RelativeMoveDirection = Vector3(0.067274, 0.000000, -0.997734)
+
+==============================================
+EVENT #130 | FRAME #251
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(0.767009, 0.000000, -0.641636)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(420.526764, 0.000000, -2671.913086)
+ NEW = Vector3(494.748199, 0.000000, -2663.231689)
+ OLD MAG = 2704.803711
+ NEW MAG = 2708.796631
+ DELTA MAG = 3.992920
+ DELTA = Vector3(74.221436, 0.000000, 8.681396)
+ DIRECTION DOT = 0.999619961
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.672518, -14.554478, -29.687916)
+ NEW = Vector3(4.672516, -14.971144, -29.687901)
+ OLD MAG = 33.392178
+ NEW MAG = 33.575871
+
+HRP = Vector3(5.497198, -15.387810, -29.591440)
+
+REGISTRY OTHER DATA:
+ Speed = 30
+ Sprint = 1.6696319203317902
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.080077, -0.664179, -0.626337)
+ RelativeMoveDirection = Vector3(0.094762, 0.000000, -0.995500)
+
+==============================================
+EVENT #131 | FRAME #252
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(0.784466, 0.000000, -0.620171)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(494.748199, 0.000000, -2663.231689)
+ NEW = Vector3(565.734497, 0.000000, -2653.014404)
+ OLD MAG = 2708.796631
+ NEW MAG = 2712.663086
+ DELTA MAG = 3.866455
+ DELTA = Vector3(70.986298, 0.000000, 10.217285)
+ DIRECTION DOT = 0.999651015
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.672516, -14.971144, -29.687901)
+ NEW = Vector3(5.497198, -15.387810, -29.591440)
+ OLD MAG = 33.575871
+ NEW MAG = 33.803215
+
+HRP = Vector3(6.285934, -15.804476, -29.477915)
+
+REGISTRY OTHER DATA:
+ Speed = 30.1
+ Sprint = 1.6720966857156636
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.096085, -0.665901, -0.595964)
+ RelativeMoveDirection = Vector3(0.093517, 0.000000, -0.995618)
+
+==============================================
+EVENT #132 | FRAME #253
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(0.800633, 0.000000, -0.599156)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(565.734497, 0.000000, -2653.014404)
+ NEW = Vector3(633.459656, 0.000000, -2641.506348)
+ OLD MAG = 2712.663086
+ NEW MAG = 2716.399658
+ DELTA MAG = 3.736572
+ DELTA = Vector3(67.725159, 0.000000, 11.508057)
+ DIRECTION DOT = 0.999680698
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.497198, -15.387810, -29.591440)
+ NEW = Vector3(6.285934, -15.804476, -29.477915)
+ OLD MAG = 33.803215
+ NEW MAG = 34.032951
+
+HRP = Vector3(7.038435, -16.221144, -29.350048)
+
+REGISTRY OTHER DATA:
+ Speed = 30.1
+ Sprint = 1.6744833863811728
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.110717, -0.666761, -0.567219)
+ RelativeMoveDirection = Vector3(0.092277, 0.000000, -0.995733)
+
+==============================================
+EVENT #133 | FRAME #254
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(0.815570, 0.000000, -0.578659)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(633.459656, 0.000000, -2641.506348)
+ NEW = Vector3(704.018799, 0.000000, -2627.582764)
+ OLD MAG = 2716.399658
+ NEW MAG = 2720.263428
+ DELTA MAG = 3.863770
+ DELTA = Vector3(70.559143, 0.000000, 13.923584)
+ DIRECTION DOT = 0.999651074
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.285934, -15.804476, -29.477915)
+ NEW = Vector3(7.038435, -16.221144, -29.350048)
+ OLD MAG = 34.032951
+ NEW MAG = 34.265003
+
+HRP = Vector3(7.822424, -16.637812, -29.195341)
+
+REGISTRY OTHER DATA:
+ Speed = 30.2
+ Sprint = 1.6767899124710648
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.125216, -0.667620, -0.536817)
+ RelativeMoveDirection = Vector3(0.093329, 0.000000, -0.995635)
+
+==============================================
+EVENT #134 | FRAME #255
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(0.830624, 0.000000, -0.556833)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(704.018799, 0.000000, -2627.582764)
+ NEW = Vector3(777.322144, 0.000000, -2610.998291)
+ OLD MAG = 2720.263428
+ NEW MAG = 2724.250732
+ DELTA MAG = 3.987305
+ DELTA = Vector3(73.303345, 0.000000, 16.584473)
+ DIRECTION DOT = 0.999619961
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.038435, -16.221144, -29.350048)
+ NEW = Vector3(7.822424, -16.637812, -29.195341)
+ OLD MAG = 34.265003
+ NEW MAG = 34.501812
+
+HRP = Vector3(8.636907, -17.054480, -29.011070)
+
+REGISTRY OTHER DATA:
+ Speed = 30.2
+ Sprint = 1.6791749553915896
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.139296, -0.669334, -0.503980)
+ RelativeMoveDirection = Vector3(0.094379, 0.000000, -0.995536)
+
+==============================================
+EVENT #135 | FRAME #256
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.845711, 0.000000, -0.533641)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(777.322144, 0.000000, -2610.998291)
+ NEW = Vector3(1179.534424, 0.000000, -2677.781250)
+ OLD MAG = 2724.250732
+ NEW MAG = 2926.057861
+ DELTA MAG = 201.807129
+ DELTA = Vector3(402.212280, 0.000000, -66.782959)
+ DIRECTION DOT = 0.992127359
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.822424, -16.637812, -29.195341)
+ NEW = Vector3(8.636907, -17.054480, -29.011070)
+ OLD MAG = 34.501812
+ NEW MAG = 34.743252
+
+HRP = Vector3(13.105927, -11.984114, -29.753105)
+
+REGISTRY OTHER DATA:
+ Speed = 32.5
+ Sprint = 1.6863358508490809
+ State = Move
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.153695, -0.670191, -0.468862)
+ RelativeMoveDirection = Vector3(0.191228, -0.000000, -0.981546)
+
+==============================================
+EVENT #136 | FRAME #257
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.861324, 0.000000, -0.508056)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1179.534424, 0.000000, -2677.781250)
+ NEW = Vector3(1563.600098, 0.000000, -2724.662598)
+ OLD MAG = 2926.057861
+ NEW MAG = 3141.437988
+ DELTA MAG = 215.380127
+ DELTA = Vector3(384.065674, 0.000000, -46.881348)
+ DIRECTION DOT = 0.994380057
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(8.636907, -17.054480, -29.011070)
+ NEW = Vector3(13.105927, -11.984114, -29.753105)
+ OLD MAG = 34.743252
+ NEW MAG = 34.650131
+
+HRP = Vector3(17.373322, -2.619102, -30.274008)
+
+REGISTRY OTHER DATA:
+ Speed = 34.9
+ Sprint = 1.693325365211148
+ State = Move
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.169762, -0.671900, -0.424509)
+ RelativeMoveDirection = Vector3(0.265271, -0.000000, -0.964174)
+
+==============================================
+EVENT #137 | FRAME #258
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.879476, 0.000000, -0.475943)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1563.600098, 0.000000, -2724.662598)
+ NEW = Vector3(1974.082520, 0.000000, -2748.259277)
+ OLD MAG = 3141.437988
+ NEW MAG = 3383.774658
+ DELTA MAG = 242.336670
+ DELTA = Vector3(410.482422, 0.000000, -23.596680)
+ DIRECTION DOT = 0.994810581
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(13.105927, -11.984114, -29.753105)
+ NEW = Vector3(17.373322, -2.619102, -30.274008)
+ OLD MAG = 34.650131
+ NEW MAG = 35.002964
+
+HRP = Vector3(21.934235, 0.542012, -30.536196)
+
+REGISTRY OTHER DATA:
+ Speed = 37.5
+ Sprint = 1.7009122526434102
+ State = Move
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.189837, -0.674457, -0.359715)
+ RelativeMoveDirection = Vector3(0.327357, -0.000000, -0.944901)
+
+==============================================
+EVENT #138 | FRAME #259
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.903468, 0.000000, -0.428656)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1974.082520, 0.000000, -2748.259277)
+ NEW = Vector3(2170.645020, 0.000000, -2709.940674)
+ OLD MAG = 3383.774658
+ NEW MAG = 3472.099854
+ DELTA MAG = 88.325195
+ DELTA = Vector3(196.562500, 0.000000, 38.318604)
+ DIRECTION DOT = 0.998625278
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(17.373322, -2.619102, -30.274008)
+ NEW = Vector3(21.934235, 0.542012, -30.536196)
+ OLD MAG = 35.002964
+ NEW MAG = 37.601379
+
+HRP = Vector3(24.118261, 1.383903, -30.110434)
+
+REGISTRY OTHER DATA:
+ Speed = 38.5
+ Sprint = 1.7075389589111172
+ State = Move
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.204564, -0.676158, -0.303043)
+ RelativeMoveDirection = Vector3(0.326795, -0.000000, -0.945095)
+
+==============================================
+EVENT #139 | FRAME #260
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(0.922267, 0.000000, -0.386553)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2170.645020, 0.000000, -2709.940674)
+ NEW = Vector3(2247.645508, 0.000000, -2626.706787)
+ OLD MAG = 3472.099854
+ NEW MAG = 3457.093994
+ DELTA MAG = -15.005859
+ DELTA = Vector3(77.000488, 0.000000, 83.233887)
+ DIRECTION DOT = 0.999473870
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(21.934235, 0.542012, -30.536196)
+ NEW = Vector3(24.118261, 1.383903, -30.110434)
+ OLD MAG = 37.601379
+ NEW MAG = 38.603676
+
+HRP = Vector3(24.973824, 1.412370, -29.185614)
+
+REGISTRY OTHER DATA:
+ Speed = 38.4
+ Sprint = 1.71529839666773
+ State = Move
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.209652, -0.677855, -0.277947)
+ RelativeMoveDirection = Vector3(0.313853, -0.000000, -0.949472)
+
+==============================================
+EVENT #140 | FRAME #261
+==============================================
+STATE = Enum.HumanoidStateType.Jumping
+MOVE DIRECTION = Vector3(0.929665, 0.000000, -0.368405)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2247.645508, 0.000000, -2626.706787)
+ NEW = Vector3(2492.332520, 0.000000, -2710.856201)
+ OLD MAG = 3457.093994
+ NEW MAG = 3682.453369
+ DELTA MAG = 225.359375
+ DELTA = Vector3(244.687012, 0.000000, -84.149414)
+ DIRECTION DOT = 0.999365091
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(24.118261, 1.383903, -30.110434)
+ NEW = Vector3(24.973824, 1.412370, -29.185614)
+ OLD MAG = 38.603676
+ NEW MAG = 38.438087
+
+HRP = Vector3(27.692583, 17.112175, -30.120626)
+
+REGISTRY OTHER DATA:
+ Speed = 40.9
+ Sprint = 1.7217546072716674
+ State = Move
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.231458, -0.680394, -0.143444)
+ RelativeMoveDirection = Vector3(0.329049, -0.000000, -0.944313)
+
+==============================================
+EVENT #141 | FRAME #262
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.964057, 0.000000, -0.265696)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2492.332520, 0.000000, -2710.856201)
+ NEW = Vector3(2515.164795, 0.000000, -2613.347168)
+ OLD MAG = 3682.453369
+ NEW MAG = 3627.070068
+ DELTA MAG = -55.383301
+ DELTA = Vector3(22.832275, 0.000000, 97.509033)
+ DIRECTION DOT = 0.999739408
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(24.973824, 1.412370, -29.185614)
+ NEW = Vector3(27.692583, 17.112175, -30.120626)
+ OLD MAG = 38.438087
+ NEW MAG = 44.350399
+
+HRP = Vector3(27.946270, 16.695507, -29.037186)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 1.7287896677314154
+ State = Move
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.231458, -0.680394, -0.143444)
+ RelativeMoveDirection = Vector3(0.247163, -0.000000, -0.968974)
+
+==============================================
+EVENT #142 | FRAME #263
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.964057, 0.000000, -0.265696)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.692583, 17.112175, -30.120626)
+ NEW = Vector3(27.946270, 16.695507, -29.037186)
+ OLD MAG = 44.350399
+ NEW MAG = 43.622150
+
+HRP = Vector3(27.946270, 16.278839, -29.037186)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.235911, -0.680394, -0.097927)
+ RelativeMoveDirection = Vector3(0.247173, -0.000000, -0.968971)
+
+==============================================
+EVENT #143 | FRAME #264
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.973200, 0.000000, -0.229959)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.946270, 16.695507, -29.037186)
+ NEW = Vector3(27.946270, 16.278839, -29.037186)
+ OLD MAG = 43.622150
+ NEW MAG = 43.464386
+
+HRP = Vector3(27.946270, 15.862172, -29.037186)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.238620, -0.680394, -0.053705)
+ RelativeMoveDirection = Vector3(0.211281, -0.000000, -0.977425)
+
+==============================================
+EVENT #144 | FRAME #265
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.980795, 0.000000, -0.195039)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.946270, 16.278839, -29.037186)
+ NEW = Vector3(27.946270, 15.862172, -29.037186)
+ OLD MAG = 43.464386
+ NEW MAG = 43.310055
+
+HRP = Vector3(27.946270, 15.445506, -29.037186)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.239774, -0.680394, -0.005127)
+ RelativeMoveDirection = Vector3(0.176227, -0.000000, -0.984350)
+
+==============================================
+EVENT #145 | FRAME #266
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.987685, 0.000000, -0.156455)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.946270, 15.862172, -29.037186)
+ NEW = Vector3(27.946270, 15.445506, -29.037186)
+ OLD MAG = 43.310055
+ NEW MAG = 43.159191
+
+HRP = Vector3(27.946270, 15.028840, -29.037186)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.239209, -0.680394, 0.037746)
+ RelativeMoveDirection = Vector3(0.137520, -0.000000, -0.990499)
+
+==============================================
+EVENT #146 | FRAME #267
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.992504, 0.000000, -0.122209)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.946270, 15.445506, -29.037186)
+ NEW = Vector3(27.946270, 15.028840, -29.037186)
+ OLD MAG = 43.159191
+ NEW MAG = 43.011837
+
+HRP = Vector3(27.946270, 14.612174, -29.037186)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.237522, -0.680394, 0.074867)
+ RelativeMoveDirection = Vector3(0.103189, -0.000000, -0.994662)
+
+==============================================
+EVENT #147 | FRAME #268
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.995721, 0.000000, -0.092410)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2515.164795, 0.000000, -2613.347168)
+ NEW = Vector3(2521.062256, 0.000000, -2608.193359)
+ OLD MAG = 3627.070068
+ NEW MAG = 3627.454834
+ DELTA MAG = 0.384766
+ DELTA = Vector3(5.897461, 0.000000, 5.153809)
+ DIRECTION DOT = 0.999997616
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.946270, 15.028840, -29.037186)
+ NEW = Vector3(27.946270, 14.612174, -29.037186)
+ OLD MAG = 43.011837
+ NEW MAG = 42.868027
+
+HRP = Vector3(28.011797, 14.195508, -28.979921)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.235225, -0.680394, 0.106226)
+ RelativeMoveDirection = Vector3(0.075485, -0.000000, -0.997147)
+
+==============================================
+EVENT #148 | FRAME #269
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.658045, 0.000000, -0.752979)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.946270, 14.612174, -29.037186)
+ NEW = Vector3(28.011797, 14.195508, -28.979921)
+ OLD MAG = 42.868027
+ NEW MAG = 42.731827
+
+HRP = Vector3(28.011797, 13.778842, -28.979921)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.504113, -0.680394, -0.531916)
+ RelativeMoveDirection = Vector3(0.050173, -0.000000, -0.998741)
+
+==============================================
+EVENT #149 | FRAME #270
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.687883, 0.000000, -0.725822)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(28.011797, 14.195508, -28.979921)
+ NEW = Vector3(28.011797, 13.778842, -28.979921)
+ OLD MAG = 42.731827
+ NEW MAG = 42.595222
+
+HRP = Vector3(28.011797, 13.362176, -28.979921)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.504113, -0.680394, -0.531916)
+ RelativeMoveDirection = Vector3(0.009845, -0.000000, -0.999951)
+
+==============================================
+EVENT #150 | FRAME #271
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.026827, 0.000000, -0.999640)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2521.062256, 0.000000, -2608.193359)
+ NEW = Vector3(2410.433105, 0.000000, -2716.732178)
+ OLD MAG = 3627.454834
+ NEW MAG = 3631.917236
+ DELTA MAG = 4.462402
+ DELTA = Vector3(-110.629150, 0.000000, -108.538818)
+ DIRECTION DOT = 0.999089122
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(28.011797, 13.778842, -28.979921)
+ NEW = Vector3(28.011797, 13.362176, -28.979921)
+ OLD MAG = 42.595222
+ NEW MAG = 42.462269
+
+HRP = Vector3(26.782585, 12.945510, -30.185907)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
+ RelativeMoveDirection = Vector3(-0.032832, -0.000000, -0.999461)
+
+==============================================
+EVENT #151 | FRAME #272
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(28.011797, 13.362176, -28.979921)
+ NEW = Vector3(26.782585, 12.945510, -30.185907)
+ OLD MAG = 42.462269
+ NEW MAG = 42.380211
+
+HRP = Vector3(26.782585, 12.528844, -30.185907)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
+ RelativeMoveDirection = Vector3(-0.050097, -0.000000, -0.998744)
+
+==============================================
+EVENT #152 | FRAME #273
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.782585, 12.945510, -30.185907)
+ NEW = Vector3(26.782585, 12.528844, -30.185907)
+ OLD MAG = 42.380211
+ NEW MAG = 42.254795
+
+HRP = Vector3(26.782585, 12.112178, -30.185907)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
+ RelativeMoveDirection = Vector3(-0.050105, -0.000000, -0.998744)
+
+==============================================
+EVENT #153 | FRAME #274
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.782585, 12.528844, -30.185907)
+ NEW = Vector3(26.782585, 12.112178, -30.185907)
+ OLD MAG = 42.254795
+ NEW MAG = 42.133129
+
+HRP = Vector3(26.782585, 11.695512, -30.185907)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.200583, -0.680394, -1.223450)
+ RelativeMoveDirection = Vector3(-0.050108, -0.000000, -0.998744)
+
+==============================================
+EVENT #154 | FRAME #275
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.009537, 0.000000, -0.999955)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2410.433105, 0.000000, -2716.732178)
+ NEW = Vector3(2407.444580, 0.000000, -2719.657471)
+ OLD MAG = 3631.917236
+ NEW MAG = 3632.124268
+ DELTA MAG = 0.207031
+ DELTA = Vector3(-2.988525, 0.000000, -2.925293)
+ DIRECTION DOT = 0.999999285
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.782585, 12.112178, -30.185907)
+ NEW = Vector3(26.782585, 11.695512, -30.185907)
+ OLD MAG = 42.133129
+ NEW MAG = 42.015247
+
+HRP = Vector3(26.749378, 11.278846, -30.218410)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.201993, -0.680394, -1.223218)
+ RelativeMoveDirection = Vector3(-0.051257, -0.000000, -0.998686)
+
+==============================================
+EVENT #155 | FRAME #276
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.010690, 0.000000, -0.999943)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2407.444580, 0.000000, -2719.657471)
+ NEW = Vector3(2386.356201, 0.000000, -2739.969238)
+ OLD MAG = 3632.124268
+ NEW MAG = 3633.473389
+ DELTA MAG = 1.349121
+ DELTA = Vector3(-21.088379, 0.000000, -20.311768)
+ DIRECTION DOT = 0.999967515
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.782585, 11.695512, -30.185907)
+ NEW = Vector3(26.749378, 11.278846, -30.218410)
+ OLD MAG = 42.015247
+ NEW MAG = 41.903389
+
+HRP = Vector3(26.515064, 10.862180, -30.444098)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.212403, -0.681238, -1.220983)
+ RelativeMoveDirection = Vector3(-0.058145, -0.000000, -0.998308)
+
+==============================================
+EVENT #156 | FRAME #277
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.018759, 0.000000, -0.999824)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2386.356201, 0.000000, -2739.969238)
+ NEW = Vector3(2362.032227, 0.000000, -2762.968506)
+ OLD MAG = 3633.473389
+ NEW MAG = 3634.995361
+ DELTA MAG = 1.521973
+ DELTA = Vector3(-24.323975, 0.000000, -22.999268)
+ DIRECTION DOT = 0.999957621
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.749378, 11.278846, -30.218410)
+ NEW = Vector3(26.515064, 10.862180, -30.444098)
+ OLD MAG = 41.903389
+ NEW MAG = 41.807640
+
+HRP = Vector3(26.244797, 10.445514, -30.699646)
+
+REGISTRY OTHER DATA:
+ Speed = 40.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.223654, -0.681238, -1.218972)
+ RelativeMoveDirection = Vector3(-0.059273, -0.000000, -0.998242)
+
+==============================================
+EVENT #157 | FRAME #278
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.027979, 0.000000, -0.999609)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2362.032227, 0.000000, -2762.968506)
+ NEW = Vector3(2334.388672, 0.000000, -2788.568848)
+ OLD MAG = 3634.995361
+ NEW MAG = 3636.686035
+ DELTA MAG = 1.690674
+ DELTA = Vector3(-27.643555, 0.000000, -25.600342)
+ DIRECTION DOT = 0.999946475
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.515064, 10.862180, -30.444098)
+ NEW = Vector3(26.244797, 10.445514, -30.699646)
+ OLD MAG = 41.807640
+ NEW MAG = 41.717701
+
+HRP = Vector3(25.937647, 10.028848, -30.984093)
+
+REGISTRY OTHER DATA:
+ Speed = 40.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.236289, -0.681238, -1.216586)
+ RelativeMoveDirection = Vector3(-0.060399, -0.000000, -0.998174)
+
+==============================================
+EVENT #158 | FRAME #279
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.038349, 0.000000, -0.999264)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2334.388672, 0.000000, -2788.568848)
+ NEW = Vector3(2303.332520, 0.000000, -2816.671387)
+ OLD MAG = 3636.686035
+ NEW MAG = 3638.540527
+ DELTA MAG = 1.854492
+ DELTA = Vector3(-31.056152, 0.000000, -28.102539)
+ DIRECTION DOT = 0.999933958
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.244797, 10.445514, -30.699646)
+ NEW = Vector3(25.937647, 10.028848, -30.984093)
+ OLD MAG = 41.717701
+ NEW MAG = 41.633560
+
+HRP = Vector3(25.592579, 9.612182, -31.296343)
+
+REGISTRY OTHER DATA:
+ Speed = 40.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.250826, -0.682082, -1.213199)
+ RelativeMoveDirection = Vector3(-0.061524, -0.000000, -0.998106)
+
+==============================================
+EVENT #159 | FRAME #280
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.049866, 0.000000, -0.998756)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2303.332520, 0.000000, -2816.671387)
+ NEW = Vector3(2268.762939, 0.000000, -2847.164795)
+ OLD MAG = 3638.540527
+ NEW MAG = 3640.553955
+ DELTA MAG = 2.013428
+ DELTA = Vector3(-34.569580, 0.000000, -30.493408)
+ DIRECTION DOT = 0.999920011
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(25.937647, 10.028848, -30.984093)
+ NEW = Vector3(25.592579, 9.612182, -31.296343)
+ OLD MAG = 41.633560
+ NEW MAG = 41.555206
+
+HRP = Vector3(25.208471, 9.195516, -31.635159)
+
+REGISTRY OTHER DATA:
+ Speed = 40.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.266190, -0.682082, -1.209920)
+ RelativeMoveDirection = Vector3(-0.062646, -0.000000, -0.998036)
+
+==============================================
+EVENT #160 | FRAME #281
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.062527, 0.000000, -0.998043)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2268.762939, 0.000000, -2847.164795)
+ NEW = Vector3(2237.001465, 0.000000, -2874.536621)
+ OLD MAG = 3640.553955
+ NEW MAG = 3642.407959
+ DELTA MAG = 1.854004
+ DELTA = Vector3(-31.761475, 0.000000, -27.371826)
+ DIRECTION DOT = 0.999933839
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(25.592579, 9.612182, -31.296343)
+ NEW = Vector3(25.208471, 9.195516, -31.635159)
+ OLD MAG = 41.555206
+ NEW MAG = 41.482620
+
+HRP = Vector3(24.855566, 8.778850, -31.939291)
+
+REGISTRY OTHER DATA:
+ Speed = 40.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.280634, -0.682924, -1.206175)
+ RelativeMoveDirection = Vector3(-0.061470, -0.000000, -0.998109)
+
+==============================================
+EVENT #161 | FRAME #282
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.074028, 0.000000, -0.997256)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2237.001465, 0.000000, -2874.536621)
+ NEW = Vector3(2204.910400, 0.000000, -2901.554199)
+ OLD MAG = 3642.407959
+ NEW MAG = 3644.262207
+ DELTA MAG = 1.854248
+ DELTA = Vector3(-32.091064, 0.000000, -27.017578)
+ DIRECTION DOT = 0.999933839
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(25.208471, 9.195516, -31.635159)
+ NEW = Vector3(24.855566, 8.778850, -31.939291)
+ OLD MAG = 41.482620
+ NEW MAG = 41.412384
+
+HRP = Vector3(24.498999, 8.362184, -32.239483)
+
+REGISTRY OTHER DATA:
+ Speed = 40.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.295028, -0.683766, -1.202257)
+ RelativeMoveDirection = Vector3(-0.061444, -0.000000, -0.998110)
+
+==============================================
+EVENT #162 | FRAME #283
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.085520, 0.000000, -0.996336)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2204.910400, 0.000000, -2901.554199)
+ NEW = Vector3(2169.217041, 0.000000, -2930.839111)
+ OLD MAG = 3644.262207
+ NEW MAG = 3646.274902
+ DELTA MAG = 2.012695
+ DELTA = Vector3(-35.693359, 0.000000, -29.284912)
+ DIRECTION DOT = 0.999919891
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(24.855566, 8.778850, -31.939291)
+ NEW = Vector3(24.498999, 8.362184, -32.239483)
+ OLD MAG = 41.412384
+ NEW MAG = 41.346237
+
+HRP = Vector3(24.102407, 7.945517, -32.564873)
+
+REGISTRY OTHER DATA:
+ Speed = 40.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.310750, -0.684607, -1.197810)
+ RelativeMoveDirection = Vector3(-0.062568, -0.000000, -0.998041)
+
+==============================================
+EVENT #163 | FRAME #284
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.098148, 0.000000, -0.995172)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2169.217041, 0.000000, -2930.839111)
+ NEW = Vector3(2129.817871, 0.000000, -2962.262695)
+ OLD MAG = 3646.274902
+ NEW MAG = 3648.441406
+ DELTA MAG = 2.166504
+ DELTA = Vector3(-39.399170, 0.000000, -31.423584)
+ DIRECTION DOT = 0.999904633
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(24.498999, 8.362184, -32.239483)
+ NEW = Vector3(24.102407, 7.945517, -32.564873)
+ OLD MAG = 41.346237
+ NEW MAG = 41.285931
+
+HRP = Vector3(23.664640, 7.528850, -32.914024)
+
+REGISTRY OTHER DATA:
+ Speed = 40.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.327783, -0.685447, -1.192779)
+ RelativeMoveDirection = Vector3(-0.063688, -0.000000, -0.997970)
+
+==============================================
+EVENT #164 | FRAME #285
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.111905, 0.000000, -0.993719)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2129.817871, 0.000000, -2962.262695)
+ NEW = Vector3(2086.603516, 0.000000, -2995.682129)
+ OLD MAG = 3648.441406
+ NEW MAG = 3650.756836
+ DELTA MAG = 2.315430
+ DELTA = Vector3(-43.214355, 0.000000, -33.419434)
+ DIRECTION DOT = 0.999888003
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(24.102407, 7.945517, -32.564873)
+ NEW = Vector3(23.664640, 7.528850, -32.914024)
+ OLD MAG = 41.285931
+ NEW MAG = 41.231441
+
+HRP = Vector3(23.184481, 7.112183, -33.285351)
+
+REGISTRY OTHER DATA:
+ Speed = 40.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.346589, -0.687124, -1.186481)
+ RelativeMoveDirection = Vector3(-0.064807, -0.000000, -0.997898)
+
+==============================================
+EVENT #165 | FRAME #286
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.126785, 0.000000, -0.991930)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2086.603516, 0.000000, -2995.682129)
+ NEW = Vector3(2039.458740, 0.000000, -3030.939941)
+ OLD MAG = 3650.756836
+ NEW MAG = 3653.216309
+ DELTA MAG = 2.459473
+ DELTA = Vector3(-47.144775, 0.000000, -35.257812)
+ DIRECTION DOT = 0.999870181
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(23.664640, 7.528850, -32.914024)
+ NEW = Vector3(23.184481, 7.112183, -33.285351)
+ OLD MAG = 41.231441
+ NEW MAG = 41.182735
+
+HRP = Vector3(22.660650, 6.695516, -33.677105)
+
+REGISTRY OTHER DATA:
+ Speed = 40.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.366643, -0.688797, -1.179462)
+ RelativeMoveDirection = Vector3(-0.065923, -0.000000, -0.997825)
+
+==============================================
+EVENT #166 | FRAME #287
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.142777, 0.000000, -0.989755)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2039.458740, 0.000000, -3030.939941)
+ NEW = Vector3(1981.341064, 0.000000, -3072.653320)
+ OLD MAG = 3653.216309
+ NEW MAG = 3656.078613
+ DELTA MAG = 2.862305
+ DELTA = Vector3(-58.117676, 0.000000, -41.713379)
+ DIRECTION DOT = 0.999808669
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(23.184481, 7.112183, -33.285351)
+ NEW = Vector3(22.660650, 6.695516, -33.677105)
+ OLD MAG = 41.182735
+ NEW MAG = 41.139790
+
+HRP = Vector3(22.014898, 6.278849, -34.140587)
+
+REGISTRY OTHER DATA:
+ Speed = 40.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.390150, -0.689632, -1.171405)
+ RelativeMoveDirection = Vector3(-0.069334, -0.000000, -0.997594)
+
+==============================================
+EVENT #167 | FRAME #288
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.162146, 0.000000, -0.986767)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1981.341064, 0.000000, -3072.653320)
+ NEW = Vector3(1922.370483, 0.000000, -3113.251953)
+ OLD MAG = 3656.078613
+ NEW MAG = 3658.940674
+ DELTA MAG = 2.862061
+ DELTA = Vector3(-58.970581, 0.000000, -40.598633)
+ DIRECTION DOT = 0.999808788
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(22.660650, 6.695516, -33.677105)
+ NEW = Vector3(22.014898, 6.278849, -34.140587)
+ OLD MAG = 41.139790
+ NEW MAG = 41.105469
+
+HRP = Vector3(21.359669, 5.862182, -34.591682)
+
+REGISTRY OTHER DATA:
+ Speed = 40.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.413934, -0.691300, -1.162223)
+ RelativeMoveDirection = Vector3(-0.069294, -0.000000, -0.997596)
+
+==============================================
+EVENT #168 | FRAME #289
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.181452, 0.000000, -0.983400)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1922.370483, 0.000000, -3113.251953)
+ NEW = Vector3(1859.001709, 0.000000, -3154.967285)
+ OLD MAG = 3658.940674
+ NEW MAG = 3661.926514
+ DELTA MAG = 2.985840
+ DELTA = Vector3(-63.368774, 0.000000, -41.715332)
+ DIRECTION DOT = 0.999785602
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(22.014898, 6.278849, -34.140587)
+ NEW = Vector3(21.359669, 5.862182, -34.591682)
+ OLD MAG = 41.105469
+ NEW MAG = 41.075359
+
+HRP = Vector3(20.655571, 5.445515, -35.055183)
+
+REGISTRY OTHER DATA:
+ Speed = 40.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.438399, -0.692133, -1.152718)
+ RelativeMoveDirection = Vector3(-0.070403, -0.000000, -0.997519)
+
+==============================================
+EVENT #169 | FRAME #290
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.201818, 0.000000, -0.979423)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1859.001709, 0.000000, -3154.967285)
+ NEW = Vector3(1819.930054, 0.000000, -3179.983643)
+ OLD MAG = 3661.926514
+ NEW MAG = 3663.937988
+ DELTA MAG = 2.011475
+ DELTA = Vector3(-39.071655, 0.000000, -25.016357)
+ DIRECTION DOT = 0.999920011
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(21.359669, 5.862182, -34.591682)
+ NEW = Vector3(20.655571, 5.445515, -35.055183)
+ OLD MAG = 41.075359
+ NEW MAG = 41.050846
+
+HRP = Vector3(20.221441, 5.028848, -35.333145)
+
+REGISTRY OTHER DATA:
+ Speed = 40.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.453412, -0.692964, -1.146394)
+ RelativeMoveDirection = Vector3(-0.062323, -0.000000, -0.998056)
+
+==============================================
+EVENT #170 | FRAME #291
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.214222, 0.000000, -0.976785)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1819.930054, 0.000000, -3179.983643)
+ NEW = Vector3(1776.908569, 0.000000, -3206.697021)
+ OLD MAG = 3663.937988
+ NEW MAG = 3666.102783
+ DELTA MAG = 2.164795
+ DELTA = Vector3(-43.021484, 0.000000, -26.713379)
+ DIRECTION DOT = 0.999904811
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(20.655571, 5.445515, -35.055183)
+ NEW = Vector3(20.221441, 5.028848, -35.333145)
+ OLD MAG = 41.050846
+ NEW MAG = 41.019840
+
+HRP = Vector3(19.743425, 4.612181, -35.629959)
+
+REGISTRY OTHER DATA:
+ Speed = 40.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.469649, -0.693795, -1.139333)
+ RelativeMoveDirection = Vector3(-0.063447, -0.000000, -0.997985)
+
+==============================================
+EVENT #171 | FRAME #292
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.227714, 0.000000, -0.973728)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1776.908569, 0.000000, -3206.697021)
+ NEW = Vector3(1711.511475, 0.000000, -3245.447510)
+ OLD MAG = 3666.102783
+ NEW MAG = 3669.087402
+ DELTA MAG = 2.984619
+ DELTA = Vector3(-65.397095, 0.000000, -38.750488)
+ DIRECTION DOT = 0.999785483
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(20.221441, 5.028848, -35.333145)
+ NEW = Vector3(19.743425, 4.612181, -35.629959)
+ OLD MAG = 41.019840
+ NEW MAG = 40.994743
+
+HRP = Vector3(19.016790, 4.195514, -36.060520)
+
+REGISTRY OTHER DATA:
+ Speed = 40.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.494005, -0.695454, -1.127964)
+ RelativeMoveDirection = Vector3(-0.070308, -0.000000, -0.997525)
+
+==============================================
+EVENT #172 | FRAME #293
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.247870, 0.000000, -0.968793)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1711.511475, 0.000000, -3245.447510)
+ NEW = Vector3(1648.992798, 0.000000, -3280.855713)
+ OLD MAG = 3669.087402
+ NEW MAG = 3671.946533
+ DELTA MAG = 2.859131
+ DELTA = Vector3(-62.518677, 0.000000, -35.408203)
+ DIRECTION DOT = 0.999808609
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(19.743425, 4.612181, -35.629959)
+ NEW = Vector3(19.016790, 4.195514, -36.060520)
+ OLD MAG = 40.994743
+ NEW MAG = 40.982944
+
+HRP = Vector3(18.322140, 3.778848, -36.453945)
+
+REGISTRY OTHER DATA:
+ Speed = 40.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.516806, -0.697109, -1.116670)
+ RelativeMoveDirection = Vector3(-0.069118, -0.000000, -0.997608)
+
+==============================================
+EVENT #173 | FRAME #294
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.266808, 0.000000, -0.963750)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1648.992798, 0.000000, -3280.855713)
+ NEW = Vector3(1593.255737, 0.000000, -3311.162354)
+ OLD MAG = 3671.946533
+ NEW MAG = 3674.542236
+ DELTA MAG = 2.595703
+ DELTA = Vector3(-55.737061, 0.000000, -30.306641)
+ DIRECTION DOT = 0.999850929
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(19.016790, 4.195514, -36.060520)
+ NEW = Vector3(18.322140, 3.778848, -36.453945)
+ OLD MAG = 40.982944
+ NEW MAG = 40.974022
+
+HRP = Vector3(17.702839, 3.362181, -36.790688)
+
+REGISTRY OTHER DATA:
+ Speed = 40.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.536422, -0.697935, -1.106860)
+ RelativeMoveDirection = Vector3(-0.066782, -0.000000, -0.997768)
+
+==============================================
+EVENT #174 | FRAME #295
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.283433, 0.000000, -0.958992)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1593.255737, 0.000000, -3311.162354)
+ NEW = Vector3(1544.530151, 0.000000, -3336.718018)
+ OLD MAG = 3674.542236
+ NEW MAG = 3676.854736
+ DELTA MAG = 2.312500
+ DELTA = Vector3(-48.725586, 0.000000, -25.555664)
+ DIRECTION DOT = 0.999888062
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(18.322140, 3.778848, -36.453945)
+ NEW = Vector3(17.702839, 3.362181, -36.790688)
+ OLD MAG = 40.974022
+ NEW MAG = 40.966442
+
+HRP = Vector3(17.161442, 2.945515, -37.074638)
+
+REGISTRY OTHER DATA:
+ Speed = 40.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.553698, -0.699584, -1.097270)
+ RelativeMoveDirection = Vector3(-0.064451, -0.000000, -0.997921)
+
+==============================================
+EVENT #175 | FRAME #296
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.297773, 0.000000, -0.954637)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1544.530151, 0.000000, -3336.718018)
+ NEW = Vector3(1506.803467, 0.000000, -3355.953613)
+ OLD MAG = 3676.854736
+ NEW MAG = 3678.706543
+ DELTA MAG = 1.851807
+ DELTA = Vector3(-37.726685, 0.000000, -19.235596)
+ DIRECTION DOT = 0.999933720
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(17.702839, 3.362181, -36.790688)
+ NEW = Vector3(17.161442, 2.945515, -37.074638)
+ OLD MAG = 40.966442
+ NEW MAG = 40.959980
+
+HRP = Vector3(16.742258, 2.528848, -37.288368)
+
+REGISTRY OTHER DATA:
+ Speed = 40.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.566677, -0.700407, -1.090095)
+ RelativeMoveDirection = Vector3(-0.060975, -0.000000, -0.998139)
+
+==============================================
+EVENT #176 | FRAME #297
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.308758, 0.000000, -0.951141)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1506.803467, 0.000000, -3355.953613)
+ NEW = Vector3(1449.687744, 0.000000, -3383.841553)
+ OLD MAG = 3678.706543
+ NEW MAG = 3681.301025
+ DELTA MAG = 2.594482
+ DELTA = Vector3(-57.115723, 0.000000, -27.887939)
+ DIRECTION DOT = 0.999851048
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(17.161442, 2.945515, -37.074638)
+ NEW = Vector3(16.742258, 2.528848, -37.288368)
+ OLD MAG = 40.959980
+ NEW MAG = 40.952663
+
+HRP = Vector3(16.107637, 2.112182, -37.598232)
+
+REGISTRY OTHER DATA:
+ Speed = 40.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.585796, -0.701230, -1.079407)
+ RelativeMoveDirection = Vector3(-0.066694, 0.000000, -0.997774)
+
+==============================================
+EVENT #177 | FRAME #298
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.325159, 0.000000, -0.945659)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1449.687744, 0.000000, -3383.841553)
+ NEW = Vector3(1388.181274, 0.000000, -3412.480713)
+ OLD MAG = 3681.301025
+ NEW MAG = 3684.029297
+ DELTA MAG = 2.728271
+ DELTA = Vector3(-61.506470, 0.000000, -28.639160)
+ DIRECTION DOT = 0.999830544
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(16.742258, 2.528848, -37.288368)
+ NEW = Vector3(16.107637, 2.112182, -37.598232)
+ OLD MAG = 40.952663
+ NEW MAG = 40.957836
+
+HRP = Vector3(15.424233, 1.695515, -37.916447)
+
+REGISTRY OTHER DATA:
+ Speed = 40.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.605947, -0.702051, -1.067685)
+ RelativeMoveDirection = Vector3(-0.067807, 0.000000, -0.997698)
+
+==============================================
+EVENT #178 | FRAME #299
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.342545, 0.000000, -0.939501)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1388.181274, 0.000000, -3412.480713)
+ NEW = Vector3(1326.110718, 0.000000, -3440.000977)
+ OLD MAG = 3684.029297
+ NEW MAG = 3686.757080
+ DELTA MAG = 2.727783
+ DELTA = Vector3(-62.070557, 0.000000, -27.520264)
+ DIRECTION DOT = 0.999830484
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(16.107637, 2.112182, -37.598232)
+ NEW = Vector3(15.424233, 1.695515, -37.916447)
+ OLD MAG = 40.957836
+ NEW MAG = 40.968754
+
+HRP = Vector3(14.734561, 1.278848, -38.222225)
+
+REGISTRY OTHER DATA:
+ Speed = 40.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.625865, -0.702872, -1.055587)
+ RelativeMoveDirection = Vector3(-0.067769, 0.000000, -0.997701)
+
+==============================================
+EVENT #179 | FRAME #300
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.359816, 0.000000, -0.933023)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1326.110718, 0.000000, -3440.000977)
+ NEW = Vector3(1263.496948, 0.000000, -3466.391113)
+ OLD MAG = 3686.757080
+ NEW MAG = 3689.483887
+ DELTA MAG = 2.726807
+ DELTA = Vector3(-62.613770, 0.000000, -26.390137)
+ DIRECTION DOT = 0.999830604
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(15.424233, 1.695515, -37.916447)
+ NEW = Vector3(14.734561, 1.278848, -38.222225)
+ OLD MAG = 40.968754
+ NEW MAG = 40.983913
+
+HRP = Vector3(14.038853, 0.862181, -38.515450)
+
+REGISTRY OTHER DATA:
+ Speed = 40.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.645543, -0.703691, -1.043117)
+ RelativeMoveDirection = Vector3(-0.067733, 0.000000, -0.997704)
+
+==============================================
+EVENT #180 | FRAME #301
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.376964, 0.000000, -0.926228)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1263.496948, 0.000000, -3466.391113)
+ NEW = Vector3(1204.334961, 0.000000, -3490.130371)
+ OLD MAG = 3689.483887
+ NEW MAG = 3692.077148
+ DELTA MAG = 2.593262
+ DELTA = Vector3(-59.161987, 0.000000, -23.739258)
+ DIRECTION DOT = 0.999851167
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(14.734561, 1.278848, -38.222225)
+ NEW = Vector3(14.038853, 0.862181, -38.515450)
+ OLD MAG = 40.983913
+ NEW MAG = 41.003323
+
+HRP = Vector3(13.381497, 0.445515, -38.779221)
+
+REGISTRY OTHER DATA:
+ Speed = 41
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.663786, -0.704510, -1.031045)
+ RelativeMoveDirection = Vector3(-0.066548, 0.000000, -0.997783)
+
+==============================================
+EVENT #181 | FRAME #302
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.392923, 0.000000, -0.919571)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1204.334961, 0.000000, -3490.130371)
+ NEW = Vector3(1148.728760, 0.000000, -3511.407471)
+ OLD MAG = 3692.077148
+ NEW MAG = 3694.531006
+ DELTA MAG = 2.453857
+ DELTA = Vector3(-55.606201, 0.000000, -21.277100)
+ DIRECTION DOT = 0.999870300
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(14.038853, 0.862181, -38.515450)
+ NEW = Vector3(13.381497, 0.445515, -38.779221)
+ OLD MAG = 41.003323
+ NEW MAG = 41.025490
+
+HRP = Vector3(12.763650, 0.028848, -39.015633)
+
+REGISTRY OTHER DATA:
+ Speed = 41
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.680340, -0.704510, -1.020198)
+ RelativeMoveDirection = Vector3(-0.065365, 0.000000, -0.997861)
+
+==============================================
+EVENT #182 | FRAME #303
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.407713, 0.000000, -0.913110)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1148.728760, 0.000000, -3511.407471)
+ NEW = Vector3(1100.789185, 0.000000, -3528.994629)
+ OLD MAG = 3694.531006
+ NEW MAG = 3696.693115
+ DELTA MAG = 2.162109
+ DELTA = Vector3(-47.939575, 0.000000, -17.587158)
+ DIRECTION DOT = 0.999904692
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(13.381497, 0.445515, -38.779221)
+ NEW = Vector3(12.763650, 0.028848, -39.015633)
+ OLD MAG = 41.025490
+ NEW MAG = 41.050350
+
+HRP = Vector3(12.230989, -0.387819, -39.211044)
+
+REGISTRY OTHER DATA:
+ Speed = 41
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.694668, -0.705328, -1.009926)
+ RelativeMoveDirection = Vector3(-0.063036, 0.000000, -0.998011)
+
+==============================================
+EVENT #183 | FRAME #304
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.420306, 0.000000, -0.907383)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1100.789185, 0.000000, -3528.994629)
+ NEW = Vector3(971.182373, 0.000000, -3571.187500)
+ OLD MAG = 3696.693115
+ NEW MAG = 3700.888428
+ DELTA MAG = 4.195312
+ DELTA = Vector3(-129.606812, 0.000000, -42.192871)
+ DIRECTION DOT = 0.999321640
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(12.763650, 0.028848, -39.015633)
+ NEW = Vector3(12.230989, -0.387819, -39.211044)
+ OLD MAG = 41.050350
+ NEW MAG = 41.076191
+
+HRP = Vector3(10.790915, -0.804485, -39.679855)
+
+REGISTRY OTHER DATA:
+ Speed = 41.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.732200, -0.707775, -0.981294)
+ RelativeMoveDirection = Vector3(-0.085973, 0.000000, -0.996297)
+
+==============================================
+EVENT #184 | FRAME #305
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.453486, 0.000000, -0.891263)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(12.230989, -0.387819, -39.211044)
+ NEW = Vector3(10.790915, -0.804485, -39.679855)
+ OLD MAG = 41.076191
+ NEW MAG = 41.128845
+
+HRP = Vector3(10.790914, -1.221152, -39.679855)
+
+REGISTRY OTHER DATA:
+ Speed = 41.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.732200, -0.707775, -0.981294)
+ RelativeMoveDirection = Vector3(-0.049162, 0.000000, -0.998791)
+
+==============================================
+EVENT #185 | FRAME #306
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.453486, 0.000000, -0.891263)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(971.182373, 0.000000, -3571.187500)
+ NEW = Vector3(905.945312, 0.000000, -3591.102051)
+ OLD MAG = 3700.888428
+ NEW MAG = 3703.613281
+ DELTA MAG = 2.724854
+ DELTA = Vector3(-65.237061, 0.000000, -19.914551)
+ DIRECTION DOT = 0.999830544
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(10.790915, -0.804485, -39.679855)
+ NEW = Vector3(10.790914, -1.221152, -39.679855)
+ OLD MAG = 41.128845
+ NEW MAG = 41.139107
+
+HRP = Vector3(10.066057, -1.637819, -39.901127)
+
+REGISTRY OTHER DATA:
+ Speed = 41.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.750413, -0.708589, -0.966841)
+ RelativeMoveDirection = Vector3(-0.067548, 0.000000, -0.997716)
+
+==============================================
+EVENT #186 | FRAME #307
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.469848, 0.000000, -0.882747)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(905.945312, 0.000000, -3591.102051)
+ NEW = Vector3(840.303711, 0.000000, -3609.823730)
+ OLD MAG = 3703.613281
+ NEW MAG = 3706.337402
+ DELTA MAG = 2.724121
+ DELTA = Vector3(-65.641602, 0.000000, -18.721680)
+ DIRECTION DOT = 0.999830544
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(10.790914, -1.221152, -39.679855)
+ NEW = Vector3(10.066057, -1.637819, -39.901127)
+ OLD MAG = 41.139107
+ NEW MAG = 41.183830
+
+HRP = Vector3(9.336707, -2.054486, -40.109146)
+
+REGISTRY OTHER DATA:
+ Speed = 41.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.768342, -0.709402, -0.952050)
+ RelativeMoveDirection = Vector3(-0.067510, 0.000000, -0.997719)
+
+==============================================
+EVENT #187 | FRAME #308
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.486050, 0.000000, -0.873931)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(840.303711, 0.000000, -3609.823730)
+ NEW = Vector3(794.987244, 0.000000, -3622.129395)
+ OLD MAG = 3706.337402
+ NEW MAG = 3708.345459
+ DELTA MAG = 2.008057
+ DELTA = Vector3(-45.316467, 0.000000, -12.305664)
+ DIRECTION DOT = 0.999919891
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(10.066057, -1.637819, -39.901127)
+ NEW = Vector3(9.336707, -2.054486, -40.109146)
+ OLD MAG = 41.183830
+ NEW MAG = 41.232738
+
+HRP = Vector3(8.833190, -2.471152, -40.245876)
+
+REGISTRY OTHER DATA:
+ Speed = 41.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.780568, -0.710214, -0.941440)
+ RelativeMoveDirection = Vector3(-0.061730, 0.000000, -0.998093)
+
+==============================================
+EVENT #188 | FRAME #309
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.497093, 0.000000, -0.867697)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(794.987244, 0.000000, -3622.129395)
+ NEW = Vector3(753.642578, 0.000000, -3632.846191)
+ OLD MAG = 3708.345459
+ NEW MAG = 3710.195068
+ DELTA MAG = 1.849609
+ DELTA = Vector3(-41.344666, 0.000000, -10.716797)
+ DIRECTION DOT = 0.999933839
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(9.336707, -2.054486, -40.109146)
+ NEW = Vector3(8.833190, -2.471152, -40.245876)
+ OLD MAG = 41.232738
+ NEW MAG = 41.277870
+
+HRP = Vector3(8.373805, -2.887819, -40.364952)
+
+REGISTRY OTHER DATA:
+ Speed = 41.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.791575, -0.711025, -0.931586)
+ RelativeMoveDirection = Vector3(-0.060556, 0.000000, -0.998165)
+
+==============================================
+EVENT #189 | FRAME #310
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.507063, 0.000000, -0.861909)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(753.642578, 0.000000, -3632.846191)
+ NEW = Vector3(682.966980, 0.000000, -3649.694824)
+ OLD MAG = 3710.195068
+ NEW MAG = 3713.046631
+ DELTA MAG = 2.851562
+ DELTA = Vector3(-70.675598, 0.000000, -16.848633)
+ DIRECTION DOT = 0.999808788
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(8.833190, -2.471152, -40.245876)
+ NEW = Vector3(8.373805, -2.887819, -40.364952)
+ OLD MAG = 41.277870
+ NEW MAG = 41.325409
+
+HRP = Vector3(7.588521, -3.304485, -40.552158)
+
+REGISTRY OTHER DATA:
+ Speed = 41.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.809869, -0.711835, -0.915097)
+ RelativeMoveDirection = Vector3(-0.068573, 0.000000, -0.997646)
+
+==============================================
+EVENT #190 | FRAME #311
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.523856, 0.000000, -0.851807)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(682.966980, 0.000000, -3649.694824)
+ NEW = Vector3(620.312927, 0.000000, -3663.490723)
+ OLD MAG = 3713.046631
+ NEW MAG = 3715.636230
+ DELTA MAG = 2.589600
+ DELTA = Vector3(-62.654053, 0.000000, -13.795898)
+ DIRECTION DOT = 0.999851048
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(8.373805, -2.887819, -40.364952)
+ NEW = Vector3(7.588521, -3.304485, -40.552158)
+ OLD MAG = 41.325409
+ NEW MAG = 41.388195
+
+HRP = Vector3(6.892365, -3.721152, -40.705444)
+
+REGISTRY OTHER DATA:
+ Speed = 41.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.825925, -0.713453, -0.899351)
+ RelativeMoveDirection = Vector3(-0.066236, 0.000000, -0.997804)
+
+==============================================
+EVENT #191 | FRAME #312
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.538507, 0.000000, -0.842621)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(620.312927, 0.000000, -3663.490723)
+ NEW = Vector3(561.595825, 0.000000, -3675.429688)
+ OLD MAG = 3715.636230
+ NEW MAG = 3718.087158
+ DELTA MAG = 2.450928
+ DELTA = Vector3(-58.717102, 0.000000, -11.938965)
+ DIRECTION DOT = 0.999870300
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.588521, -3.304485, -40.552158)
+ NEW = Vector3(6.892365, -3.721152, -40.705444)
+ OLD MAG = 41.388195
+ NEW MAG = 41.452202
+
+HRP = Vector3(6.239954, -4.137818, -40.838100)
+
+REGISTRY OTHER DATA:
+ Speed = 41.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.840496, -0.714260, -0.885098)
+ RelativeMoveDirection = Vector3(-0.065053, 0.000000, -0.997882)
+
+==============================================
+EVENT #192 | FRAME #313
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.552036, 0.000000, -0.833820)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(561.595825, 0.000000, -3675.429688)
+ NEW = Vector3(527.964233, 0.000000, -3681.945557)
+ OLD MAG = 3718.087158
+ NEW MAG = 3719.605957
+ DELTA MAG = 1.518799
+ DELTA = Vector3(-33.631592, 0.000000, -6.515869)
+ DIRECTION DOT = 0.999957740
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.892365, -3.721152, -40.705444)
+ NEW = Vector3(6.239954, -4.137818, -40.838100)
+ OLD MAG = 41.452202
+ NEW MAG = 41.518780
+
+HRP = Vector3(5.866269, -4.554485, -40.910500)
+
+REGISTRY OTHER DATA:
+ Speed = 41.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.848780, -0.715067, -0.876500)
+ RelativeMoveDirection = Vector3(-0.058129, 0.000000, -0.998309)
+
+==============================================
+EVENT #193 | FRAME #314
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.559703, 0.000000, -0.828694)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(527.964233, 0.000000, -3681.945557)
+ NEW = Vector3(468.900085, 0.000000, -3692.402832)
+ OLD MAG = 3719.605957
+ NEW MAG = 3722.056641
+ DELTA MAG = 2.450684
+ DELTA = Vector3(-59.064148, 0.000000, -10.457275)
+ DIRECTION DOT = 0.999870241
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.239954, -4.137818, -40.838100)
+ NEW = Vector3(5.866269, -4.554485, -40.910500)
+ OLD MAG = 41.518780
+ NEW MAG = 41.579147
+
+HRP = Vector3(5.210001, -4.971152, -41.026691)
+
+REGISTRY OTHER DATA:
+ Speed = 41.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.862959, -0.715872, -0.861875)
+ RelativeMoveDirection = Vector3(-0.065003, 0.000000, -0.997885)
+
+==============================================
+EVENT #194 | FRAME #315
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.573004, 0.000000, -0.819553)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(468.900085, 0.000000, -3692.402832)
+ NEW = Vector3(405.389587, 0.000000, -3702.517822)
+ OLD MAG = 3722.056641
+ NEW MAG = 3724.644775
+ DELTA MAG = 2.588135
+ DELTA = Vector3(-63.510498, 0.000000, -10.114990)
+ DIRECTION DOT = 0.999851167
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.866269, -4.554485, -40.910500)
+ NEW = Vector3(5.210001, -4.971152, -41.026691)
+ OLD MAG = 41.579147
+ NEW MAG = 41.653881
+
+HRP = Vector3(4.504328, -5.387819, -41.139080)
+
+REGISTRY OTHER DATA:
+ Speed = 41.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.877863, -0.716677, -0.846009)
+ RelativeMoveDirection = Vector3(-0.066119, 0.000000, -0.997812)
+
+==============================================
+EVENT #195 | FRAME #316
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.587090, 0.000000, -0.809522)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(405.389587, 0.000000, -3702.517822)
+ NEW = Vector3(333.146851, 0.000000, -3712.576172)
+ OLD MAG = 3724.644775
+ NEW MAG = 3727.493652
+ DELTA MAG = 2.848877
+ DELTA = Vector3(-72.242737, 0.000000, -10.058350)
+ DIRECTION DOT = 0.999808729
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(5.210001, -4.971152, -41.026691)
+ NEW = Vector3(4.504328, -5.387819, -41.139080)
+ OLD MAG = 41.653881
+ NEW MAG = 41.734177
+
+HRP = Vector3(3.701632, -5.804486, -41.250839)
+
+REGISTRY OTHER DATA:
+ Speed = 41.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.894274, -0.716677, -0.828643)
+ RelativeMoveDirection = Vector3(-0.068381, 0.000000, -0.997659)
+
+==============================================
+EVENT #196 | FRAME #317
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.602841, 0.000000, -0.797861)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(333.146851, 0.000000, -3712.576172)
+ NEW = Vector3(290.559753, 0.000000, -3718.005859)
+ OLD MAG = 3727.493652
+ NEW MAG = 3729.342285
+ DELTA MAG = 1.848633
+ DELTA = Vector3(-42.587097, 0.000000, -5.429688)
+ DIRECTION DOT = 0.999933779
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.504328, -5.387819, -41.139080)
+ NEW = Vector3(3.701632, -5.804486, -41.250839)
+ OLD MAG = 41.734177
+ NEW MAG = 41.821358
+
+HRP = Vector3(3.228442, -6.221153, -41.311169)
+
+REGISTRY OTHER DATA:
+ Speed = 41.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.903767, -0.716677, -0.818278)
+ RelativeMoveDirection = Vector3(-0.060303, 0.000000, -0.998180)
+
+==============================================
+EVENT #197 | FRAME #318
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.611999, 0.000000, -0.790859)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(290.559753, 0.000000, -3718.005859)
+ NEW = Vector3(157.903503, 0.000000, -3730.120850)
+ OLD MAG = 3729.342285
+ NEW MAG = 3733.461670
+ DELTA MAG = 4.119385
+ DELTA = Vector3(-132.656250, 0.000000, -12.114990)
+ DIRECTION DOT = 0.999363303
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.701632, -5.804486, -41.250839)
+ NEW = Vector3(3.228442, -6.221153, -41.311169)
+ OLD MAG = 41.821358
+ NEW MAG = 41.901531
+
+HRP = Vector3(1.754484, -6.637820, -41.445782)
+
+REGISTRY OTHER DATA:
+ Speed = 41.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.932503, -0.717480, -0.784641)
+ RelativeMoveDirection = Vector3(-0.084397, 0.000000, -0.996432)
+
+==============================================
+EVENT #198 | FRAME #319
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.639866, 0.000000, -0.768487)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(157.903503, 0.000000, -3730.120850)
+ NEW = Vector3(102.160416, 0.000000, -3734.370361)
+ OLD MAG = 3733.461670
+ NEW MAG = 3735.767578
+ DELTA MAG = 2.305908
+ DELTA = Vector3(-55.743088, 0.000000, -4.249512)
+ DIRECTION DOT = 0.999888122
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(3.228442, -6.221153, -41.311169)
+ NEW = Vector3(1.754484, -6.637820, -41.445782)
+ OLD MAG = 41.901531
+ NEW MAG = 42.010616
+
+HRP = Vector3(1.135116, -7.054487, -41.492996)
+
+REGISTRY OTHER DATA:
+ Speed = 41.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.944157, -0.717480, -0.770578)
+ RelativeMoveDirection = Vector3(-0.063667, 0.000000, -0.997971)
+
+==============================================
+EVENT #199 | FRAME #320
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.651311, 0.000000, -0.758811)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(102.160416, 0.000000, -3734.370361)
+ NEW = Vector3(42.024788, 0.000000, -3737.979736)
+ OLD MAG = 3735.767578
+ NEW MAG = 3738.216064
+ DELTA MAG = 2.448486
+ DELTA = Vector3(-60.135628, 0.000000, -3.609375)
+ DIRECTION DOT = 0.999870181
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.754484, -6.637820, -41.445782)
+ NEW = Vector3(1.135116, -7.054487, -41.492996)
+ OLD MAG = 42.010616
+ NEW MAG = 42.103718
+
+HRP = Vector3(0.466943, -7.471154, -41.533100)
+
+REGISTRY OTHER DATA:
+ Speed = 41.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.956520, -0.718283, -0.754413)
+ RelativeMoveDirection = Vector3(-0.064789, 0.000000, -0.997899)
+
+==============================================
+EVENT #200 | FRAME #321
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.663473, 0.000000, -0.748201)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(42.024788, 0.000000, -3737.979736)
+ NEW = Vector3(-0.980373, 0.000000, -3740.063721)
+ OLD MAG = 3738.216064
+ NEW MAG = 3740.063965
+ DELTA MAG = 1.847900
+ DELTA = Vector3(-43.005161, 0.000000, -2.083984)
+ DIRECTION DOT = 0.999933779
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(1.135116, -7.054487, -41.492996)
+ NEW = Vector3(0.466943, -7.471154, -41.533100)
+ OLD MAG = 42.103718
+ NEW MAG = 42.202305
+
+HRP = Vector3(-0.010893, -7.887821, -41.556255)
+
+REGISTRY OTHER DATA:
+ Speed = 41.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.965153, -0.718283, -0.743336)
+ RelativeMoveDirection = Vector3(-0.060164, 0.000000, -0.998189)
+
+==============================================
+EVENT #201 | FRAME #322
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.672054, 0.000000, -0.740502)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-0.980373, 0.000000, -3740.063721)
+ NEW = Vector3(-112.997452, 0.000000, -3742.130127)
+ OLD MAG = 3740.063965
+ NEW MAG = 3743.835693
+ DELTA MAG = 3.771729
+ DELTA = Vector3(-112.017075, 0.000000, -2.066406)
+ DIRECTION DOT = 0.999552250
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.466943, -7.471154, -41.533100)
+ NEW = Vector3(-0.010893, -7.887821, -41.556255)
+ OLD MAG = 42.202305
+ NEW MAG = 42.298229
+
+HRP = Vector3(-1.255526, -8.304487, -41.579216)
+
+REGISTRY OTHER DATA:
+ Speed = 41.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.986997, -0.718283, -0.714077)
+ RelativeMoveDirection = Vector3(-0.078517, 0.000000, -0.996913)
+
+==============================================
+EVENT #202 | FRAME #323
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.693944, 0.000000, -0.720029)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-112.997452, 0.000000, -3742.130127)
+ NEW = Vector3(-173.371475, 0.000000, -3742.269287)
+ OLD MAG = 3743.835693
+ NEW MAG = 3746.283203
+ DELTA MAG = 2.447510
+ DELTA = Vector3(-60.374023, 0.000000, -0.139160)
+ DIRECTION DOT = 0.999870181
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-0.010893, -7.887821, -41.556255)
+ NEW = Vector3(-1.255526, -8.304487, -41.579216)
+ OLD MAG = 42.298229
+ NEW MAG = 42.419006
+
+HRP = Vector3(-1.926349, -8.721153, -41.580765)
+
+REGISTRY OTHER DATA:
+ Speed = 41.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.998395, -0.719084, -0.697227)
+ RelativeMoveDirection = Vector3(-0.064682, 0.000000, -0.997906)
+
+==============================================
+EVENT #203 | FRAME #324
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.705474, 0.000000, -0.708735)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-173.371475, 0.000000, -3742.269287)
+ NEW = Vector3(-242.409714, 0.000000, -3741.155029)
+ OLD MAG = 3746.283203
+ NEW MAG = 3749.000244
+ DELTA MAG = 2.717041
+ DELTA = Vector3(-69.038239, 0.000000, 1.114258)
+ DIRECTION DOT = 0.999830484
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-1.255526, -8.304487, -41.579216)
+ NEW = Vector3(-1.926349, -8.721153, -41.580765)
+ OLD MAG = 42.419006
+ NEW MAG = 42.529156
+
+HRP = Vector3(-2.693440, -9.137819, -41.568382)
+
+REGISTRY OTHER DATA:
+ Speed = 41.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.011085, -0.719084, -0.678693)
+ RelativeMoveDirection = Vector3(-0.066950, 0.000000, -0.997756)
+
+==============================================
+EVENT #204 | FRAME #325
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.718427, 0.000000, -0.695603)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-242.409714, 0.000000, -3741.155029)
+ NEW = Vector3(-281.257233, 0.000000, -3740.124756)
+ OLD MAG = 3749.000244
+ NEW MAG = 3750.685059
+ DELTA MAG = 1.684814
+ DELTA = Vector3(-38.847519, 0.000000, 1.030273)
+ DIRECTION DOT = 0.999946356
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-1.926349, -8.721153, -41.580765)
+ NEW = Vector3(-2.693440, -9.137819, -41.568382)
+ OLD MAG = 42.529156
+ NEW MAG = 42.646042
+
+HRP = Vector3(-3.125079, -9.554485, -41.556934)
+
+REGISTRY OTHER DATA:
+ Speed = 41.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.018072, -0.719084, -0.668166)
+ RelativeMoveDirection = Vector3(-0.058874, 0.000000, -0.998265)
+
+==============================================
+EVENT #205 | FRAME #326
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.725605, 0.000000, -0.688111)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-281.257233, 0.000000, -3740.124756)
+ NEW = Vector3(-376.192200, 0.000000, -3735.195312)
+ OLD MAG = 3750.685059
+ NEW MAG = 3754.091797
+ DELTA MAG = 3.406738
+ DELTA = Vector3(-94.934967, 0.000000, 4.929443)
+ DIRECTION DOT = 0.999679506
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-2.693440, -9.137819, -41.568382)
+ NEW = Vector3(-3.125079, -9.554485, -41.556934)
+ OLD MAG = 42.646042
+ NEW MAG = 42.755505
+
+HRP = Vector3(-4.179912, -9.971151, -41.502163)
+
+REGISTRY OTHER DATA:
+ Speed = 41.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.034646, -0.719885, -0.641305)
+ RelativeMoveDirection = Vector3(-0.073786, 0.000000, -0.997274)
+
+==============================================
+EVENT #206 | FRAME #327
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.742822, 0.000000, -0.669489)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-376.192200, 0.000000, -3735.195312)
+ NEW = Vector3(-436.592133, 0.000000, -3731.080811)
+ OLD MAG = 3754.091797
+ NEW MAG = 3756.537842
+ DELTA MAG = 2.446045
+ DELTA = Vector3(-60.399933, 0.000000, 4.114502)
+ DIRECTION DOT = 0.999870241
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-3.125079, -9.554485, -41.556934)
+ NEW = Vector3(-4.179912, -9.971151, -41.502163)
+ OLD MAG = 42.755505
+ NEW MAG = 42.887352
+
+HRP = Vector3(-4.851022, -10.387817, -41.456448)
+
+REGISTRY OTHER DATA:
+ Speed = 41.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.044862, -0.719885, -0.624523)
+ RelativeMoveDirection = Vector3(-0.064551, 0.000000, -0.997914)
+
+==============================================
+EVENT #207 | FRAME #328
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.753530, 0.000000, -0.657413)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-436.592133, 0.000000, -3731.080811)
+ NEW = Vector3(-531.388794, 0.000000, -3722.202881)
+ OLD MAG = 3756.537842
+ NEW MAG = 3759.942627
+ DELTA MAG = 3.404785
+ DELTA = Vector3(-94.796661, 0.000000, 8.877930)
+ DIRECTION DOT = 0.999679506
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-4.179912, -9.971151, -41.502163)
+ NEW = Vector3(-4.851022, -10.387817, -41.456448)
+ OLD MAG = 42.887352
+ NEW MAG = 43.012512
+
+HRP = Vector3(-5.904319, -10.804483, -41.357803)
+
+REGISTRY OTHER DATA:
+ Speed = 41.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.060363, -0.719885, -0.597825)
+ RelativeMoveDirection = Vector3(-0.073709, 0.000000, -0.997280)
+
+==============================================
+EVENT #208 | FRAME #329
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.769960, 0.000000, -0.638093)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-531.388794, 0.000000, -3722.202881)
+ NEW = Vector3(-578.759216, 0.000000, -3717.159912)
+ OLD MAG = 3759.942627
+ NEW MAG = 3761.946289
+ DELTA MAG = 2.003662
+ DELTA = Vector3(-47.370422, 0.000000, 5.042969)
+ DIRECTION DOT = 0.999920011
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-4.851022, -10.387817, -41.456448)
+ NEW = Vector3(-5.904319, -10.804483, -41.357803)
+ OLD MAG = 43.012512
+ NEW MAG = 43.151657
+
+HRP = Vector3(-6.430656, -11.221149, -41.301769)
+
+REGISTRY OTHER DATA:
+ Speed = 41.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.067859, -0.719885, -0.584331)
+ RelativeMoveDirection = Vector3(-0.061029, 0.000000, -0.998136)
+
+==============================================
+EVENT #209 | FRAME #330
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.777989, 0.000000, -0.628277)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-578.759216, 0.000000, -3717.159912)
+ NEW = Vector3(-724.591797, 0.000000, -3695.826416)
+ OLD MAG = 3761.946289
+ NEW MAG = 3766.187256
+ DELTA MAG = 4.240967
+ DELTA = Vector3(-145.832581, 0.000000, 21.333496)
+ DIRECTION DOT = 0.999234140
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-5.904319, -10.804483, -41.357803)
+ NEW = Vector3(-6.430656, -11.221149, -41.301769)
+ OLD MAG = 43.151657
+ NEW MAG = 43.279369
+
+HRP = Vector3(-8.051018, -11.637815, -41.064732)
+
+REGISTRY OTHER DATA:
+ Speed = 41.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.089937, -0.719885, -0.542036)
+ RelativeMoveDirection = Vector3(-0.087419, 0.000000, -0.996172)
+
+==============================================
+EVENT #210 | FRAME #331
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.802012, 0.000000, -0.597308)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-724.591797, 0.000000, -3695.826416)
+ NEW = Vector3(-805.877747, 0.000000, -3682.110596)
+ OLD MAG = 3766.187256
+ NEW MAG = 3769.267334
+ DELTA MAG = 3.080078
+ DELTA = Vector3(-81.285950, 0.000000, 13.715820)
+ DIRECTION DOT = 0.999761105
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-6.430656, -11.221149, -41.301769)
+ NEW = Vector3(-8.051018, -11.637815, -41.064732)
+ OLD MAG = 43.279369
+ NEW MAG = 43.434662
+
+HRP = Vector3(-8.954194, -12.054482, -40.912334)
+
+REGISTRY OTHER DATA:
+ Speed = 41.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.101547, -0.719885, -0.518034)
+ RelativeMoveDirection = Vector3(-0.070134, 0.000000, -0.997538)
+
+==============================================
+EVENT #211 | FRAME #332
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.814902, 0.000000, -0.579599)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-805.877747, 0.000000, -3682.110596)
+ NEW = Vector3(-869.901245, 0.000000, -3670.165527)
+ OLD MAG = 3769.267334
+ NEW MAG = 3771.848633
+ DELTA MAG = 2.581299
+ DELTA = Vector3(-64.023499, 0.000000, 11.945068)
+ DIRECTION DOT = 0.999851167
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-8.051018, -11.637815, -41.064732)
+ NEW = Vector3(-8.954194, -12.054482, -40.912334)
+ OLD MAG = 43.434662
+ NEW MAG = 43.581043
+
+HRP = Vector3(-9.665566, -12.471148, -40.779610)
+
+REGISTRY OTHER DATA:
+ Speed = 41.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.110340, -0.719885, -0.498909)
+ RelativeMoveDirection = Vector3(-0.065503, 0.000000, -0.997852)
+
+==============================================
+EVENT #212 | FRAME #333
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.824802, 0.000000, -0.565421)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-869.901245, 0.000000, -3670.165527)
+ NEW = Vector3(-908.260132, 0.000000, -3662.595947)
+ OLD MAG = 3771.848633
+ NEW MAG = 3773.532227
+ DELTA MAG = 1.683594
+ DELTA = Vector3(-38.358887, 0.000000, 7.569580)
+ DIRECTION DOT = 0.999946535
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-8.954194, -12.054482, -40.912334)
+ NEW = Vector3(-9.665566, -12.471148, -40.779610)
+ OLD MAG = 43.581043
+ NEW MAG = 43.725613
+
+HRP = Vector3(-10.091778, -12.887814, -40.695503)
+
+REGISTRY OTHER DATA:
+ Speed = 41.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.115457, -0.719885, -0.487362)
+ RelativeMoveDirection = Vector3(-0.058580, 0.000000, -0.998283)
+
+==============================================
+EVENT #213 | FRAME #334
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.830624, 0.000000, -0.556833)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-908.260132, 0.000000, -3662.595947)
+ NEW = Vector3(-1081.351318, 0.000000, -3619.853027)
+ OLD MAG = 3773.532227
+ NEW MAG = 3777.916992
+ DELTA MAG = 4.384766
+ DELTA = Vector3(-173.091187, 0.000000, 42.742920)
+ DIRECTION DOT = 0.998885870
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-9.665566, -12.471148, -40.779610)
+ NEW = Vector3(-10.091778, -12.887814, -40.695503)
+ OLD MAG = 43.725613
+ NEW MAG = 43.864151
+
+HRP = Vector3(-12.015012, -13.304480, -40.220581)
+
+REGISTRY OTHER DATA:
+ Speed = 41.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.137238, -0.719885, -0.434114)
+ RelativeMoveDirection = Vector3(-0.095306, 0.000000, -0.995448)
+
+==============================================
+EVENT #214 | FRAME #335
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.856006, 0.000000, -0.516965)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1081.351318, 0.000000, -3619.853027)
+ NEW = Vector3(-1206.975586, 0.000000, -3584.180176)
+ OLD MAG = 3777.916992
+ NEW MAG = 3781.948975
+ DELTA MAG = 4.031982
+ DELTA = Vector3(-125.624268, 0.000000, 35.672852)
+ DIRECTION DOT = 0.999403834
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-10.091778, -12.887814, -40.695503)
+ NEW = Vector3(-12.015012, -13.304480, -40.220581)
+ OLD MAG = 43.864151
+ NEW MAG = 44.034817
+
+HRP = Vector3(-13.410836, -13.721146, -39.824219)
+
+REGISTRY OTHER DATA:
+ Speed = 42
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.151569, -0.719885, -0.394531)
+ RelativeMoveDirection = Vector3(-0.082614, 0.000000, -0.996582)
+
+==============================================
+EVENT #215 | FRAME #336
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.873370, 0.000000, -0.487057)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1206.975586, 0.000000, -3584.180176)
+ NEW = Vector3(-1327.318481, 0.000000, -3545.615967)
+ OLD MAG = 3781.948975
+ NEW MAG = 3785.916992
+ DELTA MAG = 3.968018
+ DELTA = Vector3(-120.342896, 0.000000, 38.564209)
+ DIRECTION DOT = 0.999442875
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-12.015012, -13.304480, -40.220581)
+ NEW = Vector3(-13.410836, -13.721146, -39.824219)
+ OLD MAG = 44.034817
+ NEW MAG = 44.205074
+
+HRP = Vector3(-14.747980, -14.137812, -39.395725)
+
+REGISTRY OTHER DATA:
+ Speed = 42
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.164113, -0.719885, -0.355818)
+ RelativeMoveDirection = Vector3(-0.081415, 0.000000, -0.996680)
+
+==============================================
+EVENT #216 | FRAME #337
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.889163, 0.000000, -0.457592)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1327.318481, 0.000000, -3545.615967)
+ NEW = Vector3(-1368.688599, 0.000000, -3531.830811)
+ OLD MAG = 3785.916992
+ NEW MAG = 3787.761719
+ DELTA MAG = 1.844727
+ DELTA = Vector3(-41.370117, 0.000000, 13.785156)
+ DIRECTION DOT = 0.999933660
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-13.410836, -13.721146, -39.824219)
+ NEW = Vector3(-14.747980, -14.137812, -39.395725)
+ OLD MAG = 44.205074
+ NEW MAG = 44.377964
+
+HRP = Vector3(-15.207648, -14.554478, -39.242558)
+
+REGISTRY OTHER DATA:
+ Speed = 42
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.168138, -0.719885, -0.342374)
+ RelativeMoveDirection = Vector3(-0.059544, 0.000000, -0.998226)
+
+==============================================
+EVENT #217 | FRAME #338
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(-0.894379, 0.000000, -0.447311)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1368.688599, 0.000000, -3531.830811)
+ NEW = Vector3(-1495.437988, 0.000000, -3484.500732)
+ OLD MAG = 3787.761719
+ NEW MAG = 3791.843994
+ DELTA MAG = 4.082275
+ DELTA = Vector3(-126.749390, 0.000000, 47.330078)
+ DIRECTION DOT = 0.999363184
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-14.747980, -14.137812, -39.395725)
+ NEW = Vector3(-15.207648, -14.554478, -39.242558)
+ OLD MAG = 44.377964
+ NEW MAG = 44.531830
+
+HRP = Vector3(-16.615969, -14.971144, -38.716652)
+
+REGISTRY OTHER DATA:
+ Speed = 42.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.179915, -0.719084, -0.301194)
+ RelativeMoveDirection = Vector3(-0.083645, 0.000000, -0.996495)
+
+==============================================
+EVENT #218 | FRAME #339
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(-0.909790, 0.000000, -0.415069)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1495.437988, 0.000000, -3484.500732)
+ NEW = Vector3(-1612.586914, 0.000000, -3436.234863)
+ OLD MAG = 3791.843994
+ NEW MAG = 3795.806396
+ DELTA MAG = 3.962402
+ DELTA = Vector3(-117.148926, 0.000000, 48.265869)
+ DIRECTION DOT = 0.999442816
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-15.207648, -14.554478, -39.242558)
+ NEW = Vector3(-16.615969, -14.971144, -38.716652)
+ OLD MAG = 44.531830
+ NEW MAG = 44.712467
+
+HRP = Vector3(-17.917624, -15.387810, -38.180367)
+
+REGISTRY OTHER DATA:
+ Speed = 42.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.189323, -0.719084, -0.261586)
+ RelativeMoveDirection = Vector3(-0.081291, 0.000000, -0.996690)
+
+==============================================
+EVENT #219 | FRAME #340
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(-0.923156, 0.000000, -0.384426)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1612.586914, 0.000000, -3436.234863)
+ NEW = Vector3(-1708.487915, 0.000000, -3393.582764)
+ OLD MAG = 3795.806396
+ NEW MAG = 3799.386230
+ DELTA MAG = 3.579834
+ DELTA = Vector3(-95.901001, 0.000000, 42.652100)
+ DIRECTION DOT = 0.999618471
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-16.615969, -14.971144, -38.716652)
+ NEW = Vector3(-17.917624, -15.387810, -38.180367)
+ OLD MAG = 44.712467
+ NEW MAG = 44.895058
+
+HRP = Vector3(-18.983189, -15.804476, -37.706451)
+
+REGISTRY OTHER DATA:
+ Speed = 42.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.196105, -0.719084, -0.228584)
+ RelativeMoveDirection = Vector3(-0.075497, 0.000000, -0.997146)
+
+==============================================
+EVENT #220 | FRAME #341
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(-0.933437, 0.000000, -0.358740)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1708.487915, 0.000000, -3393.582764)
+ NEW = Vector3(-1744.305786, 0.000000, -3377.205566)
+ OLD MAG = 3799.386230
+ NEW MAG = 3801.068359
+ DELTA MAG = 1.682129
+ DELTA = Vector3(-35.817871, 0.000000, 16.377197)
+ DIRECTION DOT = 0.999946356
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.917624, -15.387810, -38.180367)
+ NEW = Vector3(-18.983189, -15.804476, -37.706451)
+ OLD MAG = 44.895058
+ NEW MAG = 45.076817
+
+HRP = Vector3(-19.381165, -16.221144, -37.524483)
+
+REGISTRY OTHER DATA:
+ Speed = 42.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.198757, -0.718283, -0.216915)
+ RelativeMoveDirection = Vector3(-0.058223, 0.000000, -0.998304)
+
+==============================================
+EVENT #221 | FRAME #342
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(-0.937109, 0.000000, -0.349036)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1744.305786, 0.000000, -3377.205566)
+ NEW = Vector3(-1865.688232, 0.000000, -3316.370605)
+ OLD MAG = 3801.068359
+ NEW MAG = 3805.142090
+ DELTA MAG = 4.073730
+ DELTA = Vector3(-121.382446, 0.000000, 60.834961)
+ DIRECTION DOT = 0.999363244
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-18.983189, -15.804476, -37.706451)
+ NEW = Vector3(-19.381165, -16.221144, -37.524483)
+ OLD MAG = 45.076817
+ NEW MAG = 45.242035
+
+HRP = Vector3(-20.729858, -16.637812, -36.848545)
+
+REGISTRY OTHER DATA:
+ Speed = 42.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.205742, -0.718283, -0.173945)
+ RelativeMoveDirection = Vector3(-0.083475, 0.000000, -0.996510)
+
+==============================================
+EVENT #222 | FRAME #343
+==============================================
+STATE = Enum.HumanoidStateType.Landed
+MOVE DIRECTION = Vector3(-0.948982, 0.000000, -0.315330)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1865.688232, 0.000000, -3316.370605)
+ NEW = Vector3(-1950.787354, 0.000000, -3270.984619)
+ OLD MAG = 3805.142090
+ NEW MAG = 3808.531250
+ DELTA MAG = 3.389160
+ DELTA = Vector3(-85.099121, 0.000000, 45.385986)
+ DIRECTION DOT = 0.999679446
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-19.381165, -16.221144, -37.524483)
+ NEW = Vector3(-20.729858, -16.637812, -36.848545)
+ OLD MAG = 45.242035
+ NEW MAG = 45.435219
+
+HRP = Vector3(-21.675404, -17.054480, -36.344254)
+
+REGISTRY OTHER DATA:
+ Speed = 42.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.210155, -0.717480, -0.144041)
+ RelativeMoveDirection = Vector3(-0.073083, 0.000000, -0.997326)
+
+==============================================
+EVENT #223 | FRAME #344
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.956674, 0.000000, -0.291163)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1950.787354, 0.000000, -3270.984619)
+ NEW = Vector3(-2384.230713, 0.000000, -3196.074707)
+ OLD MAG = 3808.531250
+ NEW MAG = 3987.411377
+ DELTA MAG = 178.880127
+ DELTA = Vector3(-433.443359, 0.000000, 74.909912)
+ DIRECTION DOT = 0.994683146
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-20.729858, -16.637812, -36.848545)
+ NEW = Vector3(-21.675404, -17.054480, -36.344254)
+ OLD MAG = 45.435219
+ NEW MAG = 45.624371
+
+HRP = Vector3(-26.491436, -9.049329, -35.511925)
+
+REGISTRY OTHER DATA:
+ Speed = 44.3
+ Sprint = 2
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.212464, -0.717480, -0.123094)
+ RelativeMoveDirection = Vector3(-0.150380, 0.000000, -0.988628)
+
+==============================================
+EVENT #224 | FRAME #345
+==============================================
+STATE = Enum.HumanoidStateType.Running
+MOVE DIRECTION = Vector3(-0.961565, 0.000000, -0.274577)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-2384.230713, 0.000000, -3196.074707)
+ NEW = Vector3(-2833.785400, 0.000000, -3114.326416)
+ OLD MAG = 3987.411377
+ NEW MAG = 4210.625488
+ DELTA MAG = 223.214111
+ DELTA = Vector3(-449.554688, 0.000000, 81.748291)
+ DIRECTION DOT = 0.995266199
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-21.675404, -17.054480, -36.344254)
+ NEW = Vector3(-26.491436, -9.049329, -35.511925)
+ OLD MAG = 45.624371
+ NEW MAG = 45.219280
+
+HRP = Vector3(-31.486488, -1.248849, -34.603607)
+
+REGISTRY OTHER DATA:
+ Speed = 46.7
+ Sprint = 2
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.213826, -0.716677, -0.114025)
+ RelativeMoveDirection = Vector3(-0.228924, 0.000000, -0.973444)
+
+==============================================
+EVENT #225 | FRAME #346
+==============================================
+STATE = Enum.HumanoidStateType.Jumping
+MOVE DIRECTION = Vector3(-0.963750, 0.000000, -0.266808)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-2833.785400, 0.000000, -3114.326416)
+ NEW = Vector3(-3086.079834, 0.000000, -3168.128418)
+ OLD MAG = 4210.625488
+ NEW MAG = 4422.773926
+ DELTA MAG = 212.148438
+ DELTA = Vector3(-252.294434, 0.000000, -53.802002)
+ DIRECTION DOT = 0.999421597
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-26.491436, -9.049329, -35.511925)
+ NEW = Vector3(-31.486488, -1.248849, -34.603607)
+ OLD MAG = 45.219280
+ NEW MAG = 46.801369
+
+HRP = Vector3(-34.289772, 17.112177, -35.201427)
+
+REGISTRY OTHER DATA:
+ Speed = 49.1
+ Sprint = 2
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.218601, -0.715067, -0.060752)
+ RelativeMoveDirection = Vector3(-0.254086, 0.000000, -0.967182)
+
+==============================================
+EVENT #226 | FRAME #347
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.974768, 0.000000, -0.223222)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-3086.079834, 0.000000, -3168.128418)
+ NEW = Vector3(-3091.932129, 0.000000, -3050.737305)
+ OLD MAG = 4422.773926
+ NEW MAG = 4343.620605
+ DELTA MAG = -79.153320
+ DELTA = Vector3(-5.852295, 0.000000, 117.391113)
+ DIRECTION DOT = 0.999803424
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-31.486488, -1.248849, -34.603607)
+ NEW = Vector3(-34.289772, 17.112177, -35.201427)
+ OLD MAG = 46.801369
+ NEW MAG = 52.036098
+
+HRP = Vector3(-34.354794, 16.695509, -33.897079)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Move
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.218601, -0.715067, -0.060752)
+ RelativeMoveDirection = Vector3(-0.229689, 0.000000, -0.973264)
+
+==============================================
+EVENT #227 | FRAME #348
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.974768, 0.000000, -0.223222)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.289772, 17.112177, -35.201427)
+ NEW = Vector3(-34.354794, 16.695509, -33.897079)
+ OLD MAG = 52.036098
+ NEW MAG = 51.068619
+
+HRP = Vector3(-34.354794, 16.278841, -33.897079)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.219554, -0.714260, -0.050205)
+ RelativeMoveDirection = Vector3(-0.229717, 0.000000, -0.973257)
+
+==============================================
+EVENT #228 | FRAME #349
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.976785, 0.000000, -0.214223)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.354794, 16.695509, -33.897079)
+ NEW = Vector3(-34.354794, 16.278841, -33.897079)
+ OLD MAG = 51.068619
+ NEW MAG = 50.933922
+
+HRP = Vector3(-34.354794, 15.862174, -33.897079)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.219772, -0.714260, -0.044581)
+ RelativeMoveDirection = Vector3(-0.220753, 0.000000, -0.975330)
+
+==============================================
+EVENT #229 | FRAME #350
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.977762, 0.000000, -0.209716)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.354794, 16.278841, -33.897079)
+ NEW = Vector3(-34.354794, 15.862174, -33.897079)
+ OLD MAG = 50.933922
+ NEW MAG = 50.802288
+
+HRP = Vector3(-34.354794, 15.445508, -33.897079)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-1.219772, -0.714260, -0.044581)
+ RelativeMoveDirection = Vector3(-0.216260, 0.000000, -0.976336)
+
+==============================================
+EVENT #230 | FRAME #351
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.543091, 0.000000, -0.839674)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.354794, 15.862174, -33.897079)
+ NEW = Vector3(-34.354794, 15.445508, -33.897079)
+ OLD MAG = 50.802288
+ NEW MAG = 50.673737
+
+HRP = Vector3(-34.354794, 15.028842, -33.897079)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.380098, -0.714260, -0.587671)
+ RelativeMoveDirection = Vector3(-0.216263, 0.000000, -0.976335)
+
+==============================================
+EVENT #231 | FRAME #352
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.543091, 0.000000, -0.839674)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.354794, 15.445508, -33.897079)
+ NEW = Vector3(-34.354794, 15.028842, -33.897079)
+ OLD MAG = 50.673737
+ NEW MAG = 50.548294
+
+HRP = Vector3(-34.354794, 14.612176, -33.897079)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.380098, -0.714260, -0.587671)
+ RelativeMoveDirection = Vector3(-0.216264, 0.000000, -0.976335)
+
+==============================================
+EVENT #232 | FRAME #353
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.543091, 0.000000, -0.839674)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.354794, 15.028842, -33.897079)
+ NEW = Vector3(-34.354794, 14.612176, -33.897079)
+ OLD MAG = 50.548294
+ NEW MAG = 50.425980
+
+HRP = Vector3(-34.354794, 14.195510, -33.897079)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.379867, -0.713453, -0.588800)
+ RelativeMoveDirection = Vector3(-0.216264, 0.000000, -0.976335)
+
+==============================================
+EVENT #233 | FRAME #354
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.210843, 0.000000, -0.977520)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-3091.932129, 0.000000, -3050.737305)
+ NEW = Vector3(-2860.052734, 0.000000, -3199.956787)
+ OLD MAG = 4343.620605
+ NEW MAG = 4291.809082
+ DELTA MAG = -51.811523
+ DELTA = Vector3(231.879395, 0.000000, -149.219482)
+ DIRECTION DOT = 0.998032689
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.354794, 14.612176, -33.897079)
+ NEW = Vector3(-34.354794, 14.195510, -33.897079)
+ OLD MAG = 50.425980
+ NEW MAG = 50.306824
+
+HRP = Vector3(-31.778358, 13.778844, -35.555069)
+
+REGISTRY OTHER DATA:
+ Speed = 47.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.461736, -0.713453, -1.130391)
+ RelativeMoveDirection = Vector3(-0.155765, 0.000000, -0.987794)
+
+==============================================
+EVENT #234 | FRAME #355
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.211970, 0.000000, -0.977276)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-2860.052734, 0.000000, -3199.956787)
+ NEW = Vector3(-2628.512207, 0.000000, -3347.452881)
+ OLD MAG = 4291.809082
+ NEW MAG = 4256.115234
+ DELTA MAG = -35.693848
+ DELTA = Vector3(231.540527, 0.000000, -147.496094)
+ DIRECTION DOT = 0.997971892
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-34.354794, 14.195510, -33.897079)
+ NEW = Vector3(-31.778358, 13.778844, -35.555069)
+ OLD MAG = 50.306824
+ NEW MAG = 49.637520
+
+HRP = Vector3(-29.205688, 13.362178, -37.193913)
+
+REGISTRY OTHER DATA:
+ Speed = 47.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.466944, -0.713453, -1.128250)
+ RelativeMoveDirection = Vector3(-0.093740, 0.000000, -0.995597)
+
+==============================================
+EVENT #235 | FRAME #356
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.216474, 0.000000, -0.976288)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-2628.512207, 0.000000, -3347.452881)
+ NEW = Vector3(-2393.003662, 0.000000, -3491.813232)
+ OLD MAG = 4256.115234
+ NEW MAG = 4233.110840
+ DELTA MAG = -23.004395
+ DELTA = Vector3(235.508545, 0.000000, -144.360352)
+ DIRECTION DOT = 0.997896969
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-31.778358, 13.778844, -35.555069)
+ NEW = Vector3(-29.205688, 13.362178, -37.193913)
+ OLD MAG = 49.637520
+ NEW MAG = 49.141705
+
+HRP = Vector3(-26.588928, 12.945512, -38.797916)
+
+REGISTRY OTHER DATA:
+ Speed = 47
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.485954, -0.712645, -1.120708)
+ RelativeMoveDirection = Vector3(-0.033627, 0.000000, -0.999434)
+
+==============================================
+EVENT #236 | FRAME #357
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.233324, 0.000000, -0.972399)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-2393.003662, 0.000000, -3491.813232)
+ NEW = Vector3(-2158.411865, 0.000000, -3635.611816)
+ OLD MAG = 4233.110840
+ NEW MAG = 4228.051270
+ DELTA MAG = -5.059570
+ DELTA = Vector3(234.591797, 0.000000, -143.798584)
+ DIRECTION DOT = 0.997885466
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-29.205688, 13.362178, -37.193913)
+ NEW = Vector3(-26.588928, 12.945512, -38.797916)
+ OLD MAG = 49.141705
+ NEW MAG = 48.783558
+
+HRP = Vector3(-23.982353, 12.528846, -40.395679)
+
+REGISTRY OTHER DATA:
+ Speed = 46.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.485954, -0.712645, -1.120708)
+ RelativeMoveDirection = Vector3(0.014111, 0.000000, -0.999900)
+
+==============================================
+EVENT #237 | FRAME #358
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.233324, 0.000000, -0.972399)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-2158.411865, 0.000000, -3635.611816)
+ NEW = Vector3(-2015.919800, 0.000000, -3720.934326)
+ OLD MAG = 4228.051270
+ NEW MAG = 4231.936035
+ DELTA MAG = 3.884766
+ DELTA = Vector3(142.492065, 0.000000, -85.322510)
+ DIRECTION DOT = 0.999229610
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-26.588928, 12.945512, -38.797916)
+ NEW = Vector3(-23.982353, 12.528846, -40.395679)
+ OLD MAG = 48.783558
+ NEW MAG = 48.620327
+
+HRP = Vector3(-22.399109, 12.112180, -41.343708)
+
+REGISTRY OTHER DATA:
+ Speed = 47
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.497556, -0.712645, -1.115606)
+ RelativeMoveDirection = Vector3(0.053340, 0.000000, -0.998576)
+
+==============================================
+EVENT #238 | FRAME #359
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.243400, 0.000000, -0.969926)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-2015.919800, 0.000000, -3720.934326)
+ NEW = Vector3(-1978.043701, 0.000000, -3743.083496)
+ OLD MAG = 4231.936035
+ NEW MAG = 4233.595703
+ DELTA MAG = 1.659668
+ DELTA = Vector3(37.876099, 0.000000, -22.149170)
+ DIRECTION DOT = 0.999946356
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-23.982353, 12.528846, -40.395679)
+ NEW = Vector3(-22.399109, 12.112180, -41.343708)
+ OLD MAG = 48.620327
+ NEW MAG = 48.556435
+
+HRP = Vector3(-21.978260, 11.695514, -41.589809)
+
+REGISTRY OTHER DATA:
+ Speed = 47
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.508689, -0.711836, -1.111092)
+ RelativeMoveDirection = Vector3(0.053331, 0.000000, -0.998577)
+
+==============================================
+EVENT #239 | FRAME #360
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.253450, 0.000000, -0.967348)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1978.043701, 0.000000, -3743.083496)
+ NEW = Vector3(-1944.183105, 0.000000, -3762.467529)
+ OLD MAG = 4233.595703
+ NEW MAG = 4235.092773
+ DELTA MAG = 1.497070
+ DELTA = Vector3(33.860596, 0.000000, -19.384033)
+ DIRECTION DOT = 0.999957502
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-22.399109, 12.112180, -41.343708)
+ NEW = Vector3(-21.978260, 11.695514, -41.589809)
+ OLD MAG = 48.556435
+ NEW MAG = 48.472065
+
+HRP = Vector3(-21.602032, 11.278848, -41.805187)
+
+REGISTRY OTHER DATA:
+ Speed = 47
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.518915, -0.711836, -1.106353)
+ RelativeMoveDirection = Vector3(0.052176, 0.000000, -0.998638)
+
+==============================================
+EVENT #240 | FRAME #361
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.262361, 0.000000, -0.964970)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1944.183105, 0.000000, -3762.467529)
+ NEW = Vector3(-1910.133301, 0.000000, -3781.545166)
+ OLD MAG = 4235.092773
+ NEW MAG = 4236.589844
+ DELTA MAG = 1.497070
+ DELTA = Vector3(34.049805, 0.000000, -19.077637)
+ DIRECTION DOT = 0.999957561
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-21.978260, 11.695514, -41.589809)
+ NEW = Vector3(-21.602032, 11.278848, -41.805187)
+ OLD MAG = 48.472065
+ NEW MAG = 48.389400
+
+HRP = Vector3(-21.223700, 10.862182, -42.017162)
+
+REGISTRY OTHER DATA:
+ Speed = 47
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.529096, -0.711836, -1.101521)
+ RelativeMoveDirection = Vector3(0.052166, 0.000000, -0.998638)
+
+==============================================
+EVENT #241 | FRAME #362
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.271249, 0.000000, -0.962509)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1910.133301, 0.000000, -3781.545166)
+ NEW = Vector3(-1854.318481, 0.000000, -3811.727539)
+ OLD MAG = 4236.589844
+ NEW MAG = 4238.839844
+ DELTA MAG = 2.250000
+ DELTA = Vector3(55.814819, 0.000000, -30.182373)
+ DIRECTION DOT = 0.999888062
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-21.602032, 11.278848, -41.805187)
+ NEW = Vector3(-21.223700, 10.862182, -42.017162)
+ OLD MAG = 48.389400
+ NEW MAG = 48.310188
+
+HRP = Vector3(-20.603535, 10.445516, -42.352520)
+
+REGISTRY OTHER DATA:
+ Speed = 47
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.545544, -0.711836, -1.093468)
+ RelativeMoveDirection = Vector3(0.057900, 0.000000, -0.998322)
+
+==============================================
+EVENT #242 | FRAME #363
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.285643, 0.000000, -0.958336)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1854.318481, 0.000000, -3811.727539)
+ NEW = Vector3(-1798.027466, 0.000000, -3841.085693)
+ OLD MAG = 4238.839844
+ NEW MAG = 4241.089844
+ DELTA MAG = 2.250000
+ DELTA = Vector3(56.291016, 0.000000, -29.358154)
+ DIRECTION DOT = 0.999888062
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-21.223700, 10.862182, -42.017162)
+ NEW = Vector3(-20.603535, 10.445516, -42.352520)
+ OLD MAG = 48.310188
+ NEW MAG = 48.242619
+
+HRP = Vector3(-19.978079, 10.028850, -42.678722)
+
+REGISTRY OTHER DATA:
+ Speed = 47.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.561491, -0.711025, -1.085896)
+ RelativeMoveDirection = Vector3(0.057876, 0.000000, -0.998324)
+
+==============================================
+EVENT #243 | FRAME #364
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.299973, 0.000000, -0.953948)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1798.027466, 0.000000, -3841.085693)
+ NEW = Vector3(-1741.273071, 0.000000, -3869.612061)
+ OLD MAG = 4241.089844
+ NEW MAG = 4243.339355
+ DELTA MAG = 2.249512
+ DELTA = Vector3(56.754395, 0.000000, -28.526367)
+ DIRECTION DOT = 0.999888003
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-20.603535, 10.445516, -42.352520)
+ NEW = Vector3(-19.978079, 10.028850, -42.678722)
+ OLD MAG = 48.242619
+ NEW MAG = 48.178574
+
+HRP = Vector3(-19.347475, 9.612184, -42.995682)
+
+REGISTRY OTHER DATA:
+ Speed = 47.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.577702, -0.711025, -1.077360)
+ RelativeMoveDirection = Vector3(0.057852, 0.000000, -0.998325)
+
+==============================================
+EVENT #244 | FRAME #365
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.314236, 0.000000, -0.949345)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1741.273071, 0.000000, -3869.612061)
+ NEW = Vector3(-1679.631226, 0.000000, -3899.358643)
+ OLD MAG = 4243.339355
+ NEW MAG = 4245.722656
+ DELTA MAG = 2.383301
+ DELTA = Vector3(61.641846, 0.000000, -29.746582)
+ DIRECTION DOT = 0.999870062
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-19.978079, 10.028850, -42.678722)
+ NEW = Vector3(-19.347475, 9.612184, -42.995682)
+ OLD MAG = 48.178574
+ NEW MAG = 48.118061
+
+HRP = Vector3(-18.662565, 9.195518, -43.326202)
+
+REGISTRY OTHER DATA:
+ Speed = 47.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.595014, -0.711025, -1.067896)
+ RelativeMoveDirection = Vector3(0.058979, 0.000000, -0.998259)
+
+==============================================
+EVENT #245 | FRAME #366
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.329516, 0.000000, -0.944150)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1679.631226, 0.000000, -3899.358643)
+ NEW = Vector3(-1613.006226, 0.000000, -3930.101074)
+ OLD MAG = 4245.722656
+ NEW MAG = 4248.232910
+ DELTA MAG = 2.510254
+ DELTA = Vector3(66.625000, 0.000000, -30.742432)
+ DIRECTION DOT = 0.999850750
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-19.347475, 9.612184, -42.995682)
+ NEW = Vector3(-18.662565, 9.195518, -43.326202)
+ OLD MAG = 48.118061
+ NEW MAG = 48.062550
+
+HRP = Vector3(-17.922289, 8.778852, -43.667782)
+
+REGISTRY OTHER DATA:
+ Speed = 47.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.613391, -0.711025, -1.057447)
+ RelativeMoveDirection = Vector3(0.060104, 0.000000, -0.998192)
+
+==============================================
+EVENT #246 | FRAME #367
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.345793, 0.000000, -0.938311)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1613.006226, 0.000000, -3930.101074)
+ NEW = Vector3(-1550.332397, 0.000000, -3957.802490)
+ OLD MAG = 4248.232910
+ NEW MAG = 4250.615723
+ DELTA MAG = 2.382812
+ DELTA = Vector3(62.673828, 0.000000, -27.701416)
+ DIRECTION DOT = 0.999870002
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-18.662565, 9.195518, -43.326202)
+ NEW = Vector3(-17.922289, 8.778852, -43.667782)
+ OLD MAG = 48.062550
+ NEW MAG = 48.011997
+
+HRP = Vector3(-17.225912, 8.362185, -43.975578)
+
+REGISTRY OTHER DATA:
+ Speed = 47.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.630377, -0.711025, -1.047410)
+ RelativeMoveDirection = Vector3(0.058929, 0.000000, -0.998262)
+
+==============================================
+EVENT #247 | FRAME #368
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.360891, 0.000000, -0.932608)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1550.332397, 0.000000, -3957.802490)
+ NEW = Vector3(-1500.791260, 0.000000, -3978.952393)
+ OLD MAG = 4250.615723
+ NEW MAG = 4252.580078
+ DELTA MAG = 1.964355
+ DELTA = Vector3(49.541138, 0.000000, -21.149902)
+ DIRECTION DOT = 0.999919713
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.922289, 8.778852, -43.667782)
+ NEW = Vector3(-17.225912, 8.362185, -43.975578)
+ OLD MAG = 48.011997
+ NEW MAG = 47.963631
+
+HRP = Vector3(-16.675457, 7.945519, -44.210575)
+
+REGISTRY OTHER DATA:
+ Speed = 47.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.643608, -0.711025, -1.039332)
+ RelativeMoveDirection = Vector3(0.055456, 0.000000, -0.998461)
+
+==============================================
+EVENT #248 | FRAME #369
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.372689, 0.000000, -0.927956)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1500.791260, 0.000000, -3978.952393)
+ NEW = Vector3(-1409.797363, 0.000000, -4015.342529)
+ OLD MAG = 4252.580078
+ NEW MAG = 4255.643555
+ DELTA MAG = 3.063477
+ DELTA = Vector3(90.993896, 0.000000, -36.390137)
+ DIRECTION DOT = 0.999734938
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-17.225912, 8.362185, -43.975578)
+ NEW = Vector3(-16.675457, 7.945519, -44.210575)
+ OLD MAG = 47.963631
+ NEW MAG = 47.914268
+
+HRP = Vector3(-15.664412, 7.528852, -44.614910)
+
+REGISTRY OTHER DATA:
+ Speed = 47.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.667399, -0.711025, -1.024218)
+ RelativeMoveDirection = Vector3(0.065783, 0.000000, -0.997834)
+
+==============================================
+EVENT #249 | FRAME #370
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.393983, 0.000000, -0.919118)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1409.797363, 0.000000, -4015.342529)
+ NEW = Vector3(-1294.699829, 0.000000, -4057.567139)
+ OLD MAG = 4255.643555
+ NEW MAG = 4259.119629
+ DELTA MAG = 3.476074
+ DELTA = Vector3(115.097534, 0.000000, -42.224609)
+ DIRECTION DOT = 0.999585688
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-16.675457, 7.945519, -44.210575)
+ NEW = Vector3(-15.664412, 7.528852, -44.614910)
+ OLD MAG = 47.914268
+ NEW MAG = 47.880554
+
+HRP = Vector3(-14.385552, 7.112185, -45.084072)
+
+REGISTRY OTHER DATA:
+ Speed = 47.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.696919, -0.711836, -1.003790)
+ RelativeMoveDirection = Vector3(0.071496, 0.000000, -0.997441)
+
+==============================================
+EVENT #250 | FRAME #371
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.420306, 0.000000, -0.907382)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1294.699829, 0.000000, -4057.567139)
+ NEW = Vector3(-1173.635864, 0.000000, -4097.907227)
+ OLD MAG = 4259.119629
+ NEW MAG = 4262.659668
+ DELTA MAG = 3.540039
+ DELTA = Vector3(121.063965, 0.000000, -40.340088)
+ DIRECTION DOT = 0.999551773
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-15.664412, 7.528852, -44.614910)
+ NEW = Vector3(-14.385552, 7.112185, -45.084072)
+ OLD MAG = 47.880554
+ NEW MAG = 47.855000
+
+HRP = Vector3(-13.040398, 6.695518, -45.532295)
+
+REGISTRY OTHER DATA:
+ Speed = 47.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.726948, -0.712645, -0.981674)
+ RelativeMoveDirection = Vector3(0.072608, 0.000000, -0.997361)
+
+==============================================
+EVENT #251 | FRAME #372
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.447311, 0.000000, -0.894379)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1173.635864, 0.000000, -4097.907227)
+ NEW = Vector3(-1056.062500, 0.000000, -4133.354004)
+ OLD MAG = 4262.659668
+ NEW MAG = 4266.132324
+ DELTA MAG = 3.472656
+ DELTA = Vector3(117.573364, 0.000000, -35.446777)
+ DIRECTION DOT = 0.999585569
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-14.385552, 7.112185, -45.084072)
+ NEW = Vector3(-13.040398, 6.695518, -45.532295)
+ OLD MAG = 47.855000
+ NEW MAG = 47.833794
+
+HRP = Vector3(-11.734027, 6.278851, -45.926147)
+
+REGISTRY OTHER DATA:
+ Speed = 47.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.755173, -0.713453, -0.959530)
+ RelativeMoveDirection = Vector3(0.071422, 0.000000, -0.997446)
+
+==============================================
+EVENT #252 | FRAME #373
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.472898, 0.000000, -0.881117)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-1056.062500, 0.000000, -4133.354004)
+ NEW = Vector3(-985.114624, 0.000000, -4153.412109)
+ OLD MAG = 4266.132324
+ NEW MAG = 4268.639160
+ DELTA MAG = 2.506836
+ DELTA = Vector3(70.947876, 0.000000, -20.058105)
+ DIRECTION DOT = 0.999850929
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-13.040398, 6.695518, -45.532295)
+ NEW = Vector3(-11.734027, 6.278851, -45.926147)
+ OLD MAG = 47.833794
+ NEW MAG = 47.815502
+
+HRP = Vector3(-10.945718, 5.862184, -46.149017)
+
+REGISTRY OTHER DATA:
+ Speed = 47.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.771876, -0.714261, -0.945537)
+ RelativeMoveDirection = Vector3(0.059893, 0.000000, -0.998205)
+
+==============================================
+EVENT #253 | FRAME #374
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.488064, 0.000000, -0.872808)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-985.114624, 0.000000, -4153.412109)
+ NEW = Vector3(-899.441162, 0.000000, -4175.724609)
+ OLD MAG = 4268.639160
+ NEW MAG = 4271.495117
+ DELTA MAG = 2.855957
+ DELTA = Vector3(85.673462, 0.000000, -22.312500)
+ DIRECTION DOT = 0.999785364
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-11.734027, 6.278851, -45.926147)
+ NEW = Vector3(-10.945718, 5.862184, -46.149017)
+ OLD MAG = 47.815502
+ NEW MAG = 47.790226
+
+HRP = Vector3(-9.993790, 5.445517, -46.396935)
+
+REGISTRY OTHER DATA:
+ Speed = 47.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.791537, -0.715067, -0.928520)
+ RelativeMoveDirection = Vector3(0.063320, 0.000000, -0.997993)
+
+==============================================
+EVENT #254 | FRAME #375
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.506069, 0.000000, -0.862493)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-899.441162, 0.000000, -4175.724609)
+ NEW = Vector3(-774.682068, 0.000000, -4204.252930)
+ OLD MAG = 4271.495117
+ NEW MAG = 4275.029297
+ DELTA MAG = 3.534180
+ DELTA = Vector3(124.759094, 0.000000, -28.528320)
+ DIRECTION DOT = 0.999551892
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-10.945718, 5.862184, -46.149017)
+ NEW = Vector3(-9.993790, 5.445517, -46.396935)
+ OLD MAG = 47.790226
+ NEW MAG = 47.772430
+
+HRP = Vector3(-8.607577, 5.028850, -46.713917)
+
+REGISTRY OTHER DATA:
+ Speed = 47.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.819008, -0.715067, -0.904381)
+ RelativeMoveDirection = Vector3(0.072486, 0.000000, -0.997369)
+
+==============================================
+EVENT #255 | FRAME #376
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.531690, 0.000000, -0.846939)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-774.682068, 0.000000, -4204.252930)
+ NEW = Vector3(-668.456604, 0.000000, -4225.724121)
+ OLD MAG = 4275.029297
+ NEW MAG = 4278.268066
+ DELTA MAG = 3.238770
+ DELTA = Vector3(106.225464, 0.000000, -21.471191)
+ DIRECTION DOT = 0.999679148
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-9.993790, 5.445517, -46.396935)
+ NEW = Vector3(-8.607577, 5.028850, -46.713917)
+ OLD MAG = 47.772430
+ NEW MAG = 47.765778
+
+HRP = Vector3(-7.427295, 4.612183, -46.952484)
+
+REGISTRY OTHER DATA:
+ Speed = 47.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.841843, -0.715872, -0.882512)
+ RelativeMoveDirection = Vector3(0.067851, 0.000000, -0.997695)
+
+==============================================
+EVENT #256 | FRAME #377
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.552997, 0.000000, -0.833183)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-668.456604, 0.000000, -4225.724121)
+ NEW = Vector3(-586.007812, 0.000000, -4240.713867)
+ OLD MAG = 4278.268066
+ NEW MAG = 4281.011719
+ DELTA MAG = 2.743652
+ DELTA = Vector3(82.448792, 0.000000, -14.989746)
+ DIRECTION DOT = 0.999808431
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-8.607577, 5.028850, -46.713917)
+ NEW = Vector3(-7.427295, 4.612183, -46.952484)
+ OLD MAG = 47.765778
+ NEW MAG = 47.759529
+
+HRP = Vector3(-6.511198, 4.195516, -47.119038)
+
+REGISTRY OTHER DATA:
+ Speed = 47.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.858976, -0.715872, -0.865845)
+ RelativeMoveDirection = Vector3(0.062072, 0.000000, -0.998072)
+
+==============================================
+EVENT #257 | FRAME #378
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.569219, 0.000000, -0.822186)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-586.007812, 0.000000, -4240.713867)
+ NEW = Vector3(-483.668732, 0.000000, -4256.770996)
+ OLD MAG = 4281.011719
+ NEW MAG = 4284.161133
+ DELTA MAG = 3.149414
+ DELTA = Vector3(102.339081, 0.000000, -16.057129)
+ DIRECTION DOT = 0.999707639
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-7.427295, 4.612183, -46.952484)
+ NEW = Vector3(-6.511198, 4.195516, -47.119038)
+ OLD MAG = 47.759529
+ NEW MAG = 47.751457
+
+HRP = Vector3(-5.374097, 3.778850, -47.297447)
+
+REGISTRY OTHER DATA:
+ Speed = 47.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.879684, -0.715872, -0.844798)
+ RelativeMoveDirection = Vector3(0.066645, 0.000000, -0.997777)
+
+==============================================
+EVENT #258 | FRAME #379
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.588955, 0.000000, -0.808166)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-483.668732, 0.000000, -4256.770996)
+ NEW = Vector3(-371.069977, 0.000000, -4271.390625)
+ OLD MAG = 4284.161133
+ NEW MAG = 4287.478516
+ DELTA MAG = 3.317383
+ DELTA = Vector3(112.598755, 0.000000, -14.619629)
+ DIRECTION DOT = 0.999649286
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-6.511198, 4.195516, -47.119038)
+ NEW = Vector3(-5.374097, 3.778850, -47.297447)
+ OLD MAG = 47.751457
+ NEW MAG = 47.751537
+
+HRP = Vector3(-4.122999, 3.362183, -47.459888)
+
+REGISTRY OTHER DATA:
+ Speed = 47.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.901772, -0.715872, -0.821178)
+ RelativeMoveDirection = Vector3(0.068912, 0.000000, -0.997623)
+
+==============================================
+EVENT #259 | FRAME #380
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.610174, 0.000000, -0.792267)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-371.069977, 0.000000, -4271.390625)
+ NEW = Vector3(-243.242035, 0.000000, -4284.105469)
+ OLD MAG = 4287.478516
+ NEW MAG = 4291.005371
+ DELTA MAG = 3.526855
+ DELTA = Vector3(127.827942, 0.000000, -12.714844)
+ DIRECTION DOT = 0.999551773
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-5.374097, 3.778850, -47.297447)
+ NEW = Vector3(-4.122999, 3.362183, -47.459888)
+ OLD MAG = 47.751537
+ NEW MAG = 47.757141
+
+HRP = Vector3(-2.702690, 2.945517, -47.601166)
+
+REGISTRY OTHER DATA:
+ Speed = 47.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.925977, -0.715872, -0.793784)
+ RelativeMoveDirection = Vector3(0.072326, 0.000000, -0.997381)
+
+==============================================
+EVENT #260 | FRAME #381
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.633644, 0.000000, -0.773625)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-243.242035, 0.000000, -4284.105469)
+ NEW = Vector3(-105.093872, 0.000000, -4293.356445)
+ OLD MAG = 4291.005371
+ NEW MAG = 4294.642578
+ DELTA MAG = 3.637207
+ DELTA = Vector3(138.148163, 0.000000, -9.250977)
+ DIRECTION DOT = 0.999480188
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-4.122999, 3.362183, -47.459888)
+ NEW = Vector3(-2.702690, 2.945517, -47.601166)
+ OLD MAG = 47.757141
+ NEW MAG = 47.768734
+
+HRP = Vector3(-1.167710, 2.528850, -47.703953)
+
+REGISTRY OTHER DATA:
+ Speed = 47.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.951113, -0.715872, -0.763486)
+ RelativeMoveDirection = Vector3(0.074588, 0.000000, -0.997214)
+
+==============================================
+EVENT #261 | FRAME #382
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.658282, 0.000000, -0.752772)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(-105.093872, 0.000000, -4293.356445)
+ NEW = Vector3(33.398346, 0.000000, -4298.147949)
+ OLD MAG = 4294.642578
+ NEW MAG = 4298.277832
+ DELTA MAG = 3.635254
+ DELTA = Vector3(138.492218, 0.000000, -4.791504)
+ DIRECTION DOT = 0.999480188
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-2.702690, 2.945517, -47.601166)
+ NEW = Vector3(-1.167710, 2.528850, -47.703953)
+ OLD MAG = 47.768734
+ NEW MAG = 47.785202
+
+HRP = Vector3(0.371092, 2.112184, -47.757195)
+
+REGISTRY OTHER DATA:
+ Speed = 47.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.975287, -0.716677, -0.731566)
+ RelativeMoveDirection = Vector3(0.074551, 0.000000, -0.997217)
+
+==============================================
+EVENT #262 | FRAME #383
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.682234, 0.000000, -0.731134)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(33.398346, 0.000000, -4298.147949)
+ NEW = Vector3(191.910706, 0.000000, -4297.782227)
+ OLD MAG = 4298.277832
+ NEW MAG = 4302.064941
+ DELTA MAG = 3.787109
+ DELTA = Vector3(158.512360, 0.000000, 0.365723)
+ DIRECTION DOT = 0.999320924
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(-1.167710, 2.528850, -47.703953)
+ NEW = Vector3(0.371092, 2.112184, -47.757195)
+ OLD MAG = 47.785202
+ NEW MAG = 47.805321
+
+HRP = Vector3(2.132340, 1.695517, -47.753128)
+
+REGISTRY OTHER DATA:
+ Speed = 47.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.001604, -0.717480, -0.694271)
+ RelativeMoveDirection = Vector3(0.079111, 0.000000, -0.996866)
+
+==============================================
+EVENT #263 | FRAME #384
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.708735, 0.000000, -0.705474)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(191.910706, 0.000000, -4297.782227)
+ NEW = Vector3(404.831512, 0.000000, -4286.726562)
+ OLD MAG = 4302.064941
+ NEW MAG = 4305.799805
+ DELTA MAG = 3.734863
+ DELTA = Vector3(212.920807, 0.000000, 11.055664)
+ DIRECTION DOT = 0.998773336
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(0.371092, 2.112184, -47.757195)
+ NEW = Vector3(2.132340, 1.695517, -47.753128)
+ OLD MAG = 47.805321
+ NEW MAG = 47.830772
+
+HRP = Vector3(4.498126, 1.278850, -47.630287)
+
+REGISTRY OTHER DATA:
+ Speed = 47.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.034733, -0.718283, -0.642960)
+ RelativeMoveDirection = Vector3(0.091707, 0.000000, -0.995786)
+
+==============================================
+EVENT #264 | FRAME #385
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.742822, 0.000000, -0.669489)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(404.831512, 0.000000, -4286.726562)
+ NEW = Vector3(572.850464, 0.000000, -4271.381836)
+ OLD MAG = 4305.799805
+ NEW MAG = 4309.624023
+ DELTA MAG = 3.824219
+ DELTA = Vector3(168.018951, 0.000000, 15.344727)
+ DIRECTION DOT = 0.999233365
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(2.132340, 1.695517, -47.753128)
+ NEW = Vector3(4.498126, 1.278850, -47.630287)
+ OLD MAG = 47.830772
+ NEW MAG = 47.859303
+
+HRP = Vector3(6.365004, 0.862183, -47.459793)
+
+REGISTRY OTHER DATA:
+ Speed = 47.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.059058, -0.719085, -0.601094)
+ RelativeMoveDirection = Vector3(0.081329, 0.000000, -0.996687)
+
+==============================================
+EVENT #265 | FRAME #386
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.768487, 0.000000, -0.639866)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(572.850464, 0.000000, -4271.381836)
+ NEW = Vector3(671.521240, 0.000000, -4260.071289)
+ OLD MAG = 4309.624023
+ NEW MAG = 4312.672852
+ DELTA MAG = 3.048828
+ DELTA = Vector3(98.670776, 0.000000, 11.310547)
+ DIRECTION DOT = 0.999734879
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(4.498126, 1.278850, -47.630287)
+ NEW = Vector3(6.365004, 0.862183, -47.459793)
+ OLD MAG = 47.859303
+ NEW MAG = 47.892467
+
+HRP = Vector3(7.461345, 0.445517, -47.334118)
+
+REGISTRY OTHER DATA:
+ Speed = 47.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.072634, -0.719085, -0.576518)
+ RelativeMoveDirection = Vector3(0.065205, 0.000000, -0.997872)
+
+==============================================
+EVENT #266 | FRAME #387
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.783034, 0.000000, -0.621979)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(671.521240, 0.000000, -4260.071289)
+ NEW = Vector3(784.692993, 0.000000, -4244.048340)
+ OLD MAG = 4312.672852
+ NEW MAG = 4315.980957
+ DELTA MAG = 3.308105
+ DELTA = Vector3(113.171753, 0.000000, 16.022949)
+ DIRECTION DOT = 0.999649286
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(6.365004, 0.862183, -47.459793)
+ NEW = Vector3(7.461345, 0.445517, -47.334118)
+ OLD MAG = 47.892467
+ NEW MAG = 47.920650
+
+HRP = Vector3(8.718809, 0.028850, -47.156086)
+
+REGISTRY OTHER DATA:
+ Speed = 47.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.087542, -0.719085, -0.547877)
+ RelativeMoveDirection = Vector3(0.068629, 0.000000, -0.997642)
+
+==============================================
+EVENT #267 | FRAME #388
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.799249, 0.000000, -0.601000)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(784.692993, 0.000000, -4244.048340)
+ NEW = Vector3(907.250305, 0.000000, -4223.077637)
+ OLD MAG = 4315.980957
+ NEW MAG = 4319.431641
+ DELTA MAG = 3.450684
+ DELTA = Vector3(122.557312, 0.000000, 20.970703)
+ DIRECTION DOT = 0.999585509
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(7.461345, 0.445517, -47.334118)
+ NEW = Vector3(8.718809, 0.028850, -47.156086)
+ OLD MAG = 47.920650
+ NEW MAG = 47.955345
+
+HRP = Vector3(10.080556, -0.387817, -46.923077)
+
+REGISTRY OTHER DATA:
+ Speed = 47.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.102879, -0.719085, -0.516310)
+ RelativeMoveDirection = Vector3(0.070896, 0.000000, -0.997484)
+
+==============================================
+EVENT #268 | FRAME #389
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.816236, 0.000000, -0.577718)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(907.250305, 0.000000, -4223.077637)
+ NEW = Vector3(1043.799316, 0.000000, -4195.149414)
+ OLD MAG = 4319.431641
+ NEW MAG = 4323.054199
+ DELTA MAG = 3.622559
+ DELTA = Vector3(136.549011, 0.000000, 27.928223)
+ DIRECTION DOT = 0.999480128
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(8.718809, 0.028850, -47.156086)
+ NEW = Vector3(10.080556, -0.387817, -46.923077)
+ OLD MAG = 47.955345
+ NEW MAG = 47.995243
+
+HRP = Vector3(11.597768, -0.804483, -46.612766)
+
+REGISTRY OTHER DATA:
+ Speed = 48
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.118967, -0.719085, -0.480447)
+ RelativeMoveDirection = Vector3(0.074310, 0.000000, -0.997235)
+
+==============================================
+EVENT #269 | FRAME #390
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.834456, 0.000000, -0.551074)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1043.799316, 0.000000, -4195.149414)
+ NEW = Vector3(1179.489746, 0.000000, -4162.801758)
+ OLD MAG = 4323.054199
+ NEW MAG = 4326.674805
+ DELTA MAG = 3.620605
+ DELTA = Vector3(135.690430, 0.000000, 32.347656)
+ DIRECTION DOT = 0.999480128
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(10.080556, -0.387817, -46.923077)
+ NEW = Vector3(11.597768, -0.804483, -46.612766)
+ OLD MAG = 47.995243
+ NEW MAG = 48.040665
+
+HRP = Vector3(13.105439, -1.221150, -46.253345)
+
+REGISTRY OTHER DATA:
+ Speed = 48
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.133890, -0.719085, -0.444083)
+ RelativeMoveDirection = Vector3(0.074273, 0.000000, -0.997238)
+
+==============================================
+EVENT #270 | FRAME #391
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.851807, 0.000000, -0.523856)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1179.489746, 0.000000, -4162.801758)
+ NEW = Vector3(1337.986084, 0.000000, -4118.583008)
+ OLD MAG = 4326.674805
+ NEW MAG = 4330.465332
+ DELTA MAG = 3.790527
+ DELTA = Vector3(158.496338, 0.000000, 44.218750)
+ DIRECTION DOT = 0.999277949
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(11.597768, -0.804483, -46.612766)
+ NEW = Vector3(13.105439, -1.221150, -46.253345)
+ OLD MAG = 48.040665
+ NEW MAG = 48.089664
+
+HRP = Vector3(14.866508, -1.637817, -45.762028)
+
+REGISTRY OTHER DATA:
+ Speed = 48.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.149737, -0.719885, -0.399836)
+ RelativeMoveDirection = Vector3(0.079983, 0.000000, -0.996796)
+
+==============================================
+EVENT #271 | FRAME #392
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.871115, 0.000000, -0.491079)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1337.986084, 0.000000, -4118.583008)
+ NEW = Vector3(1490.125122, 0.000000, -4070.022949)
+ OLD MAG = 4330.465332
+ NEW MAG = 4334.230957
+ DELTA MAG = 3.765625
+ DELTA = Vector3(152.139038, 0.000000, 48.560059)
+ DIRECTION DOT = 0.999321163
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(13.105439, -1.221150, -46.253345)
+ NEW = Vector3(14.866508, -1.637817, -45.762028)
+ OLD MAG = 48.089664
+ NEW MAG = 48.144146
+
+HRP = Vector3(16.556944, -2.054484, -45.222469)
+
+REGISTRY OTHER DATA:
+ Speed = 48.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.163450, -0.720685, -0.356368)
+ RelativeMoveDirection = Vector3(0.078796, -0.000000, -0.996891)
+
+==============================================
+EVENT #272 | FRAME #393
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.888635, 0.000000, -0.458616)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1490.125122, 0.000000, -4070.022949)
+ NEW = Vector3(1635.860352, 0.000000, -4017.699219)
+ OLD MAG = 4334.230957
+ NEW MAG = 4337.965820
+ DELTA MAG = 3.734863
+ DELTA = Vector3(145.735229, 0.000000, 52.323730)
+ DIRECTION DOT = 0.999362826
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(14.866508, -1.637817, -45.762028)
+ NEW = Vector3(16.556944, -2.054484, -45.222469)
+ OLD MAG = 48.144146
+ NEW MAG = 48.201920
+
+HRP = Vector3(18.176222, -2.471150, -44.641094)
+
+REGISTRY OTHER DATA:
+ Speed = 48.1
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.175159, -0.721484, -0.313787)
+ RelativeMoveDirection = Vector3(0.077610, -0.000000, -0.996984)
+
+==============================================
+EVENT #273 | FRAME #394
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.904454, 0.000000, -0.426572)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1635.860352, 0.000000, -4017.699219)
+ NEW = Vector3(1798.029297, 0.000000, -3951.975586)
+ OLD MAG = 4337.965820
+ NEW MAG = 4341.776367
+ DELTA MAG = 3.810547
+ DELTA = Vector3(162.168945, 0.000000, 65.723633)
+ DIRECTION DOT = 0.999187469
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(16.556944, -2.054484, -45.222469)
+ NEW = Vector3(18.176222, -2.471150, -44.641094)
+ OLD MAG = 48.201920
+ NEW MAG = 48.262913
+
+HRP = Vector3(19.978100, -2.887817, -43.910831)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.186860, -0.721484, -0.266128)
+ RelativeMoveDirection = Vector3(0.082170, -0.000000, -0.996618)
+
+==============================================
+EVENT #274 | FRAME #395
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.920925, 0.000000, -0.389740)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1798.029297, 0.000000, -3951.975586)
+ NEW = Vector3(1979.872070, 0.000000, -3868.322754)
+ OLD MAG = 4341.776367
+ NEW MAG = 4345.551270
+ DELTA MAG = 3.774902
+ DELTA = Vector3(181.842773, 0.000000, 83.652832)
+ DIRECTION DOT = 0.998938620
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(18.176222, -2.471150, -44.641094)
+ NEW = Vector3(19.978100, -2.887817, -43.910831)
+ OLD MAG = 48.262913
+ NEW MAG = 48.328304
+
+HRP = Vector3(21.998575, -3.304483, -42.981358)
+
+REGISTRY OTHER DATA:
+ Speed = 48.2
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.197866, -0.721484, -0.211134)
+ RelativeMoveDirection = Vector3(0.087876, -0.000000, -0.996131)
+
+==============================================
+EVENT #275 | FRAME #396
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.937912, 0.000000, -0.346874)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(1979.872070, 0.000000, -3868.322754)
+ NEW = Vector3(2100.889404, 0.000000, -3808.019531)
+ OLD MAG = 4345.551270
+ NEW MAG = 4349.108887
+ DELTA MAG = 3.557617
+ DELTA = Vector3(121.017334, 0.000000, 60.303223)
+ DIRECTION DOT = 0.999516666
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(19.978100, -2.887817, -43.910831)
+ NEW = Vector3(21.998575, -3.304483, -42.981358)
+ OLD MAG = 48.328304
+ NEW MAG = 48.396839
+
+HRP = Vector3(23.343212, -3.721150, -42.311321)
+
+REGISTRY OTHER DATA:
+ Speed = 48.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.203857, -0.721484, -0.173752)
+ RelativeMoveDirection = Vector3(0.072900, -0.000000, -0.997339)
+
+==============================================
+EVENT #276 | FRAME #397
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.948253, 0.000000, -0.317517)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2100.889404, 0.000000, -3808.019531)
+ NEW = Vector3(2193.920166, 0.000000, -3758.815674)
+ OLD MAG = 4349.108887
+ NEW MAG = 4352.238281
+ DELTA MAG = 3.129395
+ DELTA = Vector3(93.030762, 0.000000, 49.203857)
+ DIRECTION DOT = 0.999707758
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(21.998575, -3.304483, -42.981358)
+ NEW = Vector3(23.343212, -3.721150, -42.311321)
+ OLD MAG = 48.396839
+ NEW MAG = 48.466488
+
+HRP = Vector3(24.376888, -4.137816, -41.764610)
+
+REGISTRY OTHER DATA:
+ Speed = 48.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.207710, -0.721484, -0.144559)
+ RelativeMoveDirection = Vector3(0.065974, -0.000000, -0.997821)
+
+==============================================
+EVENT #277 | FRAME #398
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.955661, 0.000000, -0.294469)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2193.920166, 0.000000, -3758.815674)
+ NEW = Vector3(2298.724365, 0.000000, -3699.617920)
+ OLD MAG = 4352.238281
+ NEW MAG = 4355.606445
+ DELTA MAG = 3.368164
+ DELTA = Vector3(104.804199, 0.000000, 59.197754)
+ DIRECTION DOT = 0.999618232
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(23.343212, -3.721150, -42.311321)
+ NEW = Vector3(24.376888, -4.137816, -41.764610)
+ OLD MAG = 48.466488
+ NEW MAG = 48.534904
+
+HRP = Vector3(25.541378, -4.554483, -41.106857)
+
+REGISTRY OTHER DATA:
+ Speed = 48.3
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.211247, -0.721484, -0.111093)
+ RelativeMoveDirection = Vector3(0.069397, -0.000000, -0.997589)
+
+==============================================
+EVENT #278 | FRAME #399
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.963442, 0.000000, -0.267918)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2298.724365, 0.000000, -3699.617920)
+ NEW = Vector3(2401.930664, 0.000000, -3637.495361)
+ OLD MAG = 4355.606445
+ NEW MAG = 4358.972656
+ DELTA MAG = 3.366211
+ DELTA = Vector3(103.206299, 0.000000, 62.122559)
+ DIRECTION DOT = 0.999618173
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(24.376888, -4.137816, -41.764610)
+ NEW = Vector3(25.541378, -4.554483, -41.106857)
+ OLD MAG = 48.534904
+ NEW MAG = 48.609451
+
+HRP = Vector3(26.688116, -4.971150, -40.416607)
+
+REGISTRY OTHER DATA:
+ Speed = 48.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.213857, -0.721484, -0.077542)
+ RelativeMoveDirection = Vector3(0.069365, -0.000000, -0.997591)
+
+==============================================
+EVENT #279 | FRAME #400
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.970485, 0.000000, -0.241163)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2401.930664, 0.000000, -3637.495361)
+ NEW = Vector3(2503.457275, 0.000000, -3572.491211)
+ OLD MAG = 4358.972656
+ NEW MAG = 4362.337891
+ DELTA MAG = 3.365234
+ DELTA = Vector3(101.526611, 0.000000, 65.004150)
+ DIRECTION DOT = 0.999618173
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(25.541378, -4.554483, -41.106857)
+ NEW = Vector3(26.688116, -4.971150, -40.416607)
+ OLD MAG = 48.609451
+ NEW MAG = 48.687473
+
+HRP = Vector3(27.816189, -5.387817, -39.694340)
+
+REGISTRY OTHER DATA:
+ Speed = 48.4
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.215537, -0.721484, -0.043931)
+ RelativeMoveDirection = Vector3(0.069332, -0.000000, -0.997594)
+
+==============================================
+EVENT #280 | FRAME #401
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.976785, 0.000000, -0.214222)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2503.457275, 0.000000, -3572.491211)
+ NEW = Vector3(2603.223877, 0.000000, -3504.650635)
+ OLD MAG = 4362.337891
+ NEW MAG = 4365.701660
+ DELTA MAG = 3.363770
+ DELTA = Vector3(99.766602, 0.000000, 67.840576)
+ DIRECTION DOT = 0.999618053
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(26.688116, -4.971150, -40.416607)
+ NEW = Vector3(27.816189, -5.387817, -39.694340)
+ OLD MAG = 48.687473
+ NEW MAG = 48.768940
+
+HRP = Vector3(28.924707, -5.804484, -38.940556)
+
+REGISTRY OTHER DATA:
+ Speed = 48.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.216288, -0.721484, -0.010287)
+ RelativeMoveDirection = Vector3(0.069300, -0.000000, -0.997596)
+
+==============================================
+EVENT #281 | FRAME #402
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.982337, 0.000000, -0.187118)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2603.223877, 0.000000, -3504.650635)
+ NEW = Vector3(2705.147705, 0.000000, -3430.960449)
+ OLD MAG = 4365.701660
+ NEW MAG = 4369.131836
+ DELTA MAG = 3.430176
+ DELTA = Vector3(101.923828, 0.000000, 73.690186)
+ DIRECTION DOT = 0.999585569
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.816189, -5.387817, -39.694340)
+ NEW = Vector3(28.924707, -5.804484, -38.940556)
+ OLD MAG = 48.768940
+ NEW MAG = 48.853840
+
+HRP = Vector3(30.057192, -6.221151, -38.121777)
+
+REGISTRY OTHER DATA:
+ Speed = 48.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.215591, -0.722282, 0.025442)
+ RelativeMoveDirection = Vector3(0.070418, -0.000000, -0.997518)
+
+==============================================
+EVENT #282 | FRAME #403
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.987322, 0.000000, -0.158732)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2705.147705, 0.000000, -3430.960449)
+ NEW = Vector3(2801.074219, 0.000000, -3357.481201)
+ OLD MAG = 4369.131836
+ NEW MAG = 4372.493164
+ DELTA MAG = 3.361328
+ DELTA = Vector3(95.926514, 0.000000, 73.479248)
+ DIRECTION DOT = 0.999618113
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(28.924707, -5.804484, -38.940556)
+ NEW = Vector3(30.057192, -6.221151, -38.121777)
+ OLD MAG = 48.853840
+ NEW MAG = 48.942898
+
+HRP = Vector3(31.123041, -6.637818, -37.305340)
+
+REGISTRY OTHER DATA:
+ Speed = 48.5
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.214422, -0.722282, 0.059061)
+ RelativeMoveDirection = Vector3(0.069235, -0.000000, -0.997600)
+
+==============================================
+EVENT #283 | FRAME #404
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.991335, 0.000000, -0.131358)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2801.074219, 0.000000, -3357.481201)
+ NEW = Vector3(2898.827148, 0.000000, -3278.030273)
+ OLD MAG = 4372.493164
+ NEW MAG = 4375.920410
+ DELTA MAG = 3.427246
+ DELTA = Vector3(97.752930, 0.000000, 79.450928)
+ DIRECTION DOT = 0.999585688
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(30.057192, -6.221151, -38.121777)
+ NEW = Vector3(31.123041, -6.637818, -37.305340)
+ OLD MAG = 48.942898
+ NEW MAG = 49.034607
+
+HRP = Vector3(32.209187, -7.054485, -36.422550)
+
+REGISTRY OTHER DATA:
+ Speed = 48.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.212216, -0.722282, 0.094032)
+ RelativeMoveDirection = Vector3(0.070353, -0.000000, -0.997522)
+
+==============================================
+EVENT #284 | FRAME #405
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.994709, 0.000000, -0.102736)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2898.827148, 0.000000, -3278.030273)
+ NEW = Vector3(2998.047119, 0.000000, -3192.323486)
+ OLD MAG = 4375.920410
+ NEW MAG = 4379.408203
+ DELTA MAG = 3.487793
+ DELTA = Vector3(99.219971, 0.000000, 85.706787)
+ DIRECTION DOT = 0.999551892
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(31.123041, -6.637818, -37.305340)
+ NEW = Vector3(32.209187, -7.054485, -36.422550)
+ OLD MAG = 49.034607
+ NEW MAG = 49.130436
+
+HRP = Vector3(33.311630, -7.471152, -35.470253)
+
+REGISTRY OTHER DATA:
+ Speed = 48.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.208853, -0.722282, 0.130319)
+ RelativeMoveDirection = Vector3(0.071470, -0.000000, -0.997443)
+
+==============================================
+EVENT #285 | FRAME #406
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.997341, 0.000000, -0.072879)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2998.047119, 0.000000, -3192.323486)
+ NEW = Vector3(3087.479980, 0.000000, -3110.643066)
+ OLD MAG = 4379.408203
+ NEW MAG = 4382.765137
+ DELTA MAG = 3.356934
+ DELTA = Vector3(89.432861, 0.000000, 81.680420)
+ DIRECTION DOT = 0.999618232
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(32.209187, -7.054485, -36.422550)
+ NEW = Vector3(33.311630, -7.471152, -35.470253)
+ OLD MAG = 49.130436
+ NEW MAG = 49.230289
+
+HRP = Vector3(34.305328, -7.887819, -34.562698)
+
+REGISTRY OTHER DATA:
+ Speed = 48.6
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.204785, -0.722282, 0.163712)
+ RelativeMoveDirection = Vector3(0.069137, -0.000000, -0.997607)
+
+==============================================
+EVENT #286 | FRAME #407
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.998975, 0.000000, -0.045260)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(3087.479980, 0.000000, -3110.643066)
+ NEW = Vector3(3167.594238, 0.000000, -3033.657471)
+ OLD MAG = 4382.765137
+ NEW MAG = 4385.969727
+ DELTA MAG = 3.204590
+ DELTA = Vector3(80.114258, 0.000000, 76.985596)
+ DIRECTION DOT = 0.999679208
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(33.311630, -7.471152, -35.470253)
+ NEW = Vector3(34.305328, -7.887819, -34.562698)
+ OLD MAG = 49.230289
+ NEW MAG = 49.332073
+
+HRP = Vector3(35.195488, -8.304485, -33.707302)
+
+REGISTRY OTHER DATA:
+ Speed = 48.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.200246, -0.722282, 0.194212)
+ RelativeMoveDirection = Vector3(0.066807, -0.000000, -0.997766)
+
+==============================================
+EVENT #287 | FRAME #408
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.999802, 0.000000, -0.019912)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(3167.594238, 0.000000, -3033.657471)
+ NEW = Vector3(3245.787598, 0.000000, -2954.607178)
+ OLD MAG = 4385.969727
+ NEW MAG = 4389.172852
+ DELTA MAG = 3.203125
+ DELTA = Vector3(78.193359, 0.000000, 79.050293)
+ DIRECTION DOT = 0.999679148
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(34.305328, -7.887819, -34.562698)
+ NEW = Vector3(35.195488, -8.304485, -33.707302)
+ OLD MAG = 49.332073
+ NEW MAG = 49.435505
+
+HRP = Vector3(36.064301, -8.721151, -32.828964)
+
+REGISTRY OTHER DATA:
+ Speed = 48.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.194935, -0.722282, 0.224588)
+ RelativeMoveDirection = Vector3(0.066778, -0.000000, -0.997768)
+
+==============================================
+EVENT #288 | FRAME #409
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.999985, 0.000000, 0.005450)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(3245.787598, 0.000000, -2954.607178)
+ NEW = Vector3(3263.462402, 0.000000, -2936.531494)
+ OLD MAG = 4389.172852
+ NEW MAG = 4390.148438
+ DELTA MAG = 0.975586
+ DELTA = Vector3(17.674805, 0.000000, 18.075684)
+ DIRECTION DOT = 0.999983490
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(35.195488, -8.304485, -33.707302)
+ NEW = Vector3(36.064301, -8.721151, -32.828964)
+ OLD MAG = 49.435505
+ NEW MAG = 49.542236
+
+HRP = Vector3(36.260685, -9.137817, -32.628124)
+
+REGISTRY OTHER DATA:
+ Speed = 48.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(1.193621, -0.722282, 0.231472)
+ RelativeMoveDirection = Vector3(0.047203, -0.000000, -0.998885)
+
+==============================================
+EVENT #289 | FRAME #410
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.714992, 0.000000, -0.699133)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(36.064301, -8.721151, -32.828964)
+ NEW = Vector3(36.260685, -9.137817, -32.628124)
+ OLD MAG = 49.542236
+ NEW MAG = 49.627934
+
+HRP = Vector3(36.260685, -9.554483, -32.628124)
+
+REGISTRY OTHER DATA:
+ Speed = 48.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(0.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(0.497820, -0.722282, -0.480088)
+ RelativeMoveDirection = Vector3(0.041451, -0.000000, -0.999141)
+
+==============================================
+EVENT #290 | FRAME #411
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.018130, 0.000000, -0.999836)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(3263.462402, 0.000000, -2936.531494)
+ NEW = Vector3(3071.085938, 0.000000, -3136.474121)
+ OLD MAG = 4390.148438
+ NEW MAG = 4389.651367
+ DELTA MAG = -0.497070
+ DELTA = Vector3(-192.376465, 0.000000, -199.942627)
+ DIRECTION DOT = 0.998002648
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(36.260685, -9.137817, -32.628124)
+ NEW = Vector3(36.260685, -9.554483, -32.628124)
+ OLD MAG = 49.627934
+ NEW MAG = 49.706337
+
+HRP = Vector3(34.123173, -9.971149, -34.849709)
+
+REGISTRY OTHER DATA:
+ Speed = 48.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.194967, -0.722282, -1.200124)
+ RelativeMoveDirection = Vector3(-0.028661, -0.000000, -0.999589)
+
+==============================================
+EVENT #291 | FRAME #412
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.019282, 0.000000, -0.999814)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(3071.085938, 0.000000, -3136.474121)
+ NEW = Vector3(3035.633057, 0.000000, -3173.321533)
+ OLD MAG = 4389.651367
+ NEW MAG = 4391.473145
+ DELTA MAG = 1.821777
+ DELTA = Vector3(-35.452881, 0.000000, -36.847412)
+ DIRECTION DOT = 0.999932289
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(36.260685, -9.554483, -32.628124)
+ NEW = Vector3(34.123173, -9.971149, -34.849709)
+ OLD MAG = 49.706337
+ NEW MAG = 49.782696
+
+HRP = Vector3(33.729252, -10.387815, -35.259121)
+
+REGISTRY OTHER DATA:
+ Speed = 48.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.194967, -0.722282, -1.200124)
+ RelativeMoveDirection = Vector3(-0.041421, -0.000000, -0.999142)
+
+==============================================
+EVENT #292 | FRAME #413
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.019282, 0.000000, -0.999814)
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(34.123173, -9.971149, -34.849709)
+ NEW = Vector3(33.729252, -10.387815, -35.259121)
+ OLD MAG = 49.782696
+ NEW MAG = 49.887623
+
+HRP = Vector3(33.729252, -10.804482, -35.259121)
+
+REGISTRY OTHER DATA:
+ Speed = 48.7
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.194967, -0.722282, -1.200124)
+ RelativeMoveDirection = Vector3(-0.041431, -0.000000, -0.999141)
+
+==============================================
+EVENT #293 | FRAME #414
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.019282, 0.000000, -0.999814)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(3035.633057, 0.000000, -3173.321533)
+ NEW = Vector3(3021.536133, 0.000000, -3187.838379)
+ OLD MAG = 4391.473145
+ NEW MAG = 4392.265625
+ DELTA MAG = 0.792480
+ DELTA = Vector3(-14.096924, 0.000000, -14.516846)
+ DIRECTION DOT = 0.999989390
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(33.729252, -10.387815, -35.259121)
+ NEW = Vector3(33.729252, -10.804482, -35.259121)
+ OLD MAG = 49.887623
+ NEW MAG = 49.976044
+
+HRP = Vector3(33.572620, -11.429481, -35.420418)
+
+REGISTRY OTHER DATA:
+ Speed = 48.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.200499, -0.722282, -1.199212)
+ RelativeMoveDirection = Vector3(-0.046037, -0.000000, -0.998940)
+
+==============================================
+EVENT #294 | FRAME #415
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.014672, 0.000000, -0.999892)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(3021.536133, 0.000000, -3187.838379)
+ NEW = Vector3(2996.656250, 0.000000, -3213.048828)
+ OLD MAG = 4392.265625
+ NEW MAG = 4393.589844
+ DELTA MAG = 1.324219
+ DELTA = Vector3(-24.879883, 0.000000, -25.210449)
+ DIRECTION DOT = 0.999967456
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(33.729252, -10.804482, -35.259121)
+ NEW = Vector3(33.572620, -11.429481, -35.420418)
+ OLD MAG = 49.976044
+ NEW MAG = 50.123447
+
+HRP = Vector3(33.296181, -11.637814, -35.700531)
+
+REGISTRY OTHER DATA:
+ Speed = 48.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.210170, -0.722282, -1.197555)
+ RelativeMoveDirection = Vector3(-0.049478, -0.000000, -0.998775)
+
+==============================================
+EVENT #295 | FRAME #416
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(0.006602, 0.000000, -0.999978)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2996.656250, 0.000000, -3213.048828)
+ NEW = Vector3(2901.421631, 0.000000, -3303.932861)
+ OLD MAG = 4393.589844
+ NEW MAG = 4397.069336
+ DELTA MAG = 3.479492
+ DELTA = Vector3(-95.234619, 0.000000, -90.884033)
+ DIRECTION DOT = 0.999551773
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(33.572620, -11.429481, -35.420418)
+ NEW = Vector3(33.296181, -11.637814, -35.700531)
+ OLD MAG = 50.123447
+ NEW MAG = 50.185677
+
+HRP = Vector3(32.238014, -12.054480, -36.710358)
+
+REGISTRY OTHER DATA:
+ Speed = 48.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.245966, -0.722282, -1.190718)
+ RelativeMoveDirection = Vector3(-0.071313, -0.000000, -0.997454)
+
+==============================================
+EVENT #296 | FRAME #417
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.023369, 0.000000, -0.999727)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2901.421631, 0.000000, -3303.932861)
+ NEW = Vector3(2795.669434, 0.000000, -3398.524170)
+ OLD MAG = 4397.069336
+ NEW MAG = 4400.651367
+ DELTA MAG = 3.582031
+ DELTA = Vector3(-105.752197, 0.000000, -94.591309)
+ DIRECTION DOT = 0.999480188
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(33.296181, -11.637814, -35.700531)
+ NEW = Vector3(32.238014, -12.054480, -36.710358)
+ OLD MAG = 50.185677
+ NEW MAG = 50.321472
+
+HRP = Vector3(31.062988, -12.471146, -37.761372)
+
+REGISTRY OTHER DATA:
+ Speed = 48.8
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.283712, -0.721484, -1.182780)
+ RelativeMoveDirection = Vector3(-0.073567, -0.000000, -0.997290)
+
+==============================================
+EVENT #297 | FRAME #418
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.055622, 0.000000, -0.998452)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2795.669434, 0.000000, -3398.524170)
+ NEW = Vector3(2646.529541, 0.000000, -3520.600098)
+ OLD MAG = 4400.651367
+ NEW MAG = 4404.400391
+ DELTA MAG = 3.749023
+ DELTA = Vector3(-149.139893, 0.000000, -122.075928)
+ DIRECTION DOT = 0.999042213
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(32.238014, -12.054480, -36.710358)
+ NEW = Vector3(31.062988, -12.471146, -37.761372)
+ OLD MAG = 50.321472
+ NEW MAG = 50.461468
+
+HRP = Vector3(29.405880, -12.887812, -39.117771)
+
+REGISTRY OTHER DATA:
+ Speed = 48.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.335238, -0.721484, -1.169220)
+ RelativeMoveDirection = Vector3(-0.085021, -0.000000, -0.996379)
+
+==============================================
+EVENT #298 | FRAME #419
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.099295, 0.000000, -0.995058)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2646.529541, 0.000000, -3520.600098)
+ NEW = Vector3(2504.622314, 0.000000, -3627.494385)
+ OLD MAG = 4404.400391
+ NEW MAG = 4408.157227
+ DELTA MAG = 3.756836
+ DELTA = Vector3(-141.907227, 0.000000, -106.894287)
+ DIRECTION DOT = 0.999187469
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(31.062988, -12.471146, -37.761372)
+ NEW = Vector3(29.405880, -12.887812, -39.117771)
+ OLD MAG = 50.461468
+ NEW MAG = 50.606339
+
+HRP = Vector3(27.829134, -13.304478, -40.305485)
+
+REGISTRY OTHER DATA:
+ Speed = 48.9
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.381630, -0.720685, -1.155410)
+ RelativeMoveDirection = Vector3(-0.081535, -0.000000, -0.996670)
+
+==============================================
+EVENT #299 | FRAME #420
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.139353, 0.000000, -0.990243)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2504.622314, 0.000000, -3627.494385)
+ NEW = Vector3(2371.251953, 0.000000, -3720.451416)
+ OLD MAG = 4408.157227
+ NEW MAG = 4411.870117
+ DELTA MAG = 3.712891
+ DELTA = Vector3(-133.370361, 0.000000, -92.957031)
+ DIRECTION DOT = 0.999320865
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(29.405880, -12.887812, -39.117771)
+ NEW = Vector3(27.829134, -13.304478, -40.305485)
+ OLD MAG = 50.606339
+ NEW MAG = 50.754330
+
+HRP = Vector3(26.347240, -13.721144, -41.338341)
+
+REGISTRY OTHER DATA:
+ Speed = 49
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.423984, -0.720685, -1.140548)
+ RelativeMoveDirection = Vector3(-0.078052, -0.000000, -0.996949)
+
+==============================================
+EVENT #300 | FRAME #421
+==============================================
+STATE = Enum.HumanoidStateType.Freefall
+MOVE DIRECTION = Vector3(-0.175781, 0.000000, -0.984429)
+
+DATA.VELOCITY CHANGED
+ OLD = Vector3(2371.251953, 0.000000, -3720.451416)
+ NEW = Vector3(2251.892822, 0.000000, -3798.042480)
+ OLD MAG = 4411.870117
+ NEW MAG = 4415.444336
+ DELTA MAG = 3.574219
+ DELTA = Vector3(-119.359131, 0.000000, -77.591064)
+ DIRECTION DOT = 0.999480128
+
+ACTUAL VELOCITY CHANGED
+ OLD = Vector3(27.829134, -13.304478, -40.305485)
+ NEW = Vector3(26.347240, -13.721144, -41.338341)
+ OLD MAG = 50.754330
+ NEW MAG = 50.904865
+
+HRP = Vector3(25.021029, -14.137810, -42.200466)
+
+REGISTRY OTHER DATA:
+ Speed = 49
+ Sprint = 2
+ State = Air
+ MoveDirection = Vector3(-1.000000, 0.000000, -1.000000)
+ GlobalMoveDirection = Vector3(-0.461027, -0.721484, -1.125573)
+ RelativeMoveDirection = Vector3(-0.073422, -0.000000, -0.997301)
+
+==============================================
+TRACE STOPPED
+FRAMES = 2024
+EVENTS = 496
+==============================================
