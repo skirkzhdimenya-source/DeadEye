@@ -41,7 +41,7 @@ local DEG_PER_INPUT = 0.33
 -- Плавность движения камеры.
 -- Movement является delta-input, поэтому не прыгаем сразу
 -- между -8 и 0/8, а плавно приближаемся к target input.
-local CAMERA_SMOOTH_SPEED = 20
+local CAMERA_SMOOTH_SPEED = 60
 
 -- Ограничение величины Movement.
 local MAX_CAMERA_INPUT = 8
@@ -1756,8 +1756,10 @@ local function startSolver()
     LastRuntimeError = nil
     ExecutionSamples = {}
 
-    SmoothedCameraInput = 0
-    LastCameraUpdate = tick()
+    if JumpCount == 1 then
+        SmoothedCameraInput = 0
+        LastCameraUpdate = tick()
+    end
 
     if MovementTable then
         local initialMovement =
@@ -1857,49 +1859,55 @@ local function startSolver()
     )
 
     --==========================================================--
-    -- PRE-ALIGN CAMERA
+    -- PRE-ALIGN ONLY FOR THE FIRST JUMP
+    --
+    -- После первого приземления нельзя обнулять input и
+    -- заново крутить камеру перед каждым прыжком: это режет
+    -- горизонтальную скорость на земле.
     --==========================================================--
 
-    local alignStart =
-        tick()
+    if JumpCount == 1 then
+        local alignStart =
+            tick()
 
-    while
-        not ATB_ENV.ATBSolverStop
-        and tick() - alignStart < PRE_ALIGN_TIME
-    do
-        if not Root then
-            break
-        end
-
-        DesiredMoveVector =
-            Vector3.zero
-
-        updateCameraTowardVelocity(0)
-
-        local velocity =
-            flat(
-                getInternalVelocity()
-            )
-
-        if velocity.Magnitude > 0.001 then
-            local error =
-                math.deg(
-                    math.abs(
-                        angleDifference(
-                            vectorToYaw(
-                                velocity
-                            ),
-                            cameraToYaw()
-                        )
-                    )
-                )
-
-            if error < 0.2 then
+        while
+            not ATB_ENV.ATBSolverStop
+            and tick() - alignStart < PRE_ALIGN_TIME
+        do
+            if not Root then
                 break
             end
-        end
 
-        RunService.RenderStepped:Wait()
+            DesiredMoveVector =
+                Vector3.zero
+
+            updateCameraTowardVelocity(0)
+
+            local velocity =
+                flat(
+                    getInternalVelocity()
+                )
+
+            if velocity.Magnitude > 0.001 then
+                local error =
+                    math.deg(
+                        math.abs(
+                            angleDifference(
+                                vectorToYaw(
+                                    velocity
+                                ),
+                                cameraToYaw()
+                            )
+                        )
+                    )
+
+                if error < 0.2 then
+                    break
+                end
+            end
+
+            RunService.RenderStepped:Wait()
+        end
     end
 
     if ATB_ENV.ATBSolverStop then
@@ -1919,14 +1927,20 @@ local function startSolver()
     -- Сначала даём реальный W-ввод на один кадр, затем Jump().
     --==========================================================--
 
-    DesiredMoveVector =
-        Vector3.new(
-            0,
-            0,
-            -1
-        )
+    if JumpCount == 1
+        or DesiredMoveVector.Magnitude < 0.001
+    then
+        DesiredMoveVector =
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+    end
 
-    updateCameraTowardVelocity(0)
+    if JumpCount == 1 then
+        updateCameraTowardVelocity(0)
+    end
 
     RunService.RenderStepped:Wait()
 
@@ -2508,17 +2522,9 @@ local function startSolver()
         ATB_ENV.ATBSolverActive =
             false
 
-        DesiredMoveVector =
-            Vector3.zero
-
-        if MovementTable then
-            pcall(
-                function()
-                    setMovementInput(0)
-                end
-            )
-        end
-
+        -- Не обнуляем DesiredMoveVector / Movement между
+        -- прыжками: персонаж должен сохранить input и скорость
+        -- до следующего Jump().
         task.defer(
             function()
                 if ATB_ENV.ATBSolverStop
