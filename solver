@@ -41,14 +41,14 @@ local DEG_PER_INPUT = 0.33
 -- Плавность движения камеры.
 -- Movement является delta-input, поэтому не прыгаем сразу
 -- между -8 и 0/8, а плавно приближаемся к target input.
-local CAMERA_SMOOTH_SPEED = 18
+local CAMERA_SMOOTH_SPEED = 20
 
 -- Ограничение величины Movement.
 local MAX_CAMERA_INPUT = 8
 
 -- Перед Jump() достаточно короткого pre-align, чтобы не было
 -- полусекундной паузы перед каждым автоматическим прыжком.
-local PRE_ALIGN_TIME = 0.10
+local PRE_ALIGN_TIME = 0.033
 
 -- Подтвержденная физика.
 local SIM_DT = 1 / 120
@@ -96,6 +96,7 @@ local OriginalMovementValue = nil
 local DesiredMoveVector = Vector3.zero
 
 local SmoothedCameraInput = 0
+local LastCameraUpdate = nil
 
 local Connections = {}
 
@@ -1577,10 +1578,20 @@ local function updateCameraTowardVelocity(action)
 
     -- Плавно приближаем реальный camera input к target.
     -- Это убирает рывки при A <-> D <-> W.
-    local dt =
-        RunService.RenderStepped
-        and (1 / 60)
+    local now =
+        tick()
+
+    local dt = 
+        LastCameraUpdate
+        and clamp(
+            now - LastCameraUpdate,
+            1 / 240,
+            1 / 20
+        )
         or (1 / 60)
+
+    LastCameraUpdate =
+        now
 
     local alpha =
         1
@@ -1746,6 +1757,7 @@ local function startSolver()
     ExecutionSamples = {}
 
     SmoothedCameraInput = 0
+    LastCameraUpdate = tick()
 
     if MovementTable then
         local initialMovement =
@@ -2550,6 +2562,7 @@ local function startSolver()
         Vector3.zero
 
     SmoothedCameraInput = 0
+    LastCameraUpdate = nil
 
     if MovementTable then
         pcall(
