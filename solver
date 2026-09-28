@@ -2670,9 +2670,9 @@ local function startSolver()
                         actualError
                     ),
 
-                "PLAN STEPS = "
+                "LIVE STEPS = "
                     .. tostring(
-                        #ActivePlan
+                        PlanIndex
                     ),
 
                 "USED STEPS = "
