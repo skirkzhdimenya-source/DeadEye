@@ -2100,6 +2100,10 @@ local function startSolver()
     JumpCount =
         JumpCount + 1
 
+    LastExecutionPosition = nil
+
+    PlanIndex = 1
+
     Running = true
 
     ATB_ENV.ATBSolverActive = true
@@ -2151,7 +2155,12 @@ local function startSolver()
             DesiredMoveVector =
                 Vector3.zero
 
-            updateCameraTowardVelocity(0)
+            local _, preAlignYaw =
+                getLiveSteering()
+
+            updateCameraTowardYaw(
+                preAlignYaw
+            )
 
             local velocity =
                 flat(
@@ -2417,6 +2426,15 @@ local function startSolver()
         and Humanoid
         and Humanoid.Health > 0
     do
+        PlanIndex =
+            math.floor(
+                (
+                    tick()
+                    - executionStart
+                )
+                / SIM_DT
+            ) + 1
+
         local action,
             targetYaw,
             headingAngle,
@@ -2917,6 +2935,8 @@ connect(
 
             if not Running then
                 JumpCount = 0
+                LastExecutionPosition = nil
+                LiveSteerAction = 0
             end
 
             task.spawn(
