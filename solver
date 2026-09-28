@@ -38,8 +38,17 @@ local AIR_ADD = 182
 -- примерно 0.33 градуса yaw на единицу Movement.
 local DEG_PER_INPUT = 0.33
 
+-- Плавность движения камеры.
+-- Movement является delta-input, поэтому не прыгаем сразу
+-- между -8 и 0/8, а плавно приближаемся к target input.
+local CAMERA_SMOOTH_SPEED = 18
+
 -- Ограничение величины Movement.
 local MAX_CAMERA_INPUT = 8
+
+-- Перед Jump() достаточно короткого pre-align, чтобы не было
+-- полусекундной паузы перед каждым автоматическим прыжком.
+local PRE_ALIGN_TIME = 0.10
 
 -- Подтвержденная физика.
 local SIM_DT = 1 / 120
@@ -85,6 +94,8 @@ local MovementTable = nil
 local OriginalMovementValue = nil
 
 local DesiredMoveVector = Vector3.zero
+
+local SmoothedCameraInput = 0
 
 local Connections = {}
 
@@ -1530,16 +1541,13 @@ local function updateCameraTowardVelocity(action)
         )
 
     -- W+A / W+D: камера должна быть примерно под 45°
-    -- к текущей velocity, чтобы диагональный input W+A/W+D
-    -- давал направление, перпендикулярное velocity.
+    -- к текущей velocity.
     if action == -1 then
-        -- A: камера ~45° влево от velocity.
         targetYaw =
             targetYaw
             - math.rad(45)
 
     elseif action == 1 then
-        -- D: камера ~45° вправо от velocity.
         targetYaw =
             targetYaw
             + math.rad(45)
@@ -1554,20 +1562,44 @@ local function updateCameraTowardVelocity(action)
             currentYaw
         )
 
-    local input =
+    local targetInput =
         error
         / math.rad(
             DEG_PER_INPUT
         )
 
-    input =
+    targetInput =
         clamp(
-            input,
+            targetInput,
             -MAX_CAMERA_INPUT,
             MAX_CAMERA_INPUT
         )
 
-    setMovementInput(input)
+    -- Плавно приближаем реальный camera input к target.
+    -- Это убирает рывки при A <-> D <-> W.
+    local dt =
+        RunService.RenderStepped
+        and (1 / 60)
+        or (1 / 60)
+
+    local alpha =
+        1
+        - math.exp(
+            -CAMERA_SMOOTH_SPEED
+            * dt
+        )
+
+    SmoothedCameraInput =
+        SmoothedCameraInput
+        + (
+            targetInput
+            - SmoothedCameraInput
+        )
+        * alpha
+
+    setMovementInput(
+        SmoothedCameraInput
+    )
 end
 
 --==============================================================--
@@ -1713,6 +1745,24 @@ local function startSolver()
     LastRuntimeError = nil
     ExecutionSamples = {}
 
+    SmoothedCameraInput = 0
+
+    if MovementTable then
+        local initialMovement =
+            rawget(
+                MovementTable,
+                "Movement"
+            )
+
+        if typeof(initialMovement) == "Vector2" then
+            SmoothedCameraInput =
+                initialMovement.X
+        elseif typeof(initialMovement) == "number" then
+            SmoothedCameraInput =
+                initialMovement
+        end
+    end
+
     updateCharacter()
     updateGameCharacter()
 
@@ -1803,7 +1853,7 @@ local function startSolver()
 
     while
         not ATB_ENV.ATBSolverStop
-        and tick() - alignStart < 0.5
+        and tick() - alignStart < PRE_ALIGN_TIME
     do
         if not Root then
             break
@@ -2031,7 +2081,7 @@ local function startSolver()
         if MovementTable then
             pcall(
                 function()
-                    MovementTable.Movement = 0
+                    setMovementInput(0)
                 end
             )
         end
@@ -2452,14 +2502,12 @@ local function startSolver()
         if MovementTable then
             pcall(
                 function()
-                    MovementTable.Movement =
-                        Vector2.zero
+                    setMovementInput(0)
                 end
             )
         end
 
-        task.delay(
-            0.15,
+        task.defer(
             function()
                 if ATB_ENV.ATBSolverStop
                     or Destroyed
@@ -2500,6 +2548,8 @@ local function startSolver()
 
     DesiredMoveVector =
         Vector3.zero
+
+    SmoothedCameraInput = 0
 
     if MovementTable then
         pcall(
