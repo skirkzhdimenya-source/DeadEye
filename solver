@@ -66,9 +66,9 @@ local MAX_AUTO_JUMPS = 20
 -- Пока скорость смотрит мимо B, используем A/D и держим
 -- CameraRight перпендикулярно velocity.
 -- Когда курс достаточно совпал с B, отпускаем A/D.
-local STEER_RELEASE_DEG = 7
-local STEER_REENGAGE_DEG = 11
-local STEER_SIDE_SWITCH_DOT = 0.12
+local STEER_RELEASE_CROSS = 1.25
+local STEER_REENGAGE_CROSS = 2.50
+local STEER_SIDE_SWITCH_CROSS = 1.00
 
 -- Штраф за лишнее переключение направления.
 local SWITCH_PENALTY = 0.03
@@ -1788,11 +1788,11 @@ end
 
 local function getLiveSteering()
     if not Root then
-        return 0, nil, 0, math.huge
+        return 0, nil, 0, math.huge, 0, math.huge
     end
 
     if not TargetPosition then
-        return 0, nil, 0, math.huge
+        return 0, nil, 0, math.huge, 0, math.huge
     end
 
     local delta =
@@ -1809,17 +1809,20 @@ local function getLiveSteering()
 
         return
             0,
-            vectorToYaw(
-                flat(
-                    Root.CFrame.LookVector
-                )
-            ),
+            cameraToYaw(),
             0,
-            distance
+            distance,
+            0,
+            0
     end
 
-    local targetDirection =
-        delta.Unit
+    -- Для самого первого Jump() velocity ещё может быть нулевой.
+    -- В этом случае НЕ крутим камеру к B: W должен использовать
+    -- текущий camera forward и реально дать горизонтальный старт.
+    local rawVelocity =
+        flat(
+            Root.AssemblyLinearVelocity
+        )
 
     local velocity =
         flat(
@@ -1828,28 +1831,95 @@ local function getLiveSteering()
 
     if velocity.Magnitude < 0.001 then
         velocity =
-            flat(
-                Root.AssemblyLinearVelocity
-            )
+            rawVelocity
             * VELOCITY_SCALE
     end
 
     if velocity.Magnitude < 0.001 then
-        -- Нет горизонтальной скорости: смотрим прямо на B
-        -- и не пытаемся закручивать скорость из нуля.
         LiveSteerAction = 0
 
         return
             0,
-            vectorToYaw(
-                targetDirection
-            ),
+            cameraToYaw(),
             180,
-            distance
+            distance,
+            distance,
+            math.huge
     end
 
     local velocityDirection =
         velocity.Unit
+
+    -- CameraRight перпендикулярен текущей horizontal velocity.
+    -- D = +CameraRight, A = -CameraRight.
+    local cameraRight =
+        rightPerpendicular(
+            velocityDirection
+        )
+
+    -- Сколько времени остаётся до пересечения target-ground-height.
+    -- Используем реальную мировую AssemblyLinearVelocity.
+    local targetGroundY =
+        TargetPosition.Y
+        + (
+            Humanoid
+            and Humanoid.HipHeight
+            or 0
+        )
+
+    local verticalVelocity =
+        Root.AssemblyLinearVelocity.Y
+
+    local remainingTime =
+        getDescendingTime(
+            Root.Position.Y,
+            verticalVelocity,
+            targetGroundY
+        )
+
+    if not remainingTime
+        or remainingTime < 0.02
+    then
+        remainingTime = 0
+    end
+
+    -- Главный критерий:
+    -- "если прямо сейчас перестать air-strafe, где я приземлюсь?"
+    --
+    -- Не пытаемся просто смотреть на B. Смотрим именно на
+    -- прогноз точки приземления и её боковую ошибку относительно
+    -- текущего направления velocity.
+    local predictedLanding =
+        Root.Position
+
+        + (
+            Root.AssemblyLinearVelocity
+            * remainingTime
+        )
+
+    local landingError =
+        flat(
+            TargetPosition
+            - predictedLanding
+        )
+
+    local lateralError =
+        landingError:Dot(
+            cameraRight
+        )
+
+    local lateralMiss =
+        math.abs(
+            lateralError
+        )
+
+    local alongError =
+        landingError:Dot(
+            velocityDirection
+        )
+
+    local targetDirection =
+        delta.Unit
 
     local headingDot =
         clamp(
@@ -1867,21 +1937,16 @@ local function getLiveSteering()
             )
         )
 
-    local cameraRight =
-        rightPerpendicular(
-            velocityDirection
-        )
-
-    local targetSide =
-        targetDirection:Dot(
-            cameraRight
-        )
-
-    -- Гистерезис:
-    -- не дёргаем A <-> D на границе курса.
+    -- Гистерезис по ПРОГНОЗУ ПРИЗЕМЛЕНИЯ.
+    --
+    -- Это важно: как только текущая траектория уже приводит
+    -- к B, A/D отпускается. Поэтому solver не должен бесконечно
+    -- описывать круг вокруг точки.
     if LiveSteerAction == 0 then
-        if headingAngle >= STEER_REENGAGE_DEG then
-            if targetSide >= 0 then
+        if lateralMiss >= STEER_REENGAGE_CROSS
+            and remainingTime > 0.02
+        then
+            if lateralError >= 0 then
                 LiveSteerAction = 1
             else
                 LiveSteerAction = -1
@@ -1889,44 +1954,38 @@ local function getLiveSteering()
         end
 
     else
-        if headingAngle <= STEER_RELEASE_DEG then
+        if lateralMiss <= STEER_RELEASE_CROSS
+            or remainingTime <= 0.02
+        then
             LiveSteerAction = 0
 
         elseif LiveSteerAction == 1
-            and targetSide < -STEER_SIDE_SWITCH_DOT
+            and lateralError < -STEER_SIDE_SWITCH_CROSS
         then
             LiveSteerAction = -1
 
         elseif LiveSteerAction == -1
-            and targetSide > STEER_SIDE_SWITCH_DOT
+            and lateralError > STEER_SIDE_SWITCH_CROSS
         then
             LiveSteerAction = 1
         end
     end
 
-    local targetYaw
-
-    if LiveSteerAction == 0 then
-        -- Курс совпал с B: камера смотрит на B, N сохраняет
-        -- текущую высокую скорость по прямой.
-        targetYaw =
-            vectorToYaw(
-                targetDirection
-            )
-    else
-        -- A/D должны видеть CameraRight перпендикулярным
-        -- текущей velocity для максимального air-strafe.
-        targetYaw =
-            vectorToYaw(
-                velocityDirection
-            )
-    end
+    -- ВСЕГДА держим камеру относительно текущей velocity.
+    -- На N больше не поворачиваем её на B: это само по себе
+    -- не должно вызывать постоянный разворот персонажа/камеры.
+    local targetYaw =
+        vectorToYaw(
+            velocityDirection
+        )
 
     return
         LiveSteerAction,
         targetYaw,
         headingAngle,
-        distance
+        distance,
+        lateralMiss,
+        remainingTime
 end
 
 local function isGrounded()
@@ -2133,77 +2192,23 @@ local function startSolver()
     )
 
     --==========================================================--
-    -- PRE-ALIGN ONLY FOR THE FIRST JUMP
+    -- NO TARGET PRE-ALIGN BEFORE THE FIRST JUMP
     --
-    -- После первого приземления нельзя обнулять input и
-    -- заново крутить камеру перед каждым прыжком: это режет
-    -- горизонтальную скорость на земле.
+    -- Нельзя заранее крутить камеру прямо на B при нулевой
+    -- горизонтальной скорости: это выглядит как мгновенный
+    -- разворот без разгона.
+    --
+    -- Первый Jump стартует по текущему camera forward.
+    -- После появления реальной velocity камера уже подстраивается
+    -- под velocity, а не под саму B.
     --==========================================================--
-
-    if JumpCount == 1 then
-        local alignStart =
-            tick()
-
-        while
-            not ATB_ENV.ATBSolverStop
-            and tick() - alignStart < PRE_ALIGN_TIME
-        do
-            if not Root then
-                break
-            end
-
-            DesiredMoveVector =
-                Vector3.zero
-
-            local _, preAlignYaw =
-                getLiveSteering()
-
-            updateCameraTowardYaw(
-                preAlignYaw
-            )
-
-            local velocity =
-                flat(
-                    getInternalVelocity()
-                )
-
-            if velocity.Magnitude > 0.001 then
-                local error =
-                    math.deg(
-                        math.abs(
-                            angleDifference(
-                                vectorToYaw(
-                                    velocity
-                                ),
-                                cameraToYaw()
-                            )
-                        )
-                    )
-
-                if error < 0.2 then
-                    break
-                end
-            end
-
-            RunService.RenderStepped:Wait()
-        end
-    end
-
-    if ATB_ENV.ATBSolverStop then
-        Running = false
-        ATB_ENV.ATBSolverActive = false
-        return
-    end
 
     --==========================================================--
     -- PRIME JUMP WITH REAL FORWARD INPUT
     --
-    -- Раньше перед Jump() DesiredMoveVector был zero.
-    -- Поэтому Jump() иногда стартовал строго на месте, а
-    -- последующее ожидание горизонтальной скорости ничего
-    -- не могло создать.
-    --
-    -- Сначала даём реальный W-ввод на один кадр, затем Jump().
+    -- W нужен на КАЖДОМ автоматическом прыжке. Камера перед этим
+    -- держится вдоль текущей velocity, поэтому W сохраняет набор
+    -- скорости, вместо того чтобы начинать следующий jump с N.
     --==========================================================--
 
     local primeAction,
@@ -2227,38 +2232,25 @@ local function startSolver()
             ).Unit
 
     else
-        -- На точном курсе B lateral input не нужен.
-        -- На первом прыжке оставляем W на один кадр для старта.
-        if JumpCount == 1 then
-            DesiredMoveVector =
-                Vector3.new(
-                    0,
-                    0,
-                    -1
-                )
-        else
-            DesiredMoveVector =
-                Vector3.zero
-        end
-    end
-
-    if JumpCount == 1 then
-        if primeYaw then
-            updateCameraTowardYaw(
-                primeYaw
+        -- W = camera forward.
+        DesiredMoveVector =
+            Vector3.new(
+                0,
+                0,
+                -1
             )
-        end
-
-        -- Только первый Jump требует отдельного кадра,
-        -- чтобы первичный W-ввод попал в native camera/movement.
-        RunService.RenderStepped:Wait()
     end
 
-    if ATB_ENV.ATBSolverStop then
-        Running = false
-        ATB_ENV.ATBSolverActive = false
-        return
+    -- primeYaw здесь никогда не направляется в B при нулевой
+    -- velocity: getLiveSteering() возвращает текущий camera yaw.
+    if primeYaw then
+        updateCameraTowardYaw(
+            primeYaw
+        )
     end
+
+    -- Один кадр даём native movement получить W/A/D до Jump().
+    RunService.RenderStepped:Wait()
 
     local jumpSuccess =
         executeJump()
@@ -2438,7 +2430,9 @@ local function startSolver()
         local action,
             targetYaw,
             headingAngle,
-            targetDistance =
+            targetDistance,
+            lateralMiss,
+            remainingTime =
             getLiveSteering()
 
         if action == -1 then
@@ -2600,7 +2594,11 @@ local function startSolver()
                 "HEADING =",
                 headingAngle,
                 "DISTANCE =",
-                targetDistance
+                targetDistance,
+                "LATERAL MISS =",
+                lateralMiss,
+                "REMAINING =",
+                remainingTime
             )
 
             lastLogAction =
