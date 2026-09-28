@@ -58,7 +58,8 @@ local GRAVITY = 50
 local BEAM_WIDTH = 150
 
 -- Продолжаем прыжки автоматически, пока B не достигнута.
-local TARGET_REACHED_DISTANCE = 6
+local TARGET_REACHED_DISTANCE = 2.5
+local TARGET_TOUCH_DISTANCE = 2.5
 local MAX_AUTO_JUMPS = 20
 
 -- Штраф за лишнее переключение направления.
@@ -1270,8 +1271,14 @@ local function buildPlan(
     end
 
     local best = nil
+    local bestScore =
+        math.huge
+
     local bestDistance =
         math.huge
+
+    local bestApproachDot =
+        0
 
     for _, state in ipairs(states) do
         local errorVector =
@@ -1281,9 +1288,67 @@ local function buildPlan(
         local distance =
             errorVector.Magnitude
 
-        if distance < bestDistance then
+        local velocity =
+            flat(
+                state.velocity
+            )
+
+        local approachDot = 0
+        local approachPenalty = 0
+
+        if velocity.Magnitude > 0.001
+            and distance > 0.001
+        then
+            approachDot =
+                velocity.Unit:Dot(
+                    errorVector.Unit
+                )
+
+            -- Скорость, направленная от точки, особенно плоха:
+            -- такой state начинает обходить B по дуге.
+            local away =
+                math.max(
+                    0,
+                    -approachDot
+                )
+
+            -- Для касания желательно, чтобы траектория
+            -- проходила через B, а не касалась её по касательной.
+            local lateral =
+                math.sqrt(
+                    math.max(
+                        0,
+                        1
+                            - approachDot
+                            * approachDot
+                    )
+                )
+
+            approachPenalty =
+                away * 40
+                + lateral
+                    * math.min(
+                        distance,
+                        20
+                    )
+                    * 0.8
+        end
+
+        local score =
+            distance
+            + approachPenalty
+            + state.switches
+                * SWITCH_PENALTY
+
+        if score < bestScore then
+            bestScore =
+                score
+
             bestDistance =
                 distance
+
+            bestApproachDot =
+                approachDot
 
             best = state
         end
@@ -1326,6 +1391,9 @@ local function buildPlan(
 
         predictedDistance =
             bestDistance,
+
+        predictedApproachDot =
+            bestApproachDot,
 
         steps = stepCount,
 
@@ -1735,6 +1803,55 @@ end
 -- START SOLVER
 --==============================================================--
 
+local function isGrounded()
+    if not Humanoid or not Root then
+        return false
+    end
+
+    local state =
+        Humanoid:GetState()
+
+    if state ==
+        Enum.HumanoidStateType.Landed
+        or state ==
+            Enum.HumanoidStateType.Running
+        or state ==
+            Enum.HumanoidStateType.RunningNoPhysics
+    then
+        return true
+    end
+
+    if Humanoid.FloorMaterial
+        ~= Enum.Material.Air
+    then
+        return true
+    end
+
+    return false
+end
+
+local function waitForGrounded(timeout)
+    local deadline =
+        tick()
+        + (timeout or 0.75)
+
+    while
+        not ATB_ENV.ATBSolverStop
+        and not Destroyed
+        and tick() < deadline
+    do
+        updateCharacter()
+
+        if isGrounded() then
+            return true
+        end
+
+        RunService.RenderStepped:Wait()
+    end
+
+    return isGrounded()
+end
+
 local function startSolver()
     if Running then
         return
@@ -1818,6 +1935,24 @@ local function startSolver()
 
     if not setupControlModule() then
         return
+    end
+
+    -- После автоматического перехода ждём именно физический
+    -- контакт с землёй. Это НЕ искусственная задержка:
+    -- новый Jump() вызывается на первом grounded-кадре.
+    if JumpCount > 0 then
+        local grounded =
+            waitForGrounded(0.75)
+
+        if not grounded then
+            warn(
+                "[ATB Solver] Could not confirm grounded state for next jump"
+            )
+
+            Running = false
+            ATB_ENV.ATBSolverActive = false
+            return
+        end
     end
 
     JumpCount =
@@ -2254,6 +2389,57 @@ local function startSolver()
 
         updateCameraTowardVelocity(action)
 
+        --======================================================--
+        -- TOUCHDOWN CHECK
+        --
+        -- Если во время снижения root уже находится над B,
+        -- не продолжаем следующий прыжок вокруг цели.
+        -- Проверяем горизонталь + близость к текущей grounded
+        -- высоте.
+        --======================================================--
+
+        local targetDistance =
+            flat(
+                TargetPosition
+                - Root.Position
+            ).Magnitude
+
+        local targetGroundY =
+            TargetPosition.Y
+            + (
+                Humanoid
+                and Humanoid.HipHeight
+                or 0
+            )
+
+        local descending =
+            Root.AssemblyLinearVelocity.Y
+            <= 0
+
+        local nearTouchHeight =
+            math.abs(
+                Root.Position.Y
+                - targetGroundY
+            )
+            <= 1.75
+
+        if targetDistance
+            <= TARGET_TOUCH_DISTANCE
+            and descending
+            and nearTouchHeight
+        then
+            print(
+                "[ATB Solver] TOUCHDOWN TARGET HIT.",
+                "DISTANCE =",
+                targetDistance
+            )
+
+            PlanIndex =
+                index
+
+            break
+        end
+
         if PlanIndex == 1
             or PlanIndex == 5
             or PlanIndex == 10
@@ -2401,6 +2587,12 @@ local function startSolver()
                 "PREDICTED ERROR = "
                     .. tostring(
                         plan.predictedDistance
+                    ),
+
+                "PREDICTED APPROACH DOT = "
+                    .. tostring(
+                        plan.predictedApproachDot
+                        or 0
                     ),
 
                 "",
