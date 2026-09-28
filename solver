@@ -41,7 +41,7 @@ local DEG_PER_INPUT = 0.33
 -- Плавность движения камеры.
 -- Movement является delta-input, поэтому не прыгаем сразу
 -- между -8 и 0/8, а плавно приближаемся к target input.
-local CAMERA_SMOOTH_SPEED = 60
+local CAMERA_SMOOTH_SPEED = 90
 
 -- Ограничение величины Movement.
 local MAX_CAMERA_INPUT = 8
@@ -1536,23 +1536,21 @@ local function updateCameraTowardVelocity(action)
         return
     end
 
+    -- Подтверждённая геометрия воздушного WishDirection:
+    --
+    -- D -> CameraRight
+    -- A -> -CameraRight
+    --
+    -- Для максимального air-strafe WishDirection должен быть
+    -- перпендикулярен текущей horizontal Velocity.
+    --
+    -- Следовательно CameraLook должен быть параллелен Velocity.
+    --
+    -- НЕ добавляем +/-45°: это было ошибкой предыдущей версии.
     local targetYaw =
         vectorToYaw(
             velocity
         )
-
-    -- W+A / W+D: камера должна быть примерно под 45°
-    -- к текущей velocity.
-    if action == -1 then
-        targetYaw =
-            targetYaw
-            - math.rad(45)
-
-    elseif action == 1 then
-        targetYaw =
-            targetYaw
-            + math.rad(45)
-    end
 
     local currentYaw =
         cameraToYaw()
@@ -1576,12 +1574,11 @@ local function updateCameraTowardVelocity(action)
             MAX_CAMERA_INPUT
         )
 
-    -- Плавно приближаем реальный camera input к target.
-    -- Это убирает рывки при A <-> D <-> W.
+    -- Плавное следование, но достаточно быстрое для air-strafe.
     local now =
         tick()
 
-    local dt = 
+    local dt =
         LastCameraUpdate
         and clamp(
             now - LastCameraUpdate,
@@ -1657,7 +1654,7 @@ end
 
 local function applyAction(action)
     if action == -1 then
-        -- W + A
+        -- A
         DesiredMoveVector =
             Vector3.new(
                 -1,
@@ -1666,7 +1663,7 @@ local function applyAction(action)
             ).Unit
 
     elseif action == 1 then
-        -- W + D
+        -- D
         DesiredMoveVector =
             Vector3.new(
                 1,
@@ -1675,13 +1672,9 @@ local function applyAction(action)
             ).Unit
 
     else
-        -- W
+        -- N: не подаём lateral input в воздухе.
         DesiredMoveVector =
-            Vector3.new(
-                0,
-                0,
-                -1
-            )
+            Vector3.zero
     end
 end
 
@@ -1728,7 +1721,7 @@ local function actionsToText(actions)
         elseif action == 1 then
             result[i] = "D"
         else
-            result[i] = "W"
+            result[i] = "N"
         end
     end
 
@@ -2291,7 +2284,7 @@ local function startSolver()
                             and "A"
                             or action == 1
                             and "D"
-                            or "W"
+                            or "N"
                         ),
                         "RAW V = "
                             .. tostring(rawVelocity),
@@ -2318,7 +2311,7 @@ local function startSolver()
                     and "A"
                     or action == 1
                     and "D"
-                    or "W"
+                    or "N"
 
                 print(
                     "["
