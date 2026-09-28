@@ -2,9 +2,19 @@
 --                    AIR A -> B SOLVER v1                     --
 --==============================================================--
 
-getgenv().ATBSolverStop = false
-getgenv().ATBSolverRunning = true
-getgenv().ATBSolverActive = false
+local ATB_ENV
+
+if type(getgenv) == "function" then
+    ATB_ENV =
+        getgenv()
+else
+    ATB_ENV =
+        _G
+end
+
+ATB_ENV.ATBSolverStop = false
+ATB_ENV.ATBSolverRunning = true
+ATB_ENV.ATBSolverActive = false
 
 --==============================================================--
 -- SERVICES
@@ -129,13 +139,13 @@ updateCharacter()
 connect(
     LocalPlayer.CharacterAdded,
     function()
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return
         end
 
         task.wait(0.25)
 
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return
         end
 
@@ -192,13 +202,13 @@ updateGameCharacter()
 connect(
     LocalPlayer.CharacterAdded,
     function()
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return
         end
 
         task.wait(0.3)
 
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return
         end
 
@@ -451,7 +461,7 @@ local function findMovementTable()
     --==========================================================--
 
     for _, object in ipairs(objects) do
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return nil
         end
 
@@ -499,7 +509,7 @@ local function findMovementTable()
     --==========================================================--
 
     for _, object in ipairs(objects) do
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return nil
         end
 
@@ -563,7 +573,7 @@ local function findMovementTable()
     local inspectedTables = {}
 
     for _, object in ipairs(objects) do
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return nil
         end
 
@@ -751,9 +761,9 @@ local function setupControlModule()
 
     ControlModule.GetMoveVector =
         function(self, ...)
-            if getgenv().ATBSolverStop
-                or not getgenv().ATBSolverRunning
-                or not getgenv().ATBSolverActive
+            if ATB_ENV.ATBSolverStop
+                or not ATB_ENV.ATBSolverRunning
+                or not ATB_ENV.ATBSolverActive
             then
                 return OriginalGetMoveVector(
                     self,
@@ -1176,7 +1186,7 @@ end
         flat(target)
 
     for stepIndex = 1, stepCount do
-        if getgenv().ATBSolverStop then
+        if ATB_ENV.ATBSolverStop then
             return nil
         end
 
@@ -1704,7 +1714,7 @@ local function startSolver()
         return
     end
 
-    getgenv().ATBSolverStop = false
+    ATB_ENV.ATBSolverStop = false
 
     LastRuntimeError = nil
     ExecutionSamples = {}
@@ -1764,7 +1774,7 @@ local function startSolver()
 
     Running = true
 
-    getgenv().ATBSolverActive = true
+    ATB_ENV.ATBSolverActive = true
 
     print(
         "=================================================="
@@ -1798,7 +1808,7 @@ local function startSolver()
         tick()
 
     while
-        not getgenv().ATBSolverStop
+        not ATB_ENV.ATBSolverStop
         and tick() - alignStart < 0.5
     do
         if not Root then
@@ -1836,9 +1846,9 @@ local function startSolver()
         RunService.RenderStepped:Wait()
     end
 
-    if getgenv().ATBSolverStop then
+    if ATB_ENV.ATBSolverStop then
         Running = false
-        getgenv().ATBSolverActive = false
+        ATB_ENV.ATBSolverActive = false
         return
     end
 
@@ -1864,9 +1874,9 @@ local function startSolver()
 
     RunService.RenderStepped:Wait()
 
-    if getgenv().ATBSolverStop then
+    if ATB_ENV.ATBSolverStop then
         Running = false
-        getgenv().ATBSolverActive = false
+        ATB_ENV.ATBSolverActive = false
         return
     end
 
@@ -1875,16 +1885,16 @@ local function startSolver()
 
     if not jumpSuccess then
         Running = false
-        getgenv().ATBSolverActive = false
+        ATB_ENV.ATBSolverActive = false
         return
     end
 
     -- Ждём первый физический кадр после Jump().
     RunService.Heartbeat:Wait()
 
-    if getgenv().ATBSolverStop then
+    if ATB_ENV.ATBSolverStop then
         Running = false
-        getgenv().ATBSolverActive = false
+        ATB_ENV.ATBSolverActive = false
         return
     end
 
@@ -1893,7 +1903,7 @@ local function startSolver()
 
     if not Root then
         Running = false
-        getgenv().ATBSolverActive = false
+        ATB_ENV.ATBSolverActive = false
         return
     end
 
@@ -2021,7 +2031,7 @@ local function startSolver()
         )
 
         Running = false
-        getgenv().ATBSolverActive = false
+        ATB_ENV.ATBSolverActive = false
         DesiredMoveVector = Vector3.zero
 
         if MovementTable then
@@ -2147,7 +2157,7 @@ local function startSolver()
     local lastPlanIndex = 0
 
     while
-        not getgenv().ATBSolverStop
+        not ATB_ENV.ATBSolverStop
         and Root
         and Root.Parent
         and Humanoid
@@ -2426,7 +2436,7 @@ local function startSolver()
     -- AUTO NEXT JUMP
     --==========================================================--
 
-    if not getgenv().ATBSolverStop
+    if not ATB_ENV.ATBSolverStop
         and actualError > TARGET_REACHED_DISTANCE
         and JumpCount < MAX_AUTO_JUMPS
     then
@@ -2439,7 +2449,7 @@ local function startSolver()
 
         Running = false
 
-        getgenv().ATBSolverActive =
+        ATB_ENV.ATBSolverActive =
             false
 
         DesiredMoveVector =
@@ -2457,7 +2467,7 @@ local function startSolver()
         task.delay(
             0.15,
             function()
-                if getgenv().ATBSolverStop
+                if ATB_ENV.ATBSolverStop
                     or Destroyed
                 then
                     return
@@ -2491,7 +2501,7 @@ local function startSolver()
 
     Running = false
 
-    getgenv().ATBSolverActive =
+    ATB_ENV.ATBSolverActive =
         false
 
     DesiredMoveVector =
@@ -2515,11 +2525,11 @@ local function stopSolver()
         return
     end
 
-    getgenv().ATBSolverStop = true
+    ATB_ENV.ATBSolverStop = true
 
     Running = false
 
-    getgenv().ATBSolverActive = false
+    ATB_ENV.ATBSolverActive = false
 
     DesiredMoveVector =
         Vector3.zero
@@ -2648,9 +2658,9 @@ connect(
 task.spawn(
     function()
         while
-            getgenv().ATBSolverRunning
+            ATB_ENV.ATBSolverRunning
         do
-            if getgenv().ATBSolverStop then
+            if ATB_ENV.ATBSolverStop then
                 break
             end
 
@@ -2666,8 +2676,8 @@ task.spawn(
 task.spawn(
     function()
         while
-            getgenv().ATBSolverRunning
-            and not getgenv().ATBSolverStop
+            ATB_ENV.ATBSolverRunning
+            and not ATB_ENV.ATBSolverStop
         do
             task.wait(0.1)
         end
@@ -2678,7 +2688,7 @@ task.spawn(
 
         Destroyed = true
 
-        getgenv().ATBSolverActive =
+        ATB_ENV.ATBSolverActive =
             false
 
         DesiredMoveVector =
@@ -2718,10 +2728,10 @@ task.spawn(
 
         removeTargetMarker()
 
-        getgenv().ATBSolverRunning =
+        ATB_ENV.ATBSolverRunning =
             false
 
-        getgenv().ATBSolverStop =
+        ATB_ENV.ATBSolverStop =
             true
 
         print(
