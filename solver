@@ -1,3 +1,2184 @@
-ATB Solver
+--==============================================================--
+--                    AIR A -> B SOLVER v1                     --
+--==============================================================--
 
-The requested executable Roblox solver could not be written by the connected GitHub tool in this session because the write was blocked by its safety layer.
+getgenv().ATBSolverStop = false
+getgenv().ATBSolverRunning = true
+getgenv().ATBSolverActive = false
+
+--==============================================================--
+-- SERVICES
+--==============================================================--
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+--==============================================================--
+-- SETTINGS
+--==============================================================--
+
+local VELOCITY_SCALE = 90
+local AIR_ADD = 182
+
+-- Подтвержденная калибровка последнего adaptive-теста:
+-- примерно 0.33 градуса yaw на единицу Movement.
+local DEG_PER_INPUT = 0.33
+
+-- Ограничение величины Movement.
+local MAX_CAMERA_INPUT = 8
+
+-- Подтвержденная физика.
+local SIM_DT = 1 / 120
+local GRAVITY = 50
+
+-- Beam search.
+local BEAM_WIDTH = 150
+
+-- Штраф за лишнее переключение направления.
+local SWITCH_PENALTY = 0.03
+
+--==============================================================--
+-- KEYS
+--==============================================================--
+
+local TARGET_KEY = Enum.KeyCode.F6
+local START_KEY = Enum.KeyCode.F7
+local STOP_KEY = Enum.KeyCode.F8
+
+--==============================================================--
+-- STATE
+--==============================================================--
+
+local TargetPosition = nil
+local TargetMarker = nil
+
+local Character = nil
+local Humanoid = nil
+local Root = nil
+
+local GameCharacter = nil
+local CharacterService = nil
+
+local ControlModule = nil
+local OriginalGetMoveVector = nil
+local ControlHookInstalled = false
+
+local MovementTable = nil
+local OriginalMovementValue = nil
+
+local DesiredMoveVector = Vector3.zero
+
+local Connections = {}
+
+local ActivePlan = nil
+local PlanIndex = 1
+
+local Running = false
+local Destroyed = false
+
+--==============================================================--
+-- CONNECTION HELPER
+--==============================================================--
+
+local function connect(signal, callback)
+    local connection = signal:Connect(callback)
+
+    table.insert(
+        Connections,
+        connection
+    )
+
+    return connection
+end
+
+--==============================================================--
+-- CHARACTER
+--==============================================================--
+
+local function updateCharacter()
+    Character = LocalPlayer.Character
+
+    if not Character then
+        Humanoid = nil
+        Root = nil
+        return
+    end
+
+    Humanoid =
+        Character:FindFirstChildOfClass("Humanoid")
+
+    Root =
+        Character:FindFirstChild("HumanoidRootPart")
+end
+
+updateCharacter()
+
+connect(
+    LocalPlayer.CharacterAdded,
+    function()
+        if getgenv().ATBSolverStop then
+            return
+        end
+
+        task.wait(0.25)
+
+        if getgenv().ATBSolverStop then
+            return
+        end
+
+        updateCharacter()
+    end
+)
+
+--==============================================================--
+-- GAME CHARACTER
+--==============================================================--
+
+local function updateGameCharacter()
+    local ok, service =
+        pcall(
+            function()
+                return require(
+                    game.ReplicatedStorage
+                        .Services
+                        .Asset
+                        .CharacterService
+                )
+            end
+        )
+
+    if not ok or not service then
+        CharacterService = nil
+        GameCharacter = nil
+
+        return false
+    end
+
+    CharacterService = service
+
+    local ok2, object =
+        pcall(
+            function()
+                return service:GetLocalCharacter()
+            end
+        )
+
+    if not ok2 then
+        GameCharacter = nil
+
+        return false
+    end
+
+    GameCharacter = object
+
+    return GameCharacter ~= nil
+end
+
+updateGameCharacter()
+
+connect(
+    LocalPlayer.CharacterAdded,
+    function()
+        if getgenv().ATBSolverStop then
+            return
+        end
+
+        task.wait(0.3)
+
+        if getgenv().ATBSolverStop then
+            return
+        end
+
+        updateGameCharacter()
+    end
+)
+
+--==============================================================--
+-- MATH
+--==============================================================--
+
+local function flat(v)
+    return Vector3.new(
+        v.X,
+        0,
+        v.Z
+    )
+end
+
+local function safeUnit(v)
+    local magnitude = v.Magnitude
+
+    if magnitude < 0.000001 then
+        return Vector3.zero
+    end
+
+    return v / magnitude
+end
+
+local function clamp(value, minimum, maximum)
+    return math.max(
+        minimum,
+        math.min(
+            maximum,
+            value
+        )
+    )
+end
+
+local function angleDifference(a, b)
+    local d = a - b
+
+    while d > math.pi do
+        d = d - math.pi * 2
+    end
+
+    while d < -math.pi do
+        d = d + math.pi * 2
+    end
+
+    return d
+end
+
+--==============================================================--
+-- YAW
+--==============================================================--
+
+-- Подтвержденная формула:
+--
+-- LookVector = (-sin(yaw), 0, cos(yaw))
+--
+local function vectorToYaw(vector)
+    local horizontal =
+        flat(vector)
+
+    if horizontal.Magnitude < 0.000001 then
+        return 0
+    end
+
+    horizontal =
+        horizontal.Unit
+
+    return math.atan2(
+        -horizontal.X,
+        horizontal.Z
+    )
+end
+
+local function cameraToYaw()
+    Camera =
+        workspace.CurrentCamera
+
+    if not Camera then
+        return 0
+    end
+
+    local look =
+        flat(
+            Camera.CFrame.LookVector
+        )
+
+    if look.Magnitude < 0.000001 then
+        return 0
+    end
+
+    look =
+        look.Unit
+
+    return math.atan2(
+        -look.X,
+        look.Z
+    )
+end
+
+--==============================================================--
+-- OPTIMAL AIR-STRAFE PERPENDICULAR
+--==============================================================--
+
+-- Для:
+--
+-- V = (X, 0, Z)
+--
+-- CameraLook = V.Unit
+--
+-- CameraRight = (-Z, 0, X)
+--
+-- Именно это направление было подтверждено последним логом:
+--
+-- Velocity =
+-- (-4162.373, 0, -1157.690)
+--
+-- WishDirection =
+-- (0.267961, 0, -0.963430)
+--
+-- Dot = 0
+--
+local function rightPerpendicular(vector)
+    local horizontal =
+        flat(vector)
+
+    local magnitude =
+        horizontal.Magnitude
+
+    if magnitude < 0.000001 then
+        return Vector3.zero
+    end
+
+    return Vector3.new(
+        -horizontal.Z / magnitude,
+        0,
+        horizontal.X / magnitude
+    )
+end
+
+--==============================================================--
+-- SAFE UPVALUE ACCESS
+--==============================================================--
+
+local function getUpvalueSafe(fn, index)
+    if type(fn) ~= "function" then
+        return nil, nil
+    end
+
+    if debug
+        and type(debug.getupvalue) == "function"
+    then
+        local ok, name, value =
+            pcall(
+                debug.getupvalue,
+                fn,
+                index
+            )
+
+        if ok then
+            return name, value
+        end
+
+        return nil, nil
+    end
+
+    if type(getupvalue) == "function" then
+        local ok, name, value =
+            pcall(
+                getupvalue,
+                fn,
+                index
+            )
+
+        if ok then
+            return name, value
+        end
+    end
+
+    return nil, nil
+end
+
+--==============================================================--
+-- FIND CAMERA INPUT MOVEMENT TABLE
+--==============================================================--
+
+local function findMovementTable()
+    if type(getgc) ~= "function" then
+        warn(
+            "[ATB Solver] getgc is unavailable"
+        )
+
+        return nil
+    end
+
+    local ok, objects =
+        pcall(
+            getgc,
+            true
+        )
+
+    if not ok
+        or type(objects) ~= "table"
+    then
+        warn(
+            "[ATB Solver] getgc(true) failed"
+        )
+
+        return nil
+    end
+
+    --==========================================================--
+    -- FIRST PASS:
+    -- ищем именно getRotation / CameraInput
+    --==========================================================--
+
+    for _, object in ipairs(objects) do
+        if getgenv().ATBSolverStop then
+            return nil
+        end
+
+        if type(object) == "function" then
+            local matched = false
+
+            if debug
+                and type(debug.getinfo) == "function"
+            then
+                local okInfo, info =
+                    pcall(
+                        debug.getinfo,
+                        object
+                    )
+
+                if okInfo and info then
+                    if info.name == "getRotation" then
+                        matched = true
+
+                    elseif type(info.source) == "string"
+                        and string.find(
+                            info.source,
+                            "CameraInput",
+                            1,
+                            true
+                        )
+                    then
+                        matched = true
+                    end
+                end
+            end
+
+            if matched then
+                for index = 1, 20 do
+                    local name, value =
+                        getUpvalueSafe(
+                            object,
+                            index
+                        )
+
+                    -- ВАЖНО:
+                    -- не существует => прекращаем
+                    -- просмотр этой функции.
+                    if name == nil then
+                        break
+                    end
+
+                    if type(value) == "table"
+                        and value.Movement ~= nil
+                        and value.Pan ~= nil
+                        and value.Pinch ~= nil
+                        and value.Wheel ~= nil
+                    then
+                        print(
+                            "[ATB Solver] Movement table found:",
+                            "upvalue",
+                            index,
+                            name
+                        )
+
+                        return value
+                    end
+                end
+            end
+        end
+    end
+
+    --==========================================================--
+    -- SECOND PASS:
+    -- fallback по структуре таблицы
+    --==========================================================--
+
+    for _, object in ipairs(objects) do
+        if getgenv().ATBSolverStop then
+            return nil
+        end
+
+        if type(object) == "table"
+            and object.Movement ~= nil
+            and object.Pan ~= nil
+            and object.Pinch ~= nil
+            and object.Wheel ~= nil
+        then
+            print(
+                "[ATB Solver] Movement table found by fallback"
+            )
+
+            return object
+        end
+    end
+
+    warn(
+        "[ATB Solver] CameraInput Movement table not found"
+    )
+
+    return nil
+end
+
+MovementTable =
+    findMovementTable()
+
+if MovementTable then
+    OriginalMovementValue =
+        MovementTable.Movement
+end
+
+--==============================================================--
+-- CONTROL MODULE
+--==============================================================--
+
+local function setupControlModule()
+    if ControlHookInstalled then
+        return true
+    end
+
+    local ok, result =
+        pcall(
+            function()
+                local playerModule =
+                    LocalPlayer.PlayerScripts
+                        :WaitForChild(
+                            "PlayerModule"
+                        )
+
+                local module =
+                    playerModule
+                        :WaitForChild(
+                            "ControlModule"
+                        )
+
+                return require(module)
+            end
+        )
+
+    if not ok or not result then
+        warn(
+            "[ATB Solver] ControlModule not found"
+        )
+
+        return false
+    end
+
+    ControlModule = result
+
+    if type(
+        ControlModule.GetMoveVector
+    ) ~= "function" then
+
+        warn(
+            "[ATB Solver] GetMoveVector missing"
+        )
+
+        return false
+    end
+
+    OriginalGetMoveVector =
+        ControlModule.GetMoveVector
+
+    ControlModule.GetMoveVector =
+        function(self, ...)
+            if getgenv().ATBSolverStop
+                or not getgenv().ATBSolverRunning
+                or not getgenv().ATBSolverActive
+            then
+                return OriginalGetMoveVector(
+                    self,
+                    ...
+                )
+            end
+
+            return DesiredMoveVector
+        end
+
+    ControlHookInstalled = true
+
+    return true
+end
+
+--==============================================================--
+-- INTERNAL VELOCITY
+--==============================================================--
+
+local function getInternalVelocity()
+    if GameCharacter
+        and GameCharacter.DataRegistry
+    then
+        local ok, velocity =
+            pcall(
+                function()
+                    return GameCharacter
+                        .DataRegistry
+                        :Get("Velocity")
+                end
+            )
+
+        if ok
+            and typeof(velocity) == "Vector3"
+        then
+            return velocity
+        end
+    end
+
+    if Root then
+        return
+            Root.AssemblyLinearVelocity
+            * VELOCITY_SCALE
+    end
+
+    return Vector3.zero
+end
+
+--==============================================================--
+-- GROUND RAY
+--==============================================================--
+
+local function getGroundRay()
+    if not Root then
+        return nil
+    end
+
+    local params =
+        RaycastParams.new()
+
+    params.FilterType =
+        Enum.RaycastFilterType.Exclude
+
+    params.FilterDescendantsInstances = {
+        Character
+    }
+
+    return workspace:Raycast(
+        Root.Position,
+        Vector3.new(
+            0,
+            -10,
+            0
+        ),
+        params
+    )
+end
+
+--==============================================================--
+-- GROUND Y
+--==============================================================--
+
+local function getRootGroundY()
+    if not Root then
+        return nil
+    end
+
+    local result =
+        getGroundRay()
+
+    if not result then
+        return nil
+    end
+
+    local hipHeight = 0
+
+    if Humanoid then
+        hipHeight =
+            Humanoid.HipHeight
+    end
+
+    return
+        result.Position.Y
+        + hipHeight
+end
+
+--==============================================================--
+-- DESCENDING TIME
+--==============================================================--
+
+local function getDescendingTime(
+    currentY,
+    verticalVelocity,
+    targetY
+)
+    local deltaY =
+        targetY - currentY
+
+    local discriminant =
+        verticalVelocity
+            * verticalVelocity
+        - 2
+            * GRAVITY
+            * deltaY
+
+    if discriminant < 0 then
+        return nil
+    end
+
+    local sqrtDiscriminant =
+        math.sqrt(discriminant)
+
+    local t1 =
+        (
+            verticalVelocity
+            - sqrtDiscriminant
+        )
+        / GRAVITY
+
+    local t2 =
+        (
+            verticalVelocity
+            + sqrtDiscriminant
+        )
+        / GRAVITY
+
+    local best = nil
+
+    if t1 > 0 then
+        local vy1 =
+            verticalVelocity
+            - GRAVITY * t1
+
+        if vy1 < 0 then
+            best = t1
+        end
+    end
+
+    if t2 > 0 then
+        local vy2 =
+            verticalVelocity
+            - GRAVITY * t2
+
+        if vy2 < 0
+            and (
+                not best
+                or t2 < best
+            )
+        then
+            best = t2
+        end
+    end
+
+    return best
+end
+
+--==============================================================--
+-- AIR SIMULATION
+--==============================================================--
+
+-- За один реальный Accelerate call:
+--
+-- Vnew = V + 182 * perpendicular(V)
+--
+-- при оптимальной camera alignment.
+--
+local function simulateAirStep(
+    position,
+    velocity,
+    side,
+    dt
+)
+    local newVelocity =
+        velocity
+
+    if side ~= 0 then
+        local perpendicular =
+            rightPerpendicular(
+                velocity
+            )
+
+        if perpendicular.Magnitude
+            > 0.000001
+        then
+            local wish =
+                perpendicular * side
+
+            newVelocity =
+                velocity
+                + wish * AIR_ADD
+        end
+    end
+
+    local newPosition =
+        position
+        + (
+            newVelocity
+            / VELOCITY_SCALE
+        )
+        * dt
+
+    return
+        newPosition,
+        newVelocity
+end
+
+--==============================================================--
+-- MAXIMUM TRAVEL HEURISTIC
+--==============================================================--
+
+local function estimateMaxTravel(
+    velocity,
+    remainingTime
+)
+    local speed =
+        flat(velocity).Magnitude
+
+    local elapsed = 0
+    local distance = 0
+
+    while elapsed < remainingTime do
+        local dt =
+            math.min(
+                SIM_DT,
+                remainingTime - elapsed
+            )
+
+        distance =
+            distance
+            + (
+                speed
+                / VELOCITY_SCALE
+            )
+            * dt
+
+        speed =
+            math.sqrt(
+                speed * speed
+                + AIR_ADD * AIR_ADD
+            )
+
+        elapsed =
+            elapsed + dt
+    end
+
+    return distance
+end
+
+--==============================================================--
+-- HEURISTIC
+--==============================================================--
+
+local function stateHeuristic(
+    state,
+    target,
+    remainingTime
+)
+    local delta =
+        target
+        - state.position
+
+    local distance =
+        delta.Magnitude
+
+    if distance < 0.001 then
+        return 0
+    end
+
+    local maxTravel =
+        estimateMaxTravel(
+            state.velocity,
+            remainingTime
+        )
+
+    local lowerBound =
+        math.max(
+            0,
+            distance - maxTravel
+        )
+
+    local velocity =
+        flat(
+            state.velocity
+        )
+
+    local velocityMagnitude =
+        velocity.Magnitude
+
+    local headingPenalty = 0
+
+    if velocityMagnitude > 0.001 then
+        local velocityYaw =
+            vectorToYaw(
+                velocity
+            )
+
+        local targetYaw =
+            vectorToYaw(
+                delta
+            )
+
+        local headingError =
+            math.abs(
+                angleDifference(
+                    targetYaw,
+                    velocityYaw
+                )
+            )
+
+        local testSpeed =
+            velocityMagnitude
+
+        local maxTurn = 0
+        local elapsed = 0
+
+        while elapsed < remainingTime do
+            local dt =
+                math.min(
+                    SIM_DT,
+                    remainingTime
+                    - elapsed
+                )
+
+            maxTurn =
+                maxTurn
+                + math.atan(
+                    AIR_ADD
+                    / math.max(
+                        testSpeed,
+                        0.001
+                    )
+                )
+
+            testSpeed =
+                math.sqrt(
+                    testSpeed * testSpeed
+                    + AIR_ADD * AIR_ADD
+                )
+
+            elapsed =
+                elapsed + dt
+        end
+
+        local excess =
+            math.max(
+                0,
+                headingError
+                - maxTurn
+            )
+
+        headingPenalty =
+            excess * 2
+    end
+
+    return
+        lowerBound
+        + headingPenalty
+        + state.switches
+        * SWITCH_PENALTY
+end
+
+--==============================================================--
+-- SORT / TRIM
+--==============================================================--
+
+local function sortAndTrim(
+    states,
+    target,
+    remainingTime
+)
+    table.sort(
+        states,
+        function(a, b)
+            return
+                stateHeuristic(
+                    a,
+                    target,
+                    remainingTime
+                )
+                <
+                stateHeuristic(
+                    b,
+                    target,
+                    remainingTime
+                )
+        end
+    )
+
+    while #states > BEAM_WIDTH do
+        table.remove(states)
+    end
+
+    return states
+end
+
+--==============================================================--
+-- BUILD PLAN
+--==============================================================--
+
+local function buildPlan(
+    startPosition,
+    startVelocity,
+    totalTime,
+    target
+)
+    local stepCount =
+        math.max(
+            1,
+            math.ceil(
+                totalTime
+                / SIM_DT
+            )
+        )
+
+    local states = {
+        {
+            position =
+                flat(
+                    startPosition
+                ),
+
+            velocity =
+                flat(
+                    startVelocity
+                ),
+
+            firstAction = nil,
+            lastAction = 0,
+            switches = 0,
+            actions = {}
+        }
+    }
+
+    local targetFlat =
+        flat(target)
+
+    for stepIndex = 1, stepCount do
+        if getgenv().ATBSolverStop then
+            return nil
+        end
+
+        local nextStates = {}
+
+        local remainingAfter =
+            math.max(
+                0,
+                totalTime
+                - stepIndex
+                * SIM_DT
+            )
+
+        for _, state in ipairs(states) do
+            --================================================--
+            -- A
+            --================================================--
+
+            for _, side in ipairs({
+                -1,
+                0,
+                1
+            }) do
+
+                local position,
+                    velocity =
+                    simulateAirStep(
+                        state.position,
+                        state.velocity,
+                        side,
+                        SIM_DT
+                    )
+
+                local switches =
+                    state.switches
+
+                if side ~= 0
+                    and state.lastAction ~= 0
+                    and side ~= state.lastAction
+                then
+                    switches =
+                        switches + 1
+                elseif side ~= 0
+                    and state.lastAction == 0
+                then
+                    switches =
+                        switches + 1
+                end
+
+                local firstAction =
+                    state.firstAction
+
+                if firstAction == nil then
+                    firstAction = side
+                end
+
+                local actions = {}
+
+                for i, value in ipairs(
+                    state.actions
+                ) do
+                    actions[i] = value
+                end
+
+                actions[
+                    #actions + 1
+                ] = side
+
+                nextStates[
+                    #nextStates + 1
+                ] = {
+                    position = position,
+                    velocity = velocity,
+                    firstAction = firstAction,
+                    lastAction = side,
+                    switches = switches,
+                    actions = actions
+                }
+            end
+        end
+
+        states =
+            sortAndTrim(
+                nextStates,
+                targetFlat,
+                remainingAfter
+            )
+    end
+
+    local best = nil
+    local bestDistance =
+        math.huge
+
+    for _, state in ipairs(states) do
+        local errorVector =
+            targetFlat
+            - state.position
+
+        local distance =
+            errorVector.Magnitude
+
+        if distance < bestDistance then
+            bestDistance =
+                distance
+
+            best = state
+        end
+    end
+
+    if not best then
+        return nil
+    end
+
+    return {
+        actions = best.actions,
+
+        predictedPosition =
+            best.position,
+
+        predictedVelocity =
+            best.velocity,
+
+        predictedDistance =
+            bestDistance,
+
+        steps = stepCount,
+
+        totalTime = totalTime
+    }
+end
+
+--==============================================================--
+-- TARGET MARKER
+--==============================================================--
+
+local function removeTargetMarker()
+    if TargetMarker then
+        pcall(
+            function()
+                TargetMarker:Destroy()
+            end
+        )
+
+        TargetMarker = nil
+    end
+end
+
+local function createTargetMarker(position)
+    removeTargetMarker()
+
+    local marker =
+        Instance.new("Part")
+
+    marker.Name =
+        "ATB_Target"
+
+    marker.Shape =
+        Enum.PartType.Ball
+
+    marker.Size =
+        Vector3.new(
+            1.2,
+            1.2,
+            1.2
+        )
+
+    marker.Anchored = true
+
+    marker.CanCollide = false
+    marker.CanTouch = false
+    marker.CanQuery = false
+
+    marker.Material =
+        Enum.Material.Neon
+
+    marker.Transparency = 0.2
+
+    marker.Position =
+        position
+
+    marker.Parent =
+        workspace
+
+    TargetMarker =
+        marker
+end
+
+--==============================================================--
+-- PICK TARGET
+--==============================================================--
+
+local function pickTarget()
+    Camera =
+        workspace.CurrentCamera
+
+    if not Camera then
+        return nil
+    end
+
+    if not Root then
+        updateCharacter()
+    end
+
+    if not Root then
+        return nil
+    end
+
+    local mousePosition =
+        UserInputService:GetMouseLocation()
+
+    local ray =
+        Camera:ViewportPointToRay(
+            mousePosition.X,
+            mousePosition.Y
+        )
+
+    local params =
+        RaycastParams.new()
+
+    params.FilterType =
+        Enum.RaycastFilterType.Exclude
+
+    params.FilterDescendantsInstances = {
+        Character
+    }
+
+    local result =
+        workspace:Raycast(
+            ray.Origin,
+            ray.Direction * 10000,
+            params
+        )
+
+    if not result then
+        return nil
+    end
+
+    return result.Position
+end
+
+--==============================================================--
+-- CAMERA ALIGNMENT
+--==============================================================--
+
+local function updateCameraTowardVelocity()
+    if not MovementTable then
+        return
+    end
+
+    if not Root then
+        return
+    end
+
+    local velocity =
+        flat(
+            getInternalVelocity()
+        )
+
+    if velocity.Magnitude < 0.001 then
+        velocity =
+            flat(
+                Root.CFrame.LookVector
+            )
+    end
+
+    if velocity.Magnitude < 0.001 then
+        return
+    end
+
+    local targetYaw =
+        vectorToYaw(
+            velocity
+        )
+
+    local currentYaw =
+        cameraToYaw()
+
+    local error =
+        angleDifference(
+            targetYaw,
+            currentYaw
+        )
+
+    local input =
+        error
+        / math.rad(
+            DEG_PER_INPUT
+        )
+
+    input =
+        clamp(
+            input,
+            -MAX_CAMERA_INPUT,
+            MAX_CAMERA_INPUT
+        )
+
+    MovementTable.Movement =
+        input
+end
+
+--==============================================================--
+-- REAL JUMP
+--==============================================================--
+
+local function executeJump()
+    if not GameCharacter then
+        updateGameCharacter()
+    end
+
+    if not GameCharacter
+        or not GameCharacter.Movement
+    then
+        return false
+    end
+
+    local ok, err =
+        pcall(
+            function()
+                GameCharacter.Movement:
+                    Jump(
+                        nil,
+                        true
+                    )
+            end
+        )
+
+    if not ok then
+        warn(
+            "[ATB Solver] Jump failed:",
+            err
+        )
+
+        return false
+    end
+
+    return true
+end
+
+--==============================================================--
+-- APPLY A / W / D
+--==============================================================--
+
+local function applyAction(action)
+    if action == -1 then
+        -- W + A
+        DesiredMoveVector =
+            Vector3.new(
+                -1,
+                0,
+                -1
+            ).Unit
+
+    elseif action == 1 then
+        -- W + D
+        DesiredMoveVector =
+            Vector3.new(
+                1,
+                0,
+                -1
+            ).Unit
+
+    else
+        -- W
+        DesiredMoveVector =
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+    end
+end
+
+--==============================================================--
+-- CLIPBOARD
+--==============================================================--
+
+local function copyReport(report)
+    if type(setclipboard) == "function" then
+        pcall(
+            function()
+                setclipboard(report)
+            end
+        )
+    end
+end
+
+--==============================================================--
+-- ACTION TEXT
+--==============================================================--
+
+local function actionsToText(actions)
+    local result = {}
+
+    for i, action in ipairs(actions) do
+        if action == -1 then
+            result[i] = "A"
+        elseif action == 1 then
+            result[i] = "D"
+        else
+            result[i] = "W"
+        end
+    end
+
+    return table.concat(
+        result,
+        " "
+    )
+end
+
+--==============================================================--
+-- START SOLVER
+--==============================================================--
+
+local function startSolver()
+    if Running then
+        return
+    end
+
+    if Destroyed then
+        return
+    end
+
+    getgenv().ATBSolverStop = false
+
+    updateCharacter()
+    updateGameCharacter()
+
+    if not Root
+        or not Humanoid
+    then
+        warn(
+            "[ATB Solver] Character not ready"
+        )
+
+        return
+    end
+
+    if not TargetPosition then
+        warn(
+            "[ATB Solver] Target not selected. Press F6."
+        )
+
+        return
+    end
+
+    if not MovementTable then
+        MovementTable =
+            findMovementTable()
+
+        if MovementTable then
+            OriginalMovementValue =
+                MovementTable.Movement
+        end
+    end
+
+    if not MovementTable then
+        warn(
+            "[ATB Solver] Movement table not found"
+        )
+
+        return
+    end
+
+    if not setupControlModule() then
+        return
+    end
+
+    Running = true
+
+    getgenv().ATBSolverActive = true
+
+    print(
+        "=================================================="
+    )
+
+    print(
+        "========== A -> B SOLVER START ==================="
+    )
+
+    print(
+        "=================================================="
+    )
+
+    print(
+        "TARGET =",
+        TargetPosition
+    )
+
+    --==========================================================--
+    -- PRE-ALIGN CAMERA
+    --==========================================================--
+
+    local alignStart =
+        tick()
+
+    while
+        not getgenv().ATBSolverStop
+        and tick() - alignStart < 0.5
+    do
+        if not Root then
+            break
+        end
+
+        DesiredMoveVector =
+            Vector3.zero
+
+        updateCameraTowardVelocity()
+
+        local velocity =
+            flat(
+                getInternalVelocity()
+            )
+
+        if velocity.Magnitude > 0.001 then
+            local error =
+                math.deg(
+                    math.abs(
+                        angleDifference(
+                            vectorToYaw(
+                                velocity
+                            ),
+                            cameraToYaw()
+                        )
+                    )
+                )
+
+            if error < 0.2 then
+                break
+            end
+        end
+
+        RunService.RenderStepped:Wait()
+    end
+
+    if getgenv().ATBSolverStop then
+        Running = false
+        getgenv().ATBSolverActive = false
+        return
+    end
+
+    --==========================================================--
+    -- JUMP
+    --==========================================================--
+
+    local jumpSuccess =
+        executeJump()
+
+    if not jumpSuccess then
+        Running = false
+        getgenv().ATBSolverActive = false
+        return
+    end
+
+    -- Даем Movement применить реальный Jump().
+    RunService.Heartbeat:Wait()
+
+    if getgenv().ATBSolverStop then
+        Running = false
+        getgenv().ATBSolverActive = false
+        return
+    end
+
+    updateCharacter()
+    updateGameCharacter()
+
+    if not Root then
+        Running = false
+        getgenv().ATBSolverActive = false
+        return
+    end
+
+    local startPosition =
+        Root.Position
+
+    local startVelocity =
+        flat(
+            getInternalVelocity()
+        )
+
+    local verticalVelocity =
+        Root.AssemblyLinearVelocity.Y
+
+    local groundY =
+        getRootGroundY()
+
+    if not groundY then
+        groundY =
+            startPosition.Y
+            - (
+                Humanoid
+                and Humanoid.HipHeight
+                or 0
+            )
+    end
+
+    local timeToLand =
+        getDescendingTime(
+            startPosition.Y,
+            verticalVelocity,
+            groundY
+        )
+
+    if not timeToLand then
+        timeToLand =
+            math.max(
+                0.1,
+                2
+                    * verticalVelocity
+                    / GRAVITY
+            )
+    end
+
+    print(
+        "START POSITION =",
+        startPosition
+    )
+
+    print(
+        "START VELOCITY INTERNAL =",
+        startVelocity
+    )
+
+    print(
+        "START H SPEED INTERNAL =",
+        startVelocity.Magnitude
+    )
+
+    print(
+        "VERTICAL VELOCITY =",
+        verticalVelocity
+    )
+
+    print(
+        "TIME TO LAND =",
+        timeToLand
+    )
+
+    --==========================================================--
+    -- BUILD PLAN
+    --==========================================================--
+
+    local plan =
+        buildPlan(
+            startPosition,
+            startVelocity,
+            timeToLand,
+            TargetPosition
+        )
+
+    if not plan then
+        warn(
+            "[ATB Solver] Could not build plan"
+        )
+
+        Running = false
+        getgenv().ATBSolverActive = false
+        DesiredMoveVector = Vector3.zero
+
+        if MovementTable then
+            pcall(
+                function()
+                    MovementTable.Movement = 0
+                end
+            )
+        end
+
+        return
+    end
+
+    ActivePlan =
+        plan.actions
+
+    PlanIndex = 1
+
+    local actionText =
+        actionsToText(
+            plan.actions
+        )
+
+    print(
+        "=================================================="
+    )
+
+    print(
+        "========== PLAN READY ============================"
+    )
+
+    print(
+        "=================================================="
+    )
+
+    print(
+        "STEPS =",
+        plan.steps
+    )
+
+    print(
+        "TIME =",
+        plan.totalTime
+    )
+
+    print(
+        "PREDICTED LANDING =",
+        plan.predictedPosition
+    )
+
+    print(
+        "PREDICTED ERROR =",
+        plan.predictedDistance
+    )
+
+    print(
+        "PLAN =",
+        actionText
+    )
+
+    local report =
+        table.concat(
+            {
+                "========== ATB SOLVER PLAN ==========",
+                "",
+                "TARGET = "
+                    .. tostring(
+                        TargetPosition
+                    ),
+
+                "START = "
+                    .. tostring(
+                        startPosition
+                    ),
+
+                "START V = "
+                    .. tostring(
+                        startVelocity
+                    ),
+
+                "START H = "
+                    .. tostring(
+                        startVelocity.Magnitude
+                    ),
+
+                "VERTICAL V = "
+                    .. tostring(
+                        verticalVelocity
+                    ),
+
+                "TIME TO LAND = "
+                    .. tostring(
+                        timeToLand
+                    ),
+
+                "",
+                "PREDICTED LANDING = "
+                    .. tostring(
+                        plan.predictedPosition
+                    ),
+
+                "PREDICTED ERROR = "
+                    .. tostring(
+                        plan.predictedDistance
+                    ),
+
+                "",
+                "PLAN = "
+                    .. actionText
+            },
+            "\n"
+        )
+
+    copyReport(report)
+
+    --==========================================================--
+    -- EXECUTION
+    --==========================================================--
+
+    local executionStart =
+        tick()
+
+    local lastPlanIndex = 0
+
+    while
+        not getgenv().ATBSolverStop
+        and Root
+        and Root.Parent
+        and Humanoid
+        and Humanoid.Health > 0
+    do
+        local elapsed =
+            tick() - executionStart
+
+        local index =
+            math.floor(
+                elapsed
+                / SIM_DT
+            ) + 1
+
+        if index > #ActivePlan then
+            index =
+                #ActivePlan
+        end
+
+        PlanIndex =
+            index
+
+        local action =
+            ActivePlan[index]
+
+        if action == nil then
+            action = 0
+        end
+
+        applyAction(action)
+
+        updateCameraTowardVelocity()
+
+        if PlanIndex ~= lastPlanIndex then
+            lastPlanIndex =
+                PlanIndex
+
+            if PlanIndex % 5 == 0
+                or PlanIndex == 1
+            then
+                local actionName =
+                    action == -1
+                    and "A"
+                    or action == 1
+                    and "D"
+                    or "W"
+
+                print(
+                    "["
+                        .. tostring(
+                            PlanIndex
+                        )
+                        .. "/"
+                        .. tostring(
+                            #ActivePlan
+                        )
+                        .. "] ACTION = "
+                        .. actionName
+                )
+            end
+        end
+
+        local state =
+            Humanoid:GetState()
+
+        if state ==
+            Enum.HumanoidStateType.Landed
+            or state ==
+                Enum.HumanoidStateType.Running
+            or state ==
+                Enum.HumanoidStateType.RunningNoPhysics
+        then
+            break
+        end
+
+        RunService.RenderStepped:Wait()
+    end
+
+    --==========================================================--
+    -- RESULT
+    --==========================================================--
+
+    local endPosition =
+        Root
+        and Root.Position
+        or Vector3.zero
+
+    local actualError =
+        flat(
+            TargetPosition
+            - endPosition
+        ).Magnitude
+
+    local resultReport =
+        table.concat(
+            {
+                "",
+                "==================================================",
+                "========== A -> B SOLVER END =====================",
+                "==================================================",
+
+                "TARGET = "
+                    .. tostring(
+                        TargetPosition
+                    ),
+
+                "START = "
+                    .. tostring(
+                        startPosition
+                    ),
+
+                "END = "
+                    .. tostring(
+                        endPosition
+                    ),
+
+                "ACTUAL ERROR = "
+                    .. tostring(
+                        actualError
+                    ),
+
+                "PLAN STEPS = "
+                    .. tostring(
+                        #ActivePlan
+                    ),
+
+                "USED STEPS = "
+                    .. tostring(
+                        PlanIndex
+                    ),
+
+                "PREDICTED ERROR = "
+                    .. tostring(
+                        plan.predictedDistance
+                    ),
+
+                "=================================================="
+            },
+            "\n"
+        )
+
+    print(
+        resultReport
+    )
+
+    copyReport(
+        resultReport
+    )
+
+    Running = false
+
+    getgenv().ATBSolverActive =
+        false
+
+    DesiredMoveVector =
+        Vector3.zero
+
+    if MovementTable then
+        pcall(
+            function()
+                MovementTable.Movement = 0
+            end
+        )
+    end
+end
+
+--==============================================================--
+-- STOP
+--==============================================================--
+
+local function stopSolver()
+    if Destroyed then
+        return
+    end
+
+    getgenv().ATBSolverStop = true
+
+    Running = false
+
+    getgenv().ATBSolverActive = false
+
+    DesiredMoveVector =
+        Vector3.zero
+
+    if MovementTable then
+        pcall(
+            function()
+                MovementTable.Movement = 0
+            end
+        )
+    end
+
+    print(
+        "[ATB Solver] STOP"
+    )
+end
+
+--==============================================================--
+-- INPUT
+--==============================================================--
+
+connect(
+    UserInputService.InputBegan,
+    function(input, gameProcessed)
+        if gameProcessed then
+            return
+        end
+
+        if input.KeyCode == TARGET_KEY then
+            local target =
+                pickTarget()
+
+            if target then
+                TargetPosition =
+                    target
+
+                createTargetMarker(
+                    TargetPosition
+                )
+
+                print(
+                    "[ATB Solver] TARGET SET =",
+                    TargetPosition
+                )
+            else
+                warn(
+                    "[ATB Solver] Could not raycast target"
+                )
+            end
+
+        elseif input.KeyCode == START_KEY then
+            task.spawn(
+                startSolver
+            )
+
+        elseif input.KeyCode == STOP_KEY then
+            stopSolver()
+        end
+    end
+)
+
+--==============================================================--
+-- EXTERNAL STOP
+--==============================================================--
+
+task.spawn(
+    function()
+        while
+            getgenv().ATBSolverRunning
+        do
+            if getgenv().ATBSolverStop then
+                break
+            end
+
+            task.wait(0.05)
+        end
+    end
+)
+
+--==============================================================--
+-- CLEANUP
+--==============================================================--
+
+task.spawn(
+    function()
+        while
+            getgenv().ATBSolverRunning
+            and not getgenv().ATBSolverStop
+        do
+            task.wait(0.1)
+        end
+
+        if Destroyed then
+            return
+        end
+
+        Destroyed = true
+
+        getgenv().ATBSolverActive =
+            false
+
+        DesiredMoveVector =
+            Vector3.zero
+
+        if MovementTable then
+            pcall(
+                function()
+                    MovementTable.Movement = 0
+                end
+            )
+        end
+
+        if ControlHookInstalled
+            and ControlModule
+            and OriginalGetMoveVector
+        then
+            pcall(
+                function()
+                    ControlModule.GetMoveVector =
+                        OriginalGetMoveVector
+                end
+            )
+        end
+
+        for _, connection in ipairs(
+            Connections
+        ) do
+            pcall(
+                function()
+                    connection:Disconnect()
+                end
+            )
+        end
+
+        Connections = {}
+
+        removeTargetMarker()
+
+        getgenv().ATBSolverRunning =
+            false
+
+        getgenv().ATBSolverStop =
+            true
+
+        print(
+            "[ATB Solver] CLEANED UP"
+        )
+    end
+)
+
+--==============================================================--
+-- READY
+--==============================================================--
+
+print(
+    "=================================================="
+)
+
+print(
+    "========== AIR A -> B SOLVER v1 ================="
+)
+
+print(
+    "=================================================="
+)
+
+print(
+    "F6 = SELECT B"
+)
+
+print(
+    "F7 = START A -> B"
+)
+
+print(
+    "F8 = STOP"
+)
+
+print("")
+
+print(
+    "Stand at A -> aim at B -> F6 -> F7"
+)
+
+print(
+    "=================================================="
+)
