@@ -1829,7 +1829,44 @@ local function startSolver()
         return
     end
 
-    -- Даем Movement применить реальный Jump().
+    --==========================================================--
+    -- PRIME JUMP WITH REAL FORWARD INPUT
+    --
+    -- Раньше перед Jump() DesiredMoveVector был zero.
+    -- Поэтому Jump() иногда стартовал строго на месте, а
+    -- последующее ожидание горизонтальной скорости ничего
+    -- не могло создать.
+    --
+    -- Сначала даём реальный W-ввод на один кадр, затем Jump().
+    --==========================================================--
+
+    DesiredMoveVector =
+        Vector3.new(
+            0,
+            0,
+            -1
+        )
+
+    updateCameraTowardVelocity(0)
+
+    RunService.RenderStepped:Wait()
+
+    if getgenv().ATBSolverStop then
+        Running = false
+        getgenv().ATBSolverActive = false
+        return
+    end
+
+    local jumpSuccess =
+        executeJump()
+
+    if not jumpSuccess then
+        Running = false
+        getgenv().ATBSolverActive = false
+        return
+    end
+
+    -- Ждём первый физический кадр после Jump().
     RunService.Heartbeat:Wait()
 
     if getgenv().ATBSolverStop then
@@ -1847,39 +1884,34 @@ local function startSolver()
         return
     end
 
-    -- В этой игре горизонтальная скорость появляется НЕ на
-    -- том же кадре, в котором вызывается Jump(). Если снять
-    -- startVelocity слишком рано, получим 0,0,0 и симулятор
-    -- физически не сможет начать air-strafe.
-    local velocityWaitStart =
-        tick()
+    -- Важный момент:
+    -- DataRegistry.Velocity обновляется с задержкой, поэтому для
+    -- начальной скорости после Jump() используем фактический
+    -- AssemblyLinearVelocity и применяем подтверждённый scale 90.
+    local rawStartVelocity =
+        Root.AssemblyLinearVelocity
 
     local startVelocity =
-        Vector3.zero
+        flat(
+            rawStartVelocity
+            * VELOCITY_SCALE
+        )
 
-    while
-        tick() - velocityWaitStart < 0.15
-        and not getgenv().ATBSolverStop
-    do
-        startVelocity =
-            flat(
-                getInternalVelocity()
-            )
-
-        if startVelocity.Magnitude > 0.001 then
-            break
-        end
-
-        RunService.Heartbeat:Wait()
-    end
-
-    -- Позицию и вертикальную скорость берём после появления
-    -- реальной стартовой horizontal velocity.
     local startPosition =
         Root.Position
 
     local verticalVelocity =
-        Root.AssemblyLinearVelocity.Y
+        rawStartVelocity.Y
+
+    print(
+        "[ATB Solver] RAW POST-JUMP VELOCITY =",
+        rawStartVelocity
+    )
+
+    print(
+        "[ATB Solver] START VELOCITY FROM RAW =",
+        startVelocity
+    )
 
     local groundY =
         getRootGroundY()
