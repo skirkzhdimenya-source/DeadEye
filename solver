@@ -993,6 +993,11 @@ local function stateHeuristic(
     target,
     remainingTime
 )
+    -- Дешёвая эвристика для beam sorting.
+    -- Предыдущая версия внутри каждого сравнения запускала
+    -- дополнительные циклы на всё оставшееся время, из-за чего
+    -- F7 мог надолго подвешивать клиент.
+
     local delta =
         target
         - state.position
@@ -1001,20 +1006,10 @@ local function stateHeuristic(
         delta.Magnitude
 
     if distance < 0.001 then
-        return 0
+        return
+            state.switches
+            * SWITCH_PENALTY
     end
-
-    local maxTravel =
-        estimateMaxTravel(
-            state.velocity,
-            remainingTime
-        )
-
-    local lowerBound =
-        math.max(
-            0,
-            distance - maxTravel
-        )
 
     local velocity =
         flat(
@@ -1045,53 +1040,22 @@ local function stateHeuristic(
                 )
             )
 
-        local testSpeed =
-            velocityMagnitude
-
-        local maxTurn = 0
-        local elapsed = 0
-
-        while elapsed < remainingTime do
-            local dt =
-                math.min(
-                    SIM_DT,
-                    remainingTime
-                    - elapsed
-                )
-
-            maxTurn =
-                maxTurn
-                + math.atan(
-                    AIR_ADD
-                    / math.max(
-                        testSpeed,
-                        0.001
-                    )
-                )
-
-            testSpeed =
-                math.sqrt(
-                    testSpeed * testSpeed
-                    + AIR_ADD * AIR_ADD
-                )
-
-            elapsed =
-                elapsed + dt
-        end
-
-        local excess =
-            math.max(
+        local timeFactor =
+            1
+            + math.max(
                 0,
-                headingError
-                - maxTurn
+                0.5
+                    - remainingTime
             )
 
         headingPenalty =
-            excess * 2
+            headingError
+            * 20
+            * timeFactor
     end
 
     return
-        lowerBound
+        distance
         + headingPenalty
         + state.switches
         * SWITCH_PENALTY
@@ -1550,14 +1514,30 @@ end
 -- CLIPBOARD
 --==============================================================--
 
-local function copyReport(report)
-    if type(setclipboard) == "function" then
-        pcall(
-            function()
-                setclipboard(report)
-            end
-        )
+local function copyReport(...)
+    if type(setclipboard) ~= "function" then
+        return
     end
+
+    local parts = {...}
+    local reportParts = {}
+
+    for i, value in ipairs(parts) do
+        reportParts[i] =
+            tostring(value)
+    end
+
+    local report =
+        table.concat(
+            reportParts,
+            "\n"
+        )
+
+    pcall(
+        function()
+            setclipboard(report)
+        end
+    )
 end
 
 --==============================================================--
@@ -1815,6 +1795,13 @@ local function startSolver()
     -- BUILD PLAN
     --==========================================================--
 
+    local buildStart =
+        tick()
+
+    print(
+        "[ATB Solver] BUILD PLAN START"
+    )
+
     local plan =
         buildPlan(
             startPosition,
@@ -1822,6 +1809,15 @@ local function startSolver()
             timeToLand,
             TargetPosition
         )
+
+    local buildDuration =
+        tick()
+        - buildStart
+
+    print(
+        "[ATB Solver] BUILD PLAN TIME =",
+        buildDuration
+    )
 
     if not plan then
         warn(
@@ -2201,7 +2197,48 @@ connect(
             )
 
             task.spawn(
-                startSolver
+                function()
+                    local ok, err =
+                        xpcall(
+                            startSolver,
+                            function(errorObject)
+                                local traceback =
+                                    tostring(
+                                        errorObject
+                                    )
+
+                                if debug
+                                    and type(
+                                        debug.traceback
+                                    ) == "function"
+                                then
+                                    traceback =
+                                        debug.traceback(
+                                            traceback,
+                                            2
+                                        )
+                                end
+
+                                warn(
+                                    "[ATB Solver] F7 ERROR:",
+                                    traceback
+                                )
+
+                                copyReport(
+                                    "========== ATB SOLVER ERROR ==========",
+                                    traceback
+                                )
+
+                                return traceback
+                            end
+                        )
+
+                    if not ok then
+                        print(
+                            "[ATB Solver] F7 THREAD FAILED"
+                        )
+                    end
+                end
             )
 
         elseif input.KeyCode == STOP_KEY then
