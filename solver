@@ -1817,19 +1817,6 @@ local function startSolver()
     end
 
     --==========================================================--
-    -- JUMP
-    --==========================================================--
-
-    local jumpSuccess =
-        executeJump()
-
-    if not jumpSuccess then
-        Running = false
-        getgenv().ATBSolverActive = false
-        return
-    end
-
-    --==========================================================--
     -- PRIME JUMP WITH REAL FORWARD INPUT
     --
     -- Раньше перед Jump() DesiredMoveVector был zero.
