@@ -1813,10 +1813,6 @@ local function isGrounded()
 
     if state ==
         Enum.HumanoidStateType.Landed
-        or state ==
-            Enum.HumanoidStateType.Running
-        or state ==
-            Enum.HumanoidStateType.RunningNoPhysics
     then
         return true
     end
@@ -1827,7 +1823,25 @@ local function isGrounded()
         return true
     end
 
-    return false
+    -- Дополнительная физическая проверка:
+    -- действительно ли под root находится поверхность
+    -- примерно на уровне ног.
+    local result =
+        getGroundRay()
+
+    if not result then
+        return false
+    end
+
+    local hipHeight =
+        Humanoid.HipHeight
+
+    local distance =
+        (Root.Position.Y
+            - result.Position.Y)
+
+    return distance
+        <= hipHeight + 0.35
 end
 
 local function waitForGrounded(timeout)
@@ -2068,9 +2082,11 @@ local function startSolver()
 
     if JumpCount == 1 then
         updateCameraTowardVelocity(0)
-    end
 
-    RunService.RenderStepped:Wait()
+        -- Только первый Jump требует отдельного кадра,
+        -- чтобы первичный W-ввод попал в native camera/movement.
+        RunService.RenderStepped:Wait()
+    end
 
     if ATB_ENV.ATBSolverStop then
         Running = false
