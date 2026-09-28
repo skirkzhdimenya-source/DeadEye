@@ -38,6 +38,10 @@ local GRAVITY = 50
 -- Beam search.
 local BEAM_WIDTH = 150
 
+-- Продолжаем прыжки автоматически, пока B не достигнута.
+local TARGET_REACHED_DISTANCE = 6
+local MAX_AUTO_JUMPS = 20
+
 -- Штраф за лишнее переключение направления.
 local SWITCH_PENALTY = 0.03
 
@@ -79,6 +83,8 @@ local PlanIndex = 1
 
 local Running = false
 local Destroyed = false
+
+local JumpCount = 0
 
 local LastRuntimeError = nil
 local ExecutionSamples = {}
@@ -1743,12 +1749,22 @@ local function startSolver()
         return
     end
 
+    JumpCount =
+        JumpCount + 1
+
     Running = true
 
     getgenv().ATBSolverActive = true
 
     print(
         "=================================================="
+    )
+
+    print(
+        "[ATB Solver] JUMP #",
+        JumpCount,
+        "/",
+        MAX_AUTO_JUMPS
     )
 
     print(
@@ -2266,6 +2282,7 @@ local function startSolver()
                 "",
                 "==================================================",
                 "========== A -> B SOLVER END =====================",
+                "JUMP = " .. tostring(JumpCount),
                 "==================================================",
 
                 "TARGET = "
@@ -2395,6 +2412,73 @@ local function startSolver()
         resultReport
     )
 
+    --==========================================================--
+    -- AUTO NEXT JUMP
+    --==========================================================--
+
+    if not getgenv().ATBSolverStop
+        and actualError > TARGET_REACHED_DISTANCE
+        and JumpCount < MAX_AUTO_JUMPS
+    then
+        print(
+            "[ATB Solver] TARGET NOT REACHED.",
+            "DISTANCE =",
+            actualError,
+            "STARTING NEXT JUMP..."
+        )
+
+        Running = false
+
+        getgenv().ATBSolverActive =
+            false
+
+        DesiredMoveVector =
+            Vector3.zero
+
+        if MovementTable then
+            pcall(
+                function()
+                    MovementTable.Movement =
+                        Vector2.zero
+                end
+            )
+        end
+
+        task.delay(
+            0.15,
+            function()
+                if getgenv().ATBSolverStop
+                    or Destroyed
+                then
+                    return
+                end
+
+                if Running then
+                    return
+                end
+
+                startSolver()
+            end
+        )
+
+        return
+    end
+
+    if actualError <= TARGET_REACHED_DISTANCE then
+        print(
+            "[ATB Solver] TARGET REACHED.",
+            "DISTANCE =",
+            actualError
+        )
+
+    elseif JumpCount >= MAX_AUTO_JUMPS then
+        warn(
+            "[ATB Solver] MAX AUTO JUMPS REACHED.",
+            "DISTANCE =",
+            actualError
+        )
+    end
+
     Running = false
 
     getgenv().ATBSolverActive =
@@ -2489,6 +2573,10 @@ connect(
             print(
                 "[ATB Solver] F7 -> START REQUEST"
             )
+
+            if not Running then
+                JumpCount = 0
+            end
 
             task.spawn(
                 function()
