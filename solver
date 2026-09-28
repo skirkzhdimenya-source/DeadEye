@@ -406,12 +406,56 @@ local function findMovementTable()
     end
 
     --==========================================================--
-    -- EXACT PATH:
-    -- CameraInput.getRotation -> upvalue #4
+    -- Проверка, что это именно CameraInput state table.
+    -- Ищем НЕ только по имени функции, потому что executor
+    -- может не отдавать нормальный debug.getinfo().name/source.
+    --==========================================================--
+
+    local function isMovementTable(value)
+        if type(value) ~= "table" then
+            return false
+        end
+
+        local movement =
+            rawget(
+                value,
+                "Movement"
+            )
+
+        local pan =
+            rawget(
+                value,
+                "Pan"
+            )
+
+        local pinch =
+            rawget(
+                value,
+                "Pinch"
+            )
+
+        local wheel =
+            rawget(
+                value,
+                "Wheel"
+            )
+
+        if movement == nil
+            or pan == nil
+            or pinch == nil
+            or wheel == nil
+        then
+            return false
+        end
+
+        return true
+    end
+
+    --==========================================================--
+    -- PASS 1
     --
-    -- Дальше НЕ перебираем upvalue #1..#20 и НЕ ищем
-    -- случайные таблицы из getgc(), чтобы не попадать
-    -- на Connection/proxy objects.
+    -- Сначала используем известный путь, но не фиксируемся
+    -- на upvalue #4.
     --==========================================================--
 
     for _, object in ipairs(objects) do
@@ -449,51 +493,69 @@ local function findMovementTable()
             end
 
             if matched then
-                local name, value =
-                    getUpvalueSafe(
-                        object,
-                        4
-                    )
-
-                if name ~= nil
-                    and type(value) == "table"
-                then
-                    local movement =
-                        rawget(
-                            value,
-                            "Movement"
+                for index = 1, 12 do
+                    local name, value =
+                        getUpvalueSafe(
+                            object,
+                            index
                         )
 
-                    local pan =
-                        rawget(
-                            value,
-                            "Pan"
-                        )
-
-                    local pinch =
-                        rawget(
-                            value,
-                            "Pinch"
-                        )
-
-                    local wheel =
-                        rawget(
-                            value,
-                            "Wheel"
-                        )
-
-                    if movement ~= nil
-                        and pan ~= nil
-                        and pinch ~= nil
-                        and wheel ~= nil
+                    if name ~= nil
+                        and isMovementTable(value)
                     then
                         print(
                             "[ATB Solver] Movement table found:",
-                            "CameraInput.getRotation upvalue #4"
+                            "CameraInput function upvalue #"
+                                .. tostring(index)
                         )
 
                         return value
                     end
+                end
+            end
+        end
+    end
+
+    --==========================================================--
+    -- PASS 2
+    --
+    -- Fallback: debug.getinfo() может быть бесполезен или
+    -- номер upvalue мог измениться. Тогда ищем среди всех
+    -- function upvalues таблицу с точной структурой CameraInput.
+    --
+    -- Это выполняется один раз при загрузке solver.
+    --==========================================================--
+
+    print(
+        "[ATB Solver] Exact CameraInput path not found,",
+        "starting structural fallback..."
+    )
+
+    for _, object in ipairs(objects) do
+        if getgenv().ATBSolverStop then
+            return nil
+        end
+
+        if type(object) == "function" then
+            for index = 1, 12 do
+                local name, value =
+                    getUpvalueSafe(
+                        object,
+                        index
+                    )
+
+                if name ~= nil
+                    and isMovementTable(value)
+                then
+                    print(
+                        "[ATB Solver] Movement table found:",
+                        "structural fallback, upvalue #"
+                            .. tostring(index),
+                        "name =",
+                        tostring(name)
+                    )
+
+                    return value
                 end
             end
         end
@@ -504,14 +566,6 @@ local function findMovementTable()
     )
 
     return nil
-end
-
-MovementTable =
-    findMovementTable()
-
-if MovementTable then
-    OriginalMovementValue =
-        MovementTable.Movement
 end
 
 --==============================================================--
