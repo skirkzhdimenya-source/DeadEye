@@ -1231,13 +1231,6 @@ end
                     switches = switches
                 }
 
-                child.score =
-                    stateHeuristic(
-                        child,
-                        targetFlat,
-                        remainingAfter
-                    )
-
                 nextStates[
                     #nextStates + 1
                 ] = child
