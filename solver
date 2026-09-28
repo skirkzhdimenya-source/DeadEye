@@ -1108,21 +1108,23 @@ local function sortAndTrim(
     target,
     remainingTime
 )
+    -- Считаем score ровно один раз для каждого состояния.
+    -- table.sort() может вызвать comparator много раз; раньше
+    -- stateHeuristic() пересчитывался на каждом сравнении.
+
+    for _, state in ipairs(states) do
+        state.score =
+            stateHeuristic(
+                state,
+                target,
+                remainingTime
+            )
+    end
+
     table.sort(
         states,
         function(a, b)
-            return
-                stateHeuristic(
-                    a,
-                    target,
-                    remainingTime
-                )
-                <
-                stateHeuristic(
-                    b,
-                    target,
-                    remainingTime
-                )
+            return a.score < b.score
         end
     )
 
@@ -1133,11 +1135,7 @@ local function sortAndTrim(
     return states
 end
 
---==============================================================--
--- BUILD PLAN
---==============================================================--
-
-local function buildPlan(
+--==============================================local function buildPlan(
     startPosition,
     startVelocity,
     totalTime,
@@ -1152,6 +1150,8 @@ local function buildPlan(
             )
         )
 
+    -- Храним только parent + action вместо копии полного
+    -- массива actions у каждого состояния.
     local states = {
         {
             position =
@@ -1164,10 +1164,11 @@ local function buildPlan(
                     startVelocity
                 ),
 
-            firstAction = nil,
+            parent = nil,
+            action = nil,
             lastAction = 0,
             switches = 0,
-            actions = {}
+            score = 0
         }
     }
 
@@ -1190,16 +1191,11 @@ local function buildPlan(
             )
 
         for _, state in ipairs(states) do
-            --================================================--
-            -- A
-            --================================================--
-
             for _, side in ipairs({
                 -1,
                 0,
                 1
             }) do
-
                 local position,
                     velocity =
                     simulateAirStep(
@@ -1218,6 +1214,7 @@ local function buildPlan(
                 then
                     switches =
                         switches + 1
+
                 elseif side ~= 0
                     and state.lastAction == 0
                 then
@@ -1225,35 +1222,25 @@ local function buildPlan(
                         switches + 1
                 end
 
-                local firstAction =
-                    state.firstAction
+                local child = {
+                    position = position,
+                    velocity = velocity,
+                    parent = state,
+                    action = side,
+                    lastAction = side,
+                    switches = switches
+                }
 
-                if firstAction == nil then
-                    firstAction = side
-                end
-
-                local actions = {}
-
-                for i, value in ipairs(
-                    state.actions
-                ) do
-                    actions[i] = value
-                end
-
-                actions[
-                    #actions + 1
-                ] = side
+                child.score =
+                    stateHeuristic(
+                        child,
+                        targetFlat,
+                        remainingAfter
+                    )
 
                 nextStates[
                     #nextStates + 1
-                ] = {
-                    position = position,
-                    velocity = velocity,
-                    firstAction = firstAction,
-                    lastAction = side,
-                    switches = switches,
-                    actions = actions
-                }
+                ] = child
             end
         end
 
@@ -1289,8 +1276,30 @@ local function buildPlan(
         return nil
     end
 
+    -- Восстанавливаем последовательность действий по parent-ссылкам.
+    local reversedActions = {}
+    local cursor = best
+
+    while cursor
+        and cursor.parent
+    do
+        reversedActions[
+            #reversedActions + 1
+        ] = cursor.action
+
+        cursor = cursor.parent
+    end
+
+    local actions = {}
+
+    for i = #reversedActions, 1, -1 do
+        actions[
+            #actions + 1
+        ] = reversedActions[i]
+    end
+
     return {
-        actions = best.actions,
+        actions = actions,
 
         predictedPosition =
             best.position,
@@ -1299,6 +1308,14 @@ local function buildPlan(
             best.velocity,
 
         predictedDistance =
+            bestDistance,
+
+        steps = stepCount,
+
+        totalTime = totalTime
+    }
+end
+nce =
             bestDistance,
 
         steps = stepCount,
