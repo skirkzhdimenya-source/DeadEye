@@ -81,6 +81,7 @@ local Running = false
 local Destroyed = false
 
 local LastRuntimeError = nil
+local ExecutionSamples = {}
 
 --==============================================================--
 -- CONNECTION HELPER
@@ -1674,6 +1675,7 @@ local function startSolver()
     getgenv().ATBSolverStop = false
 
     LastRuntimeError = nil
+    ExecutionSamples = {}
 
     updateCharacter()
     updateGameCharacter()
@@ -2089,6 +2091,51 @@ local function startSolver()
 
         updateCameraTowardVelocity()
 
+        if PlanIndex == 1
+            or PlanIndex == 5
+            or PlanIndex == 10
+            or PlanIndex == 20
+            or PlanIndex == 40
+            or PlanIndex == 60
+            or PlanIndex == 80
+        then
+            local rawVelocity =
+                Root.AssemblyLinearVelocity
+
+            local internalVelocity =
+                getInternalVelocity()
+
+            local movementValue =
+                MovementTable
+                    and MovementTable.Movement
+                    or nil
+
+            ExecutionSamples[
+                #ExecutionSamples + 1
+            ] =
+                table.concat(
+                    {
+                        "STEP = " .. tostring(PlanIndex),
+                        "ACTION = " .. (
+                            action == -1
+                            and "A"
+                            or action == 1
+                            and "D"
+                            or "W"
+                        ),
+                        "RAW V = "
+                            .. tostring(rawVelocity),
+                        "INTERNAL V = "
+                            .. tostring(internalVelocity),
+                        "MOVEMENT = "
+                            .. tostring(movementValue),
+                        "DESIRED = "
+                            .. tostring(DesiredMoveVector)
+                    },
+                    " | "
+                )
+        end
+
         if PlanIndex ~= lastPlanIndex then
             lastPlanIndex =
                 PlanIndex
@@ -2190,6 +2237,48 @@ local function startSolver()
                 "PREDICTED ERROR = "
                     .. tostring(
                         plan.predictedDistance
+                    ),
+
+                "",
+                "START VELOCITY INTERNAL = "
+                    .. tostring(
+                        startVelocity
+                    ),
+
+                "START H SPEED INTERNAL = "
+                    .. tostring(
+                        startVelocity.Magnitude
+                    ),
+
+                "VERTICAL VELOCITY = "
+                    .. tostring(
+                        verticalVelocity
+                    ),
+
+                "TIME TO LAND = "
+                    .. tostring(
+                        timeToLand
+                    ),
+
+                "BUILD PLAN TIME = "
+                    .. tostring(
+                        buildDuration
+                    ),
+
+                "PLAN = "
+                    .. tostring(
+                        actionText
+                    ),
+
+                "",
+                "EXECUTION SAMPLES = "
+                    .. (
+                        #ExecutionSamples > 0
+                        and table.concat(
+                            ExecutionSamples,
+                            "\n"
+                        )
+                        or "none"
                     ),
 
                 "",
