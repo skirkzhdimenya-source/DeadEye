@@ -1141,3 +1141,129 @@ Exact full line-109 source:
 
 Further investigation:
     REQUIRED
+
+=============================================================
+16. DERIVED OPTIMAL AIR-STRAFE STEERING
+=============================================================
+
+Controlled camera tests in file "s" established:
+
+FIXED:
+    camera turn = 0 deg/frame
+    horizontal speed change = 0
+
+SLOW:
+    camera turn ~= 0.33 deg/frame
+    HSpeed increase ~= 0.97 registry units/call
+
+MEDIUM:
+    camera turn ~= 0.66 deg/frame
+    HSpeed increase ~= 1.79 registry units/call
+
+FAST:
+    camera turn ~= 0.99 deg/frame
+    HSpeed increase ~= 2.45 registry units/call
+
+Accelerate() itself is confirmed to perform:
+
+addSpeed = wishSpeed - Velocity:Dot(wishDirection)
+
+if addSpeed <= 0:
+    return Velocity
+
+accelSpeed = acceleration * dt * wishSpeed
+
+addSpeed = min(addSpeed, accelSpeed)
+
+Velocity = Velocity + addSpeed * wishDirection
+
+
+For a fixed current horizontal velocity magnitude V, wish speed W,
+and wish direction w, the resulting speed is maximized when:
+
+Velocity · w = 0
+
+Therefore the optimal air-strafe condition is:
+
+WishDirection PERPENDICULAR to current horizontal Velocity.
+
+
+For W+D:
+
+    WishDirection = CameraRight
+
+CameraRight is perpendicular to CameraLook.
+
+Therefore the optimal W+D steering condition is:
+
+    CameraLook approximately aligned with current horizontal Velocity.
+
+For W+A:
+
+    WishDirection = -CameraRight
+
+The corresponding optimal condition is the opposite camera-side solution.
+
+When the current velocity and wish direction are exactly perpendicular,
+and the acceleration cap does not bind, the ideal one-step velocity-angle change
+is approximately:
+
+    deltaAngle = atan(WishSpeed / HSpeed)
+
+Using the confirmed active values:
+
+    WishSpeed = 182
+    HSpeed ~= 4500 registry units
+
+gives approximately:
+
+    deltaAngle ~= atan(182 / 4500)
+               ~= 2.32 degrees per movement/physics step
+
+At dt ~= 1/120:
+
+    ideal camera angular rate ~= 278 deg/s
+
+This is a derived steering target, not yet an experimentally confirmed
+engine maximum.
+
+The important control law for the future A->B planner is therefore:
+
+1. Read current horizontal Velocity.
+2. Select the desired strafe side (A or D).
+3. Keep CameraRight / -CameraRight perpendicular to Velocity.
+4. Rotate CameraLook so that it tracks the current Velocity direction.
+5. Recompute every movement step because the velocity direction itself changes.
+6. Avoid fixed camera turn rates as the primary controller.
+
+This means the future trajectory planner should optimize camera tracking error
+relative to Velocity, not simply hold a fixed camera yaw rate.
+
+
+=============================================================
+17. CURRENT NEXT VALIDATION
+=============================================================
+
+The next useful validation is a dynamic/adaptive camera test.
+
+Instead of fixed camera turn rates, camera yaw should be continuously adjusted
+toward the current horizontal Velocity direction.
+
+The test should measure:
+
+    camera yaw
+    velocity yaw
+    camera-to-velocity yaw error
+    WishDirection
+    Velocity.Dot(WishDirection)
+    HSpeed
+    HSpeed gain per step
+    actual camera turn per step
+
+Expected target:
+
+    CameraLook aligned with Velocity
+    WishDirection perpendicular to Velocity
+    Velocity.Dot(WishDirection) ~= 0
+
+This validation should be performed in an open area without wall contact.
