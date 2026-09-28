@@ -1145,7 +1145,11 @@ local function sortAndTrim(
     return states
 end
 
---==============================================local function buildPlan(
+--==============================================================--
+-- BUILD PLAN
+--==============================================================--
+
+local function buildPlan(
     startPosition,
     startVelocity,
     totalTime,
