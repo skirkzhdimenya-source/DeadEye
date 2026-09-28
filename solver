@@ -696,8 +696,6 @@ local function findMovementTable()
         print(
             "=========================================="
         )
-
-        copyReport(report)
     end
 
     warn(
