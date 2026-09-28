@@ -80,6 +80,8 @@ local PlanIndex = 1
 local Running = false
 local Destroyed = false
 
+local LastRuntimeError = nil
+
 --==============================================================--
 -- CONNECTION HELPER
 --==============================================================--
@@ -1578,6 +1580,8 @@ local function startSolver()
 
     getgenv().ATBSolverStop = false
 
+    LastRuntimeError = nil
+
     updateCharacter()
     updateGameCharacter()
 
@@ -2088,6 +2092,13 @@ local function startSolver()
                         plan.predictedDistance
                     ),
 
+                "",
+                "RUNTIME ERROR = "
+                    .. tostring(
+                        LastRuntimeError
+                            or "none"
+                    ),
+
                 "=================================================="
             },
             "\n"
@@ -2095,6 +2106,10 @@ local function startSolver()
 
     print(
         resultReport
+    )
+
+    print(
+        "[ATB Solver] FINAL REPORT COPIED"
     )
 
     copyReport(
@@ -2219,13 +2234,11 @@ connect(
                                         )
                                 end
 
+                                LastRuntimeError =
+                                    traceback
+
                                 warn(
                                     "[ATB Solver] F7 ERROR:",
-                                    traceback
-                                )
-
-                                copyReport(
-                                    "========== ATB SOLVER ERROR ==========",
                                     traceback
                                 )
 
