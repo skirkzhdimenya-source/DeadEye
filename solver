@@ -449,9 +449,45 @@ local function findMovementTable()
         end
 
         if isMovementTable(object) then
+            local keys = {}
+
+            for key, value in pairs(object) do
+                if #keys < 30 then
+                    keys[#keys + 1] =
+                        tostring(key)
+                        .. "="
+                        .. tostring(value)
+                end
+            end
+
+            local description =
+                table.concat(
+                    keys,
+                    ", "
+                )
+
             print(
-                "[ATB Solver] Movement table found:",
+                "[ATB Solver] Movement table candidate:",
                 "direct getgc table"
+            )
+
+            print(
+                "[ATB Solver] Movement type =",
+                typeof(object.Movement),
+                "value =",
+                tostring(object.Movement)
+            )
+
+            print(
+                "[ATB Solver] Movement table keys =",
+                description
+            )
+
+            copyReport(
+                "========== MOVEMENT TABLE ==========",
+                "Movement type = " .. tostring(typeof(object.Movement)),
+                "Movement value = " .. tostring(object.Movement),
+                "Keys = " .. description
             )
 
             return object
@@ -1384,6 +1420,71 @@ end
 -- CAMERA ALIGNMENT
 --==============================================================--
 
+local function setMovementInput(value)
+    if not MovementTable then
+        return false
+    end
+
+    local current =
+        rawget(
+            MovementTable,
+            "Movement"
+        )
+
+    local currentType =
+        typeof(current)
+
+    local output = value
+
+    if currentType == "Vector2" then
+        output =
+            Vector2.new(
+                value,
+                0
+            )
+
+    elseif currentType == "Vector3" then
+        output =
+            Vector3.new(
+                value,
+                0,
+                0
+            )
+
+    elseif currentType == "number" then
+        output = value
+
+    else
+        warn(
+            "[ATB Solver] Unknown Movement type:",
+            currentType,
+            "value =",
+            tostring(current)
+        )
+
+        return false
+    end
+
+    local ok, err =
+        pcall(
+            function()
+                MovementTable.Movement =
+                    output
+            end
+        )
+
+    if not ok then
+        warn(
+            "[ATB Solver] Failed to set Movement:",
+            err
+        )
+
+        return false
+    end
+
+    return true
+end
+
 local function updateCameraTowardVelocity()
     if not MovementTable then
         return
@@ -1436,8 +1537,7 @@ local function updateCameraTowardVelocity()
             MAX_CAMERA_INPUT
         )
 
-    MovementTable.Movement =
-        input
+    setMovementInput(input)
 end
 
 --==============================================================--
@@ -1610,6 +1710,13 @@ local function startSolver()
         if MovementTable then
             OriginalMovementValue =
                 MovementTable.Movement
+
+            print(
+                "[ATB Solver] Movement type =",
+                typeof(OriginalMovementValue),
+                "initial value =",
+                tostring(OriginalMovementValue)
+            )
         end
     end
 
@@ -2097,6 +2204,32 @@ local function startSolver()
                     .. tostring(
                         LastRuntimeError
                             or "none"
+                    ),
+
+                "FINAL MOVEMENT TYPE = "
+                    .. tostring(
+                        MovementTable
+                            and typeof(
+                                MovementTable.Movement
+                            )
+                            or "nil"
+                    ),
+
+                "FINAL MOVEMENT VALUE = "
+                    .. tostring(
+                        MovementTable
+                            and MovementTable.Movement
+                            or "nil"
+                    ),
+
+                "FINAL DESIRED MOVE = "
+                    .. tostring(
+                        DesiredMoveVector
+                    ),
+
+                "CONTROL HOOK INSTALLED = "
+                    .. tostring(
+                        ControlHookInstalled
                     ),
 
                 "=================================================="
