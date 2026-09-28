@@ -483,13 +483,6 @@ local function findMovementTable()
                 description
             )
 
-            copyReport(
-                "========== MOVEMENT TABLE ==========",
-                "Movement type = " .. tostring(typeof(object.Movement)),
-                "Movement value = " .. tostring(object.Movement),
-                "Keys = " .. description
-            )
-
             return object
         end
     end
