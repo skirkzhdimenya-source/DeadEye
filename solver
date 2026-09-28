@@ -2015,10 +2015,19 @@ end
 connect(
     UserInputService.InputBegan,
     function(input, gameProcessed)
-        if gameProcessed then
+        if input.UserInputType ~= Enum.UserInputType.Keyboard then
             return
         end
 
+        print(
+            "[ATB Solver] KEY =",
+            input.KeyCode,
+            "PROCESSED =",
+            tostring(gameProcessed)
+        )
+
+        -- F6/F7/F8 должны работать даже если Roblox/CoreGui
+        -- пометил событие как gameProcessed.
         if input.KeyCode == TARGET_KEY then
             local target =
                 pickTarget()
@@ -2042,11 +2051,19 @@ connect(
             end
 
         elseif input.KeyCode == START_KEY then
+            print(
+                "[ATB Solver] F7 -> START REQUEST"
+            )
+
             task.spawn(
                 startSolver
             )
 
         elseif input.KeyCode == STOP_KEY then
+            print(
+                "[ATB Solver] F8 -> STOP REQUEST"
+            )
+
             stopSolver()
         end
     end
