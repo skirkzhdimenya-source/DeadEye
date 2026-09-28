@@ -698,3 +698,446 @@ Stable rediscovery of movement helper:
 ============================================================
 END
 ============================================================
+
+
+============================================================
+19. UPDATE 2026-09-28 — NEW CONFIRMED FINDINGS
+============================================================
+
+The latest runtime investigation located the exact line-109 function without
+hooking or modifying it.
+
+Function:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+linedefined = 109
+numparams = 5
+
+Attempting:
+    decompile(line109Function)
+
+returned:
+    failed to get function bytecode
+
+Therefore direct decompilation of the active line-109 function is not available
+in the current executor and should not be relied upon.
+
+------------------------------------------------------------
+19.1 LINE-109 UPVALUE
+------------------------------------------------------------
+
+line-109 has exactly one upvalue:
+
+upvalue[1] = table containing only:
+
+    Accelerate   -> Helpers line 177
+    WallImpact   -> Helpers line 70
+    ApplyFriction-> Helpers line 47
+    AirControl   -> Helpers line 164
+
+There are NO additional hidden functions in this upvalue.
+
+------------------------------------------------------------
+19.2 LINE-109 CONSTANTS
+------------------------------------------------------------
+
+Relevant constants recovered from line 109:
+
+    "Velocity"
+    "Get"
+    "MoveDirection"
+    "Z"
+    Vector3(1, 1, 0)
+    "ApplyFriction"
+    "WallrunDirection"
+    "Wallrunning"
+    -0.99
+    "X"
+    Vector3(0, 0, 1)
+    0.99
+    Vector3(1, 0, 0)
+    "AI"
+    "GetAttribute"
+    "GlobalMoveDirection"
+    "LookCFrame"
+    "VectorToWorldSpace"
+    "Magnitude"
+    "Speed"
+    Vector3(0, 0, 0)
+    "Unit"
+    "Dot"
+    "AirAcceleration"
+    2
+    0
+    "AirStrafeAcceleration"
+    "Swimming"
+    "Accelerate"
+    "AirControl"
+    "antiNan"
+    "magnitude"
+    "SprintCap"
+    "math"
+    "clamp"
+    "WallImpact"
+    "BaseMover"
+    "PlaneVelocity"
+    "Vector2"
+    "Force"
+    0.5
+    "HumanoidRootPart"
+    "GetMass"
+    "workspace"
+    "Gravity"
+    "WallrunForce"
+    "Sprint"
+
+This confirms that line 109 itself references:
+    GlobalMoveDirection
+    LookCFrame:VectorToWorldSpace(...)
+    Dot
+    AirAcceleration
+    AirStrafeAcceleration
+    Accelerate
+    AirControl
+and also contains wallrun/force-related branches.
+
+The constant tables found in the same function were only:
+
+    BaseMover    -> 0
+    PlaneVelocity-> 0
+    Force        -> 0
+    Sprint       -> 0
+    Velocity     -> 0
+
+They do not contain additional direction logic.
+
+------------------------------------------------------------
+19.3 ACCELERATE CALL ARGUMENT MAPPING — CONFIRMED
+------------------------------------------------------------
+
+Runtime raw argument tracing established the actual call layout:
+
+    Accelerate(
+        self,          -- arg 1
+        velocity,      -- arg 2
+        wishDirection, -- arg 3
+        acceleration,  -- arg 4
+        wishSpeed,     -- arg 5
+        deltaTime,     -- arg 6
+        special        -- arg 7
+    )
+
+This mapping is confirmed by the observed argument types and returned values.
+
+For normal air calls:
+    acceleration = 182
+    wishSpeed    = 182
+    deltaTime    ~= 0.008
+
+The observed return delta matches an additional factor of 10:
+
+    accelSpeed = acceleration * 10 * deltaTime * wishSpeed
+
+Thus the effective confirmed helper behavior in the tested air context is:
+
+    if special == true then
+        acceleration = acceleration * 0.4
+        wishSpeed = wishSpeed * 1.3
+    end
+
+    currentSpeed = velocity:Dot(wishDirection)
+    addSpeed = wishSpeed - currentSpeed
+
+    if addSpeed <= 0 then
+        return velocity
+    end
+
+    accelSpeed = acceleration * 10 * deltaTime * wishSpeed
+
+    if addSpeed >= accelSpeed then
+        addSpeed = accelSpeed
+    end
+
+    return velocity + addSpeed * wishDirection
+
+IMPORTANT:
+The factor 10 is confirmed from runtime return-value matching for the tested
+air calls. It was not directly visible as a literal in the earlier helper
+decompile, so retain this distinction.
+
+The special=true behavior (0.4 acceleration / 1.3 wishSpeed) is confirmed from
+the helper decompile, but the line-109 condition that sets arg 7 to true is
+still not recovered.
+
+------------------------------------------------------------
+19.4 AIRCONTROL ARGUMENT MAPPING — CONFIRMED
+------------------------------------------------------------
+
+Runtime tracing of AirControl established:
+
+    arg 1 = self/table
+    arg 2 = vector whose Z is tested
+    arg 3 = number (observed around 1620 in the tested calls)
+    arg 4 = Vector3 lateral/right direction (often ±1,0,0 in world space)
+    arg 5 = current Velocity
+    arg 6 = deltaTime
+
+This corresponds to the helper's internal roles:
+
+    v1 = arg 2
+    v3 = arg 3
+    v5 = arg 4
+    v2 = arg 5
+    v6 = arg 6
+
+The helper is:
+
+    local Z = v1.Z
+
+    if math.abs(Z) < 0.001 or math.abs(v3) < 0.001 then
+        return v2
+    end
+
+    local magnitude = v2.magnitude
+    local unit = v2.unit
+    local dot = unit:Dot(v5)
+
+    local unused = 32 * (1 * dot * dot * v6)
+
+    return unit * Vector3.new(magnitude, 0, magnitude)
+
+In the observed calls, the returned value matched arg 5/current Velocity
+exactly. The 32 * dot^2 * dt intermediate is assigned to an unused local in
+the available decompile and was not observed changing the returned vector.
+
+Therefore:
+- do NOT currently treat 1620 as a proven "meaning" such as Speed*1.08;
+- do NOT treat AirControl as the direct source of the observed horizontal
+  air-strafe rotation;
+- the exact intended role of the unused intermediate remains unresolved.
+
+------------------------------------------------------------
+19.5 WISHDIR — CONTROLLED INPUT TESTS
+------------------------------------------------------------
+
+Multiple controlled camera/input tests established the following behavior.
+
+W:
+    WishDir = CameraLook
+
+D:
+    WishDir = CameraRight
+
+A:
+    WishDir = -CameraRight
+
+W+D:
+    WishDir = CameraRight
+
+W+A:
+    WishDir = -CameraRight
+
+During long smooth camera rotation, WishDir continued to track the corresponding
+CameraRight / -CameraRight vector exactly (dot ~= 1.0).
+
+Humanoid.MoveDirection remained normal diagonal input for W+A/W+D, so the air
+WishDir is NOT simply Humanoid.MoveDirection.
+
+Current best-supported direction-selection model:
+
+    if D/right-lateral input > 0 then
+        WishDir = CameraRight
+    elseif A/left-lateral input < 0 then
+        WishDir = -CameraRight
+    else
+        WishDir = CameraLook
+    end
+
+This is behaviorally strongly confirmed, but the exact line-109 source branch
+that produces it is still NOT directly recovered.
+
+This means lateral input takes priority over W in the tested air-strafe path.
+
+------------------------------------------------------------
+19.6 CONFIRMED AIR ACCELERATION EXAMPLE
+------------------------------------------------------------
+
+At one jump transition:
+
+    Velocity     = (2529.051, 0, 416.207)
+    WishDir      = (-0.128, 0, 0.992)
+    Acceleration = 182
+    WishSpeed    = 182
+    dt           = 0.007786
+
+    Dot         = 89.816742
+    addSpeed    = 92.183258
+
+    accelSpeed with factor 10:
+        182 * 10 * 0.007786 * 182
+        = 2579.089909
+
+Since addSpeed < accelSpeed:
+
+    Delta = addSpeed * WishDir
+          = (-11.773, 0, 91.428)
+
+Observed return:
+
+    (2517.278, 0, 507.635)
+
+which matches the calculation.
+
+Subsequent Freefall Accelerate calls showed the same relationship.
+
+------------------------------------------------------------
+19.7 INTERNAL VELOCITY VS REAL ROBLOX VELOCITY
+------------------------------------------------------------
+
+DataRegistry["Velocity"] is the game's custom/internal movement velocity.
+
+Observed internal values are in the thousands while the actual:
+
+    HumanoidRootPart.AssemblyLinearVelocity
+
+is much smaller (roughly 48-50 in the tested air segments).
+
+Examples of internal velocity:
+
+    (-243.242, -4284.105)  magnitude 4291.005
+    ( 671.521, -4260.071)  magnitude 4312.673
+    (1635.860, -4017.699) magnitude 4337.966
+
+Therefore these two velocity representations must NOT be treated as the same
+numeric scale.
+
+The internal velocity rotates substantially during air strafe and its magnitude
+can also increase slightly.
+
+------------------------------------------------------------
+19.8 CURRENT RECONSTRUCTED AIR CHAIN
+------------------------------------------------------------
+
+What is presently established:
+
+    input
+      |
+      v
+    direction selection inside line 109
+      |
+      +--> lateral A/D has priority in tested air cases
+      |
+      v
+    WishDir
+      |
+      +--> likely camera-relative:
+           W    -> CameraLook
+           D    -> CameraRight
+           A    -> -CameraRight
+      |
+      v
+    Accelerate
+      |
+      +--> currentSpeed = Velocity · WishDir
+      +--> addSpeed = wishSpeed - currentSpeed
+      +--> accelSpeed = acceleration * 10 * dt * wishSpeed
+      +--> Velocity += WishDir * min(addSpeed, accelSpeed)
+      |
+      v
+    AirControl is also called separately
+      |
+      v
+    other movement/wall/ground processing
+
+The exact ordering of these calls in line 109 is still not recovered.
+
+------------------------------------------------------------
+19.9 WHAT WE ARE DOING NEXT
+------------------------------------------------------------
+
+The goal is to recover the game's movement physics accurately enough to
+document/reimplement them in DeadEye, especially:
+
+    A. exact WishDir construction inside line 109
+    B. exact branch selecting AirAcceleration vs AirStrafeAcceleration
+    C. exact ordering:
+           ApplyFriction
+           Accelerate
+           AirControl
+           clamping
+           wallrun/PlaneVelocity handling
+    D. exact meaning of AirControl's 1620 parameter and 32*dot^2*dt term
+    E. exact frame/timing relationship between:
+           camera input
+           CameraCFrame
+           DataRegistry LookCFrame
+           HumanoidRootPart.CFrame
+           Jump()
+    F. exact camera-pitch -> jump-speed interaction at the same frame
+    G. exact deltaTime used by movement
+
+Because direct decompilation of line 109 fails with:
+    "failed to get function bytecode"
+
+the next investigation should avoid hooking line 109 and instead use
+non-invasive runtime inspection/controlled experiments.
+
+Priority next step:
+    determine the line-109 direction and acceleration branches from runtime
+    behavior without replacing/hooking the movement function.
+
+Only findings confirmed by source inspection or runtime matching should be
+promoted from "unresolved" to "confirmed".
+
+------------------------------------------------------------
+19.10 IMPORTANT DEBUGGING RESTRICTIONS
+------------------------------------------------------------
+
+DO NOT hook line 109 again.
+
+A previous hook of line 109 broke movement/air turning and produced:
+    "479: attempt to call a nil value"
+
+A previous Registry.Set hook produced:
+    "109: attempt to get connection:: get (not a valid member)"
+
+Therefore future tests should avoid both techniques.
+
+Also:
+- use F6 as the stop/copy key for future test scripts;
+- do not add incomplete physics conclusions to this file without marking them
+  as unresolved;
+- do not claim the 1620 AirControl value's meaning without evidence.
+
+============================================================
+20. STATUS
+============================================================
+
+Camera pipeline:
+    substantially recovered
+
+Jump speed formula:
+    recovered
+
+Camera pitch effect on jump horizontal-speed cap:
+    recovered mathematically
+
+Accelerate:
+    helper formula recovered
+    air caller argument mapping recovered
+    runtime factor-10 behavior recovered
+
+WishDir:
+    behavior recovered for W/A/D/W+A/W+D
+    exact source branch still unresolved
+
+AirControl:
+    helper decompiled
+    argument mapping recovered
+    exact purpose/order still unresolved
+
+Exact full line-109 source:
+    unavailable because executor reports:
+        failed to get function bytecode
+
+Further investigation:
+    REQUIRED
