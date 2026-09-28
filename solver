@@ -58,9 +58,17 @@ local GRAVITY = 50
 local BEAM_WIDTH = 150
 
 -- Продолжаем прыжки автоматически, пока B не достигнута.
-local TARGET_REACHED_DISTANCE = 2.5
-local TARGET_TOUCH_DISTANCE = 2.5
+local TARGET_REACHED_DISTANCE = 1.5
+local TARGET_TOUCH_DISTANCE = 1.5
 local MAX_AUTO_JUMPS = 20
+
+-- Live steering:
+-- Пока скорость смотрит мимо B, используем A/D и держим
+-- CameraRight перпендикулярно velocity.
+-- Когда курс достаточно совпал с B, отпускаем A/D.
+local STEER_RELEASE_DEG = 7
+local STEER_REENGAGE_DEG = 11
+local STEER_SIDE_SWITCH_DOT = 0.12
 
 -- Штраф за лишнее переключение направления.
 local SWITCH_PENALTY = 0.03
@@ -108,6 +116,9 @@ local Running = false
 local Destroyed = false
 
 local JumpCount = 0
+
+local LiveSteerAction = 0
+local LastExecutionPosition = nil
 
 local LastRuntimeError = nil
 local ExecutionSamples = {}
@@ -1579,7 +1590,7 @@ local function setMovementInput(value)
     return true
 end
 
-local function updateCameraTowardVelocity(action)
+local function updateCameraTowardYaw(targetYaw)
     if not MovementTable then
         return
     end
@@ -1588,37 +1599,9 @@ local function updateCameraTowardVelocity(action)
         return
     end
 
-    local velocity =
-        flat(
-            getInternalVelocity()
-        )
-
-    if velocity.Magnitude < 0.001 then
-        velocity =
-            flat(
-                Root.CFrame.LookVector
-            )
-    end
-
-    if velocity.Magnitude < 0.001 then
+    if targetYaw == nil then
         return
     end
-
-    -- Подтверждённая геометрия воздушного WishDirection:
-    --
-    -- D -> CameraRight
-    -- A -> -CameraRight
-    --
-    -- Для максимального air-strafe WishDirection должен быть
-    -- перпендикулярен текущей horizontal Velocity.
-    --
-    -- Следовательно CameraLook должен быть параллелен Velocity.
-    --
-    -- НЕ добавляем +/-45°: это было ошибкой предыдущей версии.
-    local targetYaw =
-        vectorToYaw(
-            velocity
-        )
 
     local currentYaw =
         cameraToYaw()
@@ -1642,7 +1625,6 @@ local function updateCameraTowardVelocity(action)
             MAX_CAMERA_INPUT
         )
 
-    -- Плавное следование, но достаточно быстрое для air-strafe.
     local now =
         tick()
 
@@ -1677,6 +1659,7 @@ local function updateCameraTowardVelocity(action)
         SmoothedCameraInput
     )
 end
+
 
 --==============================================================--
 -- REAL JUMP
@@ -1803,6 +1786,149 @@ end
 -- START SOLVER
 --==============================================================--
 
+local function getLiveSteering()
+    if not Root then
+        return 0, nil, 0, math.huge
+    end
+
+    if not TargetPosition then
+        return 0, nil, 0, math.huge
+    end
+
+    local delta =
+        flat(
+            TargetPosition
+            - Root.Position
+        )
+
+    local distance =
+        delta.Magnitude
+
+    if distance < 0.001 then
+        LiveSteerAction = 0
+
+        return
+            0,
+            vectorToYaw(
+                flat(
+                    Root.CFrame.LookVector
+                )
+            ),
+            0,
+            distance
+    end
+
+    local targetDirection =
+        delta.Unit
+
+    local velocity =
+        flat(
+            getInternalVelocity()
+        )
+
+    if velocity.Magnitude < 0.001 then
+        velocity =
+            flat(
+                Root.AssemblyLinearVelocity
+            )
+            * VELOCITY_SCALE
+    end
+
+    if velocity.Magnitude < 0.001 then
+        -- Нет горизонтальной скорости: смотрим прямо на B
+        -- и не пытаемся закручивать скорость из нуля.
+        LiveSteerAction = 0
+
+        return
+            0,
+            vectorToYaw(
+                targetDirection
+            ),
+            180,
+            distance
+    end
+
+    local velocityDirection =
+        velocity.Unit
+
+    local headingDot =
+        clamp(
+            velocityDirection:Dot(
+                targetDirection
+            ),
+            -1,
+            1
+        )
+
+    local headingAngle =
+        math.deg(
+            math.acos(
+                headingDot
+            )
+        )
+
+    local cameraRight =
+        rightPerpendicular(
+            velocityDirection
+        )
+
+    local targetSide =
+        targetDirection:Dot(
+            cameraRight
+        )
+
+    -- Гистерезис:
+    -- не дёргаем A <-> D на границе курса.
+    if LiveSteerAction == 0 then
+        if headingAngle >= STEER_REENGAGE_DEG then
+            if targetSide >= 0 then
+                LiveSteerAction = 1
+            else
+                LiveSteerAction = -1
+            end
+        end
+
+    else
+        if headingAngle <= STEER_RELEASE_DEG then
+            LiveSteerAction = 0
+
+        elseif LiveSteerAction == 1
+            and targetSide < -STEER_SIDE_SWITCH_DOT
+        then
+            LiveSteerAction = -1
+
+        elseif LiveSteerAction == -1
+            and targetSide > STEER_SIDE_SWITCH_DOT
+        then
+            LiveSteerAction = 1
+        end
+    end
+
+    local targetYaw
+
+    if LiveSteerAction == 0 then
+        -- Курс совпал с B: камера смотрит на B, N сохраняет
+        -- текущую высокую скорость по прямой.
+        targetYaw =
+            vectorToYaw(
+                targetDirection
+            )
+    else
+        -- A/D должны видеть CameraRight перпендикулярным
+        -- текущей velocity для максимального air-strafe.
+        targetYaw =
+            vectorToYaw(
+                velocityDirection
+            )
+    end
+
+    return
+        LiveSteerAction,
+        targetYaw,
+        headingAngle,
+        distance
+end
+
 local function isGrounded()
     if not Humanoid or not Root then
         return false
@@ -1881,6 +2007,8 @@ local function startSolver()
     ExecutionSamples = {}
 
     if JumpCount == 1 then
+        LiveSteerAction = 0
+        LastExecutionPosition = nil
         SmoothedCameraInput = 0
         LastCameraUpdate = tick()
     end
@@ -2069,19 +2197,48 @@ local function startSolver()
     -- Сначала даём реальный W-ввод на один кадр, затем Jump().
     --==========================================================--
 
-    if JumpCount == 1
-        or DesiredMoveVector.Magnitude < 0.001
-    then
+    local primeAction,
+        primeYaw =
+        getLiveSteering()
+
+    if primeAction == -1 then
         DesiredMoveVector =
             Vector3.new(
-                0,
+                -1,
                 0,
                 -1
-            )
+            ).Unit
+
+    elseif primeAction == 1 then
+        DesiredMoveVector =
+            Vector3.new(
+                1,
+                0,
+                -1
+            ).Unit
+
+    else
+        -- На точном курсе B lateral input не нужен.
+        -- На первом прыжке оставляем W на один кадр для старта.
+        if JumpCount == 1 then
+            DesiredMoveVector =
+                Vector3.new(
+                    0,
+                    0,
+                    -1
+                )
+        else
+            DesiredMoveVector =
+                Vector3.zero
+        end
     end
 
     if JumpCount == 1 then
-        updateCameraTowardVelocity(0)
+        if primeYaw then
+            updateCameraTowardYaw(
+                primeYaw
+            )
+        end
 
         -- Только первый Jump требует отдельного кадра,
         -- чтобы первичный W-ввод попал в native camera/movement.
@@ -2215,151 +2372,33 @@ local function startSolver()
     -- BUILD PLAN
     --==========================================================--
 
-    local buildStart =
-        tick()
-
-    print(
-        "[ATB Solver] BUILD PLAN START"
-    )
-
-    local plan =
-        buildPlan(
-            startPosition,
-            startVelocity,
-            timeToLand,
-            TargetPosition
-        )
+    --==========================================================--
+    -- LIVE SOLVER
+    --
+    -- В боевом цикле НЕ строим beam-plan. Он создавал
+    -- лишний freeze на десятки миллисекунд после каждого Jump.
+    -- Steering принимается по фактической velocity/цели каждый кадр.
+    --==========================================================--
 
     local buildDuration =
-        tick()
-        - buildStart
+        0
 
-    print(
-        "[ATB Solver] BUILD PLAN TIME =",
-        buildDuration
-    )
-
-    if not plan then
-        warn(
-            "[ATB Solver] Could not build plan"
-        )
-
-        Running = false
-        ATB_ENV.ATBSolverActive = false
-        DesiredMoveVector = Vector3.zero
-
-        if MovementTable then
-            pcall(
-                function()
-                    setMovementInput(0)
-                end
-            )
-        end
-
-        return
-    end
-
-    ActivePlan =
-        plan.actions
-
-    PlanIndex = 1
+    local plan = {
+        actions = {},
+        predictedPosition = TargetPosition,
+        predictedVelocity = startVelocity,
+        predictedDistance = 0,
+        predictedApproachDot = 0,
+        steps = 0,
+        totalTime = timeToLand
+    }
 
     local actionText =
-        actionsToText(
-            plan.actions
-        )
+        "LIVE TARGET STEERING"
 
     print(
-        "=================================================="
+        "[ATB Solver] LIVE STEERING ENABLED"
     )
-
-    print(
-        "========== PLAN READY ============================"
-    )
-
-    print(
-        "=================================================="
-    )
-
-    print(
-        "STEPS =",
-        plan.steps
-    )
-
-    print(
-        "TIME =",
-        plan.totalTime
-    )
-
-    print(
-        "PREDICTED LANDING =",
-        plan.predictedPosition
-    )
-
-    print(
-        "PREDICTED ERROR =",
-        plan.predictedDistance
-    )
-
-    print(
-        "PLAN =",
-        actionText
-    )
-
-    local report =
-        table.concat(
-            {
-                "========== ATB SOLVER PLAN ==========",
-                "",
-                "TARGET = "
-                    .. tostring(
-                        TargetPosition
-                    ),
-
-                "START = "
-                    .. tostring(
-                        startPosition
-                    ),
-
-                "START V = "
-                    .. tostring(
-                        startVelocity
-                    ),
-
-                "START H = "
-                    .. tostring(
-                        startVelocity.Magnitude
-                    ),
-
-                "VERTICAL V = "
-                    .. tostring(
-                        verticalVelocity
-                    ),
-
-                "TIME TO LAND = "
-                    .. tostring(
-                        timeToLand
-                    ),
-
-                "",
-                "PREDICTED LANDING = "
-                    .. tostring(
-                        plan.predictedPosition
-                    ),
-
-                "PREDICTED ERROR = "
-                    .. tostring(
-                        plan.predictedDistance
-                    ),
-
-                "",
-                "PLAN = "
-                    .. actionText
-            },
-            "\n"
-        )
-
-    copyReport(report)
 
     --==========================================================--
     -- EXECUTION
@@ -2368,7 +2407,8 @@ local function startSolver()
     local executionStart =
         tick()
 
-    local lastPlanIndex = 0
+    local lastLogAction = nil
+    local lastLogAngle = nil
 
     while
         not ATB_ENV.ATBSolverStop
@@ -2377,48 +2417,46 @@ local function startSolver()
         and Humanoid
         and Humanoid.Health > 0
     do
-        local elapsed =
-            tick() - executionStart
+        local action,
+            targetYaw,
+            headingAngle,
+            targetDistance =
+            getLiveSteering()
 
-        local index =
-            math.floor(
-                elapsed
-                / SIM_DT
-            ) + 1
+        if action == -1 then
+            DesiredMoveVector =
+                Vector3.new(
+                    -1,
+                    0,
+                    -1
+                ).Unit
 
-        if index > #ActivePlan then
-            index =
-                #ActivePlan
+        elseif action == 1 then
+            DesiredMoveVector =
+                Vector3.new(
+                    1,
+                    0,
+                    -1
+                ).Unit
+
+        else
+            DesiredMoveVector =
+                Vector3.zero
         end
 
-        PlanIndex =
-            index
+        updateCameraTowardYaw(
+            targetYaw
+        )
 
-        local action =
-            ActivePlan[index]
-
-        if action == nil then
-            action = 0
-        end
-
-        applyAction(action)
-
-        updateCameraTowardVelocity(action)
+        local currentPosition =
+            Root.Position
 
         --======================================================--
-        -- TOUCHDOWN CHECK
+        -- TARGET TOUCH CHECK
         --
-        -- Если во время снижения root уже находится над B,
-        -- не продолжаем следующий прыжок вокруг цели.
-        -- Проверяем горизонталь + близость к текущей grounded
-        -- высоте.
+        -- Нужна именно точка касания ногами:
+        -- root.Y должен быть примерно на HipHeight выше B.
         --======================================================--
-
-        local targetDistance =
-            flat(
-                TargetPosition
-                - Root.Position
-            ).Magnitude
 
         local targetGroundY =
             TargetPosition.Y
@@ -2434,10 +2472,65 @@ local function startSolver()
 
         local nearTouchHeight =
             math.abs(
-                Root.Position.Y
+                currentPosition.Y
                 - targetGroundY
             )
-            <= 1.75
+            <= 1.25
+
+        -- Дополнительная проверка отрезка движения:
+        -- на большой скорости можно пролететь через небольшой
+        -- радиус между двумя RenderStepped-кадрами.
+        local segmentHit = false
+
+        if LastExecutionPosition then
+            local segment =
+                currentPosition
+                - LastExecutionPosition
+
+            local lengthSquared =
+                flat(segment).Magnitude
+                * flat(segment).Magnitude
+
+            if lengthSquared > 0.000001 then
+                local fromTarget =
+                    flat(
+                        TargetPosition
+                        - LastExecutionPosition
+                    )
+
+                local projection =
+                    fromTarget:Dot(
+                        flat(segment)
+                    )
+                    / lengthSquared
+
+                projection =
+                    clamp(
+                        projection,
+                        0,
+                        1
+                    )
+
+                local closest =
+                    LastExecutionPosition
+                    + segment * projection
+
+                local segmentDistance =
+                    flat(
+                        TargetPosition
+                        - closest
+                    ).Magnitude
+
+                if segmentDistance
+                    <= TARGET_TOUCH_DISTANCE
+                then
+                    segmentHit = true
+                end
+            end
+        end
+
+        LastExecutionPosition =
+            currentPosition
 
         if targetDistance
             <= TARGET_TOUCH_DISTANCE
@@ -2447,87 +2540,56 @@ local function startSolver()
             print(
                 "[ATB Solver] TOUCHDOWN TARGET HIT.",
                 "DISTANCE =",
-                targetDistance
+                targetDistance,
+                "HEADING =",
+                headingAngle
             )
-
-            PlanIndex =
-                index
 
             break
         end
 
-        if PlanIndex == 1
-            or PlanIndex == 5
-            or PlanIndex == 10
-            or PlanIndex == 20
-            or PlanIndex == 40
-            or PlanIndex == 60
-            or PlanIndex == 80
+        if segmentHit
+            and descending
+            and nearTouchHeight
         then
-            local rawVelocity =
-                Root.AssemblyLinearVelocity
+            print(
+                "[ATB Solver] TARGET SEGMENT HIT.",
+                "DISTANCE =",
+                targetDistance,
+                "HEADING =",
+                headingAngle
+            )
 
-            local internalVelocity =
-                getInternalVelocity()
-
-            local movementValue =
-                MovementTable
-                    and MovementTable.Movement
-                    or nil
-
-            ExecutionSamples[
-                #ExecutionSamples + 1
-            ] =
-                table.concat(
-                    {
-                        "STEP = " .. tostring(PlanIndex),
-                        "ACTION = " .. (
-                            action == -1
-                            and "A"
-                            or action == 1
-                            and "D"
-                            or "N"
-                        ),
-                        "RAW V = "
-                            .. tostring(rawVelocity),
-                        "INTERNAL V = "
-                            .. tostring(internalVelocity),
-                        "MOVEMENT = "
-                            .. tostring(movementValue),
-                        "DESIRED = "
-                            .. tostring(DesiredMoveVector)
-                    },
-                    " | "
-                )
+            break
         end
 
-        if PlanIndex ~= lastPlanIndex then
-            lastPlanIndex =
-                PlanIndex
-
-            if PlanIndex % 5 == 0
-                or PlanIndex == 1
-            then
-                local actionName =
-                    action == -1
+        if action ~= lastLogAction
+            or (
+                lastLogAngle == nil
+                or math.abs(
+                    headingAngle
+                    - lastLogAngle
+                ) > 5
+            )
+        then
+            print(
+                "[ATB Solver] STEER =",
+                action == -1
                     and "A"
                     or action == 1
                     and "D"
-                    or "N"
+                    or "N",
+                "HEADING =",
+                headingAngle,
+                "DISTANCE =",
+                targetDistance
+            )
 
-                print(
-                    "["
-                        .. tostring(
-                            PlanIndex
-                        )
-                        .. "/"
-                        .. tostring(
-                            #ActivePlan
-                        )
-                        .. "] ACTION = "
-                        .. actionName
-                )
-            end
+            lastLogAction =
+                action
+
+            lastLogAngle =
+                headingAngle
         end
 
         local state =
@@ -2600,16 +2662,11 @@ local function startSolver()
                         PlanIndex
                     ),
 
-                "PREDICTED ERROR = "
-                    .. tostring(
-                        plan.predictedDistance
-                    ),
+                "MODE = LIVE TARGET STEERING",
 
-                "PREDICTED APPROACH DOT = "
-                    .. tostring(
-                        plan.predictedApproachDot
-                        or 0
-                    ),
+                "PREDICTED ERROR = live steering",
+
+                "PREDICTED APPROACH DOT = live steering",
 
                 "",
                 "START VELOCITY INTERNAL = "
