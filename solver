@@ -1479,7 +1479,7 @@ local function setMovementInput(value)
     return true
 end
 
-local function updateCameraTowardVelocity()
+local function updateCameraTowardVelocity(action)
     if not MovementTable then
         return
     end
@@ -1508,6 +1508,22 @@ local function updateCameraTowardVelocity()
         vectorToYaw(
             velocity
         )
+
+    -- W+A / W+D: камера должна быть примерно под 45°
+    -- к текущей velocity, чтобы диагональный input W+A/W+D
+    -- давал направление, перпендикулярное velocity.
+    if action == -1 then
+        -- A: камера ~45° влево от velocity.
+        targetYaw =
+            targetYaw
+            - math.rad(45)
+
+    elseif action == 1 then
+        -- D: камера ~45° вправо от velocity.
+        targetYaw =
+            targetYaw
+            + math.rad(45)
+    end
 
     local currentYaw =
         cameraToYaw()
@@ -1766,7 +1782,7 @@ local function startSolver()
         DesiredMoveVector =
             Vector3.zero
 
-        updateCameraTowardVelocity()
+        updateCameraTowardVelocity(0)
 
         local velocity =
             flat(
@@ -1831,13 +1847,36 @@ local function startSolver()
         return
     end
 
-    local startPosition =
-        Root.Position
+    -- В этой игре горизонтальная скорость появляется НЕ на
+    -- том же кадре, в котором вызывается Jump(). Если снять
+    -- startVelocity слишком рано, получим 0,0,0 и симулятор
+    -- физически не сможет начать air-strafe.
+    local velocityWaitStart =
+        tick()
 
     local startVelocity =
-        flat(
-            getInternalVelocity()
-        )
+        Vector3.zero
+
+    while
+        tick() - velocityWaitStart < 0.15
+        and not getgenv().ATBSolverStop
+    do
+        startVelocity =
+            flat(
+                getInternalVelocity()
+            )
+
+        if startVelocity.Magnitude > 0.001 then
+            break
+        end
+
+        RunService.Heartbeat:Wait()
+    end
+
+    -- Позицию и вертикальную скорость берём после появления
+    -- реальной стартовой horizontal velocity.
+    local startPosition =
+        Root.Position
 
     local verticalVelocity =
         Root.AssemblyLinearVelocity.Y
@@ -1881,6 +1920,12 @@ local function startSolver()
         "START VELOCITY INTERNAL =",
         startVelocity
     )
+
+    if startVelocity.Magnitude < 0.001 then
+        warn(
+            "[ATB Solver] Horizontal jump velocity was not observed before planning"
+        )
+    end
 
     print(
         "START H SPEED INTERNAL =",
@@ -2089,7 +2134,7 @@ local function startSolver()
 
         applyAction(action)
 
-        updateCameraTowardVelocity()
+        updateCameraTowardVelocity(action)
 
         if PlanIndex == 1
             or PlanIndex == 5
