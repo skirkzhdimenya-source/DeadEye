@@ -93,6 +93,10 @@ local MIN_PRESERVED_SPEED_INTERNAL = 900
 -- mainJump.jumpDelay defaults to 0.01.
 local JUMP_DELAY = 0.01
 
+-- Keep W alive briefly after Jump() until the game's custom movement
+-- system produces measurable horizontal velocity.
+local START_ACCELERATION_TIME = 0.10
+
 -- Штраф за лишнее переключение направления.
 local SWITCH_PENALTY = 0.03
 
@@ -143,6 +147,7 @@ local JumpCount = 0
 local LiveSteerAction = 0
 local LastExecutionPosition = nil
 local JumpLandingDeadline = nil
+local JumpStartTime = nil
 
 local LastRuntimeError = nil
 local ExecutionSamples = {}
@@ -1965,9 +1970,31 @@ local function getLiveSteering()
     end
 
     if velocity.Magnitude < 0.001 then
-        -- No horizontal velocity yet:
-        -- keep the existing camera direction and let W build speed.
+        -- The custom movement may take several simulation frames to
+        -- publish horizontal velocity. Do NOT replace W with N here.
+        -- Keep W alive through the initial acceleration window.
+        local stillStarting =
+            JumpStartTime
+            and (
+                tick() - JumpStartTime
+                < START_ACCELERATION_TIME
+            )
+
         LiveSteerAction = 0
+
+        if stillStarting then
+            return
+                0,
+                cameraToYaw(),
+                180,
+                distance,
+                distance,
+                0,
+                0,
+                math.huge,
+                math.huge,
+                math.huge
+        end
 
         return
             0,
@@ -2538,6 +2565,8 @@ local function startSolver()
         return
     end
 
+    JumpStartTime = tick()
+
     -- Ждём первый физический кадр после Jump().
     RunService.Heartbeat:Wait()
 
@@ -2578,6 +2607,11 @@ local function startSolver()
     print(
         "[ATB Solver] RAW POST-JUMP VELOCITY =",
         rawStartVelocity
+    )
+
+    print(
+        "[ATB Solver] START W WINDOW =",
+        START_ACCELERATION_TIME
     )
 
     print(
@@ -2723,7 +2757,32 @@ local function startSolver()
             steerDuration =
             getLiveSteering()
 
-        if action == -1 then
+        local startupActive =
+            JumpStartTime
+            and (
+                tick() - JumpStartTime
+                < START_ACCELERATION_TIME
+            )
+
+        if startupActive
+            and Root.AssemblyLinearVelocity
+                .Magnitude < 8
+        then
+            -- Force forward input while the movement stack catches up.
+            action = 0
+        end
+
+        if startupActive then
+            -- W must remain held during startup even though getLiveSteering
+            -- returns action 0 for "no lateral correction".
+            DesiredMoveVector =
+                Vector3.new(
+                    0,
+                    0,
+                    -1
+                )
+
+        elseif action == -1 then
             DesiredMoveVector =
                 Vector3.new(
                     -1,
@@ -3151,6 +3210,7 @@ local function startSolver()
     SmoothedCameraInput = 0
     LastCameraUpdate = nil
     JumpLandingDeadline = nil
+    JumpStartTime = nil
 
     if MovementTable then
         pcall(
@@ -3180,6 +3240,7 @@ local function stopSolver()
         Vector3.zero
 
     JumpLandingDeadline = nil
+    JumpStartTime = nil
 
     if MovementTable then
         pcall(
