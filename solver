@@ -504,7 +504,8 @@ local function findMovementTable()
             return false
         end
 
-        local pan =            rawget(value, "Pan")
+        local pan =
+            rawget(value, "Pan")
 
         local pinch =
             rawget(value, "Pinch")
@@ -1003,7 +1004,8 @@ local function getDescendingTime(
     return best
 end
 
---==============================================================---- AIR SIMULATION
+--==============================================================--
+-- AIR SIMULATION
 --==============================================================--
 
 -- За один реальный Accelerate call:
@@ -1503,6 +1505,7 @@ local function createTargetMarker(position)
 
     marker.Parent =
         workspace
+
     TargetMarker =
         marker
 end
@@ -2007,7 +2010,8 @@ local function predictLandingForAction(
         elseif activeAction == 2 then
             -- Soft brake: accelerate opposite the current velocity.
             -- Never predict speed below the safety floor.
-            local speed =                predictedVelocity.Magnitude
+            local speed =
+                predictedVelocity.Magnitude
 
             if speed > MIN_PRESERVED_SPEED_INTERNAL then
                 predictedVelocity =
@@ -2207,10 +2211,8 @@ local function getLiveSteering()
             local finalAction
 
             if finalLateralError > 0 then
-                -- Цель справа от текущей траектории.
                 finalAction = 1
             else
-                -- Цель слева от текущей траектории.
                 finalAction = -1
             end
 
@@ -2620,6 +2622,7 @@ local function waitForGrounded(timeout)
 
         RunService.RenderStepped:Wait()
     end
+
     return isGrounded()
 end
 
@@ -3118,6 +3121,7 @@ local function startSolver()
             remainingTime,
             alongError
         )
+
         local currentPosition =
             Root.Position
 
@@ -3618,3 +3622,176 @@ connect(
                         xpcall(
                             startSolver,
                             function(errorObject)
+                                local traceback =
+                                    tostring(
+                                        errorObject
+                                    )
+
+                                if debug
+                                    and type(
+                                        debug.traceback
+                                    ) == "function"
+                                then
+                                    traceback =
+                                        debug.traceback(
+                                            traceback,
+                                            2
+                                        )
+                                end
+
+                                LastRuntimeError =
+                                    traceback
+
+                                warn(
+                                    "[ATB Solver] F7 ERROR:",
+                                    traceback
+                                )
+
+                                return traceback
+                            end
+                        )
+
+                    if not ok then
+                        print(
+                            "[ATB Solver] F7 THREAD FAILED"
+                        )
+                    end
+                end
+            )
+
+        elseif input.KeyCode == STOP_KEY then
+            print(
+                "[ATB Solver] F8 -> STOP REQUEST"
+            )
+
+            stopSolver()
+        end
+    end
+)
+
+--==============================================================--
+-- EXTERNAL STOP
+--==============================================================--
+
+task.spawn(
+    function()
+        while
+            ATB_ENV.ATBSolverRunning
+        do
+            if ATB_ENV.ATBSolverStop then
+                break
+            end
+
+            task.wait(0.05)
+        end
+    end
+)
+
+--==============================================================--
+-- CLEANUP
+--==============================================================--
+
+task.spawn(
+    function()
+        while
+            ATB_ENV.ATBSolverRunning
+            and not ATB_ENV.ATBSolverStop
+        do
+            task.wait(0.1)
+        end
+
+        if Destroyed then
+            return
+        end
+
+        Destroyed = true
+
+        ATB_ENV.ATBSolverActive =
+            false
+
+        DesiredMoveVector =
+            Vector3.zero
+
+        if MovementTable then
+            pcall(
+                function()
+                    MovementTable.Movement = 0
+                end
+            )
+        end
+
+        if ControlHookInstalled
+            and ControlModule
+            and OriginalGetMoveVector
+        then
+            pcall(
+                function()
+                    ControlModule.GetMoveVector =
+                        OriginalGetMoveVector
+                end
+            )
+        end
+
+        for _, connection in ipairs(
+            Connections
+        ) do
+            pcall(
+                function()
+                    connection:Disconnect()
+                end
+            )
+        end
+
+        Connections = {}
+
+        removeTargetMarker()
+
+        ATB_ENV.ATBSolverRunning =
+            false
+
+        ATB_ENV.ATBSolverStop =
+            true
+
+        print(
+            "[ATB Solver] CLEANED UP"
+        )
+    end
+)
+
+--==============================================================--
+-- READY
+--==============================================================--
+
+print(
+    "=================================================="
+)
+
+print(
+    "========== AIR A -> B SOLVER v1 ================="
+)
+
+print(
+    "=================================================="
+)
+
+print(
+    "F6 = SELECT B"
+)
+
+print(
+    "F7 = START A -> B"
+)
+
+print(
+    "F8 = STOP"
+)
+
+print("")
+
+print(
+    "Stand at A -> aim at B -> F6 -> F7"
+)
+
+print(
+    "=================================================="
+)
