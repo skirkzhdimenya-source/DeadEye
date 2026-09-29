@@ -70,6 +70,14 @@ local STEER_RELEASE_CROSS = 0.75
 local STEER_REENGAGE_CROSS = 1.50
 local STEER_SIDE_SWITCH_CROSS = 0.60
 
+-- Финальная коррекция прямо перед B.
+-- Когда B уже рядом, нельзя отпускать A/D только потому,
+-- что прогноз N выглядит близким: проверяем фактическое
+-- боковое отклонение B от текущего вектора скорости.
+local FINAL_CORRECTION_DISTANCE = 10
+local FINAL_CORRECTION_LATERAL = 0.35
+local FINAL_CORRECTION_TIME = 0.35
+
 -- A/D correction is tested over several durations and then
 -- naturally followed by N/coasting until touchdown.
 local STEER_DURATIONS = {
@@ -497,8 +505,7 @@ local function findMovementTable()
             return false
         end
 
-        local pan =
-            rawget(value, "Pan")
+        local pan =            rawget(value, "Pan")
 
         local pinch =
             rawget(value, "Pinch")
@@ -997,8 +1004,7 @@ local function getDescendingTime(
     return best
 end
 
---==============================================================--
--- AIR SIMULATION
+--==============================================================---- AIR SIMULATION
 --==============================================================--
 
 -- За один реальный Accelerate call:
@@ -1498,7 +1504,6 @@ local function createTargetMarker(position)
 
     marker.Parent =
         workspace
-
     TargetMarker =
         marker
 end
@@ -1755,6 +1760,12 @@ local function updateCameraTowardYaw(targetYaw)
     end
 
     if targetYaw == nil then
+        -- При N полностью убираем остаточный camera delta-input.
+        SmoothedCameraInput = 0
+        LastCameraUpdate = tick()
+
+        setMovementInput(0)
+
         return
     end
 
@@ -1997,8 +2008,7 @@ local function predictLandingForAction(
         elseif activeAction == 2 then
             -- Soft brake: accelerate opposite the current velocity.
             -- Never predict speed below the safety floor.
-            local speed =
-                predictedVelocity.Magnitude
+            local speed =                predictedVelocity.Magnitude
 
             if speed > MIN_PRESERVED_SPEED_INTERNAL then
                 predictedVelocity =
@@ -2157,19 +2167,91 @@ local function getLiveSteering()
     end
 
     if remainingTime <= 0 then
+        -- Расчётное время уже закончилось, но фактический персонаж
+        -- всё ещё может находиться в воздухе. В этой фазе нельзя
+        -- просто переходить в N и только доворачивать камеру.
+        -- Продолжаем A/D по реальной боковой ошибке до касания.
+        local finalCameraRight =
+            rightPerpendicular(
+                velocityDirection
+            )
+
+        local finalLateralError =
+            delta:Dot(
+                finalCameraRight
+            )
+
+        local finalAlongError =
+            delta:Dot(
+                velocityDirection
+            )
+
+        local finalHeadingDot =
+            clamp(
+                velocityDirection:Dot(
+                    delta.Unit
+                ),
+                -1,
+                1
+            )
+
+        local finalHeadingAngle =
+            math.deg(
+                math.acos(
+                    finalHeadingDot
+                )
+            )
+
+        if math.abs(finalLateralError)
+            > FINAL_CORRECTION_LATERAL
+        then
+            local finalAction
+
+            if finalLateralError > 0 then
+                -- Цель справа от текущей траектории.
+                finalAction = 1
+            else
+                -- Цель слева от текущей траектории.
+                finalAction = -1
+            end
+
+            LiveSteerAction =
+                finalAction
+
+            return
+                finalAction,
+                vectorToYaw(
+                    velocityDirection
+                ),
+                finalHeadingAngle,
+                distance,
+                math.abs(
+                    finalLateralError
+                ),
+                0,
+                finalAlongError,
+                math.huge,
+                math.huge,
+                math.huge,
+                0.05
+        end
+
+        LiveSteerAction = 0
+
         return
             0,
-            vectorToYaw(
-                velocityDirection
+            nil,
+            finalHeadingAngle,
+            distance,
+            math.abs(
+                finalLateralError
             ),
             0,
-            distance,
-            distance,
-            0,
-            0,
+            finalAlongError,
             math.huge,
             math.huge,
-            math.huge
+            math.huge,
+            0
     end
 
     --==========================================================--
@@ -2344,10 +2426,52 @@ local function getLiveSteering()
 
     -- Never steer when simple coasting already lands essentially
     -- on the marker.
-    if candidates[0]
+    -- Финальный заход: если B уже близко, смотрим не только
+    -- на прогноз полной остановки A/D, а на фактическое
+    -- боковое отклонение цели относительно текущей скорости.
+    local currentCameraRight =
+        rightPerpendicular(
+            velocityDirection
+        )
+
+    local currentLateralError =
+        delta:Dot(
+            currentCameraRight
+        )
+
+    if distance <= FINAL_CORRECTION_DISTANCE
+        and remainingTime <= FINAL_CORRECTION_TIME
+        and math.abs(currentLateralError)
+            > FINAL_CORRECTION_LATERAL
+    then
+        if currentLateralError > 0 then
+            bestAction = 1
+        else
+            bestAction = -1
+        end
+
+        local forcedCandidate =
+            candidates[bestAction]
+
+        if forcedCandidate then
+            bestDuration =
+                math.max(
+                    0.05,
+                    forcedCandidate.duration
+                        or 0
+                )
+        else
+            bestDuration = 0.05
+        end
+
+    elseif candidates[0]
         and candidates[0].distance
             <= STEER_RELEASE_CROSS
+        and math.abs(currentLateralError)
+            <= FINAL_CORRECTION_LATERAL
     then
+        -- Отпускаем A/D только когда B действительно находится
+        -- почти на линии текущей траектории.
         bestAction = 0
         bestDuration = 0
     end
@@ -2421,8 +2545,8 @@ local function getLiveSteering()
             )
 
     else
-        targetYaw =
-            cameraToYaw()
+        -- N = не вращаем камеру и не оставляем старый Movement input.
+        targetYaw = nil
     end
 
     return
@@ -2498,7 +2622,6 @@ local function waitForGrounded(timeout)
 
         RunService.RenderStepped:Wait()
     end
-
     return isGrounded()
 end
 
@@ -2997,7 +3120,6 @@ local function startSolver()
             remainingTime,
             alongError
         )
-
         local currentPosition =
             Root.Position
 
@@ -3498,176 +3620,3 @@ connect(
                         xpcall(
                             startSolver,
                             function(errorObject)
-                                local traceback =
-                                    tostring(
-                                        errorObject
-                                    )
-
-                                if debug
-                                    and type(
-                                        debug.traceback
-                                    ) == "function"
-                                then
-                                    traceback =
-                                        debug.traceback(
-                                            traceback,
-                                            2
-                                        )
-                                end
-
-                                LastRuntimeError =
-                                    traceback
-
-                                warn(
-                                    "[ATB Solver] F7 ERROR:",
-                                    traceback
-                                )
-
-                                return traceback
-                            end
-                        )
-
-                    if not ok then
-                        print(
-                            "[ATB Solver] F7 THREAD FAILED"
-                        )
-                    end
-                end
-            )
-
-        elseif input.KeyCode == STOP_KEY then
-            print(
-                "[ATB Solver] F8 -> STOP REQUEST"
-            )
-
-            stopSolver()
-        end
-    end
-)
-
---==============================================================--
--- EXTERNAL STOP
---==============================================================--
-
-task.spawn(
-    function()
-        while
-            ATB_ENV.ATBSolverRunning
-        do
-            if ATB_ENV.ATBSolverStop then
-                break
-            end
-
-            task.wait(0.05)
-        end
-    end
-)
-
---==============================================================--
--- CLEANUP
---==============================================================--
-
-task.spawn(
-    function()
-        while
-            ATB_ENV.ATBSolverRunning
-            and not ATB_ENV.ATBSolverStop
-        do
-            task.wait(0.1)
-        end
-
-        if Destroyed then
-            return
-        end
-
-        Destroyed = true
-
-        ATB_ENV.ATBSolverActive =
-            false
-
-        DesiredMoveVector =
-            Vector3.zero
-
-        if MovementTable then
-            pcall(
-                function()
-                    MovementTable.Movement = 0
-                end
-            )
-        end
-
-        if ControlHookInstalled
-            and ControlModule
-            and OriginalGetMoveVector
-        then
-            pcall(
-                function()
-                    ControlModule.GetMoveVector =
-                        OriginalGetMoveVector
-                end
-            )
-        end
-
-        for _, connection in ipairs(
-            Connections
-        ) do
-            pcall(
-                function()
-                    connection:Disconnect()
-                end
-            )
-        end
-
-        Connections = {}
-
-        removeTargetMarker()
-
-        ATB_ENV.ATBSolverRunning =
-            false
-
-        ATB_ENV.ATBSolverStop =
-            true
-
-        print(
-            "[ATB Solver] CLEANED UP"
-        )
-    end
-)
-
---==============================================================--
--- READY
---==============================================================--
-
-print(
-    "=================================================="
-)
-
-print(
-    "========== AIR A -> B SOLVER v1 ================="
-)
-
-print(
-    "=================================================="
-)
-
-print(
-    "F6 = SELECT B"
-)
-
-print(
-    "F7 = START A -> B"
-)
-
-print(
-    "F8 = STOP"
-)
-
-print("")
-
-print(
-    "Stand at A -> aim at B -> F6 -> F7"
-)
-
-print(
-    "=================================================="
-)
