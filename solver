@@ -70,6 +70,19 @@ local STEER_RELEASE_CROSS = 0.75
 local STEER_REENGAGE_CROSS = 1.50
 local STEER_SIDE_SWITCH_CROSS = 0.60
 
+-- A/D correction is tested over several durations and then
+-- naturally followed by N/coasting until touchdown.
+local STEER_DURATIONS = {
+    0.025,
+    0.05,
+    0.09,
+    0.15,
+    0.25,
+    0.40,
+    0.60,
+    0.90
+}
+
 -- DeadEye's jump delay, copied only as timing:
 -- mainJump.jumpDelay defaults to 0.01.
 local JUMP_DELAY = 0.01
@@ -1797,6 +1810,7 @@ local function predictLandingForAction(
     position,
     velocity,
     action,
+    steerTime,
     remainingTime
 )
     local predictedPosition =
@@ -1816,7 +1830,16 @@ local function predictLandingForAction(
                 remainingTime - elapsed
             )
 
+        local activeAction = 0
+
         if action ~= 0
+            and elapsed < steerTime
+        then
+            activeAction =
+                action
+        end
+
+        if activeAction ~= 0
             and predictedVelocity.Magnitude > 0.001
         then
             local perpendicular =
@@ -1829,7 +1852,7 @@ local function predictLandingForAction(
                     predictedVelocity
                     + (
                         perpendicular
-                        * action
+                        * activeAction
                         * AIR_ADD
                     )
             end
@@ -1852,9 +1875,10 @@ local function predictLandingForAction(
         predictedVelocity
 end
 
+
 local function getLiveSteering()
     if not Root then
-        return 0, nil, 0, math.huge, math.huge, 0, 0, math.huge, math.huge, math.huge
+        return 0, nil, 0, math.huge, math.huge, 0, 0, math.huge, math.huge, math.huge, 0
     end
 
     if not TargetPosition then
@@ -1980,81 +2004,148 @@ local function getLiveSteering()
 
     local bestAction = 0
     local bestDistance = math.huge
+    local bestDuration = 0
 
+    -- N means coast for the full remaining jump.
+    local landingPosition,
+        landingVelocity =
+        predictLandingForAction(
+            Root.Position,
+            velocity,
+            0,
+            0,
+            remainingTime
+        )
+
+    local error =
+        flat(
+            TargetPosition
+            - landingPosition
+        )
+
+    candidates[0] = {
+        position = landingPosition,
+        velocity = landingVelocity,
+        distance = error.Magnitude,
+        score = error.Magnitude,
+        error = error,
+        duration = 0
+    }
+
+    bestDistance =
+        candidates[0].score
+
+    bestAction = 0
+    bestDuration = 0
+
+    -- For A and D, test a range of pulse lengths. After the pulse
+    -- finishes, the trajectory coasts until the real end of jump.
     for _, action in ipairs({
         -1,
-        0,
         1
     }) do
-        local landingPosition,
-            landingVelocity =
-            predictLandingForAction(
-                Root.Position,
-                velocity,
-                action,
-                remainingTime
-            )
+        local actionBest = nil
 
-        local error =
-            flat(
-                TargetPosition
-                - landingPosition
-            )
+        for _, duration in ipairs(
+            STEER_DURATIONS
+        ) do
+            if duration <= remainingTime then
+                local candidatePosition,
+                    candidateVelocity =
+                    predictLandingForAction(
+                        Root.Position,
+                        velocity,
+                        action,
+                        duration,
+                        remainingTime
+                    )
 
-        local candidateDistance =
-            error.Magnitude
+                local candidateError =
+                    flat(
+                        TargetPosition
+                        - candidatePosition
+                    )
 
-        -- Small preference for N when the landing point is already
-        -- captured. This avoids unnecessary speed-changing steering.
-        local score =
-            candidateDistance
+                local candidateScore =
+                    candidateError.Magnitude
 
-        if action ~= 0
-            and LiveSteerAction ~= 0
-            and action ~= LiveSteerAction
-        then
-            score =
-                score + 0.05
+                -- Avoid gratuitous A<->D reversals, but allow a
+                -- correction when it materially improves touchdown.
+                if LiveSteerAction ~= 0
+                    and action ~= LiveSteerAction
+                then
+                    candidateScore =
+                        candidateScore + 0.08
+                end
+
+                if not actionBest
+                    or candidateScore < actionBest.score
+                then
+                    actionBest = {
+                        position = candidatePosition,
+                        velocity = candidateVelocity,
+                        distance = candidateError.Magnitude,
+                        score = candidateScore,
+                        error = candidateError,
+                        duration = duration
+                    }
+                end
+            end
         end
 
-        candidates[action] = {
-            position = landingPosition,
-            velocity = landingVelocity,
-            distance = candidateDistance,
-            score = score,
-            error = error
-        }
+        if actionBest then
+            candidates[action] =
+                actionBest
 
-        if score < bestDistance then
-            bestDistance = score
-            bestAction = action
+            if actionBest.score < bestDistance then
+                bestDistance =
+                    actionBest.score
+
+                bestAction =
+                    action
+
+                bestDuration =
+                    actionBest.duration
+            end
         end
     end
 
     local currentCandidate =
         candidates[LiveSteerAction]
 
-    -- Hysteresis: don't chatter A <-> D because two predictions are
-    -- nearly identical. Switch only when the new action is clearly
-    -- better.
+    -- Hysteresis only if keeping the current side is almost as good.
     if currentCandidate
         and currentCandidate.score
-            <= bestDistance + 0.35
+            <= bestDistance + 0.40
     then
         bestAction =
             LiveSteerAction
+
+        bestDuration =
+            currentCandidate.duration
+            or 0
     end
 
-    -- If N already lands close enough, always prefer coasting.
+    -- Never steer when simple coasting already lands essentially
+    -- on the marker.
     if candidates[0]
         and candidates[0].distance
             <= STEER_RELEASE_CROSS
     then
         bestAction = 0
+        bestDuration = 0
     end
 
     LiveSteerAction =
         bestAction
+
+    local chosen =
+        candidates[bestAction]
+
+    if not chosen then
+        chosen =
+            candidates[0]
+    end
 
     local chosen =
         candidates[bestAction]
@@ -2122,7 +2213,8 @@ local function getLiveSteering()
         alongError,
         candidates[-1] and candidates[-1].distance or math.huge,
         candidates[0] and candidates[0].distance or math.huge,
-        candidates[1] and candidates[1].distance or math.huge
+        candidates[1] and candidates[1].distance or math.huge,
+        bestDuration
 end
 
 local function isGrounded()
@@ -2553,7 +2645,8 @@ local function startSolver()
             alongError,
             predictedA,
             predictedN,
-            predictedD =
+            predictedD,
+            steerDuration =
             getLiveSteering()
 
         if action == -1 then
@@ -2725,7 +2818,9 @@ local function startSolver()
                 "PRED A/N/D =",
                 predictedA,
                 predictedN,
-                predictedD
+                predictedD,
+                "STEER DURATION =",
+                steerDuration
             )
 
             lastLogAction =
