@@ -66,9 +66,13 @@ local MAX_AUTO_JUMPS = 20
 -- Пока скорость смотрит мимо B, используем A/D и держим
 -- CameraRight перпендикулярно velocity.
 -- Когда курс достаточно совпал с B, отпускаем A/D.
-local STEER_RELEASE_CROSS = 1.25
-local STEER_REENGAGE_CROSS = 2.50
-local STEER_SIDE_SWITCH_CROSS = 1.00
+local STEER_RELEASE_CROSS = 0.75
+local STEER_REENGAGE_CROSS = 1.50
+local STEER_SIDE_SWITCH_CROSS = 0.60
+
+-- DeadEye's jump delay, copied only as timing:
+-- mainJump.jumpDelay defaults to 0.01.
+local JUMP_DELAY = 0.01
 
 -- Штраф за лишнее переключение направления.
 local SWITCH_PENALTY = 0.03
@@ -1788,11 +1792,11 @@ end
 
 local function getLiveSteering()
     if not Root then
-        return 0, nil, 0, math.huge, 0, math.huge
+        return 0, nil, 0, math.huge, math.huge, math.huge, 0
     end
 
     if not TargetPosition then
-        return 0, nil, 0, math.huge, 0, math.huge
+        return 0, nil, 0, math.huge, math.huge, math.huge, 0
     end
 
     local delta =
@@ -1813,12 +1817,10 @@ local function getLiveSteering()
             0,
             distance,
             0,
+            0,
             0
     end
 
-    -- Для самого первого Jump() velocity ещё может быть нулевой.
-    -- В этом случае НЕ крутим камеру к B: W должен использовать
-    -- текущий camera forward и реально дать горизонтальный старт.
     local rawVelocity =
         flat(
             Root.AssemblyLinearVelocity
@@ -1838,27 +1840,26 @@ local function getLiveSteering()
     if velocity.Magnitude < 0.001 then
         LiveSteerAction = 0
 
+        -- Before there is real jump velocity, NEVER aim at B.
+        -- Keep the camera exactly where the player already has it.
         return
             0,
             cameraToYaw(),
             180,
             distance,
             distance,
-            math.huge
+            math.huge,
+            0
     end
 
     local velocityDirection =
         velocity.Unit
 
-    -- CameraRight перпендикулярен текущей horizontal velocity.
-    -- D = +CameraRight, A = -CameraRight.
     local cameraRight =
         rightPerpendicular(
             velocityDirection
         )
 
-    -- Сколько времени остаётся до пересечения target-ground-height.
-    -- Используем реальную мировую AssemblyLinearVelocity.
     local targetGroundY =
         TargetPosition.Y
         + (
@@ -1883,15 +1884,21 @@ local function getLiveSteering()
         remainingTime = 0
     end
 
-    -- Главный критерий:
-    -- "если прямо сейчас перестать air-strafe, где я приземлюсь?"
+    --==========================================================--
+    -- END-OF-JUMP INTERCEPT
     --
-    -- Не пытаемся просто смотреть на B. Смотрим именно на
-    -- прогноз точки приземления и её боковую ошибку относительно
-    -- текущего направления velocity.
+    -- The target is evaluated where the ROOT will be at the
+    -- end of the current jump, not where it is right now.
+    --
+    -- We temporarily assume "N" from this exact frame onward:
+    --     landing = position + current velocity * timeRemaining
+    --
+    -- lateralError tells us which side of that final landing
+    -- point B is on. A/D is only used to correct that final miss.
+    --==========================================================--
+
     local predictedLanding =
         Root.Position
-
         + (
             Root.AssemblyLinearVelocity
             * remainingTime
@@ -1918,13 +1925,10 @@ local function getLiveSteering()
             velocityDirection
         )
 
-    local targetDirection =
-        delta.Unit
-
     local headingDot =
         clamp(
             velocityDirection:Dot(
-                targetDirection
+                delta.Unit
             ),
             -1,
             1
@@ -1937,11 +1941,17 @@ local function getLiveSteering()
             )
         )
 
-    -- Гистерезис по ПРОГНОЗУ ПРИЗЕМЛЕНИЯ.
+    --==========================================================--
+    -- CAPTURE LOGIC
     --
-    -- Это важно: как только текущая траектория уже приводит
-    -- к B, A/D отпускается. Поэтому solver не должен бесконечно
-    -- описывать круг вокруг точки.
+    -- Do NOT chase the instantaneous B direction.
+    -- Steer only while the END-OF-JUMP trajectory misses B.
+    --
+    -- Once the predicted touchdown is inside the capture band,
+    -- release A/D and coast. This is what prevents the permanent
+    -- circular motion around B.
+    --==========================================================--
+
     if LiveSteerAction == 0 then
         if lateralMiss >= STEER_REENGAGE_CROSS
             and remainingTime > 0.02
@@ -1971,13 +1981,27 @@ local function getLiveSteering()
         end
     end
 
-    -- ВСЕГДА держим камеру относительно текущей velocity.
-    -- На N больше не поворачиваем её на B: это само по себе
-    -- не должно вызывать постоянный разворот персонажа/камеры.
-    local targetYaw =
-        vectorToYaw(
-            velocityDirection
-        )
+    --==========================================================--
+    -- CAMERA
+    --
+    -- While A/D is active, CameraLook follows velocity so
+    -- CameraRight remains the maximum air-strafe direction.
+    --
+    -- While coasting, CAMERA IS NOT SENT TO B. It stays where it
+    -- already is, so the solver cannot manufacture another turn.
+    --==========================================================--
+
+    local targetYaw
+
+    if LiveSteerAction ~= 0 then
+        targetYaw =
+            vectorToYaw(
+                velocityDirection
+            )
+    else
+        targetYaw =
+            cameraToYaw()
+    end
 
     return
         LiveSteerAction,
@@ -1985,7 +2009,8 @@ local function getLiveSteering()
         headingAngle,
         distance,
         lateralMiss,
-        remainingTime
+        remainingTime,
+        alongError
 end
 
 local function isGrounded()
@@ -2192,65 +2217,38 @@ local function startSolver()
     )
 
     --==========================================================--
-    -- NO TARGET PRE-ALIGN BEFORE THE FIRST JUMP
+    -- PRIME JUMP
     --
-    -- Нельзя заранее крутить камеру прямо на B при нулевой
-    -- горизонтальной скорости: это выглядит как мгновенный
-    -- разворот без разгона.
+    -- IMPORTANT: nothing here targets B.
     --
-    -- Первый Jump стартует по текущему camera forward.
-    -- После появления реальной velocity камера уже подстраивается
-    -- под velocity, а не под саму B.
+    -- We deliberately start the jump using the camera direction
+    -- that the player already has. This prevents the "first turn
+    -- toward B without accelerating" that the previous version had.
+    --
+    -- The 0.01 second delay is the same timing value used by
+    -- DeadEye's AutoJump module.
     --==========================================================--
 
-    --==========================================================--
-    -- PRIME JUMP WITH REAL FORWARD INPUT
-    --
-    -- W нужен на КАЖДОМ автоматическом прыжке. Камера перед этим
-    -- держится вдоль текущей velocity, поэтому W сохраняет набор
-    -- скорости, вместо того чтобы начинать следующий jump с N.
-    --==========================================================--
-
-    local primeAction,
-        primeYaw =
-        getLiveSteering()
-
-    if primeAction == -1 then
-        DesiredMoveVector =
-            Vector3.new(
-                -1,
-                0,
-                -1
-            ).Unit
-
-    elseif primeAction == 1 then
-        DesiredMoveVector =
-            Vector3.new(
-                1,
-                0,
-                -1
-            ).Unit
-
-    else
-        -- W = camera forward.
-        DesiredMoveVector =
-            Vector3.new(
-                0,
-                0,
-                -1
-            )
-    end
-
-    -- primeYaw здесь никогда не направляется в B при нулевой
-    -- velocity: getLiveSteering() возвращает текущий camera yaw.
-    if primeYaw then
-        updateCameraTowardYaw(
-            primeYaw
+    DesiredMoveVector =
+        Vector3.new(
+            0,
+            0,
+            -1
         )
+
+    -- Give the movement input one frame to reach the native
+    -- movement path, then use the requested 0.01s jump delay.
+    RunService.RenderStepped:Wait()
+
+    if ATB_ENV.ATBSolverStop then
+        Running = false
+        ATB_ENV.ATBSolverActive = false
+        return
     end
 
-    -- Один кадр даём native movement получить W/A/D до Jump().
-    RunService.RenderStepped:Wait()
+    task.wait(
+        JUMP_DELAY
+    )
 
     local jumpSuccess =
         executeJump()
@@ -2432,7 +2430,8 @@ local function startSolver()
             headingAngle,
             targetDistance,
             lateralMiss,
-            remainingTime =
+            remainingTime,
+            alongError =
             getLiveSteering()
 
         if action == -1 then
@@ -2597,6 +2596,8 @@ local function startSolver()
                 targetDistance,
                 "LATERAL MISS =",
                 lateralMiss,
+                "ALONG ERROR =",
+                alongError,
                 "REMAINING =",
                 remainingTime
             )
