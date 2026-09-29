@@ -352,15 +352,14 @@ end
 --
 -- CameraLook = V.Unit
 --
--- CameraRight = (-Z, 0, X)
+-- CameraRight = (Z, 0, -X)
 --
 -- Именно это направление было подтверждено последним логом:
 --
 -- Velocity =
 -- (-4162.373, 0, -1157.690)
 --
--- WishDirection =
--- (0.267961, 0, -0.963430)
+-- WishDirection = CameraRight for D
 --
 -- Dot = 0
 --
@@ -375,10 +374,13 @@ local function rightPerpendicular(vector)
         return Vector3.zero
     end
 
+    -- CameraRight для LookVector = velocityDirection:
+    -- (Look.Z, 0, -Look.X)
+    -- D = +CameraRight, A = -CameraRight.
     return Vector3.new(
-        -horizontal.Z / magnitude,
+        horizontal.Z / magnitude,
         0,
-        horizontal.X / magnitude
+        -horizontal.X / magnitude
     )
 end
 
@@ -1852,7 +1854,7 @@ end
 
 local function getLiveSteering()
     if not Root then
-        return 0, nil, 0, math.huge, math.huge, 0, 0
+        return 0, nil, 0, math.huge, math.huge, 0, 0, math.huge, math.huge, math.huge
     end
 
     if not TargetPosition then
@@ -1876,6 +1878,9 @@ local function getLiveSteering()
             cameraToYaw(),
             0,
             distance,
+            0,
+            0,
+            0,
             0,
             0,
             0
@@ -1909,7 +1914,10 @@ local function getLiveSteering()
             distance,
             distance,
             0,
-            0
+            0,
+            math.huge,
+            math.huge,
+            math.huge
     end
 
     local velocityDirection =
@@ -1945,7 +1953,10 @@ local function getLiveSteering()
             distance,
             distance,
             0,
-            0
+            0,
+            math.huge,
+            math.huge,
+            math.huge
     end
 
     --==========================================================--
@@ -2108,7 +2119,10 @@ local function getLiveSteering()
         distance,
         lateralMiss,
         remainingTime,
-        alongError
+        alongError,
+        candidates[-1] and candidates[-1].distance or math.huge,
+        candidates[0] and candidates[0].distance or math.huge,
+        candidates[1] and candidates[1].distance or math.huge
 end
 
 local function isGrounded()
@@ -2536,7 +2550,10 @@ local function startSolver()
             targetDistance,
             lateralMiss,
             remainingTime,
-            alongError =
+            alongError,
+            predictedA,
+            predictedN,
+            predictedD =
             getLiveSteering()
 
         if action == -1 then
@@ -2704,7 +2721,11 @@ local function startSolver()
                 "ALONG ERROR =",
                 alongError,
                 "REMAINING =",
-                remainingTime
+                remainingTime,
+                "PRED A/N/D =",
+                predictedA,
+                predictedN,
+                predictedD
             )
 
             lastLogAction =
