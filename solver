@@ -376,7 +376,7 @@ end
 --
 -- CameraLook = V.Unit
 --
--- CameraRight = (Z, 0, -X)
+-- CameraRight = (-Z, 0, X)
 --
 -- Именно это направление было подтверждено последним логом:
 --
@@ -399,12 +399,12 @@ local function rightPerpendicular(vector)
     end
 
     -- CameraRight для LookVector = velocityDirection:
-    -- (Look.Z, 0, -Look.X)
+    -- (-Look.Z, 0, Look.X)
     -- D = +CameraRight, A = -CameraRight.
     return Vector3.new(
-        horizontal.Z / magnitude,
+        -horizontal.Z / magnitude,
         0,
-        -horizontal.X / magnitude
+        horizontal.X / magnitude
     )
 end
 
