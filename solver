@@ -74,8 +74,13 @@ local STEER_SIDE_SWITCH_CROSS = 0.60
 -- Когда B уже рядом, нельзя отпускать A/D только потому,
 -- что прогноз N выглядит близким: проверяем фактическое
 -- боковое отклонение B от текущего вектора скорости.
-local FINAL_CORRECTION_DISTANCE = 10
+local FINAL_CORRECTION_DISTANCE = 12
 local FINAL_CORRECTION_LATERAL = 0.35
+
+-- A/D mapping:
+-- -1 = A
+-- +1 = D
+local STRAFE_DIRECTION = 1
 
 -- A/D correction is tested over several durations and then
 -- naturally followed by N/coasting until touchdown.
@@ -409,14 +414,18 @@ local function rightPerpendicular(vector)
         return Vector3.zero
     end
 
-    -- CameraRight для LookVector = velocityDirection:
-    -- (-Look.Z, 0, Look.X)
-    -- D = +CameraRight, A = -CameraRight.
-    return Vector3.new(
-        -horizontal.Z / magnitude,
+    -- Настоящий CameraRight для LookVector = (X, 0, Z):
+    -- (Z, 0, -X).
+    --
+    -- В старой версии здесь фактически возвращалась LEFT-сторона,
+    -- поэтому выбор A/D был зеркальным.
+    local right = Vector3.new(
+        horizontal.Z / magnitude,
         0,
-        horizontal.X / magnitude
+        -horizontal.X / magnitude
     )
+
+    return right * STRAFE_DIRECTION
 end
 
 --==============================================================--
@@ -2262,7 +2271,9 @@ local function getLiveSteering()
     --     A   = left strafe pulse
     --     N   = coast
     --     D   = right strafe pulse
-    --     BRK = short controlled brake pulse
+    --
+    -- BRK больше не участвует в выборе: runtime показал,
+    -- что W + разворот камеры назад не меняет фактическую velocity.
     --
     -- Pick the action whose FINAL horizontal position is closest
     -- to B. This targets the end of the jump directly instead of
@@ -2311,13 +2322,12 @@ local function getLiveSteering()
     bestAction = 0
     bestDuration = 0
 
-    -- For A, D and soft-brake, test a range of pulse lengths.
+    -- For A and D, test a range of pulse lengths.
     -- After the pulse finishes, the trajectory coasts until the
     -- real end of jump.
     for _, action in ipairs({
         -1,
-        1,
-        2
+        1
     }) do
         local actionBest = nil
 
