@@ -149,6 +149,10 @@ local LastExecutionPosition = nil
 local JumpLandingDeadline = nil
 local JumpStartTime = nil
 
+local LastRuntimeVelocity = nil
+local LastRuntimeSampleTime = nil
+local RuntimeSampleCounter = 0
+
 local LastRuntimeError = nil
 local ExecutionSamples = {}
 
@@ -1621,6 +1625,126 @@ local function setMovementInput(value)
     return true
 end
 
+local function actionName(action)
+    if action == -1 then
+        return "A"
+    elseif action == 1 then
+        return "D"
+    elseif action == 2 then
+        return "BRK"
+    end
+
+    return "N"
+end
+
+local function recordRuntimeSample(
+    action,
+    targetYaw,
+    headingAngle,
+    targetDistance,
+    lateralMiss,
+    remainingTime,
+    alongError
+)
+    if not Root then
+        return
+    end
+
+    local now = tick()
+    local rawVelocity =
+        flat(
+            Root.AssemblyLinearVelocity
+        )
+
+    local previousVelocity =
+        LastRuntimeVelocity
+
+    local dv = Vector3.zero
+
+    if previousVelocity then
+        dv =
+            rawVelocity
+            - previousVelocity
+    end
+
+    local currentMovement =
+        MovementTable
+        and rawget(
+            MovementTable,
+            "Movement"
+        )
+        or nil
+
+    local cameraYaw =
+        cameraToYaw()
+
+    local cameraLook =
+        flat(
+            Camera
+            and Camera.CFrame.LookVector
+            or Vector3.zero
+        )
+
+    local cameraRight =
+        rightPerpendicular(
+            cameraLook
+        )
+
+    local wishVector =
+        DesiredMoveVector
+
+    RuntimeSampleCounter =
+        RuntimeSampleCounter + 1
+
+    -- Keep this intentionally sparse: every 8 render steps.
+    if RuntimeSampleCounter % 8 == 1 then
+        print(
+            "[ATB Solver] REAL INPUT:",
+            actionName(action),
+            "desired=",
+            wishVector,
+            "movement=",
+            tostring(currentMovement),
+            "cameraYaw=",
+            math.deg(cameraYaw),
+            "vel=",
+            rawVelocity,
+            "dV=",
+            dv,
+            "rightDot=",
+            rawVelocity:Dot(cameraRight)
+        )
+
+        ExecutionSamples[
+            #ExecutionSamples + 1
+        ] =
+            string.format(
+                "REAL %s | desired=%s | movement=%s | vel=%s | dV=%s | dist=%.3f | lateral=%.3f | remaining=%.3f",
+                actionName(action),
+                tostring(wishVector),
+                tostring(currentMovement),
+                tostring(rawVelocity),
+                tostring(dv),
+                targetDistance,
+                lateralMiss,
+                remainingTime
+            )
+
+        if #ExecutionSamples > 12 then
+            table.remove(
+                ExecutionSamples,
+                1
+            )
+        end
+    end
+
+    LastRuntimeVelocity =
+        rawVelocity
+
+    LastRuntimeSampleTime =
+        now
+end
+
 local function updateCameraTowardYaw(targetYaw)
     if not MovementTable then
         return
@@ -2488,6 +2612,9 @@ local function startSolver()
 
     LastExecutionPosition = nil
     JumpLandingDeadline = nil
+    LastRuntimeVelocity = nil
+    LastRuntimeSampleTime = nil
+    RuntimeSampleCounter = 0
 
     PlanIndex = 1
 
@@ -2604,6 +2731,15 @@ local function startSolver()
     print(
         "[ATB Solver] RAW POST-JUMP VELOCITY =",
         rawStartVelocity
+    )
+
+    print(
+        "[ATB Solver] CAMERA AT JUMP =",
+        cameraToYaw(),
+        "LOOK =",
+        Camera
+        and Camera.CFrame.LookVector
+        or nil
     )
 
     print(
@@ -2852,6 +2988,16 @@ local function startSolver()
             targetYaw
         )
 
+        recordRuntimeSample(
+            action,
+            targetYaw,
+            headingAngle,
+            targetDistance,
+            lateralMiss,
+            remainingTime,
+            alongError
+        )
+
         local currentPosition =
             Root.Position
 
@@ -2989,6 +3135,8 @@ local function startSolver()
                 headingAngle,
                 "DISTANCE =",
                 targetDistance,
+                "CHOSEN =",
+                actionName(action),
                 "PREDICTED END MISS =",
                 lateralMiss,
                 "ALONG ERROR =",
