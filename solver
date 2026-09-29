@@ -95,7 +95,7 @@ local JUMP_DELAY = 0.01
 
 -- Keep W alive briefly after Jump() until the game's custom movement
 -- system produces measurable horizontal velocity.
-local START_ACCELERATION_TIME = 0.10
+local START_ACCELERATION_TIME = 0.18
 
 -- Штраф за лишнее переключение направления.
 local SWITCH_PENALTY = 0.03
@@ -2239,9 +2239,6 @@ local function getLiveSteering()
             candidates[0]
     end
 
-    local chosen =
-        candidates[bestAction]
-
     local cameraRight =
         rightPerpendicular(
             velocityDirection
@@ -2619,11 +2616,11 @@ local function startSolver()
         startVelocity
     )
 
-    local groundY =
+    local currentGroundY =
         getRootGroundY()
 
-    if not groundY then
-        groundY =
+    if not currentGroundY then
+        currentGroundY =
             startPosition.Y
             - (
                 Humanoid
@@ -2632,12 +2629,36 @@ local function startSolver()
             )
     end
 
-    local timeToLand =
+    local targetRootY =
+        TargetPosition.Y
+        + (
+            Humanoid
+            and Humanoid.HipHeight
+            or 0
+        )
+
+    local targetTimeToLand =
         getDescendingTime(
             startPosition.Y,
             verticalVelocity,
-            groundY
+            targetRootY
         )
+
+    local floorTimeToLand =
+        getDescendingTime(
+            startPosition.Y,
+            verticalVelocity,
+            currentGroundY
+        )
+
+    local timeToLand =
+        targetTimeToLand
+        or floorTimeToLand
+
+    local landingTimeSource =
+        targetTimeToLand
+        and "TARGET HEIGHT"
+        or "CURRENT FLOOR"
 
     if not timeToLand then
         timeToLand =
@@ -2647,6 +2668,9 @@ local function startSolver()
                     * verticalVelocity
                     / GRAVITY
             )
+
+        landingTimeSource =
+            "FALLBACK"
     end
 
     print(
@@ -2680,8 +2704,20 @@ local function startSolver()
         timeToLand
     )
 
-    -- The end of this jump is tied to the real floor height,
-    -- never to TargetPosition.Y.
+    print(
+        "LANDING TIME SOURCE =",
+        landingTimeSource
+    )
+
+    print(
+        "TARGET ROOT Y =",
+        targetRootY,
+        "CURRENT FLOOR ROOT Y =",
+        currentGroundY
+    )
+
+    -- The end of this jump uses the target height when that
+    -- descending interception is physically reachable.
     JumpLandingDeadline =
         tick()
         + timeToLand
