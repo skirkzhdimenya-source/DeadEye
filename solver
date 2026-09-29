@@ -41,7 +41,7 @@ local DEG_PER_INPUT = 0.33
 -- Плавность движения камеры.
 -- Movement является delta-input, поэтому не прыгаем сразу
 -- между -8 и 0/8, а плавно приближаемся к target input.
-local CAMERA_SMOOTH_SPEED = 90
+local CAMERA_SMOOTH_SPEED = 30
 
 -- Ограничение величины Movement.
 local MAX_CAMERA_INPUT = 8
@@ -123,6 +123,7 @@ local JumpCount = 0
 
 local LiveSteerAction = 0
 local LastExecutionPosition = nil
+local JumpLandingDeadline = nil
 
 local LastRuntimeError = nil
 local ExecutionSamples = {}
@@ -1790,13 +1791,72 @@ end
 -- START SOLVER
 --==============================================================--
 
+local function predictLandingForAction(
+    position,
+    velocity,
+    action,
+    remainingTime
+)
+    local predictedPosition =
+        flat(position)
+
+    local predictedVelocity =
+        flat(
+            velocity
+        )
+
+    local elapsed = 0
+
+    while elapsed < remainingTime do
+        local dt =
+            math.min(
+                SIM_DT,
+                remainingTime - elapsed
+            )
+
+        if action ~= 0
+            and predictedVelocity.Magnitude > 0.001
+        then
+            local perpendicular =
+                rightPerpendicular(
+                    predictedVelocity
+                )
+
+            if perpendicular.Magnitude > 0.001 then
+                predictedVelocity =
+                    predictedVelocity
+                    + (
+                        perpendicular
+                        * action
+                        * AIR_ADD
+                    )
+            end
+        end
+
+        predictedPosition =
+            predictedPosition
+            + (
+                predictedVelocity
+                / VELOCITY_SCALE
+            )
+            * dt
+
+        elapsed =
+            elapsed + dt
+    end
+
+    return
+        predictedPosition,
+        predictedVelocity
+end
+
 local function getLiveSteering()
     if not Root then
-        return 0, nil, 0, math.huge, math.huge, math.huge, 0
+        return 0, nil, 0, math.huge, math.huge, 0, 0
     end
 
     if not TargetPosition then
-        return 0, nil, 0, math.huge, math.huge, math.huge, 0
+        return 0, nil, 0, math.huge, math.huge, 0, 0
     end
 
     local delta =
@@ -1838,80 +1898,163 @@ local function getLiveSteering()
     end
 
     if velocity.Magnitude < 0.001 then
+        -- No horizontal velocity yet:
+        -- keep the existing camera direction and let W build speed.
         LiveSteerAction = 0
 
-        -- Before there is real jump velocity, NEVER aim at B.
-        -- Keep the camera exactly where the player already has it.
         return
             0,
             cameraToYaw(),
             180,
             distance,
             distance,
-            math.huge,
+            0,
             0
     end
 
     local velocityDirection =
         velocity.Unit
 
+    --==========================================================--
+    -- REAL END OF THIS JUMP
+    --
+    -- Do NOT derive the horizon from TargetPosition.Y.
+    -- B can be visually above/below the current jump height.
+    --
+    -- JumpLandingDeadline is calculated once from the actual
+    -- ground under the player immediately after Jump().
+    --==========================================================--
+
+    local remainingTime = 0
+
+    if JumpLandingDeadline then
+        remainingTime =
+            math.max(
+                0,
+                JumpLandingDeadline - tick()
+            )
+    end
+
+    if remainingTime <= 0 then
+        return
+            0,
+            vectorToYaw(
+                velocityDirection
+            ),
+            0,
+            distance,
+            distance,
+            0,
+            0
+    end
+
+    --==========================================================--
+    -- END-OF-JUMP CANDIDATE SOLVER
+    --
+    -- For the remaining time, simulate:
+    --     A  = constant optimal left strafe
+    --     N  = coast
+    --     D  = constant optimal right strafe
+    --
+    -- Pick the action whose FINAL horizontal position is closest
+    -- to B. This targets the end of the jump directly instead of
+    -- chasing B's instantaneous direction.
+    --==========================================================--
+
+    local candidates = {
+        [-1] = nil,
+        [0] = nil,
+        [1] = nil
+    }
+
+    local bestAction = 0
+    local bestDistance = math.huge
+
+    for _, action in ipairs({
+        -1,
+        0,
+        1
+    }) do
+        local landingPosition,
+            landingVelocity =
+            predictLandingForAction(
+                Root.Position,
+                velocity,
+                action,
+                remainingTime
+            )
+
+        local error =
+            flat(
+                TargetPosition
+                - landingPosition
+            )
+
+        local candidateDistance =
+            error.Magnitude
+
+        -- Small preference for N when the landing point is already
+        -- captured. This avoids unnecessary speed-changing steering.
+        local score =
+            candidateDistance
+
+        if action ~= 0
+            and LiveSteerAction ~= 0
+            and action ~= LiveSteerAction
+        then
+            score =
+                score + 0.05
+        end
+
+        candidates[action] = {
+            position = landingPosition,
+            velocity = landingVelocity,
+            distance = candidateDistance,
+            score = score,
+            error = error
+        }
+
+        if score < bestDistance then
+            bestDistance = score
+            bestAction = action
+        end
+    end
+
+    local currentCandidate =
+        candidates[LiveSteerAction]
+
+    -- Hysteresis: don't chatter A <-> D because two predictions are
+    -- nearly identical. Switch only when the new action is clearly
+    -- better.
+    if currentCandidate
+        and currentCandidate.score
+            <= bestDistance + 0.35
+    then
+        bestAction =
+            LiveSteerAction
+    end
+
+    -- If N already lands close enough, always prefer coasting.
+    if candidates[0]
+        and candidates[0].distance
+            <= STEER_RELEASE_CROSS
+    then
+        bestAction = 0
+    end
+
+    LiveSteerAction =
+        bestAction
+
+    local chosen =
+        candidates[bestAction]
+
     local cameraRight =
         rightPerpendicular(
             velocityDirection
         )
 
-    local targetGroundY =
-        TargetPosition.Y
-        + (
-            Humanoid
-            and Humanoid.HipHeight
-            or 0
-        )
-
-    local verticalVelocity =
-        Root.AssemblyLinearVelocity.Y
-
-    local remainingTime =
-        getDescendingTime(
-            Root.Position.Y,
-            verticalVelocity,
-            targetGroundY
-        )
-
-    if not remainingTime
-        or remainingTime < 0.02
-    then
-        remainingTime = 0
-    end
-
-    --==========================================================--
-    -- END-OF-JUMP INTERCEPT
-    --
-    -- The target is evaluated where the ROOT will be at the
-    -- end of the current jump, not where it is right now.
-    --
-    -- We temporarily assume "N" from this exact frame onward:
-    --     landing = position + current velocity * timeRemaining
-    --
-    -- lateralError tells us which side of that final landing
-    -- point B is on. A/D is only used to correct that final miss.
-    --==========================================================--
-
-    local predictedLanding =
-        Root.Position
-        + (
-            Root.AssemblyLinearVelocity
-            * remainingTime
-        )
-
-    local landingError =
-        flat(
-            TargetPosition
-            - predictedLanding
-        )
-
     local lateralError =
-        landingError:Dot(
+        chosen.error:Dot(
             cameraRight
         )
 
@@ -1921,14 +2064,17 @@ local function getLiveSteering()
         )
 
     local alongError =
-        landingError:Dot(
+        chosen.error:Dot(
             velocityDirection
         )
+
+    local targetDirection =
+        delta.Unit
 
     local headingDot =
         clamp(
             velocityDirection:Dot(
-                delta.Unit
+                targetDirection
             ),
             -1,
             1
@@ -1941,59 +2087,11 @@ local function getLiveSteering()
             )
         )
 
-    --==========================================================--
-    -- CAPTURE LOGIC
-    --
-    -- Do NOT chase the instantaneous B direction.
-    -- Steer only while the END-OF-JUMP trajectory misses B.
-    --
-    -- Once the predicted touchdown is inside the capture band,
-    -- release A/D and coast. This is what prevents the permanent
-    -- circular motion around B.
-    --==========================================================--
-
-    if LiveSteerAction == 0 then
-        if lateralMiss >= STEER_REENGAGE_CROSS
-            and remainingTime > 0.02
-        then
-            if lateralError >= 0 then
-                LiveSteerAction = 1
-            else
-                LiveSteerAction = -1
-            end
-        end
-
-    else
-        if lateralMiss <= STEER_RELEASE_CROSS
-            or remainingTime <= 0.02
-        then
-            LiveSteerAction = 0
-
-        elseif LiveSteerAction == 1
-            and lateralError < -STEER_SIDE_SWITCH_CROSS
-        then
-            LiveSteerAction = -1
-
-        elseif LiveSteerAction == -1
-            and lateralError > STEER_SIDE_SWITCH_CROSS
-        then
-            LiveSteerAction = 1
-        end
-    end
-
-    --==========================================================--
-    -- CAMERA
-    --
-    -- While A/D is active, CameraLook follows velocity so
-    -- CameraRight remains the maximum air-strafe direction.
-    --
-    -- While coasting, CAMERA IS NOT SENT TO B. It stays where it
-    -- already is, so the solver cannot manufacture another turn.
-    --==========================================================--
-
+    -- Only turn the camera while a strafe is actually required.
+    -- When N wins, leave the camera untouched.
     local targetYaw
 
-    if LiveSteerAction ~= 0 then
+    if bestAction ~= 0 then
         targetYaw =
             vectorToYaw(
                 velocityDirection
@@ -2004,7 +2102,7 @@ local function getLiveSteering()
     end
 
     return
-        LiveSteerAction,
+        bestAction,
         targetYaw,
         headingAngle,
         distance,
@@ -2185,6 +2283,7 @@ local function startSolver()
         JumpCount + 1
 
     LastExecutionPosition = nil
+    JumpLandingDeadline = nil
 
     PlanIndex = 1
 
@@ -2366,6 +2465,12 @@ local function startSolver()
         "TIME TO LAND =",
         timeToLand
     )
+
+    -- The end of this jump is tied to the real floor height,
+    -- never to TargetPosition.Y.
+    JumpLandingDeadline =
+        tick()
+        + timeToLand
 
     --==========================================================--
     -- BUILD PLAN
@@ -2594,7 +2699,7 @@ local function startSolver()
                 headingAngle,
                 "DISTANCE =",
                 targetDistance,
-                "LATERAL MISS =",
+                "PREDICTED END MISS =",
                 lateralMiss,
                 "ALONG ERROR =",
                 alongError,
@@ -2844,6 +2949,7 @@ local function startSolver()
 
     SmoothedCameraInput = 0
     LastCameraUpdate = nil
+    JumpLandingDeadline = nil
 
     if MovementTable then
         pcall(
@@ -2871,6 +2977,8 @@ local function stopSolver()
 
     DesiredMoveVector =
         Vector3.zero
+
+    JumpLandingDeadline = nil
 
     if MovementTable then
         pcall(
