@@ -80,8 +80,14 @@ local STEER_DURATIONS = {
     0.25,
     0.40,
     0.60,
-    0.90
+    0.70,
+    0.80,
+    0.85,
+    0.875
 }
+
+-- Minimum horizontal speed kept by the optional braking mode.
+local MIN_PRESERVED_SPEED_INTERNAL = 900
 
 -- DeadEye's jump delay, copied only as timing:
 -- mainJump.jumpDelay defaults to 0.01.
@@ -1839,21 +1845,42 @@ local function predictLandingForAction(
                 action
         end
 
-        if activeAction ~= 0
-            and predictedVelocity.Magnitude > 0.001
+        if activeAction == -1
+            or activeAction == 1
         then
-            local perpendicular =
-                rightPerpendicular(
-                    predictedVelocity
-                )
+            if predictedVelocity.Magnitude > 0.001 then
+                local perpendicular =
+                    rightPerpendicular(
+                        predictedVelocity
+                    )
 
-            if perpendicular.Magnitude > 0.001 then
+                if perpendicular.Magnitude > 0.001 then
+                    predictedVelocity =
+                        predictedVelocity
+                        + (
+                            perpendicular
+                            * activeAction
+                            * AIR_ADD
+                        )
+                end
+            end
+
+        elseif activeAction == 2 then
+            -- Soft brake: accelerate opposite the current velocity.
+            -- Never predict speed below the safety floor.
+            local speed =
+                predictedVelocity.Magnitude
+
+            if speed > MIN_PRESERVED_SPEED_INTERNAL then
                 predictedVelocity =
                     predictedVelocity
-                    + (
-                        perpendicular
-                        * activeAction
-                        * AIR_ADD
+                    - (
+                        predictedVelocity.Unit
+                        * math.min(
+                            AIR_ADD,
+                            speed
+                            - MIN_PRESERVED_SPEED_INTERNAL
+                        )
                     )
             end
         end
@@ -1882,7 +1909,18 @@ local function getLiveSteering()
     end
 
     if not TargetPosition then
-        return 0, nil, 0, math.huge, math.huge, 0, 0
+        return
+            0,
+            nil,
+            0,
+            math.huge,
+            math.huge,
+            0,
+            0,
+            math.huge,
+            math.huge,
+            math.huge,
+            0
     end
 
     local delta =
@@ -1987,9 +2025,10 @@ local function getLiveSteering()
     -- END-OF-JUMP CANDIDATE SOLVER
     --
     -- For the remaining time, simulate:
-    --     A  = constant optimal left strafe
-    --     N  = coast
-    --     D  = constant optimal right strafe
+    --     A   = left strafe pulse
+    --     N   = coast
+    --     D   = right strafe pulse
+    --     BRK = short controlled brake pulse
     --
     -- Pick the action whose FINAL horizontal position is closest
     -- to B. This targets the end of the jump directly instead of
@@ -2038,11 +2077,13 @@ local function getLiveSteering()
     bestAction = 0
     bestDuration = 0
 
-    -- For A and D, test a range of pulse lengths. After the pulse
-    -- finishes, the trajectory coasts until the real end of jump.
+    -- For A, D and soft-brake, test a range of pulse lengths.
+    -- After the pulse finishes, the trajectory coasts until the
+    -- real end of jump.
     for _, action in ipairs({
         -1,
-        1
+        1,
+        2
     }) do
         local actionBest = nil
 
@@ -2068,6 +2109,30 @@ local function getLiveSteering()
 
                 local candidateScore =
                     candidateError.Magnitude
+
+                local finalSpeed =
+                    candidateVelocity.Magnitude
+
+                if action == 2
+                    and finalSpeed
+                        <= MIN_PRESERVED_SPEED_INTERNAL
+                then
+                    candidateScore =
+                        math.huge
+                else
+                    -- Speed is secondary to touchdown accuracy, but
+                    -- avoid throwing away a large amount of momentum.
+                    candidateScore =
+                        candidateScore
+                        + (
+                            0.00003
+                            * math.max(
+                                0,
+                                2000
+                                    - finalSpeed
+                            )
+                        )
+                end
 
                 -- Avoid gratuitous A<->D reversals, but allow a
                 -- correction when it materially improves touchdown.
@@ -2193,11 +2258,20 @@ local function getLiveSteering()
     -- When N wins, leave the camera untouched.
     local targetYaw
 
-    if bestAction ~= 0 then
+    if bestAction == -1
+        or bestAction == 1
+    then
         targetYaw =
             vectorToYaw(
                 velocityDirection
             )
+
+    elseif bestAction == 2 then
+        targetYaw =
+            vectorToYaw(
+                -velocityDirection
+            )
+
     else
         targetYaw =
             cameraToYaw()
@@ -2665,6 +2739,15 @@ local function startSolver()
                     -1
                 ).Unit
 
+        elseif action == 2 then
+            -- BRK = W while camera looks opposite velocity.
+            DesiredMoveVector =
+                Vector3.new(
+                    0,
+                    0,
+                    -1
+                )
+
         else
             DesiredMoveVector =
                 Vector3.zero
@@ -2804,6 +2887,8 @@ local function startSolver()
                     and "A"
                     or action == 1
                     and "D"
+                    or action == 2
+                    and "BRK"
                     or "N",
                 "HEADING =",
                 headingAngle,
