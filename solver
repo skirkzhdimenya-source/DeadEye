@@ -76,7 +76,6 @@ local STEER_SIDE_SWITCH_CROSS = 0.60
 -- боковое отклонение B от текущего вектора скорости.
 local FINAL_CORRECTION_DISTANCE = 10
 local FINAL_CORRECTION_LATERAL = 0.35
-local FINAL_CORRECTION_TIME = 0.35
 
 -- A/D correction is tested over several durations and then
 -- naturally followed by N/coasting until touchdown.
@@ -2440,7 +2439,6 @@ local function getLiveSteering()
         )
 
     if distance <= FINAL_CORRECTION_DISTANCE
-        and remainingTime <= FINAL_CORRECTION_TIME
         and math.abs(currentLateralError)
             > FINAL_CORRECTION_LATERAL
     then
