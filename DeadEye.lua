@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.100
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.101
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.100"
+local SCRIPT_VERSION = "1.101"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10137,7 +10137,9 @@ local mainJump = {
     sensorPart = nil,
     frontSensorPart = nil,
     sensorTouchConnection = nil,
+    sensorTouchConnectionEnded = nil,
     frontSensorTouchConnection = nil,
+    frontSensorTouchConnectionEnded = nil,
     connections = {}
 }
 mainJump.jumpDelay =
@@ -10199,21 +10201,17 @@ end
 --// =========================================================
 --// CAMERA LOOK / JUMP
 --// =========================================================
+--// LOOK is deliberately tied to the AUTOJUMP sensor cycle.
+--// Manual/native jumps never call beginLook().
 local LOOK_RENDER_NAME = "DeadEyeMainLook"
 local LOOK_INPUT_RADIANS = 0.00575958658
 local LOOK_TARGET_PITCH = -math.rad(89)
 local LOOK_MAX_INPUT = 1000
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
-local LOOK_RESTORE_FRAMES = 4
+local LOOK_MAX_AFTER_JUMP = 0.12
 
-mainJump.lookActive = false
-mainJump.lookRestoring = false
-mainJump.lookSavedPitch = nil
-mainJump.lookSavedYaw = nil
-mainJump.lookMovementState = nil
 mainJump.lookRenderBound = false
-mainJump.lookRestoreFrameCount = 0
-mainJump.lookStateConnection = nil
+mainJump.lookRestoreDeadline = 0
 
 local function mainLookAngleDelta(target, current)
     return math.atan2(
@@ -10333,7 +10331,8 @@ end
 function mainJump.finishLookRestore()
     mainJump.lookActive = false
     mainJump.lookRestoring = false
-    mainJump.lookRestoreFrameCount = 0
+    mainJump.lookRestoreDeadline = 0
+    mainJump.lookAutoJumpCycle = false
 
     mainJump.unbindLookRender()
 end
@@ -10343,18 +10342,20 @@ function mainJump.restoreLookNow()
         workspace.CurrentCamera
 
     if mainJump.lookSavedPitch
-        and mainJump.lookSavedYaw
         and camera
     then
         pcall(function()
             local position =
                 camera.CFrame.Position
 
+            local _, currentYaw, _ =
+                camera.CFrame:ToOrientation()
+
             camera.CFrame =
                 CFrame.new(position)
                 * CFrame.fromOrientation(
                     mainJump.lookSavedPitch,
-                    mainJump.lookSavedYaw,
+                    currentYaw,
                     0
                 )
         end)
@@ -10383,10 +10384,12 @@ function mainJump.bindLookRender()
             if not genv.DEADEYE_MAIN_RUNNING
                 or cleaned
             then
-                if not mainJump.lookRestoring then
+                if mainJump.lookRestoring then
+                    mainJump.restoreLookNow()
+                else
                     mainJump.unbindLookRender()
-                    return
                 end
+                return
             end
 
             if not mainJump.lookActive
@@ -10403,50 +10406,50 @@ function mainJump.bindLookRender()
                 return
             end
 
+            --// LOOK changes pitch only. X is copied from the native
+            --// camera input state, so mouse/controller left-right
+            --// camera movement stays fully usable.
+            local pitch
+
+            local cameraOk = pcall(function()
+                pitch = select(
+                    1,
+                    camera.CFrame:ToOrientation()
+                )
+            end)
+
+            if not cameraOk
+                or not pitch
+            then
+                return
+            end
+
             local targetPitch =
                 mainJump.lookActive
                 and LOOK_TARGET_PITCH
                 or mainJump.lookSavedPitch
 
-            local targetYaw =
-                mainJump.lookSavedYaw
-
-            if not targetPitch
-                or not targetYaw
-            then
-                return
-            end
-
-            local pitch, yaw
-
-            local cameraOk = pcall(function()
-                pitch, yaw, _ =
-                    camera.CFrame:ToOrientation()
-            end)
-
-            if not cameraOk
-                or not pitch
-                or not yaw
-            then
+            if not targetPitch then
                 return
             end
 
             local pitchDelta =
                 targetPitch - pitch
 
-            local yawDelta =
-                mainLookAngleDelta(
-                    targetYaw,
-                    yaw
-                )
-
             if mainJump.lookRestoring
                 and math.abs(pitchDelta)
                     <= LOOK_RESTORE_EPSILON
-                and math.abs(yawDelta)
-                    <= LOOK_RESTORE_EPSILON
             then
                 mainJump.finishLookRestore()
+                return
+            end
+
+            if mainJump.lookActive
+                and mainJump.lookRestoreDeadline > 0
+                and tick()
+                    >= mainJump.lookRestoreDeadline
+            then
+                mainJump.endLook()
                 return
             end
 
@@ -10457,12 +10460,18 @@ function mainJump.bindLookRender()
                 return
             end
 
-            local moveX =
-                math.clamp(
-                    -yawDelta / LOOK_INPUT_RADIANS,
-                    -LOOK_MAX_INPUT,
-                    LOOK_MAX_INPUT
-                )
+            local currentMovement =
+                Vector2.zero
+
+            pcall(function()
+                if typeof(
+                    movementState.Movement
+                ) == "Vector2"
+                then
+                    currentMovement =
+                        movementState.Movement
+                end
+            end)
 
             local moveY =
                 math.clamp(
@@ -10474,54 +10483,18 @@ function mainJump.bindLookRender()
             pcall(function()
                 movementState.Movement =
                     Vector2.new(
-                        moveX,
+                        currentMovement.X,
                         moveY
                     )
             end)
-
-            if mainJump.lookRestoring then
-                mainJump.lookRestoreFrameCount += 1
-
-                if mainJump.lookRestoreFrameCount
-                    >= LOOK_RESTORE_FRAMES
-                then
-                    local afterPitch, afterYaw
-
-                    local afterOk = pcall(function()
-                        afterPitch, afterYaw, _ =
-                            camera.CFrame:ToOrientation()
-                    end)
-
-                    if afterOk
-                        and afterPitch
-                        and afterYaw
-                    then
-                        local afterPitchDelta =
-                            mainJump.lookSavedPitch
-                            - afterPitch
-
-                        local afterYawDelta =
-                            mainLookAngleDelta(
-                                mainJump.lookSavedYaw,
-                                afterYaw
-                            )
-
-                        if math.abs(afterPitchDelta)
-                                <= LOOK_RESTORE_EPSILON
-                            and math.abs(afterYawDelta)
-                                <= LOOK_RESTORE_EPSILON
-                        then
-                            mainJump.finishLookRestore()
-                        end
-                    end
-                end
-            end
         end
     )
 end
 
 function mainJump.beginLook()
     if not mainJump.lookEnabled
+        or not mainJump.enabled
+        or not mainJump.lookAutoJumpCycle
         or cleaned
     then
         return
@@ -10534,27 +10507,30 @@ function mainJump.beginLook()
         return
     end
 
-    local pitch, yaw
+    local pitch
     local ok = pcall(function()
-        pitch, yaw, _ =
+        pitch = select(
+            1,
             camera.CFrame:ToOrientation()
+        )
     end)
 
     if not ok
         or not pitch
-        or not yaw
     then
         return
     end
 
-    if not mainJump.lookActive then
-        mainJump.lookSavedPitch = pitch
-        mainJump.lookSavedYaw = yaw
+    if not mainJump.lookActive
+        and not mainJump.lookRestoring
+    then
+        mainJump.lookSavedPitch =
+            pitch
     end
 
     mainJump.lookActive = true
     mainJump.lookRestoring = false
-    mainJump.lookRestoreFrameCount = 0
+    mainJump.lookRestoreDeadline = 0
 
     mainJump.findLookMovementState()
     mainJump.bindLookRender()
@@ -10569,7 +10545,7 @@ function mainJump.endLook()
 
     mainJump.lookActive = false
     mainJump.lookRestoring = true
-    mainJump.lookRestoreFrameCount = 0
+    mainJump.lookRestoreDeadline = 0
 
     mainJump.findLookMovementState()
     mainJump.bindLookRender()
@@ -10579,73 +10555,12 @@ function mainJump.setLookEnabled(state)
     mainJump.lookEnabled =
         state and true or false
 
-    if mainJump.lookEnabled then
-        local humanoid =
-            mainJump.humanoid
-
-        if humanoid
-            and humanoid.Parent
-        then
-            local currentState =
-                humanoid:GetState()
-
-            if currentState
-                    == Enum.HumanoidStateType.Jumping
-                or currentState
-                    == Enum.HumanoidStateType.Freefall
-            then
-                mainJump.beginLook()
-            end
-        end
-    else
+    if not mainJump.lookEnabled then
         mainJump.endLook()
     end
 
     mainJump.saveConfig()
     mainJump.update()
-end
-
-function mainJump.bindLookToCharacter(humanoid)
-    if mainJump.lookStateConnection then
-        pcall(function()
-            mainJump.lookStateConnection:Disconnect()
-        end)
-        mainJump.lookStateConnection = nil
-    end
-
-    if not humanoid then
-        return
-    end
-
-    mainJump.lookStateConnection =
-        humanoid.StateChanged:Connect(
-            function(_, newState)
-                if not genv.DEADEYE_MAIN_RUNNING
-                    or cleaned
-                then
-                    return
-                end
-
-                if newState
-                        == Enum.HumanoidStateType.Jumping
-                then
-                    mainJump.beginLook()
-                    return
-                end
-
-                if newState
-                        == Enum.HumanoidStateType.Landed
-                    or newState
-                        == Enum.HumanoidStateType.Running
-                then
-                    if mainJump.lookActive
-                        or mainJump.lookRestoring
-                    then
-                        mainJump.endLook()
-                    end
-                end
-            end
-        )
 end
 
 function mainJump.update()
@@ -10726,6 +10641,10 @@ function mainJump.setEnabled(state)
     else
         mainJump.needsInputRearm = true
         mainJump.destroySensors()
+
+        mainJump.lookAutoJumpCycle = false
+        mainJump.lookSensorTouching = 0
+        mainJump.endLook()
 
         if mainJump.humanoid
             and mainJump.humanoid.Parent
@@ -10858,6 +10777,18 @@ function mainJump.destroySensors()
             mainJump.frontSensorTouchConnection:Disconnect()
         end)
         mainJump.frontSensorTouchConnection = nil
+    end
+    if mainJump.sensorTouchConnectionEnded then
+        pcall(function()
+            mainJump.sensorTouchConnectionEnded:Disconnect()
+        end)
+        mainJump.sensorTouchConnectionEnded = nil
+    end
+    if mainJump.frontSensorTouchConnectionEnded then
+        pcall(function()
+            mainJump.frontSensorTouchConnectionEnded:Disconnect()
+        end)
+        mainJump.frontSensorTouchConnectionEnded = nil
     end
     if mainJump.sensorPart then
         pcall(function()
@@ -11240,9 +11171,20 @@ function mainJump.jump(hit)
     mainJump.lastJump =
         tick()
 
-    mainJump.beginLook()
+    if mainJump.lookEnabled
+        and mainJump.enabled
+    then
+        mainJump.lookAutoJumpCycle = true
+        mainJump.beginLook()
+    end
 
     mainJump.humanoid.Jump = true
+
+    if mainJump.lookActive then
+        mainJump.lookRestoreDeadline =
+            tick()
+            + LOOK_MAX_AFTER_JUMP
+    end
 
     pcall(function()
         mainJump.humanoid:ChangeState(
@@ -11265,15 +11207,47 @@ function mainJump.contact(hit)
     then
         return
     end
+    if mainJump.lookEnabled then
+        mainJump.lookAutoJumpCycle = true
+        mainJump.lookSensorTouching += 1
+        mainJump.beginLook()
+    end
+
     task.wait(
         mainJump.jumpDelay
     )
+
     if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
     then
+        mainJump.lookSensorTouching =
+            math.max(
+                0,
+                mainJump.lookSensorTouching - 1
+            )
+        if mainJump.lookSensorTouching == 0
+            and mainJump.lookActive
+        then
+            mainJump.endLook()
+        end
         return
     end
+
     mainJump.jump(hit)
+
+    if mainJump.lookSensorTouching > 0 then
+        task.defer(function()
+            task.wait(
+                LOOK_MAX_AFTER_JUMP
+            )
+
+            if mainJump.lookActive
+                and mainJump.lookSensorTouching > 0
+            then
+                mainJump.endLook()
+            end
+        end)
+    end
 end
 function mainJump.createSensors(char)
     if not char
@@ -11292,10 +11266,6 @@ function mainJump.createSensors(char)
         char:WaitForChild(
             "HumanoidRootPart"
         )
-
-    mainJump.bindLookToCharacter(
-        mainJump.humanoid
-    )
 
     local sensor =
         Instance.new("Part")
@@ -11337,8 +11307,31 @@ function mainJump.createSensors(char)
     mainJump.sensorTouchConnection =
         sensor.Touched:Connect(
             function(hit)
+                if mainJump.lookEnabled then
+                    mainJump.lookSensorTouching += 1
+                    mainJump.beginLook()
+                end
                 mainJump.contact(hit)
             end        )
+
+    mainJump.sensorTouchConnectionEnded =
+        sensor.TouchEnded:Connect(
+            function(hit)
+                if mainJump.lookEnabled then
+                    mainJump.lookSensorTouching =
+                        math.max(
+                            0,
+                            mainJump.lookSensorTouching - 1
+                        )
+
+                    if mainJump.lookSensorTouching == 0
+                        and mainJump.lookActive
+                    then
+                        mainJump.endLook()
+                    end
+                end
+            end
+        )
     local front =
         Instance.new("Part")
     front.Name =
@@ -11379,7 +11372,30 @@ function mainJump.createSensors(char)
     mainJump.frontSensorTouchConnection =
         front.Touched:Connect(
             function(hit)
+                if mainJump.lookEnabled then
+                    mainJump.lookSensorTouching += 1
+                    mainJump.beginLook()
+                end
                 mainJump.contact(hit)
+            end
+        )
+
+    mainJump.frontSensorTouchConnectionEnded =
+        front.TouchEnded:Connect(
+            function(hit)
+                if mainJump.lookEnabled then
+                    mainJump.lookSensorTouching =
+                        math.max(
+                            0,
+                            mainJump.lookSensorTouching - 1
+                        )
+
+                    if mainJump.lookSensorTouching == 0
+                        and mainJump.lookActive
+                    then
+                        mainJump.endLook()
+                    end
+                end
             end
         )
 end
