@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.106
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.107
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.106"
+local SCRIPT_VERSION = "1.107"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10207,7 +10207,7 @@ end
 local LOOK_RENDER_NAME = "DeadEyeMainLook"
 local LOOK_INPUT_RADIANS = 0.00575958658
 local LOOK_TARGET_PITCH = -math.rad(89)
-local LOOK_MAX_INPUT = 18
+local LOOK_MAX_INPUT = 22
 local LOOK_PITCH_GAIN = 0.35
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
 local LOOK_MAX_AFTER_JUMP = 0.12
@@ -11169,6 +11169,16 @@ function mainJump.lookScannerSeesSurface()
         return false
     end
 
+    local overlapParams =
+        OverlapParams.new()
+
+    overlapParams.FilterType =
+        Enum.RaycastFilterType.Exclude
+
+    overlapParams.FilterDescendantsInstances = {
+        mainJump.character
+    }
+
     for _, sensor in ipairs({
         mainJump.lookSensorPart,
         mainJump.lookFrontSensorPart
@@ -11176,28 +11186,21 @@ function mainJump.lookScannerSeesSurface()
         if sensor
             and sensor.Parent
         then
-            local touching
+            local parts
             local ok = pcall(function()
-                touching =
-                    sensor:GetTouchingParts()
+                parts =
+                    workspace:GetPartBoundsInBox(
+                        sensor.CFrame,
+                        sensor.Size,
+                        overlapParams
+                    )
             end)
 
             if ok
-                and type(touching) == "table"
+                and type(parts) == "table"
+                and #parts > 0
             then
-                for _, part in ipairs(touching) do
-                    if part
-                        and part.Parent
-                        and (
-                            not mainJump.character
-                            or not part:IsDescendantOf(
-                                mainJump.character
-                            )
-                        )
-                    then
-                        return true
-                    end
-                end
+                return true
             end
         end
     end
@@ -11213,15 +11216,11 @@ function mainJump.jump(hit)
     mainJump.lastJump =
         tick()
 
-    local useLook =
-        mainJump.lookEnabled
+    if mainJump.lookEnabled
         and mainJump.enabled
-        and hit ~= nil
-        and mainJump.lookScannerSeesSurface()
-
-    if useLook then
+        and mainJump.lookActive
+    then
         mainJump.lookAutoJumpCycle = true
-        mainJump.beginLook()
     end
 
     mainJump.humanoid.Jump = true
@@ -11253,6 +11252,13 @@ function mainJump.contact(hit)
         )
     then
         return
+    end
+
+    if mainJump.lookEnabled
+        and mainJump.lookScannerSeesSurface()
+    then
+        mainJump.lookAutoJumpCycle = true
+        mainJump.beginLook()
     end
 
     task.wait(
@@ -11400,21 +11406,21 @@ function mainJump.createSensors(char)
     lookSensor.Size =
         Vector3.new(
             2.6,
-            6,
+            7,
             2.6
         )
     lookSensor.Transparency = 1
     lookSensor.Anchored = false
     lookSensor.CanCollide = false
-    lookSensor.CanTouch = true
-    lookSensor.CanQuery = false
+    lookSensor.CanTouch = false
+    lookSensor.CanQuery = true
     lookSensor.Massless = true
     lookSensor.CastShadow = false
     lookSensor.CFrame =
         mainJump.root.CFrame
         * CFrame.new(
             0,
-            -5,
+            -5.5,
             0
         )
     lookSensor.Parent = char
@@ -11440,21 +11446,21 @@ function mainJump.createSensors(char)
     lookFront.Size =
         Vector3.new(
             2,
-            6,
+            7,
             1
         )
     lookFront.Transparency = 1
     lookFront.Anchored = false
     lookFront.CanCollide = false
-    lookFront.CanTouch = true
-    lookFront.CanQuery = false
+    lookFront.CanTouch = false
+    lookFront.CanQuery = true
     lookFront.Massless = true
     lookFront.CastShadow = false
     lookFront.CFrame =
         mainJump.root.CFrame
         * CFrame.new(
             0,
-            -2.5,
+            -3,
             -0.8
         )
     lookFront.Parent = char
