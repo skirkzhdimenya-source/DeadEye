@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.114
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.115
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114 -> v1.115.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.114"
+local SCRIPT_VERSION = "1.115"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10697,18 +10697,12 @@ function mainJump.bindAirTurnRender()
             local turning =
                 0
 
-            local wDown =
-                false
             local aDown =
                 false
             local dDown =
                 false
 
             pcall(function()
-                wDown =
-                    UserInputService:IsKeyDown(
-                        Enum.KeyCode.W
-                    )
                 aDown =
                     UserInputService:IsKeyDown(
                         Enum.KeyCode.A
@@ -10718,10 +10712,6 @@ function mainJump.bindAirTurnRender()
                         Enum.KeyCode.D
                     )
             end)
-
-            if not wDown then
-                return
-            end
 
             if aDown
                 and not dDown
@@ -10735,6 +10725,89 @@ function mainJump.bindAirTurnRender()
 
             if turning == 0 then
                 return
+            end
+
+            --// If the camera is looking backwards relative to the
+            --// current horizontal movement, invert A/D so the same
+            --// physical strafe side remains consistent.
+            local camera =
+                workspace.CurrentCamera
+
+            local horizontalLook
+            local horizontalVelocity
+
+            if camera then
+                pcall(function()
+                    local look =
+                        camera.CFrame.LookVector
+
+                    horizontalLook =
+                        Vector3.new(
+                            look.X,
+                            0,
+                            look.Z
+                        )
+                end)
+            end
+
+            pcall(function()
+                local velocity
+
+                if Registry then
+                    velocity =
+                        Registry:Get("Velocity")
+                end
+
+                if typeof(velocity) == "Vector3" then
+                    horizontalVelocity =
+                        Vector3.new(
+                            velocity.X,
+                            0,
+                            velocity.Z
+                        )
+                end
+            end)
+
+            if not horizontalVelocity
+                or horizontalVelocity.Magnitude
+                    < 0.001
+            then
+                pcall(function()
+                    local velocity =
+                        mainJump.root
+                        and mainJump.root.AssemblyLinearVelocity
+
+                    if typeof(velocity) == "Vector3" then
+                        horizontalVelocity =
+                            Vector3.new(
+                                velocity.X,
+                                0,
+                                velocity.Z
+                            )
+                    end
+                end)
+            end
+
+            if horizontalLook
+                and horizontalVelocity
+                and horizontalLook.Magnitude
+                    > 0.001
+                and horizontalVelocity.Magnitude
+                    > 0.001
+            then
+                horizontalLook =
+                    horizontalLook.Unit
+
+                horizontalVelocity =
+                    horizontalVelocity.Unit
+
+                if horizontalLook:Dot(
+                    horizontalVelocity
+                ) < 0
+                then
+                    turning =
+                        -turning
+                end
             end
 
             local movementState =
