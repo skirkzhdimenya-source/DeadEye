@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.116
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.117
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114 -> v1.115 -> v1.116.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114 -> v1.115 -> v1.116 -> v1.117.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.116"
+local SCRIPT_VERSION = "1.117"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -66,6 +66,8 @@ local function purgeStaleMainJumpSensors()
                 or object.Name == "FrontJumpSensor"
                 or object.Name == "LookFootJumpSensor"
                 or object.Name == "LookFrontJumpSensor"
+                or object.Name == "JumpForwardSensorExtra"
+                or object.Name == "LookForwardSensorExtra"
             )
         then
             pcall(function()
@@ -233,6 +235,10 @@ function loadSavedConfig()
     savedConfig.main.hideUIHotkey =
         savedConfig.main.hideUIHotkey
         or "H"
+
+    if savedConfig.main.rageLook ~= true then
+        savedConfig.main.rageLook = false
+    end
 
     if type(decoded.gui) == "table" then
         savedConfig.gui = savedConfig.gui or {}
@@ -10196,7 +10202,10 @@ local mainJump = {
     frontSensorPart = nil,
     lookSensorPart = nil,
     lookFrontSensorPart = nil,
+    jumpForwardSensorPart = nil,
+    lookForwardSensorPart = nil,
     sensorTouchConnection = nil,
+    jumpForwardSensorTouchConnection = nil,
     lookAutoJumpCycle = false,
     lookWatcherConnection = nil,
     lookTriggeredThisAir = false,
@@ -10605,6 +10614,7 @@ end
 
 function mainJump.beginLook()
     if not mainJump.lookEnabled
+        or mainJump.rageLookEnabled
         or not mainJump.enabled
         or not mainJump.lookAutoJumpCycle
         or cleaned
@@ -10982,36 +10992,26 @@ end
 --// =========================================================
 --// RAGE LOOK
 --//
---// Independent from normal LOOK.
---// The player sees the real camera CFrame.
---// The game's Air movement calculation can see a temporary
---// fake CFrame with the same yaw and pitch ~= -89 degrees.
+--// RAGE LOOK is completely separate from normal LOOK.
+--// IMPORTANT: it NEVER writes Camera.CFrame.
+--//
+--// The confirmed Air function currently has 5 parameters.
+--// We replace a CFrame argument with a fake downward CFrame
+--// only for the Air call itself. The real camera remains untouched.
+--// If the Air function does not receive a CFrame argument,
+--// RAGE LOOK stays OFF and prints a diagnostic instead of
+--// falling back to visually rotating the camera.
 --// =========================================================
-local RAGE_LOOK_PITCH = -math.rad(89)
+local RAGE_LOOK_PITCH =
+    -math.rad(89)
 
-function mainJump.getRageLookFakeCFrame(camera)
-    if not camera then
+function mainJump.getRageLookFakeCFrame(realCFrame)
+    if typeof(realCFrame) ~= "CFrame" then
         return nil
     end
 
-    local realCFrame =
-        camera.CFrame
-
-    local yaw
-    local ok =
-        pcall(function()
-            local _, currentYaw =
-                realCFrame:ToOrientation()
-
-            yaw =
-                currentYaw
-        end)
-
-    if not ok
-        or not yaw
-    then
-        return nil
-    end
+    local _, yaw =
+        realCFrame:ToOrientation()
 
     return
         CFrame.new(
@@ -11024,11 +11024,7 @@ function mainJump.getRageLookFakeCFrame(camera)
         )
 end
 
-function mainJump.withRageLookCamera(callback)
-    if type(callback) ~= "function" then
-        return false
-    end
-
+function mainJump.patchRageLookArguments(args)
     local camera =
         workspace.CurrentCamera
 
@@ -11036,217 +11032,30 @@ function mainJump.withRageLookCamera(callback)
         return false
     end
 
-    local originalCFrame =
+    local visualCFrame =
         camera.CFrame
 
-    local fakeCFrame =
-        mainJump.getRageLookFakeCFrame(
-            camera
-        )
+    local patched = false
 
-    if not fakeCFrame then
-        return false
-    end
+    for index = 1, args.n do
+        if typeof(args[index]) == "CFrame" then
+            local fake =
+                mainJump.getRageLookFakeCFrame(
+                    visualCFrame
+                )
 
-    local restored = false
+            if fake then
+                args[index] =
+                    fake
+                patched = true
+            end
 
-    local function restore()
-        if restored then
-            return
+            --// Air should have one camera/look CFrame argument.
+            break
         end
-
-        restored = true
-
-        pcall(function()
-            camera.CFrame =
-                originalCFrame
-        end)
-
-        mainJump.rageLookSavedCFrame = nil
-        mainJump.rageLookCameraSpoofed = false
     end
 
-    mainJump.rageLookSavedCFrame =
-        originalCFrame
-    mainJump.rageLookCameraSpoofed =
-        true
-
-    local ok, packed =
-        pcall(function()
-            camera.CFrame =
-                fakeCFrame
-
-            return table.pack(
-                callback()
-            )
-        end)
-
-    restore()
-
-    if not ok then
-        error(
-            packed,
-            0
-        )
-    end
-
-    return table.unpack(
-        packed,
-        1,
-        packed.n
-    )
-end
-
-function mainJump.beginRageLookFallback()
-    if not mainJump.rageLookEnabled
-        or mainJump.rageLookHookInstalled
-        or mainJump.rageLookCameraSpoofed
-    then
-        return
-    end
-
-    local camera =
-        workspace.CurrentCamera
-
-    if not camera then
-        return
-    end
-
-    local fakeCFrame =
-        mainJump.getRageLookFakeCFrame(
-            camera
-        )
-
-    if not fakeCFrame then
-        return
-    end
-
-    mainJump.rageLookSavedCFrame =
-        camera.CFrame
-    mainJump.rageLookCameraSpoofed =
-        true
-
-    pcall(function()
-        camera.CFrame =
-            fakeCFrame
-    end)
-end
-
-function mainJump.endRageLookFallback()
-    if not mainJump.rageLookCameraSpoofed then
-        return
-    end
-
-    local camera =
-        workspace.CurrentCamera
-
-    local saved =
-        mainJump.rageLookSavedCFrame
-
-    mainJump.rageLookSavedCFrame = nil
-    mainJump.rageLookCameraSpoofed = false
-
-    if camera
-        and saved
-    then
-        pcall(function()
-            camera.CFrame =
-                saved
-        end)
-    end
-end
-
-function mainJump.unbindRageLookFallback()
-    if mainJump.rageLookFallbackPreConnection then
-        pcall(function()
-            mainJump.rageLookFallbackPreConnection:Disconnect()
-        end)
-        mainJump.rageLookFallbackPreConnection = nil
-    end
-
-    if mainJump.rageLookFallbackPostConnection then
-        pcall(function()
-            mainJump.rageLookFallbackPostConnection:Disconnect()
-        end)
-        mainJump.rageLookFallbackPostConnection = nil
-    end
-
-    if mainJump.rageLookFallbackHeartbeatConnection then
-        pcall(function()
-            mainJump.rageLookFallbackHeartbeatConnection:Disconnect()
-        end)
-        mainJump.rageLookFallbackHeartbeatConnection = nil
-    end
-
-    if mainJump.rageLookFallbackRenderConnection then
-        pcall(function()
-            mainJump.rageLookFallbackRenderConnection:Disconnect()
-        end)
-        mainJump.rageLookFallbackRenderConnection = nil
-    end
-
-    mainJump.endRageLookFallback()
-end
-
-function mainJump.bindRageLookFallback()
-    if mainJump.rageLookHookInstalled
-        or mainJump.rageLookFallbackPreConnection
-        or mainJump.rageLookFallbackHeartbeatConnection
-    then
-        return true
-    end
-
-    if RunService.PreSimulation
-        and RunService.PostSimulation
-    then
-        mainJump.rageLookFallbackPreConnection =
-            RunService.PreSimulation:Connect(
-                function()
-                    if mainJump.rageLookEnabled
-                        and not cleaned
-                    then
-                        mainJump.beginRageLookFallback()
-                    end
-                end
-            )
-
-        mainJump.rageLookFallbackPostConnection =
-            RunService.PostSimulation:Connect(
-                function()
-                    mainJump.endRageLookFallback()
-                end
-            )
-
-        mainJump.rageLookMode =
-            "PreSimulation/PostSimulation"
-
-        return true
-    end
-
-    mainJump.rageLookFallbackHeartbeatConnection =
-        RunService.Heartbeat:Connect(
-            function()
-                if mainJump.rageLookEnabled
-                    and not cleaned
-                then
-                    mainJump.beginRageLookFallback()
-                else
-                    mainJump.endRageLookFallback()
-                end
-            end
-        )
-
-    mainJump.rageLookFallbackRenderConnection =
-        RunService.RenderStepped:Connect(
-            function()
-                mainJump.endRageLookFallback()
-            end
-        )
-
-    mainJump.rageLookMode =
-        "Heartbeat/RenderStepped"
-
-    return true
+    return patched
 end
 
 function mainJump.findRageLookAirFunction()
@@ -11270,7 +11079,20 @@ function mainJump.findRageLookAirFunction()
         return nil
     end
 
-    local function tryRequireNode(node)
+    local moveFunction =
+        movementRoot:FindFirstChild(
+            "MoveFunction"
+        )
+
+    local functionsNode =
+        moveFunction
+        and moveFunction:FindFirstChild(
+            "Functions"
+        )
+
+    --// Requiring these nodes is attempted only to expose the
+    --// already-loaded Air function. No camera is touched.
+    local function findInModule(node)
         if not node
             or not node:IsA("ModuleScript")
         then
@@ -11301,42 +11123,30 @@ function mainJump.findRageLookAirFunction()
         return nil
     end
 
-    local moveFunction =
-        movementRoot:FindFirstChild(
-            "MoveFunction"
+    local air =
+        findInModule(
+            functionsNode
         )
 
-    if moveFunction then
-        local functionsNode =
-            moveFunction:FindFirstChild(
-                "Functions"
-            )
-
-        local air =
-            tryRequireNode(
-                functionsNode
-            )
-
-        if air then
-            return air
-        end
-
-        air =
-            tryRequireNode(
-                moveFunction
-            )
-
-        if air then
-            return air
-        end
+    if air then
+        return air
     end
 
+    air =
+        findInModule(
+            moveFunction
+        )
+
+    if air then
+        return air
+    end
+
+    --// Runtime discovery based on the confirmed source location.
     if type(getgc) == "function"
         and debug
         and type(debug.getinfo) == "function"
     then
         local objects
-
         local ok =
             pcall(function()
                 objects =
@@ -11404,6 +11214,9 @@ function mainJump.installRageLookHook()
     end
 
     if type(hookfunction) ~= "function" then
+        warn(
+            "[DeadEye] Rage Look: hookfunction unavailable"
+        )
         return false
     end
 
@@ -11411,10 +11224,14 @@ function mainJump.installRageLookHook()
         mainJump.findRageLookAirFunction()
 
     if type(air) ~= "function" then
+        warn(
+            "[DeadEye] Rage Look: Air function not found"
+        )
         return false
     end
 
     local original
+    local loggedArgumentTypes = false
 
     local ok =
         pcall(function()
@@ -11422,25 +11239,57 @@ function mainJump.installRageLookHook()
                 hookfunction(
                     air,
                     function(...)
-                        if not mainJump.rageLookEnabled
-                            or cleaned
-                        then
-                            return original(...)
-                        end
-
                         local args =
                             table.pack(...)
 
-                        return mainJump.withRageLookCamera(
-                            function()
-                                return original(
-                                    table.unpack(
-                                        args,
-                                        1,
-                                        args.n
-                                    )
+                        if not mainJump.rageLookEnabled
+                            or cleaned
+                        then
+                            return original(
+                                table.unpack(
+                                    args,
+                                    1,
+                                    args.n
                                 )
+                            )
+                        end
+
+                        local patched =
+                            mainJump.patchRageLookArguments(
+                                args
+                            )
+
+                        if not patched
+                            and not loggedArgumentTypes
+                        then
+                            loggedArgumentTypes = true
+
+                            local types = {}
+
+                            for index = 1, args.n do
+                                types[index] =
+                                    tostring(
+                                        typeof(
+                                            args[index]
+                                        )
+                                    )
                             end
+
+                            warn(
+                                "[DeadEye] Rage Look: Air has no CFrame argument. Types =",
+                                table.concat(
+                                    types,
+                                    ", "
+                                )
+                            )
+                        end
+
+                        return original(
+                            table.unpack(
+                                args,
+                                1,
+                                args.n
+                            )
                         )
                     end
                 )
@@ -11464,7 +11313,7 @@ function mainJump.installRageLookHook()
         true
 
     mainJump.rageLookMode =
-        "Air hook"
+        "Air CFrame argument"
 
     return true
 end
@@ -11501,49 +11350,43 @@ function mainJump.uninstallRageLookHook()
     mainJump.rageLookOriginalAir =
         nil
 
-    if mainJump.rageLookMode
-        == "Air hook"
-    then
-        mainJump.rageLookMode = nil
-    end
+    mainJump.rageLookMode =
+        nil
 end
 
 function mainJump.setRageLookEnabled(state)
     state =
         state and true or false
 
-    if state == mainJump.rageLookEnabled
-        and (
-            not state
-            or mainJump.rageLookHookInstalled
-            or mainJump.rageLookFallbackPreConnection
-            or mainJump.rageLookFallbackHeartbeatConnection
-        )
-    then
-        mainJump.update()
-        return
-    end
-
-    mainJump.rageLookEnabled =
-        false
-
     if state then
+        if mainJump.rageLookEnabled then
+            mainJump.update()
+            return
+        end
+
+        --// Normal LOOK is the only part that intentionally
+        --// rotates the visible camera. Disable its active cycle
+        --// while RAGE LOOK is enabled.
+        if mainJump.lookActive
+            or mainJump.lookRestoring
+        then
+            mainJump.endLook()
+        end
+
         local hooked =
             mainJump.installRageLookHook()
 
-        mainJump.rageLookEnabled =
-            true
-
-        if hooked then
-            mainJump.unbindRageLookFallback()
-        else
-            mainJump.bindRageLookFallback()
+        if not hooked then
+            mainJump.rageLookEnabled = false
+            mainJump.update()
+            return false
         end
+
+        mainJump.rageLookEnabled = true
+
     else
-        mainJump.unbindRageLookFallback()
-        mainJump.uninstallRageLookHook()
-        mainJump.endRageLookFallback()
         mainJump.rageLookEnabled = false
+        mainJump.uninstallRageLookHook()
     end
 
     if mainJump.rageLookMode then
@@ -11551,19 +11394,23 @@ function mainJump.setRageLookEnabled(state)
             "[DeadEye] Rage Look mode =",
             mainJump.rageLookMode
         )
-    elseif state then
-        warn(
-            "[DeadEye] Rage Look could not install a mode"
-        )
     end
 
     mainJump.saveConfig()
     mainJump.update()
+
+    return true
 end
 
 function mainJump.setLookEnabled(state)
     mainJump.lookEnabled =
         state and true or false
+
+    if mainJump.lookEnabled
+        and mainJump.rageLookEnabled
+    then
+        mainJump.lookEnabled = false
+    end
 
     if not mainJump.lookEnabled then
         mainJump.endLook()
@@ -11860,11 +11707,20 @@ function mainJump.destroySensors()
         mainJump.frontSensorTouchConnection = nil
     end
 
+    if mainJump.jumpForwardSensorTouchConnection then
+        pcall(function()
+            mainJump.jumpForwardSensorTouchConnection:Disconnect()
+        end)
+        mainJump.jumpForwardSensorTouchConnection = nil
+    end
+
     for _, key in ipairs({
         "sensorPart",
         "frontSensorPart",
+        "jumpForwardSensorPart",
         "lookSensorPart",
-        "lookFrontSensorPart"
+        "lookFrontSensorPart",
+        "lookForwardSensorPart"
     }) do
         local sensor =
             mainJump[key]
@@ -12263,62 +12119,73 @@ function mainJump.lookScannerSeesSurface()
 
     params.IgnoreWater = true
 
-    local rayOrigin =
-        mainJump.root.Position
-        + Vector3.new(
-            0,
-            -0.75,
-            0
-        )
-
     local rayLength =
         7.5
 
-    local result
+    local origins = {
+        mainJump.root.Position
+            + Vector3.new(
+                0,
+                -0.75,
+                0
+            )
+    }
 
-    local ok =
-        pcall(function()
-            result =
-                workspace:Raycast(
-                    rayOrigin,
-                    Vector3.new(
-                        0,
-                        -rayLength,
-                        0
-                    ),
-                    params
-                )
-        end)
-
-    if not ok
-        or not result
+    if mainJump.lookForwardSensorPart
+        and mainJump.lookForwardSensorPart.Parent
     then
-        return false
-    end
-
-    local instance =
-        result.Instance
-
-    local validSurface =
-        instance == workspace.Terrain
-        or (
-            instance
-            and instance:IsA("BasePart")
-            and instance.CanCollide
+        table.insert(
+            origins,
+            mainJump.lookForwardSensorPart.Position
         )
-
-    if not validSurface then
-        return false
     end
 
-    local distance =
-        (
-            rayOrigin
-            - result.Position
-        ).Magnitude
+    for _, origin in ipairs(origins) do
+        local result
 
-    return distance >= 2.0
-        and distance <= rayLength
+        local ok =
+            pcall(function()
+                result =
+                    workspace:Raycast(
+                        origin,
+                        Vector3.new(
+                            0,
+                            -rayLength,
+                            0
+                        ),
+                        params
+                    )
+            end)
+
+        if ok and result then
+            local instance =
+                result.Instance
+
+            local validSurface =
+                instance == workspace.Terrain
+                or (
+                    instance
+                    and instance:IsA("BasePart")
+                    and instance.CanCollide
+                )
+
+            if validSurface then
+                local distance =
+                    (
+                        origin
+                        - result.Position
+                    ).Magnitude
+
+                if distance >= 2.0
+                    and distance <= rayLength
+                then
+                    return true
+                end
+            end
+        end
+    end
+
+    return false
 end
 
 function mainJump.jump(hit)
@@ -12511,6 +12378,122 @@ function mainJump.createSensors(char)
         )
 
     --// =====================================================
+    --// EXTRA FORWARD JUMP SENSOR
+    --// Same shape/offset as FrontJumpSensor.
+    --// Kept as a separate physical sensor for map-dependent
+    --// contact detection.
+    --// =====================================================
+    local jumpForwardExtra =
+        Instance.new("Part")
+
+    jumpForwardExtra.Name =
+        "JumpForwardSensorExtra"
+
+    jumpForwardExtra.Size =
+        Vector3.new(
+            2,
+            3,
+            1
+        )
+
+    jumpForwardExtra.Transparency = 1
+    jumpForwardExtra.Anchored = false
+    jumpForwardExtra.CanCollide = false
+    jumpForwardExtra.CanTouch = true
+    jumpForwardExtra.CanQuery = false
+    jumpForwardExtra.Massless = true
+    jumpForwardExtra.CastShadow = false
+
+    jumpForwardExtra.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -1,
+            -0.8
+        )
+
+    jumpForwardExtra.Parent =
+        char
+
+    local jumpForwardExtraWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    jumpForwardExtraWeld.Part0 =
+        mainJump.root
+
+    jumpForwardExtraWeld.Part1 =
+        jumpForwardExtra
+
+    jumpForwardExtraWeld.Parent =
+        jumpForwardExtra
+
+    mainJump.jumpForwardSensorPart =
+        jumpForwardExtra
+
+    mainJump.jumpForwardSensorTouchConnection =
+        jumpForwardExtra.Touched:Connect(
+            function(hit)
+                mainJump.contact(hit)
+            end
+        )
+
+    --// =====================================================
+    --// EXTRA FORWARD LOOK SENSOR
+    --// Same shape/offset as FrontJumpSensor.
+    --// It is used as an additional forward/downward probe.
+    --// =====================================================
+    local lookForwardExtra =
+        Instance.new("Part")
+
+    lookForwardExtra.Name =
+        "LookForwardSensorExtra"
+
+    lookForwardExtra.Size =
+        Vector3.new(
+            2,
+            3,
+            1
+        )
+
+    lookForwardExtra.Transparency = 1
+    lookForwardExtra.Anchored = false
+    lookForwardExtra.CanCollide = false
+    lookForwardExtra.CanTouch = false
+    lookForwardExtra.CanQuery = true
+    lookForwardExtra.Massless = true
+    lookForwardExtra.CastShadow = false
+
+    lookForwardExtra.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -1,
+            -0.8
+        )
+
+    lookForwardExtra.Parent =
+        char
+
+    local lookForwardExtraWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    lookForwardExtraWeld.Part0 =
+        mainJump.root
+
+    lookForwardExtraWeld.Part1 =
+        lookForwardExtra
+
+    lookForwardExtraWeld.Parent =
+        lookForwardExtra
+
+    mainJump.lookForwardSensorPart =
+        lookForwardExtra
+
+    --// =====================================================
     --// LOOK-ONLY SENSORS
     --// Small pre-landing detection band.
     --// They never call AutoJump and have no touch counters.
@@ -12609,6 +12592,7 @@ function mainJump.createSensors(char)
                     or cleaned
                     or not mainJump.enabled
                     or not mainJump.lookEnabled
+                    or mainJump.rageLookEnabled
                     or not mainJump.humanoid
                     or not mainJump.root
                 then
