@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.109
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.110
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.109"
+local SCRIPT_VERSION = "1.110"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10183,6 +10183,8 @@ local mainJump = {
     lookFrontSensorPart = nil,
     sensorTouchConnection = nil,
     lookAutoJumpCycle = false,
+    lookWatcherConnection = nil,
+    manualJumpActive = false,
     frontSensorTouchConnection = nil,
     connections = {}
 }
@@ -10250,8 +10252,8 @@ end
 local LOOK_RENDER_NAME = "DeadEyeMainLook"
 local LOOK_INPUT_RADIANS = 0.00575958658
 local LOOK_TARGET_PITCH = -math.rad(89)
-local LOOK_MAX_INPUT = 6
-local LOOK_PITCH_GAIN = 0.25
+local LOOK_MAX_INPUT = 18
+local LOOK_PITCH_GAIN = 0.45
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
 local LOOK_MIN_ACTIVE = 0.08
 local LOOK_MAX_AFTER_JUMP = 0.22
@@ -10702,11 +10704,7 @@ function mainJump.setEnabled(state)
                     return
                 end
                 if mainJump.canJump() then
-                    if mainJump.lookEnabled then
-                        mainJump.lookAutoJumpCycle = true
-                        mainJump.beginLook()
-                    end
-
+                    mainJump.lookAutoJumpCycle = true
                     mainJump.jump()
                 end
             end)
@@ -10716,6 +10714,15 @@ function mainJump.setEnabled(state)
         mainJump.destroySensors()
 
         mainJump.lookAutoJumpCycle = false
+        mainJump.manualJumpActive = false
+
+        if mainJump.lookWatcherConnection then
+            pcall(function()
+                mainJump.lookWatcherConnection:Disconnect()
+            end)
+            mainJump.lookWatcherConnection = nil
+        end
+
         mainJump.endLook()
 
         if mainJump.humanoid
@@ -10838,6 +10845,15 @@ function mainJump.startCapture(kind)
     end
 end
 function mainJump.destroySensors()
+    if mainJump.lookWatcherConnection then
+        pcall(function()
+            mainJump.lookWatcherConnection:Disconnect()
+        end)
+        mainJump.lookWatcherConnection = nil
+    end
+
+    mainJump.manualJumpActive = false
+
     if mainJump.sensorTouchConnection then
         pcall(function()
             mainJump.sensorTouchConnection:Disconnect()
@@ -11332,11 +11348,6 @@ function mainJump.contact(hit)
         return
     end
 
-    if mainJump.lookEnabled then
-        mainJump.lookAutoJumpCycle = true
-        mainJump.beginLook()
-    end
-
     task.wait(
         mainJump.jumpDelay
     )
@@ -11554,6 +11565,67 @@ function mainJump.createSensors(char)
 
     mainJump.lookFrontSensorPart =
         lookFront
+
+    --// =====================================================
+    --// LOOK PRE-LANDING WATCHER
+    --// =====================================================
+    --// Runs only while AutoJump is enabled. It waits for the
+    --// character to be descending and for the separate LOOK
+    --// sensor to see the landing surface. This is deliberately
+    --// earlier than the normal AutoJump Touched event.
+    mainJump.lookWatcherConnection =
+        RunService.Heartbeat:Connect(
+            function()
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or cleaned
+                    or not mainJump.enabled
+                    or not mainJump.lookEnabled
+                    or not mainJump.humanoid
+                    or not mainJump.root
+                then
+                    return
+                end
+
+                if mainJump.manualJumpActive then
+                    if mainJump.humanoid.FloorMaterial
+                        ~= Enum.Material.Air
+                    then
+                        mainJump.manualJumpActive = false
+                    else
+                        return
+                    end
+                end
+
+                local state
+                local verticalVelocity = 0
+
+                pcall(function()
+                    state =
+                        mainJump.humanoid:GetState()
+                    verticalVelocity =
+                        mainJump.root.AssemblyLinearVelocity.Y
+                end)
+
+                if not state
+                    or (
+                        state
+                            ~= Enum.HumanoidStateType.Freefall
+                        and state
+                            ~= Enum.HumanoidStateType.FallingDown
+                    )
+                    or verticalVelocity >= -0.05
+                then
+                    return
+                end
+
+                if not mainJump.lookActive
+                    and mainJump.lookScannerSeesSurface()
+                then
+                    mainJump.lookAutoJumpCycle = true
+                    mainJump.beginLook()
+                end
+            end
+        )
 end
 genv.DEADEYE_MAIN_RUNNING = true
 mainPage =
@@ -12113,6 +12185,23 @@ mainConnect(
     UserInputService.JumpRequest:Connect(
         function()
             if mainJump.enabled
+                and mainJump.humanoid
+                and mainJump.humanoid.Parent
+            then
+                mainJump.manualJumpActive = true
+                mainJump.lookAutoJumpCycle = false
+
+                if mainJump.lookActive then
+                    mainJump.endLook()
+                end
+            end
+        end
+    )
+)
+mainConnect(
+    UserInputService.JumpRequest:Connect(
+        function()
+            if mainJump.enabled
                 or not genv.DEADEYE_MAIN_RUNNING
                 or not mainJump.needsInputRearm
                 or not mainJump.humanoid
@@ -12208,6 +12297,36 @@ mainConnect(
         end
     )
 )
+mainConnect(
+    LocalPlayer.CharacterAdded:Connect(
+        function(char)
+            task.defer(function()
+                local humanoid =
+                    char:FindFirstChildOfClass(
+                        "Humanoid"
+                    )
+
+                if not humanoid then
+                    return
+                end
+
+                humanoid.StateChanged:Connect(
+                    function(_, newState)
+                        if newState
+                                == Enum.HumanoidStateType.Landed
+                            or newState
+                                == Enum.HumanoidStateType.Running
+                        then
+                            mainJump.manualJumpActive =
+                                false
+                        end
+                    end
+                )
+            end)
+        end
+    )
+)
+
 mainConnect(
     UserInputService.InputEnded:Connect(
         function(input)
