@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.121"
+local SCRIPT_VERSION = "1.122"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11026,16 +11026,43 @@ function mainJump.getRageLookFakeCFrame(
         return nil
     end
 
-    local _, yaw =
-        realCFrame:ToOrientation()
+    --// Preserve the real horizontal look direction.
+    --// Do not derive yaw with ToOrientation() at steep pitch.
+
+    local lookVector =
+        realCFrame.LookVector
+
+    local flatLook =
+        Vector3.new(
+            lookVector.X,
+            0,
+            lookVector.Z
+        )
+
+    if flatLook.Magnitude < 0.000001 then
+        flatLook =
+            Vector3.new(
+                0,
+                0,
+                -1
+            )
+    else
+        flatLook =
+            flatLook.Unit
+    end
+
+    local baseCFrame =
+        CFrame.lookAt(
+            realCFrame.Position,
+            realCFrame.Position + flatLook,
+            Vector3.yAxis
+        )
 
     return
-        CFrame.new(
-            realCFrame.Position
-        )
-        * CFrame.fromOrientation(
+        baseCFrame
+        * CFrame.Angles(
             RAGE_LOOK_PITCH,
-            yaw,
+            0,
             0
         )
 end
