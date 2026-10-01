@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.111
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.112
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.111"
+local SCRIPT_VERSION = "1.112"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10252,11 +10252,11 @@ end
 local LOOK_RENDER_NAME = "DeadEyeMainLook"
 local LOOK_INPUT_RADIANS = 0.00575958658
 local LOOK_TARGET_PITCH = -math.rad(89)
-local LOOK_MAX_INPUT = 18
-local LOOK_PITCH_GAIN = 0.45
+local LOOK_MAX_INPUT = 12
+local LOOK_PITCH_GAIN = 0.32
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
-local LOOK_MIN_ACTIVE = 0.08
-local LOOK_MAX_AFTER_JUMP = 0.22
+local LOOK_MIN_ACTIVE = 0.10
+local LOOK_MAX_AFTER_JUMP = 0.30
 
 mainJump.lookRenderBound = false
 mainJump.lookRestoreDeadline = 0
@@ -11483,7 +11483,7 @@ function mainJump.createSensors(char)
 
     --// =====================================================
     --// LOOK-ONLY SENSORS
-    --// Roughly 2x the useful downward detection range.
+    --// Small pre-landing detection band.
     --// They never call AutoJump and have no touch counters.
     --// =====================================================
     local lookSensor =
@@ -11493,7 +11493,7 @@ function mainJump.createSensors(char)
     lookSensor.Size =
         Vector3.new(
             2.6,
-            7,
+            1.0,
             2.6
         )
     lookSensor.Transparency = 1
@@ -11507,7 +11507,7 @@ function mainJump.createSensors(char)
         mainJump.root.CFrame
         * CFrame.new(
             0,
-            -3.5,
+            -4.8,
             0
         )
     lookSensor.Parent = char
@@ -11533,7 +11533,7 @@ function mainJump.createSensors(char)
     lookFront.Size =
         Vector3.new(
             2,
-            7,
+            1.0,
             1
         )
     lookFront.Transparency = 1
@@ -11547,7 +11547,7 @@ function mainJump.createSensors(char)
         mainJump.root.CFrame
         * CFrame.new(
             0,
-            -3.5,
+            -4.8,
             -0.8
         )
     lookFront.Parent = char
