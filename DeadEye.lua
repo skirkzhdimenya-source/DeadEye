@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.107
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.108
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.107"
+local SCRIPT_VERSION = "1.108"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10210,10 +10210,12 @@ local LOOK_TARGET_PITCH = -math.rad(89)
 local LOOK_MAX_INPUT = 22
 local LOOK_PITCH_GAIN = 0.35
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
-local LOOK_MAX_AFTER_JUMP = 0.12
+local LOOK_MIN_ACTIVE = 0.08
+local LOOK_MAX_AFTER_JUMP = 0.22
 
 mainJump.lookRenderBound = false
 mainJump.lookRestoreDeadline = 0
+mainJump.lookMinActiveDeadline = 0
 
 local function mainLookAngleDelta(target, current)
     return math.atan2(
@@ -10334,6 +10336,7 @@ function mainJump.finishLookRestore()
     mainJump.lookActive = false
     mainJump.lookRestoring = false
     mainJump.lookRestoreDeadline = 0
+    mainJump.lookMinActiveDeadline = 0
     mainJump.lookAutoJumpCycle = false
 
     mainJump.unbindLookRender()
@@ -10446,13 +10449,26 @@ function mainJump.bindLookRender()
                 return
             end
 
-            if mainJump.lookActive
-                and mainJump.lookRestoreDeadline > 0
-                and tick()
-                    >= mainJump.lookRestoreDeadline
-            then
-                mainJump.endLook()
-                return
+            if mainJump.lookActive then
+                local now =
+                    tick()
+
+                if mainJump.lookRestoreDeadline > 0
+                    and now
+                        >= mainJump.lookRestoreDeadline
+                then
+                    mainJump.endLook()
+                    return
+                end
+
+                if mainJump.lookMinActiveDeadline > 0
+                    and now
+                        >= mainJump.lookMinActiveDeadline
+                    and not mainJump.lookScannerSeesSurface()
+                then
+                    mainJump.endLook()
+                    return
+                end
             end
 
             local movementState =
@@ -10534,7 +10550,12 @@ function mainJump.beginLook()
 
     mainJump.lookActive = true
     mainJump.lookRestoring = false
-    mainJump.lookRestoreDeadline = 0
+    mainJump.lookRestoreDeadline =
+        tick()
+        + LOOK_MAX_AFTER_JUMP
+    mainJump.lookMinActiveDeadline =
+        tick()
+        + LOOK_MIN_ACTIVE
 
     mainJump.findLookMovementState()
     mainJump.bindLookRender()
@@ -10638,6 +10659,11 @@ function mainJump.setEnabled(state)
                     return
                 end
                 if mainJump.canJump() then
+                    if mainJump.lookEnabled then
+                        mainJump.lookAutoJumpCycle = true
+                        mainJump.beginLook()
+                    end
+
                     mainJump.jump()
                 end
             end)
@@ -11163,6 +11189,9 @@ function mainJump.canJump()
 end
 
 function mainJump.lookScannerSeesSurface()
+    --// LOOK is activated only by an AutoJump-triggered contact.
+    --// These separate sensors only decide when the short LOOK window
+    --// has ended. No Touched/TouchEnded counters are used.
     if not mainJump.lookEnabled
         or not mainJump.enabled
     then
@@ -11221,6 +11250,12 @@ function mainJump.jump(hit)
         and mainJump.lookActive
     then
         mainJump.lookAutoJumpCycle = true
+        mainJump.lookRestoreDeadline =
+            tick()
+            + LOOK_MAX_AFTER_JUMP
+        mainJump.lookMinActiveDeadline =
+            tick()
+            + LOOK_MIN_ACTIVE
     end
 
     mainJump.humanoid.Jump = true
@@ -11254,9 +11289,7 @@ function mainJump.contact(hit)
         return
     end
 
-    if mainJump.lookEnabled
-        and mainJump.lookScannerSeesSurface()
-    then
+    if mainJump.lookEnabled then
         mainJump.lookAutoJumpCycle = true
         mainJump.beginLook()
     end
