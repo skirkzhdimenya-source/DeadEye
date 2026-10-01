@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.112
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.113
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.112"
+local SCRIPT_VERSION = "1.113"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -86,6 +86,11 @@ end)
 if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP then
     pcall(function()
         genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP()
+    end)
+end
+if genv.DEADEYE_MAIN_AIR_TURN_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_MAIN_AIR_TURN_CLEANUP()
     end)
 end
 --// =========================================================
@@ -148,7 +153,9 @@ local savedConfig = {
         jumpDelay = 0.01,
         hotkey = "Z",
         hideUIHotkey = "H",
-        look = false
+        look = false,
+        airTurn = false,
+        airTurnSpeed = 180
     },
     gui = {
         x = 35,
@@ -10168,6 +10175,8 @@ genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CONNECTION = true
 local mainJump = {
     enabled = false,
     lookEnabled = false,
+    airTurnEnabled = false,
+    airTurnSpeed = 180,
     jumpDelay = 0.01,
     hotkeyName = "Z",
     hideUIHotkeyName = "H",
@@ -10213,6 +10222,19 @@ mainJump.lookEnabled =
     savedConfig.main
     and savedConfig.main.look == true
     or false
+mainJump.airTurnEnabled =
+    savedConfig.main
+    and savedConfig.main.airTurn == true
+    or false
+mainJump.airTurnSpeed =
+    math.clamp(
+        tonumber(
+            savedConfig.main
+            and savedConfig.main.airTurnSpeed
+        ) or 180,
+        30,
+        360
+    )
 local function mainConnect(connection)
     table.insert(
         mainJump.connections,
@@ -10237,7 +10259,9 @@ function mainJump.saveConfig()
         hotkey = mainJump.hotkeyName,
         hideUIHotkey =
             mainJump.hideUIHotkeyName,
-        look = mainJump.lookEnabled
+        look = mainJump.lookEnabled,
+        airTurn = mainJump.airTurnEnabled,
+        airTurnSpeed = mainJump.airTurnSpeed
     }
     pcall(function()
         saveSavedConfig()
@@ -10621,6 +10645,241 @@ function mainJump.endLook()
     mainJump.bindLookRender()
 end
 
+
+local AIR_TURN_RENDER_NAME =
+    "DeadEyeMainAirTurn"
+
+local AIR_TURN_MIN_SPEED = 30
+local AIR_TURN_MAX_SPEED = 360
+
+mainJump.airTurnRenderBound = false
+
+function mainJump.unbindAirTurnRender()
+    if not mainJump.airTurnRenderBound then
+        return
+    end
+
+    pcall(function()
+        RunService:UnbindFromRenderStep(
+            AIR_TURN_RENDER_NAME
+        )
+    end)
+
+    mainJump.airTurnRenderBound = false
+end
+
+function mainJump.bindAirTurnRender()
+    if mainJump.airTurnRenderBound then
+        return
+    end
+
+    pcall(function()
+        RunService:UnbindFromRenderStep(
+            AIR_TURN_RENDER_NAME
+        )
+    end)
+
+    mainJump.airTurnRenderBound = true
+
+    RunService:BindToRenderStep(
+        AIR_TURN_RENDER_NAME,
+        Enum.RenderPriority.Camera.Value - 2,
+        function(deltaTime)
+            if not genv.DEADEYE_MAIN_RUNNING
+                or cleaned
+                or not mainJump.airTurnEnabled
+            then
+                mainJump.unbindAirTurnRender()
+                return
+            end
+
+            local turning =
+                0
+
+            local wDown =
+                false
+            local aDown =
+                false
+            local dDown =
+                false
+
+            pcall(function()
+                wDown =
+                    UserInputService:IsKeyDown(
+                        Enum.KeyCode.W
+                    )
+                aDown =
+                    UserInputService:IsKeyDown(
+                        Enum.KeyCode.A
+                    )
+                dDown =
+                    UserInputService:IsKeyDown(
+                        Enum.KeyCode.D
+                    )
+            end)
+
+            if not wDown then
+                return
+            end
+
+            if aDown
+                and not dDown
+            then
+                turning = -1
+            elseif dDown
+                and not aDown
+            then
+                turning = 1
+            end
+
+            if turning == 0 then
+                return
+            end
+
+            local movementState =
+                mainJump.findLookMovementState()
+
+            if not movementState then
+                return
+            end
+
+            local currentMovement =
+                Vector2.zero
+
+            pcall(function()
+                if typeof(
+                    movementState.Movement
+                ) == "Vector2"
+                then
+                    currentMovement =
+                        movementState.Movement
+                end
+            end)
+
+            local dt =
+                tonumber(deltaTime)
+                or 1 / 60
+
+            dt =
+                math.clamp(
+                    dt,
+                    1 / 240,
+                    1 / 30
+                )
+
+            local radiansPerFrame =
+                math.rad(
+                    mainJump.airTurnSpeed
+                )
+                * dt
+
+            local moveX =
+                radiansPerFrame
+                / LOOK_INPUT_RADIANS
+                * turning
+
+            pcall(function()
+                movementState.Movement =
+                    Vector2.new(
+                        moveX,
+                        currentMovement.Y
+                    )
+            end)
+        end
+    )
+end
+
+function mainJump.setAirTurnEnabled(state)
+    mainJump.airTurnEnabled =
+        state and true or false
+
+    if mainJump.airTurnEnabled then
+        mainJump.findLookMovementState()
+        mainJump.bindAirTurnRender()
+    else
+        mainJump.unbindAirTurnRender()
+    end
+
+    mainJump.saveConfig()
+    mainJump.update()
+end
+
+function mainJump.setAirTurnSpeed(value, persist)
+    local number =
+        tonumber(value)
+
+    if not number then
+        number =
+            mainJump.airTurnSpeed
+    end
+
+    mainJump.airTurnSpeed =
+        math.clamp(
+            math.floor(
+                number
+                + 0.5
+            ),
+            AIR_TURN_MIN_SPEED,
+            AIR_TURN_MAX_SPEED
+        )
+
+    if mainJump.airTurnSpeedValue then
+        mainJump.airTurnSpeedValue.Text =
+            tostring(
+                mainJump.airTurnSpeed
+            )
+            .. "°/s"
+    end
+
+    if mainJump.airTurnSliderFill
+        and mainJump.airTurnSliderTrack
+    then
+        local alpha =
+            (
+                mainJump.airTurnSpeed
+                - AIR_TURN_MIN_SPEED
+            )
+            / (
+                AIR_TURN_MAX_SPEED
+                - AIR_TURN_MIN_SPEED
+            )
+
+        mainJump.airTurnSliderFill.Size =
+            UDim2.new(
+                alpha,
+                0,
+                1,
+                0
+            )
+    end
+
+    if mainJump.airTurnSliderKnob
+        and mainJump.airTurnSliderTrack
+    then
+        local alpha =
+            (
+                mainJump.airTurnSpeed
+                - AIR_TURN_MIN_SPEED
+            )
+            / (
+                AIR_TURN_MAX_SPEED
+                - AIR_TURN_MIN_SPEED
+            )
+
+        mainJump.airTurnSliderKnob.Position =
+            UDim2.new(
+                alpha,
+                -5,
+                0.5,
+                -5
+            )
+    end
+
+    if persist then
+        mainJump.saveConfig()
+    end
+end
+
 function mainJump.setLookEnabled(state)
     mainJump.lookEnabled =
         state and true or false
@@ -10671,6 +10930,28 @@ function mainJump.update()
             mainJump.lookToggle.Text =
                 "OFF"
             mainJump.lookToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end
+
+    if mainJump.airTurnToggle then
+        if mainJump.airTurnEnabled then
+            mainJump.airTurnToggle.Text =
+                "ON"
+            mainJump.airTurnToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            mainJump.airTurnToggle.Text =
+                "OFF"
+            mainJump.airTurnToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -11882,10 +12163,310 @@ mainConnect(
         end
     )
 )
+
+__UI.airTurnRow =
+    mainRow(
+        "AIR TURN",
+        3
+    )
+local airTurnLabel =
+    autoLabel:Clone()
+airTurnLabel.Text =
+    "AIR TURN"
+airTurnLabel.Parent =
+    __UI.airTurnRow
+
+mainJump.airTurnToggle =
+    Instance.new("TextButton")
+mainJump.airTurnToggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+mainJump.airTurnToggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+mainJump.airTurnToggle.BorderSizePixel =
+    0
+mainJump.airTurnToggle.TextSize =
+    10
+mainJump.airTurnToggle.Font =
+    Enum.Font.GothamBold
+mainJump.airTurnToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.airTurnToggle.Parent =
+    __UI.airTurnRow
+__UI.airTurnToggleCorner =
+    Instance.new("UICorner")
+__UI.airTurnToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+__UI.airTurnToggleCorner.Parent =
+    mainJump.airTurnToggle
+mainConnect(
+    mainJump.airTurnToggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setAirTurnEnabled(
+                not mainJump.airTurnEnabled
+            )
+        end
+    )
+)
+
+__UI.airTurnSpeedRow =
+    mainRow(
+        "TURN SPEED",
+        4
+    )
+local airTurnSpeedLabel =
+    autoLabel:Clone()
+airTurnSpeedLabel.Text =
+    "TURN SPEED"
+airTurnSpeedLabel.Parent =
+    __UI.airTurnSpeedRow
+
+mainJump.airTurnSliderTrack =
+    Instance.new("Frame")
+mainJump.airTurnSliderTrack.Size =
+    UDim2.new(
+        1,
+        -190,
+        0,
+        6
+    )
+mainJump.airTurnSliderTrack.Position =
+    UDim2.new(
+        0,
+        105,
+        0.5,
+        -3
+    )
+mainJump.airTurnSliderTrack.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.airTurnSliderTrack.BorderSizePixel =
+    0
+mainJump.airTurnSliderTrack.Active =
+    true
+mainJump.airTurnSliderTrack.Parent =
+    __UI.airTurnSpeedRow
+
+__UI.airTurnSliderTrackCorner =
+    Instance.new("UICorner")
+__UI.airTurnSliderTrackCorner.CornerRadius =
+    UDim.new(
+        1,
+        0
+    )
+__UI.airTurnSliderTrackCorner.Parent =
+    mainJump.airTurnSliderTrack
+
+mainJump.airTurnSliderFill =
+    Instance.new("Frame")
+mainJump.airTurnSliderFill.Size =
+    UDim2.new(
+        0,
+        0,
+        1,
+        0
+    )
+mainJump.airTurnSliderFill.BackgroundColor3 =
+    Color3.fromRGB(
+        82,
+        88,
+        100
+    )
+mainJump.airTurnSliderFill.BorderSizePixel =
+    0
+mainJump.airTurnSliderFill.Parent =
+    mainJump.airTurnSliderTrack
+
+__UI.airTurnSliderFillCorner =
+    Instance.new("UICorner")
+__UI.airTurnSliderFillCorner.CornerRadius =
+    UDim.new(
+        1,
+        0
+    )
+__UI.airTurnSliderFillCorner.Parent =
+    mainJump.airTurnSliderFill
+
+mainJump.airTurnSliderKnob =
+    Instance.new("Frame")
+mainJump.airTurnSliderKnob.Size =
+    UDim2.new(
+        0,
+        10,
+        0,
+        10
+    )
+mainJump.airTurnSliderKnob.AnchorPoint =
+    Vector2.new(
+        0,
+        0.5
+    )
+mainJump.airTurnSliderKnob.BackgroundColor3 =
+    Color3.fromRGB(
+        205,
+        205,
+        205
+    )
+mainJump.airTurnSliderKnob.BorderSizePixel =
+    0
+mainJump.airTurnSliderKnob.Parent =
+    mainJump.airTurnSliderTrack
+
+__UI.airTurnSliderKnobCorner =
+    Instance.new("UICorner")
+__UI.airTurnSliderKnobCorner.CornerRadius =
+    UDim.new(
+        1,
+        0
+    )
+__UI.airTurnSliderKnobCorner.Parent =
+    mainJump.airTurnSliderKnob
+
+mainJump.airTurnSpeedValue =
+    Instance.new("TextLabel")
+mainJump.airTurnSpeedValue.Size =
+    UDim2.new(
+        0,
+        62,
+        0,
+        28
+    )
+mainJump.airTurnSpeedValue.Position =
+    UDim2.new(
+        1,
+        -74,
+        0.5,
+        -14
+    )
+mainJump.airTurnSpeedValue.BackgroundTransparency =
+    1
+mainJump.airTurnSpeedValue.TextSize =
+    10
+mainJump.airTurnSpeedValue.Font =
+    Enum.Font.GothamBold
+mainJump.airTurnSpeedValue.TextColor3 =
+    Color3.fromRGB(
+        215,
+        215,
+        215
+    )
+mainJump.airTurnSpeedValue.TextXAlignment =
+    Enum.TextXAlignment.Right
+mainJump.airTurnSpeedValue.Parent =
+    __UI.airTurnSpeedRow
+
+local airTurnSliderDragging =
+    false
+
+local function updateAirTurnSliderFromX(x)
+    if not mainJump.airTurnSliderTrack then
+        return
+    end
+
+    local position =
+        mainJump.airTurnSliderTrack.AbsolutePosition.X
+    local size =
+        mainJump.airTurnSliderTrack.AbsoluteSize.X
+
+    if size <= 0 then
+        return
+    end
+
+    local alpha =
+        math.clamp(
+            (x - position)
+            / size,
+            0,
+            1
+        )
+
+    local value =
+        AIR_TURN_MIN_SPEED
+        + (
+            AIR_TURN_MAX_SPEED
+            - AIR_TURN_MIN_SPEED
+        )
+        * alpha
+
+    mainJump.setAirTurnSpeed(
+        value,
+        false
+    )
+end
+
+mainConnect(
+    mainJump.airTurnSliderTrack.InputBegan:Connect(
+        function(input)
+            if input.UserInputType
+                == Enum.UserInputType.MouseButton1
+            then
+                airTurnSliderDragging =
+                    true
+
+                updateAirTurnSliderFromX(
+                    input.Position.X
+                )
+            end
+        end
+    )
+)
+
+mainConnect(
+    UserInputService.InputChanged:Connect(
+        function(input)
+            if not airTurnSliderDragging then
+                return
+            end
+
+            if input.UserInputType
+                == Enum.UserInputType.MouseMovement
+            then
+                updateAirTurnSliderFromX(
+                    input.Position.X
+                )
+            end
+        end
+    )
+)
+
+mainConnect(
+    UserInputService.InputEnded:Connect(
+        function(input)
+            if input.UserInputType
+                == Enum.UserInputType.MouseButton1
+                and airTurnSliderDragging
+            then
+                airTurnSliderDragging =
+                    false
+                mainJump.saveConfig()
+            end
+        end
+    )
+)
+
 __UI.delayRow =
     mainRow(
         "DELAY",
-        3
+        5
     )
 __UI.delayLabel =
     autoLabel:Clone()
@@ -12008,7 +12589,7 @@ mainConnect(
 __UI.hotkeyRow =
     mainRow(
         "HOTKEY",
-        4
+        6
     )
 __UI.hotkeyLabel =
     autoLabel:Clone()
@@ -12073,7 +12654,7 @@ mainConnect(
 __UI.hideRow =
     mainRow(
         "HIDE UI",
-        5
+        7
     )
 __UI.hideLabel =
     autoLabel:Clone()
@@ -12334,7 +12915,23 @@ then
         end
     )
 end
+mainJump.setAirTurnSpeed(
+    mainJump.airTurnSpeed,
+    false
+)
 mainJump.update()
+
+if mainJump.airTurnEnabled then
+    mainJump.findLookMovementState()
+    mainJump.bindAirTurnRender()
+end
+
+genv.DEADEYE_MAIN_AIR_TURN_CLEANUP =
+    function()
+        pcall(function()
+            mainJump.unbindAirTurnRender()
+        end)
+    end
 
 genv.DEADEYE_MAIN_SENSORS_CLEANUP =
     function()
