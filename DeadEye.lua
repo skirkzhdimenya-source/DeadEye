@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.118
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.119
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.118"
+local SCRIPT_VERSION = "1.119"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11005,13 +11005,15 @@ end
 local RAGE_LOOK_PITCH =
     -math.rad(89)
 
-function mainJump.getRageLookFakeCFrame(realCFrame)
-    if typeof(realCFrame) ~= "CFrame" then
+function mainJump.getRageLookFakeCFrame(realCFrame, visualCFrame)
+    if typeof(realCFrame) ~= "CFrame"
+        or typeof(visualCFrame) ~= "CFrame"
+    then
         return nil
     end
 
     local _, yaw =
-        realCFrame:ToOrientation()
+        visualCFrame:ToOrientation()
 
     return
         CFrame.new(
@@ -11029,33 +11031,75 @@ function mainJump.patchRageLookArguments(args)
         workspace.CurrentCamera
 
     if not camera then
-        return false
+        return false, nil
     end
 
     local visualCFrame =
         camera.CFrame
 
-    local patched = false
+    local cameraLook =
+        visualCFrame.LookVector
 
+    local bestIndex = nil
+    local bestScore = math.huge
+
+    --// Air may receive more than one CFrame. Do NOT blindly replace
+    --// the first one: select the CFrame that most closely represents
+    --// the real camera by position + look direction.
     for index = 1, args.n do
-        if typeof(args[index]) == "CFrame" then
-            local fake =
-                mainJump.getRageLookFakeCFrame(
-                    visualCFrame
-                )
+        local value =
+            args[index]
 
-            if fake then
-                args[index] =
-                    fake
-                patched = true
+        if typeof(value) == "CFrame" then
+            local positionDistance =
+                (value.Position
+                    - visualCFrame.Position).Magnitude
+
+            local lookDot = 0
+
+            pcall(function()
+                lookDot =
+                    math.clamp(
+                        value.LookVector:Dot(
+                            cameraLook
+                        ),
+                        -1,
+                        1
+                    )
+            end)
+
+            local score =
+                positionDistance
+                + (1 - lookDot) * 4
+
+            if score < bestScore then
+                bestScore = score
+                bestIndex = index
             end
-
-            --// Air should have one camera/look CFrame argument.
-            break
         end
     end
 
-    return patched
+    if not bestIndex then
+        return false, nil
+    end
+
+    local realCFrame =
+        args[bestIndex]
+
+    local fake =
+        mainJump.getRageLookFakeCFrame(
+            realCFrame,
+            visualCFrame
+        )
+
+    if not fake then
+        return false, bestIndex
+    end
+
+    args[bestIndex] =
+        fake
+
+    return true, bestIndex
 end
 
 function mainJump.findRageLookAirFunction()
@@ -11254,12 +11298,21 @@ function mainJump.installRageLookHook()
                             )
                         end
 
-                        local patched =
+                        local patched, patchedIndex =
                             mainJump.patchRageLookArguments(
                                 args
                             )
 
-                        if not patched
+                        if patched
+                            and not loggedArgumentTypes
+                        then
+                            loggedArgumentTypes = true
+
+                            warn(
+                                "[DeadEye] Rage Look: patched Air CFrame arg",
+                                tostring(patchedIndex)
+                            )
+                        elseif not patched
                             and not loggedArgumentTypes
                         then
                             loggedArgumentTypes = true
@@ -11276,7 +11329,7 @@ function mainJump.installRageLookHook()
                             end
 
                             warn(
-                                "[DeadEye] Rage Look: Air has no CFrame argument. Types =",
+                                "[DeadEye] Rage Look: Air has no usable CFrame argument. Types =",
                                 table.concat(
                                     types,
                                     ", "
