@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.104
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.105
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.104"
+local SCRIPT_VERSION = "1.105"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11225,7 +11225,9 @@ function mainJump.contact(hit)
         mainJump.lookSensorTouching =
             math.max(
                 0,
-                mainJump.lookSensorTouching - 1
+                (tonumber(
+                                mainJump.lookSensorTouching
+                            ) or 0) - 1
             )
         if mainJump.lookSensorTouching == 0
             and mainJump.lookActive
@@ -11318,7 +11320,10 @@ function mainJump.createSensors(char)
                     )
                 then
                     if mainJump.lookEnabled then
-                        mainJump.lookSensorTouching += 1
+                        mainJump.lookSensorTouching =
+                            (tonumber(
+                                mainJump.lookSensorTouching
+                            ) or 0) + 1
                         mainJump.beginLook()
                     end
                     mainJump.contact(hit)
@@ -11332,7 +11337,9 @@ function mainJump.createSensors(char)
                     mainJump.lookSensorTouching =
                         math.max(
                             0,
-                            mainJump.lookSensorTouching - 1
+                            (tonumber(
+                                mainJump.lookSensorTouching
+                            ) or 0) - 1
                         )
 
                     if mainJump.lookSensorTouching == 0
@@ -11392,7 +11399,10 @@ function mainJump.createSensors(char)
                     )
                 then
                     if mainJump.lookEnabled then
-                        mainJump.lookSensorTouching += 1
+                        mainJump.lookSensorTouching =
+                            (tonumber(
+                                mainJump.lookSensorTouching
+                            ) or 0) + 1
                         mainJump.beginLook()
                     end
                     mainJump.contact(hit)
@@ -11407,7 +11417,9 @@ function mainJump.createSensors(char)
                     mainJump.lookSensorTouching =
                         math.max(
                             0,
-                            mainJump.lookSensorTouching - 1
+                            (tonumber(
+                                mainJump.lookSensorTouching
+                            ) or 0) - 1
                         )
 
                     if mainJump.lookSensorTouching == 0
