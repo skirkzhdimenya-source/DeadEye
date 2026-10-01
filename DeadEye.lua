@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.102
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.103
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.102"
+local SCRIPT_VERSION = "1.103"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11173,6 +11173,7 @@ function mainJump.jump(hit)
 
     if mainJump.lookEnabled
         and mainJump.enabled
+        and mainJump.lookSensorTouching > 0
     then
         mainJump.lookAutoJumpCycle = true
         mainJump.beginLook()
@@ -11306,11 +11307,20 @@ function mainJump.createSensors(char)
     mainJump.sensorTouchConnection =
         sensor.Touched:Connect(
             function(hit)
-                if mainJump.lookEnabled then
-                    mainJump.lookSensorTouching += 1
-                    mainJump.beginLook()
+                if hit
+                    and (
+                        not mainJump.character
+                        or not hit:IsDescendantOf(
+                            mainJump.character
+                        )
+                    )
+                then
+                    if mainJump.lookEnabled then
+                        mainJump.lookSensorTouching += 1
+                        mainJump.beginLook()
+                    end
+                    mainJump.contact(hit)
                 end
-                mainJump.contact(hit)
             end        )
 
     mainJump.sensorTouchConnectionEnded =
@@ -11371,11 +11381,20 @@ function mainJump.createSensors(char)
     mainJump.frontSensorTouchConnection =
         front.Touched:Connect(
             function(hit)
-                if mainJump.lookEnabled then
-                    mainJump.lookSensorTouching += 1
-                    mainJump.beginLook()
+                if hit
+                    and (
+                        not mainJump.character
+                        or not hit:IsDescendantOf(
+                            mainJump.character
+                        )
+                    )
+                then
+                    if mainJump.lookEnabled then
+                        mainJump.lookSensorTouching += 1
+                        mainJump.beginLook()
+                    end
+                    mainJump.contact(hit)
                 end
-                mainJump.contact(hit)
             end
         )
 
