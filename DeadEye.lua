@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.108
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.109
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.108"
+local SCRIPT_VERSION = "1.109"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -40,6 +40,49 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local genv = getgenv and getgenv() or _G
+
+--// =========================================================
+--// PURGE STALE AUTOJUMP / LOOK SENSORS
+--// =========================================================
+--// Previous DeadEye instances could leave Touched/TouchEnded
+--// connections alive because their sensor Parts were not destroyed
+--// during cleanup. Destroying the named sensor Parts disconnects
+--// those old callbacks and prevents stale arithmetic errors.
+local function purgeStaleMainJumpSensors()
+    local character =
+        LocalPlayer
+        and LocalPlayer.Character
+
+    if not character then
+        return
+    end
+
+    for _, object in ipairs(
+        character:GetDescendants()
+    ) do
+        if object:IsA("BasePart")
+            and (
+                object.Name == "FootJumpSensor"
+                or object.Name == "FrontJumpSensor"
+                or object.Name == "LookFootJumpSensor"
+                or object.Name == "LookFrontJumpSensor"
+            )
+        then
+            pcall(function()
+                object:Destroy()
+            end)
+        end
+    end
+end
+
+purgeStaleMainJumpSensors()
+
+pcall(function()
+    if genv.DEADEYE_MAIN_SENSORS_CLEANUP then
+        genv.DEADEYE_MAIN_SENSORS_CLEANUP()
+    end
+end)
+
 if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP then
     pcall(function()
         genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP()
@@ -10207,8 +10250,8 @@ end
 local LOOK_RENDER_NAME = "DeadEyeMainLook"
 local LOOK_INPUT_RADIANS = 0.00575958658
 local LOOK_TARGET_PITCH = -math.rad(89)
-local LOOK_MAX_INPUT = 22
-local LOOK_PITCH_GAIN = 0.35
+local LOOK_MAX_INPUT = 6
+local LOOK_PITCH_GAIN = 0.25
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
 local LOOK_MIN_ACTIVE = 0.08
 local LOOK_MAX_AFTER_JUMP = 0.22
@@ -12203,6 +12246,15 @@ then
     )
 end
 mainJump.update()
+
+genv.DEADEYE_MAIN_SENSORS_CLEANUP =
+    function()
+        pcall(function()
+            mainJump.destroySensors()
+        end)
+
+        purgeStaleMainJumpSensors()
+    end
 --// =========================================================
 --// OTHERS PAGE
 --// =========================================================
@@ -17696,6 +17748,10 @@ local function cleanup()
     end)
 
     NativeWheel.restore(true)
+
+    pcall(function()
+        mainJump.destroySensors()
+    end)
 
     pcall(function()
         if mainJump.lookActive
