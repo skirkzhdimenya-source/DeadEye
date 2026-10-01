@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.113
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.114
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.113"
+local SCRIPT_VERSION = "1.114"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10688,6 +10688,7 @@ function mainJump.bindAirTurnRender()
             if not genv.DEADEYE_MAIN_RUNNING
                 or cleaned
                 or not mainJump.airTurnEnabled
+                or not mainJump.enabled
             then
                 mainJump.unbindAirTurnRender()
                 return
@@ -10793,7 +10794,9 @@ function mainJump.setAirTurnEnabled(state)
     mainJump.airTurnEnabled =
         state and true or false
 
-    if mainJump.airTurnEnabled then
+    if mainJump.airTurnEnabled
+        and mainJump.enabled
+    then
         mainJump.findLookMovementState()
         mainJump.bindAirTurnRender()
     else
@@ -10966,6 +10969,11 @@ function mainJump.setEnabled(state)
 
     if mainJump.enabled then
         mainJump.needsInputRearm = false
+
+        if mainJump.airTurnEnabled then
+            mainJump.findLookMovementState()
+            mainJump.bindAirTurnRender()
+        end
         if mainJump.character
             and mainJump.humanoid
             and mainJump.humanoid.Parent
@@ -10996,6 +11004,7 @@ function mainJump.setEnabled(state)
 
         mainJump.lookAutoJumpCycle = false
         mainJump.manualJumpActive = false
+        mainJump.unbindAirTurnRender()
 
         if mainJump.lookWatcherConnection then
             pcall(function()
@@ -12921,7 +12930,9 @@ mainJump.setAirTurnSpeed(
 )
 mainJump.update()
 
-if mainJump.airTurnEnabled then
+if mainJump.airTurnEnabled
+    and mainJump.enabled
+then
     mainJump.findLookMovementState()
     mainJump.bindAirTurnRender()
 end
