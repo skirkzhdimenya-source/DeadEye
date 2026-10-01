@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.105
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.106
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.105"
+local SCRIPT_VERSION = "1.106"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10136,12 +10136,11 @@ local mainJump = {
     root = nil,
     sensorPart = nil,
     frontSensorPart = nil,
+    lookSensorPart = nil,
+    lookFrontSensorPart = nil,
     sensorTouchConnection = nil,
     lookAutoJumpCycle = false,
-    lookSensorTouching = 0,
-    sensorTouchConnectionEnded = nil,
     frontSensorTouchConnection = nil,
-    frontSensorTouchConnectionEnded = nil,
     connections = {}
 }
 mainJump.jumpDelay =
@@ -10208,7 +10207,8 @@ end
 local LOOK_RENDER_NAME = "DeadEyeMainLook"
 local LOOK_INPUT_RADIANS = 0.00575958658
 local LOOK_TARGET_PITCH = -math.rad(89)
-local LOOK_MAX_INPUT = 1000
+local LOOK_MAX_INPUT = 18
+local LOOK_PITCH_GAIN = 0.35
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
 local LOOK_MAX_AFTER_JUMP = 0.12
 
@@ -10477,7 +10477,9 @@ function mainJump.bindLookRender()
 
             local moveY =
                 math.clamp(
-                    -pitchDelta / LOOK_INPUT_RADIANS,
+                    -pitchDelta
+                        / LOOK_INPUT_RADIANS
+                        * LOOK_PITCH_GAIN,
                     -LOOK_MAX_INPUT,
                     LOOK_MAX_INPUT
                 )
@@ -10645,7 +10647,6 @@ function mainJump.setEnabled(state)
         mainJump.destroySensors()
 
         mainJump.lookAutoJumpCycle = false
-        mainJump.lookSensorTouching = 0
         mainJump.endLook()
 
         if mainJump.humanoid
@@ -10774,37 +10775,33 @@ function mainJump.destroySensors()
         end)
         mainJump.sensorTouchConnection = nil
     end
+
     if mainJump.frontSensorTouchConnection then
         pcall(function()
             mainJump.frontSensorTouchConnection:Disconnect()
         end)
         mainJump.frontSensorTouchConnection = nil
     end
-    if mainJump.sensorTouchConnectionEnded then
-        pcall(function()
-            mainJump.sensorTouchConnectionEnded:Disconnect()
-        end)
-        mainJump.sensorTouchConnectionEnded = nil
-    end
-    if mainJump.frontSensorTouchConnectionEnded then
-        pcall(function()
-            mainJump.frontSensorTouchConnectionEnded:Disconnect()
-        end)
-        mainJump.frontSensorTouchConnectionEnded = nil
-    end
-    if mainJump.sensorPart then
-        pcall(function()
-            mainJump.sensorPart:Destroy()
-        end)
-        mainJump.sensorPart = nil
-    end
-    if mainJump.frontSensorPart then
-        pcall(function()
-            mainJump.frontSensorPart:Destroy()
-        end)
-        mainJump.frontSensorPart = nil
+
+    for _, key in ipairs({
+        "sensorPart",
+        "frontSensorPart",
+        "lookSensorPart",
+        "lookFrontSensorPart"
+    }) do
+        local sensor =
+            mainJump[key]
+
+        if sensor then
+            pcall(function()
+                sensor:Destroy()
+            end)
+
+            mainJump[key] = nil
+        end
     end
 end
+
 function mainJump.isGameJumpBlocked()
     local object =
         getCharacterObject()
@@ -11165,6 +11162,49 @@ function mainJump.canJump()
             ~= Enum.HumanoidStateType.FallingDown
 end
 
+function mainJump.lookScannerSeesSurface()
+    if not mainJump.lookEnabled
+        or not mainJump.enabled
+    then
+        return false
+    end
+
+    for _, sensor in ipairs({
+        mainJump.lookSensorPart,
+        mainJump.lookFrontSensorPart
+    }) do
+        if sensor
+            and sensor.Parent
+        then
+            local touching
+            local ok = pcall(function()
+                touching =
+                    sensor:GetTouchingParts()
+            end)
+
+            if ok
+                and type(touching) == "table"
+            then
+                for _, part in ipairs(touching) do
+                    if part
+                        and part.Parent
+                        and (
+                            not mainJump.character
+                            or not part:IsDescendantOf(
+                                mainJump.character
+                            )
+                        )
+                    then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+
+    return false
+end
+
 function mainJump.jump(hit)
     if not mainJump.canJump() then
         return
@@ -11173,10 +11213,13 @@ function mainJump.jump(hit)
     mainJump.lastJump =
         tick()
 
-    if mainJump.lookEnabled
+    local useLook =
+        mainJump.lookEnabled
         and mainJump.enabled
-        and mainJump.lookSensorTouching > 0
-    then
+        and hit ~= nil
+        and mainJump.lookScannerSeesSurface()
+
+    if useLook then
         mainJump.lookAutoJumpCycle = true
         mainJump.beginLook()
     end
@@ -11203,16 +11246,13 @@ function mainJump.contact(hit)
     then
         return
     end
+
     if mainJump.character
         and hit:IsDescendantOf(
             mainJump.character
         )
     then
         return
-    end
-    if mainJump.lookEnabled then
-        mainJump.lookAutoJumpCycle = true
-        mainJump.beginLook()
     end
 
     task.wait(
@@ -11222,37 +11262,12 @@ function mainJump.contact(hit)
     if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
     then
-        mainJump.lookSensorTouching =
-            math.max(
-                0,
-                (tonumber(
-                                mainJump.lookSensorTouching
-                            ) or 0) - 1
-            )
-        if mainJump.lookSensorTouching == 0
-            and mainJump.lookActive
-        then
-            mainJump.endLook()
-        end
         return
     end
 
     mainJump.jump(hit)
-
-    if mainJump.lookSensorTouching > 0 then
-        task.defer(function()
-            task.wait(
-                LOOK_MAX_AFTER_JUMP
-            )
-
-            if mainJump.lookActive
-                and mainJump.lookSensorTouching > 0
-            then
-                mainJump.endLook()
-            end
-        end)
-    end
 end
+
 function mainJump.createSensors(char)
     if not char
         or not char:IsA("Model")
@@ -11261,16 +11276,24 @@ function mainJump.createSensors(char)
     end
 
     mainJump.destroySensors()
-    mainJump.character = char
+
+    mainJump.character =
+        char
+
     mainJump.humanoid =
         char:WaitForChild(
             "Humanoid"
         )
+
     mainJump.root =
         char:WaitForChild(
             "HumanoidRootPart"
         )
 
+    --// =====================================================
+    --// AUTOJUMP SENSORS
+    --// These remain independent from LOOK.
+    --// =====================================================
     local sensor =
         Instance.new("Part")
     sensor.Name =
@@ -11296,6 +11319,7 @@ function mainJump.createSensors(char)
             0
         )
     sensor.Parent = char
+
     local weld =
         Instance.new(
             "WeldConstraint"
@@ -11306,50 +11330,17 @@ function mainJump.createSensors(char)
         sensor
     weld.Parent =
         sensor
+
     mainJump.sensorPart =
         sensor
+
     mainJump.sensorTouchConnection =
         sensor.Touched:Connect(
             function(hit)
-                if hit
-                    and (
-                        not mainJump.character
-                        or not hit:IsDescendantOf(
-                            mainJump.character
-                        )
-                    )
-                then
-                    if mainJump.lookEnabled then
-                        mainJump.lookSensorTouching =
-                            (tonumber(
-                                mainJump.lookSensorTouching
-                            ) or 0) + 1
-                        mainJump.beginLook()
-                    end
-                    mainJump.contact(hit)
-                end
-            end        )
-
-    mainJump.sensorTouchConnectionEnded =
-        sensor.TouchEnded:Connect(
-            function(hit)
-                if mainJump.lookEnabled then
-                    mainJump.lookSensorTouching =
-                        math.max(
-                            0,
-                            (tonumber(
-                                mainJump.lookSensorTouching
-                            ) or 0) - 1
-                        )
-
-                    if mainJump.lookSensorTouching == 0
-                        and mainJump.lookActive
-                    then
-                        mainJump.endLook()
-                    end
-                end
+                mainJump.contact(hit)
             end
         )
+
     local front =
         Instance.new("Part")
     front.Name =
@@ -11375,6 +11366,7 @@ function mainJump.createSensors(char)
             -0.8
         )
     front.Parent = char
+
     local frontWeld =
         Instance.new(
             "WeldConstraint"
@@ -11385,51 +11377,101 @@ function mainJump.createSensors(char)
         front
     frontWeld.Parent =
         front
+
     mainJump.frontSensorPart =
         front
+
     mainJump.frontSensorTouchConnection =
         front.Touched:Connect(
             function(hit)
-                if hit
-                    and (
-                        not mainJump.character
-                        or not hit:IsDescendantOf(
-                            mainJump.character
-                        )
-                    )
-                then
-                    if mainJump.lookEnabled then
-                        mainJump.lookSensorTouching =
-                            (tonumber(
-                                mainJump.lookSensorTouching
-                            ) or 0) + 1
-                        mainJump.beginLook()
-                    end
-                    mainJump.contact(hit)
-                end
+                mainJump.contact(hit)
             end
         )
 
-    mainJump.frontSensorTouchConnectionEnded =
-        front.TouchEnded:Connect(
-            function(hit)
-                if mainJump.lookEnabled then
-                    mainJump.lookSensorTouching =
-                        math.max(
-                            0,
-                            (tonumber(
-                                mainJump.lookSensorTouching
-                            ) or 0) - 1
-                        )
-
-                    if mainJump.lookSensorTouching == 0
-                        and mainJump.lookActive
-                    then
-                        mainJump.endLook()
-                    end
-                end
-            end
+    --// =====================================================
+    --// LOOK-ONLY SENSORS
+    --// Roughly 2x the useful downward detection range.
+    --// They never call AutoJump and have no touch counters.
+    --// =====================================================
+    local lookSensor =
+        Instance.new("Part")
+    lookSensor.Name =
+        "LookFootJumpSensor"
+    lookSensor.Size =
+        Vector3.new(
+            2.6,
+            6,
+            2.6
         )
+    lookSensor.Transparency = 1
+    lookSensor.Anchored = false
+    lookSensor.CanCollide = false
+    lookSensor.CanTouch = true
+    lookSensor.CanQuery = false
+    lookSensor.Massless = true
+    lookSensor.CastShadow = false
+    lookSensor.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -5,
+            0
+        )
+    lookSensor.Parent = char
+
+    local lookWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+    lookWeld.Part0 =
+        mainJump.root
+    lookWeld.Part1 =
+        lookSensor
+    lookWeld.Parent =
+        lookSensor
+
+    mainJump.lookSensorPart =
+        lookSensor
+
+    local lookFront =
+        Instance.new("Part")
+    lookFront.Name =
+        "LookFrontJumpSensor"
+    lookFront.Size =
+        Vector3.new(
+            2,
+            6,
+            1
+        )
+    lookFront.Transparency = 1
+    lookFront.Anchored = false
+    lookFront.CanCollide = false
+    lookFront.CanTouch = true
+    lookFront.CanQuery = false
+    lookFront.Massless = true
+    lookFront.CastShadow = false
+    lookFront.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -2.5,
+            -0.8
+        )
+    lookFront.Parent = char
+
+    local lookFrontWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+    lookFrontWeld.Part0 =
+        mainJump.root
+    lookFrontWeld.Part1 =
+        lookFront
+    lookFrontWeld.Parent =
+        lookFront
+
+    mainJump.lookFrontSensorPart =
+        lookFront
 end
 genv.DEADEYE_MAIN_RUNNING = true
 mainPage =
