@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.119
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.120
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.119"
+local SCRIPT_VERSION = "1.120"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10995,25 +10995,39 @@ end
 --// RAGE LOOK is completely separate from normal LOOK.
 --// IMPORTANT: it NEVER writes Camera.CFrame.
 --//
---// The confirmed Air function currently has 5 parameters.
---// We replace a CFrame argument with a fake downward CFrame
---// only for the Air call itself. The real camera remains untouched.
---// If the Air function does not receive a CFrame argument,
---// RAGE LOOK stays OFF and prints a diagnostic instead of
---// falling back to visually rotating the camera.
+--// The real Air function reads:
+--//     Parent.DataRegistry:Get("LookCFrame")
+--//
+--// Runtime probing confirmed:
+--//     Camera.LookVector == LookCFrame.LookVector
+--//     Camera.Pitch      == LookCFrame.Pitch
+--//
+--// Therefore RAGE LOOK does NOT modify the camera.
+--// Instead:
+--//
+--//     Air()
+--//       -> DataRegistry:Get("LookCFrame")
+--//       -> fake CFrame with -89 degree pitch
+--//
+--// The fake value exists only while Air is executing.
 --// =========================================================
+
 local RAGE_LOOK_PITCH =
     -math.rad(89)
 
-function mainJump.getRageLookFakeCFrame(realCFrame, visualCFrame)
-    if typeof(realCFrame) ~= "CFrame"
-        or typeof(visualCFrame) ~= "CFrame"
-    then
+mainJump.rageLookAirDepth =
+    0
+
+function mainJump.getRageLookFakeCFrame(
+    realCFrame
+)
+
+    if typeof(realCFrame) ~= "CFrame" then
         return nil
     end
 
     local _, yaw =
-        visualCFrame:ToOrientation()
+        realCFrame:ToOrientation()
 
     return
         CFrame.new(
@@ -11026,83 +11040,12 @@ function mainJump.getRageLookFakeCFrame(realCFrame, visualCFrame)
         )
 end
 
-function mainJump.patchRageLookArguments(args)
-    local camera =
-        workspace.CurrentCamera
-
-    if not camera then
-        return false, nil
-    end
-
-    local visualCFrame =
-        camera.CFrame
-
-    local cameraLook =
-        visualCFrame.LookVector
-
-    local bestIndex = nil
-    local bestScore = math.huge
-
-    --// Air may receive more than one CFrame. Do NOT blindly replace
-    --// the first one: select the CFrame that most closely represents
-    --// the real camera by position + look direction.
-    for index = 1, args.n do
-        local value =
-            args[index]
-
-        if typeof(value) == "CFrame" then
-            local positionDistance =
-                (value.Position
-                    - visualCFrame.Position).Magnitude
-
-            local lookDot = 0
-
-            pcall(function()
-                lookDot =
-                    math.clamp(
-                        value.LookVector:Dot(
-                            cameraLook
-                        ),
-                        -1,
-                        1
-                    )
-            end)
-
-            local score =
-                positionDistance
-                + (1 - lookDot) * 4
-
-            if score < bestScore then
-                bestScore = score
-                bestIndex = index
-            end
-        end
-    end
-
-    if not bestIndex then
-        return false, nil
-    end
-
-    local realCFrame =
-        args[bestIndex]
-
-    local fake =
-        mainJump.getRageLookFakeCFrame(
-            realCFrame,
-            visualCFrame
-        )
-
-    if not fake then
-        return false, bestIndex
-    end
-
-    args[bestIndex] =
-        fake
-
-    return true, bestIndex
-end
+--==============================================================
+-- FIND REAL AIR FUNCTION
+--==============================================================
 
 function mainJump.findRageLookAirFunction()
+
     if mainJump.rageLookAirFunction then
         return mainJump.rageLookAirFunction
     end
@@ -11134,9 +11077,8 @@ function mainJump.findRageLookAirFunction()
             "Functions"
         )
 
-    --// Requiring these nodes is attempted only to expose the
-    --// already-loaded Air function. No camera is touched.
     local function findInModule(node)
+
         if not node
             or not node:IsA("ModuleScript")
         then
@@ -11185,12 +11127,16 @@ function mainJump.findRageLookAirFunction()
         return air
     end
 
-    --// Runtime discovery based on the confirmed source location.
+    --// Runtime discovery.
+    --// IMPORTANT:
+    --// We require the exact real function at line 109.
     if type(getgc) == "function"
         and debug
         and type(debug.getinfo) == "function"
     then
+
         local objects
+
         local ok =
             pcall(function()
                 objects =
@@ -11200,8 +11146,13 @@ function mainJump.findRageLookAirFunction()
         if ok
             and type(objects) == "table"
         then
-            for _, object in ipairs(objects) do
+
+            for _, object in ipairs(
+                objects
+            ) do
+
                 if type(object) == "function" then
+
                     local info
 
                     pcall(function()
@@ -11224,25 +11175,17 @@ function mainJump.findRageLookAirFunction()
                             info.linedefined
                         )
 
-                    local name =
-                        info
-                        and tostring(
-                            info.name or ""
-                        )
-                        or ""
-
                     if string.find(
                         source,
                         "Movement.MoveFunction.Functions",
                         1,
                         true
                     )
-                    and (
-                        line == 109
-                        or name == "Air"
-                    )
+                    and line == 109
                     then
+
                         return object
+
                     end
                 end
             end
@@ -11252,44 +11195,186 @@ function mainJump.findRageLookAirFunction()
     return nil
 end
 
+--==============================================================
+-- FIND DATEREGISTRY.GET
+--==============================================================
+
+function mainJump.findRageLookDataRegistryGet()
+
+    local object =
+        getCharacterObject()
+
+    if not object then
+        return nil
+    end
+
+    if not object.DataRegistry then
+        return nil
+    end
+
+    local registry =
+        object.DataRegistry
+
+    local getFunction
+
+    pcall(function()
+        getFunction =
+            registry.Get
+    end)
+
+    if type(getFunction) ~= "function" then
+        return nil
+    end
+
+    return getFunction
+end
+
+--==============================================================
+-- INSTALL RAGE LOOK
+--==============================================================
+
 function mainJump.installRageLookHook()
+
     if mainJump.rageLookHookInstalled then
         return true
     end
 
     if type(hookfunction) ~= "function" then
+
         warn(
             "[DeadEye] Rage Look: hookfunction unavailable"
         )
+
         return false
     end
+
+    --==========================================================
+    -- REAL AIR
+    --==========================================================
 
     local air =
         mainJump.findRageLookAirFunction()
 
     if type(air) ~= "function" then
+
         warn(
-            "[DeadEye] Rage Look: Air function not found"
+            "[DeadEye] Rage Look: real Air function not found"
         )
+
         return false
     end
 
-    local original
-    local loggedArgumentTypes = false
+    --==========================================================
+    -- DATEREGISTRY.GET
+    --==========================================================
 
-    local ok =
+    local registryGet =
+        mainJump.findRageLookDataRegistryGet()
+
+    if type(registryGet) ~= "function" then
+
+        warn(
+            "[DeadEye] Rage Look: DataRegistry.Get not found"
+        )
+
+        return false
+    end
+
+    local originalGet =
+        nil
+
+    local originalAir =
+        nil
+
+    --==========================================================
+    -- HOOK DATEREGISTRY.GET
+    --==========================================================
+
+    local getHookOK =
         pcall(function()
-            original =
+
+            originalGet =
+                hookfunction(
+                    registryGet,
+                    function(
+                        self,
+                        key
+                    )
+
+                        local results =
+                            table.pack(
+                                originalGet(
+                                    self,
+                                    key
+                                )
+                            )
+
+                        --// Only spoof LookCFrame when we are
+                        --// actually inside the real Air function.
+                        if mainJump.rageLookEnabled
+                            and mainJump.rageLookAirDepth > 0
+                            and key == "LookCFrame"
+                            and not cleaned
+                        then
+
+                            local realCFrame =
+                                results[1]
+
+                            local fakeCFrame =
+                                mainJump.getRageLookFakeCFrame(
+                                    realCFrame
+                                )
+
+                            if fakeCFrame then
+
+                                results[1] =
+                                    fakeCFrame
+
+                            end
+                        end
+
+                        return table.unpack(
+                            results,
+                            1,
+                            results.n
+                        )
+                    end
+                )
+
+        end)
+
+    if not getHookOK
+        or type(originalGet) ~= "function"
+    then
+
+        warn(
+            "[DeadEye] Rage Look: failed to hook DataRegistry.Get"
+        )
+
+        return false
+    end
+
+    --==========================================================
+    -- HOOK REAL AIR
+    --==========================================================
+
+    local airHookOK =
+        pcall(function()
+
+            originalAir =
                 hookfunction(
                     air,
                     function(...)
+
                         local args =
                             table.pack(...)
 
+                        --// Normal Air path.
                         if not mainJump.rageLookEnabled
                             or cleaned
                         then
-                            return original(
+
+                            return originalAir(
                                 table.unpack(
                                     args,
                                     1,
@@ -11298,104 +11383,177 @@ function mainJump.installRageLookHook()
                             )
                         end
 
-                        local patched, patchedIndex =
-                            mainJump.patchRageLookArguments(
-                                args
-                            )
+                        --// Enter Air context.
+                        mainJump.rageLookAirDepth =
+                            mainJump.rageLookAirDepth
+                            + 1
 
-                        if patched
-                            and not loggedArgumentTypes
-                        then
-                            loggedArgumentTypes = true
+                        local results =
+                            table.pack(
+                                pcall(function()
 
-                            warn(
-                                "[DeadEye] Rage Look: patched Air CFrame arg",
-                                tostring(patchedIndex)
-                            )
-                        elseif not patched
-                            and not loggedArgumentTypes
-                        then
-                            loggedArgumentTypes = true
-
-                            local types = {}
-
-                            for index = 1, args.n do
-                                types[index] =
-                                    tostring(
-                                        typeof(
-                                            args[index]
+                                    return originalAir(
+                                        table.unpack(
+                                            args,
+                                            1,
+                                            args.n
                                         )
                                     )
-                            end
 
-                            warn(
-                                "[DeadEye] Rage Look: Air has no usable CFrame argument. Types =",
-                                table.concat(
-                                    types,
-                                    ", "
-                                )
+                                end)
                             )
+
+                        --// Always leave Air context.
+                        mainJump.rageLookAirDepth =
+                            math.max(
+                                0,
+                                mainJump.rageLookAirDepth
+                                - 1
+                            )
+
+                        if not results[1] then
+
+                            error(
+                                results[2],
+                                0
+                            )
+
                         end
 
-                        return original(
-                            table.unpack(
-                                args,
-                                1,
-                                args.n
-                            )
+                        return table.unpack(
+                            results,
+                            2,
+                            results.n
                         )
+
                     end
                 )
+
         end)
 
-    if not ok
-        or type(original) ~= "function"
+    if not airHookOK
+        or type(originalAir) ~= "function"
     then
-        mainJump.rageLookAirFunction = nil
-        mainJump.rageLookOriginalAir = nil
+
+        --// Air hook failed.
+        --// Restore DataRegistry.Get immediately.
+
+        pcall(function()
+
+            hookfunction(
+                registryGet,
+                originalGet
+            )
+
+        end)
+
+        warn(
+            "[DeadEye] Rage Look: failed to hook Air"
+        )
+
         return false
     end
+
+    --==========================================================
+    -- SAVE HOOK STATE
+    --==========================================================
+
+    mainJump.rageLookDataRegistryGet =
+        registryGet
+
+    mainJump.rageLookOriginalDataRegistryGet =
+        originalGet
 
     mainJump.rageLookAirFunction =
         air
 
     mainJump.rageLookOriginalAir =
-        original
+        originalAir
 
     mainJump.rageLookHookInstalled =
         true
 
     mainJump.rageLookMode =
-        "Air CFrame argument"
+        "DataRegistry LookCFrame"
 
     return true
 end
 
+--==============================================================
+-- UNINSTALL RAGE LOOK
+--==============================================================
+
 function mainJump.uninstallRageLookHook()
+
     if not mainJump.rageLookHookInstalled then
         return
     end
 
-    local air =
-        mainJump.rageLookAirFunction
+    --==========================================================
+    -- RESTORE DATEREGISTRY.GET
+    --==========================================================
 
-    local original =
-        mainJump.rageLookOriginalAir
+    local registryGet =
+        mainJump.rageLookDataRegistryGet
 
-    if air
-        and original
+    local originalGet =
+        mainJump.rageLookOriginalDataRegistryGet
+
+    if registryGet
+        and originalGet
         and type(hookfunction) == "function"
     then
+
         pcall(function()
+
             hookfunction(
-                air,
-                original
+                registryGet,
+                originalGet
             )
+
         end)
     end
 
+    --==========================================================
+    -- RESTORE AIR
+    --==========================================================
+
+    local air =
+        mainJump.rageLookAirFunction
+
+    local originalAir =
+        mainJump.rageLookOriginalAir
+
+    if air
+        and originalAir
+        and type(hookfunction) == "function"
+    then
+
+        pcall(function()
+
+            hookfunction(
+                air,
+                originalAir
+            )
+
+        end)
+    end
+
+    --==========================================================
+    -- CLEAR STATE
+    --==========================================================
+
+    mainJump.rageLookAirDepth =
+        0
+
     mainJump.rageLookHookInstalled =
         false
+
+    mainJump.rageLookDataRegistryGet =
+        nil
+
+    mainJump.rageLookOriginalDataRegistryGet =
+        nil
 
     mainJump.rageLookAirFunction =
         nil
@@ -11407,46 +11565,65 @@ function mainJump.uninstallRageLookHook()
         nil
 end
 
+--==============================================================
+-- RAGE LOOK TOGGLE
+--==============================================================
+
 function mainJump.setRageLookEnabled(state)
+
     state =
         state and true or false
 
     if state then
+
         if mainJump.rageLookEnabled then
+
             mainJump.update()
-            return
+
+            return true
         end
 
-        --// Normal LOOK is the only part that intentionally
-        --// rotates the visible camera. Disable its active cycle
-        --// while RAGE LOOK is enabled.
+        --// Normal visual LOOK must not fight Rage Look.
         if mainJump.lookActive
             or mainJump.lookRestoring
         then
+
             mainJump.endLook()
+
         end
 
         local hooked =
             mainJump.installRageLookHook()
 
         if not hooked then
-            mainJump.rageLookEnabled = false
+
+            mainJump.rageLookEnabled =
+                false
+
             mainJump.update()
+
             return false
         end
 
-        mainJump.rageLookEnabled = true
+        mainJump.rageLookEnabled =
+            true
 
     else
-        mainJump.rageLookEnabled = false
+
+        mainJump.rageLookEnabled =
+            false
+
         mainJump.uninstallRageLookHook()
+
     end
 
     if mainJump.rageLookMode then
+
         print(
             "[DeadEye] Rage Look mode =",
             mainJump.rageLookMode
         )
+
     end
 
     mainJump.saveConfig()
