@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.120
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.121
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.120"
+local SCRIPT_VERSION = "1.121"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11050,86 +11050,6 @@ function mainJump.findRageLookAirFunction()
         return mainJump.rageLookAirFunction
     end
 
-    local movementRoot =
-        ReplicatedStorage
-        :FindFirstChild("Objects")
-        and ReplicatedStorage.Objects
-            :FindFirstChild("Game")
-        and ReplicatedStorage.Objects.Game
-            :FindFirstChild("Character")
-        and ReplicatedStorage.Objects.Game.Character
-            :FindFirstChild("Client")
-        and ReplicatedStorage.Objects.Game.Character.Client
-            :FindFirstChild("Movement")
-
-    if not movementRoot then
-        return nil
-    end
-
-    local moveFunction =
-        movementRoot:FindFirstChild(
-            "MoveFunction"
-        )
-
-    local functionsNode =
-        moveFunction
-        and moveFunction:FindFirstChild(
-            "Functions"
-        )
-
-    local function findInModule(node)
-
-        if not node
-            or not node:IsA("ModuleScript")
-        then
-            return nil
-        end
-
-        local ok, result =
-            pcall(function()
-                return require(node)
-            end)
-
-        if not ok
-            or type(result) ~= "table"
-        then
-            return nil
-        end
-
-        if type(result.Air) == "function" then
-            return result.Air
-        end
-
-        if type(result.Functions) == "table"
-            and type(result.Functions.Air) == "function"
-        then
-            return result.Functions.Air
-        end
-
-        return nil
-    end
-
-    local air =
-        findInModule(
-            functionsNode
-        )
-
-    if air then
-        return air
-    end
-
-    air =
-        findInModule(
-            moveFunction
-        )
-
-    if air then
-        return air
-    end
-
-    --// Runtime discovery.
-    --// IMPORTANT:
-    --// We require the exact real function at line 109.
     if type(getgc) == "function"
         and debug
         and type(debug.getinfo) == "function"
@@ -11162,42 +11082,60 @@ function mainJump.findRageLookAirFunction()
                             )
                     end)
 
-                    local source =
-                        info
-                        and tostring(
-                            info.source or ""
+                    if info then
+
+                        local source =
+                            tostring(
+                                info.source or ""
+                            )
+
+                        local line =
+                            tonumber(
+                                info.linedefined
+                            )
+
+                        if string.find(
+                            source,
+                            "ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions",
+                            1,
+                            true
                         )
-                        or ""
+                        and line == 109
+                        then
 
-                    local line =
-                        info
-                        and tonumber(
-                            info.linedefined
-                        )
+                            mainJump.rageLookAirFunction =
+                                object
 
-                    if string.find(
-                        source,
-                        "Movement.MoveFunction.Functions",
-                        1,
-                        true
-                    )
-                    and line == 109
-                    then
+                            print(
+                                "[DeadEye] Rage Look Air =",
+                                tostring(object)
+                            )
 
-                        return object
+                            print(
+                                "[DeadEye] Rage Look Air source =",
+                                source
+                            )
 
+                            print(
+                                "[DeadEye] Rage Look Air line =",
+                                tostring(line)
+                            )
+
+                            return object
+
+                        end
                     end
                 end
             end
         end
     end
 
+    warn(
+        "[DeadEye] Rage Look: real Air line 109 not found"
+    )
+
     return nil
 end
-
---==============================================================
--- FIND DATEREGISTRY.GET
---==============================================================
 
 function mainJump.findRageLookDataRegistryGet()
 
