@@ -1,11 +1,11 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.117
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.118
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
 --// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114 -> v1.115 -> v1.116 -> v1.117.
+--// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114 -> v1.115 -> v1.116 -> v1.117 -> v1.118.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.117"
+local SCRIPT_VERSION = "1.118"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11406,12 +11406,6 @@ function mainJump.setLookEnabled(state)
     mainJump.lookEnabled =
         state and true or false
 
-    if mainJump.lookEnabled
-        and mainJump.rageLookEnabled
-    then
-        mainJump.lookEnabled = false
-    end
-
     if not mainJump.lookEnabled then
         mainJump.endLook()
     end
@@ -12196,7 +12190,8 @@ function mainJump.jump(hit)
     mainJump.lastJump =
         tick()
 
-    mainJump.lookTriggeredThisAir = true
+    --// Starting an automatic jump begins a NEW airborne phase.
+    --// LOOK is allowed to trigger once near the landing of this jump.
 
     if mainJump.lookEnabled
         and mainJump.enabled
