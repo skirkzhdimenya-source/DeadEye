@@ -3186,3 +3186,58 @@ This is the direct requested decompilation attempt.
 =============================================================
 END OF 2026-10-02 v1.11 PLAN
 =============================================================
+
+
+=============================================================
+44. 2026-10-02 — v1.12 RESULT: FUNCTION BYTECODE INACCESSIBLE
+=============================================================
+
+v1.12 confirmed the exact limitation:
+
+    decompile(Functions["Run"])
+        -> failed to get function bytecode
+
+GC scanning found exactly one matching original Run closure:
+
+    source = ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+    line = 23
+
+Attempting decompile() on that GC candidate failed with the same bytecode error.
+
+Therefore:
+
+    The executor can expose:
+        source
+        line
+        constants
+        function object
+
+    but cannot retrieve bytecode for the Run closure.
+
+The investigation must stop trying to decompile the function object directly.
+
+Next target:
+
+    decompile(Functions ModuleScript)
+
+rather than:
+
+    decompile(Functions["Run"])
+
+This may allow retrieval of the complete source because the executor may have
+script-level bytecode access even when closure-level bytecode access fails.
+
+Potential secondary diagnostic:
+
+    getscriptbytecode(FunctionsScript)
+
+when exposed by the executor.
+
+The objective remains unchanged:
+
+    recover the full Run body and identify the operation that changes horizontal
+    Velocity during/around the Air -> Move landing transition.
+
+=============================================================
+END OF 2026-10-02 v1.12 RESULT
+=============================================================
