@@ -3241,3 +3241,896 @@ The objective remains unchanged:
 =============================================================
 END OF 2026-10-02 v1.12 RESULT
 =============================================================
+
+
+=============================================================
+45. 2026-10-02 — HANDOFF / STOP POINT FOR FUTURE SESSION
+=============================================================
+
+CURRENT INVESTIGATION GOAL
+-------------------------------------------------------------
+
+The ONLY active investigation is:
+
+    identify the exact operation that removes horizontal speed when the
+    character lands and transitions from Air to grounded Move/Run.
+
+This is NOT the A -> B solver investigation.
+
+The practical symptom being investigated is:
+
+    repeated jumping / air movement can build horizontal speed
+    but landing causes a horizontal-speed reduction.
+
+The desired end result is to identify the exact code path responsible so it
+can later be changed without breaking the rest of the movement system.
+
+
+=============================================================
+CONFIRMED MOVEMENT ARCHITECTURE
+=============================================================
+
+Primary path:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
+
+Movement initialization creates:
+
+    Movement.StateInfo = require(Shared.StateInfo)
+    Movement.MoveStats = require(script.MoveStats).new(Movement)
+    Movement.MoveFunction = require(script.MoveFunction).new(Movement)
+    Movement.RootPartOrienter = require(script.RootPartOrienter).new(Movement)
+
+Runtime ownership:
+
+    GameCharacter
+        |
+        +-- Movement
+              |
+              +-- MoveFunction
+                    |
+                    +-- Move
+
+IMPORTANT:
+
+    GameCharacter.MoveFunction is WRONG.
+    GameCharacter.Movement.MoveFunction is CORRECT.
+
+The CharacterService used to obtain the local runtime character is:
+
+    ReplicatedStorage.Services.Asset.CharacterService
+
+The correct runtime access is:
+
+    local CharacterService =
+        require(
+            ReplicatedStorage.Services.Asset.CharacterService
+        )
+
+    local GameCharacter =
+        CharacterService:GetLocalCharacter()
+
+
+=============================================================
+CONFIRMED MoveFunction SOURCE / CALL CHAIN
+=============================================================
+
+Recovered MoveFunction source conceptually:
+
+    function t.Move(p3, p4, p5, p6)
+
+        local stateInfo = StateInfo:GetState(p5)
+
+        if stateInfo then
+
+            local Movement = stateInfo.Movement
+
+            if Movement then
+
+                if Movement.MoveType
+                    and
+                    Functions[Movement.MoveType]
+                then
+
+                    return Functions[Movement.MoveType](
+                        p4,
+                        Movement,
+                        p3.DataRegistry,
+                        p3.Character,
+                        p6
+                    )
+
+                end
+            end
+
+        else
+
+            return
+
+        end
+    end
+
+Therefore:
+
+    Movement.Update()
+        ->
+    DoFunction("Move", State, MoveStats, dt)
+        ->
+    MoveFunction.Move(dt, State, MoveStats)
+        ->
+    StateInfo:GetState(State)
+        ->
+    Functions[MoveType](...)
+        ->
+    Air / Run / other movement function
+
+
+=============================================================
+CONFIRMED STATES / MOVETYPE
+=============================================================
+
+Normal airborne state:
+
+    State = "Air"
+    MoveType = "Air"
+
+Normal grounded movement state:
+
+    State = "Move"
+    MoveType = "Run"
+
+Therefore the landing path of interest is:
+
+    Air
+        ->
+    Move
+        ->
+    Run
+
+
+=============================================================
+CONFIRMED ORIGINAL FUNCTIONS MODULE
+=============================================================
+
+Original module:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+
+It is a ModuleScript.
+
+require(FunctionsScript) returns a table containing:
+
+    Air          source line 109, params 5
+    Run          source line 23,  params 5
+    Slide        source line 190, params 5
+    GrappleMove  source line 244, params 5
+    Climb        source line 251, params 5
+    ClimbStart   source line 354, params 4
+    ClimbEnd     source line 384, params 4
+    LungeMove    source line 394, params 5
+
+Most important:
+
+    Functions["Run"]
+
+is confirmed to be the ORIGINAL game function with:
+
+    source =
+        ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+
+    line = 23
+    params = 5
+
+
+=============================================================
+CONFIRMED Run CONSTANTS
+=============================================================
+
+debug.getconstants(Functions["Run"]) succeeds and returns 52 constants.
+
+Important Run constants, in the order exposed:
+
+    JumpingActive
+    Get
+    MoveDirection
+    GlobalMoveDirection
+    Swimming
+    X
+    Z
+    Vector3
+    new
+    BhopEnabled
+    JumpQueued
+    LookCFrame
+    Velocity
+    Sprint
+    ApplyFriction
+    0.5
+    Crouching
+    -0.5
+    Y
+    0
+    Unit
+    CapSprint
+    ADS
+    SprintAcceleration
+    2
+    SprintCap
+    math
+    clamp
+    Magnitude
+    WalkSpeedMultiplier
+    Emote
+    lerp
+    1
+    Speed
+    RunAccel
+    Accelerate
+    WallImpact
+    SwimMover
+    VectorVelocity
+    BaseMover
+    PlaneVelocity
+    Vector2
+
+This confirms that the Run function references:
+
+    ApplyFriction
+    CapSprint
+    SprintAcceleration
+    SprintCap
+    Accelerate
+    WallImpact
+    SwimMover
+    VectorVelocity
+    BaseMover
+    PlaneVelocity
+
+The exact execution ORDER is still unresolved.
+
+
+=============================================================
+CONFIRMED Air CONSTANTS
+=============================================================
+
+debug.getconstants(Functions["Air"]) succeeds and returns 57 constants.
+
+Important Air constants:
+
+    Velocity
+    Get
+    MoveDirection
+    Z
+    ApplyFriction
+    WallrunDirection
+    Wallrunning
+    -0.99
+    X
+    0.99
+    AI
+    GetAttribute
+    GlobalMoveDirection
+    LookCFrame
+    VectorToWorldSpace
+    Magnitude
+    Speed
+    Unit
+    Dot
+    AirAcceleration
+    2
+    0
+    AirStrafeAcceleration
+    Swimming
+    Accelerate
+    AirControl
+    antiNan
+    magnitude
+    SprintCap
+    math
+    clamp
+    WallImpact
+    BaseMover
+    PlaneVelocity
+    Vector2
+    new
+    Force
+    0.5
+    HumanoidRootPart
+    GetMass
+    workspace
+    Gravity
+    WallrunForce
+    Sprint
+
+Air and Run both reference ApplyFriction.
+
+
+=============================================================
+CONFIRMED MOVE STATS
+=============================================================
+
+Recovered BaseStats:
+
+    SprintAcceleration = 1
+    SprintCap = 2
+    RunAccel = 1
+    Friction = 5
+    RunDeaccel = 700
+    AirStrafeAcceleration = 182
+    AirAcceleration = 1
+    Speed = 1500
+    JumpHeight = 3
+    JumpCap = 1
+    WalkSpeedMultiplier = 1
+    JumpSpeedMultiplier = 1.45
+    BhopEnabled = false
+    GroundedDistCheck = 2.9
+
+During tested runtime sessions:
+
+    MoveStats.Speed = 1620
+    Sprint = 2
+    Friction = 5
+    RunDeaccel = 1190
+
+So the nominal:
+
+    Sprint * Speed
+
+was:
+
+    3240 internal velocity units
+
+while high-speed tests exceeded 3240 internal units.
+
+
+=============================================================
+RECOVERED ApplyFriction HELPER
+=============================================================
+
+Location:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
+
+Recovered function is ApplyFriction, approximately line 47.
+
+Logic recovered:
+
+    Velocity = DataRegistry:Get("Velocity")
+    magnitude = Velocity.magnitude
+
+    RunDeaccel = stats.RunDeaccel
+    Friction = stats.Friction
+
+    if Swimming then
+        RunDeaccel *= 0.6
+        Friction *= 0.6
+    end
+
+    v4 = max(RunDeaccel, magnitude)
+
+    v5 =
+        magnitude
+        -
+        v4 * Friction * dt * mode-factor
+
+    clamp v5 to >= 0
+
+    if v5 > 0 then
+        multiplier = v5 / magnitude
+    end
+
+    return Velocity * multiplier
+
+Important consequence:
+
+    when magnitude > RunDeaccel,
+
+    v4 = magnitude
+
+so the effective loss can approximately become:
+
+    magnitude * Friction * dt
+
+for the relevant mode factor.
+
+The exact mode-factor branches were partially recovered previously.
+
+
+=============================================================
+RECOVERED Accelerate HELPER
+=============================================================
+
+Location:
+
+    Functions.Helpers
+    approximately line 177
+
+Recovered logic:
+
+    currentSpeed =
+        velocity:Dot(wishDirection)
+
+    addSpeed =
+        wishSpeed - currentSpeed
+
+    if addSpeed <= 0 then
+        return velocity
+    end
+
+    accelSpeed =
+        acceleration * deltaTime * wishSpeed
+
+    if accelSpeed > addSpeed then
+        accelSpeed = addSpeed
+    end
+
+    return
+        velocity
+        +
+        addSpeed * wishDirection
+
+A runtime test previously observed an effective factor around 10 in tested
+air calls:
+
+    accelSpeed =
+        acceleration * 10 * dt * wishSpeed
+
+The exact reason for that runtime factor remains contextual to the call path.
+
+
+=============================================================
+RECOVERED AirControl HELPER
+=============================================================
+
+Location:
+
+    Functions.Helpers
+    approximately line 164
+
+Observed argument structure:
+
+    arg1 = self/table
+    arg2 = vector whose Z is tested
+    arg3 = number often around 1620
+    arg4 = lateral/right direction vector
+    arg5 = current Velocity
+    arg6 = dt
+
+Recovered logic:
+
+    Z = arg2.Z
+
+    if abs(Z) < 0.001
+        or
+        abs(arg3) < 0.001
+    then
+        return arg5
+    end
+
+    magnitude = arg5.magnitude
+    unit = arg5.unit
+    dot = unit:Dot(arg4)
+
+    unused =
+        32 * (1 * dot * dot * dt)
+
+    return
+        unit *
+        Vector3.new(
+            magnitude,
+            0,
+            magnitude
+        )
+
+This helper itself does not explain the landing loss.
+
+
+=============================================================
+RECOVERED JUMP SPEED LOGIC
+=============================================================
+
+Jump() contains the horizontal-speed rewrite:
+
+    v5 =
+        JumpSpeedMultiplier
+        *
+        HumanoidRootPart.CFrame.lookVector:Dot(
+            Velocity.unit
+        ) ^ 2
+
+    if Velocity.magnitude < Sprint * Speed * v5 then
+
+        v6 =
+            Velocity.magnitude
+            *
+            JumpSpeedMultiplier
+
+        v7 =
+            Sprint
+            *
+            Speed
+            *
+            v5
+
+        v8 =
+            math.min(v6, v7)
+
+        DataRegistry:Set(
+            "Velocity",
+            (
+                DataRegistry:Get("Velocity")
+                *
+                Vector3.new(1,0,1)
+            ).unit
+            *
+            v8
+        )
+
+    end
+
+Therefore looking down changes jump-time horizontal speed because of:
+
+    (HumanoidRootPart.lookVector · Velocity.unit)^2
+
+This is a separate known issue and NOT the current landing investigation.
+
+
+=============================================================
+INTERNAL VS REAL VELOCITY SCALE
+=============================================================
+
+Movement velocity stored in DataRegistry is approximately:
+
+    internal velocity ~= real horizontal velocity * 90
+
+Movement.Update derives:
+
+    Speed =
+        Velocity.Magnitude / 90
+
+therefore real-world horizontal speed is approximately:
+
+    internal HSpeed / 90
+
+
+=============================================================
+v1.02 LANDING DATA — IMPORTANT HISTORICAL RESULT
+=============================================================
+
+v1.02 used Heartbeat-style sampling around the Air -> Move transition.
+
+It recorded 10 representative landings.
+
+Representative values:
+
+    #1
+        49.648 -> 49.300
+        actual loss = 0.348
+        predicted friction = 2.181
+
+    #2
+        51.098 -> 49.866
+        actual loss = 1.232
+        predicted friction = 2.310
+
+    #3
+        51.592 -> 50.660
+        actual loss = 0.932
+        predicted friction = 2.503
+
+    #4
+        52.733 -> 50.532
+        actual loss = 2.201
+        predicted friction = 2.218
+        difference = 0.017
+
+    #5
+        51.827 -> 50.057
+        actual loss = 1.770
+        predicted friction = 2.245
+
+    #6
+        51.049 -> 49.466
+        actual loss = 1.583
+        predicted friction = 1.998
+
+    #7
+        51.321 -> 49.905
+        actual loss = 1.416
+        predicted friction = 1.278
+        difference = 0.138
+
+    #8
+        49.381 -> 48.318
+        actual loss = 1.063
+        predicted friction = 2.479
+
+    #9
+        49.390 -> 48.544
+        actual loss = 0.846
+        predicted friction = 2.394
+
+    #10
+        48.429 -> 46.348
+        actual loss = 2.081
+        predicted friction = 2.331
+
+One landing (#4) was an extremely close match to ApplyFriction prediction.
+
+This is useful evidence, but NOT final proof because v1.02 sampling was outside
+the exact movement-function call boundary.
+
+
+=============================================================
+v1.03 — REJECTED
+=============================================================
+
+Attempted:
+
+    hook Movement.Update()
+
+Reason:
+
+    compare exact Velocity before/after Movement.Update(dt)
+
+Problem:
+
+    hook caused runtime errors and movement/camera side effects.
+
+Observed:
+
+    camera could rotate
+    character no longer followed camera horizontal rotation correctly
+
+Conclusion:
+
+    Movement.Update hook is too invasive.
+
+Do NOT use v1.03 again.
+
+
+=============================================================
+v1.04 / v1.05 / v1.06 HISTORY
+=============================================================
+
+v1.04:
+
+    initial wrapper helper had an argument/result handling bug.
+    Rejected before use.
+
+v1.05:
+
+    corrected wrapper logic but used wrong object path:
+
+        GameCharacter.MoveFunction
+
+    which does not exist.
+
+v1.06:
+
+    corrected runtime path:
+
+        GameCharacter.Movement.MoveFunction.Move
+
+    Hook target installed successfully.
+
+However v1.06 broke normal movement.
+
+User observed:
+
+    - normal landing stopped behaving normally;
+    - character could appear suspended/sliding over the floor as if still airborne;
+    - speed did not lose normally on landing.
+
+The log also showed repeated stale observations from LANDING #26 through #76:
+
+    LAST AIR remained:
+        Velocity = (129.475, 0.000, 4234.887)
+        HSpeed = 4236.865723
+
+    FIRST RUN PRE remained:
+        Velocity = (129.475, 0.000, 4234.887)
+        HSpeed = 4236.865723
+
+    FIRST RUN POST remained identical.
+
+Conclusion:
+
+    MoveFunction.Move hook is unsafe under this executor.
+
+Do NOT use MoveFunction.Move hooks again.
+
+
+=============================================================
+v1.07 / v1.08 / v1.09 / v1.10 / v1.11 / v1.12 / v1.13
+=============================================================
+
+v1.07:
+
+    Intended non-invasive upvalue/prototype inspection.
+    Character lookup initially failed because CharacterService was treated as a
+    direct object method rather than requiring the ModuleScript.
+
+v1.08:
+
+    Correct CharacterService require succeeded.
+    GameCharacter found.
+    Movement found.
+    Movement.MoveFunction found.
+    Movement.MoveFunction.Move found.
+
+    However debug.getupvalues(MoveFunction.Move) exposed nothing useful.
+
+v1.09:
+
+    Indexed debug.getupvalue() was attempted.
+
+    Result:
+
+        MoveFunction.Move
+        source = =Opiumware
+        line = 1
+        params = 0
+
+        constant:
+            __newlclosure_wrapper
+
+    Therefore the runtime property MoveFunction.Move is an executor wrapper.
+
+v1.10:
+
+    Directly requiring the original Movement.MoveFunction ModuleScript still
+    produced a function object whose debug information was:
+
+        source = =Opiumware
+        line = 1
+        params = 0
+
+        constant:
+            __newlclosure_wrapper
+
+    However direct requiring the original Functions ModuleScript succeeded and
+    exposed the original game function objects:
+
+        Functions["Air"]
+        source = ReplicatedStorage...MoveFunction.Functions
+        line = 109
+        params = 5
+
+        Functions["Run"]
+        source = ReplicatedStorage...MoveFunction.Functions
+        line = 23
+        params = 5
+
+    This is the current reliable way to obtain original Air/Run closures.
+
+v1.11:
+
+    Direct decompile(Functions["Run"]) was attempted.
+
+    Failed:
+
+        Opiumware:381: failed to get function bytecode
+
+    GC scan found exactly one matching closure:
+
+        source =
+            ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+        line = 23
+        params = 5
+
+    decompile() of that GC candidate failed with:
+
+        Opiumware:543: failed to get function bytecode
+
+v1.12:
+
+    Repeated the same direct function decompilation with mandatory clipboard
+    handling.
+
+    Result remained:
+
+        failed to get function bytecode
+
+v1.13:
+
+    Attempted script-level decompilation of the entire Functions ModuleScript
+    rather than Functions["Run"].
+
+    The executor returned:
+
+        decompiler error:
+        invalid Luau bytecode:
+        Failure(Error { input: [...], code: Verify })
+
+    The returned input clearly contains:
+
+        Run
+        Air
+        Slide
+        GrappleMove
+        Climb
+        Helpers
+        ApplyFriction
+        Accelerate
+        AirControl
+        BaseMover
+        PlaneVelocity
+        WallImpact
+        SwimMover
+        and many other known constants/instructions.
+
+    This strongly indicates the executor received the current module's Luau
+    bytecode but its bytecode parser/verifier cannot decode the format.
+
+Current interpretation:
+
+    Roblox updated the movement scripts / Luau bytecode format,
+    while the installed Opiumware decompiler/parser appears not to support the
+    new bytecode version yet.
+
+This is the current stopping point.
+
+
+=============================================================
+CURRENT STOP POINT
+=============================================================
+
+STOP HERE.
+
+Do NOT continue with:
+
+    Movement.Update hooks
+    MoveFunction.Move hooks
+    Air/Run hooks
+    DataRegistry:Set hooks
+
+Do NOT spend time re-running function-level decompile().
+
+Do NOT return to the A -> B solver.
+
+The useful next action when the executor/decompiler is updated is:
+
+    1. run decompile() on the Functions ModuleScript again;
+    2. if it succeeds, extract the COMPLETE Functions module source;
+    3. inspect the exact Run function from line 23;
+    4. determine the exact order/conditions for:
+           ApplyFriction
+           CapSprint
+           Accelerate
+           WallImpact
+           SwimMover
+           BaseMover
+           PlaneVelocity
+           VectorVelocity
+    5. identify exactly what changes DataRegistry["Velocity"] on landing;
+    6. only then design the smallest safe modification.
+
+The current evidence already makes ApplyFriction a strong candidate, but it is
+NOT yet the final proven answer because the exact Run execution order is still
+unavailable.
+
+
+=============================================================
+FUTURE SESSION HANDOFF
+=============================================================
+
+When continuing in a new chat, provide this file:
+
+    Camera_Jump_Physics.txt
+
+The future investigation should resume at:
+
+    section 45
+    CURRENT STOP POINT
+
+The first sentence to preserve as the active objective is:
+
+    "Find the exact operation that removes horizontal speed when Air transitions
+     to grounded Move/Run; current blocker is executor incompatibility with the
+     updated Luau bytecode."
+
+=============================================================
+END OF 2026-10-02 HANDOFF
+=============================================================
