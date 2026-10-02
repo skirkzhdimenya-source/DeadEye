@@ -3005,3 +3005,78 @@ Strictly non-invasive:
 =============================================================
 END OF 2026-10-02 v1.09 PLAN
 =============================================================
+
+
+=============================================================
+40. 2026-10-02 — v1.09 RESULT: MoveFunction.Move IS EXECUTOR WRAPPER
+=============================================================
+
+v1.09 reached the live runtime method, but debug inspection showed:
+
+    MoveFunction.Move
+    source = =Opiumware
+    line = 1
+    params = 0
+
+and:
+
+    debug.getupvalue(...)
+    ERROR = closure has no upvalues
+
+with the only constant:
+
+    __newlclosure_wrapper
+
+Therefore the live property:
+
+    Movement.MoveFunction.Move
+
+is an executor-generated wrapper, not the original game Lua closure.
+
+This explains why the expected Move source upvalues:
+
+    StateInfo
+    Functions
+
+cannot be recovered from that runtime function object.
+
+No conclusion about the actual MoveFunction implementation may be drawn from
+the wrapper's empty upvalue list.
+
+-------------------------------------------------------------
+40.1 NEW DISCOVERY ROUTE
+-------------------------------------------------------------
+
+The original game functions must be located independently of the wrapper.
+
+Preferred targets:
+
+    the required MoveFunction module's original function
+    the Functions module/table itself
+    Functions["Air"]
+    Functions["Run"]
+
+The next probe should scan accessible GC objects/tables and identify functions
+whose debug source/name/line match the recovered movement modules.
+
+Priority:
+
+    1. find the original Functions table containing Air and Run;
+    2. print the real Air function info;
+    3. print the real Run function info;
+    4. inspect their indexed upvalues;
+    5. inspect their constants;
+    6. inspect their nested prototypes;
+    7. inspect helper tables/functions when exposed.
+
+Strict safety remains:
+
+    no hookfunction
+    no writes
+    no movement calls
+    no state changes
+    no camera changes
+
+=============================================================
+END OF 2026-10-02 v1.09 RESULT
+=============================================================
