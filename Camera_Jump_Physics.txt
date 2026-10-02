@@ -3144,3 +3144,45 @@ No hooks and no game-state writes are used.
 =============================================================
 END OF 2026-10-02 v1.10 PLAN
 =============================================================
+
+
+=============================================================
+43. 2026-10-02 — v1.11 PLAN: DIRECT RUN DECOMPILATION
+=============================================================
+
+The immediate target is now the complete original:
+
+    Functions["Run"]
+
+from:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+
+v1.11 performs no hooks and no movement modifications.
+
+Primary attempt:
+
+    decompile(Functions["Run"])
+
+Fallback:
+
+    scan getgc() for function closures whose debug info matches the recovered
+    Run source/module/line and attempt decompile() on those candidates.
+
+The purpose is to recover the full Run body and determine the exact execution
+order and conditions for:
+
+    ApplyFriction
+    CapSprint
+    Accelerate
+    WallImpact
+    SwimMover
+    BaseMover
+    PlaneVelocity
+    VectorVelocity
+
+This is the direct requested decompilation attempt.
+
+=============================================================
+END OF 2026-10-02 v1.11 PLAN
+=============================================================
