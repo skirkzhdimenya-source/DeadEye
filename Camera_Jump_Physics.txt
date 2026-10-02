@@ -2775,3 +2775,78 @@ MoveFunction.Move.
 =============================================================
 END OF 2026-10-02 v1.04 CORRECTION
 =============================================================
+
+=============================================================
+33. 2026-10-02 — v1.05 PATH ERROR CORRECTION
+=============================================================
+
+The v1.05 script reported:
+
+    MoveFunction object not found
+
+This was caused by an incorrect object path in the probe.
+
+Recovered Movement.Init() proves:
+
+    p9.MoveFunction =
+        require(script.MoveFunction).new(p9)
+
+where p9 is the Movement object.
+
+Therefore the runtime ownership is:
+
+    GameCharacter
+        |
+        +-- Movement
+              |
+              +-- MoveFunction
+                    |
+                    +-- Move
+
+NOT:
+
+    GameCharacter
+        |
+        +-- MoveFunction
+
+
+-------------------------------------------------------------
+33.1 CORRECT RUNTIME PATH
+-------------------------------------------------------------
+
+The probe must retrieve:
+
+    GameCharacter.Movement
+        -> Movement.MoveFunction
+        -> Movement.MoveFunction.Move
+
+The previous v1.05 failure was therefore a probe-path error, not evidence that
+MoveFunction is absent from the live movement controller.
+
+
+-------------------------------------------------------------
+33.2 v1.06 CORRECTION
+-------------------------------------------------------------
+
+v1.06 will use:
+
+    Movement.MoveFunction
+
+as the MoveFunction object.
+
+All other investigation rules remain unchanged:
+
+    - do not hook Movement.Update
+    - do not hook Functions["Air"]
+    - do not hook Functions["Run"]
+    - do not hook DataRegistry:Set
+    - do not write Velocity
+    - preserve original arguments
+    - preserve original return values
+    - compare Air -> Run movement calls
+    - support multi-jump speed build-up
+
+
+=============================================================
+END OF 2026-10-02 v1.05 PATH CORRECTION
+=============================================================
