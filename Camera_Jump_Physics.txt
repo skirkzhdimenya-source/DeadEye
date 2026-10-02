@@ -1716,3 +1716,99 @@ NEXT TARGET:
 =============================================================
 END OF APPENDED 2026-10-02 NOTES
 =============================================================
+
+=============================================================
+23. 2026-10-02 — LANDING TRANSITION PROBE
+=============================================================
+
+A non-invasive probe is being used to isolate the single Air -> Move transition.
+
+The probe does NOT:
+    - hook Functions["Air"]
+    - hook Functions["Run"]
+    - hook DataRegistry:Set
+    - replace any movement function
+
+It only observes the live character on Heartbeat.
+
+For every observed state transition it records:
+
+    previous State
+    previous MoveType
+    new State
+    new MoveType
+    deltaTime
+    internal Velocity
+    internal horizontal velocity magnitude
+    DataRegistry["Speed"]
+    real AssemblyLinearVelocity horizontal magnitude
+    MoveStats.Speed
+    MoveStats.Friction
+    MoveStats.RunDeaccel
+    Sprint
+    Grounded
+
+For an Air -> Move transition it additionally calculates the friction-only
+prediction from the previous internal horizontal velocity:
+
+    if HSpeed > RunDeaccel:
+
+        predictedMultiplier = 1 - Friction * dt
+
+        predictedLoss = HSpeed - HSpeed * predictedMultiplier
+
+This is compared with the actual horizontal-speed change observed across the
+transition.
+
+The test is specifically intended to answer:
+
+    Does the first ground-side tick produce approximately
+        HSpeed * (1 - 5*dt)
+    before any acceleration/cap/constraint effect is accounted for?
+
+The output should be copied with F6.
+
+External stop flag:
+
+    getgenv().LandingLossProbeStop = true
+
+This lets another script stop the probe without modifying the movement system.
+
+
+-------------------------------------------------------------
+23.1 EXPECTED INTERPRETATION
+-------------------------------------------------------------
+
+Case A:
+
+    actual loss ~= friction prediction
+
+This strongly supports ApplyFriction as the direct source of the observed
+landing speed loss.
+
+Case B:
+
+    actual loss differs substantially from friction prediction
+
+Then the next target is the remaining Run-side operation:
+
+    Accelerate
+    Sprint/Crouch speed calculation
+    CapSprint
+    WallImpact
+    SwimMover
+    VectorVelocity / BaseMover / PlaneVelocity
+    or a ground constraint
+
+Case C:
+
+    MoveStats.Speed changes at Air -> Move and the actual loss correlates with
+    that change
+
+Then the state Movement.SpeedMult / StateSpeedMultipliers path must also be
+investigated.
+
+
+=============================================================
+END OF 2026-10-02 ADDITION
+=============================================================
