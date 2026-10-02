@@ -2956,3 +2956,52 @@ No hooks or writes are permitted.
 =============================================================
 END OF 2026-10-02 v1.08 RESULT
 =============================================================
+
+
+=============================================================
+39. 2026-10-02 — v1.09 PLAN: INDEXED UPVALUE INSPECTION
+=============================================================
+
+v1.08 confirmed the live MoveFunction.Move function but could not expose its
+captured upvalues through debug.getupvalues().
+
+v1.09 will use executor-compatible indexed inspection:
+
+    debug.getupvalue(MoveFunction.Move, index)
+
+for a sequence of indexes.
+
+For every returned upvalue the probe will print:
+
+    index
+    upvalue name
+    value type
+    function info when applicable
+
+The first goal is to recover the live:
+
+    StateInfo
+    Functions
+
+references directly from the Move closure.
+
+Then, once Functions is found:
+
+    Functions["Air"]
+    Functions["Run"]
+
+will be inspected without modifying either function.
+
+MoveFunction.Move constants and prototypes will also be queried independently.
+
+Strictly non-invasive:
+
+    no hookfunction
+    no DataRegistry writes
+    no Velocity writes
+    no State writes
+    no camera writes
+
+=============================================================
+END OF 2026-10-02 v1.09 PLAN
+=============================================================
