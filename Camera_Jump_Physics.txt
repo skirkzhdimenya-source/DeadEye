@@ -2885,3 +2885,26 @@ No conclusion about movement physics may be drawn from this failed run.
 =============================================================
 END OF 2026-10-02 v1.07 RESULT
 =============================================================
+
+
+=============================================================
+37. 2026-10-02 — v1.08 CHARACTER SERVICE ACCESS CORRECTION
+=============================================================
+
+v1.08 keeps the non-invasive introspection strategy from v1.07.
+
+Only the local-character acquisition is changed.
+
+The probe will:
+
+    1. locate ReplicatedStorage.Services.Asset.CharacterService;
+    2. report its ClassName;
+    3. require it when it is a ModuleScript;
+    4. attempt GetLocalCharacter() on the resulting service table/object;
+    5. retry briefly so the character controller has time to initialize.
+
+No movement function is hooked and no game state is modified.
+
+=============================================================
+END OF 2026-10-02 v1.08 PLAN
+=============================================================
