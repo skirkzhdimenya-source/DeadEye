@@ -2596,3 +2596,136 @@ remains unresolved until the Run bytecode/source becomes available.
 =============================================================
 END OF 2026-10-02 v1.04 INVESTIGATION TARGET
 =============================================================
+
+=============================================================
+31. 2026-10-02 — v1.04 PRECISE AIR/RUN MOVEMENT-FUNCTION PROBE
+=============================================================
+
+v1.03 was rejected as an observation method because wrapping Movement.Update()
+altered the normal movement/camera behavior.
+
+The next probe wraps only:
+
+    MoveFunction.Move()
+
+Recovered call chain:
+
+    Movement.Update()
+        ->
+    Movement:DoFunction("Move", State, MoveStats, dt)
+        ->
+    MoveFunction:Move(dt, State, MoveStats)
+        ->
+    StateInfo:GetState(State)
+        ->
+    Functions[Movement.MoveType](...)
+
+Therefore v1.04 preserves the outer Movement.Update() function and the final
+RootPartOrienter update.
+
+The probe records each selected movement-function invocation.
+
+For Air:
+
+    State = Air
+    MoveType = Air
+
+For the normal grounded state:
+
+    State = Move
+    MoveType = Run
+
+The first Run invocation after an Air invocation is treated as the landing-side
+Run call.
+
+
+-------------------------------------------------------------
+31.1 THREE DISTINCT MEASUREMENTS
+-------------------------------------------------------------
+
+v1.04 separates three effects:
+
+    A. LAST AIR -> FIRST RUN PRE
+        Velocity change between the end of the last Air movement call and the
+        beginning of the first Run movement call.
+
+        This can reveal changes occurring OUTSIDE the selected movement
+        function, such as physics/ground resolution/state transition timing.
+
+    B. FIRST RUN PRE -> FIRST RUN POST
+        Velocity change DURING the actual Functions["Run"] call.
+
+        This is the most important measurement.
+
+    C. APPLYFRICTION PREDICTION
+        Calculated using the exact dt argument passed into MoveFunction.Move()
+        for that Run call.
+
+This allows direct comparison of:
+
+    Run pre
+        ->
+    Run post
+
+against:
+
+    ApplyFriction expected change.
+
+
+-------------------------------------------------------------
+31.2 EXPECTED DECISION
+-------------------------------------------------------------
+
+If:
+
+    Run pre -> Run post loss
+        ~= ApplyFriction prediction
+
+then the landing loss is strongly localized to the Run movement function and
+matches the recovered friction helper.
+
+If:
+
+    last Air post -> first Run pre loss
+        is large
+
+but:
+
+    Run pre -> Run post loss
+        is near zero
+
+then the loss occurs outside Functions["Run"].
+
+If:
+
+    Run pre -> Run post
+        differs substantially from ApplyFriction
+
+then another operation inside Run contributes.
+
+
+-------------------------------------------------------------
+31.3 IMPORTANT BEHAVIOR PRESERVATION
+-------------------------------------------------------------
+
+v1.04:
+
+    - does NOT hook Movement.Update
+    - does NOT hook Functions["Air"]
+    - does NOT hook Functions["Run"]
+    - does NOT hook DataRegistry:Set
+    - does NOT modify Velocity
+    - does NOT modify camera
+    - forwards all original MoveFunction.Move arguments
+    - forwards all original return values
+
+The wrapper must remain observation-only.
+
+Because the previous v1.03 Movement.Update hook can remain installed for the
+duration of a client session, v1.04 testing should be performed in a fresh game
+session after leaving/rejoining the game.
+
+
+=============================================================
+END OF 2026-10-02 v1.04 PRECISE PROBE
+=============================================================
