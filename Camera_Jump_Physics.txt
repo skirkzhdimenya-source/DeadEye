@@ -1921,3 +1921,65 @@ the probe must still log lower-speed transitions.
 =============================================================
 END OF 2026-10-02 MULTI-JUMP TESTING ADDITION
 =============================================================
+
+=============================================================
+25. 2026-10-02 — LANDING PROBE v1.02 MULTI-JUMP UPDATE
+=============================================================
+
+The probe itself is now treated as a multi-jump measurement tool.
+
+Version:
+    v1.02
+
+Required behavior:
+
+    - do not stop after the first Air -> Move transition;
+    - count every Air -> Move transition;
+    - retain all transition measurements;
+    - show the transition/jump count;
+    - continuously show current HSpeed;
+    - mark transitions after at least 4 jumps;
+    - allow the player to use normal camera yaw and A/D during speed build-up.
+
+The player should therefore perform a continuous sequence of jumps while
+maintaining movement.
+
+The probe does not control the jump, camera, W, A, or D. It only observes.
+
+Suggested interpretation:
+
+    Landing #1:
+        baseline low-speed measurement
+
+    Landing #2:
+        compare against #1
+
+    Landing #3:
+        compare against #2
+
+    Landing #4+:
+        high-speed measurements become useful for the ~2 speed loss test
+
+A high-speed marker is used when:
+
+    internal horizontal speed >= 4000
+
+which corresponds approximately to:
+
+    real horizontal speed >= 44.4
+
+This threshold is a display/selection aid only and is NOT a proven engine
+threshold.
+
+The scientifically relevant comparison remains:
+
+    actual HSpeed loss
+        vs
+    ApplyFriction predicted loss
+
+The multi-jump sequence exists only to obtain a sufficiently large HSpeed.
+
+
+=============================================================
+END OF 2026-10-02 v1.02 ADDITION
+=============================================================
