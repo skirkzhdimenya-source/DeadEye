@@ -2421,3 +2421,178 @@ the hook itself is rejected and a non-hook runtime tracer must be used instead.
 =============================================================
 END OF 2026-10-02 v1.03 RESULT
 =============================================================
+
+=============================================================
+30. 2026-10-02 — NEW TARGET: MoveFunction.Move() BOUNDARY
+=============================================================
+
+The recovered code gives a narrower and cleaner execution boundary than
+Movement.Update():
+
+    Movement.Update()
+        ->
+    Movement:DoFunction("Move", State, MoveStats, dt)
+        ->
+    MoveFunction:Move(dt, State, MoveStats)
+        ->
+    StateInfo:GetState(State)
+        ->
+    state.Movement.MoveType
+        ->
+    Functions[MoveType](dt, Movement, DataRegistry, Character, MoveStats)
+
+Therefore the exact Air -> Run transition can be observed around:
+
+    MoveFunction.Move()
+
+without intercepting the outer Movement.Update().
+
+This preserves the rest of the Update() pipeline, including:
+
+    RootPartOrienter:Update(dt, State)
+
+which was broken/affected by the previous Movement.Update hook.
+
+
+-------------------------------------------------------------
+30.1 EXACT MoveFunction.Move ARGUMENTS — SOURCE CONFIRMED
+-------------------------------------------------------------
+
+Recovered source:
+
+    function t.Move(p3, p4, p5, p6)
+
+where:
+
+    p3 = MoveFunction self
+    p4 = dt
+    p5 = State
+    p6 = MoveStats
+
+Then:
+
+    local v7 = StateInfo:GetState(p5)
+    local Movement = v7.Movement
+
+    return Functions[Movement.MoveType](
+        p4,
+        Movement,
+        p3.DataRegistry,
+        p3.Character,
+        p6
+    )
+
+Thus a wrapper around MoveFunction.Move can record:
+
+    exact dt
+    exact State
+    exact MoveType
+
+and compare DataRegistry["Velocity"] immediately before and after the chosen
+Air/Run movement function.
+
+
+-------------------------------------------------------------
+30.2 v1.04 REQUIREMENTS
+-------------------------------------------------------------
+
+The next probe must:
+
+    - hook ONLY MoveFunction.Move;
+    - forward all original varargs unchanged;
+    - never write DataRegistry;
+    - never write Velocity;
+    - never write camera state;
+    - never replace Air or Run directly;
+    - retain the original return values;
+    - count Air -> Move / MoveType Air -> Run transitions;
+    - keep the multi-jump speed build-up behavior.
+
+For each Air -> Run boundary record:
+
+    dt
+    State before
+    MoveType before
+    internal Velocity before
+    internal HSpeed before
+    internal Velocity after
+    internal HSpeed after
+    real AssemblyLinearVelocity before
+    real AssemblyLinearVelocity after
+    Friction
+    RunDeaccel
+    Speed
+    Sprint
+
+Then calculate:
+
+    actual HSpeed loss
+
+and:
+
+    ApplyFriction prediction
+
+using the exact MoveFunction.Move dt.
+
+
+-------------------------------------------------------------
+30.3 WHAT THIS TEST DISTINGUISHES
+-------------------------------------------------------------
+
+This boundary can answer a more precise question than v1.02:
+
+    Did the Air/Run movement-function invocation itself change internal Velocity?
+
+Possible outcomes:
+
+    A.
+        Air -> Run movement call
+        actual loss ~= ApplyFriction prediction
+
+        Strong evidence that ApplyFriction inside the Run-side movement
+        function is the relevant source.
+
+    B.
+        Air -> Run movement call
+        actual loss is near zero
+
+        The landing loss is occurring outside the Run movement function,
+        such as Roblox ground resolution, another movement pass, or a
+        constraint/physics operation.
+
+    C.
+        Air -> Run movement call
+        actual loss differs substantially from friction prediction
+
+        Another operation inside the Run function is contributing.
+
+
+-------------------------------------------------------------
+30.4 IMPORTANT INTERPRETATION RULE
+-------------------------------------------------------------
+
+The MoveFunction.Move boundary is narrower than Movement.Update but still
+contains the entire selected Run function.
+
+Therefore it can establish whether the loss occurs inside:
+
+    Functions["Run"]
+
+but cannot by itself establish the exact statement order inside Run.
+
+The exact order between:
+
+    ApplyFriction
+    Accelerate
+    CapSprint
+    WallImpact
+    SwimMover
+    BaseMover
+    PlaneVelocity
+
+remains unresolved until the Run bytecode/source becomes available.
+
+
+=============================================================
+END OF 2026-10-02 v1.04 INVESTIGATION TARGET
+=============================================================
