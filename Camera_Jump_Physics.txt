@@ -1983,3 +1983,244 @@ The multi-jump sequence exists only to obtain a sufficiently large HSpeed.
 =============================================================
 END OF 2026-10-02 v1.02 ADDITION
 =============================================================
+
+=============================================================
+26. 2026-10-02 — ACTUAL v1.02 MULTI-JUMP RESULTS
+=============================================================
+
+The user performed the v1.02 test while looking straight ahead throughout the
+test.
+
+This is important because the observed high-speed landings were NOT produced by
+deliberately changing camera yaw during the measurements.
+
+The user accumulated speed over repeated jumps and reached:
+
+    MAX internal HSpeed ~= 4747.396
+    MAX real HSpeed ~= 52.749
+
+Ten Air -> Move landings were captured.
+
+Representative results:
+
+    Landing #1:
+        previous real HSpeed = 49.648
+        current real HSpeed  = 49.300
+        actual loss          = 0.348
+        friction prediction  = 2.181
+
+    Landing #2:
+        previous real HSpeed = 51.098
+        current real HSpeed  = 49.866
+        actual loss          = 1.232
+        friction prediction  = 2.310
+
+    Landing #3:
+        previous real HSpeed = 51.592
+        current real HSpeed  = 50.660
+        actual loss          = 0.932
+        friction prediction  = 2.503
+
+    Landing #4:
+        previous real HSpeed = 52.733
+        current real HSpeed  = 50.532
+        actual loss          = 2.201
+        friction prediction  = 2.218
+        difference            = 0.017
+
+    Landing #5:
+        previous real HSpeed = 51.827
+        current real HSpeed  = 50.057
+        actual loss          = 1.770
+        friction prediction  = 2.245
+
+    Landing #6:
+        previous real HSpeed = 51.049
+        current real HSpeed  = 49.466
+        actual loss          = 1.583
+        friction prediction  = 1.998
+
+    Landing #7:
+        previous real HSpeed = 51.321
+        current real HSpeed  = 49.905
+        actual loss          = 1.416
+        friction prediction  = 1.278
+        difference            = 0.138
+
+    Landing #8:
+        previous real HSpeed = 49.381
+        current real HSpeed  = 48.318
+        actual loss          = 1.063
+        friction prediction  = 2.479
+
+    Landing #9:
+        previous real HSpeed = 49.390
+        current real HSpeed  = 48.544
+        actual loss          = 0.846
+        friction prediction  = 2.394
+
+    Landing #10:
+        previous real HSpeed = 48.429
+        current real HSpeed  = 46.348
+        actual loss          = 2.081
+        friction prediction  = 2.331
+        difference            = 0.250
+
+The exact Landing #4 match is strong evidence that the magnitude of the observed
+landing loss can be produced by ApplyFriction alone.
+
+
+-------------------------------------------------------------
+26.1 IMPORTANT HIGH-SPEED OBSERVATION
+-------------------------------------------------------------
+
+At the high-speed landings:
+
+    MoveStats.Speed = 1620
+    Sprint = 2
+
+therefore the nominal sprint-speed product is:
+
+    Sprint * Speed = 3240
+
+while the measured internal horizontal velocity was approximately:
+
+    4300-4750
+
+Therefore:
+
+    current internal speed > Sprint * Speed
+
+for the measured high-speed landings.
+
+The recovered Accelerate helper returns the existing velocity when:
+
+    addSpeed = wishSpeed - velocity:Dot(wishDirection)
+
+is <= 0.
+
+Consequently, if Run's effective wishSpeed at this point is bounded around
+Sprint * Speed, Accelerate may provide no positive speed addition on the landing
+tick while the current velocity remains above that desired speed.
+
+This makes the friction-only landing-loss explanation especially plausible.
+
+The exact Run-side wishSpeed construction is still NOT directly recovered, so this
+is a derived interpretation, not yet a source-level fact.
+
+
+-------------------------------------------------------------
+26.2 WHY THE OTHER LANDINGS DO NOT EXACTLY MATCH
+-------------------------------------------------------------
+
+The v1.02 probe compares samples taken from Heartbeat callbacks.
+
+It does NOT capture:
+
+    exact beginning of Movement.Update(dt)
+    exact end of Movement.Update(dt)
+
+and therefore the observed Air -> Move sample difference may include:
+
+    - the actual Movement.Update processing;
+    - Roblox physics between samples;
+    - collision/ground resolution;
+    - another movement/constraint operation;
+    - a different effective movement dt than the Heartbeat sample dt;
+    - ordering differences between the probe callback and the game's own update.
+
+Therefore the v1.02 measurements prove that landing losses of roughly 1-2+ real
+speed occur, and that some landings match the ApplyFriction calculation extremely
+closely, but they do NOT by themselves prove exact Run call ordering.
+
+
+=============================================================
+27. 2026-10-02 — NEXT TARGET: WRAP MOVEMENT.UPDATE()
+=============================================================
+
+The next non-line-109 investigation target is the actual:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
+    :Update(dt)
+
+method.
+
+Recovered source:
+
+    function t.Update(p42, p43)
+
+and inside it:
+
+    p42:SetState(
+        p42.DataRegistry:Get("State")
+    )
+
+    ...
+
+    p42:DoFunction(
+        "Move",
+        p42.State,
+        v44,
+        p43
+    )
+
+This means wrapping the real Movement.Update() can provide a much cleaner
+measurement boundary than Heartbeat sampling.
+
+Required measurements:
+
+    BEFORE Movement.Update:
+        self.State
+        DataRegistry State
+        Grounded
+        internal Velocity
+        real AssemblyLinearVelocity
+
+    exact dt argument passed into Movement.Update
+
+    AFTER Movement.Update:
+        self.State
+        DataRegistry State
+        Grounded
+        internal Velocity
+        DataRegistry Speed
+        real AssemblyLinearVelocity
+
+For an Air -> Move update call, calculate:
+
+    exact internal HSpeed before
+    exact internal HSpeed after
+
+and compare it to:
+
+    ApplyFriction predicted HSpeed
+
+using the ACTUAL dt argument received by Movement.Update.
+
+This should eliminate the major Heartbeat-sampling ambiguity.
+
+
+-------------------------------------------------------------
+27.1 SAFETY / DEBUGGING RESTRICTION
+-------------------------------------------------------------
+
+Do NOT hook:
+
+    line-109 Air function
+    DataRegistry:Set
+
+Those previous experiments broke the movement pipeline.
+
+The proposed v1.03 test instead wraps only:
+
+    Movement.Update
+
+and calls the original Update function normally.
+
+If the executor cannot safely hook the method, the probe must stop and report
+that limitation rather than modifying the movement logic.
+
+
+=============================================================
+END OF 2026-10-02 RESULTS + NEXT TARGET
+=============================================================
