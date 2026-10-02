@@ -1267,3 +1267,452 @@ Expected target:
     Velocity.Dot(WishDirection) ~= 0
 
 This validation should be performed in an open area without wall contact.
+
+=============================================================
+21. UPDATE 2026-10-02 — LANDING SPEED LOSS INVESTIGATION
+=============================================================
+
+The investigation is now focused specifically on the horizontal-speed drop that
+appears when the movement state changes from:
+
+    State = "Air"
+    MoveType = "Air"
+
+to:
+
+    State = "Move"
+    MoveType = "Run"
+
+The A->B solver is intentionally NOT part of this investigation.
+
+
+-------------------------------------------------------------
+21.1 EXACT STATE TRANSITION ORDER — CONFIRMED
+-------------------------------------------------------------
+
+Movement.SetState(newState) was recovered from the movement dump.
+
+When the requested state differs from the current state, SetState does this:
+
+    1. get current MoveStats
+    2. End the previous state
+    3. Start the new state
+    4. read the new state's StateInfo
+    5. apply Perk StateSpeedMultipliers
+    6. apply Movement.SpeedMult through MoveStats:SpeedChange("State", ...)
+    7. apply Movement.DisableSprinting
+    8. update PlatformStand / Massless / collision state
+    9. set p28.State = newState
+   10. enable the new state's constraints
+
+Important:
+
+There are NO discovered functions named:
+
+    AirEnd
+    RunStart
+
+in the active Functions table.
+
+Therefore the Air -> Move transition itself does not currently have a dedicated
+AirEnd/RunStart movement function shown by the recovered function table.
+
+
+-------------------------------------------------------------
+21.2 EXACT UPDATE ORDER AFTER THE STATE CHANGE — CONFIRMED
+-------------------------------------------------------------
+
+Movement.Update(dt) does:
+
+    p42:SetState(p42.DataRegistry:Get("State"))
+    p42:UpdateCanJump()
+    p42.MoveStats:UpdateMoveStats()
+    local v44 = p42.MoveStats:GetMoveStats()
+    p42:DoFunction("Move", p42.State, v44, dt)
+
+MoveFunction.Move() then:
+
+    StateInfo:GetState(state)
+        ->
+    state.Movement
+        ->
+    Movement.MoveType
+        ->
+    Functions[Movement.MoveType](...)
+
+Therefore on the first update in State = "Move":
+
+    SetState("Move")
+        ->
+    MoveStats state modifiers are applied
+        ->
+    p42.State becomes "Move"
+        ->
+    DoFunction("Move")
+        ->
+    Functions["Run"](...)
+
+So the first Run movement call happens in the SAME Movement.Update tick
+in which Air -> Move is committed.
+
+
+-------------------------------------------------------------
+21.3 NEW IMPORTANT LEAD — STATE SPEED MODIFIER
+-------------------------------------------------------------
+
+SetState can change MoveStats.Speed before the first Run call.
+
+The exact operation is:
+
+    p28.MoveStats:SpeedChange("State", Movement.SpeedMult)
+
+and MoveStats.UpdateAttributes() multiplies the base speed by every active
+SpeedChanges entry.
+
+Therefore the Air -> Move transition can change:
+
+    MoveStats.Speed
+
+before Run executes.
+
+This does NOT directly rewrite DataRegistry["Velocity"] in the recovered
+SetState code.
+
+However, Run uses Speed/Sprint/SprintCap-related values, so a change in
+MoveStats.Speed can alter Run's desired speed/acceleration behavior.
+
+The exact Move state's Movement.SpeedMult is still not recovered here.
+
+
+-------------------------------------------------------------
+21.4 NEW IMPORTANT LEAD — APPLYFRICTION NUMERICALLY MATCHES THE OBSERVED LOSS
+-------------------------------------------------------------
+
+ApplyFriction is now the strongest concrete explanation for the observed
+landing speed drop.
+
+Recovered helper:
+
+    local Velocity = DataRegistry:Get("Velocity")
+    local magnitude = Velocity.magnitude
+
+    local RunDeaccel = stats.RunDeaccel
+    local Friction = stats.Friction
+
+    local v4
+    if magnitude < RunDeaccel then
+        v4 = RunDeaccel
+    else
+        v4 = magnitude
+    end
+
+    local newMagnitude =
+        magnitude - v4 * Friction * dt * <mode>
+
+    ...
+    return Velocity * (newMagnitude / magnitude)
+
+For the observed internal air speeds, magnitude is several thousand
+registry units while:
+
+    RunDeaccel = 700
+
+so:
+
+    magnitude > RunDeaccel
+    =>
+    v4 = magnitude
+
+Therefore, in the normal/non-swimming case, the multiplier simplifies to:
+
+    newMagnitude / magnitude
+        =
+    1 - Friction * dt
+
+With the confirmed base:
+
+    Friction = 5
+
+the first Run friction tick is approximately:
+
+    multiplier = 1 - 5 * dt
+
+
+-------------------------------------------------------------
+21.5 THIS FITS THE REAL OBSERVED ~2 SPEED LOSS
+-------------------------------------------------------------
+
+One measured movement call had approximately:
+
+    dt = 0.007786
+
+Therefore:
+
+    multiplier
+        = 1 - 5 * 0.007786
+        = 0.96107
+
+So friction alone removes approximately:
+
+    3.893% of horizontal/internal speed
+
+per such Run tick.
+
+The game's internal velocity scale is approximately:
+
+    internal Velocity ~= real horizontal velocity * 90
+
+because Movement.Update calculates:
+
+    Speed = Velocity.Magnitude / 90
+
+For a real horizontal speed of 50:
+
+    50 * 90 = 4500 internal
+
+friction loss:
+
+    4500 * (1 - 0.96107)
+        ~= 175.2 internal
+
+converted back:
+
+    175.2 / 90
+        ~= 1.95 real speed
+
+For a real horizontal speed of 60:
+
+    60 * 90 = 5400 internal
+
+loss:
+
+    5400 * (1 - 0.96107)
+        ~= 210.3 internal
+
+converted back:
+
+    210.3 / 90
+        ~= 2.34 real speed
+
+This is an extremely close numerical match to the previously observed
+approximately 2 units of horizontal-speed loss per landing.
+
+IMPORTANT:
+
+This is a very strong numerical match, but it is still a DERIVED lead, not
+yet a direct runtime proof that ApplyFriction is the exact first operation
+responsible for the landing drop.
+
+
+-------------------------------------------------------------
+21.6 WHY THE LANDING TICK IS THE CRITICAL TEST
+-------------------------------------------------------------
+
+Because:
+
+    Air -> Move
+        ->
+    first Run call
+        ->
+    ApplyFriction is available inside Run
+
+the critical experiment is NOT another long air-strafe test.
+
+We only need to isolate one transition and compare:
+
+    last Air velocity
+        vs
+    first Move/Run velocity
+
+while also logging:
+
+    State
+    MoveType
+    DataRegistry["Velocity"]
+    DataRegistry["Speed"]
+    MoveStats.Speed
+    MoveStats.Friction
+    MoveStats.RunDeaccel
+    Sprint
+    Grounded
+    HumanoidRootPart.AssemblyLinearVelocity
+
+The goal is to determine whether the first Move/Run tick removes approximately:
+
+    1 - 5*dt
+
+of the current velocity before the acceleration portion can compensate for it.
+
+
+-------------------------------------------------------------
+21.7 NON-INVASIVE INVESTIGATION RULE
+-------------------------------------------------------------
+
+Future landing tests should NOT:
+
+    - hook the line-109 Air function
+    - hook Registry:Set
+    - replace Run
+    - replace Air
+
+Those approaches have already caused movement breakage.
+
+The safe direction is runtime observation around the existing Movement.Update
+pipeline without replacing the active movement functions.
+
+
+-------------------------------------------------------------
+21.8 RUN FUNCTION — CURRENT SOURCE EVIDENCE
+-------------------------------------------------------------
+
+The active Run function is:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+    linedefined = 23
+    numparams = 5
+
+Direct bytecode decompilation currently fails with:
+
+    failed to get function bytecode
+
+Therefore the exact source order inside Run is still unavailable.
+
+Recovered Run constants prove that it references:
+
+    "JumpingActive"
+    "MoveDirection"
+    "GlobalMoveDirection"
+    "Swimming"
+    "X"
+    "Z"
+    "BhopEnabled"
+    "JumpQueued"
+    "LookCFrame"
+    "Velocity"
+    "Sprint"
+    "ApplyFriction"
+    "Crouching"
+    "CapSprint"
+    "ADS"
+    "SprintAcceleration"
+    "SprintCap"
+    "Magnitude"
+    "WalkSpeedMultiplier"
+    "Emote"
+    "Speed"
+    "RunAccel"
+    "Accelerate"
+    "WallImpact"
+    "SwimMover"
+    "VectorVelocity"
+    "BaseMover"
+    "PlaneVelocity"
+
+This confirms that Run has both ground friction and acceleration-related logic,
+plus sprint/crouch/swim/constraint branches.
+
+
+-------------------------------------------------------------
+21.9 CURRENT HYPOTHESIS — ORDER OF OPERATIONS
+-------------------------------------------------------------
+
+Most likely landing path:
+
+    State changes Air -> Move
+              |
+              v
+    MoveStats state modifier update
+              |
+              v
+    Run(...)
+              |
+              +--> ApplyFriction(...)
+              |
+              +--> direction / sprint calculations
+              |
+              +--> Accelerate(...)
+              |
+              +--> caps / constraints / other branches
+
+The ordering shown above is NOT yet confirmed.
+
+The immediate priority is to prove or disprove:
+
+    first Run tick
+        ->
+    ApplyFriction
+        ->
+    ~4% speed drop
+
+before making any DeadEye physics implementation change based on this.
+
+
+=============================================================
+22. CURRENT INVESTIGATION STATUS — 2026-10-02
+=============================================================
+
+CONFIRMED:
+
+    Air MoveType      = Air
+    Move MoveType     = Run
+
+    AirEnd function   = absent
+    RunStart function = absent
+
+    Movement.Update:
+        SetState(...)
+        ->
+        MoveStats.UpdateMoveStats()
+        ->
+        DoFunction("Move", ...)
+        ->
+        current MoveType function
+
+    Move -> Run function:
+        Functions["Run"]
+
+    Run function:
+        linedefined = 23
+        direct decompile unavailable
+
+    ApplyFriction:
+        Friction = 5
+        RunDeaccel = 700
+
+    Observed internal velocity:
+        several thousand registry units
+
+    Internal -> real speed scale:
+        approximately 90
+
+STRONG DERIVED LEAD:
+
+    when internal speed > RunDeaccel:
+        ApplyFriction multiplier ~= 1 - 5*dt
+
+    at dt ~= 0.0078:
+        multiplier ~= 0.961
+
+    expected real-speed loss:
+        ~1.95 at real speed 50
+        ~2.34 at real speed 60
+
+This closely matches the observed landing loss.
+
+NOT YET PROVEN:
+
+    exact position of ApplyFriction inside Run
+    whether ApplyFriction is the FIRST source of the landing loss
+    exact Move.SpeedMult value
+    exact Run ordering relative to Accelerate and caps
+    whether another ground/collision/constraint operation also changes Velocity
+    on the same transition tick
+
+NEXT TARGET:
+
+    isolate exactly one Air -> Move transition and identify the first velocity
+    change caused by the ground-side movement path.
+
+=============================================================
+END OF APPENDED 2026-10-02 NOTES
+=============================================================
