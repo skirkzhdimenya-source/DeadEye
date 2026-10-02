@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.121
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.123
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.122"
+local SCRIPT_VERSION = "1.123"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10308,8 +10308,15 @@ end
 local LOOK_RENDER_NAME = "DeadEyeMainLook"
 local LOOK_INPUT_RADIANS = 0.00575958658
 local LOOK_TARGET_PITCH = -math.rad(89)
-local LOOK_MAX_INPUT = 12
-local LOOK_PITCH_GAIN = 0.32
+
+--// LOOK now starts only shortly before predicted ground contact.
+--// The existing LOOK raycast sensor is still used; no new sensor is created.
+--// Faster pitch movement is intentional so the head reaches the down angle
+--// before the landing/jump-speed calculation happens.
+local LOOK_PRELAND_TIME = 0.18
+local LOOK_MAX_INPUT = 24
+local LOOK_PITCH_GAIN = 1.15
+
 local LOOK_RESTORE_EPSILON = math.rad(0.75)
 local LOOK_MIN_ACTIVE = 0.10
 local LOOK_MAX_AFTER_JUMP = 0.30
@@ -12284,16 +12291,16 @@ function mainJump.canJump()
             ~= Enum.HumanoidStateType.FallingDown
 end
 
-function mainJump.lookScannerSeesSurface()
-    --// Only accept an actual collidable landing surface directly below.
-    --// The old overlap-box scanner could see arbitrary map geometry and
-    --// re-trigger LOOK repeatedly on some maps.
+function mainJump.lookScannerGetSurfaceDistance()
+    --// Same existing LOOK raycast sensor.
+    --// Returns the nearest valid landing-surface distance instead of only
+    --// a boolean, so the watcher can start LOOK a small time before impact.
     if not mainJump.lookEnabled
         or not mainJump.enabled
         or not mainJump.root
         or not mainJump.character
     then
-        return false
+        return nil
     end
 
     local params =
@@ -12308,8 +12315,10 @@ function mainJump.lookScannerSeesSurface()
 
     params.IgnoreWater = true
 
+    --// Slightly longer only to give the predictive watcher enough room;
+    --// activation itself is still gated by predicted impact time.
     local rayLength =
-        7.5
+        9.5
 
     local origins = {
         mainJump.root.Position
@@ -12328,6 +12337,8 @@ function mainJump.lookScannerSeesSurface()
             mainJump.lookForwardSensorPart.Position
         )
     end
+
+    local nearestDistance = nil
 
     for _, origin in ipairs(origins) do
         local result
@@ -12368,13 +12379,73 @@ function mainJump.lookScannerSeesSurface()
                 if distance >= 2.0
                     and distance <= rayLength
                 then
-                    return true
+                    if not nearestDistance
+                        or distance < nearestDistance
+                    then
+                        nearestDistance = distance
+                    end
                 end
             end
         end
     end
 
-    return false
+    return nearestDistance
+end
+
+function mainJump.lookScannerSeesSurface()
+    return mainJump.lookScannerGetSurfaceDistance() ~= nil
+end
+
+function mainJump.getPredictedLookLandingTime(distance, verticalVelocity)
+    if not distance
+        or distance <= 0
+        or verticalVelocity >= -0.05
+    then
+        return nil
+    end
+
+    local gravity = 196.2
+
+    pcall(function()
+        gravity = tonumber(workspace.Gravity)
+            or 196.2
+    end)
+
+    if gravity <= 0 then
+        return nil
+    end
+
+    --// Solve:
+    --// distance + verticalVelocity*t + 0.5*g*t^2 = 0
+    local discriminant =
+        verticalVelocity * verticalVelocity
+        - 2 * gravity * distance
+
+    if discriminant >= 0 then
+        local root =
+            math.sqrt(discriminant)
+
+        local t =
+            (
+                -verticalVelocity
+                - root
+            )
+            / gravity
+
+        if t >= 0 then
+            return t
+        end
+    end
+
+    --// Fallback when the measured trajectory and Workspace.Gravity
+    --// do not produce a real quadratic root.
+    local speed =
+        math.max(
+            -verticalVelocity,
+            0.01
+        )
+
+    return distance / speed
 end
 
 function mainJump.jump(hit)
@@ -12838,13 +12909,30 @@ function mainJump.createSensors(char)
                 end
 
                 --// One LOOK activation per airborne phase.
+                --// Use the existing LOOK sensor, but wait until the predicted
+                --// contact point is only a small amount away. This puts the
+                --// head down shortly BEFORE landing rather than too early.
                 if not mainJump.lookTriggeredThisAir
                     and not mainJump.lookActive
-                    and mainJump.lookScannerSeesSurface()
                 then
-                    mainJump.lookTriggeredThisAir = true
-                    mainJump.lookAutoJumpCycle = true
-                    mainJump.beginLook()
+                    local surfaceDistance =
+                        mainJump.lookScannerGetSurfaceDistance()
+
+                    if surfaceDistance then
+                        local landingTime =
+                            mainJump.getPredictedLookLandingTime(
+                                surfaceDistance,
+                                verticalVelocity
+                            )
+
+                        if landingTime
+                            and landingTime <= LOOK_PRELAND_TIME
+                        then
+                            mainJump.lookTriggeredThisAir = true
+                            mainJump.lookAutoJumpCycle = true
+                            mainJump.beginLook()
+                        end
+                    end
                 end
             end
         )
