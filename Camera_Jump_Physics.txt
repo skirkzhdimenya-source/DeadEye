@@ -2850,3 +2850,38 @@ All other investigation rules remain unchanged:
 =============================================================
 END OF 2026-10-02 v1.05 PATH CORRECTION
 =============================================================
+
+
+=============================================================
+36. 2026-10-02 — v1.07 RESULT: CHARACTER LOOKUP BUG
+=============================================================
+
+v1.07 did not reach the movement introspection stage because:
+
+    GameCharacter = false
+    ERROR = Local Character not found
+
+This is a probe lookup error.
+
+The v1.07 script incorrectly tested:
+
+    type(characterService.GetLocalCharacter) == "function"
+
+directly on the Roblox Instance.
+
+The previously recovered runtime path is:
+
+    ReplicatedStorage.Services.Asset.CharacterService
+
+and the live service API is:
+
+    CharacterService:GetLocalCharacter()
+
+The next revision must obtain the service/module correctly, then call
+GetLocalCharacter() after the character system has initialized.
+
+No conclusion about movement physics may be drawn from this failed run.
+
+=============================================================
+END OF 2026-10-02 v1.07 RESULT
+=============================================================
