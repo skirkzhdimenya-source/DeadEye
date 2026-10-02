@@ -2729,3 +2729,49 @@ session after leaving/rejoining the game.
 =============================================================
 END OF 2026-10-02 v1.04 PRECISE PROBE
 =============================================================
+
+=============================================================
+32. 2026-10-02 — v1.04 SCRIPT CORRECTION
+=============================================================
+
+Before running v1.04, a wrapper-helper bug was found in the delivered test script:
+the helper returned a success boolean as its first result while the script assigned
+that first result directly to object/function variables.
+
+Therefore:
+
+    v1.04 MUST NOT be used.
+
+Corrected version:
+
+    v1.05
+
+The v1.05 script uses a simple single-result protected accessor instead.
+
+The underlying investigation target is unchanged:
+
+    hook ONLY MoveFunction.Move
+    leave Movement.Update untouched
+    leave Air/Run untouched
+    leave DataRegistry:Set untouched
+    compare:
+        last Air post
+        first Run pre
+        first Run post
+    use exact dt passed to MoveFunction.Move
+
+
+-------------------------------------------------------------
+32.1 FRESH SESSION REQUIRED
+-------------------------------------------------------------
+
+Because v1.03 may have installed a Movement.Update hook into the current client,
+the corrected v1.05 test should be performed after leaving/rejoining the game.
+
+This ensures the old Movement.Update wrapper is no longer active before testing
+MoveFunction.Move.
+
+
+=============================================================
+END OF 2026-10-02 v1.04 CORRECTION
+=============================================================
