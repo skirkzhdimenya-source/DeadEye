@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.124
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.125
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.124"
+local SCRIPT_VERSION = "1.125"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12308,11 +12308,8 @@ function mainJump.lookScannerSeesSurface()
 
     params.IgnoreWater = true
 
-    --// Keep the existing LOOK scanner and its original logic.
-    --// Only shorten the detection range so LOOK starts shortly
-    --// before the landing instead of much earlier.
     local rayLength =
-        6.0
+        7.5
 
     local origins = {
         mainJump.root.Position
