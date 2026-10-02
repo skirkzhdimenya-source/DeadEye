@@ -2908,3 +2908,51 @@ No movement function is hooked and no game state is modified.
 =============================================================
 END OF 2026-10-02 v1.08 PLAN
 =============================================================
+
+
+=============================================================
+38. 2026-10-02 — v1.08 RESULT: getupvalues() INCOMPATIBILITY
+=============================================================
+
+v1.08 successfully reached the live runtime objects:
+
+    CharacterService = required successfully
+    GameCharacter = table
+    GameCharacter.Movement = FOUND
+    Movement.MoveFunction = FOUND
+    Movement.MoveFunction.Move = FOUND
+
+Therefore the character-service lookup is now confirmed correct.
+
+However:
+
+    Functions table = NOT FOUND
+
+and no individual MoveFunction.Move upvalues were printed.
+
+This does NOT contradict the previously recovered MoveFunction source,
+which explicitly contains:
+
+    upvalue StateInfo
+    upvalue Functions
+
+The likely cause is executor-specific behavior of:
+
+    debug.getupvalues(function)
+
+The next probe must therefore use the indexed API:
+
+    debug.getupvalue(function, index)
+
+for indexes 1..N and print BOTH:
+
+    returned upvalue name
+    returned upvalue value
+
+It should also inspect MoveFunction.Move constants/prototypes directly.
+
+No hooks or writes are permitted.
+
+=============================================================
+END OF 2026-10-02 v1.08 RESULT
+=============================================================
