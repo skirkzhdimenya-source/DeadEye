@@ -2224,3 +2224,111 @@ that limitation rather than modifying the movement logic.
 =============================================================
 END OF 2026-10-02 RESULTS + NEXT TARGET
 =============================================================
+
+=============================================================
+28. 2026-10-02 — LANDING PROBE v1.03: EXACT Movement.Update() BOUNDARY
+=============================================================
+
+The next probe version is v1.03.
+
+Unlike v1.02, it measures velocity immediately BEFORE and immediately AFTER
+the actual Movement.Update(dt) call.
+
+The exact method being observed is:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.Update
+
+Recovered Movement.Update order:
+
+    SetState(DataRegistry:Get("State"))
+    UpdateCanJump()
+    UpdateMoveStats()
+    DoFunction("Move", State, MoveStats, dt)
+    ...
+    RootPartOrienter:Update(dt, State)
+
+Therefore a wrapper around Movement.Update provides the cleanest available
+runtime boundary around the state transition and current movement function.
+
+The probe records:
+
+    exact dt argument
+    pre State
+    post State
+    pre DataRegistry State
+    post DataRegistry State
+    pre Grounded
+    post Grounded
+    pre internal Velocity
+    post internal Velocity
+    pre internal HSpeed
+    post internal HSpeed
+    pre real AssemblyLinearVelocity
+    post real AssemblyLinearVelocity
+    Friction
+    RunDeaccel
+    MoveStats.Speed
+    Sprint
+
+For every Air -> Move Update call it calculates:
+
+    actual internal HSpeed loss
+
+and:
+
+    ApplyFriction predicted loss
+
+using the exact dt passed to Movement.Update.
+
+
+-------------------------------------------------------------
+28.1 WHY v1.03 IS BETTER THAN v1.02
+-------------------------------------------------------------
+
+v1.02 sampled around Heartbeat.
+
+Therefore its Air -> Move comparison could include timing outside the movement
+function itself.
+
+v1.03 instead compares:
+
+    BEFORE Movement.Update
+             |
+             v
+        original Update
+             |
+             v
+    AFTER Movement.Update
+
+The original function is still executed normally.
+
+This removes the major ambiguity about which frame interval is being measured.
+
+
+-------------------------------------------------------------
+28.2 WHAT v1.03 CAN PROVE
+-------------------------------------------------------------
+
+If an Air -> Move Update call shows:
+
+    actual HSpeed loss ~= ApplyFriction prediction
+
+using the exact Movement.Update dt,
+
+then ApplyFriction becomes strongly supported as the direct source of the
+landing loss inside the Run-side update.
+
+If:
+
+    actual loss differs significantly,
+
+then another operation inside Run or the resulting constraint/physics path must
+be responsible for the difference.
+
+The probe still does not claim exact ApplyFriction call ORDER inside Run, because
+Run's own bytecode remains unavailable.
+
+
+=============================================================
+END OF 2026-10-02 v1.03 PROBE NOTES
+=============================================================
