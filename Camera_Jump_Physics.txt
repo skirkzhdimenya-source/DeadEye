@@ -3080,3 +3080,67 @@ Strict safety remains:
 =============================================================
 END OF 2026-10-02 v1.09 RESULT
 =============================================================
+
+
+=============================================================
+41. 2026-10-02 — v1.10 PLAN: REQUIRE ORIGINAL MOVEMENT MODULES
+=============================================================
+
+v1.09 proved that the live instance property:
+
+    Movement.MoveFunction.Move
+
+is an executor-generated __newlclosure_wrapper.
+
+The recovered source hierarchy provides a cleaner route:
+
+    ReplicatedStorage
+      .Objects
+        .Game
+          .Character
+            .Client
+              .Movement
+                .MoveFunction
+                  .Functions
+
+MoveFunction is a ModuleScript whose source previously recovered:
+
+    function t.Move(p3, p4, p5, p6)
+        ...
+        return Functions[Movement.MoveType](
+            p4,
+            Movement,
+            p3.DataRegistry,
+            p3.Character,
+            p6
+        )
+    end
+
+Therefore the next probe will directly require:
+
+    Movement.MoveFunction ModuleScript
+
+and inspect:
+
+    OriginalMoveModule.Move
+
+instead of:
+
+    GameCharacter.Movement.MoveFunction.Move
+
+It will also directly require:
+
+    MoveFunctionModule.Functions
+
+and inspect:
+
+    Functions["Air"]
+    Functions["Run"]
+
+This should bypass the executor's __newlclosure_wrapper entirely.
+
+No hooks and no game-state writes are used.
+
+=============================================================
+END OF 2026-10-02 v1.10 PLAN
+=============================================================
