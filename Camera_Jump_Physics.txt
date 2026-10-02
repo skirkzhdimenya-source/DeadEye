@@ -1812,3 +1812,112 @@ investigated.
 =============================================================
 END OF 2026-10-02 ADDITION
 =============================================================
+
+=============================================================
+24. 2026-10-02 — IMPORTANT TESTING CONDITION: SPEED MUST BE BUILT UP
+=============================================================
+
+The landing-loss probe must NOT assume that the player can immediately reach
+horizontal speeds of 50-60 by running straight.
+
+Observed normal behavior:
+
+    straight W movement
+        ->
+    ordinary jump
+        ->
+    landing
+        ->
+    horizontal speed remains around 36
+
+To reach the higher speeds needed to make the landing-loss effect obvious,
+the player must accumulate speed over multiple consecutive jumps while continuing
+to use the game's native air movement.
+
+Therefore the landing experiment should be performed as a multi-jump sequence.
+
+Recommended procedure:
+
+    1. Start running forward.
+    2. Keep the same forward movement through every jump.
+    3. Do NOT intentionally stop between jumps.
+    4. Do NOT disable the native camera yaw.
+    5. Allow natural air acceleration/strafe to continue.
+    6. Perform at least 4 consecutive jumps before judging the landing-loss
+       behavior.
+    7. Once the internal/real horizontal speed reaches the desired range, let
+       one clean Air -> Move landing occur and inspect the capture.
+
+The reason for keeping the natural camera/A-D movement available is that the
+game's air movement can increase horizontal speed beyond the ~36 straight-run
+value.
+
+The probe therefore needs two phases:
+
+    BUILD-UP PHASE
+        Observe consecutive jumps and current HSpeed.
+
+    CAPTURE PHASE
+        Detect the first clean Air -> Move transition after speed has been
+        sufficiently accumulated.
+
+The probe must continue logging every Air -> Move transition so that earlier
+lower-speed landings are also retained for comparison.
+
+
+-------------------------------------------------------------
+24.1 MULTI-JUMP INTERPRETATION
+-------------------------------------------------------------
+
+A useful comparison is:
+
+    Jump 1 landing:
+        lower HSpeed
+
+    Jump 2 landing:
+        higher HSpeed
+
+    Jump 3 landing:
+        higher HSpeed
+
+    Jump 4+ landing:
+        sufficiently high HSpeed for the friction-loss test
+
+The important question remains:
+
+    actual landing loss
+        vs
+    predicted ApplyFriction loss
+
+The speed build-up itself is not the phenomenon being measured; it is only a
+way to obtain a large enough HSpeed that one Run/ApplyFriction tick produces an
+easily measurable absolute loss.
+
+
+-------------------------------------------------------------
+24.2 PROBE BEHAVIOR UPDATE
+-------------------------------------------------------------
+
+The probe should therefore:
+
+    - count Air -> Move transitions;
+    - print the jump/landing number;
+    - continuously show current real and internal HSpeed;
+    - keep all previous transition records;
+    - mark the high-speed captures separately;
+    - NOT stop after the first landing.
+
+Suggested high-speed marker:
+
+    INTERNAL HSpeed >= 4000
+
+which corresponds roughly to:
+
+    real HSpeed >= 4000 / 90 ~= 44.4
+
+This threshold is only a convenience for highlighting stronger measurements;
+the probe must still log lower-speed transitions.
+
+=============================================================
+END OF 2026-10-02 MULTI-JUMP TESTING ADDITION
+=============================================================
