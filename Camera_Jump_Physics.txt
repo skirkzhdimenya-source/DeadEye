@@ -2332,3 +2332,92 @@ Run's own bytecode remains unavailable.
 =============================================================
 END OF 2026-10-02 v1.03 PROBE NOTES
 =============================================================
+
+=============================================================
+29. 2026-10-02 — v1.03 RESULT: MOVEMENT.UPDATE HOOK IS TOO INVASIVE
+=============================================================
+
+The v1.03 Movement.Update() wrapper caused repeated runtime errors.
+
+Observed side effect:
+
+    camera can still rotate
+    character no longer follows the camera's horizontal rotation correctly
+
+This is consistent with the recovered Movement.Update() structure:
+
+    SetState(...)
+    UpdateCanJump()
+    UpdateMoveStats()
+    DoFunction("Move", ...)
+    ...
+    RootPartOrienter:Update(dt, State)
+
+Therefore breaking the wrapper/original-call path can prevent the final
+RootPartOrienter update from executing correctly.
+
+Conclusion:
+
+    DO NOT continue using a Movement.Update hook for the landing experiment.
+
+The exact error text from the user's executor was reported as repeated references
+to the wrapper/update function (line 588 / hookupdate / update), but the complete
+runtime error string was not preserved in the report.
+
+
+-------------------------------------------------------------
+29.1 NEW INVESTIGATION STRATEGY
+-------------------------------------------------------------
+
+The next probe should leave Movement.Update itself completely untouched.
+
+The target is the narrower movement-function layer:
+
+    Movement.Update
+        ->
+    DoFunction("Move")
+        ->
+    MoveFunction.Move
+        ->
+    Functions[Movement.MoveType]
+        ->
+    Run or Air
+
+The purpose is to observe the velocity handed through the movement function
+without breaking the outer Update() and RootPartOrienter path.
+
+Priority:
+
+    1. identify the exact live MoveFunction.Move function;
+    2. safely observe its arguments and returned values;
+    3. identify the Air -> Run call boundary;
+    4. compare Velocity immediately before/after the movement function;
+    5. preserve the original return values exactly.
+
+Any hook at this layer must be removed immediately if character rotation,
+movement, or camera synchronization changes.
+
+
+-------------------------------------------------------------
+29.2 IMPORTANT LIMITATION
+-------------------------------------------------------------
+
+Even this narrower hook may still affect movement if the executor's hookfunction
+implementation changes call semantics.
+
+Therefore the first version of the next probe should have a SAFE MODE:
+
+    observation only
+    no DataRegistry writes
+    no velocity writes
+    no camera writes
+    no state writes
+    original return values forwarded unchanged
+
+If the game behavior changes merely from installing the observation hook,
+the hook itself is rejected and a non-hook runtime tracer must be used instead.
+
+
+=============================================================
+END OF 2026-10-02 v1.03 RESULT
+=============================================================
