@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.125
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.126
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.125"
+local SCRIPT_VERSION = "1.126"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -163,7 +163,9 @@ local savedConfig = {
         look = false,
         rageLook = false,
         airTurn = false,
-        airTurnSpeed = 180
+        airTurnSpeed = 180,
+        crouchSpamDelay = 0.03,
+        crouchSpamHotkey = "I"
     },
     gui = {
         x = 35,
@@ -10192,6 +10194,14 @@ local mainJump = {
     jumpDelay = 0.01,
     hotkeyName = "Z",
     hideUIHotkeyName = "H",
+    crouchSpamEnabled = false,
+    crouchSpamDelay = 0.03,
+    crouchSpamHotkeyName = "I",
+    crouchSpamThread = nil,
+    crouchSpamMovement = nil,
+    crouchSpamDelayBox = nil,
+    crouchSpamHotkeyBox = nil,
+    crouchSpamToggle = nil,
     lastJump = 0,
     capturing = nil,
     needsInputRearm = false,
@@ -10245,6 +10255,21 @@ mainJump.hideUIHotkeyName =
         and savedConfig.main.hideUIHotkey
         or "H"
     )
+mainJump.crouchSpamDelay =
+    math.clamp(
+        tonumber(
+            savedConfig.main
+            and savedConfig.main.crouchSpamDelay
+        ) or 0.03,
+        0.001,
+        5
+    )
+mainJump.crouchSpamHotkeyName =
+    tostring(
+        savedConfig.main
+        and savedConfig.main.crouchSpamHotkey
+        or "I"
+    )
 mainJump.lookEnabled =
     savedConfig.main
     and savedConfig.main.look == true
@@ -10293,7 +10318,9 @@ function mainJump.saveConfig()
         look = mainJump.lookEnabled,
         rageLook = mainJump.rageLookEnabled,
         airTurn = mainJump.airTurnEnabled,
-        airTurnSpeed = mainJump.airTurnSpeed
+        airTurnSpeed = mainJump.airTurnSpeed,
+        crouchSpamDelay = mainJump.crouchSpamDelay,
+        crouchSpamHotkey = mainJump.crouchSpamHotkeyName
     }
     pcall(function()
         saveSavedConfig()
@@ -11677,6 +11704,28 @@ function mainJump.update()
         end
     end
 
+    if mainJump.crouchSpamToggle then
+        if mainJump.crouchSpamEnabled then
+            mainJump.crouchSpamToggle.Text =
+                "ON"
+            mainJump.crouchSpamToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            mainJump.crouchSpamToggle.Text =
+                "OFF"
+            mainJump.crouchSpamToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end
+
     if mainJump.airTurnToggle then
         if mainJump.airTurnEnabled then
             mainJump.airTurnToggle.Text =
@@ -11793,6 +11842,201 @@ function mainJump.setDelay(value)
         )
     mainJump.saveConfig()
 end
+
+function mainJump.getCrouchMovement()
+    local object =
+        getCharacterObject()
+
+    if not object then
+        return nil
+    end
+
+    local movement
+
+    pcall(function()
+        movement = object.Movement
+    end)
+
+    if type(movement) ~= "table" then
+        return nil
+    end
+
+    if type(movement.KeyUsed) ~= "function" then
+        return nil
+    end
+
+    return movement
+end
+
+function mainJump.setCrouching(state)
+    local movement =
+        mainJump.getCrouchMovement()
+
+    if not movement then
+        return false
+    end
+
+    mainJump.crouchSpamMovement =
+        movement
+
+    local ok, err =
+        pcall(function()
+            movement:KeyUsed({
+                Key = "Crouching",
+                Down = state and true or false
+            })
+        end)
+
+    if not ok then
+        warn(
+            "[DeadEye] Crouch Spam KeyUsed error:",
+            err
+        )
+        return false
+    end
+
+    return true
+end
+
+function mainJump.stopCrouchSpam()
+    if mainJump.crouchSpamThread then
+        pcall(function()
+            task.cancel(
+                mainJump.crouchSpamThread
+            )
+        end)
+
+        mainJump.crouchSpamThread = nil
+    end
+
+    mainJump.crouchSpamEnabled =
+        false
+
+    -- Always finish standing.
+    mainJump.setCrouching(false)
+end
+
+function mainJump.setCrouchSpamEnabled(state)
+    state =
+        state and true or false
+
+    if not state then
+        mainJump.stopCrouchSpam()
+        mainJump.update()
+        mainJump.saveConfig()
+        return
+    end
+
+    if cleaned then
+        return
+    end
+
+    if mainJump.crouchSpamEnabled
+        and mainJump.crouchSpamThread
+    then
+        return
+    end
+
+    mainJump.crouchSpamEnabled = true
+
+    mainJump.crouchSpamThread =
+        task.spawn(
+            function()
+                while genv.DEADEYE_MAIN_RUNNING
+                    and not cleaned
+                    and mainJump.crouchSpamEnabled
+                do
+                    if not mainJump.setCrouching(true) then
+                        break
+                    end
+
+                    task.wait(
+                        mainJump.crouchSpamDelay
+                    )
+
+                    if not genv.DEADEYE_MAIN_RUNNING
+                        or cleaned
+                        or not mainJump.crouchSpamEnabled
+                    then
+                        break
+                    end
+
+                    if not mainJump.setCrouching(false) then
+                        break
+                    end
+
+                    task.wait(
+                        mainJump.crouchSpamDelay
+                    )
+                end
+
+                mainJump.crouchSpamEnabled =
+                    false
+
+                mainJump.crouchSpamThread =
+                    nil
+
+                mainJump.setCrouching(false)
+
+                mainJump.update()
+            end
+        )
+
+    mainJump.update()
+    mainJump.saveConfig()
+end
+
+function mainJump.setCrouchSpamDelay(value)
+    local number =
+        tonumber(
+            tostring(value or "")
+        )
+
+    if not number then
+        return
+    end
+
+    mainJump.crouchSpamDelay =
+        math.clamp(
+            number,
+            0.001,
+            5
+        )
+
+    if mainJump.crouchSpamDelayBox then
+        mainJump.crouchSpamDelayBox.Text =
+            tostring(
+                mainJump.crouchSpamDelay
+            )
+    end
+
+    mainJump.saveConfig()
+end
+
+function mainJump.setCrouchSpamHotkey(value)
+    local key =
+        mainFindKeyCode(
+            value
+        )
+
+    if not key then
+        return
+    end
+
+    mainJump.crouchSpamHotkeyName =
+        key.Name
+
+    if mainJump.crouchSpamHotkeyBox then
+        mainJump.crouchSpamHotkeyBox.Text =
+            key.Name
+    end
+
+    mainJump.crouchSpamCapturing =
+        false
+
+    mainJump.saveConfig()
+end
+
 local function mainFindKeyCode(value)
     local wanted =
         tostring(
@@ -11810,6 +12054,18 @@ local function mainFindKeyCode(value)
     end
     return nil
 end
+local crouchSpamKey =
+    mainFindKeyCode(
+        mainJump.crouchSpamHotkeyName
+    )
+if crouchSpamKey then
+    mainJump.crouchSpamHotkeyName =
+        crouchSpamKey.Name
+else
+    mainJump.crouchSpamHotkeyName =
+        "I"
+end
+
 local jumpKey =
     mainFindKeyCode(
         mainJump.hotkeyName
@@ -11863,11 +12119,15 @@ end
 function mainJump.startCapture(kind)
     mainJump.capturing =
         kind
+
     if kind == "jump" then
         mainJump.hotkeyBox.Text =
             "PRESS KEY..."
-    else
+    elseif kind == "hide" then
         mainJump.hideUIHotkeyBox.Text =
+            "PRESS KEY..."
+    elseif kind == "crouchSpam" then
+        mainJump.crouchSpamHotkeyBox.Text =
             "PRESS KEY..."
     end
 end
@@ -13227,10 +13487,186 @@ mainConnect(
     )
 )
 
+__UI.crouchSpamRow =
+    mainRow(
+        "CROUCH SPAM",
+        5
+    )
+
+local crouchSpamLabel =
+    autoLabel:Clone()
+crouchSpamLabel.Text =
+    "CROUCH SPAM"
+crouchSpamLabel.Parent =
+    __UI.crouchSpamRow
+
+mainJump.crouchSpamHotkeyBox =
+    Instance.new("TextButton")
+mainJump.crouchSpamHotkeyBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.crouchSpamHotkeyBox.Position =
+    UDim2.new(
+        1,
+        -235,
+        0.5,
+        -14
+    )
+mainJump.crouchSpamHotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.crouchSpamHotkeyBox.BorderSizePixel = 0
+mainJump.crouchSpamHotkeyBox.Text =
+    mainJump.crouchSpamHotkeyName
+mainJump.crouchSpamHotkeyBox.TextSize = 10
+mainJump.crouchSpamHotkeyBox.Font =
+    Enum.Font.GothamBold
+mainJump.crouchSpamHotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.crouchSpamHotkeyBox.Parent =
+    __UI.crouchSpamRow
+
+local crouchSpamHotkeyCorner =
+    Instance.new("UICorner")
+crouchSpamHotkeyCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+crouchSpamHotkeyCorner.Parent =
+    mainJump.crouchSpamHotkeyBox
+
+mainConnect(
+    mainJump.crouchSpamHotkeyBox.MouseButton1Click:Connect(
+        function()
+            mainJump.startCapture(
+                "crouchSpam"
+            )
+        end
+    )
+)
+
+mainJump.crouchSpamDelayBox =
+    Instance.new("TextBox")
+mainJump.crouchSpamDelayBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.crouchSpamDelayBox.Position =
+    UDim2.new(
+        1,
+        -155,
+        0.5,
+        -14
+    )
+mainJump.crouchSpamDelayBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.crouchSpamDelayBox.BorderSizePixel = 0
+mainJump.crouchSpamDelayBox.ClearTextOnFocus = false
+mainJump.crouchSpamDelayBox.Text =
+    tostring(
+        mainJump.crouchSpamDelay
+    )
+mainJump.crouchSpamDelayBox.TextSize = 10
+mainJump.crouchSpamDelayBox.Font =
+    Enum.Font.GothamBold
+mainJump.crouchSpamDelayBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.crouchSpamDelayBox.Parent =
+    __UI.crouchSpamRow
+
+local crouchSpamDelayCorner =
+    Instance.new("UICorner")
+crouchSpamDelayCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+crouchSpamDelayCorner.Parent =
+    mainJump.crouchSpamDelayBox
+
+mainConnect(
+    mainJump.crouchSpamDelayBox.FocusLost:Connect(
+        function(enterPressed)
+            if enterPressed then
+                mainJump.setCrouchSpamDelay(
+                    mainJump.crouchSpamDelayBox.Text
+                )
+            else
+                mainJump.crouchSpamDelayBox.Text =
+                    tostring(
+                        mainJump.crouchSpamDelay
+                    )
+            end
+        end
+    )
+)
+
+mainJump.crouchSpamToggle =
+    Instance.new("TextButton")
+mainJump.crouchSpamToggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+mainJump.crouchSpamToggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+mainJump.crouchSpamToggle.BorderSizePixel = 0
+mainJump.crouchSpamToggle.TextSize = 10
+mainJump.crouchSpamToggle.Font =
+    Enum.Font.GothamBold
+mainJump.crouchSpamToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.crouchSpamToggle.Parent =
+    __UI.crouchSpamRow
+
+mainConnect(
+    mainJump.crouchSpamToggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setCrouchSpamEnabled(
+                not mainJump.crouchSpamEnabled
+            )
+        end
+    )
+)
+
 __UI.airTurnSpeedRow =
     mainRow(
         "TURN SPEED",
-        5
+        6
     )
 local airTurnSpeedLabel =
     autoLabel:Clone()
@@ -13468,7 +13904,7 @@ mainConnect(
 __UI.delayRow =
     mainRow(
         "DELAY",
-        6
+        7
     )
 __UI.delayLabel =
     autoLabel:Clone()
@@ -13591,7 +14027,7 @@ mainConnect(
 __UI.hotkeyRow =
     mainRow(
         "HOTKEY",
-        7
+        8
     )
 __UI.hotkeyLabel =
     autoLabel:Clone()
@@ -13656,7 +14092,7 @@ mainConnect(
 __UI.hideRow =
     mainRow(
         "HIDE UI",
-        8
+        9
     )
 __UI.hideLabel =
     autoLabel:Clone()
@@ -13736,8 +14172,16 @@ mainConnect(
                     mainJump.setHotkey(
                         keyCode.Name
                     )
-                else
+                elseif mainJump.capturing
+                    == "hide"
+                then
                     mainJump.setHideUIHotkey(
+                        keyCode.Name
+                    )
+                elseif mainJump.capturing
+                    == "crouchSpam"
+                then
+                    mainJump.setCrouchSpamHotkey(
                         keyCode.Name
                     )
                 end
@@ -13760,6 +14204,16 @@ mainConnect(
             then
                 ScreenGui.Enabled =
                     not ScreenGui.Enabled
+            end
+
+            if input.KeyCode
+                == mainFindKeyCode(
+                    mainJump.crouchSpamHotkeyName
+                )
+            then
+                mainJump.setCrouchSpamEnabled(
+                    not mainJump.crouchSpamEnabled
+                )
             end
         end
     )
@@ -13901,6 +14355,10 @@ mainConnect(
     LocalPlayer.CharacterAdded:Connect(
         function(char)
             task.wait(0.2)
+
+            mainJump.crouchSpamMovement =
+                nil
+
             if genv.DEADEYE_MAIN_RUNNING then
                 mainJump.createSensors(char)
             end
@@ -13921,6 +14379,9 @@ end
 mainJump.setAirTurnSpeed(
     mainJump.airTurnSpeed,
     false
+)
+mainJump.setCrouchSpamDelay(
+    mainJump.crouchSpamDelay
 )
 mainJump.update()
 
@@ -19499,6 +19960,10 @@ local function cleanup()
     genv.DEADEYE_MAIN_RUNNING = false
     genv.DEADEYE_UNUSUAL_POV_RUNNING = false
     genv.DEADEYE_PORTRAIT_RUNNING = false
+
+    pcall(function()
+        mainJump.stopCrouchSpam()
+    end)
 
     enabled = false
 
