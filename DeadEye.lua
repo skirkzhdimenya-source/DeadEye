@@ -12013,30 +12013,6 @@ function mainJump.setCrouchSpamDelay(value)
     mainJump.saveConfig()
 end
 
-function mainJump.setCrouchSpamHotkey(value)
-    local key =
-        mainFindKeyCode(
-            value
-        )
-
-    if not key then
-        return
-    end
-
-    mainJump.crouchSpamHotkeyName =
-        key.Name
-
-    if mainJump.crouchSpamHotkeyBox then
-        mainJump.crouchSpamHotkeyBox.Text =
-            key.Name
-    end
-
-    mainJump.crouchSpamCapturing =
-        false
-
-    mainJump.saveConfig()
-end
-
 local function mainFindKeyCode(value)
     local wanted =
         tostring(
@@ -12064,6 +12040,29 @@ if crouchSpamKey then
 else
     mainJump.crouchSpamHotkeyName =
         "I"
+end
+
+function mainJump.setCrouchSpamHotkey(value)
+    local key =
+        mainFindKeyCode(
+            value
+        )
+
+    if not key then
+        return
+    end
+
+    mainJump.crouchSpamHotkeyName =
+        key.Name
+
+    if mainJump.crouchSpamHotkeyBox then
+        mainJump.crouchSpamHotkeyBox.Text =
+            key.Name
+    end
+
+    mainJump.capturing = nil
+
+    mainJump.saveConfig()
 end
 
 local jumpKey =
