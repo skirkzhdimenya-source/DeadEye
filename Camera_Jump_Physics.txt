@@ -4422,3 +4422,321 @@ The goal is to change ONLY grounded friction/landing speed loss while preserving
 =============================================================
 END OF 2026-10-05 COMPLETE Run SOURCE RECOVERED
 =============================================================
+
+
+=============================================================
+47. 2026-10-05 — COMPLETE ApplyFriction SOURCE RECOVERED
+=============================================================
+
+The complete Helpers module was successfully decompiled.
+
+Script path:
+
+    game:GetService("ReplicatedStorage").Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
+
+Executor:
+
+    OpiumwareMac v2.5.4
+
+The exact ApplyFriction implementation is now known.
+
+-------------------------------------------------------------
+47.1 EXACT ApplyFriction SIGNATURE / ARGUMENT MAPPING
+-------------------------------------------------------------
+
+Source:
+
+    function t.ApplyFriction(_2, p7: number, p8, p9, _3, p10, p11)
+
+It is called from Run with:
+
+    Helpers:ApplyFriction(
+        p6,
+        p7,
+        p8,
+        p9,
+        p10,
+        1
+    )
+
+Therefore:
+
+    p7  = Run dt
+    p8  = Movement/state movement data
+    p9  = DataRegistry
+    _3  = Character
+    p10 = MoveStats
+    p11 = friction multiplier / mode factor
+
+For normal Run:
+
+    p11 = 1
+
+-------------------------------------------------------------
+47.2 EXACT FRICTION FORMULA
+-------------------------------------------------------------
+
+ApplyFriction does:
+
+    Velocity =
+        DataRegistry:Get("Velocity")
+
+    magnitude =
+        Velocity.magnitude
+
+    RunDeaccel =
+        MoveStats.RunDeaccel
+
+    Friction =
+        MoveStats.Friction
+
+If Swimming:
+
+    RunDeaccel *= 0.6
+    Friction *= 0.6
+
+Then:
+
+    if magnitude < RunDeaccel then
+        v12 = RunDeaccel
+    else
+        v12 = magnitude
+    end
+
+Equivalent:
+
+    v12 = max(RunDeaccel, magnitude)
+
+Then:
+
+    v13 =
+        magnitude
+        -
+        v12 * Friction * dt * p11
+
+Then clamp:
+
+    v14 = max(v13, 0)
+
+Then:
+
+    if magnitude > 0 then
+        v14 = v14 / magnitude
+    end
+
+Finally:
+
+    return Velocity * v14
+
+Therefore, for nonzero horizontal Velocity, the magnitude reduction is exactly:
+
+    loss =
+        max(RunDeaccel, magnitude)
+        *
+        Friction
+        *
+        dt
+        *
+        p11
+
+for the amount before the nonnegative clamp.
+
+-------------------------------------------------------------
+47.3 NORMAL RUN LANDING CASE
+-------------------------------------------------------------
+
+Run passes:
+
+    p11 = 1
+
+and normal movement is not swimming.
+
+Therefore:
+
+    loss =
+        max(RunDeaccel, |Velocity|)
+        *
+        Friction
+        *
+        dt
+
+For the tested high-speed runtime values:
+
+    RunDeaccel = 1190
+    Friction   = 5
+    dt         ~= 0.0083
+
+and high-speed magnitude was above 1190.
+
+Therefore:
+
+    loss =
+        |Velocity| * 5 * dt
+
+Approximate fractional loss:
+
+    5 * 0.0083
+    ~= 0.0415
+
+So approximately:
+
+    4.15% of the current internal velocity per Run tick
+
+is removed by ApplyFriction at those dt values.
+
+Because internal velocity is approximately 90x real velocity, this directly
+corresponds to the observed ~2 real-speed-unit loss at internal HSpeed around
+4300-4750.
+
+Example:
+
+    internal HSpeed = 4300
+    dt = 0.0083
+
+    loss ~= 4300 * 5 * 0.0083
+         ~= 178.45 internal
+
+    real loss ~= 178.45 / 90
+              ~= 1.98
+
+This matches the historical v1.02 landing observations closely.
+
+-------------------------------------------------------------
+47.4 WHY ApplyFriction WAS THE OBSERVED LANDING LOSS
+-------------------------------------------------------------
+
+The complete Run source proves:
+
+    ApplyFriction
+        ->
+    Accelerate
+        ->
+    WallImpact
+
+The complete ApplyFriction source now proves exactly how the first step reduces
+Velocity.
+
+For high-speed grounded movement:
+
+    current HSpeed > RunDeaccel
+
+so the helper uses:
+
+    v12 = current magnitude
+
+and subtracts:
+
+    magnitude * Friction * dt
+
+before returning the reduced velocity.
+
+Thus the direct landing-side reduction previously observed is now explained by
+the actual source code, not just correlation.
+
+-------------------------------------------------------------
+47.5 IMPORTANT: ACCELERATE CAN OFFSET SOME LOSS
+-------------------------------------------------------------
+
+The actual final Run velocity is not just the friction result.
+
+Run performs:
+
+    v11 = ApplyFriction(...)
+
+then:
+
+    Accelerate(
+        v11,
+        GlobalMoveDirection,
+        Magnitude * (Speed * v16),
+        12 * RunAccel,
+        dt,
+        Swimming
+    )
+
+Accelerate returns the input unchanged when:
+
+    wishSpeed - velocity:Dot(wishDirection) <= 0
+
+Therefore at sufficiently high speed / unfavorable direction, Accelerate may
+add nothing and ApplyFriction remains the dominant final loss.
+
+At lower speed or aligned movement, Accelerate can partially or fully offset
+the friction reduction.
+
+-------------------------------------------------------------
+47.6 EXACT MODIFICATION LEVER
+-------------------------------------------------------------
+
+For normal Run the final ApplyFriction parameter is:
+
+    p11 = 1
+
+The helper multiplies the entire friction subtraction by p11:
+
+    v13 =
+        magnitude
+        -
+        v12 * Friction * dt * p11
+
+Therefore:
+
+    p11 = 1
+        -> normal friction
+
+    p11 = 0
+        -> no friction subtraction
+
+    p11 = smaller value
+        -> proportionally reduced friction
+
+This is now the cleanest source-level control for eliminating landing speed loss
+while leaving the subsequent Accelerate and WallImpact logic unchanged.
+
+However, changing the Run call from:
+
+    Helpers:ApplyFriction(..., 1)
+
+to:
+
+    Helpers:ApplyFriction(..., 0)
+
+would disable friction for the entire normal Run update, not exclusively the
+first frame after landing.
+
+Therefore a future modification must decide whether the intended behavior is:
+
+    A. remove all grounded Run friction
+
+or:
+
+    B. preserve ordinary grounded friction but skip/reduce it only on the
+       Air -> Move landing transition.
+
+The source now provides the exact lever needed for either implementation.
+
+-------------------------------------------------------------
+47.7 OTHER APPLYFRICTION USES
+-------------------------------------------------------------
+
+The recovered source shows ApplyFriction is also used by Air and Slide.
+
+Air:
+
+    if MoveDirection2.Z > 0 then
+        Velocity =
+            Helpers:ApplyFriction(..., 1)
+    end
+
+Slide:
+
+    Helpers:ApplyFriction(..., 0.1)
+
+Therefore changing ApplyFriction itself globally would also affect Air and Slide.
+
+For preserving air/slide behavior, the safer future target is the normal Run call
+site rather than globally changing the helper function.
+
+=============================================================
+END OF 2026-10-05 COMPLETE ApplyFriction SOURCE RECOVERED
+=============================================================
