@@ -2319,3 +2319,400 @@ does not justify one.
 =============================================================
 END OF 2026-10-05 A/D + CAMERA AIR FINDINGS
 =============================================================
+
+
+============================================================
+52. 2026-10-05 — DERIVED PURE A/D + CAMERA STRAFE LAW
+============================================================
+
+This section is mathematical derivation from the confirmed Air() and
+Accelerate() source.
+
+It is not an engine-side hypothesis.
+
+The source-confirmed pure A/D conditions are:
+
+    WishDirection = camera-relative lateral direction
+    WishSpeed     = 182
+    Acceleration  = 182
+    AirControl    = skipped because MoveDirection.Z == 0
+
+Let:
+
+    V = current horizontal Velocity
+    W = unit WishDirection from A/D
+    S = 182
+    theta = angle between V and W
+
+Then:
+
+    V · W = |V| * cos(theta)
+
+Accelerate requests:
+
+    addSpeed = S - |V| * cos(theta)
+
+and caps it by:
+
+    K = S * dt * S
+
+So the actual A/D velocity update is:
+
+    a = min(S - |V| cos(theta), K)
+
+provided:
+
+    S - |V| cos(theta) > 0
+
+and:
+
+    V_new = V + aW
+
+
+-------------------------------------------------------------
+52.1 EXACT SPEED MAXIMUM — W PERPENDICULAR TO VELOCITY
+-------------------------------------------------------------
+
+In the uncapped branch:
+
+    a = S - V cos(theta)
+
+where:
+
+    V = |Velocity|
+
+Then:
+
+    |V_new|^2
+        = V^2 + a^2 + 2Va cos(theta)
+
+Substituting:
+
+    |V_new|^2
+        = V^2 + S^2 - V^2 cos^2(theta)
+
+Therefore:
+
+    |V_new|^2
+        = V^2 + S^2 - V^2 cos^2(theta)
+
+This is maximized when:
+
+    cos(theta) = 0
+
+therefore:
+
+    theta = 90 degrees
+
+So the exact maximum-speed condition for pure A/D is:
+
+    WishDirection PERPENDICULAR to current horizontal Velocity.
+
+
+-------------------------------------------------------------
+52.2 CAMERA GEOMETRY FOR THE MAXIMUM
+-------------------------------------------------------------
+
+For normal horizontal camera orientation:
+
+    CameraRight
+        is perpendicular to
+    CameraLook
+
+Pure A/D uses:
+
+    D -> +CameraRight
+    A -> -CameraRight
+
+Therefore the maximum-speed condition is achieved when the horizontal
+CameraLook direction is parallel or antiparallel to the current horizontal
+Velocity.
+
+A simple practical orientation is:
+
+    CameraLook ~= Velocity direction
+
+Then:
+
+    D -> perpendicular rightward WishDirection
+    A -> perpendicular leftward WishDirection
+
+The held A/D key selects which side of Velocity the acceleration is applied.
+
+
+-------------------------------------------------------------
+52.3 MAXIMUM SPEED GAIN PER MOVEMENT TICK
+-------------------------------------------------------------
+
+At the optimal condition:
+
+    V · W = 0
+
+therefore:
+
+    addSpeed = S = 182
+
+as long as the acceleration cap does not bind.
+
+The new speed is:
+
+    V_new = sqrt(V^2 + S^2)
+
+so:
+
+    DeltaSpeed =
+        sqrt(V^2 + 182^2) - V
+
+Because DataRegistry velocity is approximately real speed * 90:
+
+    DeltaRealSpeed =
+        (sqrt(V^2 + 182^2) - V) / 90
+
+
+-------------------------------------------------------------
+52.4 EXAMPLE AT INTERNAL SPEED 4500
+-------------------------------------------------------------
+
+Using:
+
+    V = 4500
+    S = 182
+
+gives:
+
+    DeltaInternalSpeed
+        ~= 3.67894
+
+and:
+
+    DeltaRealSpeed
+        ~= 0.04088
+
+per movement step at the exact perpendicular condition.
+
+The corresponding Velocity heading change is:
+
+    delta =
+        atan2(182, 4500)
+
+        ~= 2.316 degrees
+
+So near internal speed 4500:
+
+    optimal Velocity turn per movement step
+        ~= 2.316 degrees
+
+
+-------------------------------------------------------------
+52.5 CAMERA SHOULD TRACK VELOCITY, NOT USE A FIXED TURN RATE
+-------------------------------------------------------------
+
+After the optimal update:
+
+    V_new = V + 182 * W
+
+with:
+
+    W perpendicular to V
+
+the new Velocity itself has rotated by:
+
+    delta =
+        atan2(182, V)
+
+Therefore, to keep the next A/D WishDirection perpendicular to the NEW
+Velocity, the camera's horizontal look direction must rotate by the same
+world-yaw amount as the Velocity heading.
+
+So the adaptive rule is:
+
+    each movement step:
+        1. read current horizontal Velocity heading;
+        2. point CameraLook along that heading;
+        3. hold A or D;
+        4. after the resulting Velocity update, recompute;
+        5. rotate CameraLook to the new Velocity heading.
+
+The required camera tracking angle is therefore not constant.
+
+It decreases automatically as speed increases:
+
+    delta_camera ~= atan2(182, |Velocity|)
+
+
+-------------------------------------------------------------
+52.6 GENERAL CAMERA/VElocity ERROR EQUATION
+-------------------------------------------------------------
+
+Define:
+
+    e = VelocityYaw - CameraYaw
+
+For normal horizontal camera orientation and pure A/D:
+
+    D:
+        WishDirection angle = CameraYaw + 90 degrees
+
+    A:
+        WishDirection angle = CameraYaw - 90 degrees
+
+For D, the dot term can be written as:
+
+    Velocity · WishDirection
+        = V * sin(e)
+
+For A, the sign is reversed:
+
+    Velocity · WishDirection
+        = -V * sin(e)
+
+Thus camera yaw error changes the Accelerate dot term directly.
+
+For D:
+
+    addSpeed =
+        182 - V * sin(e)
+
+subject to the normal positive test and acceleration cap.
+
+For A:
+
+    addSpeed =
+        182 + V * sin(e)
+
+with the same cap conditions.
+
+This explains why changing camera yaw while holding A/D changes the amount of
+acceleration even though the pressed key itself has not changed.
+
+
+-------------------------------------------------------------
+52.7 CAMERA TURN RATE AND VELOCITY TURN RATE
+-------------------------------------------------------------
+
+Let:
+
+    omega = camera yaw change during one movement step
+    delta  = resulting Velocity yaw change
+
+Then the next camera/Velocity error is:
+
+    e_new =
+        e + delta - omega
+
+(with the sign convention e = VelocityYaw - CameraYaw).
+
+Therefore:
+
+    omega = delta
+
+keeps the yaw error unchanged.
+
+At the optimal condition:
+
+    e = 0
+
+the exact target is:
+
+    omega_target =
+        atan2(182, |Velocity|)
+
+so that the camera continues tracking the changing Velocity direction.
+
+
+-------------------------------------------------------------
+52.8 ACCELERATION CAP BOUNDARY
+-------------------------------------------------------------
+
+The normal A/D acceleration cap is:
+
+    K = 182 * dt * 182
+
+The uncapped request is:
+
+    182 - V cos(theta)
+
+The cap starts binding when:
+
+    182 - V cos(theta) > K
+
+or:
+
+    cos(theta) < (182 - K) / V
+
+For dt >= 1/182 ~= 0.005495 seconds:
+
+    K >= 182
+
+so at the optimal perpendicular condition:
+
+    theta = 90 degrees
+
+the request:
+
+    addSpeed = 182
+
+does not exceed the cap.
+
+Typical tested movement dt values around 0.008 therefore leave the optimal
+perpendicular A/D case uncapped.
+
+
+-------------------------------------------------------------
+52.9 GLOBAL OPTIMUM ALSO HOLDS IN THE CAPPED BRANCH
+-------------------------------------------------------------
+
+When the cap is active:
+
+    a = K
+
+and:
+
+    |V_new|^2 = V^2 + K^2 + 2VK cos(theta)
+
+Within the capped region this is largest at the boundary.
+
+The speed at the boundary is always less than or equal to the perpendicular
+case by:
+
+    (K - S)^2
+
+in squared-speed difference.
+
+Therefore the global one-step maximum remains:
+
+    theta = 90 degrees
+
+even when the acceleration cap is considered.
+
+
+-------------------------------------------------------------
+52.10 PRACTICAL RESULT
+-------------------------------------------------------------
+
+For pure airborne A/D:
+
+    Maximum speed gain:
+        keep A/D WishDirection perpendicular to horizontal Velocity.
+
+    Equivalent camera condition:
+        keep horizontal CameraLook aligned with horizontal Velocity
+        (or the opposite direction).
+
+    Camera behavior:
+        continuously track Velocity heading instead of using one fixed
+        camera turn rate.
+
+    Near V = 4500 internal:
+        camera/Velocity tracking turn
+        ~= 2.316 degrees per movement step.
+
+    Real speed gain at V = 4500:
+        ~= 0.04088 real speed units per step.
+
+This result comes directly from the confirmed Air() + Accelerate source and
+does not depend on AirControl because pure A/D bypasses AirControl.
+
+=============================================================
+END OF 2026-10-05 PURE A/D + CAMERA STRAFE LAW
+=============================================================
