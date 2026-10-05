@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.146
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.147
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.146"
+local SCRIPT_VERSION = "1.147"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10737,7 +10737,7 @@ local AIR_TURN_RENDER_NAME =
     "DeadEyeMainAirTurn"
 
 local AIR_TURN_MIN_SPEED = 30
-local AIR_TURN_MAX_SPEED = 480
+local AIR_TURN_MAX_SPEED = 600
 
 local SMART_AIR_TURN_INPUT_RADIANS = 0.00575958658
 local SMART_AIR_TURN_MAX_PIXELS = 12
