@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.144
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.145
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.144"
+local SCRIPT_VERSION = "1.145"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10818,13 +10818,95 @@ function mainJump.bindAirTurnRender()
                 return
             end
 
-            --// When the camera is behind the character, left/right
-            --// screen input is reversed relative to the normal forward view.
-            local cameraBackward =
-                mainJump.isCameraLookingBackward()
+            --// Original Air Turn inversion:
+            --// compare the camera's horizontal look with the ACTUAL
+            --// horizontal movement direction. This is intentionally
+            --// not based on HumanoidRootPart / character facing.
+            local camera =
+                workspace.CurrentCamera
 
-            if cameraBackward then
-                turning = -turning
+            local horizontalLook
+            local horizontalVelocity
+
+            if camera then
+                pcall(function()
+                    local look =
+                        camera.CFrame.LookVector
+
+                    horizontalLook =
+                        Vector3.new(
+                            look.X,
+                            0,
+                            look.Z
+                        )
+                end)
+            end
+
+            pcall(function()
+                local velocity
+
+                local object =
+                    getCharacterObject()
+
+                local registry =
+                    object
+                    and object.DataRegistry
+
+                if registry then
+                    velocity =
+                        registry:Get("Velocity")
+                end
+
+                if typeof(velocity) == "Vector3" then
+                    horizontalVelocity =
+                        Vector3.new(
+                            velocity.X,
+                            0,
+                            velocity.Z
+                        )
+                end
+            end)
+
+            if not horizontalVelocity
+                or horizontalVelocity.Magnitude
+                    < 0.001
+            then
+                pcall(function()
+                    local velocity =
+                        mainJump.root
+                        and mainJump.root.AssemblyLinearVelocity
+
+                    if typeof(velocity) == "Vector3" then
+                        horizontalVelocity =
+                            Vector3.new(
+                                velocity.X,
+                                0,
+                                velocity.Z
+                            )
+                    end
+                end)
+            end
+
+            if horizontalLook
+                and horizontalVelocity
+                and horizontalLook.Magnitude
+                    > 0.001
+                and horizontalVelocity.Magnitude
+                    > 0.001
+            then
+                horizontalLook =
+                    horizontalLook.Unit
+
+                horizontalVelocity =
+                    horizontalVelocity.Unit
+
+                if horizontalLook:Dot(
+                    horizontalVelocity
+                ) < 0
+                then
+                    turning =
+                        -turning
+                end
             end
 
             local movementState =
@@ -10990,11 +11072,6 @@ function mainJump.bindAirTurnRender()
                     * SMART_AIR_TURN_GAIN
                     / SMART_AIR_TURN_INPUT_RADIANS
                     * -1
-
-                if cameraBackward then
-                    correctionPixels =
-                        -correctionPixels
-                end
 
                 correctionPixels =
                     math.clamp(
