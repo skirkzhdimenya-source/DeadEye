@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.132
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.133
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.132"
+local SCRIPT_VERSION = "1.133"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12822,182 +12822,98 @@ function mainJump.destroyCrouchSpamSensor()
     mainJump.crouchSpamSensorContacting = false
 end
 
-function mainJump.getCrouchSpamSensorLayout(char)
-    local root =
-        char
-        and char:FindFirstChild(
-            "HumanoidRootPart"
-        )
-
-    if not root then
-        return Vector3.new(
-            2,
-            0.20,
-            1
-        ), -3.0
+function mainJump.getCrouchSpamSensorLegs(char)
+    if not char then
+        return {}
     end
 
-    local leftLeg
-    local rightLeg
+    local result = {}
 
-    for _, name in ipairs({
-        "Left Leg",
-        "LeftLowerLeg"
-    }) do
-        leftLeg =
-            char:FindFirstChild(
-                name,
-                true
-            )
-
-        if leftLeg
-            and leftLeg:IsA("BasePart")
-        then
-            break
-        end
-
-        leftLeg = nil
-    end
-
-    for _, name in ipairs({
-        "Right Leg",
-        "RightLowerLeg"
-    }) do
-        rightLeg =
-            char:FindFirstChild(
-                name,
-                true
-            )
-
-        if rightLeg
-            and rightLeg:IsA("BasePart")
-        then
-            break
-        end
-
-        rightLeg = nil
-    end
-
-    local legParts = {}
-
-    if leftLeg then
-        table.insert(
-            legParts,
-            leftLeg
-        )
-    end
-
-    if rightLeg then
-        table.insert(
-            legParts,
-            rightLeg
-        )
-    end
-
-    if #legParts == 0 then
-        return Vector3.new(
-            2,
-            0.20,
-            1
-        ), -3.0
-    end
-
-    local minX = math.huge
-    local maxX = -math.huge
-    local minZ = math.huge
-    local maxZ = -math.huge
-
-    --// Measure the actual leg footprint in root-local space.
-    --// For vertical placement, use the REAL WORLD bottom of each
-    --// leg and convert only that Y back to root-local space.
-    local minWorldBottomY = math.huge
-
-    for _, leg in ipairs(legParts) do
-        local relative =
-            root.CFrame:ToObjectSpace(
-                leg.CFrame
-            )
-
-        local position =
-            relative.Position
-
-        local halfX =
-            leg.Size.X * 0.5
-
-        local halfZ =
-            leg.Size.Z * 0.5
-
-        minX =
-            math.min(
-                minX,
-                position.X - halfX
-            )
-
-        maxX =
-            math.max(
-                maxX,
-                position.X + halfX
-            )
-
-        minZ =
-            math.min(
-                minZ,
-                position.Z - halfZ
-            )
-
-        maxZ =
-            math.max(
-                maxZ,
-                position.Z + halfZ
-            )
-
-        local worldBottom =
-            leg.CFrame:PointToWorldSpace(
-                Vector3.new(
-                    0,
-                    -(leg.Size.Y * 0.5),
-                    0
+    local function addNamedLeg(names)
+        for _, name in ipairs(names) do
+            local part =
+                char:FindFirstChild(
+                    name,
+                    true
                 )
-            )
 
-        minWorldBottomY =
-            math.min(
-                minWorldBottomY,
-                worldBottom.Y
-            )
+            if part
+                and part:IsA("BasePart")
+            then
+                table.insert(
+                    result,
+                    part
+                )
+
+                return
+            end
+        end
     end
 
-    local worldRootPosition =
-        root.Position
+    addNamedLeg({
+        "Left Leg",
+        "LeftLowerLeg",
+        "LeftFoot"
+    })
 
-    local legBottomLocalY =
-        root.CFrame:PointToObjectSpace(
-            Vector3.new(
-                worldRootPosition.X,
-                minWorldBottomY,
-                worldRootPosition.Z
-            )
-        ).Y
+    addNamedLeg({
+        "Right Leg",
+        "RightLowerLeg",
+        "RightFoot"
+    })
 
-    local sizeX =
-        math.clamp(
-            (maxX - minX) + 0.04,
-            0.5,
-            3.5
+    return result
+end
+
+function mainJump.getCrouchSpamSensorLayout(char)
+    local legs =
+        mainJump.getCrouchSpamSensorLegs(
+            char
         )
 
-    local sizeZ =
-        math.clamp(
-            (maxZ - minZ) + 0.04,
-            0.5,
-            2.5
-        )
+    if #legs == 0 then
+        return Vector3.new(
+            2,
+            0.20,
+            1
+        ), nil
+    end
+
+    local minWorldY = math.huge
+
+    for _, leg in ipairs(legs) do
+        local halfSize =
+            leg.Size * 0.5
+
+        --// Use all 8 corners so rotation of the leg cannot make
+        --// the calculated bottom jump upward/downward incorrectly.
+        for _, sx in ipairs({ -1, 1 }) do
+            for _, sy in ipairs({ -1, 1 }) do
+                for _, sz in ipairs({ -1, 1 }) do
+                    local corner =
+                        leg.CFrame:PointToWorldSpace(
+                            Vector3.new(
+                                halfSize.X * sx,
+                                halfSize.Y * sy,
+                                halfSize.Z * sz
+                            )
+                        )
+
+                    minWorldY =
+                        math.min(
+                            minWorldY,
+                            corner.Y
+                        )
+                end
+            end
+        end
+    end
 
     return Vector3.new(
-        sizeX,
+        2,
         0.20,
-        sizeZ
-    ), legBottomLocalY
+        1
+    ), minWorldY
 end
 
 function mainJump.createCrouchSpamSensor(char)
@@ -13019,7 +12935,7 @@ function mainJump.createCrouchSpamSensor(char)
         return
     end
 
-    local sensorSize, legBottomY =
+    local sensorSize =
         mainJump.getCrouchSpamSensorLayout(
             char
         )
@@ -13047,20 +12963,42 @@ function mainJump.createCrouchSpamSensor(char)
     sensor.CastShadow = false
 
     --// Independent from the actual legs: there is no weld.
-    --// It tracks only the root CFrame and keeps a fixed position
-    --// at the lower-leg/foot band, slightly downward.
-    local sensorCenterY =
-        legBottomY
-            + (sensorSize.Y * 0.5)
-            - 0.10
+    --// The sensor itself is only anchored in the character.
+    --// Its position is recalculated from the real world-space
+    --// bottom of the leg parts every Heartbeat.
+    local function updateSensorPosition()
+        if not sensor.Parent
+            or not root.Parent
+        then
+            return
+        end
 
-    sensor.CFrame =
-        root.CFrame
-        * CFrame.new(
-            0,
-            sensorCenterY,
-            0
-        )
+        local _, minWorldY =
+            mainJump.getCrouchSpamSensorLayout(
+                char
+            )
+
+        if not minWorldY then
+            return
+        end
+
+        sensor.CFrame =
+            CFrame.new(
+                root.Position.X,
+                minWorldY
+                    + (sensor.Size.Y * 0.5)
+                    - 0.10,
+                root.Position.Z
+            )
+            * CFrame.fromMatrix(
+                Vector3.zero,
+                root.CFrame.RightVector,
+                root.CFrame.UpVector,
+                root.CFrame.LookVector
+            )
+    end
+
+    updateSensorPosition()
 
     sensor.Parent = char
 
@@ -13090,13 +13028,7 @@ function mainJump.createCrouchSpamSensor(char)
             return false
         end
 
-        sensor.CFrame =
-            root.CFrame
-            * CFrame.new(
-                0,
-                sensorCenterY,
-                0
-            )
+        updateSensorPosition()
 
         local parts = {}
         pcall(function()
