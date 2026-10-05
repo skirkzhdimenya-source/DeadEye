@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.141
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.142
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.141"
+local SCRIPT_VERSION = "1.142"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -167,7 +167,6 @@ local savedConfig = {
         airTurn = false,
         airTurnSpeed = 180,
         smartAirTurn = false,
-        smartAirTurnDelay = 0.01,
         smartAirTurnHotkey = "O",
         crouchSpamDelay = 0.03,
         crouchSpamHotkey = "I"
@@ -10203,9 +10202,7 @@ local mainJump = {
     crouchSpamDelay = 0.03,
     crouchSpamHotkeyName = "I",
     smartAirTurnEnabled = false,
-    smartAirTurnDelay = 0.01,
     smartAirTurnHotkeyName = "O",
-    smartAirTurnTimer = 0,
     crouchSpamThread = nil,
     crouchSpamMovement = nil,
     crouchSpamDelayBox = nil,
@@ -10289,21 +10286,6 @@ mainJump.smartAirTurnEnabled =
     savedConfig.main
     and savedConfig.main.smartAirTurn == true
     or false
-mainJump.smartAirTurnDelay =
-    math.clamp(
-        tonumber(
-            savedConfig.main
-            and savedConfig.main.smartAirTurnDelay
-        ) or 0.01,
-        0.001,
-        5
-    )
-mainJump.smartAirTurnHotkeyName =
-    tostring(
-        savedConfig.main
-        and savedConfig.main.smartAirTurnHotkey
-        or "O"
-    )
 mainJump.lookEnabled =
     savedConfig.main
     and savedConfig.main.look == true
@@ -10354,7 +10336,6 @@ function mainJump.saveConfig()
         airTurn = mainJump.airTurnEnabled,
         airTurnSpeed = mainJump.airTurnSpeed,
         smartAirTurn = mainJump.smartAirTurnEnabled,
-        smartAirTurnDelay = mainJump.smartAirTurnDelay,
         smartAirTurnHotkey = mainJump.smartAirTurnHotkeyName,
         crouchSpamDelay = mainJump.crouchSpamDelay,
         crouchSpamHotkey = mainJump.crouchSpamHotkeyName
@@ -10825,7 +10806,6 @@ function mainJump.bindAirTurnRender()
             end
 
             if turning == 0 then
-                mainJump.smartAirTurnTimer = 0
                 return
             end
 
@@ -10865,16 +10845,6 @@ function mainJump.bindAirTurnRender()
             --// Manual mouse movement remains intact; only the correction
             --// is added to the native CameraInput movement state.
             if mainJump.smartAirTurnEnabled then
-                mainJump.smartAirTurnTimer =
-                    mainJump.smartAirTurnTimer
-                    + dt
-
-                if mainJump.smartAirTurnTimer
-                    < mainJump.smartAirTurnDelay
-                then
-                    return
-                end
-
                 local object =
                     getCharacterObject()
 
@@ -10945,7 +10915,6 @@ function mainJump.bindAirTurnRender()
                     or horizontalVelocity.Magnitude
                         < 0.001
                 then
-                    mainJump.smartAirTurnTimer = 0
                     return
                 end
 
@@ -11011,8 +10980,6 @@ function mainJump.bindAirTurnRender()
                         SMART_AIR_TURN_MAX_PIXELS
                     )
 
-                mainJump.smartAirTurnTimer = 0
-
                 pcall(function()
                     movementState.Movement =
                         Vector2.new(
@@ -11070,9 +11037,8 @@ function mainJump.setSmartAirTurnEnabled(state)
     mainJump.smartAirTurnEnabled =
         state and true or false
 
-    if not mainJump.smartAirTurnEnabled then
-        mainJump.smartAirTurnTimer = 0
-    elseif mainJump.airTurnEnabled
+    if mainJump.smartAirTurnEnabled
+        and mainJump.airTurnEnabled
         and mainJump.enabled
     then
         mainJump.findLookMovementState()
@@ -11081,33 +11047,6 @@ function mainJump.setSmartAirTurnEnabled(state)
 
     mainJump.saveConfig()
     mainJump.update()
-end
-
-function mainJump.setSmartAirTurnDelay(value)
-    local number =
-        tonumber(
-            tostring(value or "")
-        )
-
-    if not number then
-        return
-    end
-
-    mainJump.smartAirTurnDelay =
-        math.clamp(
-            number,
-            0.001,
-            5
-        )
-
-    if mainJump.smartAirTurnDelayBox then
-        mainJump.smartAirTurnDelayBox.Text =
-            tostring(
-                mainJump.smartAirTurnDelay
-            )
-    end
-
-    mainJump.saveConfig()
 end
 
 function mainJump.setAirTurnSpeed(value, persist)
@@ -13813,6 +13752,131 @@ autoLabel.TextColor3 =
 autoLabel.TextXAlignment =
     Enum.TextXAlignment.Left
 autoLabel.Parent = __UI.autoRow
+
+mainJump.hotkeyBox =
+    Instance.new("TextButton")
+mainJump.hotkeyBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.hotkeyBox.Position =
+    UDim2.new(
+        1,
+        -235,
+        0.5,
+        -14
+    )
+mainJump.hotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.hotkeyBox.BorderSizePixel = 0
+mainJump.hotkeyBox.Text =
+    mainJump.hotkeyName
+mainJump.hotkeyBox.TextSize = 10
+mainJump.hotkeyBox.Font =
+    Enum.Font.GothamBold
+mainJump.hotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.hotkeyBox.Parent =
+    __UI.autoRow
+
+__UI.autoHotkeyCorner =
+    Instance.new("UICorner")
+__UI.autoHotkeyCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+__UI.autoHotkeyCorner.Parent =
+    mainJump.hotkeyBox
+
+mainConnect(
+    mainJump.hotkeyBox.MouseButton1Click:Connect(
+        function()
+            mainJump.startCapture(
+                "jump"
+            )
+        end
+    )
+)
+
+mainJump.delayBox =
+    Instance.new("TextBox")
+mainJump.delayBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.delayBox.Position =
+    UDim2.new(
+        1,
+        -155,
+        0.5,
+        -14
+    )
+mainJump.delayBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.delayBox.BorderSizePixel = 0
+mainJump.delayBox.ClearTextOnFocus = false
+mainJump.delayBox.Text =
+    tostring(
+        mainJump.jumpDelay
+    )
+mainJump.delayBox.TextSize = 10
+mainJump.delayBox.Font =
+    Enum.Font.GothamBold
+mainJump.delayBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.delayBox.Parent =
+    __UI.autoRow
+
+__UI.autoDelayCorner =
+    Instance.new("UICorner")
+__UI.autoDelayCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+__UI.autoDelayCorner.Parent =
+    mainJump.delayBox
+
+mainConnect(
+    mainJump.delayBox.FocusLost:Connect(
+        function(enterPressed)
+            if enterPressed then
+                mainJump.setDelay(
+                    mainJump.delayBox.Text
+                )
+            else
+                mainJump.delayBox.Text =
+                    tostring(
+                        mainJump.jumpDelay
+                    )
+            end
+        end
+    )
+)
+
 mainJump.toggle =
     Instance.new("TextButton")
 mainJump.toggle.Size =
@@ -13831,8 +13895,7 @@ mainJump.toggle.Position =
     )
 mainJump.toggle.BorderSizePixel = 0
 mainJump.toggle.TextSize = 10
-mainJump.toggle.Font =
-    Enum.Font.GothamBold
+mainJump.toggle.Font = Enum.Font.GothamBold
 mainJump.toggle.TextColor3 =
     Color3.fromRGB(
         255,
@@ -13991,6 +14054,63 @@ airTurnLabel.Text =
 airTurnLabel.Parent =
     __UI.airTurnRow
 
+mainJump.smartAirTurnHotkeyBox =
+    Instance.new("TextButton")
+mainJump.smartAirTurnHotkeyBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.smartAirTurnHotkeyBox.Position =
+    UDim2.new(
+        1,
+        -155,
+        0.5,
+        -14
+    )
+mainJump.smartAirTurnHotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.smartAirTurnHotkeyBox.BorderSizePixel = 0
+mainJump.smartAirTurnHotkeyBox.Text =
+    mainJump.smartAirTurnHotkeyName
+mainJump.smartAirTurnHotkeyBox.TextSize = 10
+mainJump.smartAirTurnHotkeyBox.Font =
+    Enum.Font.GothamBold
+mainJump.smartAirTurnHotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.smartAirTurnHotkeyBox.Parent =
+    __UI.airTurnRow
+
+local smartAirTurnHotkeyCorner =
+    Instance.new("UICorner")
+smartAirTurnHotkeyCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+smartAirTurnHotkeyCorner.Parent =
+    mainJump.smartAirTurnHotkeyBox
+
+mainConnect(
+    mainJump.smartAirTurnHotkeyBox.MouseButton1Click:Connect(
+        function()
+            mainJump.startCapture(
+                "smartAirTurn"
+            )
+        end
+    )
+)
+
 mainJump.airTurnToggle =
     Instance.new("TextButton")
 mainJump.airTurnToggle.Size =
@@ -14052,130 +14172,6 @@ smartAirTurnLabel.Text =
     "SMART AIR TURN"
 smartAirTurnLabel.Parent =
     __UI.smartAirTurnRow
-
-mainJump.smartAirTurnHotkeyBox =
-    Instance.new("TextButton")
-mainJump.smartAirTurnHotkeyBox.Size =
-    UDim2.new(
-        0,
-        72,
-        0,
-        28
-    )
-mainJump.smartAirTurnHotkeyBox.Position =
-    UDim2.new(
-        1,
-        -235,
-        0.5,
-        -14
-    )
-mainJump.smartAirTurnHotkeyBox.BackgroundColor3 =
-    Color3.fromRGB(
-        32,
-        32,
-        32
-    )
-mainJump.smartAirTurnHotkeyBox.BorderSizePixel = 0
-mainJump.smartAirTurnHotkeyBox.Text =
-    mainJump.smartAirTurnHotkeyName
-mainJump.smartAirTurnHotkeyBox.TextSize = 10
-mainJump.smartAirTurnHotkeyBox.Font =
-    Enum.Font.GothamBold
-mainJump.smartAirTurnHotkeyBox.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-mainJump.smartAirTurnHotkeyBox.Parent =
-    __UI.smartAirTurnRow
-
-local smartAirTurnHotkeyCorner =
-    Instance.new("UICorner")
-smartAirTurnHotkeyCorner.CornerRadius =
-    UDim.new(
-        0,
-        5
-    )
-smartAirTurnHotkeyCorner.Parent =
-    mainJump.smartAirTurnHotkeyBox
-
-mainConnect(
-    mainJump.smartAirTurnHotkeyBox.MouseButton1Click:Connect(
-        function()
-            mainJump.startCapture(
-                "smartAirTurn"
-            )
-        end
-    )
-)
-
-mainJump.smartAirTurnDelayBox =
-    Instance.new("TextBox")
-mainJump.smartAirTurnDelayBox.Size =
-    UDim2.new(
-        0,
-        72,
-        0,
-        28
-    )
-mainJump.smartAirTurnDelayBox.Position =
-    UDim2.new(
-        1,
-        -155,
-        0.5,
-        -14
-    )
-mainJump.smartAirTurnDelayBox.BackgroundColor3 =
-    Color3.fromRGB(
-        32,
-        32,
-        32
-    )
-mainJump.smartAirTurnDelayBox.BorderSizePixel = 0
-mainJump.smartAirTurnDelayBox.ClearTextOnFocus = false
-mainJump.smartAirTurnDelayBox.Text =
-    tostring(
-        mainJump.smartAirTurnDelay
-    )
-mainJump.smartAirTurnDelayBox.TextSize = 10
-mainJump.smartAirTurnDelayBox.Font =
-    Enum.Font.GothamBold
-mainJump.smartAirTurnDelayBox.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-mainJump.smartAirTurnDelayBox.Parent =
-    __UI.smartAirTurnRow
-
-local smartAirTurnDelayCorner =
-    Instance.new("UICorner")
-smartAirTurnDelayCorner.CornerRadius =
-    UDim.new(
-        0,
-        5
-    )
-smartAirTurnDelayCorner.Parent =
-    mainJump.smartAirTurnDelayBox
-
-mainConnect(
-    mainJump.smartAirTurnDelayBox.FocusLost:Connect(
-        function(enterPressed)
-            if enterPressed then
-                mainJump.setSmartAirTurnDelay(
-                    mainJump.smartAirTurnDelayBox.Text
-                )
-            else
-                mainJump.smartAirTurnDelayBox.Text =
-                    tostring(
-                        mainJump.smartAirTurnDelay
-                    )
-            end
-        end
-    )
-)
 
 mainJump.smartAirTurnToggle =
     Instance.new("TextButton")
@@ -14617,6 +14613,12 @@ mainJump.crouchSpamToggle.Position =
         0.5,
         -14
     )
+mainJump.crouchSpamToggle.BackgroundColor3 =
+    Color3.fromRGB(
+        47,
+        52,
+        61
+    )
 mainJump.crouchSpamToggle.BorderSizePixel = 0
 mainJump.crouchSpamToggle.TextSize = 10
 mainJump.crouchSpamToggle.Font =
@@ -14640,198 +14642,10 @@ mainConnect(
     )
 )
 
-__UI.delayRow =
-    mainRow(
-        "DELAY",
-        8
-    )
-__UI.delayLabel =
-    autoLabel:Clone()
-__UI.delayLabel.Text =
-    "DELAY"
-__UI.delayLabel.Parent =
-    __UI.delayRow
-mainJump.delayBox =
-    Instance.new("TextBox")
-mainJump.delayBox.Size =
-    UDim2.new(
-        1,
-        -190,
-        0,
-        28
-    )
-mainJump.delayBox.Position =
-    UDim2.new(
-        0,
-        105,
-        0.5,
-        -14
-    )
-mainJump.delayBox.BackgroundColor3 =
-    Color3.fromRGB(
-        32,
-        32,
-        32
-    )
-mainJump.delayBox.BorderSizePixel = 0
-mainJump.delayBox.ClearTextOnFocus = false
-mainJump.delayBox.Text =
-    tostring(
-        mainJump.jumpDelay
-    )
-mainJump.delayBox.TextSize = 11
-mainJump.delayBox.Font =
-            Enum.Font.GothamBold
-mainJump.delayBox.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-mainJump.delayBox.Parent =
-    __UI.delayRow
-__UI.delayCorner =
-    Instance.new("UICorner")
-__UI.delayCorner.CornerRadius =
-    UDim.new(
-        0,
-        5
-    )
-__UI.delayCorner.Parent =
-    mainJump.delayBox
-local delaySet =
-    Instance.new("TextButton")
-delaySet.Size =
-    UDim2.new(
-        0,
-        65,
-        0,
-        28
-    )
-delaySet.Position =
-    UDim2.new(
-        1,
-        -75,
-        0.5,
-        -14
-    )
-delaySet.BackgroundColor3 =
-    Color3.fromRGB(
-        52,
-        52,
-        52
-    )
-delaySet.BorderSizePixel = 0
-delaySet.Text = "SET"
-delaySet.TextSize = 9
-delaySet.Font =
-    Enum.Font.GothamBold
-delaySet.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-delaySet.Parent =
-    __UI.delayRow
-__UI.delaySetCorner =
-    Instance.new("UICorner")
-__UI.delaySetCorner.CornerRadius =
-    UDim.new(
-        0,
-        5
-    )
-__UI.delaySetCorner.Parent =
-    delaySet
-mainConnect(
-    delaySet.MouseButton1Click:Connect(
-        function()
-            mainJump.setDelay(
-                mainJump.delayBox.Text
-            )
-        end
-    )
-)
-mainConnect(
-    mainJump.delayBox.FocusLost:Connect(
-        function(enterPressed)
-            if enterPressed then
-                mainJump.setDelay(
-                    mainJump.delayBox.Text
-                )
-            end
-        end
-    )
-)
-__UI.hotkeyRow =
-    mainRow(
-        "HOTKEY",
-        9
-    )
-__UI.hotkeyLabel =
-    autoLabel:Clone()
-__UI.hotkeyLabel.Text =
-    "HOTKEY"
-__UI.hotkeyLabel.Parent =
-    __UI.hotkeyRow
-mainJump.hotkeyBox =
-    Instance.new("TextButton")
-mainJump.hotkeyBox.Size =
-    UDim2.new(
-        1,
-        -120,
-        0,
-        28
-    )
-mainJump.hotkeyBox.Position =
-    UDim2.new(
-        0,
-        105,
-        0.5,
-        -14
-    )
-mainJump.hotkeyBox.BackgroundColor3 =
-    Color3.fromRGB(
-        32,
-        32,
-        32
-    )
-mainJump.hotkeyBox.BorderSizePixel = 0
-mainJump.hotkeyBox.Text =
-    mainJump.hotkeyName
-mainJump.hotkeyBox.TextSize = 11
-mainJump.hotkeyBox.Font =
-            Enum.Font.GothamBold
-mainJump.hotkeyBox.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-mainJump.hotkeyBox.Parent =
-    __UI.hotkeyRow
-__UI.hotkeyCorner =
-    Instance.new("UICorner")
-__UI.hotkeyCorner.CornerRadius =
-    UDim.new(
-        0,
-        5
-    )
-__UI.hotkeyCorner.Parent =
-    mainJump.hotkeyBox
-mainConnect(
-    mainJump.hotkeyBox.MouseButton1Click:Connect(
-        function()
-            mainJump.startCapture(
-                "jump"
-            )
-        end
-    )
-)
 __UI.hideRow =
     mainRow(
         "HIDE UI",
-        10
+        8
     )
 __UI.hideLabel =
     autoLabel:Clone()
