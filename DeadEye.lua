@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.145
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.146
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.145"
+local SCRIPT_VERSION = "1.146"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11072,6 +11072,16 @@ function mainJump.bindAirTurnRender()
                     * SMART_AIR_TURN_GAIN
                     / SMART_AIR_TURN_INPUT_RADIANS
                     * -1
+
+                --// Use the exact same backward-inversion rule as
+                --// the normal Air Turn: camera vs actual velocity.
+                if cameraFlat:Dot(
+                    velocityFlat
+                ) < 0
+                then
+                    correctionPixels =
+                        -correctionPixels
+                end
 
                 correctionPixels =
                     math.clamp(
