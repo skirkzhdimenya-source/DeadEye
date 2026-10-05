@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.140
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.141
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.140"
+local SCRIPT_VERSION = "1.141"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -166,6 +166,9 @@ local savedConfig = {
         rageLook = false,
         airTurn = false,
         airTurnSpeed = 180,
+        smartAirTurn = false,
+        smartAirTurnDelay = 0.01,
+        smartAirTurnHotkey = "O",
         crouchSpamDelay = 0.03,
         crouchSpamHotkey = "I"
     },
@@ -10199,6 +10202,10 @@ local mainJump = {
     crouchSpamEnabled = false,
     crouchSpamDelay = 0.03,
     crouchSpamHotkeyName = "I",
+    smartAirTurnEnabled = false,
+    smartAirTurnDelay = 0.01,
+    smartAirTurnHotkeyName = "O",
+    smartAirTurnTimer = 0,
     crouchSpamThread = nil,
     crouchSpamMovement = nil,
     crouchSpamDelayBox = nil,
@@ -10278,6 +10285,25 @@ mainJump.crouchSpamHotkeyName =
         and savedConfig.main.crouchSpamHotkey
         or "I"
     )
+mainJump.smartAirTurnEnabled =
+    savedConfig.main
+    and savedConfig.main.smartAirTurn == true
+    or false
+mainJump.smartAirTurnDelay =
+    math.clamp(
+        tonumber(
+            savedConfig.main
+            and savedConfig.main.smartAirTurnDelay
+        ) or 0.01,
+        0.001,
+        5
+    )
+mainJump.smartAirTurnHotkeyName =
+    tostring(
+        savedConfig.main
+        and savedConfig.main.smartAirTurnHotkey
+        or "O"
+    )
 mainJump.lookEnabled =
     savedConfig.main
     and savedConfig.main.look == true
@@ -10297,7 +10323,7 @@ mainJump.airTurnSpeed =
             and savedConfig.main.airTurnSpeed
         ) or 180,
         30,
-        360
+        480
     )
 local function mainConnect(connection)
     table.insert(
@@ -10327,6 +10353,9 @@ function mainJump.saveConfig()
         rageLook = mainJump.rageLookEnabled,
         airTurn = mainJump.airTurnEnabled,
         airTurnSpeed = mainJump.airTurnSpeed,
+        smartAirTurn = mainJump.smartAirTurnEnabled,
+        smartAirTurnDelay = mainJump.smartAirTurnDelay,
+        smartAirTurnHotkey = mainJump.smartAirTurnHotkeyName,
         crouchSpamDelay = mainJump.crouchSpamDelay,
         crouchSpamHotkey = mainJump.crouchSpamHotkeyName
     }
@@ -10718,7 +10747,11 @@ local AIR_TURN_RENDER_NAME =
     "DeadEyeMainAirTurn"
 
 local AIR_TURN_MIN_SPEED = 30
-local AIR_TURN_MAX_SPEED = 360
+local AIR_TURN_MAX_SPEED = 480
+
+local SMART_AIR_TURN_INPUT_RADIANS = 0.00575958658
+local SMART_AIR_TURN_MAX_PIXELS = 12
+local SMART_AIR_TURN_GAIN = 1
 
 mainJump.airTurnRenderBound = false
 
@@ -10792,90 +10825,8 @@ function mainJump.bindAirTurnRender()
             end
 
             if turning == 0 then
+                mainJump.smartAirTurnTimer = 0
                 return
-            end
-
-            --// If the camera is looking backwards relative to the
-            --// current horizontal movement, invert A/D so the same
-            --// physical strafe side remains consistent.
-            local camera =
-                workspace.CurrentCamera
-
-            local horizontalLook
-            local horizontalVelocity
-
-            if camera then
-                pcall(function()
-                    local look =
-                        camera.CFrame.LookVector
-
-                    horizontalLook =
-                        Vector3.new(
-                            look.X,
-                            0,
-                            look.Z
-                        )
-                end)
-            end
-
-            pcall(function()
-                local velocity
-
-                if Registry then
-                    velocity =
-                        Registry:Get("Velocity")
-                end
-
-                if typeof(velocity) == "Vector3" then
-                    horizontalVelocity =
-                        Vector3.new(
-                            velocity.X,
-                            0,
-                            velocity.Z
-                        )
-                end
-            end)
-
-            if not horizontalVelocity
-                or horizontalVelocity.Magnitude
-                    < 0.001
-            then
-                pcall(function()
-                    local velocity =
-                        mainJump.root
-                        and mainJump.root.AssemblyLinearVelocity
-
-                    if typeof(velocity) == "Vector3" then
-                        horizontalVelocity =
-                            Vector3.new(
-                                velocity.X,
-                                0,
-                                velocity.Z
-                            )
-                    end
-                end)
-            end
-
-            if horizontalLook
-                and horizontalVelocity
-                and horizontalLook.Magnitude
-                    > 0.001
-                and horizontalVelocity.Magnitude
-                    > 0.001
-            then
-                horizontalLook =
-                    horizontalLook.Unit
-
-                horizontalVelocity =
-                    horizontalVelocity.Unit
-
-                if horizontalLook:Dot(
-                    horizontalVelocity
-                ) < 0
-                then
-                    turning =
-                        -turning
-                end
             end
 
             local movementState =
@@ -10909,6 +10860,173 @@ function mainJump.bindAirTurnRender()
                     1 / 30
                 )
 
+            --// SMART AIR TURN:
+            --// Camera follows the actual horizontal DataRegistry Velocity.
+            --// Manual mouse movement remains intact; only the correction
+            --// is added to the native CameraInput movement state.
+            if mainJump.smartAirTurnEnabled then
+                mainJump.smartAirTurnTimer =
+                    mainJump.smartAirTurnTimer
+                    + dt
+
+                if mainJump.smartAirTurnTimer
+                    < mainJump.smartAirTurnDelay
+                then
+                    return
+                end
+
+                local object =
+                    getCharacterObject()
+
+                local registry =
+                    object
+                    and object.DataRegistry
+
+                local horizontalVelocity
+
+                if registry then
+                    pcall(function()
+                        local velocity =
+                            registry:Get("Velocity")
+
+                        if typeof(velocity) == "Vector3" then
+                            horizontalVelocity =
+                                Vector3.new(
+                                    velocity.X,
+                                    0,
+                                    velocity.Z
+                                )
+                        end
+                    end)
+                end
+
+                local humanoid =
+                    mainJump.humanoid
+
+                local airborne =
+                    true
+
+                if humanoid
+                    and humanoid.Parent
+                then
+                    local state =
+                        humanoid:GetState()
+
+                    airborne =
+                        state
+                            == Enum.HumanoidStateType.Jumping
+                        or state
+                            == Enum.HumanoidStateType.Freefall
+                        or state
+                            == Enum.HumanoidStateType.FallingDown
+                end
+
+                if registry then
+                    pcall(function()
+                        local grounded =
+                            registry:Get("Grounded")
+
+                        if grounded == false then
+                            airborne = true
+                        elseif grounded == true
+                            and (
+                                not humanoid
+                                or humanoid:GetState()
+                                    ~= Enum.HumanoidStateType.Jumping
+                            )
+                        then
+                            airborne = false
+                        end
+                    end)
+                end
+
+                if not airborne
+                    or not horizontalVelocity
+                    or horizontalVelocity.Magnitude
+                        < 0.001
+                then
+                    mainJump.smartAirTurnTimer = 0
+                    return
+                end
+
+                local camera =
+                    workspace.CurrentCamera
+
+                if not camera then
+                    return
+                end
+
+                local look =
+                    camera.CFrame.LookVector
+
+                local cameraFlat =
+                    Vector3.new(
+                        look.X,
+                        0,
+                        look.Z
+                    )
+
+                if cameraFlat.Magnitude < 0.001 then
+                    return
+                end
+
+                local velocityFlat =
+                    horizontalVelocity.Unit
+
+                cameraFlat =
+                    cameraFlat.Unit
+
+                local velocityYaw =
+                    math.atan2(
+                        -velocityFlat.X,
+                        -velocityFlat.Z
+                    )
+
+                local cameraYaw =
+                    math.atan2(
+                        -cameraFlat.X,
+                        -cameraFlat.Z
+                    )
+
+                local error =
+                    math.atan2(
+                        math.sin(
+                            velocityYaw - cameraYaw
+                        ),
+                        math.cos(
+                            velocityYaw - cameraYaw
+                        )
+                    )
+
+                local correctionPixels =
+                    error
+                    * SMART_AIR_TURN_GAIN
+                    / SMART_AIR_TURN_INPUT_RADIANS
+                    * -1
+
+                correctionPixels =
+                    math.clamp(
+                        correctionPixels,
+                        -SMART_AIR_TURN_MAX_PIXELS,
+                        SMART_AIR_TURN_MAX_PIXELS
+                    )
+
+                mainJump.smartAirTurnTimer = 0
+
+                pcall(function()
+                    movementState.Movement =
+                        Vector2.new(
+                            currentMovement.X
+                                + correctionPixels,
+                            currentMovement.Y
+                        )
+                end)
+
+                return
+            end
+
+            --// NORMAL AIR TURN:
+            --// Fixed turn rate from the TURN SPEED slider.
             local radiansPerFrame =
                 math.rad(
                     mainJump.airTurnSpeed
@@ -10946,6 +11064,50 @@ function mainJump.setAirTurnEnabled(state)
 
     mainJump.saveConfig()
     mainJump.update()
+end
+
+function mainJump.setSmartAirTurnEnabled(state)
+    mainJump.smartAirTurnEnabled =
+        state and true or false
+
+    if not mainJump.smartAirTurnEnabled then
+        mainJump.smartAirTurnTimer = 0
+    elseif mainJump.airTurnEnabled
+        and mainJump.enabled
+    then
+        mainJump.findLookMovementState()
+        mainJump.bindAirTurnRender()
+    end
+
+    mainJump.saveConfig()
+    mainJump.update()
+end
+
+function mainJump.setSmartAirTurnDelay(value)
+    local number =
+        tonumber(
+            tostring(value or "")
+        )
+
+    if not number then
+        return
+    end
+
+    mainJump.smartAirTurnDelay =
+        math.clamp(
+            number,
+            0.001,
+            5
+        )
+
+    if mainJump.smartAirTurnDelayBox then
+        mainJump.smartAirTurnDelayBox.Text =
+            tostring(
+                mainJump.smartAirTurnDelay
+            )
+    end
+
+    mainJump.saveConfig()
 end
 
 function mainJump.setAirTurnSpeed(value, persist)
@@ -11542,6 +11704,28 @@ function mainJump.update()
         end
     end
 
+    if mainJump.smartAirTurnToggle then
+        if mainJump.smartAirTurnEnabled then
+            mainJump.smartAirTurnToggle.Text =
+                "ON"
+            mainJump.smartAirTurnToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            mainJump.smartAirTurnToggle.Text =
+                "OFF"
+            mainJump.smartAirTurnToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end
+
     if mainJump.crouchSpamToggle then
         if mainJump.crouchSpamEnabled then
             mainJump.crouchSpamToggle.Text =
@@ -11882,6 +12066,41 @@ local function mainFindKeyCode(value)
     end
     return nil
 end
+local smartAirTurnKey =
+    mainFindKeyCode(
+        mainJump.smartAirTurnHotkeyName
+    )
+if smartAirTurnKey then
+    mainJump.smartAirTurnHotkeyName =
+        smartAirTurnKey.Name
+else
+    mainJump.smartAirTurnHotkeyName =
+        "O"
+end
+
+function mainJump.setSmartAirTurnHotkey(value)
+    local key =
+        mainFindKeyCode(
+            value
+        )
+
+    if not key then
+        return
+    end
+
+    mainJump.smartAirTurnHotkeyName =
+        key.Name
+
+    if mainJump.smartAirTurnHotkeyBox then
+        mainJump.smartAirTurnHotkeyBox.Text =
+            key.Name
+    end
+
+    mainJump.capturing = nil
+
+    mainJump.saveConfig()
+end
+
 local crouchSpamKey =
     mainFindKeyCode(
         mainJump.crouchSpamHotkeyName
@@ -11976,6 +12195,9 @@ function mainJump.startCapture(kind)
             "PRESS KEY..."
     elseif kind == "hide" then
         mainJump.hideUIHotkeyBox.Text =
+            "PRESS KEY..."
+    elseif kind == "smartAirTurn" then
+        mainJump.smartAirTurnHotkeyBox.Text =
             "PRESS KEY..."
     elseif kind == "crouchSpam" then
         mainJump.crouchSpamHotkeyBox.Text =
@@ -13818,177 +14040,187 @@ mainConnect(
     )
 )
 
-__UI.crouchSpamRow =
+__UI.smartAirTurnRow =
     mainRow(
-        "CROUCH SPAM",
+        "SMART AIR TURN",
         5
     )
 
-local crouchSpamLabel =
+local smartAirTurnLabel =
     autoLabel:Clone()
-crouchSpamLabel.Text =
-    "CROUCH SPAM"
-crouchSpamLabel.Parent =
-    __UI.crouchSpamRow
+smartAirTurnLabel.Text =
+    "SMART AIR TURN"
+smartAirTurnLabel.Parent =
+    __UI.smartAirTurnRow
 
-mainJump.crouchSpamHotkeyBox =
+mainJump.smartAirTurnHotkeyBox =
     Instance.new("TextButton")
-mainJump.crouchSpamHotkeyBox.Size =
+mainJump.smartAirTurnHotkeyBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.crouchSpamHotkeyBox.Position =
+mainJump.smartAirTurnHotkeyBox.Position =
     UDim2.new(
         1,
         -235,
         0.5,
         -14
     )
-mainJump.crouchSpamHotkeyBox.BackgroundColor3 =
+mainJump.smartAirTurnHotkeyBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.crouchSpamHotkeyBox.BorderSizePixel = 0
-mainJump.crouchSpamHotkeyBox.Text =
-    mainJump.crouchSpamHotkeyName
-mainJump.crouchSpamHotkeyBox.TextSize = 10
-mainJump.crouchSpamHotkeyBox.Font =
+mainJump.smartAirTurnHotkeyBox.BorderSizePixel = 0
+mainJump.smartAirTurnHotkeyBox.Text =
+    mainJump.smartAirTurnHotkeyName
+mainJump.smartAirTurnHotkeyBox.TextSize = 10
+mainJump.smartAirTurnHotkeyBox.Font =
     Enum.Font.GothamBold
-mainJump.crouchSpamHotkeyBox.TextColor3 =
+mainJump.smartAirTurnHotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.crouchSpamHotkeyBox.Parent =
-    __UI.crouchSpamRow
+mainJump.smartAirTurnHotkeyBox.Parent =
+    __UI.smartAirTurnRow
 
-local crouchSpamHotkeyCorner =
+local smartAirTurnHotkeyCorner =
     Instance.new("UICorner")
-crouchSpamHotkeyCorner.CornerRadius =
+smartAirTurnHotkeyCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-crouchSpamHotkeyCorner.Parent =
-    mainJump.crouchSpamHotkeyBox
+smartAirTurnHotkeyCorner.Parent =
+    mainJump.smartAirTurnHotkeyBox
 
 mainConnect(
-    mainJump.crouchSpamHotkeyBox.MouseButton1Click:Connect(
+    mainJump.smartAirTurnHotkeyBox.MouseButton1Click:Connect(
         function()
             mainJump.startCapture(
-                "crouchSpam"
+                "smartAirTurn"
             )
         end
     )
 )
 
-mainJump.crouchSpamDelayBox =
+mainJump.smartAirTurnDelayBox =
     Instance.new("TextBox")
-mainJump.crouchSpamDelayBox.Size =
+mainJump.smartAirTurnDelayBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.crouchSpamDelayBox.Position =
+mainJump.smartAirTurnDelayBox.Position =
     UDim2.new(
         1,
         -155,
         0.5,
         -14
     )
-mainJump.crouchSpamDelayBox.BackgroundColor3 =
+mainJump.smartAirTurnDelayBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.crouchSpamDelayBox.BorderSizePixel = 0
-mainJump.crouchSpamDelayBox.ClearTextOnFocus = false
-mainJump.crouchSpamDelayBox.Text =
+mainJump.smartAirTurnDelayBox.BorderSizePixel = 0
+mainJump.smartAirTurnDelayBox.ClearTextOnFocus = false
+mainJump.smartAirTurnDelayBox.Text =
     tostring(
-        mainJump.crouchSpamDelay
+        mainJump.smartAirTurnDelay
     )
-mainJump.crouchSpamDelayBox.TextSize = 10
-mainJump.crouchSpamDelayBox.Font =
+mainJump.smartAirTurnDelayBox.TextSize = 10
+mainJump.smartAirTurnDelayBox.Font =
     Enum.Font.GothamBold
-mainJump.crouchSpamDelayBox.TextColor3 =
+mainJump.smartAirTurnDelayBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.crouchSpamDelayBox.Parent =
-    __UI.crouchSpamRow
+mainJump.smartAirTurnDelayBox.Parent =
+    __UI.smartAirTurnRow
 
-local crouchSpamDelayCorner =
+local smartAirTurnDelayCorner =
     Instance.new("UICorner")
-crouchSpamDelayCorner.CornerRadius =
+smartAirTurnDelayCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-crouchSpamDelayCorner.Parent =
-    mainJump.crouchSpamDelayBox
+smartAirTurnDelayCorner.Parent =
+    mainJump.smartAirTurnDelayBox
 
 mainConnect(
-    mainJump.crouchSpamDelayBox.FocusLost:Connect(
+    mainJump.smartAirTurnDelayBox.FocusLost:Connect(
         function(enterPressed)
             if enterPressed then
-                mainJump.setCrouchSpamDelay(
-                    mainJump.crouchSpamDelayBox.Text
+                mainJump.setSmartAirTurnDelay(
+                    mainJump.smartAirTurnDelayBox.Text
                 )
             else
-                mainJump.crouchSpamDelayBox.Text =
+                mainJump.smartAirTurnDelayBox.Text =
                     tostring(
-                        mainJump.crouchSpamDelay
+                        mainJump.smartAirTurnDelay
                     )
             end
         end
     )
 )
 
-mainJump.crouchSpamToggle =
+mainJump.smartAirTurnToggle =
     Instance.new("TextButton")
-mainJump.crouchSpamToggle.Size =
+mainJump.smartAirTurnToggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.crouchSpamToggle.Position =
+mainJump.smartAirTurnToggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.crouchSpamToggle.BorderSizePixel = 0
-mainJump.crouchSpamToggle.TextSize = 10
-mainJump.crouchSpamToggle.Font =
+mainJump.smartAirTurnToggle.BorderSizePixel = 0
+mainJump.smartAirTurnToggle.TextSize = 10
+mainJump.smartAirTurnToggle.Font =
     Enum.Font.GothamBold
-mainJump.crouchSpamToggle.TextColor3 =
+mainJump.smartAirTurnToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.crouchSpamToggle.Parent =
-    __UI.crouchSpamRow
+mainJump.smartAirTurnToggle.Parent =
+    __UI.smartAirTurnRow
+
+local smartAirTurnToggleCorner =
+    Instance.new("UICorner")
+smartAirTurnToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+smartAirTurnToggleCorner.Parent =
+    mainJump.smartAirTurnToggle
 
 mainConnect(
-    mainJump.crouchSpamToggle.MouseButton1Click:Connect(
+    mainJump.smartAirTurnToggle.MouseButton1Click:Connect(
         function()
-            mainJump.setCrouchSpamEnabled(
-                not mainJump.crouchSpamEnabled
+            mainJump.setSmartAirTurnEnabled(
+                not mainJump.smartAirTurnEnabled
             )
         end
     )
@@ -14232,10 +14464,186 @@ mainConnect(
     )
 )
 
+__UI.crouchSpamRow =
+    mainRow(
+        "CROUCH SPAM",
+        7
+    )
+
+local crouchSpamLabel =
+    autoLabel:Clone()
+crouchSpamLabel.Text =
+    "CROUCH SPAM"
+crouchSpamLabel.Parent =
+    __UI.crouchSpamRow
+
+mainJump.crouchSpamHotkeyBox =
+    Instance.new("TextButton")
+mainJump.crouchSpamHotkeyBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.crouchSpamHotkeyBox.Position =
+    UDim2.new(
+        1,
+        -235,
+        0.5,
+        -14
+    )
+mainJump.crouchSpamHotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.crouchSpamHotkeyBox.BorderSizePixel = 0
+mainJump.crouchSpamHotkeyBox.Text =
+    mainJump.crouchSpamHotkeyName
+mainJump.crouchSpamHotkeyBox.TextSize = 10
+mainJump.crouchSpamHotkeyBox.Font =
+    Enum.Font.GothamBold
+mainJump.crouchSpamHotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.crouchSpamHotkeyBox.Parent =
+    __UI.crouchSpamRow
+
+local crouchSpamHotkeyCorner =
+    Instance.new("UICorner")
+crouchSpamHotkeyCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+crouchSpamHotkeyCorner.Parent =
+    mainJump.crouchSpamHotkeyBox
+
+mainConnect(
+    mainJump.crouchSpamHotkeyBox.MouseButton1Click:Connect(
+        function()
+            mainJump.startCapture(
+                "crouchSpam"
+            )
+        end
+    )
+)
+
+mainJump.crouchSpamDelayBox =
+    Instance.new("TextBox")
+mainJump.crouchSpamDelayBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.crouchSpamDelayBox.Position =
+    UDim2.new(
+        1,
+        -155,
+        0.5,
+        -14
+    )
+mainJump.crouchSpamDelayBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.crouchSpamDelayBox.BorderSizePixel = 0
+mainJump.crouchSpamDelayBox.ClearTextOnFocus = false
+mainJump.crouchSpamDelayBox.Text =
+    tostring(
+        mainJump.crouchSpamDelay
+    )
+mainJump.crouchSpamDelayBox.TextSize = 10
+mainJump.crouchSpamDelayBox.Font =
+    Enum.Font.GothamBold
+mainJump.crouchSpamDelayBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.crouchSpamDelayBox.Parent =
+    __UI.crouchSpamRow
+
+local crouchSpamDelayCorner =
+    Instance.new("UICorner")
+crouchSpamDelayCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+crouchSpamDelayCorner.Parent =
+    mainJump.crouchSpamDelayBox
+
+mainConnect(
+    mainJump.crouchSpamDelayBox.FocusLost:Connect(
+        function(enterPressed)
+            if enterPressed then
+                mainJump.setCrouchSpamDelay(
+                    mainJump.crouchSpamDelayBox.Text
+                )
+            else
+                mainJump.crouchSpamDelayBox.Text =
+                    tostring(
+                        mainJump.crouchSpamDelay
+                    )
+            end
+        end
+    )
+)
+
+mainJump.crouchSpamToggle =
+    Instance.new("TextButton")
+mainJump.crouchSpamToggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+mainJump.crouchSpamToggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+mainJump.crouchSpamToggle.BorderSizePixel = 0
+mainJump.crouchSpamToggle.TextSize = 10
+mainJump.crouchSpamToggle.Font =
+    Enum.Font.GothamBold
+mainJump.crouchSpamToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.crouchSpamToggle.Parent =
+    __UI.crouchSpamRow
+
+mainConnect(
+    mainJump.crouchSpamToggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setCrouchSpamEnabled(
+                not mainJump.crouchSpamEnabled
+            )
+        end
+    )
+)
+
 __UI.delayRow =
     mainRow(
         "DELAY",
-        7
+        8
     )
 __UI.delayLabel =
     autoLabel:Clone()
@@ -14358,7 +14766,7 @@ mainConnect(
 __UI.hotkeyRow =
     mainRow(
         "HOTKEY",
-        8
+        9
     )
 __UI.hotkeyLabel =
     autoLabel:Clone()
@@ -14423,7 +14831,7 @@ mainConnect(
 __UI.hideRow =
     mainRow(
         "HIDE UI",
-        9
+        10
     )
 __UI.hideLabel =
     autoLabel:Clone()
@@ -14510,6 +14918,12 @@ mainConnect(
                         keyCode.Name
                     )
                 elseif mainJump.capturing
+                    == "smartAirTurn"
+                then
+                    mainJump.setSmartAirTurnHotkey(
+                        keyCode.Name
+                    )
+                elseif mainJump.capturing
                     == "crouchSpam"
                 then
                     mainJump.setCrouchSpamHotkey(
@@ -14535,6 +14949,16 @@ mainConnect(
             then
                 ScreenGui.Enabled =
                     not ScreenGui.Enabled
+            end
+
+            if input.KeyCode
+                == mainFindKeyCode(
+                    mainJump.smartAirTurnHotkeyName
+                )
+            then
+                mainJump.setSmartAirTurnEnabled(
+                    not mainJump.smartAirTurnEnabled
+                )
             end
 
             if input.KeyCode
