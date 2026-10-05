@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.127
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.128
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.127"
+local SCRIPT_VERSION = "1.128"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -64,10 +64,12 @@ local function purgeStaleMainJumpSensors()
             and (
                 object.Name == "FootJumpSensor"
                 or object.Name == "FrontJumpSensor"
+                or object.Name == "RearJumpSensor"
                 or object.Name == "LookFootJumpSensor"
                 or object.Name == "LookFrontJumpSensor"
                 or object.Name == "JumpForwardSensorExtra"
                 or object.Name == "LookForwardSensorExtra"
+                or object.Name == "CrouchSpamFootSensor"
             )
         then
             pcall(function()
@@ -10210,12 +10212,18 @@ local mainJump = {
     root = nil,
     sensorPart = nil,
     frontSensorPart = nil,
+    rearSensorPart = nil,
     lookSensorPart = nil,
     lookFrontSensorPart = nil,
     jumpForwardSensorPart = nil,
     lookForwardSensorPart = nil,
     sensorTouchConnection = nil,
+    frontSensorTouchConnection = nil,
+    rearSensorTouchConnection = nil,
     jumpForwardSensorTouchConnection = nil,
+    crouchSpamSensorPart = nil,
+    crouchSpamSensorHeartbeatConnection = nil,
+    crouchSpamSensorContacting = false,
     lookAutoJumpCycle = false,
     lookWatcherConnection = nil,
     lookTriggeredThisAir = false,
@@ -11912,6 +11920,8 @@ function mainJump.stopCrouchSpam()
     mainJump.crouchSpamEnabled =
         false
 
+    mainJump.destroyCrouchSpamSensor()
+
     -- Always finish standing.
     mainJump.setCrouching(false)
 end
@@ -11939,6 +11949,14 @@ function mainJump.setCrouchSpamEnabled(state)
 
     mainJump.crouchSpamEnabled = true
 
+    if mainJump.character
+        and mainJump.character.Parent
+    then
+        mainJump.createCrouchSpamSensor(
+            mainJump.character
+        )
+    end
+
     mainJump.crouchSpamThread =
         task.spawn(
             function()
@@ -11961,8 +11979,12 @@ function mainJump.setCrouchSpamEnabled(state)
                         break
                     end
 
-                    if not mainJump.setCrouching(false) then
-                        break
+                    --// Contacting geometry has priority over the
+                    --// normal stand edge of the crouch-spam cycle.
+                    if not mainJump.crouchSpamSensorContacting then
+                        if not mainJump.setCrouching(false) then
+                            break
+                        end
                     end
 
                     task.wait(
@@ -12155,6 +12177,13 @@ function mainJump.destroySensors()
         mainJump.frontSensorTouchConnection = nil
     end
 
+    if mainJump.rearSensorTouchConnection then
+        pcall(function()
+            mainJump.rearSensorTouchConnection:Disconnect()
+        end)
+        mainJump.rearSensorTouchConnection = nil
+    end
+
     if mainJump.jumpForwardSensorTouchConnection then
         pcall(function()
             mainJump.jumpForwardSensorTouchConnection:Disconnect()
@@ -12165,6 +12194,7 @@ function mainJump.destroySensors()
     for _, key in ipairs({
         "sensorPart",
         "frontSensorPart",
+        "rearSensorPart",
         "jumpForwardSensorPart",
         "lookSensorPart",
         "lookFrontSensorPart",
@@ -12180,6 +12210,12 @@ function mainJump.destroySensors()
 
             mainJump[key] = nil
         end
+    end
+
+    --// Crouch Spam has its own independent sensor. Keep it alive
+    --// when only AutoJump is disabled.
+    if not mainJump.crouchSpamEnabled then
+        mainJump.destroyCrouchSpamSensor()
     end
 end
 
@@ -12675,10 +12711,66 @@ function mainJump.jump(hit)
     end)
 end
 
-function mainJump.contact(hit)
+function mainJump.isCameraLookingBackward()
+    local camera =
+        workspace.CurrentCamera
+
+    local root =
+        mainJump.root
+
+    if not camera
+        or not root
+    then
+        return false
+    end
+
+    local cameraLook =
+        camera.CFrame.LookVector
+
+    local rootLook =
+        root.CFrame.LookVector
+
+    local cameraFlat =
+        Vector3.new(
+            cameraLook.X,
+            0,
+            cameraLook.Z
+        )
+
+    local rootFlat =
+        Vector3.new(
+            rootLook.X,
+            0,
+            rootLook.Z
+        )
+
+    if cameraFlat.Magnitude <= 0.001
+        or rootFlat.Magnitude <= 0.001
+    then
+        return false
+    end
+
+    cameraFlat =
+        cameraFlat.Unit
+
+    rootFlat =
+        rootFlat.Unit
+
+    --// -1 = exactly backward, 0 = sideways.
+    --// Require a clearly backward camera direction.
+    return cameraFlat:Dot(rootFlat) <= -0.35
+end
+
+function mainJump.contact(hit, requireCameraBackward)
     if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
         or not hit
+    then
+        return
+    end
+
+    if requireCameraBackward
+        and not mainJump.isCameraLookingBackward()
     then
         return
     end
@@ -12701,7 +12793,356 @@ function mainJump.contact(hit)
         return
     end
 
+    if requireCameraBackward
+        and not mainJump.isCameraLookingBackward()
+    then
+        return
+    end
+
     mainJump.jump(hit)
+end
+
+function mainJump.destroyCrouchSpamSensor()
+    if mainJump.crouchSpamSensorHeartbeatConnection then
+        pcall(function()
+            mainJump.crouchSpamSensorHeartbeatConnection:Disconnect()
+        end)
+
+        mainJump.crouchSpamSensorHeartbeatConnection = nil
+    end
+
+    if mainJump.crouchSpamSensorPart then
+        pcall(function()
+            mainJump.crouchSpamSensorPart:Destroy()
+        end)
+
+        mainJump.crouchSpamSensorPart = nil
+    end
+
+    mainJump.crouchSpamSensorContacting = false
+end
+
+function mainJump.getCrouchSpamSensorLayout(char)
+    local root =
+        char
+        and char:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not root then
+        return Vector3.new(
+            2,
+            0.16,
+            1
+        ), -3.0
+    end
+
+    local leftLeg
+    local rightLeg
+
+    for _, name in ipairs({
+        "Left Leg",
+        "LeftLowerLeg"
+    }) do
+        leftLeg =
+            char:FindFirstChild(
+                name,
+                true
+            )
+
+        if leftLeg
+            and leftLeg:IsA("BasePart")
+        then
+            break
+        end
+
+        leftLeg = nil
+    end
+
+    for _, name in ipairs({
+        "Right Leg",
+        "RightLowerLeg"
+    }) do
+        rightLeg =
+            char:FindFirstChild(
+                name,
+                true
+            )
+
+        if rightLeg
+            and rightLeg:IsA("BasePart")
+        then
+            break
+        end
+
+        rightLeg = nil
+    end
+
+    local legParts = {}
+
+    if leftLeg then
+        table.insert(
+            legParts,
+            leftLeg
+        )
+    end
+
+    if rightLeg then
+        table.insert(
+            legParts,
+            rightLeg
+        )
+    end
+
+    if #legParts == 0 then
+        return Vector3.new(
+            2,
+            0.16,
+            1
+        ), -3.0
+    end
+
+    local minX = math.huge
+    local maxX = -math.huge
+    local minZ = math.huge
+    local maxZ = -math.huge
+    local minY = math.huge
+
+    for _, leg in ipairs(legParts) do
+        local relative =
+            root.CFrame:ToObjectSpace(
+                leg.CFrame
+            )
+
+        local position =
+            relative.Position
+
+        local halfX =
+            leg.Size.X * 0.5
+
+        local halfZ =
+            leg.Size.Z * 0.5
+
+        minX =
+            math.min(
+                minX,
+                position.X - halfX
+            )
+
+        maxX =
+            math.max(
+                maxX,
+                position.X + halfX
+            )
+
+        minZ =
+            math.min(
+                minZ,
+                position.Z - halfZ
+            )
+
+        maxZ =
+            math.max(
+                maxZ,
+                position.Z + halfZ
+            )
+
+        minY =
+            math.min(
+                minY,
+                position.Y
+                    - (leg.Size.Y * 0.5)
+            )
+    end
+
+    local sizeX =
+        math.clamp(
+            (maxX - minX) + 0.04,
+            0.5,
+            3.5
+        )
+
+    local sizeZ =
+        math.clamp(
+            (maxZ - minZ) + 0.04,
+            0.5,
+            2.5
+        )
+
+    return Vector3.new(
+        sizeX,
+        0.16,
+        sizeZ
+    ), minY
+end
+
+function mainJump.createCrouchSpamSensor(char)
+    mainJump.destroyCrouchSpamSensor()
+
+    if not mainJump.crouchSpamEnabled
+        or not char
+        or not char:IsA("Model")
+    then
+        return
+    end
+
+    local root =
+        char:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not root then
+        return
+    end
+
+    local sensorSize, legBottomY =
+        mainJump.getCrouchSpamSensorLayout(
+            char
+        )
+
+    local sensor =
+        Instance.new("Part")
+
+    sensor.Name =
+        "CrouchSpamFootSensor"
+
+    sensor.Size =
+        sensorSize
+
+    sensor.Transparency = 1
+    sensor.Anchored = true
+    sensor.CanCollide = false
+    sensor.CanTouch = false
+    sensor.CanQuery = true
+    sensor.Massless = true
+    sensor.CastShadow = false
+
+    --// Independent from the actual legs: there is no weld.
+    --// It tracks only the root CFrame and keeps a fixed position
+    --// at the lower-leg/foot band, slightly downward.
+    local sensorCenterY =
+        legBottomY
+            + (sensorSize.Y * 0.5)
+            + 0.04
+
+    sensor.CFrame =
+        root.CFrame
+        * CFrame.new(
+            0,
+            sensorCenterY,
+            0
+        )
+
+    sensor.Parent = char
+
+    mainJump.crouchSpamSensorPart =
+        sensor
+
+    local overlapParams =
+        OverlapParams.new()
+
+    overlapParams.FilterType =
+        Enum.RaycastFilterType.Exclude
+
+    overlapParams.FilterDescendantsInstances = {
+        char
+    }
+
+    overlapParams.MaxParts = 32
+
+    local function scanContact()
+        if not genv.DEADEYE_MAIN_RUNNING
+            or cleaned
+            or not mainJump.crouchSpamEnabled
+            or mainJump.crouchSpamSensorPart ~= sensor
+            or not sensor.Parent
+            or not root.Parent
+        then
+            return false
+        end
+
+        sensor.CFrame =
+            root.CFrame
+            * CFrame.new(
+                0,
+                sensorCenterY,
+                0
+            )
+
+        local parts = {}
+        pcall(function()
+            parts =
+                workspace:GetPartBoundsInBox(
+                    sensor.CFrame,
+                    sensor.Size,
+                    overlapParams
+                )
+        end)
+
+        --// A flat floor directly under the feet must not keep
+        --// crouch forced forever. React to geometry that enters
+        --// the sensor's lower-leg band instead.
+        local sensorTopY =
+            sensor.Position.Y
+                + (sensor.Size.Y * 0.5)
+
+        for _, part in ipairs(parts) do
+            if part
+                and part:IsA("BasePart")
+                and part.CanCollide
+                and not part:IsDescendantOf(char)
+            then
+                local partTopY =
+                    part.Position.Y
+                        + (part.Size.Y * 0.5)
+
+                if partTopY
+                    > sensorTopY + 0.02
+                then
+                    return true
+                end
+            end
+        end
+
+        return false
+    end
+
+    mainJump.crouchSpamSensorHeartbeatConnection =
+        RunService.Heartbeat:Connect(
+            function()
+                local touching =
+                    scanContact()
+
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or cleaned
+                    or not mainJump.crouchSpamEnabled
+                    or mainJump.crouchSpamSensorPart ~= sensor
+                then
+                    return
+                end
+
+                if touching then
+                    mainJump.crouchSpamSensorContacting =
+                        true
+
+                    --// Re-assert crouch while contact is active.
+                    mainJump.setCrouching(true)
+                elseif mainJump.crouchSpamSensorContacting then
+                    mainJump.crouchSpamSensorContacting =
+                        false
+                end
+            end
+        )
+
+    local touching =
+        scanContact()
+
+    if touching then
+        mainJump.crouchSpamSensorContacting =
+            true
+
+        mainJump.setCrouching(true)
+    end
 end
 
 function mainJump.createSensors(char)
@@ -12823,6 +13264,70 @@ function mainJump.createSensors(char)
         front.Touched:Connect(
             function(hit)
                 mainJump.contact(hit)
+            end
+        )
+
+    --// =====================================================
+    --// REAR AUTOJUMP SENSOR
+    --// Exact mirror of FrontJumpSensor.
+    --// Works only while the camera is looking backward.
+    --// =====================================================
+    local rear =
+        Instance.new("Part")
+
+    rear.Name =
+        "RearJumpSensor"
+
+    rear.Size =
+        Vector3.new(
+            2,
+            3,
+            1
+        )
+
+    rear.Transparency = 1
+    rear.Anchored = false
+    rear.CanCollide = false
+    rear.CanTouch = true
+    rear.CanQuery = false
+    rear.Massless = true
+    rear.CastShadow = false
+
+    rear.CFrame =
+        mainJump.root.CFrame
+        * CFrame.new(
+            0,
+            -1,
+            0.8
+        )
+
+    rear.Parent =
+        char
+
+    local rearWeld =
+        Instance.new(
+            "WeldConstraint"
+        )
+
+    rearWeld.Part0 =
+        mainJump.root
+
+    rearWeld.Part1 =
+        rear
+
+    rearWeld.Parent =
+        rear
+
+    mainJump.rearSensorPart =
+        rear
+
+    mainJump.rearSensorTouchConnection =
+        rear.Touched:Connect(
+            function(hit)
+                mainJump.contact(
+                    hit,
+                    true
+                )
             end
         )
 
@@ -13107,6 +13612,12 @@ function mainJump.createSensors(char)
                 end
             end
         )
+
+    if mainJump.crouchSpamEnabled then
+        mainJump.createCrouchSpamSensor(
+            char
+        )
+    end
 end
 genv.DEADEYE_MAIN_RUNNING = true
 mainPage =
@@ -19962,6 +20473,10 @@ local function cleanup()
 
     pcall(function()
         mainJump.stopCrouchSpam()
+    end)
+
+    pcall(function()
+        mainJump.destroyCrouchSpamSensor()
     end)
 
     enabled = false
