@@ -4740,3 +4740,171 @@ site rather than globally changing the helper function.
 =============================================================
 END OF 2026-10-05 COMPLETE ApplyFriction SOURCE RECOVERED
 =============================================================
+
+
+=============================================================
+48. 2026-10-05 — NO LAND FRICTION IMPLEMENTATION (DeadEye v1.139)
+=============================================================
+
+Implemented the first targeted runtime modification based on the recovered
+Functions.Run and Helpers.ApplyFriction source.
+
+Goal:
+
+    Remove the direct ApplyFriction speed loss only on the first normal Run
+    update after the movement system has been in Air.
+
+The implementation intentionally does NOT replace the native Run function
+logic. It only intercepts the ApplyFriction call from the native Run execution.
+
+-------------------------------------------------------------
+48.1 HOOK STRUCTURE
+-------------------------------------------------------------
+
+Three closures are tracked:
+
+    Functions.Air
+    Functions.Run
+    Helpers.ApplyFriction
+
+Air hook:
+
+    landingFrictionLastWasAir = true
+
+This records that the movement system is currently processing an Air update.
+
+Run hook:
+
+    previousWasAir = landingFrictionLastWasAir
+    landingFrictionLastWasAir = false
+
+    landingFrictionSkipNext =
+        mainJump.noLandingFriction
+        and previousWasAir
+
+Thus the next Run knows whether it is the first grounded update following Air.
+
+ApplyFriction hook:
+
+    if landingFrictionSkipNext and p11 == 1 then
+        landingFrictionSkipNext = false
+        return p9:Get("Velocity")
+    end
+
+Normal Run passes:
+
+    p11 = 1
+
+Returning the current DataRegistry Velocity is therefore equivalent to using
+ApplyFriction with an effective friction factor of zero for exactly that call.
+
+The original ApplyFriction is used for every other call.
+
+-------------------------------------------------------------
+48.2 WHAT REMAINS NATIVE
+-------------------------------------------------------------
+
+The original Functions.Run closure is still executed.
+
+Therefore the following remain untouched:
+
+    Run state selection
+    sprint calculation
+    direction calculation
+    WalkSpeedMultiplier
+    Accelerate
+    WallImpact
+    final BaseMover PlaneVelocity
+    returned Velocity
+    all other Run logic
+
+Air still executes the original Functions.Air closure.
+
+Slide and its ApplyFriction(..., 0.1) are unaffected because the override only
+accepts p11 == 1 and only arms itself from an Air -> Run transition.
+
+-------------------------------------------------------------
+48.3 GUI / CONFIG
+-------------------------------------------------------------
+
+Added Main-page toggle:
+
+    NO LAND FRICTION
+
+State:
+
+    mainJump.noLandingFriction
+
+Saved config key:
+
+    savedConfig.main.noLandingFriction
+
+Default:
+
+    false
+
+Therefore existing behavior remains unchanged until the new toggle is enabled.
+
+When enabled:
+
+    first normal Run ApplyFriction after Air -> skipped
+    subsequent Run ApplyFriction -> normal
+    Air ApplyFriction -> normal
+    Slide ApplyFriction -> normal
+
+-------------------------------------------------------------
+48.4 CLEANUP / RELOAD SAFETY
+-------------------------------------------------------------
+
+All three hooks keep their original closures.
+
+Global cleanup:
+
+    genv.DEADEYE_LANDING_FRICTION_CLEANUP
+
+The cleanup restores:
+
+    Functions.Air
+    Functions.Run
+    Helpers.ApplyFriction
+
+The previous instance cleanup is called at DeadEye startup, so re-executing the
+script does not intentionally stack another set of these hooks.
+
+The main DeadEye cleanup also restores the hooks and clears the global cleanup
+entry.
+
+-------------------------------------------------------------
+48.5 TEST TO PERFORM IN-GAME
+-------------------------------------------------------------
+
+With:
+
+    NO LAND FRICTION = OFF
+
+landing behavior should remain identical to the native game.
+
+With:
+
+    NO LAND FRICTION = ON
+
+perform repeated jumps while holding the same movement direction.
+
+Expected result:
+
+    Air movement continues normally.
+    On landing, the ~4% ApplyFriction loss from the first Run tick disappears.
+    Accelerate still runs normally afterward.
+    Normal grounded friction resumes on the next Run tick.
+
+If the measured speed still drops on landing, the next investigation target is
+not ApplyFriction's formula itself anymore, but whether the movement-state
+transition or the post-Run mover simulation introduces an additional loss.
+
+DeadEye version containing this implementation:
+
+    v1.139
+
+=============================================================
+END OF 2026-10-05 NO LAND FRICTION IMPLEMENTATION
+=============================================================
