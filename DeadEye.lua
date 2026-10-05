@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.134
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.135
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.134"
+local SCRIPT_VERSION = "1.135"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12850,16 +12850,21 @@ function mainJump.getCrouchSpamSensorLegs(char)
         end
     end
 
+    --// Prefer the actual foot part when the rig exposes one.
+    --// Falling back to lower-leg / R6 leg keeps this compatible
+    --// with rigs that do not have separate foot parts.
     addNamedLeg({
-        "Left Leg",
+        "LeftFoot",
+        "Left Foot",
         "LeftLowerLeg",
-        "LeftFoot"
+        "Left Leg"
     })
 
     addNamedLeg({
-        "Right Leg",
+        "RightFoot",
+        "Right Foot",
         "RightLowerLeg",
-        "RightFoot"
+        "Right Leg"
     })
 
     return result
