@@ -398,7 +398,6 @@ Confirmed relevant methods:
     Get(key)
 
 Recovered Get():
-
     function t.Get(p19, p20)
         return p19.Data[p20]
     end
@@ -797,7 +796,6 @@ Relevant recovered Character.Update() order:
     p22.Joints:Update(...)
 
     ...
-
     p22.DataRegistry:UpdateCycle(...)
 
 This order explains several important observations:
@@ -1197,7 +1195,6 @@ the multiplier is approximately:
 
     1 - 5 * 0.0083
     ~= 0.9585
-
 For another tested:
 
     dt = 0.007786
@@ -1598,1561 +1595,510 @@ Sending side:
         ->
     DataRegistry:Set("LookY", value)
         ->
-    Serializer:CanSend("LookY")
-        ->
-    Serializer:EncodeTerm("LookY", value)
-        ->
-    DataRegistry.ToSend["LookY"]
-        ->
-    DataRegistry:UpdateCycle()
-        ->
-    Serializer:EncodedDataToPacket(...)
-        ->
-    UpdateCharacterDataRegistryUnreliable:FireServer(...)
-
-Because:
-
-    Terms.LookY.Unreliable = true
-
-
-Receiving side:
-
-    UpdateCharacterDataRegistryUnreliable.OnClientEvent
-        ->
-    updateCharacterFromData(packet)
-        ->
-    Serializer:Decode(packet)
-        ->
-    CharacterService character lookup by Tag
-        ->
-    Tag.DataRegistry:ServerToClient(decodedData)
-        ->
-    receiving DataRegistry["LookY"]
-
-Then:
-
-    Joints RegistryTermUpdated("LookY")
-        ->
-    Joints.LookY
-        ->
-    Joints.Update()
-        ->
-    SetC1s(ReadNewC1s(LookY, Gyro), ...)
-
-This is the confirmed native client data flow.
 
 
 ============================================================
-42. WHAT HAS NOT BEEN CONFIRMED ABOUT RAGE LOOK
+55. 2026-10-06 — BENCH / CLIMBING / VERTICAL LAUNCH INVESTIGATION
 ============================================================
 
-The following point must NOT be presented as already proven:
+This section records the confirmed findings from the latest collision/launch
+investigation. It is intentionally separated from the older camera/jump work.
 
-    "Another player definitely sees the exact -70° head pose"
+------------------------------------------------------------
+55.1 CONFIRMED TRIGGER CONDITIONS
+------------------------------------------------------------
 
-The network path and receiving-side consumer are confirmed.
+The bug is reproducible around a bench when the character enters the bench
+with sufficient horizontal movement speed.
 
-The local Terms test confirmed that -1.225 enters the normal ToSend queue.
+Important clarification:
 
-The actual final visual result on another player still requires an in-game
-two-client observation after the current implementation is enabled.
+A manual jump performed immediately before the bench contact is NOT itself
+required by the latest evidence.
 
-So:
+The important event is:
 
-    network generation = confirmed
-    network receive path = confirmed
-    Joints consumer = confirmed
-    remote visual appearance = requires direct two-client validation
+    high-speed movement
+        ->
+    physical contact with bench geometry
+        ->
+    Humanoid enters Climbing
+        ->
+    Humanoid later enters Jumping
+        ->
+    large positive AssemblyLinearVelocity.Y appears
 
+Earlier observations that included a manual jump before the bench are therefore
+not treated as a fundamental requirement.
 
-============================================================
-43. REJECTED / UNSAFE APPROACHES
-============================================================
+Do NOT encode "three jumps before the bug" as a condition. The number of earlier
+jumps varies and is not established as causal.
 
-These are kept only to prevent repeating known-bad experiments.
+------------------------------------------------------------
+55.2 EXACT SUCCESSFUL LAUNCH TIMELINE
+------------------------------------------------------------
 
-1. Hooking the active line-109 movement function
+Runtime trace from DeadEye v1.19:
 
-A previous hook broke movement/air turning and produced:
+    11222.885927250
+        Freefall -> Climbing
+        Vy = +21.142815
 
-    "479: attempt to call a nil value"
+    11222.917959750
+        Climbing -> Jumping
+        Vy = +5.708699
 
-Do not hook line 109 as a movement implementation target.
+    11222.919324792
+        HumanoidRootPart Touched:
+        Workspace.Map.Parts.ImmovableProps.Model.Bench.Part
 
-2. Hooking Registry.Set incorrectly
+        Velocity:
+            (-32.328125, +48.670174, +32.912319)
 
-A previous implementation produced:
+    11222.919636958
+        Heartbeat:
+        Vy = +48.670174
+        dVy = +42.962025
 
-    "109: attempt to get connection:: get (not a valid member)"
+    11222.919660292
+        LAUNCH DETECTED
 
-Do not use that broken Set hook pattern.
+Therefore the large positive Y velocity appeared approximately:
 
-3. Directly forcing LookY in a loop
+    0.001605 seconds
 
-This was overwritten by Movement.UpdateTerms() before the normal network flush.
+after the recorded:
 
-Do not use repeated DataRegistry["LookY"] writes as the primary Rage Look
-replication mechanism.
+    Climbing -> Jumping
 
-4. Modifying the actual camera CFrame for the physical-look problem
+transition.
 
-The confirmed working direction keeps the visible camera unchanged and instead
-separates the physical LookCFrame read from the visual camera.
+This is the strongest current timing correlation.
 
+------------------------------------------------------------
+55.3 PHYSICS CHANGE AT THE LAUNCH
+------------------------------------------------------------
 
-============================================================
-44. DISCOVERY PATHS — CAMERA
-============================================================
+At the moment the launch was detected:
 
-Stable rediscovery:
+    Previous velocity:
+        (-32.328125, +5.708699, +30.963421)
 
-    1. getgc(true)
-    2. Find source containing:
-           PlayerModule.CameraModule.ClassicCamera
-    3. Match:
-           Update
-    4. debug.getupvalues(Update)[1]
-           -> live ClassicCamera controller
-    5. debug.getupvalues(Update)[4]
-           -> CameraInput
-    6. Find:
-           CameraInput.getRotation
-    7. debug.getupvalues(getRotation)[4]
-           -> Movement/Pan/Pinch/Wheel input table
+    Current velocity:
+        (-32.328125, +48.670174, +32.912319)
 
+The observed change was approximately:
 
-============================================================
-45. DISCOVERY PATHS — MOVEMENT HELPERS
-============================================================
+    Delta Y = +42.962025
 
-Stable structural path:
+while the horizontal components changed only modestly.
+
+A separate earlier successful trace showed an even larger transition:
+
+    Previous:
+        (19.046211, +1.604542, +49.067623)
+
+    Current:
+        (25.428055, +58.005947, +48.247513)
+
+    Delta Y:
+        +56.401405
+
+So the characteristic signature is:
+
+    small/ordinary positive Vy
+        ->
+    very large positive Vy
+        ->
+    continued ballistic ascent
+
+------------------------------------------------------------
+55.4 BENCH GEOMETRY PRESENT AT THE SUCCESSFUL LAUNCH
+------------------------------------------------------------
+
+In the strongest v1.19 trace the character contacted:
+
+    Workspace.Map.Parts.ImmovableProps.Model.Bench.Part
+
+In other successful traces the bench consisted of multiple collision parts,
+including:
+
+    Workspace.Map.Parts.ImmovableProps.Model.Bench.Part
+
+    Workspace.Map.Parts.ImmovableProps.Bench.BenchMetal
+
+    Workspace.Map.Parts.ImmovableProps.Bench.BenchSeat
+
+Therefore the detector must NOT hard-code a single bench instance.
+
+A useful geometric identity is:
+
+    bench model / bench collision geometry
+        +
+    HumanoidRootPart or jump-sensor contact
+        +
+    Climbing state transition
+        +
+    subsequent large positive Vy
+
+------------------------------------------------------------
+55.5 CanTouch TEST RESULT
+------------------------------------------------------------
+
+DeadEye v1.22 dynamically disabled CanTouch on nearby bench BaseParts while
+leaving CanCollide enabled.
+
+The bug still occurred.
+
+Therefore:
+
+    CanTouch = false
+
+does NOT by itself eliminate the bug.
+
+This makes ordinary Touched events an observer of the event rather than a
+confirmed causal mechanism.
+
+Important:
+
+The v1.22 test was designed to cover multiple nearby benches because the map
+contains many bench instances. It should be interpreted as evidence against
+CanTouch being the primary trigger.
+
+------------------------------------------------------------
+55.6 IMPORTANT LIMITATION OF THE CanCollide TEST
+------------------------------------------------------------
+
+DeadEye v1.20 disabled CanCollide on one specific bench model chosen from an
+earlier trace.
+
+The bug still occurred, but later it was established that the player can
+contact different bench instances.
+
+Therefore that specific v1.20 result is NOT a conclusive global proof that
+CanCollide is irrelevant.
+
+The correct future test must dynamically target the exact geometry that the
+player is currently contacting.
+
+------------------------------------------------------------
+55.7 PHYSICAL HUMANOID CLIMBING VS GAME CUSTOM MOVEMENT STATE
+------------------------------------------------------------
+
+This distinction is critical.
+
+The game movement system has its own custom state stored in:
+
+    DataRegistry["State"]
+
+Relevant source path:
 
     ReplicatedStorage.Objects.Game.Character.Client.Movement
-        .MoveFunction.Functions
-        .MoveFunction.Functions.Helpers
 
-Helpers table:
+The game's custom Climbing state is defined under:
 
-    Accelerate
-    ApplyFriction
-    AirControl
-    WallImpact
+    ReplicatedStorage.Objects.Game.Character.Client.Shared.StateInfo
 
-Recovered helper locations during this investigation:
+The custom Climbing state requires:
 
-    Accelerate     -> Helpers source around line 177
-    AirControl     -> Helpers source around line 164
-    ApplyFriction  -> Helpers source around line 47
+    Requirements = {
+        Climbing = true
+    }
 
-Line numbers may change after game updates.
+and uses:
 
+    Movement.MoveType = "Climb"
 
-============================================================
-46. DISCOVERY PATHS — LOOKY
-============================================================
+with:
 
-Stable structural path:
+    Constraints = {
+        "ClimbAlign"
+    }
 
-    ReplicatedStorage.Objects.Game.Character.Client.Movement.Terms
+However, during the successful bench launch traces the runtime values were
+often:
 
-Find the table entry:
+    DataRegistry.State = Move
+    DataRegistry.Grounded = true
+    DataRegistry.Climbing = nil
 
-    entry.Term == "LookY"
+while the Roblox Humanoid simultaneously reported:
 
-Inspect:
+    Freefall -> Climbing
+    ->
+    Climbing -> Jumping
 
-    entry.ID
-    entry.Type
-    entry.OwnerClientOnly
-    entry.ClientSendable
-    entry.Unreliable
-    entry.CalculateFunction
+Therefore the physical Humanoid Climbing state is NOT the same thing as the
+game's custom movement Climbing state.
 
-The current confirmed LookY metadata is:
+This was confirmed repeatedly.
 
-    ID = 6
-    Type = "Number"
-    OwnerClientOnly = false
-    ClientSendable = true
-    Unreliable = true
+------------------------------------------------------------
+55.8 CLIMBALIGN IS NOT PRESENT AT THE LAUNCH
+------------------------------------------------------------
 
+Relevant constraint source path:
 
-============================================================
-47. DISCOVERY PATHS — DATAREGISTRY / EVENTS
-============================================================
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.Constraints
 
-DataRegistry methods of interest:
+Relevant constraint definitions are obtained from:
 
-    Get
-    Set
-    ServerToClient
-    UpdateCycle
+    ReplicatedStorage.Objects.Game.Character.Client.Shared.StateInfo
 
-Network events of interest:
+The custom Climbing state can enable:
 
-    ReplicatedStorage.Events.UpdateCharacterDataRegistry
-    ReplicatedStorage.Events.UpdateCharacterDataRegistryUnreliable
+    ClimbAlign
 
-Serializer methods of interest:
+but the successful v1.18/v1.19 launch traces showed:
 
-    CanSend
-    EncodeTerm
-    DecodeTerm
-    EncodedDataToPacket
-    Decode
+    ACTIVE CONSTRAINTS
+        Workspace.Players.DEN919191.HumanoidRootPart.LinearVelocity
 
+and did NOT show:
 
-============================================================
-48. CORE CONFIRMED MODEL
-============================================================
+    ClimbAlign
 
-MOVEMENT VELOCITY:
+Therefore the custom game's ClimbAlign constraint is not currently supported
+as the direct source of the measured +Y launch.
 
-    DataRegistry["Velocity"]
-        = internal movement velocity
+------------------------------------------------------------
+55.9 THE ONLY ACTIVE MOVEMENT CONSTRAINT AT THE LAUNCH
+------------------------------------------------------------
 
-    real speed ~= internal speed / 90
+At the successful v1.19 launch the active constraint was:
 
+    Workspace.Players.DEN919191.HumanoidRootPart.LinearVelocity
 
-JUMP:
+with:
 
-    horizontal jump cap depends on:
+    VelocityConstraintMode = Plane
 
-    Sprint
-    * Speed
-    * JumpSpeedMultiplier
-    * (HRP.lookVector · Velocity.unit)^2
+and approximately:
 
+    PlaneVelocity = (-32.326969, 32.909737)
+    MaxForce       = 100000
 
-LOOK DOWN:
+The game source identifies the corresponding BaseMover as a plane-velocity
+constraint for horizontal movement.
 
-    physical downward HRP look
-        -> smaller lookVector/Velocity dot
-        -> smaller squared factor
-        -> lower jump-time horizontal speed cap
+The important practical observation is:
 
+    the movement layer is actively controlling planar/horizontal velocity,
+    while the measured launch is overwhelmingly a positive Y change.
 
-CAMERA:
+This makes the active BaseMover LinearVelocity an unlikely direct writer of the
+vertical launch value, although interaction with the physics solver still must
+be considered.
 
-    CameraInput
-        -> getRotation
-        -> ClassicCamera
-        -> CameraCFrame
+------------------------------------------------------------
+55.10 SOURCE PATHS THAT WERE CHECKED FOR DIRECT Y VELOCITY
+------------------------------------------------------------
 
+The following game source paths were recovered and checked:
 
-LOOKY:
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
 
-    LookY is a quantized pitch in radians:
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction
 
-    floor(asin(CameraCFrame.lookVector.Y) * 40 + 0.5) / 40
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
 
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
 
-LOOKY NETWORK:
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.Constraints
 
-    Movement.Terms CalculateFunction
-        -> DataRegistry.Set
-        -> ToSend
-        -> UpdateCycle
-        -> unreliable replication event
-        -> receiving DataRegistry
-        -> Joints
-        -> joint C1 changes
+    ReplicatedStorage.Objects.Game.Character.Client.Shared.StateInfo
 
-
-RAGE LOOK:
-
-    DataRegistry.Get("LookCFrame") hook
-        = local physical/physics-facing side
-
-    Movement.Terms["LookY"].CalculateFunction replacement
-        = native LookY generation / replication side
-
-
-GROUNDED FRICTION:
+The ordinary movement implementations:
 
     Run
-        -> ApplyFriction
-        -> Accelerate
-        -> WallImpact
+    Air
+    Slide
 
+return BaseMover plane velocity values using X/Z movement.
 
-APPLYFRICTION:
+They do not contain a normal path that simply writes a large positive
+AssemblyLinearVelocity.Y.
 
-    loss =
-        max(RunDeaccel, |Velocity|)
-        * Friction
-        * dt
-        * frictionFactor
+The custom Climb movement uses ClimbAlign position control, but the launch trace
+did not show ClimbAlign active.
 
+Known explicit vertical writes exist elsewhere, including Wallrun-specific and
+BatonPush-specific code, but the successful bench traces do not establish either
+of those paths as the cause.
 
-AIR ACCELERATION:
+Therefore no recovered ordinary movement source currently explains the
++40...+60 Y impulse directly.
 
-    Accelerate:
-        addSpeed = wishSpeed - Velocity·wishDirection
+------------------------------------------------------------
+55.11 NORMAL JUMP BASELINE
+------------------------------------------------------------
 
-        if addSpeed <= 0:
-            no addition
+Normal Jump() behavior was recovered from:
 
-        accelSpeed =
-            acceleration * dt * wishSpeed
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
 
-    Exact source formula:
+The ordinary jump transition produces approximately:
 
-        acceleration * dt * wishSpeed
+    Vy = +17.112177
 
-    For the normal A/D case:
+in the runtime traces.
 
-        182 * dt * 182
+The bench launch produces substantially larger values:
 
+    +48...
+    +58...
+    +73...
+
+Therefore the launch is not numerically equivalent to an ordinary jump.
+
+------------------------------------------------------------
+55.12 __namecall ChangeState TRACE RESULT
+------------------------------------------------------------
+
+DeadEye v1.23 attempted to intercept:
+
+    Humanoid:ChangeState(...)
+
+through the Lua __namecall path.
+
+The trace successfully installed the hook but did NOT log the transition to:
+
+    HumanoidStateType.Climbing
+
+even though the bug occurred.
+
+Therefore the physical transition into Climbing is not currently proven to
+originate from an ordinary Lua __namecall invocation visible through that hook.
+
+This is additional evidence that Roblox's Humanoid state-machine/physics side
+is involved.
+
+------------------------------------------------------------
+55.13 CONTROLLERMANAGER CHECK
+------------------------------------------------------------
+
+DeadEye v1.24 checked for:
+
+    ControllerManager
+
+under the character and nearby character hierarchy.
+
+Result:
+
+    ControllerManagers = 0
+    NO ControllerManager FOUND
+
+At the same time:
+
+    Humanoid.EvaluateStateMachine = true
+
+Therefore the observed physical Climbing transition is occurring without a
+visible ControllerManager in the inspected hierarchy.
+
+------------------------------------------------------------
+55.14 ARTIFICIAL Climbing -> Jumping TEST — DO NOT USE AS CAUSAL PROOF
+------------------------------------------------------------
+
+DeadEye v1.25 detected physical Climbing and then itself called:
+
+    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+
+This test reproduced a large launch.
+
+However, because the script itself inserted the state transition, this result
+cannot be used to claim that the game's natural Climbing -> Jumping transition
+alone causes the bug.
+
+Keep the observation as:
+
+    forcing Jumping after Climbing can reproduce the launch in the same
+    physical contact configuration.
+
+Do NOT treat this as proof that a game script normally calls ChangeState there.
+
+------------------------------------------------------------
+55.15 CURRENT BEST-CONSTRAINED EVENT CHAIN
+------------------------------------------------------------
+
+The strongest currently supported sequence is:
+
+    character has substantial horizontal velocity
+        ->
+    character intersects / contacts bench collision geometry
+        ->
+    Roblox Humanoid enters physical Climbing
+        ->
+    Humanoid leaves Climbing for Jumping
+        ->
+    within roughly 1...few milliseconds,
+       AssemblyLinearVelocity.Y receives a very large positive change
+        ->
+    character continues upward under normal gravity
+
+The exact internal solver/code operation that creates the +Y impulse is NOT
+yet identified.
+
+------------------------------------------------------------
+55.16 WHAT IS NO LONGER SUSPECTED AS THE PRIMARY CAUSE
+------------------------------------------------------------
+
+Based on the collected evidence, the following should no longer be treated as
+the first target:
+
+    "three jumps before the bug"
+
+    "the custom game's ClimbAlign constraint"
+
+    "a direct normal Jump() vertical impulse"
+
+    "a simple Touched callback causing the launch"
+
+    "ControllerManager"
+
+The first three were investigated directly; ControllerManager was absent.
+
+------------------------------------------------------------
+55.17 NEXT TARGET FOR REVERSE ENGINEERING
+------------------------------------------------------------
+
+The remaining high-value unknown is:
+
+    What physical operation occurs between:
+
+        physical Climbing -> Jumping
+
+    and:
+
+        AssemblyLinearVelocity.Y -> +40...+70
+
+while the player is contacting bench geometry?
+
+The next detector should therefore capture, at sub-frame/event timing as
+closely as possible:
+
+    Humanoid state
+    AssemblyLinearVelocity
+    AssemblyAngularVelocity
+    exact bench BasePart
+    contact point if available
+    collision group
+    CanCollide
+    CanTouch
+    CustomPhysicalProperties
+    CFrame / Size
+    active constraints
+    humanoid properties
+    DataRegistry state
+    whether any physics actuator appears/disappears
+
+The final objective remains:
+
+    identify the exact physical sequence
+        ->
+    convert it into a reproducible detector
+        ->
+    scan map geometry for the same sequence automatically.
 
 ============================================================
-49. OPEN ITEMS THAT ARE STILL GENUINELY UNRESOLVED
-============================================================
-
-These are not hypotheses; they are explicitly marked as not recovered.
-
-    1. Complete bytecode/source for the active line-109 air function.
-
-    2. Complete bytecode/source for the active Run function.
-
-    3. Full semantic meaning and operation ordering of AirControl.
-
-    4. Exact complete source branch for all W/A/D wish-direction cases.
-
-    5. Full exact ordering of every Run sub-operation around:
-           friction
-           acceleration
-           wall impact
-           sprint/cap
-           movers
-
-    6. Exact frame-level timing between:
-           CameraInput
-           CameraCFrame
-           DataRegistry LookCFrame
-           HumanoidRootPart.CFrame
-           Jump
-
-    7. Direct two-client visual confirmation that replicated LookY=-1.225
-       produces the intended remote head/upper-body pose.
-
-    8. Any values/line numbers that can change after a game update.
-
-
-============================================================
-50. MAINTENANCE RULE FOR THIS FILE
-============================================================
-
-Only add a statement to the confirmed sections when at least one of these is
-true:
-
-    - it is directly present in recovered source/decompile;
-    - runtime tracing measured it and the source behavior matches;
-    - a controlled test reproduced the expected result.
-
-When evidence is incomplete:
-
-    put it in section 49 instead of presenting it as fact.
-
-When a hypothesis is disproven:
-
-    remove it from the main findings rather than leaving the old statement
-    active with ambiguous wording.
-
-============================================================
-END OF CONFIRMED FINDINGS
-============================================================
-
-
-============================================================
-51. 2026-10-05 — A/D + CAMERA ROTATION DURING AIR — SOURCE CONFIRMED
-============================================================
-
-The complete Air(), MoveDirection term, GlobalMoveDirection term, and
-Accelerate/AirControl helpers are now available.
-
-This resolves the exact interaction path for simultaneous A/D input and camera
-rotation during flight.
-
--------------------------------------------------------------
-51.1 MOVE DIRECTION COMES FROM THE CONTROL MODULE
--------------------------------------------------------------
-
-Movement.Terms["MoveDirection"] uses:
-
-    ControlModule:GetMoveVector()
-
-with the only additional modification shown in the recovered term being:
-
-    if tick() - (IgnoreXMove or 0) <= 0.3 then
-        MoveVector = MoveVector * Vector3.new(0, 1, 1)
-    end
-
-Therefore the local A/D/W/S input first becomes:
-
-    DataRegistry["MoveDirection"]
-
-The exact ControlModule internals are not needed for the next stage.
-
--------------------------------------------------------------
-51.2 GLOBALMOVEdIRECTION IS CAMERA-RELATIVE
--------------------------------------------------------------
-
-The exact term is:
-
-    GlobalMoveDirection =
-        DataRegistry:Get("LookCFrame"):VectorToWorldSpace(
-            DataRegistry:Get("MoveDirection")
-        )
-
-So the game already maintains a camera-relative world movement direction.
-
-For the CLIENT Air() path, however, the function does not use that cached
-GlobalMoveDirection for normal player movement.
-
-Instead it directly performs:
-
-    v25 =
-        DataRegistry:Get("LookCFrame"):VectorToWorldSpace(MoveDirection2)
-
-Therefore the Air calculation uses the current LookCFrame directly.
-
--------------------------------------------------------------
-51.3 PURE A/D IS A SPECIAL AIR-ACCELERATION CASE
--------------------------------------------------------------
-
-The exact branch is:
-
-    if MoveDirection2.Z == 0 and MoveDirection2.X ~= 0 then
-        v28 = math.min(AirStrafeAcceleration, v26)
-        v27 = AirStrafeAcceleration
-    else
-        v28 = v26
-    end
-
-where:
-
-    v26 = v25.Magnitude * Speed
-
-For a normal unit-magnitude pure A/D input and:
-
-    Speed = 1500
-    AirStrafeAcceleration = 182
-
-this becomes:
-
-    wishSpeed = 182
-    acceleration = 182
-
-So pure A/D uses the dedicated AirStrafeAcceleration path.
-
--------------------------------------------------------------
-51.4 CAMERA YAW DIRECTLY ROTATES THE A/D WISHDIRECTION
--------------------------------------------------------------
-
-For the client:
-
-    v25 =
-        LookCFrame:VectorToWorldSpace(MoveDirection2)
-
-For pure A/D, MoveDirection2 is lateral:
-
-    D -> positive local X
-    A -> negative local X
-
-VectorToWorldSpace therefore rotates that local lateral direction into the
-camera-relative world direction.
-
-With the normal camera having no roll, pure A/D produces a horizontal
-CameraRight / -CameraRight direction.
-
-Therefore:
-
-    rotate camera yaw
-        ->
-    rotate v25 / WishDirection
-        ->
-    change Velocity:Dot(WishDirection)
-        ->
-    change Accelerate addSpeed
-        ->
-    change the resulting Velocity
-
-This is the exact simultaneous A/D + camera interaction.
-
--------------------------------------------------------------
-51.5 EXACT ACCELERATE EQUATION FOR PURE A/D
--------------------------------------------------------------
-
-Accelerate receives:
-
-    Velocity
-    WishDirection = v25
-    WishSpeed = v28
-    Acceleration = v27
-    dt = p20
-    Swimming = p21.Swimming
-
-For the normal pure A/D case:
-
-    WishSpeed = 182
-    Acceleration = 182
-    Swimming = false
-
-The helper computes:
-
-    currentSpeed =
-        Velocity:Dot(WishDirection)
-
-    addSpeed =
-        182 - currentSpeed
-
-If:
-
-    addSpeed <= 0
-
-then:
-
-    Velocity is returned unchanged.
-
-Otherwise:
-
-    accelSpeed =
-        182 * dt * 182
-
-and:
-
-    addSpeed =
-        min(addSpeed, accelSpeed)
-
-Final Accelerate result:
-
-    Velocity2 =
-        Velocity
-        + WishDirection * addSpeed
-
-This is the exact source formula. No *10 factor is present.
-
--------------------------------------------------------------
-51.6 WHAT CAMERA ROTATION DOES MATHEMATICALLY
--------------------------------------------------------------
-
-Let:
-
-    V = current Velocity
-    W = current A/D WishDirection
-
-Then:
-
-    addSpeed = 182 - V·W
-
-Therefore the camera rotation changes acceleration only by changing W.
-
-For horizontal Velocity and horizontal A/D WishDirection, the relevant
-quantity is the horizontal directional relationship between them.
-
-At:
-
-    V·W > 182
-
-the A/D Accelerate step adds nothing.
-
-At:
-
-    V·W = 0
-
-the requested additional speed is 182.
-
-At:
-
-    V·W < 0
-
-the requested addSpeed is greater than 182, but it remains capped by:
-
-    182 * dt * 182
-
-So turning the camera changes the acceleration continuously through the
-Velocity/WishDirection dot product.
-
--------------------------------------------------------------
-51.7 CRITICAL DISCOVERY — AIRCONTROL IS SKIPPED FOR PURE A/D
--------------------------------------------------------------
-
-The exact AirControl call is:
-
-    Helpers:AirControl(
-        v25,
-        v26,
-        MoveDirection2,
-        AcceleratedVelocity,
-        p20
-    )
-
-AirControl begins with:
-
-    local Z2 = p39.Z
-
-    if math.abs(Z2) < 0.001 or math.abs(p38) < 0.001 then
-        return p40
-    end
-
-For pure A/D:
-
-    MoveDirection2.Z == 0
-
-Therefore:
-
-    AirControl()
-        ->
-    immediate return of AcceleratedVelocity
-
-This means for pure A/D while airborne:
-
-    A/D + camera rotation
-        affects Accelerate
-        but does NOT pass through AirControl.
-
-This is one of the most important confirmed findings from the new decompile.
-
--------------------------------------------------------------
-51.8 CONSEQUENCE FOR CAMERA-STRAFE TESTS
--------------------------------------------------------------
-
-A test with ONLY:
-
-    A or D held
-    camera yaw changing
-    player airborne
-
-has a much simpler native path than W+A/W+D:
-
-    MoveDirection
-        ->
-    LookCFrame:VectorToWorldSpace()
-        ->
-    WishDirection
-        ->
-    Accelerate
-        ->
-    AirControl is skipped
-        ->
-    WallImpact
-        ->
-    final Velocity
-
-Therefore, for pure A/D, any measured change caused by simultaneous camera
-rotation should first be explained by the WishDirection/Dot/Accelerate path,
-before investigating AirControl.
-
--------------------------------------------------------------
-51.9 A/D BACKWARD-FILTERING DOES NOT TRIGGER
--------------------------------------------------------------
-
-Air() contains:
-
-    if MoveDirection2.Z < 0 then
-        MoveDirection2 =
-            MoveDirection2 * Vector3.new(1, 1, 0)
-    end
-
-Pure A/D has:
-
-    MoveDirection2.Z == 0
-
-so this branch does nothing.
-
-Likewise:
-
-    if MoveDirection2.Z > 0 then
-        Velocity = ApplyFriction(...)
-    end
-
-is not entered for pure A/D.
-
-Therefore pure A/D air strafe does NOT receive the Air() friction operation
-shown at the start of the function.
-
--------------------------------------------------------------
-51.10 WALLRUN EXCEPTION
--------------------------------------------------------------
-
-Before constructing v25, Air() may modify MoveDirection2 when:
-
-    p21.Wallrunning
-    and WallrunDirection
-
-are active.
-
-For non-wallrunning normal flight, this branch is irrelevant.
-
-Therefore all conclusions in this section describe normal airborne A/D unless
-explicitly testing wallrunning.
-
--------------------------------------------------------------
-51.11 AIRCONTROL — EXACT CONFIRMED BEHAVIOR, NO SPECULATION
--------------------------------------------------------------
-
-For non-pure-A/D inputs where AirControl is entered, the recovered helper is:
-
-    if math.abs(p39.Z) < 0.001 or math.abs(p38) < 0.001 then
-        return p40
-    end
-
-    magnitude = p40.magnitude
-    unit = p40.unit
-    dot = unit:Dot(p37)
-    <computed> = 32 * dot * dot * p41
-
-    return unit * Vector3.new(magnitude, 0, magnitude)
-
-Confirmed facts:
-
-    - the 32 * dot^2 * dt expression is computed;
-    - its result is not subsequently used in the returned expression visible
-      in the recovered source;
-    - the function returns a vector based on p40.unit and p40.magnitude with
-      Y removed from the output direction.
-
-No stronger semantic interpretation is stored here because the recovered code
-does not justify one.
-
-=============================================================
-END OF 2026-10-05 A/D + CAMERA AIR FINDINGS
-=============================================================
-
-
-============================================================
-52. 2026-10-05 — DERIVED PURE A/D + CAMERA STRAFE LAW
-============================================================
-
-This section is mathematical derivation from the confirmed Air() and
-Accelerate() source.
-
-It is not an engine-side hypothesis.
-
-The source-confirmed pure A/D conditions are:
-
-    WishDirection = camera-relative lateral direction
-    WishSpeed     = 182
-    Acceleration  = 182
-    AirControl    = skipped because MoveDirection.Z == 0
-
-Let:
-
-    V = current horizontal Velocity
-    W = unit WishDirection from A/D
-    S = 182
-    theta = angle between V and W
-
-Then:
-
-    V · W = |V| * cos(theta)
-
-Accelerate requests:
-
-    addSpeed = S - |V| * cos(theta)
-
-and caps it by:
-
-    K = S * dt * S
-
-So the actual A/D velocity update is:
-
-    a = min(S - |V| cos(theta), K)
-
-provided:
-
-    S - |V| cos(theta) > 0
-
-and:
-
-    V_new = V + aW
-
-
--------------------------------------------------------------
-52.1 EXACT SPEED MAXIMUM — W PERPENDICULAR TO VELOCITY
--------------------------------------------------------------
-
-In the uncapped branch:
-
-    a = S - V cos(theta)
-
-where:
-
-    V = |Velocity|
-
-Then:
-
-    |V_new|^2
-        = V^2 + a^2 + 2Va cos(theta)
-
-Substituting:
-
-    |V_new|^2
-        = V^2 + S^2 - V^2 cos^2(theta)
-
-Therefore:
-
-    |V_new|^2
-        = V^2 + S^2 - V^2 cos^2(theta)
-
-This is maximized when:
-
-    cos(theta) = 0
-
-therefore:
-
-    theta = 90 degrees
-
-So the exact maximum-speed condition for pure A/D is:
-
-    WishDirection PERPENDICULAR to current horizontal Velocity.
-
-
--------------------------------------------------------------
-52.2 CAMERA GEOMETRY FOR THE MAXIMUM
--------------------------------------------------------------
-
-For normal horizontal camera orientation:
-
-    CameraRight
-        is perpendicular to
-    CameraLook
-
-Pure A/D uses:
-
-    D -> +CameraRight
-    A -> -CameraRight
-
-Therefore the maximum-speed condition is achieved when the horizontal
-CameraLook direction is parallel or antiparallel to the current horizontal
-Velocity.
-
-A simple practical orientation is:
-
-    CameraLook ~= Velocity direction
-
-Then:
-
-    D -> perpendicular rightward WishDirection
-    A -> perpendicular leftward WishDirection
-
-The held A/D key selects which side of Velocity the acceleration is applied.
-
-
--------------------------------------------------------------
-52.3 MAXIMUM SPEED GAIN PER MOVEMENT TICK
--------------------------------------------------------------
-
-At the optimal condition:
-
-    V · W = 0
-
-therefore:
-
-    addSpeed = S = 182
-
-as long as the acceleration cap does not bind.
-
-The new speed is:
-
-    V_new = sqrt(V^2 + S^2)
-
-so:
-
-    DeltaSpeed =
-        sqrt(V^2 + 182^2) - V
-
-Because DataRegistry velocity is approximately real speed * 90:
-
-    DeltaRealSpeed =
-        (sqrt(V^2 + 182^2) - V) / 90
-
-
--------------------------------------------------------------
-52.4 EXAMPLE AT INTERNAL SPEED 4500
--------------------------------------------------------------
-
-Using:
-
-    V = 4500
-    S = 182
-
-gives:
-
-    DeltaInternalSpeed
-        ~= 3.67894
-
-and:
-
-    DeltaRealSpeed
-        ~= 0.04088
-
-per movement step at the exact perpendicular condition.
-
-The corresponding Velocity heading change is:
-
-    delta =
-        atan2(182, 4500)
-
-        ~= 2.316 degrees
-
-So near internal speed 4500:
-
-    optimal Velocity turn per movement step
-        ~= 2.316 degrees
-
-
--------------------------------------------------------------
-52.5 CAMERA SHOULD TRACK VELOCITY, NOT USE A FIXED TURN RATE
--------------------------------------------------------------
-
-After the optimal update:
-
-    V_new = V + 182 * W
-
-with:
-
-    W perpendicular to V
-
-the new Velocity itself has rotated by:
-
-    delta =
-        atan2(182, V)
-
-Therefore, to keep the next A/D WishDirection perpendicular to the NEW
-Velocity, the camera's horizontal look direction must rotate by the same
-world-yaw amount as the Velocity heading.
-
-So the adaptive rule is:
-
-    each movement step:
-        1. read current horizontal Velocity heading;
-        2. point CameraLook along that heading;
-        3. hold A or D;
-        4. after the resulting Velocity update, recompute;
-        5. rotate CameraLook to the new Velocity heading.
-
-The required camera tracking angle is therefore not constant.
-
-It decreases automatically as speed increases:
-
-    delta_camera ~= atan2(182, |Velocity|)
-
-
--------------------------------------------------------------
-52.6 GENERAL CAMERA/VElocity ERROR EQUATION
--------------------------------------------------------------
-
-Define:
-
-    e = VelocityYaw - CameraYaw
-
-For normal horizontal camera orientation and pure A/D:
-
-    D:
-        WishDirection angle = CameraYaw + 90 degrees
-
-    A:
-        WishDirection angle = CameraYaw - 90 degrees
-
-For D, the dot term can be written as:
-
-    Velocity · WishDirection
-        = V * sin(e)
-
-For A, the sign is reversed:
-
-    Velocity · WishDirection
-        = -V * sin(e)
-
-Thus camera yaw error changes the Accelerate dot term directly.
-
-For D:
-
-    addSpeed =
-        182 - V * sin(e)
-
-subject to the normal positive test and acceleration cap.
-
-For A:
-
-    addSpeed =
-        182 + V * sin(e)
-
-with the same cap conditions.
-
-This explains why changing camera yaw while holding A/D changes the amount of
-acceleration even though the pressed key itself has not changed.
-
-
--------------------------------------------------------------
-52.7 CAMERA TURN RATE AND VELOCITY TURN RATE
--------------------------------------------------------------
-
-Let:
-
-    omega = camera yaw change during one movement step
-    delta  = resulting Velocity yaw change
-
-Then the next camera/Velocity error is:
-
-    e_new =
-        e + delta - omega
-
-(with the sign convention e = VelocityYaw - CameraYaw).
-
-Therefore:
-
-    omega = delta
-
-keeps the yaw error unchanged.
-
-At the optimal condition:
-
-    e = 0
-
-the exact target is:
-
-    omega_target =
-        atan2(182, |Velocity|)
-
-so that the camera continues tracking the changing Velocity direction.
-
-
--------------------------------------------------------------
-52.8 ACCELERATION CAP BOUNDARY
--------------------------------------------------------------
-
-The normal A/D acceleration cap is:
-
-    K = 182 * dt * 182
-
-The uncapped request is:
-
-    182 - V cos(theta)
-
-The cap starts binding when:
-
-    182 - V cos(theta) > K
-
-or:
-
-    cos(theta) < (182 - K) / V
-
-For dt >= 1/182 ~= 0.005495 seconds:
-
-    K >= 182
-
-so at the optimal perpendicular condition:
-
-    theta = 90 degrees
-
-the request:
-
-    addSpeed = 182
-
-does not exceed the cap.
-
-Typical tested movement dt values around 0.008 therefore leave the optimal
-perpendicular A/D case uncapped.
-
-
--------------------------------------------------------------
-52.9 GLOBAL OPTIMUM ALSO HOLDS IN THE CAPPED BRANCH
--------------------------------------------------------------
-
-When the cap is active:
-
-    a = K
-
-and:
-
-    |V_new|^2 = V^2 + K^2 + 2VK cos(theta)
-
-Within the capped region this is largest at the boundary.
-
-The speed at the boundary is always less than or equal to the perpendicular
-case by:
-
-    (K - S)^2
-
-in squared-speed difference.
-
-Therefore the global one-step maximum remains:
-
-    theta = 90 degrees
-
-even when the acceleration cap is considered.
-
-
--------------------------------------------------------------
-52.10 PRACTICAL RESULT
--------------------------------------------------------------
-
-For pure airborne A/D:
-
-    Maximum speed gain:
-        keep A/D WishDirection perpendicular to horizontal Velocity.
-
-    Equivalent camera condition:
-        keep horizontal CameraLook aligned with horizontal Velocity
-        (or the opposite direction).
-
-    Camera behavior:
-        continuously track Velocity heading instead of using one fixed
-        camera turn rate.
-
-    Near V = 4500 internal:
-        camera/Velocity tracking turn
-        ~= 2.316 degrees per movement step.
-
-    Real speed gain at V = 4500:
-        ~= 0.04088 real speed units per step.
-
-This result comes directly from the confirmed Air() + Accelerate source and
-does not depend on AirControl because pure A/D bypasses AirControl.
-
-=============================================================
-END OF 2026-10-05 PURE A/D + CAMERA STRAFE LAW
-=============================================================
-
-
-============================================================
-53. 2026-10-05 — W+A / W+D DURING AIR — EVIDENCE STATUS
-============================================================
-
-The complete Air() source shows:
-
-    if MoveDirection2.Z < 0 then
-        MoveDirection2 =
-            MoveDirection2 * Vector3.new(1, 1, 0)
-    end
-
-Therefore any input state with:
-
-    MoveDirection.Z < 0
-
-has its Z component removed before the airborne WishDirection is built.
-
-This is confirmed.
-
--------------------------------------------------------------
-53.1 WHAT THE PROVIDED SOURCE DOES NOT PROVE
--------------------------------------------------------------
-
-Movement.Terms["MoveDirection"] calculates:
-
-    local v15 = ControlModule:GetMoveVector()
-
-The provided decompile does NOT include the internal ControlModule implementation.
-
-Therefore this file must NOT state from source alone that:
-
-    W -> Z < 0
-    S -> Z > 0
-    W+A -> exactly A
-    W+D -> exactly D
-
-Those are standard-controller assumptions unless verified from this game's
-actual ControlModule runtime or source.
-
--------------------------------------------------------------
-53.2 WHAT IS CONFIRMED FOR ANY Z<0 INPUT
--------------------------------------------------------------
-
-If a runtime test shows:
-
-    MoveDirection.Z < 0
-
-then Air() immediately removes that forward component:
-
-    Vector3.new(X, Y, Z)
-        ->
-    Vector3.new(X, Y, 0)
-
-Afterward the client constructs:
-
-    v25 =
-        LookCFrame:VectorToWorldSpace(MoveDirection2)
-
-and pure surviving lateral input can enter:
-
-    MoveDirection2.Z == 0
-    MoveDirection2.X ~= 0
-
-which selects:
-
-    AirStrafeAcceleration
-
-and causes:
-
-    AirControl
-        ->
-    immediate return
-
-because AirControl checks:
-
-    abs(MoveDirection2.Z) < 0.001
-
--------------------------------------------------------------
-53.3 USER RUNTIME OBSERVATION
--------------------------------------------------------------
-
-The user has independently verified during gameplay that holding S does not
-allow building speed.
-
-That observation is compatible with the source branch:
-
-    if MoveDirection2.Z > 0 then
-        Velocity = ApplyFriction(..., 1)
-    end
-
-but the exact complete S behavior is not being promoted to a source-proven
-formula here.
-
--------------------------------------------------------------
-53.4 CURRENT CONCLUSION
--------------------------------------------------------------
-
-Confirmed:
-
-    Inputs with MoveDirection.Z < 0
-        -> forward Z is removed
-        -> remaining pure lateral input can enter the same A/D air-strafe path
-
-Not yet source-confirmed:
-
-    exact W / A / D values produced by this game's ControlModule
-    exact W+A / W+D equivalence to A / D
-
-A future runtime test of DataRegistry["MoveDirection"] while holding:
-
-    W
-    A
-    D
-    W+A
-    W+D
-
-would resolve this without relying on generic Roblox input conventions.
-
-Do not treat the earlier unconditional statement:
-
-    W+A == A
-    W+D == D
-
-as confirmed until that test is performed.
-
-=============================================================
-END OF 2026-10-05 W+A / W+D AIR EVIDENCE STATUS
-=============================================================
-
-
-============================================================
-54. 2026-10-05 — KEYBOARD VECTORS + MOUSE CAMERA ROTATION — CONFIRMED
-============================================================
-
-The actual Keyboard controller and CameraInput module are now recovered.
-This removes the previous uncertainty about W/A/D vector signs and the
-mouse-delta-to-camera-rotation conversion.
-
--------------------------------------------------------------
-54.1 EXACT KEYBOARD MOVEMENT VALUES
--------------------------------------------------------------
-
-Path:
-
-    Players.LocalPlayer.PlayerScripts.PlayerModule.ControlModule.Keyboard
-
-Keyboard assigns:
-
-    Forward:
-        forwardValue = -1
-
-    Backward:
-        backwardValue = +1
-
-    Left:
-        leftValue = -1
-
-    Right:
-        rightValue = +1
-
-and UpdateMovement() constructs:
-
-    moveVector =
-        Vector3.new(
-            leftValue + rightValue,
-            0,
-            forwardValue + backwardValue
-        )
-
-Therefore the actual keyboard vectors are:
-
-    W  = Vector3.new( 0, 0,-1)
-    S  = Vector3.new( 0, 0, 1)
-    A  = Vector3.new(-1, 0, 0)
-    D  = Vector3.new( 1, 0, 0)
-
-Diagonal values before any later Air() processing are:
-
-    W+A = Vector3.new(-1, 0,-1)
-    W+D = Vector3.new( 1, 0,-1)
-
-    S+A = Vector3.new(-1, 0, 1)
-    S+D = Vector3.new( 1, 0, 1)
-
-The Keyboard module itself does not normalize these vectors.
-
-
--------------------------------------------------------------
-54.2 W+A / W+D COLLAPSE TO A/D IN AIR — NOW DIRECTLY CONFIRMED
--------------------------------------------------------------
-
-Air() begins with:
-
-    if MoveDirection2.Z < 0 then
-        MoveDirection2 =
-            MoveDirection2 * Vector3.new(1, 1, 0)
-    end
-
-For W+A:
-
-    (-1, 0,-1)
-        ->
-    (-1, 0, 0)
-
-For W+D:
-
-    ( 1, 0,-1)
-        ->
-    ( 1, 0, 0)
-
-Therefore, in the actual keyboard/controller implementation:
-
-    W+A -> A
-    W+D -> D
-
-inside the airborne Air() calculation.
-
-This is now fully confirmed from the game's actual Keyboard source plus the
-Air() source, not from a generic Roblox input assumption.
-
-Because after the transformation:
-
-    MoveDirection.Z == 0
-    MoveDirection.X ~= 0
-
-the same pure-lateral AirStrafeAcceleration branch is selected.
-
-Therefore W+A/W+D use the same airborne WishDirection construction and
-AirStrafeAcceleration path as A/D.
-
--------------------------------------------------------------
-54.3 S IS A DIFFERENT AIR CASE
--------------------------------------------------------------
-
-Keyboard confirms:
-
-    S = Vector3.new(0, 0, 1)
-
-Air() checks:
-
-    if MoveDirection2.Z > 0 then
-        Velocity = Helpers:ApplyFriction(..., 1)
-    end
-
-So S enters the positive-Z branch that applies the Air-side friction operation.
-
-This is consistent with the user's runtime observation that S does not build
-speed.
-
-No separate theory about S speed gain is added beyond this source fact and the
-observed behavior.
-
-
--------------------------------------------------------------
-54.4 EXACT MOUSE INPUT TO CAMERA ROTATION
--------------------------------------------------------------
-
-Path:
-
-    Players.LocalPlayer.PlayerScripts.PlayerModule.CameraModule.CameraInput
-
-Mouse input:
-
-    UserInputService.InputChanged
-        ->
-    inputChanged()
-
-For MouseMovement:
-
-    local Delta2 = p64.Delta
-    t5.Movement = Vector2.new(Delta2.X, Delta2.Y)
-
-Then getRotation():
-
-    local Movement = t5.Movement
-
-    return (
-        ...
-        + Movement * v_u_3
-        + ...
-    ) * v24
-
-with:
-
-    v_u_3 =
-        Vector2.new(0.66, 0.66)
-        * 0.008726646259971648
-
-Therefore:
-
-    v_u_3.X = 0.00575958658
-    v_u_3.Y = 0.00575958658
-
-For normal non-inverted Y:
-
-    1 mouse-pixel horizontal delta
-        ->
-    0.00575958658 rad
-        ->
-    0.33 degrees
-
-So:
-
-    CameraYawDelta ~= MouseDeltaX * 0.33 degrees
-
-For vertical input, the same base 0.33 degrees/pixel is multiplied by the
-camera-Y inversion value.
-
-This is the exact scaling inside CameraInput.getRotation().
-
-
--------------------------------------------------------------
-54.5 MOUSE MOVEMENT IS NOT MULTIPLIED BY DT
--------------------------------------------------------------
-
-The mouse term is:
-
-    Movement * v_u_3
-
-while the keyboard/gamepad terms have p22-dependent scaling:
-
-    keyboard term:
-        (...)*p22*2.094...
-
-    gamepad term:
-        Thumbstick * sensitivity * p22
-
-The mouse Movement term itself is not multiplied by p22.
-
-Therefore the recovered CameraInput code treats the MouseMovement delta as a
-per-input-event angular increment rather than a speed value multiplied by
-frame delta.
-
-
--------------------------------------------------------------
-54.6 CAMERA INPUT RESET
--------------------------------------------------------------
-
-At frame end:
-
-    t5.Movement = Vector2.new()
-
-and other transient camera input fields are reset.
-
-Therefore a MouseMovement delta is transient input consumed by getRotation()
-rather than a persistent accumulated yaw value inside CameraInput.
-
-
--------------------------------------------------------------
-54.7 COMPLETE CONFIRMED A/D + MOUSE CAMERA PIPELINE
--------------------------------------------------------------
-
-For D:
-
-    keyboard:
-        MoveDirection = (1, 0, 0)
-
-    camera:
-        MouseMovement.X
-            ->
-        camera yaw change
-            ->
-        LookCFrame
-
-    Air():
-        WishDirection =
-            LookCFrame:VectorToWorldSpace(MoveDirection)
-
-    then:
-
-        Dot = Velocity · WishDirection
-
-        addSpeed = 182 - Dot
-
-        accelSpeed = 182 * dt * 182
-
-        addSpeed = min(addSpeed, accelSpeed)
-
-        Velocity += WishDirection * addSpeed
-
-For A:
-
-    same chain, with:
-
-        MoveDirection = (-1, 0, 0)
-
-For W+A/W+D:
-
-    W is first represented in the keyboard vector,
-    then Air() removes its negative-Z component,
-    leaving exactly A/D before the LookCFrame transform.
-
-Therefore the simultaneous camera/A-D interaction is completely determined by
-the relative orientation between:
-
-    horizontal Velocity
-
-and:
-
-    camera-relative A/D WishDirection.
-
-
--------------------------------------------------------------
-54.8 PRACTICAL CAMERA STEERING RESOLUTION
--------------------------------------------------------------
-
-The previously derived optimal pure-A/D condition was:
-
-    WishDirection perpendicular to Velocity
-
-For D this means:
-
-    CameraRight perpendicular to Velocity
-
-For A:
-
-    -CameraRight perpendicular to Velocity
-
-Because CameraLook is perpendicular to CameraRight in the normal camera
-orientation, the equivalent target is:
-
-    horizontal CameraLook aligned with horizontal Velocity
-
-The mouse control resolution is now known:
-
-    ~0.33 degrees per horizontal mouse pixel
-
-Therefore an adaptive controller can convert a desired camera yaw change into
-an approximate mouse-equivalent amount:
-
-    mousePixels ~= desiredDegrees / 0.33
-
-This is an input-resolution conversion, not a claim about physical mouse
-sensitivity outside the game's CameraInput layer.
-
-=============================================================
-END OF 2026-10-05 KEYBOARD + CAMERA INPUT FINDINGS
+END OF 2026-10-06 BENCH / CLIMBING / LAUNCH FINDINGS
 ============================================================
