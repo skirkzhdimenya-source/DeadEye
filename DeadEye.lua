@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.129
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.130
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.129"
+local SCRIPT_VERSION = "1.130"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12831,9 +12831,9 @@ function mainJump.getCrouchSpamSensorLayout(char)
 
     if not root then
         return Vector3.new(
-            2,
-            0.16,
-            1
+            2.15,
+            0.20,
+            1.15
         ), -3.0
     end
 
@@ -12896,9 +12896,9 @@ function mainJump.getCrouchSpamSensorLayout(char)
 
     if #legParts == 0 then
         return Vector3.new(
-            2,
-            0.16,
-            1
+            2.15,
+            0.20,
+            1.15
         ), -3.0
     end
 
@@ -12970,9 +12970,9 @@ function mainJump.getCrouchSpamSensorLayout(char)
         )
 
     return Vector3.new(
-        sizeX,
-        0.16,
-        sizeZ
+        sizeX + 0.15,
+        0.20,
+        sizeZ + 0.15
     ), minY
 end
 
