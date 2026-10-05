@@ -1,0 +1,1344 @@
+==================================================
+DeadEye — Recovered Game Sources
+Updated: 2026-10-05
+==================================================
+
+Этот файл хранит исходники/декомпиляции игровых модулей, которые были
+получены для анализа движения, прыжков и бага с запуском вверх.
+
+Каждый источник помечен:
+    SOURCE #N
+    PATH
+    PURPOSE
+
+Не найденный пока источник также отмечен в конце.
+
+
+==================================================
+SOURCE #1
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement
+
+PURPOSE:
+Главный Movement-класс персонажа.
+Здесь находятся:
+    - Update()
+    - SetState()
+    - DoFunction()
+    - AttemptJump()
+    - testMultipleJumps()
+    - Jump()
+    - UpdateCanJump()
+    - Climb()
+    - EndClimb()
+    - другие общие movement-функции
+
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+local Shared = script.Parent.Parent:WaitForChild("Shared")
+game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Services = ReplicatedStorage:WaitForChild("Services")
+require((Services:WaitForChild("UI"):WaitForChild("PopupService")))
+local v_u_1 = require((Services:WaitForChild("Items"):WaitForChild("ClientItemService")))
+local CameraService = require(Services.Client.CameraService)
+local RunService = game:GetService("RunService")
+local v_u_2 = RunService:IsServer()
+local Terms = require(script.Terms)
+
+function t.new(p3)
+	--[[ line: 40 | upvalues: (copy) Shared, (copy) t]]
+	local t2 = {
+		Disabled = false,
+		Crouching = false,
+		State = nil,
+		JumpCount = 0,
+		JumpAmount = 0,
+		Parent = p3,
+		Character = p3.Model,
+		DataRegistry = p3.DataRegistry,
+		DisableReasons = {},
+		Velocity = Vector3.new(),
+		StateInfo = require(Shared.StateInfo)
+	}
+	local v4 = t
+	local v5 = setmetatable(t2, v4)
+	local v6 = t
+	return setmetatable(v5, v6)
+end
+
+function t.DisabledCheck(p7)
+	--[[ line: 63 | upvalues: none]]
+	for _, v8 in pairs(p7.DisableReasons) do
+		if v8[1] == true then
+			p7.Disabled = true
+			return
+		end
+	end
+	p7.Disabled = false
+end
+
+function t.Init(p9)
+	--[[ line: 73 | upvalues: (copy) Terms]]
+	p9.Humanoid = p9.Character:FindFirstChildOfClass("Humanoid")
+	p9.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming, false)
+	p9.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+	p9.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp, false)
+	p9.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+	p9.Constraints = require(script.Constraints).new(p9)
+	p9.Constraints:Init()
+	p9.MoveStats = require(script.MoveStats).new(p9)
+	p9.MoveStats:Init()
+	p9.MoveFunction = require(script.MoveFunction).new(p9)
+	p9.MoveFunction:Init()
+	p9.RootPartOrienter = require(script.RootPartOrienter).new(p9)
+	p9.RootPartOrienter:Init()
+	p9.Terms = Terms.new(p9)
+	p9.Terms:Init()
+	for _2, v10 in Terms.Children do
+		if v10.DisabledValue ~= nil then
+			p9.DataRegistry:Set(v10.Term, v10.DisabledValue)
+		end
+	end
+end
+
+function t.ResetStateModifiers(p11)
+	--[[ line: 99 | upvalues: none]]
+	p11.MoveStats:SpeedChange("State", nil)
+	p11.MoveStats:DisableSprint(false)
+	p11.JumpButtonVisible = false
+end
+
+function t.GetStateInfo(p12)
+	--[[ line: 105 | upvalues: none]]
+	local v13 = p12.State or p12.DataRegistry:Get("State")
+	if v13 == "Disabled" then
+		return p12.StateInfo:GetStateOrDefault(nil)
+	end
+	local v14 = p12.StateInfo:GetState(v13)
+	if v14 then
+		p12._lastBadState = nil
+		return v14
+	end
+	if v13 ~= p12._lastBadState then
+		p12._lastBadState = v13
+		warn((("Movement::GetStateInfo: unresolved state %*(%*)"):format(typeof(v13), (tostring(v13)))))
+	end
+	return p12.StateInfo:GetStateOrDefault(nil)
+end
+
+function t.IsAlive(p15)
+	--[[ line: 122 | upvalues: none]]
+	local Character = p15.Character
+	local v16
+	if p15.Destroyed == true or (Character == nil or (Character.Parent == nil or (Character.PrimaryPart == nil or p15.Humanoid == nil))) then
+		v16 = false
+	else
+		v16 = p15.Humanoid.Parent ~= nil
+	end
+	return v16
+end
+
+function t.Destroy(p17)
+	--[[ line: 130 | upvalues: none]]
+	p17.Destroyed = true
+	p17._jumpToken = nil
+	p17.JumpHeldDown = false
+	p17.CanJump = true
+end
+
+function t.Create(_3)
+	--[[ line: 137 | upvalues: none]]
+end
+
+function t.UpdateTerms(p18: {[any]: any}, _4)
+	--[[ line: 142 | upvalues: (copy) Terms, (copy) v_u_2]]
+	p18:DisabledCheck()
+	local v19 = p18.MoveStats:GetMoveStats()
+	local _5 = p18.Parent.Tag
+	for _6, v20 in Terms.Children do
+		if p18.Disabled and v20.DisabledValue then
+			p18.DataRegistry:Set(v20.Term, v20.DisabledValue)
+		elseif not p18.Disabled and (v20.CalculateFunction and (v20.FunctionActiveOnServer ~= false or v_u_2 ~= true)) then
+			p18.DataRegistry:Set(v20.Term, v20.CalculateFunction(p18.Terms, v19))
+		end
+	end
+end
+
+function t.DoFunction(p21, p22, p23, p24, p25)
+	--[[ line: 155 | upvalues: none]]
+	local v26, v27
+	if p22 == "Start" then
+		v26, v27 = p21.MoveFunction:Start(p23, p24)
+	elseif p22 == "End" then
+		v26, v27 = p21.MoveFunction:End(p23, p24)
+	else
+		v26, v27 = p21.MoveFunction:Move(p25, p23, p24)
+	end
+	if v26 then
+		p21.Constraints:Update(v26)
+	end
+	if v27 then
+		p21:NewTerms(v27)
+	end
+end
+
+function t.SetState(p28: {[any]: any}, p29: string)
+	--[[ line: 172 | upvalues: none]]
+	if p28.State == p29 then
+		return
+	elseif p28:IsAlive() then
+		local v30 = p28.MoveStats:GetMoveStats()
+		if p29 ~= "Climbing" then
+			p28:EndClimb()
+		end
+		if (p28.State or "Disabled") ~= "Disabled" then
+			p28:DoFunction("End", p28.State, v30)
+		end
+		if p29 == "Disabled" then
+			p28.Humanoid.PlatformStand = true
+			p28.PlatformStand = true
+			p28.Character.PrimaryPart.Massless = true
+			p28:ResetStateModifiers()
+		else
+			p28:DoFunction("Start", p29, v30)
+			local v31 = p28.StateInfo:GetState(p29)
+			local v32 = false
+			local v33 = false
+			local v34 = false
+			if v31 then
+				if v31.PlatformStand ~= nil then
+					v32 = v31.PlatformStand
+				end
+				if v31.Massless ~= nil then
+					v33 = v31.Massless
+				end
+				v34 = v31.CollisionsDisabled and true or v34
+				local v35 = nil
+				for _7, v36 in p28.MoveStats.Perks do
+					local v37 = require(v36)
+					local PerkTraits = v37.PerkTraits
+					if PerkTraits then
+						PerkTraits = v37.PerkTraits.StateSpeedMultipliers
+					end
+					if PerkTraits and PerkTraits[p29] then
+						v35 = (v35 or 1) * PerkTraits[p29]
+					end
+				end
+				p28.MoveStats:SpeedChange("Perk", v35)
+				local Movement = v31.Movement
+				if Movement then
+					p28.MoveStats:SpeedChange("State", Movement.SpeedMult)
+					p28.MoveStats:DisableSprint(Movement.DisableSprinting == true)
+					p28.JumpButtonVisible = Movement.JumpButtonVisible
+				else
+					p28:ResetStateModifiers()
+				end
+			else
+				p28.MoveStats:SpeedChange("Perk", nil)
+				p28:ResetStateModifiers()
+			end
+			p28.Humanoid.PlatformStand = v32
+			p28.PlatformStand = v32
+			if p28.Massless ~= v33 then
+				p28.Massless = v33
+				p28.Character.PrimaryPart.Massless = v33
+			end
+			if p28.CollisionsDisabled ~= v34 then
+				p28.CollisionsDisabled = v34
+				p28.Character.PrimaryPart.CollisionGroup = v34 and "PlayerVis" or "Players"
+			end
+		end
+		p28.State = p29
+		p28.Constraints:SetConstraintsEnabled(p29)
+	end
+end
+
+function t.NewTerms(p38, p39)
+	--[[ line: 251 | upvalues: none]]
+	for v40, v41 in pairs(p39) do
+		p38.DataRegistry:Set(v40, v41)
+	end
+end
+
+function t.Update(p42: {[any]: any}, p43: number)
+	--[[ line: 257 | upvalues: none]]
+	if p42:IsAlive() then
+		p42.DataRegistry:Set("JumpingActive", p42.JumpHeldDown == true)
+		if p42.PlatformStand ~= nil then
+			p42.Humanoid.PlatformStand = p42.PlatformStand
+		end
+		if p42.Disabled then
+			p42:SetState("Disabled")
+			p42:UpdateCanJump()
+		else
+			if p42.MoveStats.MoveStats.Speed == 0 then
+				p42.DataRegistry:Set("Velocity", (Vector3.new()))
+			end
+			p42:SetState((p42.DataRegistry:Get("State")))
+			p42:UpdateCanJump()
+			p42.MoveStats:UpdateMoveStats()
+			local v44 = p42.MoveStats:GetMoveStats()
+			p42:DoFunction("Move", p42.State, v44, p43)
+			if p42.XboxJumping == true then
+				p42:AttemptJump(v44, true)
+			elseif p42.JumpAmount > 0 and p42.DataRegistry:Get("Grounded") then
+				p42.JumpAmount = 0
+			end
+			local v45 = p42.DataRegistry:Get("Velocity") or Vector3.new()
+			local v46 = v45.Magnitude / 90 * 10
+			local v47 = math.floor(v46) / 10
+			p42.DataRegistry:Set("Speed", v47)
+			local v48 = v44.BaseSpeed or 0
+			p42.DataRegistry:Set("RelativeSpeed", v48 <= 0 and 0 or v47 / (v48 / 1500))
+			local DataRegistry = p42.DataRegistry
+			local v49 = "RelativeMoveDirection"
+			local v50
+			if v45 == Vector3.new() then
+				v50 = Vector3.new()
+			else
+				v50 = (p42.Character.PrimaryPart.CFrame - p42.Character.PrimaryPart.CFrame.p):VectorToObjectSpace(v45.Unit)
+			end
+			DataRegistry:Set(v49, v50)
+			p42.RootPartOrienter:Update(p43, p42.State)
+		end
+	else
+		return
+	end
+end
+
+function t.KeyUsed(p51, p52)
+	--[[ line: 331 | upvalues: (copy) ReplicatedStorage]]
+	if p52.Key == "Crouching" then
+		p51.DataRegistry:Set("CrouchKey", p52.Down)
+		return
+	elseif p52.Key == "Melee" and p52.Down == false then
+		local Carrying = p51.DataRegistry:Get("Carrying")
+		local v53
+		if Carrying == nil or Carrying == false then
+			v53 = false
+		else
+			v53 = Carrying ~= 0
+		end
+		if v53 and tick() - (p51.StartedCarrying or 0) >= 0.6 then
+			ReplicatedStorage.Events.Interact:FireServer("Carry")
+		elseif p52.Key == "Jump" then
+			p51.JumpingActive = p52.Down
+		end
+	else
+		if p52.Key == "Jump" then
+			p51.JumpingActive = p52.Down
+		end
+		return
+	end
+end
+
+function t.RegistryTermUpdated(p54, p55)
+	--[[ line: 341 | upvalues: (copy) v_u_1]]
+	if p55 == "Ragdolling" then
+		p54.DisableReasons.Ragdolling = { (p54.DataRegistry:Get("Ragdolling")) }
+		return
+	end
+	if p55 == "Carried" then
+		local DisableReasons = p54.DisableReasons
+		local Carried = p54.DataRegistry:Get("Carried")
+		local v56
+		if Carried == nil or Carried == false then
+			v56 = false
+		else
+			v56 = Carried ~= 0
+		end
+		DisableReasons.Carried = v56 and { true } or nil
+		return
+	end
+	if p55 == "Carrying" then
+		p54.StartedCarrying = tick()
+		return
+	end
+	if p55 == "ShiftMoveDirection" then
+		local ShiftMoveDirection = p54.DataRegistry:Get("ShiftMoveDirection")
+		if ShiftMoveDirection and ShiftMoveDirection ~= 0 then
+			local v57 = CFrame.new(Vector3.new(), ShiftMoveDirection)
+			local Velocity = p54.DataRegistry:Get("Velocity")
+			local lookVector = v57.lookVector
+			local magnitude = Velocity.magnitude
+			local v58 = p54.Character.HumanoidRootPart.AssemblyLinearVelocity.Y * 90
+			local v59 = lookVector * (magnitude + math.abs(v58))
+			local HumanoidRootPart = p54.Character.HumanoidRootPart
+			local X = p54.Character.HumanoidRootPart.AssemblyLinearVelocity.X
+			local v60 = v59.Y / 90
+			local Z = p54.Character.HumanoidRootPart.AssemblyLinearVelocity.Z
+			HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(X, v60, Z)
+			local v61 = v59 * Vector3.new(1, 0, 1)
+			p54.DataRegistry:Set("Velocity", v61)
+			p54.DataRegistry:Set("ShiftMoveDirection", 0)
+		end
+	end
+	if p55 == "ShiftY" then
+		local ShiftY = p54.DataRegistry:Get("ShiftY")
+		if ShiftY and ShiftY ~= 0 then
+			local HumanoidRootPart2 = p54.Character.HumanoidRootPart
+			local X2 = p54.Character.HumanoidRootPart.AssemblyLinearVelocity.X
+			local Y = (p54.Character.HumanoidRootPart.AssemblyLinearVelocity * ShiftY * Vector3.new(0, -1, 0)).Y
+			local Z2 = p54.Character.HumanoidRootPart.AssemblyLinearVelocity.Z
+			HumanoidRootPart2.AssemblyLinearVelocity = Vector3.new(X2, Y, Z2)
+			p54.DataRegistry:Set("ShiftY", 0)
+		end
+	end
+	if p55 == "Emote" then
+		local Emote = p54.DataRegistry:Get("Emote")
+		if Emote and Emote ~= 0 then
+			local v62 = v_u_1:GetItemFromID(Emote)
+			if v62 then
+				p54.MoveStats:SpeedChange("Emote", (require(v62).EmoteInfo or {}).SpeedMult or 1)
+			end
+		else
+			p54.MoveStats:SpeedChange("Emote", nil)
+			return
+		end
+	end
+	if p55 == "Perks" then
+		p54.MoveStats:Reset()
+		return
+	end
+	if p55 == "Size" then
+		p54.Terms.Size = p54.DataRegistry:Get("Size")
+	end
+end
+
+function t.JumpReact(p63, p64)
+	--[[ line: 385 | upvalues: (copy) RunService]]
+	if p63.CanJump == false or not p63:IsAlive() then
+		return
+	else
+		p63.JumpHeldDown = true
+		p63:UpdateCanJump()
+		p63:AttemptJump()
+		if p64 ~= true then
+			p63.CanJump = false
+			local t3 = {}
+			p63._jumpToken = t3
+			RunService.Heartbeat:Wait()
+			while p63.JumpHeldDown and (p63._jumpToken == t3 and p63:IsAlive()) do
+				RunService.Heartbeat:Wait()
+			end
+			if p63._jumpToken == t3 then
+				p63.CanJump = true
+			end
+		end
+	end
+end
+
+function t.AttemptJump(p65, p66, p67)
+	--[[ line: 407 | upvalues: none]]
+	if p65.Disabled or not p65:IsAlive() then
+		return
+	else
+		p65:EndClimb()
+		local Grounded = p65.DataRegistry:Get("Grounded")
+		if Grounded or p65.JumpAmount ~= 0 then
+			if Grounded then
+				p65.JumpAmount = 0
+			end
+		else
+			p65.JumpAmount = 1
+		end
+		local v68 = p65:GetStateInfo()
+		if v68.Movement and v68.Movement.CanJump == false then
+			return
+		else
+			local v69 = p66 or p65.MoveStats:GetMoveStats()
+			if Grounded or (p65.State == "WallrunLeft" or (p65.State == "WallrunRight" or p65.JumpAmount < 1)) then
+				p65:Jump(v69, true)
+			elseif p67 ~= true then
+				p65:testMultipleJumps(v69)
+			end
+		end
+	end
+end
+
+function t.testMultipleJumps(p70, p71)
+	--[[ line: 435 | upvalues: none]]
+	if p70.JumpAmount < p71.JumpCap then
+		p70.JumpAmount = p70.JumpAmount + 1
+		local v72 = script.DoubleJump:Clone()
+		v72.Parent = p70.Character.HumanoidRootPart.SoundPos
+		v72:Play()
+		local _8, v73 = workspace.CurrentCamera:WorldToScreenPoint(p70.Character.HumanoidRootPart.JumpPos.WorldPosition)
+		if v73 then
+			p70.Character.HumanoidRootPart.JumpPos.Double:Emit(10)
+		end
+		game:GetService("Debris"):AddItem(v72, 1)
+		p70:Jump(p71)
+	end
+end
+
+function t.Jump(p_u_74, p75, p76, p77)
+	--[[ line: 450 | upvalues: none]]
+	if p_u_74.DataRegistry:Get("Downed") then
+		return
+	else
+		local Carrying2 = p_u_74.DataRegistry:Get("Carrying")
+		local v78
+		if Carrying2 == nil or Carrying2 == false then
+			v78 = false
+		else
+			v78 = Carrying2 ~= 0
+		end
+		if v78 then
+			return
+		elseif p_u_74.MoveStats.MoveStats.Speed ~= 0 then
+			local v79 = p75 or p_u_74.MoveStats:GetMoveStats()
+			local Velocity2 = p_u_74.DataRegistry:Get("Velocity")
+			local Sprint = p_u_74.DataRegistry:Get("Sprint")
+			if Velocity2 ~= Vector3.new() and (p_u_74.DataRegistry:Get("Crouching") ~= true and p76 == true) then
+				local Speed = v79.Speed
+				local v80 = v79.JumpSpeedMultiplier * p_u_74.Character.HumanoidRootPart.CFrame.lookVector:Dot(Velocity2.unit) ^ 2
+				local magnitude2 = Velocity2.magnitude
+				if magnitude2 < Sprint * Speed * v80 then
+					local v81 = magnitude2 * v79.JumpSpeedMultiplier
+					local v82 = Sprint * Speed * v80
+					local v83 = math.min(v81, v82)
+					p_u_74.DataRegistry:Set("Velocity", (p_u_74.DataRegistry:Get("Velocity") * Vector3.new(1, 0, 1)).unit * v83)
+				end
+			end
+			p_u_74.Character.Humanoid.JumpHeight = p77 or v79.JumpHeight
+			p_u_74.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+			if p_u_74.State == "WallrunRight" or p_u_74.State == "WallrunLeft" then
+				p_u_74.DataRegistry:Set("IgnoreXMove", tick())
+				local Y2 = p_u_74.Character.HumanoidRootPart.AssemblyLinearVelocity.Y
+				p_u_74.DataRegistry:Set("Velocity", p_u_74.DataRegistry:Get("Velocity") + (p_u_74.DataRegistry:Get("WallrunDir") or Vector3.new()) * 90 * 30)
+				task.spawn(function()
+					--[[ line: 480 | upvalues: (copy) p_u_74, (copy) Y2]]
+					task.wait()
+					local HumanoidRootPart3 = p_u_74.Character.HumanoidRootPart
+					local X3 = p_u_74.Character.HumanoidRootPart.AssemblyLinearVelocity.X
+					local v84 = Y2 * 0.1 + 10
+					local Z3 = p_u_74.Character.HumanoidRootPart.AssemblyLinearVelocity.Z
+					HumanoidRootPart3.AssemblyLinearVelocity = Vector3.new(X3, v84, Z3)
+				end)
+			end
+		end
+	end
+end
+
+function t.UpdateCanJump(p85)
+	--[[ line: 487 | upvalues: none]]
+	if p85:IsAlive() then
+		if p85.Disabled or (p85.Humanoid.Health <= 0 or p85.CanJump == false) then
+			p85.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+			return
+		else
+			local v86 = p85:GetStateInfo()
+			if v86.Movement then
+				local Movement2 = v86.Movement
+				if Movement2 then
+					Movement2 = Movement2.CanJump == false
+				end
+				p85.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, not Movement2)
+			end
+		end
+	else
+		return
+	end
+end
+
+function t.Climb(p87, p88)
+	--[[ line: 507 | upvalues: none]]
+	local Climbing = p87.DataRegistry:Get("Climbing")
+	local v89
+	if Climbing == nil or Climbing == false then
+		v89 = false
+	else
+		v89 = Climbing ~= 0
+	end
+	if v89 then
+		p87:EndClimb()
+	else
+		p87.DataRegistry:Set("Climbing", p88)
+	end
+end
+
+function t.EndClimb(p90)
+	--[[ line: 515 | upvalues: none]]
+	local Climbing2 = p90.DataRegistry:Get("Climbing")
+	local v91
+	if Climbing2 == nil or Climbing2 == false then
+		v91 = false
+	else
+		v91 = Climbing2 ~= 0
+	end
+	if v91 then
+		p90.DataRegistry:Set("Climbing", 0)
+	end
+end
+
+function t.Lunge(p_u_92, p_u_93, p_u_94)
+	--[[ line: 524 | upvalues: (copy) RunService, (copy) CameraService]]
+	if not p_u_92.DataRegistry:Get("LungeTarget") then
+		p_u_92.DataRegistry:Set("LungeTarget", p_u_93)
+		local v_u_95 = true
+		task.spawn(function()
+			--[[ line: 530 | upvalues: (ref) RunService, (copy) p_u_92, (ref) v_u_95, (copy) p_u_93, (ref) p_u_94]]
+			if RunService:IsClient() then
+				local PrimaryPart = p_u_92.Character.PrimaryPart
+				while v_u_95 do
+					local v96 = RunService.RenderStepped:wait()
+					if p_u_93 and p_u_93.Parent then
+						local LookCFrame = p_u_92.DataRegistry:Get("LookCFrame")
+						local v97 = CFrame.new(Vector3.new(), p_u_93.Position - PrimaryPart.Position)
+						local v98 = CFrame.new(workspace.CurrentCamera.CFrame.Position) * (LookCFrame - LookCFrame.p)
+						local v99 = CFrame.new(workspace.CurrentCamera.CFrame.Position) * v97
+						local v100 = v96 * 20
+						CameraService:SetCFrame((v98:lerp(v99, (math.min(v100, 1)))))
+					end
+				end
+			end
+		end)
+		task.spawn(function()
+			--[[ line: 544 | upvalues: (copy) p_u_94, (ref) v_u_95, (copy) p_u_92]]
+			task.wait(p_u_94)
+			v_u_95 = false
+			p_u_92.DataRegistry:Set("LungeTarget", false)
+		end)
+	end
+end
+
+function t.Push(p101, p102)
+	--[[ line: 551 | upvalues: none]]
+	p101.DataRegistry:Set("Velocity", p101.DataRegistry:Get("Velocity") + p102 * Vector3.new(50, 0, 50))
+end
+
+function t.BatonPush(p103)
+	--[[ line: 555 | upvalues: none]]
+	if tick() - (p103.LastTestedSpeed or 0) > 1 then
+		p103.LastTestedSpeed = tick()
+		local lookVector2 = workspace.CurrentCamera.CFrame.lookVector
+		p103:Push(lookVector2 * -25)
+		local HumanoidRootPart4 = p103.Character.HumanoidRootPart
+		HumanoidRootPart4.AssemblyLinearVelocity = HumanoidRootPart4.AssemblyLinearVelocity + lookVector2 * Vector3.new(0, 25, 0)
+	end
+end
+
+return t
+
+
+==================================================
+SOURCE #2
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction
+
+PURPOSE:
+Обёртка MoveFunction, которая по StateInfo получает Movement.MoveType
+и вызывает соответствующую функцию из Functions.
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+local v_u_1 = require((script.Parent.Parent.Parent:WaitForChild("Shared"):WaitForChild("StateInfo")))
+local Functions = require(script.Functions)
+
+function t.new(p2)
+	--[[ line: 13 | upvalues: (copy) t]]
+	return setmetatable({ DataRegistry = p2.DataRegistry, Character = p2.Character }, t)
+end
+
+function t.Init(_)
+	--[[ line: 22 | upvalues: none]]
+end
+
+function t.Move(p3, p4, p5, p6)
+	--[[ line: 26 | upvalues: (copy) v_u_1, (copy) Functions]]
+	local v7 = v_u_1:GetState(p5)
+	if v7 then
+		local Movement = v7.Movement
+		if Movement then
+			if Movement.MoveType and Functions[Movement.MoveType] then
+				return Functions[Movement.MoveType](p4, Movement, p3.DataRegistry, p3.Character, p6)
+			end
+		end
+	else
+		return
+	end
+end
+
+function t.Start(p8, p9, p10)
+	--[[ line: 40 | upvalues: (copy) v_u_1, (copy) Functions]]
+	local v11 = v_u_1:GetState(p9)
+	if v11 then
+		local Movement2 = v11.Movement
+		if Movement2 then
+			if Movement2.MoveType and Functions[Movement2.MoveType .. "Start"] then
+				return Functions[Movement2.MoveType .. "Start"](Movement2, p8.DataRegistry, p8.Character, p10)
+			end
+		end
+	else
+		return
+	end
+end
+
+function t.End(p12, p13, p14)
+	--[[ line: 55 | upvalues: (copy) v_u_1, (copy) Functions]]
+	local v15 = v_u_1:GetState(p13)
+	if v15 then
+		local Movement3 = v15.Movement
+		if Movement3 then
+			if Movement3.MoveType and Functions[Movement3.MoveType .. "End"] then
+				return Functions[Movement3.MoveType .. "End"](Movement3, p12.DataRegistry, p12.Character, p14)
+			end
+		end
+	else
+		return
+	end
+end
+
+return t
+
+
+==================================================
+SOURCE #3
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+
+PURPOSE:
+Конкретные movement-типы:
+    - Run
+    - Air
+    - Slide
+    - GrappleMove
+    - Climb
+а также ClimbStart/ClimbEnd/LungeMove и ManualEndClimb.
+
+SOURCE CONTENT:
+
+game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local v_u_1 = game:GetService("RunService"):IsServer()
+local Helpers = require(script.Helpers)
+
+function lerp(p2, p3, p4)
+	--[[ line: 8 | upvalues: none]]
+	return p2 + (p3 - p2) * p4
+end
+
+function antiNan(p5)
+	--[[ line: 11 | upvalues: none]]
+	return p5 ~= p5 and 0 or p5
+end
+
+local t3 = {
+	Run = function(p6: number, p7, p8, p9: userdata, p10)
+		--[[ line: 23 | upvalues: (copy) Helpers]]
+		local JumpingActive = p8:Get("JumpingActive")
+		local MoveDirection = p8:Get("MoveDirection")
+		local GlobalMoveDirection = p8:Get("GlobalMoveDirection")
+		local Swimming = p7.Swimming
+		if not Swimming then
+			local X = GlobalMoveDirection.X
+			local Z = GlobalMoveDirection.Z
+			GlobalMoveDirection = Vector3.new(X, 0, Z)
+		end
+		if not (p10.BhopEnabled and JumpingActive) and p8:Get("JumpQueued") ~= true then
+			p8:Get("LookCFrame")
+			p8:Get("Velocity")
+			local Sprint = p8:Get("Sprint")
+			local v11 = Helpers:ApplyFriction(p6, p7, p8, p9, p10, 1)
+			local v12
+			if Swimming then
+				if JumpingActive then
+					local X2 = GlobalMoveDirection.X
+					local Z2 = GlobalMoveDirection.Z
+					GlobalMoveDirection = Vector3.new(X2, 0.5, Z2)
+				elseif p8:Get("Crouching") then
+					local X3 = GlobalMoveDirection.X
+					local Z3 = GlobalMoveDirection.Z
+					GlobalMoveDirection = Vector3.new(X3, -0.5, Z3)
+				end
+				if MoveDirection * Vector3.new(1, 0, 1) == Vector3.new() then
+					v12 = 1
+				else
+					local X4 = GlobalMoveDirection.X
+					local v13
+					if MoveDirection.Y == 0 then
+						v13 = GlobalMoveDirection.Y
+					else
+						v13 = MoveDirection.Y
+					end
+					local Z4 = GlobalMoveDirection.Z
+					GlobalMoveDirection = Vector3.new(X4, v13, Z4)
+					v12 = 1
+				end
+			elseif GlobalMoveDirection == Vector3.new(0, 0, 0) then
+				v12 = 1
+			else
+				GlobalMoveDirection = GlobalMoveDirection.Unit
+				if Swimming == true or (MoveDirection.Z >= 0 or (p7.CapSprint == true or p8:Get("ADS") == true)) then
+					v12 = 1
+				else
+					local v14 = Sprint + 0.5 * p10.SprintAcceleration * p6
+					local v15 = p10.SprintCap or 2
+					v12 = math.clamp(v14, 1, v15)
+				end
+			end
+			local Magnitude = GlobalMoveDirection.Magnitude
+			local v16
+			if p10.WalkSpeedMultiplier then
+				local SprintCap = p10.SprintCap
+				local v17 = (p8:Get("Emote") or 0) ~= 0 and 2 or SprintCap
+				v16 = lerp(v12, v17, p10.WalkSpeedMultiplier - 1)
+			else
+				v16 = v12
+			end
+			local v18 = Helpers:WallImpact(p6, p7, p8, p9, p10, (Helpers:Accelerate(v11, GlobalMoveDirection, Magnitude * (p10.Speed * v16), 12 * p10.RunAccel, p6, Swimming)))
+			local v19 = p7.CapSprint and 1 or v12
+			return Swimming == true and {
+				SwimMover = { VectorVelocity = v18 }
+			} or {
+				BaseMover = { PlaneVelocity = Vector2.new(v18.X, v18.Z) }
+			}, { Sprint = v19, Velocity = v18 }
+		end
+	end,
+
+	Air = function(p20: number, p21, p22, p23: userdata, p24)
+		--[[ line: 109 | upvalues: (copy) Helpers]]
+		local Velocity = p22:Get("Velocity")
+		local MoveDirection2 = p22:Get("MoveDirection")
+		if MoveDirection2.Z < 0 then
+			MoveDirection2 = MoveDirection2 * Vector3.new(1, 1, 0)
+		end
+		if MoveDirection2.Z > 0 then
+			Velocity = Helpers:ApplyFriction(p20, p21, p22, p23, p24, 1)
+		end
+		local WallrunDirection = p22:Get("WallrunDirection")
+		if p21.Wallrunning and WallrunDirection then
+			if WallrunDirection <= -0.99 then
+				if MoveDirection2.X < 0 then
+					MoveDirection2 = MoveDirection2 * Vector3.new(0, 0, 1)
+				end
+			elseif WallrunDirection >= 0.99 and MoveDirection2.X > 0 then
+				MoveDirection2 = MoveDirection2 * Vector3.new(0, 0, 1)
+			end
+			if MoveDirection2.Z < 0 then
+				MoveDirection2 = MoveDirection2 * Vector3.new(1, 0, 0)
+			end
+		end
+		local v25
+		if p23:GetAttribute("AI") then
+			v25 = p22:Get("GlobalMoveDirection")
+		else
+			v25 = p22:Get("LookCFrame"):VectorToWorldSpace(MoveDirection2)
+		end
+		local v26 = v25.Magnitude * p24.Speed
+		if v25 ~= Vector3.new(0, 0, 0) then
+			v25 = v25.Unit
+		end
+		local v27
+		if Velocity:Dot(v25) < 0 then
+			v27 = p24.AirAcceleration
+		else
+			v27 = p24.AirAcceleration * 2
+		end
+		local v28
+		if MoveDirection2.Z == 0 and MoveDirection2.X ~= 0 then
+			if p24.AirStrafeAcceleration < v26 then
+				v28 = p24.AirStrafeAcceleration
+			else
+				v28 = v26
+			end
+			v27 = p24.AirStrafeAcceleration
+		else
+			v28 = v26
+		end
+		local v29 = Helpers:AirControl(v25, v26, MoveDirection2, Helpers:Accelerate(Velocity, v25, v28, v27, p20, p21.Swimming), p20)
+		local Speed = p24.Speed
+		local v30 = antiNan
+		local v31 = p22:Get("Velocity").magnitude / (Speed * 2) * 2
+		local v32 = p24.SprintCap or 2
+		local v33 = v30((math.clamp(v31, 1, v32)))
+		local v34 = Helpers:WallImpact(p20, p21, p22, p23, p24, v29)
+		local t = {
+			BaseMover = { PlaneVelocity = Vector2.new(v34.X, v34.Z) }
+		}
+		if p21.Wallrunning then
+			local t2 = {}
+			local v35 = p23.HumanoidRootPart:GetMass() * workspace.Gravity * 0.5
+			t2.Force = Vector3.new(0, v35, 0)
+			t.WallrunForce = t2
+		end
+		return t, { Sprint = v33, Velocity = v34 }
+	end,
+
+	Slide = function(p36: number, p37, p38, p39: userdata, p40)
+		--[[ line: 190 | upvalues: (copy) Helpers, (copy) v_u_1]]
+		p38:Get("Velocity")
+		local v41 = Helpers:ApplyFriction(p36, p37, p38, p39, p40, 0.1)
+		local MoveDirection3 = p38:Get("MoveDirection")
+		if MoveDirection3.Z < 0 then
+			MoveDirection3 = MoveDirection3 * Vector3.new(1, 1, 0)
+		end
+		local v42
+		if v_u_1 then
+			v42 = p38:Get("GlobalMoveDirection")
+		else
+			v42 = p38:Get("LookCFrame"):VectorToWorldSpace(MoveDirection3)
+		end
+		local X5 = v42.X
+		local Z5 = v42.Z
+		local v43 = Vector3.new(X5, 0, Z5)
+		local v44 = v43.Magnitude * p38:Get("Velocity").magnitude
+		if v43 ~= Vector3.new(0, 0, 0) then
+			v43 = v43.Unit
+		end
+		local v45
+		if p38:Get("Velocity"):Dot(v43) < 0 then
+			v45 = p40.AirAcceleration
+		else
+			v45 = p40.AirAcceleration * 2
+		end
+		local X6 = MoveDirection3.X
+		local v46 = Vector3.new(X6, 0, 0)
+		local v47
+		if v46.Z == 0 and v46.X ~= 0 then
+			if p40.AirStrafeAcceleration < v44 then
+				v47 = p40.AirStrafeAcceleration
+			else
+				v47 = v44
+			end
+			v45 = p40.AirStrafeAcceleration
+		else
+			v47 = v44
+		end
+		local v48 = Helpers:Accelerate(v41, v43, v47, v45, p36)
+		local v49 = Helpers:AirControl(v43, v44, p38:Get("MoveDirection"), v48, p36)
+		local _, _2, v50 = workspace:FindPartOnRayWithWhitelist(Ray.new(p39.PrimaryPart.Position, Vector3.new(0, -4, 0)), { workspace.Map.Parts })
+		local v51 = p39.PrimaryPart.CFrame:VectorToObjectSpace(v50)
+		local unit = v49.unit
+		local v52 = v49.magnitude - v51.Z * p36 * 8000
+		local v53 = unit * math.clamp(v52, 0, 5000)
+		local v54 = antiNan
+		local v55 = v53.magnitude / (p40.Speed * 2) * 2
+		local v56 = p40.SprintCap or 2
+		local v57 = v54((math.clamp(v55, 1, v56)))
+		local v58 = Helpers:WallImpact(p36, p37, p38, p39, p40, v53)
+		return {
+			BaseMover = { PlaneVelocity = Vector2.new(v58.X, v58.Z) }
+		}, { Sprint = v57, Velocity = v58 }
+	end,
+
+	GrappleMove = function(_3, _4, p59, _5, _6)
+		--[[ line: 244 | upvalues: none]]
+		return {}, { Sprint = 1, Velocity = (p59:Get("ActualVelocity") or Vector3.new()) * 90 * Vector3.new(1, 0, 1) }
+	end,
+
+	Climb = function(p60: number, p61, p62, p63: userdata, p64)
+		--[[ line: 251 | upvalues: (copy) v_u_1]]
+		local Climbing = p62:Get("Climbing")
+		if (Climbing or 0) ~= 0 then
+			local PrimaryPart = Climbing.PrimaryPart
+			local v65 = CFrame.new(PrimaryPart.Center.WorldPosition, PrimaryPart.Position) - PrimaryPart.Center.WorldPosition
+			p63.HumanoidRootPart.CFrame = CFrame.new(p63.HumanoidRootPart.CFrame.p) * (p63.HumanoidRootPart.CFrame - p63.HumanoidRootPart.CFrame.p):lerp(v65, 0.5)
+			local ClimbWaitPosition = p62:Get("ClimbWaitPosition")
+			if (ClimbWaitPosition or false) ~= false then
+				if (ClimbWaitPosition - p63.PrimaryPart.Position).magnitude >= 0.1 then
+					return
+				end
+				p62:Set("ClimbWaitPosition", false)
+				p62:Set("ClimbPosition", ClimbWaitPosition)
+			end
+			local ClimbPosition = p62:Get("ClimbPosition")
+			if not p62:Get("EndingClimb") then
+				local MoveDirection4 = p62:Get("MoveDirection")
+				if v_u_1 then
+					MoveDirection4 = p62:Get("GlobalMoveDirection")
+				end
+				if p63.HumanoidRootPart.Anchored == true then
+					MoveDirection4 = Vector3.new()
+				end
+				if MoveDirection4 ~= Vector3.new() then
+					MoveDirection4 = MoveDirection4.unit
+				end
+				if not v_u_1 and p62:Get("LookCFrame").lookVector:Dot(v65.lookVector) < 0 then
+					MoveDirection4 = -MoveDirection4
+				end
+				local v66 = PrimaryPart.Position.Y - PrimaryPart.Size.Y / 2 + p63.HumanoidRootPart.Size.Y / 2
+				local v67 = PrimaryPart.Position.Y + PrimaryPart.Size.Y / 2 - p63.HumanoidRootPart.Size.Y / 2
+				local v68
+				if MoveDirection4.Z == 0 then
+					v68 = ClimbPosition
+				else
+					local X7 = ClimbPosition.X
+					local Y = ClimbPosition.Y
+					local v69 = p60 * 18
+					local Z6 = MoveDirection4.Z
+					local v70 = Y - v69 * math.sign(Z6)
+					local v71 = math.clamp(v70, v66, v67)
+					local Z7 = ClimbPosition.Z
+					v68 = Vector3.new(X7, v71, Z7)
+				end
+				p62:Set("ClimbPosition", v68)
+				local v72 = ClimbPosition.Y - v67
+				if math.abs(v72) <= 0.03 then
+					return ManualEndClimb("Top", p61, p62, p63, p64)
+				end
+				local v73 = ClimbPosition.Y - v66
+				if math.abs(v73) <= 0.03 then
+					return ManualEndClimb("Bottom", p61, p62, p63, p64)
+				end
+				return {
+					ClimbAlign = { Position = v68 }
+				}, { Sprint = 1, Velocity = Vector3.new() }
+			end
+		end
+	end
+}
+
+function ManualEndClimb(p74, _7, p_u_75, p_u_76, _8)
+	--[[ line: 316 | upvalues: none]]
+	if not p_u_75:Get("EndingClimb") then
+		p_u_75:Set("EndingClimb", true)
+		local v_u_77 = nil
+		local v78 = -1
+		local PrimaryPart2 = p_u_75:Get("Climbing").PrimaryPart
+		local LookCFrame = p_u_75:Get("LookCFrame")
+		if p74 then
+			for _9, v79 in pairs((PrimaryPart2:GetChildren())) do
+				if v79.Name == p74 .. "Waypoint" then
+					local X8 = PrimaryPart2.Position.X
+					local Y2 = v79.WorldPosition.Y
+					local Z8 = PrimaryPart2.Position.Z
+					local v80 = Vector3.new(X8, Y2, Z8)
+					if v_u_77 == nil or v78 < CFrame.new(v80, v79.WorldPosition).lookVector:Dot(LookCFrame.lookVector) then
+						v78 = CFrame.new(v80, v79.WorldPosition).lookVector:Dot(LookCFrame.lookVector)
+						local WorldPosition = v79.WorldPosition
+						local v81 = p_u_76.PrimaryPart.Size.Y / 2 + 0.25
+						v_u_77 = WorldPosition + Vector3.new(0, v81, 0)
+					end
+				end
+			end
+		end
+		if v_u_77 then
+			task.spawn(function()
+				--[[ line: 338 | upvalues: (copy) p_u_76, (copy) p_u_75, (ref) v_u_77]]
+				repeat
+					task.wait()
+				until not p_u_76.PrimaryPart or (p_u_75:Get("Climbing") == 0 or (p_u_76.PrimaryPart.Position - v_u_77).magnitude <= 0.2)
+				if p_u_75:Get("Climbing") ~= 0 then
+					p_u_75:Set("Climbing", 0)
+				end
+				print("done")
+			end)
+			p_u_75:Set("ClimbPosition", v_u_77)
+			return {
+				ClimbAlign = { Position = v_u_77 }
+			}
+		end
+	end
+end
+
+function t3.ClimbStart(_10, p82, p83: userdata, _11)
+	--[[ line: 354 | upvalues: none]]
+	p82:Set("EndingClimb", false)
+	local Climbing2 = p82:Get("Climbing")
+	if (Climbing2 or 0) ~= 0 then
+		local PrimaryPart3 = Climbing2.PrimaryPart
+		local v84 = PrimaryPart3.Position.Y - PrimaryPart3.Size.Y / 2 + p83.HumanoidRootPart.Size.Y / 2
+		local v85 = PrimaryPart3.Position.Y + PrimaryPart3.Size.Y / 2 - p83.HumanoidRootPart.Size.Y / 2
+		local Y3 = p83.HumanoidRootPart.Position.Y
+		local v86 = v84 + 1.5
+		local v87 = v85 - 1.5
+		local v88 = math.clamp(Y3, v86, v87)
+		for _12, v89 in pairs((Climbing2:GetDescendants())) do
+			if v89:IsA("BasePart") and v89.CanCollide == true then
+				local v90 = Instance.new("NoCollisionConstraint", p83.PrimaryPart)
+				v90.Part0 = p83.PrimaryPart
+				v90.Part1 = v89
+				v90.Name = "LadderNoCollision"
+			end
+		end
+		local X9 = PrimaryPart3.Center.WorldPosition.X
+		local Z9 = PrimaryPart3.Center.WorldPosition.Z
+		local v91 = Vector3.new(X9, v88, Z9)
+		p82:Set("ClimbWaitPosition", v91)
+		p82:Set("ClimbPosition", v91)
+		local t4 = {}
+		local t5 = {}
+		local X10 = PrimaryPart3.Center.WorldPosition.X
+		local Z10 = PrimaryPart3.Center.WorldPosition.Z
+		t5.Position = Vector3.new(X10, v88, Z10)
+		t4.ClimbAlign = t5
+		return t4, { Sprint = 1, Velocity = Vector3.new() }
+	end
+end
+
+function t3.ClimbEnd(_13, p92, p93: userdata, _14)
+	--[[ line: 384 | upvalues: none]]
+	for _15, v94 in p93.PrimaryPart:GetChildren() do
+		if v94.Name == "LadderNoCollision" then
+			v94:Destroy()
+		end
+	end
+	p92:Set("Climbing", 0)
+end
+
+function t3.LungeMove(_16, _17, p95, p96: userdata, _18)
+	--[[ line: 394 | upvalues: none]]
+	local LungeTarget = p95:Get("LungeTarget")
+	local v97
+	if LungeTarget then
+		v97 = LungeTarget.Position + CFrame.new(LungeTarget.Position * Vector3.new(1, 0, 1), p96.PrimaryPart.Position * Vector3.new(1, 0, 1)).lookVector * (LungeTarget.Size.X / 2 + p96.PrimaryPart.Size.X / 2) * 1.25
+	else
+		v97 = p96.PrimaryPart.Position + p96.PrimaryPart.CFrame.lookVector * 0.1
+	end
+	return {
+		LungePosition = { Position = v97 }
+	}, { Sprint = 1, Velocity = Vector3.new() }
+end
+
+return t3
+
+
+==================================================
+SOURCE #4
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
+
+PURPOSE:
+Низкоуровневые movement helpers:
+    - ApplyFriction
+    - WallImpact
+    - AirControl
+    - Accelerate
+
+SOURCE CONTENT:
+
+game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local v_u_1 = game:GetService("RunService"):IsServer()
+local v_u_2 = game:GetService("RunService"):IsClient()
+local v_u_3
+if v_u_1 then
+	v_u_3 = game:GetService("ServerScriptService").Services.Asset.InteractableService:WaitForChild("Event")
+else
+	v_u_3 = ReplicatedStorage.Services.Asset.InteractionService:WaitForChild("Event")
+end
+local CurrentCamera = workspace.CurrentCamera
+local Effects = workspace.Effects
+
+function testInteraction(p4, p5, p6, _)
+	--[[ line: 18 | upvalues: (copy) v_u_1, (ref) v_u_3]]
+	if p5 and p5.Instance:IsDescendantOf(workspace.Map.Parts.Interactables) then
+		local Parent = p5.Instance.Parent
+		if Parent.Parent ~= workspace.Map.Parts.Interactables then
+			repeat
+				Parent = Parent.Parent
+			until Parent.Parent == workspace.Map.Parts.Interactables
+		end
+		if Parent:GetAttribute("Locked") then
+			return
+		end
+		if p6.BreakDoors then
+			if v_u_1 then
+				v_u_3:Fire(p4, "Break", (Parent:GetAttribute("Tag")))
+			else
+				v_u_3:Fire("Break", Parent:GetAttribute("Tag"), p4.HumanoidRootPart.Position, true)
+			end
+			return true
+		end
+		if v_u_1 then
+			v_u_3:Fire(p4, "Open", (Parent:GetAttribute("Tag")))
+		end
+	end
+end
+
+function t.ApplyFriction(_2, p7: number, p8, p9, _3, p10, p11)
+	--[[ line: 47 | upvalues: none]]
+	local Velocity = p9:Get("Velocity")
+	local magnitude = Velocity.magnitude
+	local RunDeaccel = p10.RunDeaccel
+	local Friction = p10.Friction
+	if p8.Swimming == true then
+		RunDeaccel = RunDeaccel * 0.6
+		Friction = Friction * 0.6
+	end
+	local v12
+	if magnitude < RunDeaccel then
+		v12 = RunDeaccel or magnitude
+	else
+		v12 = magnitude
+	end
+	local v13 = magnitude - v12 * Friction * p7 * p11
+	local v14 = v13 < 0 and 0 or v13
+	if magnitude > 0 then
+		v14 = v14 / magnitude
+	end
+	return Velocity * v14
+end
+
+function t.WallImpact(_4, _5, p_u_15, p_u_16, p_u_17: userdata, p18, p19)
+	--[[ line: 70 | upvalues: (copy) CurrentCamera, (copy) Effects, (copy) v_u_2, (copy) v_u_1]]
+	local v_u_20 = p19
+	if v_u_20.magnitude > 0.01 then
+		local PrimaryPart = p_u_17.PrimaryPart
+		local t2 = {}
+		local v_u_21 = RaycastParams.new()
+		v_u_21.FilterType = Enum.RaycastFilterType.Exclude
+		local t3 = {
+			p_u_17,
+			CurrentCamera,
+			Effects,
+			workspace.Map.Ignore,
+			workspace.Players,
+			workspace.Rigs
+		}
+		v_u_21.FilterDescendantsInstances = t3
+		v_u_21.IgnoreWater = true
+		v_u_21.CollisionGroup = PrimaryPart.CollisionGroup
+		local v22, v_u_23
+		if tick() - (p_u_16:Get("BrokeDoor") or 0) <= 0.15 then
+			v22 = false
+			v_u_23 = true
+		else
+			v22 = true
+			v_u_23 = false
+		end
+		if v22 and v_u_2 then
+			repeat
+				local v24 = workspace:Blockcast(PrimaryPart.CFrame * CFrame.new(0, PrimaryPart.Size.Y * 0.1 * 0.5, 0), PrimaryPart.Size * Vector3.new(1, 0.10000000149011612, 1), CFrame.new(Vector3.new(), v_u_20).lookVector * PrimaryPart.Size.X * 1.01 * 0.5, v_u_21)
+				if v24 and v24.Instance then
+					local Instance = v24.Instance
+					table.insert(t3, Instance)
+					v_u_21.FilterDescendantsInstances = t3
+					if testInteraction(p_u_17, v24, p_u_15, p_u_16) then
+						p_u_16:Set("BrokeDoor", tick())
+						v24 = nil
+						v_u_23 = true
+					end
+				end
+			until v24 == nil or (v24.Instance == nil or v24.Instance.CanCollide)
+			if v24 ~= nil then
+				local v25 = v24.Normal:Dot(Vector3.new(0, 1, 0))
+				if math.acos(v25) >= 1.0471975511965976 then
+					local Normal = v24.Normal
+					table.insert(t2, Normal)
+				end
+			end
+		end
+		local function smallcast(p26)
+			--[[ line: 112 | upvalues: (copy) PrimaryPart, (ref) v_u_20, (copy) v_u_21, (copy) t3, (copy) p_u_17, (copy) p_u_15, (copy) p_u_16, (ref) v_u_23, (ref) t2]]
+			while true do
+				local v27 = workspace:Raycast((PrimaryPart.CFrame * CFrame.new(0, PrimaryPart.Size / 3, 0)).Position, (CFrame.new(Vector3.new(), v_u_20) * CFrame.Angles(0, math.rad(p26), 0)).lookVector * PrimaryPart.Size.X * 1.01, v_u_21)
+				if v27 and v27.Instance then
+					local v28 = t3
+					local Instance2 = v27.Instance
+					table.insert(v28, Instance2)
+					v_u_21.FilterDescendantsInstances = t3
+				end
+				if v27 == nil or (v27.Instance == nil or v27.Instance.CanCollide) then
+					if testInteraction(p_u_17, v27, p_u_15, p_u_16) then
+						v27 = nil
+						v_u_23 = true
+						p_u_16:Set("BrokeDoor", tick())
+					end
+					if v27 ~= nil then
+						local v29 = v27.Normal:Dot(Vector3.new(0, 1, 0))
+						if math.acos(v29) >= 1.0471975511965976 then
+							local v30 = t2
+							local Normal2 = v27.Normal
+							table.insert(v30, Normal2)
+						end
+					end
+					return
+				end
+			end
+		end
+		if v_u_1 then
+			smallcast(0)
+		elseif not v_u_23 then
+			smallcast(-45)
+			smallcast(45)
+		end
+		for _6, v31 in pairs(t2) do
+			local Z = v31.Z
+			local X = v31.X
+			local v32 = math.atan2(Z, X)
+			local v33 = CFrame.fromAxisAngle(Vector3.new(0, 1, 0), v32):VectorToWorldSpace(v_u_20) * Vector3.new(0, 0, 1)
+			local v34 = -v32
+			v_u_20 = CFrame.fromAxisAngle(Vector3.new(0, 1, 0), v34):VectorToWorldSpace(v33)
+		end
+		t2 = {}
+		if #t2 > 0 then
+			local Speed = p_u_16:Get("Speed")
+			local v35 = v_u_20.magnitude / (Speed * 2) * 2
+			local v36 = p18.SprintCap or 2
+			return v_u_20, math.clamp(v35, 1, v36)
+		end
+	end
+	return v_u_20
+end
+
+function t.AirControl(_7, p37: vector, p38: number, p39: vector, p40: vector, p41: number)
+	--[[ line: 164 | upvalues: none]]
+	local Z2 = p39.Z
+	if math.abs(Z2) < 0.001 or math.abs(p38) < 0.001 then
+		return p40
+	end
+	local magnitude2 = p40.magnitude
+	local unit: vector = p40.unit
+	local v42 = unit:Dot(p37)
+	local _8 = 32 * (1 * v42 * v42 * p41)
+	return unit * Vector3.new(magnitude2, 0, magnitude2)
+end
+
+function t.Accelerate(_9, p43, p44, p45, p46, p47, p48)
+	--[[ line: 177 | upvalues: none]]
+	if p48 == true then
+		p46 = p46 * 0.4
+		p45 = p45 * 1.3
+	end
+	local v49 = p45 - p43:Dot(p44)
+	if v49 <= 0 then
+		return p43
+	end
+	local v50 = p46 * p47 * p45
+	if v49 >= v50 then
+		v49 = v50
+	end
+	return p43 + v49 * p44
+end
+
+return t
+
+
+==================================================
+MISSING SOURCE
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.StateInfo
+
+STATUS:
+NOT FOUND DIRECTLY.
+
+IMPORTANT:
+The Movement module shown above actually requires:
+    script.Parent.Parent:WaitForChild("Shared").StateInfo
+
+and MoveFunction requires:
+    script.Parent.Parent.Parent:WaitForChild("Shared").StateInfo
+
+So the actual source path used by these modules appears to be a Shared.StateInfo
+module rather than Movement.StateInfo.
+
+NEXT SEARCH TARGET:
+ReplicatedStorage.Objects.Game.Character.Client.Shared.StateInfo
+or the exact Shared folder resolved by:
+    Movement -> script.Parent.Parent -> Shared
+and:
+    MoveFunction -> script.Parent.Parent.Parent -> Shared
+
+END OF FILE
