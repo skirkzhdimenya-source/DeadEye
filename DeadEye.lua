@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.142
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.143
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.142"
+local SCRIPT_VERSION = "1.143"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -167,7 +167,7 @@ local savedConfig = {
         airTurn = false,
         airTurnSpeed = 180,
         smartAirTurn = false,
-        smartAirTurnHotkey = "O",
+        airTurnHotkey = "O",
         crouchSpamDelay = 0.03,
         crouchSpamHotkey = "I"
     },
@@ -10202,7 +10202,7 @@ local mainJump = {
     crouchSpamDelay = 0.03,
     crouchSpamHotkeyName = "I",
     smartAirTurnEnabled = false,
-    smartAirTurnHotkeyName = "O",
+    airTurnHotkeyName = "O",
     crouchSpamThread = nil,
     crouchSpamMovement = nil,
     crouchSpamDelayBox = nil,
@@ -10286,6 +10286,15 @@ mainJump.smartAirTurnEnabled =
     savedConfig.main
     and savedConfig.main.smartAirTurn == true
     or false
+mainJump.airTurnHotkeyName =
+    tostring(
+        savedConfig.main
+        and (
+            savedConfig.main.airTurnHotkey
+            or savedConfig.main.smartAirTurnHotkey
+        )
+        or "O"
+    )
 mainJump.lookEnabled =
     savedConfig.main
     and savedConfig.main.look == true
@@ -10336,7 +10345,7 @@ function mainJump.saveConfig()
         airTurn = mainJump.airTurnEnabled,
         airTurnSpeed = mainJump.airTurnSpeed,
         smartAirTurn = mainJump.smartAirTurnEnabled,
-        smartAirTurnHotkey = mainJump.smartAirTurnHotkeyName,
+        airTurnHotkey = mainJump.airTurnHotkeyName,
         crouchSpamDelay = mainJump.crouchSpamDelay,
         crouchSpamHotkey = mainJump.crouchSpamHotkeyName
     }
@@ -12005,19 +12014,19 @@ local function mainFindKeyCode(value)
     end
     return nil
 end
-local smartAirTurnKey =
+local airTurnHotkeyKey =
     mainFindKeyCode(
-        mainJump.smartAirTurnHotkeyName
+        mainJump.airTurnHotkeyName
     )
-if smartAirTurnKey then
-    mainJump.smartAirTurnHotkeyName =
-        smartAirTurnKey.Name
+if airTurnHotkeyKey then
+    mainJump.airTurnHotkeyName =
+        airTurnHotkeyKey.Name
 else
-    mainJump.smartAirTurnHotkeyName =
+    mainJump.airTurnHotkeyName =
         "O"
 end
 
-function mainJump.setSmartAirTurnHotkey(value)
+function mainJump.setAirTurnHotkey(value)
     local key =
         mainFindKeyCode(
             value
@@ -12027,16 +12036,15 @@ function mainJump.setSmartAirTurnHotkey(value)
         return
     end
 
-    mainJump.smartAirTurnHotkeyName =
+    mainJump.airTurnHotkeyName =
         key.Name
 
-    if mainJump.smartAirTurnHotkeyBox then
-        mainJump.smartAirTurnHotkeyBox.Text =
+    if mainJump.airTurnHotkeyBox then
+        mainJump.airTurnHotkeyBox.Text =
             key.Name
     end
 
     mainJump.capturing = nil
-
     mainJump.saveConfig()
 end
 
@@ -12135,8 +12143,8 @@ function mainJump.startCapture(kind)
     elseif kind == "hide" then
         mainJump.hideUIHotkeyBox.Text =
             "PRESS KEY..."
-    elseif kind == "smartAirTurn" then
-        mainJump.smartAirTurnHotkeyBox.Text =
+    elseif kind == "airTurn" then
+        mainJump.airTurnHotkeyBox.Text =
             "PRESS KEY..."
     elseif kind == "crouchSpam" then
         mainJump.crouchSpamHotkeyBox.Text =
@@ -14054,58 +14062,58 @@ airTurnLabel.Text =
 airTurnLabel.Parent =
     __UI.airTurnRow
 
-mainJump.smartAirTurnHotkeyBox =
+mainJump.airTurnHotkeyBox =
     Instance.new("TextButton")
-mainJump.smartAirTurnHotkeyBox.Size =
+mainJump.airTurnHotkeyBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.smartAirTurnHotkeyBox.Position =
+mainJump.airTurnHotkeyBox.Position =
     UDim2.new(
         1,
         -155,
         0.5,
         -14
     )
-mainJump.smartAirTurnHotkeyBox.BackgroundColor3 =
+mainJump.airTurnHotkeyBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.smartAirTurnHotkeyBox.BorderSizePixel = 0
-mainJump.smartAirTurnHotkeyBox.Text =
-    mainJump.smartAirTurnHotkeyName
-mainJump.smartAirTurnHotkeyBox.TextSize = 10
-mainJump.smartAirTurnHotkeyBox.Font =
+mainJump.airTurnHotkeyBox.BorderSizePixel = 0
+mainJump.airTurnHotkeyBox.Text =
+    mainJump.airTurnHotkeyName
+mainJump.airTurnHotkeyBox.TextSize = 10
+mainJump.airTurnHotkeyBox.Font =
     Enum.Font.GothamBold
-mainJump.smartAirTurnHotkeyBox.TextColor3 =
+mainJump.airTurnHotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.smartAirTurnHotkeyBox.Parent =
+mainJump.airTurnHotkeyBox.Parent =
     __UI.airTurnRow
 
-local smartAirTurnHotkeyCorner =
+local airTurnHotkeyCorner =
     Instance.new("UICorner")
-smartAirTurnHotkeyCorner.CornerRadius =
+airTurnHotkeyCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-smartAirTurnHotkeyCorner.Parent =
-    mainJump.smartAirTurnHotkeyBox
+airTurnHotkeyCorner.Parent =
+    mainJump.airTurnHotkeyBox
 
 mainConnect(
-    mainJump.smartAirTurnHotkeyBox.MouseButton1Click:Connect(
+    mainJump.airTurnHotkeyBox.MouseButton1Click:Connect(
         function()
             mainJump.startCapture(
-                "smartAirTurn"
+                "airTurn"
             )
         end
     )
@@ -14632,6 +14640,16 @@ mainJump.crouchSpamToggle.TextColor3 =
 mainJump.crouchSpamToggle.Parent =
     __UI.crouchSpamRow
 
+__UI.crouchSpamToggleCorner =
+    Instance.new("UICorner")
+__UI.crouchSpamToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+__UI.crouchSpamToggleCorner.Parent =
+    mainJump.crouchSpamToggle
+
 mainConnect(
     mainJump.crouchSpamToggle.MouseButton1Click:Connect(
         function()
@@ -14732,9 +14750,9 @@ mainConnect(
                         keyCode.Name
                     )
                 elseif mainJump.capturing
-                    == "smartAirTurn"
+                    == "airTurn"
                 then
-                    mainJump.setSmartAirTurnHotkey(
+                    mainJump.setAirTurnHotkey(
                         keyCode.Name
                     )
                 elseif mainJump.capturing
@@ -14767,11 +14785,11 @@ mainConnect(
 
             if input.KeyCode
                 == mainFindKeyCode(
-                    mainJump.smartAirTurnHotkeyName
+                    mainJump.airTurnHotkeyName
                 )
             then
-                mainJump.setSmartAirTurnEnabled(
-                    not mainJump.smartAirTurnEnabled
+                mainJump.setAirTurnEnabled(
+                    not mainJump.airTurnEnabled
                 )
             end
 
