@@ -1,11 +1,11 @@
 --// =========================================================
 --// NO LANDING FRICTION TEST
---// CURRENT VERSION: 1.01
+--// CURRENT VERSION: 1.02
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения этого
 --// отдельного тестового скрипта повышать версию на 0.01.
---// Пример: v1.01 -> v1.02.
+--// Пример: v1.01 -> v1.02 -> v1.03.
 --//
 --// Этот файл НЕ меняет DeadEye.lua.
 --// Цель: проверить только удаление первого Run ApplyFriction
@@ -41,6 +41,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
 --// =========================================================
+--// =========================================================
 --// STATE
 --// =========================================================
 local cleaned = false
@@ -58,25 +59,17 @@ local FunctionsModule =
 local HelpersModule =
     FunctionsModule.Helpers
 
-local Functions =
-    require(FunctionsModule)
-
 local Helpers =
     require(HelpersModule)
 
-local OriginalAir = nil
-local OriginalRun = nil
 local OriginalApplyFriction = nil
+local hookInstalled = false
 
-local hooksInstalled = false
-
---// True when the latest movement-function update was Air.
-local LastMovementWasAir = false
-
---// Only true for the first Run update after Air.
-local SkipNextRunFriction = false
+--// True after ApplyFriction was observed being called by Air.
+local sawAirFriction = false
 
 local stopConnection = nil
+
 
 --// =========================================================
 --// CLEANUP
@@ -88,9 +81,7 @@ local function cleanup()
 
     cleaned = true
     genv.NO_LANDING_FRICTION_TEST_RUNNING = false
-
-    LastMovementWasAir = false
-    SkipNextRunFriction = false
+    sawAirFriction = false
 
     if stopConnection then
         pcall(function()
@@ -99,52 +90,22 @@ local function cleanup()
         stopConnection = nil
     end
 
-    if type(hookfunction) == "function" then
-        if hooksInstalled
-            and Functions
-            and Functions.Air
-            and OriginalAir
-        then
-            pcall(function()
-                hookfunction(
-                    Functions.Air,
-                    OriginalAir
-                )
-            end)
-        end
-
-        if hooksInstalled
-            and Functions
-            and Functions.Run
-            and OriginalRun
-        then
-            pcall(function()
-                hookfunction(
-                    Functions.Run,
-                    OriginalRun
-                )
-            end)
-        end
-
-        if hooksInstalled
-            and Helpers
-            and Helpers.ApplyFriction
-            and OriginalApplyFriction
-        then
-            pcall(function()
-                hookfunction(
-                    Helpers.ApplyFriction,
-                    OriginalApplyFriction
-                )
-            end)
-        end
+    if hookInstalled
+        and type(hookfunction) == "function"
+        and Helpers
+        and Helpers.ApplyFriction
+        and OriginalApplyFriction
+    then
+        pcall(function()
+            hookfunction(
+                Helpers.ApplyFriction,
+                OriginalApplyFriction
+            )
+        end)
     end
 
-    OriginalAir = nil
-    OriginalRun = nil
     OriginalApplyFriction = nil
-
-    hooksInstalled = false
+    hookInstalled = false
 
     genv.NO_LANDING_FRICTION_TEST_CLEANUP = nil
 
@@ -155,6 +116,7 @@ end
 
 genv.NO_LANDING_FRICTION_TEST_CLEANUP =
     cleanup
+
 
 --// =========================================================
 --// INSTALL
@@ -170,15 +132,6 @@ end
 local ok, err =
     pcall(function()
 
-        if type(Functions) ~= "table"
-            or type(Functions.Air) ~= "function"
-            or type(Functions.Run) ~= "function"
-        then
-            error(
-                "Functions.Air / Functions.Run not found"
-            )
-        end
-
         if type(Helpers) ~= "table"
             or type(Helpers.ApplyFriction) ~= "function"
         then
@@ -187,78 +140,18 @@ local ok, err =
             )
         end
 
-        --// -------------------------------------------------
-        --// AIR HOOK
-        --// -------------------------------------------------
-        OriginalAir =
-            hookfunction(
-                Functions.Air,
-                function(...)
-                    --// A new Air update starts / continues an
-                    --// airborne phase. Any old pending landing
-                    --// skip must be discarded.
-                    LastMovementWasAir = true
-                    SkipNextRunFriction = false
-
-                    return OriginalAir(...)
-                end
-            )
-
-        if type(OriginalAir) ~= "function" then
-            error(
-                "Failed to capture original Functions.Air"
-            )
-        end
-
-        --// -------------------------------------------------
-        --// RUN HOOK
-        --// -------------------------------------------------
-        OriginalRun =
-            hookfunction(
-                Functions.Run,
-                function(...)
-                    local wasAir =
-                        LastMovementWasAir
-
-                    --// This Run is no longer the Air update.
-                    LastMovementWasAir = false
-
-                    SkipNextRunFriction =
-                        NO_LANDING_FRICTION
-                        and wasAir
-                        or false
-
-                    return OriginalRun(...)
-                end
-            )
-
-        if type(OriginalRun) ~= "function" then
-            error(
-                "Failed to capture original Functions.Run"
-            )
-        end
-
-        --// -------------------------------------------------
-        --// APPLY FRICTION HOOK
-        --// -------------------------------------------------
-        --
         --// IMPORTANT:
-        --// The native function has 7 parameters:
+        --// We hook ONLY ApplyFriction.
+        --// Run and Air themselves are never hooked.
         --
-        --// function ApplyFriction(
-        --//     self,
-        --//     dt,
-        --//     movementData,
-        --//     dataRegistry,
-        --//     character,
-        --//     moveStats,
-        --//     frictionFactor
-        --// )
+        --// ApplyFriction is called from:
+        --//   Functions.Run -> line 41
+        --//   Functions.Air -> its Air friction call
         --
-        --// The previous failed test had only 6 parameters.
-        --// That shifted moveStats into p11 and caused:
-        --// "arithmetic ... number and nil"
-        --
+        --// debug.info caller line lets us distinguish these
+        --// without replacing Run/Air and without disturbing
+        --// their native execution.
+
         OriginalApplyFriction =
             hookfunction(
                 Helpers.ApplyFriction,
@@ -271,24 +164,53 @@ local ok, err =
                     moveStats,
                     frictionFactor
                 )
-                    if SkipNextRunFriction
-                        and frictionFactor == 1
-                    then
-                        --// Normal Run calls:
-                        --// Helpers:ApplyFriction(..., 1)
-                        --
-                        --// Returning the current Velocity is
-                        --// exactly the same result as the native
-                        --// helper with frictionFactor = 0,
-                        --// for this one call only.
-                        SkipNextRunFriction = false
+                    local callerLine = -1
 
+                    pcall(function()
+                        callerLine =
+                            debug.info(
+                                2,
+                                "l"
+                            )
+                    end)
+
+                    --// Functions.Run's ApplyFriction call is
+                    --// confirmed at source line 41 in the
+                    --// recovered Functions module.
+                    local fromRun =
+                        callerLine == 41
+
+                    if not fromRun then
+                        --// Air also uses factor 1, but its call
+                        --// must remain 100% native.
+                        sawAirFriction = true
+
+                        return OriginalApplyFriction(
+                            self,
+                            dt,
+                            movementData,
+                            dataRegistry,
+                            character,
+                            moveStats,
+                            frictionFactor
+                        )
+                    end
+
+                    local skip =
+                        NO_LANDING_FRICTION
+                        and sawAirFriction
+                        and frictionFactor == 1
+
+                    sawAirFriction = false
+
+                    if skip then
+                        --// Do not alter Run itself.
+                        --// Only this exact friction result is replaced.
                         return dataRegistry:Get(
                             "Velocity"
                         )
                     end
 
-                    --// Every other ApplyFriction call stays native.
                     return OriginalApplyFriction(
                         self,
                         dt,
@@ -307,7 +229,7 @@ local ok, err =
             )
         end
 
-        hooksInstalled = true
+        hookInstalled = true
     end)
 
 if not ok then
@@ -337,7 +259,7 @@ stopConnection =
     )
 
 print(
-    "[NoLandingFrictionTest] v1.01 ACTIVE"
+    "[NoLandingFrictionTest] v1.02 ACTIVE"
 )
 print(
     "[NoLandingFrictionTest] NO_LANDING_FRICTION =",
