@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.131
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.132
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.131"
+local SCRIPT_VERSION = "1.132"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12906,7 +12906,11 @@ function mainJump.getCrouchSpamSensorLayout(char)
     local maxX = -math.huge
     local minZ = math.huge
     local maxZ = -math.huge
-    local minY = math.huge
+
+    --// Measure the actual leg footprint in root-local space.
+    --// For vertical placement, use the REAL WORLD bottom of each
+    --// leg and convert only that Y back to root-local space.
+    local minWorldBottomY = math.huge
 
     for _, leg in ipairs(legParts) do
         local relative =
@@ -12947,13 +12951,33 @@ function mainJump.getCrouchSpamSensorLayout(char)
                 position.Z + halfZ
             )
 
-        minY =
+        local worldBottom =
+            leg.CFrame:PointToWorldSpace(
+                Vector3.new(
+                    0,
+                    -(leg.Size.Y * 0.5),
+                    0
+                )
+            )
+
+        minWorldBottomY =
             math.min(
-                minY,
-                position.Y
-                    - (leg.Size.Y * 0.5)
+                minWorldBottomY,
+                worldBottom.Y
             )
     end
+
+    local worldRootPosition =
+        root.Position
+
+    local legBottomLocalY =
+        root.CFrame:PointToObjectSpace(
+            Vector3.new(
+                worldRootPosition.X,
+                minWorldBottomY,
+                worldRootPosition.Z
+            )
+        ).Y
 
     local sizeX =
         math.clamp(
@@ -12973,7 +12997,7 @@ function mainJump.getCrouchSpamSensorLayout(char)
         sizeX,
         0.20,
         sizeZ
-    ), minY
+    ), legBottomLocalY
 end
 
 function mainJump.createCrouchSpamSensor(char)
@@ -13028,7 +13052,7 @@ function mainJump.createCrouchSpamSensor(char)
     local sensorCenterY =
         legBottomY
             + (sensorSize.Y * 0.5)
-            - 0.04
+            - 0.10
 
     sensor.CFrame =
         root.CFrame
