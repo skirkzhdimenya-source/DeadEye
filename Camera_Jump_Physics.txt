@@ -4134,3 +4134,291 @@ The first sentence to preserve as the active objective is:
 =============================================================
 END OF 2026-10-02 HANDOFF
 =============================================================
+
+
+=============================================================
+46. 2026-10-05 — COMPLETE Run SOURCE RECOVERED
+=============================================================
+
+The Functions ModuleScript was successfully decompiled.
+
+Script path:
+
+    game:GetService("ReplicatedStorage").Objects.Game.Character.Client.Movement.MoveFunction.Functions
+
+Executor:
+
+    OpiumwareMac v2.5.4
+
+The complete module source is now available.
+
+Most important recovered function:
+
+    Run = function(p6, p7, p8, p9, p10)
+
+with:
+
+    p6 = dt
+    p7 = Movement/state movement data
+    p8 = DataRegistry
+    p9 = Character
+    p10 = MoveStats
+
+-------------------------------------------------------------
+46.1 EXACT Run ORDER
+-------------------------------------------------------------
+
+For normal non-swimming grounded movement:
+
+    1. Read JumpingActive
+    2. Read MoveDirection
+    3. Read GlobalMoveDirection
+    4. Read Swimming
+    5. Flatten GlobalMoveDirection Y to 0 when not swimming
+    6. Skip Run body only when:
+           BhopEnabled and JumpingActive
+        OR:
+           JumpQueued == true
+
+    Otherwise:
+
+    7. Read LookCFrame
+    8. Read Velocity
+    9. Read Sprint
+
+   10. CALL:
+           Helpers:ApplyFriction(
+               p6, p7, p8, p9, p10, 1
+           )
+
+       Result:
+           v11
+
+   11. Build movement direction and sprint factor v12
+   12. Calculate Magnitude
+   13. Calculate v16 from WalkSpeedMultiplier / SprintCap / Emote
+   14. CALL:
+           Helpers:Accelerate(
+               v11,
+               GlobalMoveDirection,
+               Magnitude * (p10.Speed * v16),
+               12 * p10.RunAccel,
+               p6,
+               Swimming
+           )
+
+   15. CALL:
+           Helpers:WallImpact(
+               p6, p7, p8, p9, p10,
+               [result of Accelerate]
+           )
+
+       Result:
+           v18
+
+   16. For normal non-swimming movement:
+           return
+           {
+               BaseMover = {
+                   PlaneVelocity = Vector2.new(v18.X, v18.Z)
+               }
+           },
+           {
+               Sprint = v19,
+               Velocity = v18
+           }
+
+Therefore the exact normal Run velocity pipeline is:
+
+    Velocity
+        ->
+    ApplyFriction
+        ->
+    Accelerate
+        ->
+    WallImpact
+        ->
+    returned Velocity / PlaneVelocity
+
+-------------------------------------------------------------
+46.2 LANDING SPEED-LOSS SOURCE
+-------------------------------------------------------------
+
+This resolves the main investigation.
+
+The normal grounded Run function explicitly calls:
+
+    Helpers:ApplyFriction(..., 1)
+
+BEFORE:
+
+    Helpers:Accelerate(...)
+
+Therefore when Air transitions to grounded Move/Run, the grounded Run path first
+takes the current Velocity and passes it through ApplyFriction.
+
+The recovered Run source does NOT contain any separate explicit landing-only
+velocity reduction before ApplyFriction.
+
+Thus the previously observed immediate horizontal speed reduction on landing
+is explained directly by the Run-side ApplyFriction call, subject to the
+conditions that the normal Run branch is executing.
+
+This is now substantially stronger than the earlier v1.02 inference because
+the complete Run source establishes the exact call order.
+
+-------------------------------------------------------------
+46.3 IMPORTANT ACCELERATION DETAIL
+-------------------------------------------------------------
+
+Run does NOT simply take the friction result as the final velocity.
+
+After ApplyFriction:
+
+    v11 = ApplyFriction(...)
+
+Run then calls:
+
+    Accelerate(
+        v11,
+        GlobalMoveDirection,
+        Magnitude * (Speed * v16),
+        12 * RunAccel,
+        dt,
+        Swimming
+    )
+
+Therefore the final grounded velocity can be:
+
+    friction result
+        PLUS / PRESERVED BY
+    acceleration result
+
+depending on current velocity, desired movement direction, wish speed and
+acceleration conditions.
+
+Consequently:
+
+    ApplyFriction = direct first operation responsible for reducing velocity
+
+but:
+
+    final landing speed change = interaction of ApplyFriction + Accelerate +
+    WallImpact.
+
+This distinction must be preserved.
+
+-------------------------------------------------------------
+46.4 HIGH-SPEED IMPLICATION
+-------------------------------------------------------------
+
+From the recovered Run code:
+
+    wishSpeed =
+        Magnitude
+        *
+        (p10.Speed * v16)
+
+and:
+
+    acceleration =
+        12 * p10.RunAccel
+
+The Accelerate helper itself only adds velocity when:
+
+    wishSpeed - currentSpeed > 0
+
+Therefore if current horizontal velocity exceeds the current Run wish-speed
+in the relevant direction, Accelerate may add little or nothing.
+
+This explains why ApplyFriction can be the dominant source of landing speed
+loss during high-speed movement.
+
+Exact final contribution still depends on the actual vector dot product and
+the calculated v12/v16 values for that frame.
+
+-------------------------------------------------------------
+46.5 NO SEPARATE LANDING FRICTION BRANCH IN RUN
+-------------------------------------------------------------
+
+The recovered Run source contains:
+
+    if not (BhopEnabled and JumpingActive)
+        and JumpQueued ~= true
+    then
+        ...
+        Helpers:ApplyFriction(..., 1)
+        ...
+    end
+
+There is no explicit:
+
+    if State == Move and previous State == Air then ...
+
+landing-specific friction branch inside Run.
+
+Therefore the observed landing slowdown is not a special "landing friction"
+statement inside Run.
+
+It is the normal grounded Run friction being applied immediately after the
+movement state becomes grounded.
+
+-------------------------------------------------------------
+46.6 CURRENT ANSWER
+-------------------------------------------------------------
+
+Question:
+
+    What exact code removes horizontal speed when landing?
+
+Answer:
+
+    The grounded Run movement function calls:
+
+        Helpers:ApplyFriction(p6, p7, p8, p9, p10, 1)
+
+    before Accelerate() and WallImpact().
+
+    ApplyFriction is therefore the first confirmed direct velocity-reducing
+    operation in the grounded movement path.
+
+The complete source order is now proven.
+
+-------------------------------------------------------------
+46.7 NEXT SAFE MODIFICATION TARGET
+-------------------------------------------------------------
+
+Do NOT hook:
+
+    Movement.Update
+    MoveFunction.Move
+    Functions["Run"]
+
+Those hooks previously caused movement side effects under the executor.
+
+The source-level modification should instead target the actual implementation of:
+
+    Helpers:ApplyFriction
+
+or reproduce/override only the friction result at a safer integration point.
+
+Before changing anything, recover the current Helpers source and determine the
+exact meaning of the final parameter:
+
+    1
+
+and the exact friction formula/branches used by the helper.
+
+The goal is to change ONLY grounded friction/landing speed loss while preserving:
+
+    Accelerate
+    WallImpact
+    PlaneVelocity
+    air movement
+    camera
+    character rotation
+    jump logic
+
+=============================================================
+END OF 2026-10-05 COMPLETE Run SOURCE RECOVERED
+=============================================================
