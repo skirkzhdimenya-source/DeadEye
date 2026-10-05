@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.137
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.138
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.137"
+local SCRIPT_VERSION = "1.138"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -13082,28 +13082,16 @@ function mainJump.createCrouchSpamSensor(char)
                 )
         end)
 
-        --// A flat floor directly under the feet must not keep
-        --// crouch forced forever. React to geometry that enters
-        --// the sensor's lower-leg band instead.
-        local sensorTopY =
-            sensor.Position.Y
-                + (sensor.Size.Y * 0.5)
-
+        --// Any collidable BasePart overlapping the sensor counts as
+        --// contact. No extra Y/height test: visible overlap means
+        --// forced crouch until the overlap disappears.
         for _, part in ipairs(parts) do
             if part
                 and part:IsA("BasePart")
                 and part.CanCollide
                 and not part:IsDescendantOf(char)
             then
-                local partTopY =
-                    part.Position.Y
-                        + (part.Size.Y * 0.5)
-
-                if partTopY
-                    > sensorTopY + 0.02
-                then
-                    return true
-                end
+                return true
             end
         end
 
