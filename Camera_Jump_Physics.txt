@@ -4908,3 +4908,78 @@ DeadEye version containing this implementation:
 =============================================================
 END OF 2026-10-05 NO LAND FRICTION IMPLEMENTATION
 =============================================================
+
+
+=============================================================
+49. 2026-10-05 — STANDALONE TEST v1.02 AFTER HOOK FAILURE
+=============================================================
+
+The first standalone No_Landing_Friction_Test v1.01 caused movement to break:
+the character fell and horizontal speed would not rise above approximately
+50 real movement speed.
+
+The previous implementation hooked all three:
+
+    Functions.Air
+    Functions.Run
+    Helpers.ApplyFriction
+
+That approach is rejected.
+
+The new standalone v1.02 was changed to hook ONLY:
+
+    Helpers.ApplyFriction
+
+Functions.Run and Functions.Air are no longer replaced.
+
+The hook preserves the complete native ApplyFriction signature:
+
+    self
+    dt
+    movementData
+    dataRegistry
+    character
+    moveStats
+    frictionFactor
+
+A previous broken implementation had omitted one argument, shifting the
+parameters and producing:
+
+    Helpers:59: attempt to perform arithmetic on number and nil
+
+The new implementation forwards all 7 arguments exactly.
+
+To distinguish the normal Run call without hooking Run itself, v1.02 inspects
+the caller source line using:
+
+    debug.info(2, "l")
+
+The recovered Functions source confirms the normal Run ApplyFriction call is
+at source line 41.
+
+The intended sequence is:
+
+    Air ApplyFriction
+        -> mark sawAirFriction = true
+        -> native ApplyFriction unchanged
+
+    first Run ApplyFriction
+        -> detect caller line 41
+        -> if enabled and sawAirFriction:
+             return current DataRegistry Velocity
+        -> otherwise native ApplyFriction
+
+Therefore the new test does not replace either movement-state function.
+
+DeadEye.lua remains unchanged at:
+
+    v1.138
+
+Standalone test:
+
+    No_Landing_Friction_Test.lua
+    v1.02
+
+=============================================================
+END OF 2026-10-05 STANDALONE TEST v1.02
+=============================================================
