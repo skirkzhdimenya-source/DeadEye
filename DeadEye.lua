@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.133
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.134
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.133"
+local SCRIPT_VERSION = "1.134"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12880,13 +12880,17 @@ function mainJump.getCrouchSpamSensorLayout(char)
     end
 
     local minWorldY = math.huge
+    local minWorldX = math.huge
+    local maxWorldX = -math.huge
+    local minWorldZ = math.huge
+    local maxWorldZ = -math.huge
 
     for _, leg in ipairs(legs) do
         local halfSize =
             leg.Size * 0.5
 
-        --// Use all 8 corners so rotation of the leg cannot make
-        --// the calculated bottom jump upward/downward incorrectly.
+        --// Use all 8 world-space corners so the sensor follows the
+        --// actual lower leg footprint even while the rig animates.
         for _, sx in ipairs({ -1, 1 }) do
             for _, sy in ipairs({ -1, 1 }) do
                 for _, sz in ipairs({ -1, 1 }) do
@@ -12904,16 +12908,47 @@ function mainJump.getCrouchSpamSensorLayout(char)
                             minWorldY,
                             corner.Y
                         )
+
+                    minWorldX =
+                        math.min(
+                            minWorldX,
+                            corner.X
+                        )
+
+                    maxWorldX =
+                        math.max(
+                            maxWorldX,
+                            corner.X
+                        )
+
+                    minWorldZ =
+                        math.min(
+                            minWorldZ,
+                            corner.Z
+                        )
+
+                    maxWorldZ =
+                        math.max(
+                            maxWorldZ,
+                            corner.Z
+                        )
                 end
             end
         end
     end
 
+    local center =
+        Vector3.new(
+            (minWorldX + maxWorldX) * 0.5,
+            minWorldY,
+            (minWorldZ + maxWorldZ) * 0.5
+        )
+
     return Vector3.new(
         2,
         0.20,
         1
-    ), minWorldY
+    ), center
 end
 
 function mainJump.createCrouchSpamSensor(char)
@@ -12973,28 +13008,30 @@ function mainJump.createCrouchSpamSensor(char)
             return
         end
 
-        local _, minWorldY =
+        local _, center =
             mainJump.getCrouchSpamSensorLayout(
                 char
             )
 
-        if not minWorldY then
+        if not center then
             return
         end
 
+        local _, yaw, _ =
+            root.CFrame:ToOrientation()
+
         sensor.CFrame =
             CFrame.new(
-                root.Position.X,
-                minWorldY
+                center.X,
+                center.Y
                     + (sensor.Size.Y * 0.5)
                     - 0.10,
-                root.Position.Z
+                center.Z
             )
-            * CFrame.fromMatrix(
-                Vector3.zero,
-                root.CFrame.RightVector,
-                root.CFrame.UpVector,
-                root.CFrame.LookVector
+            * CFrame.Angles(
+                0,
+                yaw,
+                0
             )
     end
 
