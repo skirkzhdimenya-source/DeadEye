@@ -944,24 +944,30 @@ In tested normal air calls:
     wishSpeed    = 182
     deltaTime    ~= 0.008
 
-Runtime tracing also confirmed an effective factor of 10 in the tested air
-acceleration result:
+The exact recovered source shows:
 
     accelSpeed =
         acceleration
-        * 10
         * deltaTime
         * wishSpeed
 
-Therefore the tested effective air behavior is:
+There is NO explicit *10 factor in the recovered Accelerate source or in the
+Air() call.
+
+For the normal non-special A/D air case:
+
+    acceleration = 182
+    wishSpeed    = 182
+
+so:
 
     accelSpeed =
-        182 * 10 * dt * 182
+        182 * dt * 182
 
-when both acceleration and wishSpeed are 182.
-
-This factor was confirmed by matching the computed return vector against the
-observed return vector.
+An earlier runtime note had recorded an apparent factor 10, but the exact source
+now disproves the need for such a factor. The earlier observed return vector
+still matches because the tested addSpeed was already below the ordinary
+acceleration cap. Therefore the old "*10" claim is removed.
 
 
 ============================================================
@@ -988,14 +994,14 @@ Therefore:
         182 - 89.816742
         = 92.183258
 
-Effective acceleration cap:
+Exact source acceleration cap:
 
-    182 * 10 * 0.007786 * 182
-        = 2579.089909
+    182 * 0.007786 * 182
+        = 257.908991
 
 Since:
 
-    92.183258 < 2579.089909
+    92.183258 < 257.908991
 
 the actual velocity delta is:
 
@@ -1890,9 +1896,13 @@ AIR ACCELERATION:
         accelSpeed =
             acceleration * dt * wishSpeed
 
-    In the tested air path, runtime results matched an effective factor of 10:
+    Exact source formula:
 
-        acceleration * 10 * dt * wishSpeed
+        acceleration * dt * wishSpeed
+
+    For the normal A/D case:
+
+        182 * dt * 182
 
 
 ============================================================
@@ -1952,3 +1962,360 @@ When a hypothesis is disproven:
 ============================================================
 END OF CONFIRMED FINDINGS
 ============================================================
+
+
+============================================================
+51. 2026-10-05 — A/D + CAMERA ROTATION DURING AIR — SOURCE CONFIRMED
+============================================================
+
+The complete Air(), MoveDirection term, GlobalMoveDirection term, and
+Accelerate/AirControl helpers are now available.
+
+This resolves the exact interaction path for simultaneous A/D input and camera
+rotation during flight.
+
+-------------------------------------------------------------
+51.1 MOVE DIRECTION COMES FROM THE CONTROL MODULE
+-------------------------------------------------------------
+
+Movement.Terms["MoveDirection"] uses:
+
+    ControlModule:GetMoveVector()
+
+with the only additional modification shown in the recovered term being:
+
+    if tick() - (IgnoreXMove or 0) <= 0.3 then
+        MoveVector = MoveVector * Vector3.new(0, 1, 1)
+    end
+
+Therefore the local A/D/W/S input first becomes:
+
+    DataRegistry["MoveDirection"]
+
+The exact ControlModule internals are not needed for the next stage.
+
+-------------------------------------------------------------
+51.2 GLOBALMOVEdIRECTION IS CAMERA-RELATIVE
+-------------------------------------------------------------
+
+The exact term is:
+
+    GlobalMoveDirection =
+        DataRegistry:Get("LookCFrame"):VectorToWorldSpace(
+            DataRegistry:Get("MoveDirection")
+        )
+
+So the game already maintains a camera-relative world movement direction.
+
+For the CLIENT Air() path, however, the function does not use that cached
+GlobalMoveDirection for normal player movement.
+
+Instead it directly performs:
+
+    v25 =
+        DataRegistry:Get("LookCFrame"):VectorToWorldSpace(MoveDirection2)
+
+Therefore the Air calculation uses the current LookCFrame directly.
+
+-------------------------------------------------------------
+51.3 PURE A/D IS A SPECIAL AIR-ACCELERATION CASE
+-------------------------------------------------------------
+
+The exact branch is:
+
+    if MoveDirection2.Z == 0 and MoveDirection2.X ~= 0 then
+        v28 = math.min(AirStrafeAcceleration, v26)
+        v27 = AirStrafeAcceleration
+    else
+        v28 = v26
+    end
+
+where:
+
+    v26 = v25.Magnitude * Speed
+
+For a normal unit-magnitude pure A/D input and:
+
+    Speed = 1500
+    AirStrafeAcceleration = 182
+
+this becomes:
+
+    wishSpeed = 182
+    acceleration = 182
+
+So pure A/D uses the dedicated AirStrafeAcceleration path.
+
+-------------------------------------------------------------
+51.4 CAMERA YAW DIRECTLY ROTATES THE A/D WISHDIRECTION
+-------------------------------------------------------------
+
+For the client:
+
+    v25 =
+        LookCFrame:VectorToWorldSpace(MoveDirection2)
+
+For pure A/D, MoveDirection2 is lateral:
+
+    D -> positive local X
+    A -> negative local X
+
+VectorToWorldSpace therefore rotates that local lateral direction into the
+camera-relative world direction.
+
+With the normal camera having no roll, pure A/D produces a horizontal
+CameraRight / -CameraRight direction.
+
+Therefore:
+
+    rotate camera yaw
+        ->
+    rotate v25 / WishDirection
+        ->
+    change Velocity:Dot(WishDirection)
+        ->
+    change Accelerate addSpeed
+        ->
+    change the resulting Velocity
+
+This is the exact simultaneous A/D + camera interaction.
+
+-------------------------------------------------------------
+51.5 EXACT ACCELERATE EQUATION FOR PURE A/D
+-------------------------------------------------------------
+
+Accelerate receives:
+
+    Velocity
+    WishDirection = v25
+    WishSpeed = v28
+    Acceleration = v27
+    dt = p20
+    Swimming = p21.Swimming
+
+For the normal pure A/D case:
+
+    WishSpeed = 182
+    Acceleration = 182
+    Swimming = false
+
+The helper computes:
+
+    currentSpeed =
+        Velocity:Dot(WishDirection)
+
+    addSpeed =
+        182 - currentSpeed
+
+If:
+
+    addSpeed <= 0
+
+then:
+
+    Velocity is returned unchanged.
+
+Otherwise:
+
+    accelSpeed =
+        182 * dt * 182
+
+and:
+
+    addSpeed =
+        min(addSpeed, accelSpeed)
+
+Final Accelerate result:
+
+    Velocity2 =
+        Velocity
+        + WishDirection * addSpeed
+
+This is the exact source formula. No *10 factor is present.
+
+-------------------------------------------------------------
+51.6 WHAT CAMERA ROTATION DOES MATHEMATICALLY
+-------------------------------------------------------------
+
+Let:
+
+    V = current Velocity
+    W = current A/D WishDirection
+
+Then:
+
+    addSpeed = 182 - V·W
+
+Therefore the camera rotation changes acceleration only by changing W.
+
+For horizontal Velocity and horizontal A/D WishDirection, the relevant
+quantity is the horizontal directional relationship between them.
+
+At:
+
+    V·W > 182
+
+the A/D Accelerate step adds nothing.
+
+At:
+
+    V·W = 0
+
+the requested additional speed is 182.
+
+At:
+
+    V·W < 0
+
+the requested addSpeed is greater than 182, but it remains capped by:
+
+    182 * dt * 182
+
+So turning the camera changes the acceleration continuously through the
+Velocity/WishDirection dot product.
+
+-------------------------------------------------------------
+51.7 CRITICAL DISCOVERY — AIRCONTROL IS SKIPPED FOR PURE A/D
+-------------------------------------------------------------
+
+The exact AirControl call is:
+
+    Helpers:AirControl(
+        v25,
+        v26,
+        MoveDirection2,
+        AcceleratedVelocity,
+        p20
+    )
+
+AirControl begins with:
+
+    local Z2 = p39.Z
+
+    if math.abs(Z2) < 0.001 or math.abs(p38) < 0.001 then
+        return p40
+    end
+
+For pure A/D:
+
+    MoveDirection2.Z == 0
+
+Therefore:
+
+    AirControl()
+        ->
+    immediate return of AcceleratedVelocity
+
+This means for pure A/D while airborne:
+
+    A/D + camera rotation
+        affects Accelerate
+        but does NOT pass through AirControl.
+
+This is one of the most important confirmed findings from the new decompile.
+
+-------------------------------------------------------------
+51.8 CONSEQUENCE FOR CAMERA-STRAFE TESTS
+-------------------------------------------------------------
+
+A test with ONLY:
+
+    A or D held
+    camera yaw changing
+    player airborne
+
+has a much simpler native path than W+A/W+D:
+
+    MoveDirection
+        ->
+    LookCFrame:VectorToWorldSpace()
+        ->
+    WishDirection
+        ->
+    Accelerate
+        ->
+    AirControl is skipped
+        ->
+    WallImpact
+        ->
+    final Velocity
+
+Therefore, for pure A/D, any measured change caused by simultaneous camera
+rotation should first be explained by the WishDirection/Dot/Accelerate path,
+before investigating AirControl.
+
+-------------------------------------------------------------
+51.9 A/D BACKWARD-FILTERING DOES NOT TRIGGER
+-------------------------------------------------------------
+
+Air() contains:
+
+    if MoveDirection2.Z < 0 then
+        MoveDirection2 =
+            MoveDirection2 * Vector3.new(1, 1, 0)
+    end
+
+Pure A/D has:
+
+    MoveDirection2.Z == 0
+
+so this branch does nothing.
+
+Likewise:
+
+    if MoveDirection2.Z > 0 then
+        Velocity = ApplyFriction(...)
+    end
+
+is not entered for pure A/D.
+
+Therefore pure A/D air strafe does NOT receive the Air() friction operation
+shown at the start of the function.
+
+-------------------------------------------------------------
+51.10 WALLRUN EXCEPTION
+-------------------------------------------------------------
+
+Before constructing v25, Air() may modify MoveDirection2 when:
+
+    p21.Wallrunning
+    and WallrunDirection
+
+are active.
+
+For non-wallrunning normal flight, this branch is irrelevant.
+
+Therefore all conclusions in this section describe normal airborne A/D unless
+explicitly testing wallrunning.
+
+-------------------------------------------------------------
+51.11 AIRCONTROL — EXACT CONFIRMED BEHAVIOR, NO SPECULATION
+-------------------------------------------------------------
+
+For non-pure-A/D inputs where AirControl is entered, the recovered helper is:
+
+    if math.abs(p39.Z) < 0.001 or math.abs(p38) < 0.001 then
+        return p40
+    end
+
+    magnitude = p40.magnitude
+    unit = p40.unit
+    dot = unit:Dot(p37)
+    <computed> = 32 * dot * dot * p41
+
+    return unit * Vector3.new(magnitude, 0, magnitude)
+
+Confirmed facts:
+
+    - the 32 * dot^2 * dt expression is computed;
+    - its result is not subsequently used in the returned expression visible
+      in the recovered source;
+    - the function returns a vector based on p40.unit and p40.magnitude with
+      Y removed from the output direction.
+
+No stronger semantic interpretation is stored here because the recovered code
+does not justify one.
+
+=============================================================
+END OF 2026-10-05 A/D + CAMERA AIR FINDINGS
+=============================================================
