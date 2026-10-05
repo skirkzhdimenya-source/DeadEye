@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.138
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.139
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.138"
+local SCRIPT_VERSION = "1.139"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -11027,31 +11027,54 @@ end
 --// =========================================================
 --// RAGE LOOK
 --//
---// RAGE LOOK is completely separate from normal LOOK.
---// IMPORTANT: it NEVER writes Camera.CFrame.
+--// RAGE LOOK keeps the real camera untouched.
 --//
---// The real Air function reads:
---//     Parent.DataRegistry:Get("LookCFrame")
+--// Physical side:
+--//     DataRegistry:Get("LookCFrame")
+--//     -> fake CFrame with forced downward pitch
 --//
---// Runtime probing confirmed:
---//     Camera.LookVector == LookCFrame.LookVector
---//     Camera.Pitch      == LookCFrame.Pitch
+--// Visual head side:
+--//     DataRegistry:Get("LookY")
+--//     -> fake LookVector Y component
 --//
---// Therefore RAGE LOOK does NOT modify the camera.
---// Instead:
+--// The game's Joints controller also stores:
+--//     Joints.LookY
+--//     Joints.LastLookY
 --//
---//     Air()
---//       -> DataRegistry:Get("LookCFrame")
---//       -> fake CFrame with -89 degree pitch
+--// Both are held at the same fake value so camera movement
+--// cannot pull the head back toward the real camera pitch.
 --//
---// The fake value exists only while Air is executing.
+--// NEVER modifies:
+--//     Camera.CFrame
+--//     HumanoidRootPart.CFrame
+--//     RootPartOrienter
+--//     Head.Transform
+--//     Head.C0
 --// =========================================================
 
 local RAGE_LOOK_PITCH =
-    -math.rad(89)
+    -math.rad(70)
 
-mainJump.rageLookAirDepth =
-    0
+local RAGE_LOOK_Y =
+    math.sin(RAGE_LOOK_PITCH)
+
+mainJump.rageLookHookInstalled =
+    false
+
+mainJump.rageLookDataRegistryGet =
+    nil
+
+mainJump.rageLookOriginalDataRegistryGet =
+    nil
+
+mainJump.rageLookJoints =
+    nil
+
+mainJump.rageLookOriginalLookY =
+    nil
+
+mainJump.rageLookOriginalLastLookY =
+    nil
 
 function mainJump.getRageLookFakeCFrame(
     realCFrame
@@ -11060,9 +11083,6 @@ function mainJump.getRageLookFakeCFrame(
     if typeof(realCFrame) ~= "CFrame" then
         return nil
     end
-
-    --// Preserve the real horizontal look direction.
-    --// Do not derive yaw with ToOrientation() at steep pitch.
 
     local lookVector =
         realCFrame.LookVector
@@ -11102,124 +11122,23 @@ function mainJump.getRageLookFakeCFrame(
         )
 end
 
---==============================================================
--- FIND REAL AIR FUNCTION
---==============================================================
-
-function mainJump.findRageLookAirFunction()
-
-    if mainJump.rageLookAirFunction then
-        return mainJump.rageLookAirFunction
-    end
-
-    if type(getgc) == "function"
-        and debug
-        and type(debug.getinfo) == "function"
-    then
-
-        local objects
-
-        local ok =
-            pcall(function()
-                objects =
-                    getgc(true)
-            end)
-
-        if ok
-            and type(objects) == "table"
-        then
-
-            for _, object in ipairs(
-                objects
-            ) do
-
-                if type(object) == "function" then
-
-                    local info
-
-                    pcall(function()
-                        info =
-                            debug.getinfo(
-                                object
-                            )
-                    end)
-
-                    if info then
-
-                        local source =
-                            tostring(
-                                info.source or ""
-                            )
-
-                        local line =
-                            tonumber(
-                                info.linedefined
-                            )
-
-                        if string.find(
-                            source,
-                            "ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions",
-                            1,
-                            true
-                        )
-                        and line == 109
-                        then
-
-                            mainJump.rageLookAirFunction =
-                                object
-
-                            print(
-                                "[DeadEye] Rage Look Air =",
-                                tostring(object)
-                            )
-
-                            print(
-                                "[DeadEye] Rage Look Air source =",
-                                source
-                            )
-
-                            print(
-                                "[DeadEye] Rage Look Air line =",
-                                tostring(line)
-                            )
-
-                            return object
-
-                        end
-                    end
-                end
-            end
-        end
-    end
-
-    warn(
-        "[DeadEye] Rage Look: real Air line 109 not found"
-    )
-
-    return nil
-end
-
 function mainJump.findRageLookDataRegistryGet()
 
     local object =
         getCharacterObject()
 
-    if not object then
+    if not object
+        or not object.DataRegistry
+    then
         return nil
     end
 
-    if not object.DataRegistry then
-        return nil
-    end
-
-    local registry =
-        object.DataRegistry
-
-    local getFunction
+    local getFunction =
+        nil
 
     pcall(function()
         getFunction =
-            registry.Get
+            object.DataRegistry.Get
     end)
 
     if type(getFunction) ~= "function" then
@@ -11229,9 +11148,31 @@ function mainJump.findRageLookDataRegistryGet()
     return getFunction
 end
 
---==============================================================
--- INSTALL RAGE LOOK
---==============================================================
+function mainJump.findRageLookJoints()
+
+    local object =
+        getCharacterObject()
+
+    if not object
+        or not object.DataRegistry
+    then
+        return nil
+    end
+
+    local found =
+        nil
+
+    pcall(function()
+        found =
+            object.DataRegistry.Parent.Joints
+    end)
+
+    if type(found) ~= "table" then
+        return nil
+    end
+
+    return found
+end
 
 function mainJump.installRageLookHook()
 
@@ -11248,26 +11189,6 @@ function mainJump.installRageLookHook()
         return false
     end
 
-    --==========================================================
-    -- REAL AIR
-    --==========================================================
-
-    local air =
-        mainJump.findRageLookAirFunction()
-
-    if type(air) ~= "function" then
-
-        warn(
-            "[DeadEye] Rage Look: real Air function not found"
-        )
-
-        return false
-    end
-
-    --==========================================================
-    -- DATEREGISTRY.GET
-    --==========================================================
-
     local registryGet =
         mainJump.findRageLookDataRegistryGet()
 
@@ -11280,17 +11201,22 @@ function mainJump.installRageLookHook()
         return false
     end
 
+    local joints =
+        mainJump.findRageLookJoints()
+
+    if type(joints) ~= "table" then
+
+        warn(
+            "[DeadEye] Rage Look: Joints table not found"
+        )
+
+        return false
+    end
+
     local originalGet =
         nil
 
-    local originalAir =
-        nil
-
-    --==========================================================
-    -- HOOK DATEREGISTRY.GET
-    --==========================================================
-
-    local getHookOK =
+    local hookOK =
         pcall(function()
 
             originalGet =
@@ -11298,39 +11224,46 @@ function mainJump.installRageLookHook()
                     registryGet,
                     function(
                         self,
-                        key
+                        key,
+                        ...
                     )
 
                         local results =
                             table.pack(
                                 originalGet(
                                     self,
-                                    key
+                                    key,
+                                    ...
                                 )
                             )
 
-                        --// Only spoof LookCFrame when we are
-                        --// actually inside the real Air function.
                         if mainJump.rageLookEnabled
-                            and mainJump.rageLookAirDepth > 0
-                            and key == "LookCFrame"
                             and not cleaned
                         then
 
-                            local realCFrame =
-                                results[1]
+                            if key == "LookCFrame"
+                                and typeof(results[1]) == "CFrame"
+                            then
 
-                            local fakeCFrame =
-                                mainJump.getRageLookFakeCFrame(
-                                    realCFrame
-                                )
+                                local fakeCFrame =
+                                    mainJump.getRageLookFakeCFrame(
+                                        results[1]
+                                    )
 
-                            if fakeCFrame then
+                                if fakeCFrame then
+                                    results[1] =
+                                        fakeCFrame
+                                end
+
+                            elseif key == "LookY"
+                                and type(results[1]) == "number"
+                            then
 
                                 results[1] =
-                                    fakeCFrame
+                                    RAGE_LOOK_Y
 
                             end
+
                         end
 
                         return table.unpack(
@@ -11343,7 +11276,7 @@ function mainJump.installRageLookHook()
 
         end)
 
-    if not getHookOK
+    if not hookOK
         or type(originalGet) ~= "function"
     then
 
@@ -11354,144 +11287,99 @@ function mainJump.installRageLookHook()
         return false
     end
 
-    --==========================================================
-    -- HOOK REAL AIR
-    --==========================================================
-
-    local airHookOK =
-        pcall(function()
-
-            originalAir =
-                hookfunction(
-                    air,
-                    function(...)
-
-                        local args =
-                            table.pack(...)
-
-                        --// Normal Air path.
-                        if not mainJump.rageLookEnabled
-                            or cleaned
-                        then
-
-                            return originalAir(
-                                table.unpack(
-                                    args,
-                                    1,
-                                    args.n
-                                )
-                            )
-                        end
-
-                        --// Enter Air context.
-                        mainJump.rageLookAirDepth =
-                            mainJump.rageLookAirDepth
-                            + 1
-
-                        local results =
-                            table.pack(
-                                pcall(function()
-
-                                    return originalAir(
-                                        table.unpack(
-                                            args,
-                                            1,
-                                            args.n
-                                        )
-                                    )
-
-                                end)
-                            )
-
-                        --// Always leave Air context.
-                        mainJump.rageLookAirDepth =
-                            math.max(
-                                0,
-                                mainJump.rageLookAirDepth
-                                - 1
-                            )
-
-                        if not results[1] then
-
-                            error(
-                                results[2],
-                                0
-                            )
-
-                        end
-
-                        return table.unpack(
-                            results,
-                            2,
-                            results.n
-                        )
-
-                    end
-                )
-
-        end)
-
-    if not airHookOK
-        or type(originalAir) ~= "function"
-    then
-
-        --// Air hook failed.
-        --// Restore DataRegistry.Get immediately.
-
-        pcall(function()
-
-            hookfunction(
-                registryGet,
-                originalGet
-            )
-
-        end)
-
-        warn(
-            "[DeadEye] Rage Look: failed to hook Air"
-        )
-
-        return false
-    end
-
-    --==========================================================
-    -- SAVE HOOK STATE
-    --==========================================================
-
     mainJump.rageLookDataRegistryGet =
         registryGet
 
     mainJump.rageLookOriginalDataRegistryGet =
         originalGet
 
-    mainJump.rageLookAirFunction =
-        air
+    mainJump.rageLookJoints =
+        joints
 
-    mainJump.rageLookOriginalAir =
-        originalAir
+    pcall(function()
+        mainJump.rageLookOriginalLookY =
+            joints.LookY
+    end)
+
+    pcall(function()
+        mainJump.rageLookOriginalLastLookY =
+            joints.LastLookY
+    end)
 
     mainJump.rageLookHookInstalled =
         true
 
     mainJump.rageLookMode =
-        "DataRegistry LookCFrame"
+        "DataRegistry LookCFrame + LookY"
 
     return true
 end
 
---==============================================================
--- UNINSTALL RAGE LOOK
---==============================================================
+function mainJump.updateRageLookVisual()
+
+    local joints =
+        mainJump.rageLookJoints
+
+    if type(joints) ~= "table" then
+
+        joints =
+            mainJump.findRageLookJoints()
+
+        mainJump.rageLookJoints =
+            joints
+    end
+
+    if type(joints) ~= "table" then
+        return
+    end
+
+    pcall(function()
+
+        if type(joints.LookY) == "number" then
+            joints.LookY =
+                RAGE_LOOK_Y
+        end
+
+    end)
+
+    pcall(function()
+
+        if type(joints.LastLookY) == "number" then
+            joints.LastLookY =
+                RAGE_LOOK_Y
+        end
+
+    end)
+end
+
+function mainJump.bindRageLookVisual()
+
+    pcall(function()
+        RunService:UnbindToRenderStep(
+            "DeadEyeRageLookVisual"
+        )
+    end)
+
+    RunService:BindToRenderStep(
+        "DeadEyeRageLookVisual",
+        Enum.RenderPriority.Last.Value,
+        function()
+            if not mainJump.rageLookEnabled
+                or cleaned
+            then
+                return
+            end
+
+            mainJump.updateRageLookVisual()
+        end
+    )
+end
 
 function mainJump.uninstallRageLookHook()
 
     if not mainJump.rageLookHookInstalled then
         return
     end
-
-    --==========================================================
-    -- RESTORE DATEREGISTRY.GET
-    --==========================================================
 
     local registryGet =
         mainJump.rageLookDataRegistryGet
@@ -11514,37 +11402,30 @@ function mainJump.uninstallRageLookHook()
         end)
     end
 
-    --==========================================================
-    -- RESTORE AIR
-    --==========================================================
+    local joints =
+        mainJump.rageLookJoints
 
-    local air =
-        mainJump.rageLookAirFunction
+    if type(joints) == "table" then
 
-    local originalAir =
-        mainJump.rageLookOriginalAir
+        if type(mainJump.rageLookOriginalLookY) == "number" then
 
-    if air
-        and originalAir
-        and type(hookfunction) == "function"
-    then
+            pcall(function()
+                joints.LookY =
+                    mainJump.rageLookOriginalLookY
+            end)
 
-        pcall(function()
+        end
 
-            hookfunction(
-                air,
-                originalAir
-            )
+        if type(mainJump.rageLookOriginalLastLookY) == "number" then
 
-        end)
+            pcall(function()
+                joints.LastLookY =
+                    mainJump.rageLookOriginalLastLookY
+            end)
+
+        end
+
     end
-
-    --==========================================================
-    -- CLEAR STATE
-    --==========================================================
-
-    mainJump.rageLookAirDepth =
-        0
 
     mainJump.rageLookHookInstalled =
         false
@@ -11555,19 +11436,18 @@ function mainJump.uninstallRageLookHook()
     mainJump.rageLookOriginalDataRegistryGet =
         nil
 
-    mainJump.rageLookAirFunction =
+    mainJump.rageLookJoints =
         nil
 
-    mainJump.rageLookOriginalAir =
+    mainJump.rageLookOriginalLookY =
+        nil
+
+    mainJump.rageLookOriginalLastLookY =
         nil
 
     mainJump.rageLookMode =
         nil
 end
-
---==============================================================
--- RAGE LOOK TOGGLE
---==============================================================
 
 function mainJump.setRageLookEnabled(state)
 
@@ -11578,6 +11458,7 @@ function mainJump.setRageLookEnabled(state)
 
         if mainJump.rageLookEnabled then
 
+            mainJump.updateRageLookVisual()
             mainJump.update()
 
             return true
@@ -11608,10 +11489,19 @@ function mainJump.setRageLookEnabled(state)
         mainJump.rageLookEnabled =
             true
 
+        mainJump.updateRageLookVisual()
+        mainJump.bindRageLookVisual()
+
     else
 
         mainJump.rageLookEnabled =
             false
+
+        pcall(function()
+            RunService:UnbindToRenderStep(
+                "DeadEyeRageLookVisual"
+            )
+        end)
 
         mainJump.uninstallRageLookHook()
 
