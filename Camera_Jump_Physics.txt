@@ -1,3555 +1,40 @@
-# DeadEye — Camera + Jump + Strafe Physics Findings
-# Date: 2026-09-27
+# DeadEye — Camera + Jump + Movement Physics — Confirmed Findings Only
+# Updated: 2026-10-05
 #
-# Purpose:
-# Confirmed reverse-engineering notes for the game's client camera, jump-speed
-# calculation, and movement/air-strafe helpers.
+# This file intentionally contains only findings confirmed by:
+#   - source/decompile inspection;
+#   - runtime tracing;
+#   - controlled tests that produced the expected matching values.
+#
+# Unconfirmed hypotheses, speculative equations, and tests that were later
+# rejected are omitted. Failed approaches that are useful to avoid are kept
+# only in the final "Rejected / unsafe approaches" section.
 #
 # IMPORTANT:
-# GC indexes and 0x function/table addresses change between sessions.
-# Rediscover by source path/function name/structure, not hardcoded indexes.
+# GC indexes, upvalue indexes, line numbers and 0x addresses can change between
+# sessions. Rediscover by source path, function structure, constants and names.
+#
+# Main repository:
+#   https://github.com/skirkzhdimenya-source/DeadEye
+#
+# Related file:
+#   DeadEye.lua
+#
+# Current DeadEye Rage Look implementation at the time of this update:
+#   v1.140
+#
+# ================================================================
+
 
 ============================================================
 1. MOVEMENT BASE STATS
 ============================================================
 
 Path:
+
 ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveStats.BaseStats
 
-return {
-    SprintAcceleration = 1,
-    SprintCap = 2,
-    RunAccel = 1,
-    Friction = 5,
-    RunDeaccel = 700,
-    AirStrafeAcceleration = 182,
-    AirAcceleration = 1,
-    Speed = 1500,
-    JumpHeight = 3,
-    JumpCap = 1,
-    WalkSpeedMultiplier = 1,
-    JumpSpeedMultiplier = 1.45,
-    BhopEnabled = false,
-    GroundedDistCheck = 2.9
-}
-
-Important values:
-Speed = 1500
-SprintCap = 2
-RunAccel = 1
-Friction = 5
-RunDeaccel = 700
-AirStrafeAcceleration = 182
-AirAcceleration = 1
-AirControl = helper function
-JumpSpeedMultiplier = 1.45
-JumpHeight = 3
-BhopEnabled = false
-GroundedDistCheck = 2.9
-
-
-============================================================
-2. EXACT JUMP SPEED LOGIC
-============================================================
-
-The discovered Jump() function contains:
-
-local Speed = v3.Speed
-
-local v5 =
-    v3.JumpSpeedMultiplier *
-    v_u_1.Character.HumanoidRootPart.CFrame.lookVector:Dot(Velocity.unit) ^ 2
-
-local magnitude = Velocity.magnitude
-
-if magnitude < Sprint * Speed * v5 then
-
-    local v6 = magnitude * v3.JumpSpeedMultiplier
-    local v7 = Sprint * Speed * v5
-    local v8 = math.min(v6, v7)
-
-    v_u_1.DataRegistry:Set(
-        "Velocity",
-        (v_u_1.DataRegistry:Get("Velocity") * Vector3.new(1, 0, 1)).unit * v8
-    )
-end
-
-Thus the jump-time horizontal velocity rewrite is effectively:
-
-targetCap =
-    Sprint
-    * Speed
-    * JumpSpeedMultiplier
-    * (HumanoidRootPart.lookVector · Velocity.unit)^2
-
-newHorizontalSpeed =
-    min(
-        |Velocity| * JumpSpeedMultiplier,
-        targetCap
-    )
-
-The direction is taken from the existing Velocity after removing Y.
-
-
-============================================================
-3. LOOKING DOWN REDUCES JUMP SPEED
-============================================================
-
-The reduction is NOT caused by JumpHeight.
-
-It comes from:
-
-(HumanoidRootPart.lookVector · Velocity.unit)^2
-
-If velocity is approximately horizontal and aligned with facing direction:
-
-dot ~= cos(pitch)
-
-so:
-
-dot^2 ~= cos(pitch)^2
-
-Examples:
-0°  -> 1.000
-30° -> 0.750
-45° -> 0.500
-60° -> 0.250
-75° -> 0.067
-90° -> 0.000
-
-Actual values depend on the full 3D Velocity.unit vector and relative yaw.
-
-
-============================================================
-4. JUMP FLOW
-============================================================
-
-Jump() approximately:
-
-1. Reject if Downed.
-2. Reject while carrying a nonzero carried state.
-3. Ignore movement speed adjustment if MoveStats.Speed == 0.
-4. Read Velocity, Sprint and MoveStats.
-5. Calculate the lookVector/Velocity dot-squared factor.
-6. Calculate the jump-time horizontal velocity cap.
-7. Rewrite horizontal Velocity only when current magnitude is below that cap.
-8. Set Humanoid.JumpHeight.
-9. Change Humanoid state to Jumping.
-10. Wallrun jumps have additional velocity and vertical handling.
-
-
-============================================================
-5. ACTIVE CAMERA SYSTEM
-============================================================
-
-The tested active ordinary camera is:
-
-Players.DEN919191.PlayerScripts.PlayerModule.CameraModule.ClassicCamera
-
-ClassicCamera.Update has:
-
-upvalue[1] = live ClassicCamera controller table
-upvalue[4] = live CameraInput object
-
-Live ClassicCamera controller contains fields including:
-
-CameraCFrame
-CameraFocus
-SetCFrame
-GetCFrame
-SetSubject
-Update
-SetCameraOffset
-GetFocus
-ToggleShiftLock
-etc.
-
-
-============================================================
-6. CAMERA INPUT STATE
-============================================================
-
-CameraInput path:
-
-Players.DEN919191.PlayerScripts.PlayerModule.CameraModule.CameraInput
-
-getRotation() has:
-
-upvalue[1] = GameSettings
-
-upvalue[2] = keyboard-related table:
-    I
-    Left
-    Right
-    O
-    None
-
-upvalue[3] = gamepad table:
-    None = Vector2
-    Thumbstick2 = Vector2
-
-upvalue[4] = touch/mouse movement state:
-    Pinch = number
-    Pan = Vector2
-    Movement = Vector2
-    Wheel = number
-
-upvalue[6] =:
-    Move = Vector2
-    Pinch = number
-
-Other constants found in getRotation:
-4.18879032, 3.2253685
-0.00575958658, 0.00575958658
-0.080634214, 0.080634214
-0.0195825938, 0.0195825938
-
-getRotation constants include:
-Right
-Left
-Thumbstick2
-GamepadCameraSensitivity
-Movement
-Pan
-Move
-2.0943951023931953
-
-
-============================================================
-7. CONFIRMED MOUSE CAMERA PATH
-============================================================
-
-CameraInput.inputChanged is at line 379.
-
-It captures the exact getRotation upvalue[4] state table.
-
-Its constants include:
-
-UserInputType
-Enum
-Touch
-Enum.UserInputType.Touch
-MouseMovement
-Enum.UserInputType.MouseMovement
-Delta
-Vector2
-new
-X
-Y
-Movement
-
-Therefore:
-
-MouseMovement
-    ->
-CameraInput.inputChanged
-    ->
-Movement = Vector2(...)
-    ->
-CameraInput.getRotation()
-    ->
-ClassicCamera.Update()
-    ->
-CameraCFrame
-
-
-============================================================
-8. PROGRAMMATIC CAMERA ROTATION
-============================================================
-
-Confirmed working test:
-
-Find CameraInput.getRotation.
-
-Get:
-
-local movementTable = debug.getupvalues(getRotation)[4]
-
-Then assign:
-
-movementTable.Movement = Vector2.new(3, 0)
-
-while bound with RenderStep before Camera.
-
-The user confirmed this successfully rotated the active camera.
-
-This means camera rotation can be injected into the native camera input pipeline
-without directly assigning workspace.CurrentCamera.CFrame.
-
-
-============================================================
-9. CAMERA INPUT RESET
-============================================================
-
-CameraInput.resetInputForFrameEnd is at line 472.
-
-It captures the same state table and has constants:
-
-Vector2
-new
-Movement
-Move
-Pinch
-Wheel
-Pan
-
-This indicates Movement is frame-oriented input state and is reset/processed
-around camera frame updates.
-
-
-============================================================
-10. CHARACTER ROTATION VS CAMERA ROTATION
-============================================================
-
-These are separate systems.
-
-Camera:
-CameraInput -> getRotation -> ClassicCamera -> CameraCFrame
-
-Character:
-DataRegistry "LookCFrame" / movement RootPartOrientation logic
--> HumanoidRootPart CFrame yaw
-
-A discovered character-orientation function contains logic equivalent to:
-
-local LookCFrame = DataRegistry:Get("LookCFrame")
-local _, yaw, _ = LookCFrame:ToOrientation()
-
-local yawOnly =
-    CFrame.new(LookCFrame.Position)
-    * CFrame.Angles(0, yaw, 0)
-
-...
-
-if Movement.RootPartOrientation.Type == "Camera" then
-    local _, cameraYaw, _ =
-        DataRegistry:Get("LookCFrame"):ToOrientation()
-
-    p2:SetCFrame(
-        CFrame.new(p2.RootPart.CFrame.p)
-        * CFrame.Angles(0, cameraYaw, 0)
-    )
-end
-
-Other observed RootPartOrientation types:
-MoveDir
-EmotingMoveDir
-Camera
-Velocity
-
-This distinction matters because Jump() uses:
-
-HumanoidRootPart.CFrame.lookVector
-
-not directly workspace.CurrentCamera.CFrame.LookVector.
-
-
-============================================================
-11. AIR-STRAFE / AIR-ACCELERATION FUNCTIONS FOUND
-============================================================
-
-Two real movement functions in:
-
-ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-
-use AirStrafeAcceleration and AirAcceleration.
-
-One is line 190.
-Another is line 109.
-
-Line 190 constants include:
-
-Velocity
-Get
-0.1
-ApplyFriction
-MoveDirection
-Z
-GlobalMoveDirection
-LookCFrame
-VectorToWorldSpace
-X
-Vector3
-new
-Magnitude
-magnitude
-Unit
-Dot
-AirAcceleration
-2
-0
-AirStrafeAcceleration
-Accelerate
-AirControl
-workspace
-...
-Speed
-SprintCap
-WallImpact
-BaseMover
-PlaneVelocity
-Vector2
-Sprint
-
-Line 109 constants include similar movement logic plus:
-
-WallrunDirection
-Wallrunning
-AI
-Swimming
-Force
-HumanoidRootPart
-GetMass
-workspace.Gravity
-WallrunForce
-Sprint
-
-Both use the same movement helper table:
-
-upvalue[1] = table containing:
-    Accelerate
-    WallImpact
-    ApplyFriction
-    AirControl
-
-
-============================================================
-12. CONFIRMED ACCELERATE HELPER FORMULA
-============================================================
-
-Helper:
-
-ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
-line 177
-
-Function name:
-Accelerate
-
-Decompiled:
-
-if v3 == true then
-    v1 = v1 * 0.4
-    v2 = v2 * 1.3
-end
-
-local v4 = v2 - v5:Dot(v6)
-
-if v4 <= 0 then
-    return v5
-end
-
-local v7 = v1 * v8 * v2
-
-if v4 >= v7 then
-    v4 = v7
-end
-
-return v5 + v4 * v6
-
-This establishes the mathematical structure:
-
-currentSpeed = currentVelocity · wishDirection
-
-addSpeed = wishSpeed - currentSpeed
-
-if addSpeed <= 0:
-    return currentVelocity
-
-accelSpeed = acceleration * deltaTime * wishSpeed
-
-addSpeed = min(addSpeed, accelSpeed)
-
-newVelocity = currentVelocity + addSpeed * wishDirection
-
-There is an additional boolean mode:
-
-if special == true:
-    acceleration *= 0.4
-    wishSpeed *= 1.3
-
-The exact caller-side argument names were not yet recovered, but the helper's
-internal mathematics are confirmed.
-
-
-============================================================
-13. AIR CONTROL HELPER
-============================================================
-
-Helper:
-
-ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
-line 164
-
-Function name:
-AirControl
-
-Decompiled:
-
-local Z = v1.Z
-
-if math.abs(Z) < 0.001 or math.abs(v3) < 0.001 then
-    return v2
-end
-
-local magnitude = v2.magnitude
-local unit = v2.unit
-local v4 = unit:Dot(v5)
-
-local _ = 32 * (1 * v4 * v4 * v6)
-
-return unit * Vector3.new(magnitude, 0, magnitude)
-
-Confirmed behavior from the available decompile:
-
-- Reads Z from one vector/argument.
-- Rejects near-zero Z or near-zero v3.
-- Takes current velocity magnitude and unit direction.
-- Calculates a dot product with another vector.
-- Contains a 32 * dot² * ... expression.
-- Returns a vector based on the current velocity magnitude with Y removed.
-
-The exact argument mapping and the unused-looking intermediate calculation require
-further caller-side decompilation to state the full AirControl equation confidently.
-
-
-============================================================
-14. FRICTION HELPER
-============================================================
-
-Helper:
-
-ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
-line 47
-
-Function name:
-ApplyFriction
-
-Decompiled:
-
-local Velocity = v1:Get("Velocity")
-local magnitude = Velocity.magnitude
-local RunDeaccel = v2.RunDeaccel
-local Friction = v2.Friction
-
-if v3.Swimming == true then
-    RunDeaccel = RunDeaccel * 0.6
-    Friction = Friction * 0.6
-end
-
-local v4
-if magnitude < RunDeaccel then
-    v4 = RunDeaccel or magnitude
-else
-    v4 = magnitude
-end
-
-local v5 = magnitude - v4 * Friction * v6 * v7
-local v8 = v5 < 0 and 0 or v5
-
-if magnitude > 0 then
-    v8 = v8 / magnitude
-end
-
-return Velocity * v8
-
-This is a friction/deceleration multiplier applied to the current Velocity.
-
-Base values:
-RunDeaccel = 700
-Friction = 5
-
-Swimming reduces both by 0.6.
-
-
-============================================================
-15. WHAT IS CONFIRMED ABOUT AIR STRAFE
-============================================================
-
-Confirmed:
-
-- AirStrafeAcceleration = 182 is used by actual movement functions.
-- AirAcceleration = 1 is used by actual movement functions.
-- The movement functions process:
-    Velocity
-    MoveDirection
-    GlobalMoveDirection
-    LookCFrame
-    Speed
-    SprintCap
-    Dot
-    Accelerate
-    AirControl
-- The actual acceleration is delegated to the Accelerate helper.
-- Accelerate uses:
-    wishSpeed - velocity·wishDirection
-    then caps acceleration by:
-    acceleration * deltaTime * wishSpeed
-- A special Accelerate mode multiplies acceleration by 0.4 and wishSpeed by 1.3.
-- AirControl is separately called by the movement functions.
-- AirControl contains dot-product-squared logic.
-- Friction is handled separately by ApplyFriction.
-
-
-============================================================
-16. WHAT IS NOT YET FULLY RECOVERED
-============================================================
-
-Still unresolved:
-
-1. Exact argument mapping at the two callers of Accelerate:
-   which local is acceleration,
-   which is wishSpeed,
-   which is wishDirection,
-   which is current Velocity,
-   which is deltaTime,
-   and what boolean selects the 0.4/1.3 mode.
-
-2. Exact caller-side branch:
-   when AirAcceleration = 1 is selected versus
-   AirStrafeAcceleration = 182.
-
-3. Exact AirControl argument mapping and the meaning of its intermediate:
-   32 * (1 * dot^2 * ...).
-
-4. Exact ordering between:
-   ApplyFriction
-   Accelerate
-   AirControl
-   wall/ground checks
-   SprintCap / Speed clamping
-   PlaneVelocity handling.
-
-5. Exact timing between:
-   CameraInput movement
-   CameraCFrame
-   DataRegistry LookCFrame
-   HumanoidRootPart.CFrame
-   Jump().
-
-6. Exact frame delta passed to Accelerate.
-
-
-============================================================
-17. IMPORTANT PHYSICS SUMMARY
-============================================================
-
-Current confirmed model:
-
-GROUND / GENERAL MOVEMENT:
-- friction/deceleration acts through ApplyFriction
-- acceleration acts through Accelerate
-- Speed / Sprint / SprintCap participate in movement speed limits
-
-AIR MOVEMENT:
-- AirAcceleration = 1
-- AirStrafeAcceleration = 182
-- Accelerate applies capped acceleration based on:
-      addSpeed = wishSpeed - currentVelocity·wishDirection
-      accelSpeed = acceleration * dt * wishSpeed
-- AirControl adds a separate directional-air-control operation.
-
-JUMP:
-- JumpSpeedMultiplier = 1.45
-- Jump speed depends on:
-      (HumanoidRootPart.lookVector · Velocity.unit)^2
-- Sprint * Speed also forms the jump speed cap.
-- Looking down can therefore reduce the preserved horizontal speed.
-
-CAMERA:
-- Active path is ClassicCamera.
-- Programmatic rotation is possible through:
-      CameraInput.getRotation upvalue[4].Movement
-- This is preferable to directly forcing CurrentCamera.CFrame when trying to
-  participate in the game's native camera pipeline.
-
-
-============================================================
-18. DISCOVERY NOTES
-============================================================
-
-Stable rediscovery of active camera:
-
-1. getgc(true)
-2. Find source containing:
-   PlayerModule.CameraModule.ClassicCamera
-3. Match Update
-4. debug.getupvalues(Update)[1] -> live ClassicCamera
-5. debug.getupvalues(Update)[4] -> CameraInput
-6. Find CameraInput.getRotation
-7. debug.getupvalues(getRotation)[4] -> Movement/Pan/Pinch/Wheel table
-
-Stable rediscovery of movement helper:
-
-1. Find function source:
-   ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-2. The line-190 and line-109 functions both capture the movement helper table.
-3. Helper table contains:
-   Accelerate
-   ApplyFriction
-   AirControl
-   WallImpact
-4. Accelerate source is:
-   ...Movement.MoveFunction.Functions.Helpers
-5. Accelerate is line 177.
-6. AirControl is line 164.
-7. ApplyFriction is line 47.
-
-
-============================================================
-END
-============================================================
-
-
-============================================================
-19. UPDATE 2026-09-28 — NEW CONFIRMED FINDINGS
-============================================================
-
-The latest runtime investigation located the exact line-109 function without
-hooking or modifying it.
-
-Function:
-ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-linedefined = 109
-numparams = 5
-
-Attempting:
-    decompile(line109Function)
-
-returned:
-    failed to get function bytecode
-
-Therefore direct decompilation of the active line-109 function is not available
-in the current executor and should not be relied upon.
-
-------------------------------------------------------------
-19.1 LINE-109 UPVALUE
-------------------------------------------------------------
-
-line-109 has exactly one upvalue:
-
-upvalue[1] = table containing only:
-
-    Accelerate   -> Helpers line 177
-    WallImpact   -> Helpers line 70
-    ApplyFriction-> Helpers line 47
-    AirControl   -> Helpers line 164
-
-There are NO additional hidden functions in this upvalue.
-
-------------------------------------------------------------
-19.2 LINE-109 CONSTANTS
-------------------------------------------------------------
-
-Relevant constants recovered from line 109:
-
-    "Velocity"
-    "Get"
-    "MoveDirection"
-    "Z"
-    Vector3(1, 1, 0)
-    "ApplyFriction"
-    "WallrunDirection"
-    "Wallrunning"
-    -0.99
-    "X"
-    Vector3(0, 0, 1)
-    0.99
-    Vector3(1, 0, 0)
-    "AI"
-    "GetAttribute"
-    "GlobalMoveDirection"
-    "LookCFrame"
-    "VectorToWorldSpace"
-    "Magnitude"
-    "Speed"
-    Vector3(0, 0, 0)
-    "Unit"
-    "Dot"
-    "AirAcceleration"
-    2
-    0
-    "AirStrafeAcceleration"
-    "Swimming"
-    "Accelerate"
-    "AirControl"
-    "antiNan"
-    "magnitude"
-    "SprintCap"
-    "math"
-    "clamp"
-    "WallImpact"
-    "BaseMover"
-    "PlaneVelocity"
-    "Vector2"
-    "Force"
-    0.5
-    "HumanoidRootPart"
-    "GetMass"
-    "workspace"
-    "Gravity"
-    "WallrunForce"
-    "Sprint"
-
-This confirms that line 109 itself references:
-    GlobalMoveDirection
-    LookCFrame:VectorToWorldSpace(...)
-    Dot
-    AirAcceleration
-    AirStrafeAcceleration
-    Accelerate
-    AirControl
-and also contains wallrun/force-related branches.
-
-The constant tables found in the same function were only:
-
-    BaseMover    -> 0
-    PlaneVelocity-> 0
-    Force        -> 0
-    Sprint       -> 0
-    Velocity     -> 0
-
-They do not contain additional direction logic.
-
-------------------------------------------------------------
-19.3 ACCELERATE CALL ARGUMENT MAPPING — CONFIRMED
-------------------------------------------------------------
-
-Runtime raw argument tracing established the actual call layout:
-
-    Accelerate(
-        self,          -- arg 1
-        velocity,      -- arg 2
-        wishDirection, -- arg 3
-        acceleration,  -- arg 4
-        wishSpeed,     -- arg 5
-        deltaTime,     -- arg 6
-        special        -- arg 7
-    )
-
-This mapping is confirmed by the observed argument types and returned values.
-
-For normal air calls:
-    acceleration = 182
-    wishSpeed    = 182
-    deltaTime    ~= 0.008
-
-The observed return delta matches an additional factor of 10:
-
-    accelSpeed = acceleration * 10 * deltaTime * wishSpeed
-
-Thus the effective confirmed helper behavior in the tested air context is:
-
-    if special == true then
-        acceleration = acceleration * 0.4
-        wishSpeed = wishSpeed * 1.3
-    end
-
-    currentSpeed = velocity:Dot(wishDirection)
-    addSpeed = wishSpeed - currentSpeed
-
-    if addSpeed <= 0 then
-        return velocity
-    end
-
-    accelSpeed = acceleration * 10 * deltaTime * wishSpeed
-
-    if addSpeed >= accelSpeed then
-        addSpeed = accelSpeed
-    end
-
-    return velocity + addSpeed * wishDirection
-
-IMPORTANT:
-The factor 10 is confirmed from runtime return-value matching for the tested
-air calls. It was not directly visible as a literal in the earlier helper
-decompile, so retain this distinction.
-
-The special=true behavior (0.4 acceleration / 1.3 wishSpeed) is confirmed from
-the helper decompile, but the line-109 condition that sets arg 7 to true is
-still not recovered.
-
-------------------------------------------------------------
-19.4 AIRCONTROL ARGUMENT MAPPING — CONFIRMED
-------------------------------------------------------------
-
-Runtime tracing of AirControl established:
-
-    arg 1 = self/table
-    arg 2 = vector whose Z is tested
-    arg 3 = number (observed around 1620 in the tested calls)
-    arg 4 = Vector3 lateral/right direction (often ±1,0,0 in world space)
-    arg 5 = current Velocity
-    arg 6 = deltaTime
-
-This corresponds to the helper's internal roles:
-
-    v1 = arg 2
-    v3 = arg 3
-    v5 = arg 4
-    v2 = arg 5
-    v6 = arg 6
-
-The helper is:
-
-    local Z = v1.Z
-
-    if math.abs(Z) < 0.001 or math.abs(v3) < 0.001 then
-        return v2
-    end
-
-    local magnitude = v2.magnitude
-    local unit = v2.unit
-    local dot = unit:Dot(v5)
-
-    local unused = 32 * (1 * dot * dot * v6)
-
-    return unit * Vector3.new(magnitude, 0, magnitude)
-
-In the observed calls, the returned value matched arg 5/current Velocity
-exactly. The 32 * dot^2 * dt intermediate is assigned to an unused local in
-the available decompile and was not observed changing the returned vector.
-
-Therefore:
-- do NOT currently treat 1620 as a proven "meaning" such as Speed*1.08;
-- do NOT treat AirControl as the direct source of the observed horizontal
-  air-strafe rotation;
-- the exact intended role of the unused intermediate remains unresolved.
-
-------------------------------------------------------------
-19.5 WISHDIR — CONTROLLED INPUT TESTS
-------------------------------------------------------------
-
-Multiple controlled camera/input tests established the following behavior.
-
-W:
-    WishDir = CameraLook
-
-D:
-    WishDir = CameraRight
-
-A:
-    WishDir = -CameraRight
-
-W+D:
-    WishDir = CameraRight
-
-W+A:
-    WishDir = -CameraRight
-
-During long smooth camera rotation, WishDir continued to track the corresponding
-CameraRight / -CameraRight vector exactly (dot ~= 1.0).
-
-Humanoid.MoveDirection remained normal diagonal input for W+A/W+D, so the air
-WishDir is NOT simply Humanoid.MoveDirection.
-
-Current best-supported direction-selection model:
-
-    if D/right-lateral input > 0 then
-        WishDir = CameraRight
-    elseif A/left-lateral input < 0 then
-        WishDir = -CameraRight
-    else
-        WishDir = CameraLook
-    end
-
-This is behaviorally strongly confirmed, but the exact line-109 source branch
-that produces it is still NOT directly recovered.
-
-This means lateral input takes priority over W in the tested air-strafe path.
-
-------------------------------------------------------------
-19.6 CONFIRMED AIR ACCELERATION EXAMPLE
-------------------------------------------------------------
-
-At one jump transition:
-
-    Velocity     = (2529.051, 0, 416.207)
-    WishDir      = (-0.128, 0, 0.992)
-    Acceleration = 182
-    WishSpeed    = 182
-    dt           = 0.007786
-
-    Dot         = 89.816742
-    addSpeed    = 92.183258
-
-    accelSpeed with factor 10:
-        182 * 10 * 0.007786 * 182
-        = 2579.089909
-
-Since addSpeed < accelSpeed:
-
-    Delta = addSpeed * WishDir
-          = (-11.773, 0, 91.428)
-
-Observed return:
-
-    (2517.278, 0, 507.635)
-
-which matches the calculation.
-
-Subsequent Freefall Accelerate calls showed the same relationship.
-
-------------------------------------------------------------
-19.7 INTERNAL VELOCITY VS REAL ROBLOX VELOCITY
-------------------------------------------------------------
-
-DataRegistry["Velocity"] is the game's custom/internal movement velocity.
-
-Observed internal values are in the thousands while the actual:
-
-    HumanoidRootPart.AssemblyLinearVelocity
-
-is much smaller (roughly 48-50 in the tested air segments).
-
-Examples of internal velocity:
-
-    (-243.242, -4284.105)  magnitude 4291.005
-    ( 671.521, -4260.071)  magnitude 4312.673
-    (1635.860, -4017.699) magnitude 4337.966
-
-Therefore these two velocity representations must NOT be treated as the same
-numeric scale.
-
-The internal velocity rotates substantially during air strafe and its magnitude
-can also increase slightly.
-
-------------------------------------------------------------
-19.8 CURRENT RECONSTRUCTED AIR CHAIN
-------------------------------------------------------------
-
-What is presently established:
-
-    input
-      |
-      v
-    direction selection inside line 109
-      |
-      +--> lateral A/D has priority in tested air cases
-      |
-      v
-    WishDir
-      |
-      +--> likely camera-relative:
-           W    -> CameraLook
-           D    -> CameraRight
-           A    -> -CameraRight
-      |
-      v
-    Accelerate
-      |
-      +--> currentSpeed = Velocity · WishDir
-      +--> addSpeed = wishSpeed - currentSpeed
-      +--> accelSpeed = acceleration * 10 * dt * wishSpeed
-      +--> Velocity += WishDir * min(addSpeed, accelSpeed)
-      |
-      v
-    AirControl is also called separately
-      |
-      v
-    other movement/wall/ground processing
-
-The exact ordering of these calls in line 109 is still not recovered.
-
-------------------------------------------------------------
-19.9 WHAT WE ARE DOING NEXT
-------------------------------------------------------------
-
-The goal is to recover the game's movement physics accurately enough to
-document/reimplement them in DeadEye, especially:
-
-    A. exact WishDir construction inside line 109
-    B. exact branch selecting AirAcceleration vs AirStrafeAcceleration
-    C. exact ordering:
-           ApplyFriction
-           Accelerate
-           AirControl
-           clamping
-           wallrun/PlaneVelocity handling
-    D. exact meaning of AirControl's 1620 parameter and 32*dot^2*dt term
-    E. exact frame/timing relationship between:
-           camera input
-           CameraCFrame
-           DataRegistry LookCFrame
-           HumanoidRootPart.CFrame
-           Jump()
-    F. exact camera-pitch -> jump-speed interaction at the same frame
-    G. exact deltaTime used by movement
-
-Because direct decompilation of line 109 fails with:
-    "failed to get function bytecode"
-
-the next investigation should avoid hooking line 109 and instead use
-non-invasive runtime inspection/controlled experiments.
-
-Priority next step:
-    determine the line-109 direction and acceleration branches from runtime
-    behavior without replacing/hooking the movement function.
-
-Only findings confirmed by source inspection or runtime matching should be
-promoted from "unresolved" to "confirmed".
-
-------------------------------------------------------------
-19.10 IMPORTANT DEBUGGING RESTRICTIONS
-------------------------------------------------------------
-
-DO NOT hook line 109 again.
-
-A previous hook of line 109 broke movement/air turning and produced:
-    "479: attempt to call a nil value"
-
-A previous Registry.Set hook produced:
-    "109: attempt to get connection:: get (not a valid member)"
-
-Therefore future tests should avoid both techniques.
-
-Also:
-- use F6 as the stop/copy key for future test scripts;
-- do not add incomplete physics conclusions to this file without marking them
-  as unresolved;
-- do not claim the 1620 AirControl value's meaning without evidence.
-
-============================================================
-20. STATUS
-============================================================
-
-Camera pipeline:
-    substantially recovered
-
-Jump speed formula:
-    recovered
-
-Camera pitch effect on jump horizontal-speed cap:
-    recovered mathematically
-
-Accelerate:
-    helper formula recovered
-    air caller argument mapping recovered
-    runtime factor-10 behavior recovered
-
-WishDir:
-    behavior recovered for W/A/D/W+A/W+D
-    exact source branch still unresolved
-
-AirControl:
-    helper decompiled
-    argument mapping recovered
-    exact purpose/order still unresolved
-
-Exact full line-109 source:
-    unavailable because executor reports:
-        failed to get function bytecode
-
-Further investigation:
-    REQUIRED
-
-=============================================================
-16. DERIVED OPTIMAL AIR-STRAFE STEERING
-=============================================================
-
-Controlled camera tests in file "s" established:
-
-FIXED:
-    camera turn = 0 deg/frame
-    horizontal speed change = 0
-
-SLOW:
-    camera turn ~= 0.33 deg/frame
-    HSpeed increase ~= 0.97 registry units/call
-
-MEDIUM:
-    camera turn ~= 0.66 deg/frame
-    HSpeed increase ~= 1.79 registry units/call
-
-FAST:
-    camera turn ~= 0.99 deg/frame
-    HSpeed increase ~= 2.45 registry units/call
-
-Accelerate() itself is confirmed to perform:
-
-addSpeed = wishSpeed - Velocity:Dot(wishDirection)
-
-if addSpeed <= 0:
-    return Velocity
-
-accelSpeed = acceleration * dt * wishSpeed
-
-addSpeed = min(addSpeed, accelSpeed)
-
-Velocity = Velocity + addSpeed * wishDirection
-
-
-For a fixed current horizontal velocity magnitude V, wish speed W,
-and wish direction w, the resulting speed is maximized when:
-
-Velocity · w = 0
-
-Therefore the optimal air-strafe condition is:
-
-WishDirection PERPENDICULAR to current horizontal Velocity.
-
-
-For W+D:
-
-    WishDirection = CameraRight
-
-CameraRight is perpendicular to CameraLook.
-
-Therefore the optimal W+D steering condition is:
-
-    CameraLook approximately aligned with current horizontal Velocity.
-
-For W+A:
-
-    WishDirection = -CameraRight
-
-The corresponding optimal condition is the opposite camera-side solution.
-
-When the current velocity and wish direction are exactly perpendicular,
-and the acceleration cap does not bind, the ideal one-step velocity-angle change
-is approximately:
-
-    deltaAngle = atan(WishSpeed / HSpeed)
-
-Using the confirmed active values:
-
-    WishSpeed = 182
-    HSpeed ~= 4500 registry units
-
-gives approximately:
-
-    deltaAngle ~= atan(182 / 4500)
-               ~= 2.32 degrees per movement/physics step
-
-At dt ~= 1/120:
-
-    ideal camera angular rate ~= 278 deg/s
-
-This is a derived steering target, not yet an experimentally confirmed
-engine maximum.
-
-The important control law for the future A->B planner is therefore:
-
-1. Read current horizontal Velocity.
-2. Select the desired strafe side (A or D).
-3. Keep CameraRight / -CameraRight perpendicular to Velocity.
-4. Rotate CameraLook so that it tracks the current Velocity direction.
-5. Recompute every movement step because the velocity direction itself changes.
-6. Avoid fixed camera turn rates as the primary controller.
-
-This means the future trajectory planner should optimize camera tracking error
-relative to Velocity, not simply hold a fixed camera yaw rate.
-
-
-=============================================================
-17. CURRENT NEXT VALIDATION
-=============================================================
-
-The next useful validation is a dynamic/adaptive camera test.
-
-Instead of fixed camera turn rates, camera yaw should be continuously adjusted
-toward the current horizontal Velocity direction.
-
-The test should measure:
-
-    camera yaw
-    velocity yaw
-    camera-to-velocity yaw error
-    WishDirection
-    Velocity.Dot(WishDirection)
-    HSpeed
-    HSpeed gain per step
-    actual camera turn per step
-
-Expected target:
-
-    CameraLook aligned with Velocity
-    WishDirection perpendicular to Velocity
-    Velocity.Dot(WishDirection) ~= 0
-
-This validation should be performed in an open area without wall contact.
-
-=============================================================
-21. UPDATE 2026-10-02 — LANDING SPEED LOSS INVESTIGATION
-=============================================================
-
-The investigation is now focused specifically on the horizontal-speed drop that
-appears when the movement state changes from:
-
-    State = "Air"
-    MoveType = "Air"
-
-to:
-
-    State = "Move"
-    MoveType = "Run"
-
-The A->B solver is intentionally NOT part of this investigation.
-
-
--------------------------------------------------------------
-21.1 EXACT STATE TRANSITION ORDER — CONFIRMED
--------------------------------------------------------------
-
-Movement.SetState(newState) was recovered from the movement dump.
-
-When the requested state differs from the current state, SetState does this:
-
-    1. get current MoveStats
-    2. End the previous state
-    3. Start the new state
-    4. read the new state's StateInfo
-    5. apply Perk StateSpeedMultipliers
-    6. apply Movement.SpeedMult through MoveStats:SpeedChange("State", ...)
-    7. apply Movement.DisableSprinting
-    8. update PlatformStand / Massless / collision state
-    9. set p28.State = newState
-   10. enable the new state's constraints
-
-Important:
-
-There are NO discovered functions named:
-
-    AirEnd
-    RunStart
-
-in the active Functions table.
-
-Therefore the Air -> Move transition itself does not currently have a dedicated
-AirEnd/RunStart movement function shown by the recovered function table.
-
-
--------------------------------------------------------------
-21.2 EXACT UPDATE ORDER AFTER THE STATE CHANGE — CONFIRMED
--------------------------------------------------------------
-
-Movement.Update(dt) does:
-
-    p42:SetState(p42.DataRegistry:Get("State"))
-    p42:UpdateCanJump()
-    p42.MoveStats:UpdateMoveStats()
-    local v44 = p42.MoveStats:GetMoveStats()
-    p42:DoFunction("Move", p42.State, v44, dt)
-
-MoveFunction.Move() then:
-
-    StateInfo:GetState(state)
-        ->
-    state.Movement
-        ->
-    Movement.MoveType
-        ->
-    Functions[Movement.MoveType](...)
-
-Therefore on the first update in State = "Move":
-
-    SetState("Move")
-        ->
-    MoveStats state modifiers are applied
-        ->
-    p42.State becomes "Move"
-        ->
-    DoFunction("Move")
-        ->
-    Functions["Run"](...)
-
-So the first Run movement call happens in the SAME Movement.Update tick
-in which Air -> Move is committed.
-
-
--------------------------------------------------------------
-21.3 NEW IMPORTANT LEAD — STATE SPEED MODIFIER
--------------------------------------------------------------
-
-SetState can change MoveStats.Speed before the first Run call.
-
-The exact operation is:
-
-    p28.MoveStats:SpeedChange("State", Movement.SpeedMult)
-
-and MoveStats.UpdateAttributes() multiplies the base speed by every active
-SpeedChanges entry.
-
-Therefore the Air -> Move transition can change:
-
-    MoveStats.Speed
-
-before Run executes.
-
-This does NOT directly rewrite DataRegistry["Velocity"] in the recovered
-SetState code.
-
-However, Run uses Speed/Sprint/SprintCap-related values, so a change in
-MoveStats.Speed can alter Run's desired speed/acceleration behavior.
-
-The exact Move state's Movement.SpeedMult is still not recovered here.
-
-
--------------------------------------------------------------
-21.4 NEW IMPORTANT LEAD — APPLYFRICTION NUMERICALLY MATCHES THE OBSERVED LOSS
--------------------------------------------------------------
-
-ApplyFriction is now the strongest concrete explanation for the observed
-landing speed drop.
-
-Recovered helper:
-
-    local Velocity = DataRegistry:Get("Velocity")
-    local magnitude = Velocity.magnitude
-
-    local RunDeaccel = stats.RunDeaccel
-    local Friction = stats.Friction
-
-    local v4
-    if magnitude < RunDeaccel then
-        v4 = RunDeaccel
-    else
-        v4 = magnitude
-    end
-
-    local newMagnitude =
-        magnitude - v4 * Friction * dt * <mode>
-
-    ...
-    return Velocity * (newMagnitude / magnitude)
-
-For the observed internal air speeds, magnitude is several thousand
-registry units while:
-
-    RunDeaccel = 700
-
-so:
-
-    magnitude > RunDeaccel
-    =>
-    v4 = magnitude
-
-Therefore, in the normal/non-swimming case, the multiplier simplifies to:
-
-    newMagnitude / magnitude
-        =
-    1 - Friction * dt
-
-With the confirmed base:
-
-    Friction = 5
-
-the first Run friction tick is approximately:
-
-    multiplier = 1 - 5 * dt
-
-
--------------------------------------------------------------
-21.5 THIS FITS THE REAL OBSERVED ~2 SPEED LOSS
--------------------------------------------------------------
-
-One measured movement call had approximately:
-
-    dt = 0.007786
-
-Therefore:
-
-    multiplier
-        = 1 - 5 * 0.007786
-        = 0.96107
-
-So friction alone removes approximately:
-
-    3.893% of horizontal/internal speed
-
-per such Run tick.
-
-The game's internal velocity scale is approximately:
-
-    internal Velocity ~= real horizontal velocity * 90
-
-because Movement.Update calculates:
-
-    Speed = Velocity.Magnitude / 90
-
-For a real horizontal speed of 50:
-
-    50 * 90 = 4500 internal
-
-friction loss:
-
-    4500 * (1 - 0.96107)
-        ~= 175.2 internal
-
-converted back:
-
-    175.2 / 90
-        ~= 1.95 real speed
-
-For a real horizontal speed of 60:
-
-    60 * 90 = 5400 internal
-
-loss:
-
-    5400 * (1 - 0.96107)
-        ~= 210.3 internal
-
-converted back:
-
-    210.3 / 90
-        ~= 2.34 real speed
-
-This is an extremely close numerical match to the previously observed
-approximately 2 units of horizontal-speed loss per landing.
-
-IMPORTANT:
-
-This is a very strong numerical match, but it is still a DERIVED lead, not
-yet a direct runtime proof that ApplyFriction is the exact first operation
-responsible for the landing drop.
-
-
--------------------------------------------------------------
-21.6 WHY THE LANDING TICK IS THE CRITICAL TEST
--------------------------------------------------------------
-
-Because:
-
-    Air -> Move
-        ->
-    first Run call
-        ->
-    ApplyFriction is available inside Run
-
-the critical experiment is NOT another long air-strafe test.
-
-We only need to isolate one transition and compare:
-
-    last Air velocity
-        vs
-    first Move/Run velocity
-
-while also logging:
-
-    State
-    MoveType
-    DataRegistry["Velocity"]
-    DataRegistry["Speed"]
-    MoveStats.Speed
-    MoveStats.Friction
-    MoveStats.RunDeaccel
-    Sprint
-    Grounded
-    HumanoidRootPart.AssemblyLinearVelocity
-
-The goal is to determine whether the first Move/Run tick removes approximately:
-
-    1 - 5*dt
-
-of the current velocity before the acceleration portion can compensate for it.
-
-
--------------------------------------------------------------
-21.7 NON-INVASIVE INVESTIGATION RULE
--------------------------------------------------------------
-
-Future landing tests should NOT:
-
-    - hook the line-109 Air function
-    - hook Registry:Set
-    - replace Run
-    - replace Air
-
-Those approaches have already caused movement breakage.
-
-The safe direction is runtime observation around the existing Movement.Update
-pipeline without replacing the active movement functions.
-
-
--------------------------------------------------------------
-21.8 RUN FUNCTION — CURRENT SOURCE EVIDENCE
--------------------------------------------------------------
-
-The active Run function is:
-
-    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-    linedefined = 23
-    numparams = 5
-
-Direct bytecode decompilation currently fails with:
-
-    failed to get function bytecode
-
-Therefore the exact source order inside Run is still unavailable.
-
-Recovered Run constants prove that it references:
-
-    "JumpingActive"
-    "MoveDirection"
-    "GlobalMoveDirection"
-    "Swimming"
-    "X"
-    "Z"
-    "BhopEnabled"
-    "JumpQueued"
-    "LookCFrame"
-    "Velocity"
-    "Sprint"
-    "ApplyFriction"
-    "Crouching"
-    "CapSprint"
-    "ADS"
-    "SprintAcceleration"
-    "SprintCap"
-    "Magnitude"
-    "WalkSpeedMultiplier"
-    "Emote"
-    "Speed"
-    "RunAccel"
-    "Accelerate"
-    "WallImpact"
-    "SwimMover"
-    "VectorVelocity"
-    "BaseMover"
-    "PlaneVelocity"
-
-This confirms that Run has both ground friction and acceleration-related logic,
-plus sprint/crouch/swim/constraint branches.
-
-
--------------------------------------------------------------
-21.9 CURRENT HYPOTHESIS — ORDER OF OPERATIONS
--------------------------------------------------------------
-
-Most likely landing path:
-
-    State changes Air -> Move
-              |
-              v
-    MoveStats state modifier update
-              |
-              v
-    Run(...)
-              |
-              +--> ApplyFriction(...)
-              |
-              +--> direction / sprint calculations
-              |
-              +--> Accelerate(...)
-              |
-              +--> caps / constraints / other branches
-
-The ordering shown above is NOT yet confirmed.
-
-The immediate priority is to prove or disprove:
-
-    first Run tick
-        ->
-    ApplyFriction
-        ->
-    ~4% speed drop
-
-before making any DeadEye physics implementation change based on this.
-
-
-=============================================================
-22. CURRENT INVESTIGATION STATUS — 2026-10-02
-=============================================================
-
-CONFIRMED:
-
-    Air MoveType      = Air
-    Move MoveType     = Run
-
-    AirEnd function   = absent
-    RunStart function = absent
-
-    Movement.Update:
-        SetState(...)
-        ->
-        MoveStats.UpdateMoveStats()
-        ->
-        DoFunction("Move", ...)
-        ->
-        current MoveType function
-
-    Move -> Run function:
-        Functions["Run"]
-
-    Run function:
-        linedefined = 23
-        direct decompile unavailable
-
-    ApplyFriction:
-        Friction = 5
-        RunDeaccel = 700
-
-    Observed internal velocity:
-        several thousand registry units
-
-    Internal -> real speed scale:
-        approximately 90
-
-STRONG DERIVED LEAD:
-
-    when internal speed > RunDeaccel:
-        ApplyFriction multiplier ~= 1 - 5*dt
-
-    at dt ~= 0.0078:
-        multiplier ~= 0.961
-
-    expected real-speed loss:
-        ~1.95 at real speed 50
-        ~2.34 at real speed 60
-
-This closely matches the observed landing loss.
-
-NOT YET PROVEN:
-
-    exact position of ApplyFriction inside Run
-    whether ApplyFriction is the FIRST source of the landing loss
-    exact Move.SpeedMult value
-    exact Run ordering relative to Accelerate and caps
-    whether another ground/collision/constraint operation also changes Velocity
-    on the same transition tick
-
-NEXT TARGET:
-
-    isolate exactly one Air -> Move transition and identify the first velocity
-    change caused by the ground-side movement path.
-
-=============================================================
-END OF APPENDED 2026-10-02 NOTES
-=============================================================
-
-=============================================================
-23. 2026-10-02 — LANDING TRANSITION PROBE
-=============================================================
-
-A non-invasive probe is being used to isolate the single Air -> Move transition.
-
-The probe does NOT:
-    - hook Functions["Air"]
-    - hook Functions["Run"]
-    - hook DataRegistry:Set
-    - replace any movement function
-
-It only observes the live character on Heartbeat.
-
-For every observed state transition it records:
-
-    previous State
-    previous MoveType
-    new State
-    new MoveType
-    deltaTime
-    internal Velocity
-    internal horizontal velocity magnitude
-    DataRegistry["Speed"]
-    real AssemblyLinearVelocity horizontal magnitude
-    MoveStats.Speed
-    MoveStats.Friction
-    MoveStats.RunDeaccel
-    Sprint
-    Grounded
-
-For an Air -> Move transition it additionally calculates the friction-only
-prediction from the previous internal horizontal velocity:
-
-    if HSpeed > RunDeaccel:
-
-        predictedMultiplier = 1 - Friction * dt
-
-        predictedLoss = HSpeed - HSpeed * predictedMultiplier
-
-This is compared with the actual horizontal-speed change observed across the
-transition.
-
-The test is specifically intended to answer:
-
-    Does the first ground-side tick produce approximately
-        HSpeed * (1 - 5*dt)
-    before any acceleration/cap/constraint effect is accounted for?
-
-The output should be copied with F6.
-
-External stop flag:
-
-    getgenv().LandingLossProbeStop = true
-
-This lets another script stop the probe without modifying the movement system.
-
-
--------------------------------------------------------------
-23.1 EXPECTED INTERPRETATION
--------------------------------------------------------------
-
-Case A:
-
-    actual loss ~= friction prediction
-
-This strongly supports ApplyFriction as the direct source of the observed
-landing speed loss.
-
-Case B:
-
-    actual loss differs substantially from friction prediction
-
-Then the next target is the remaining Run-side operation:
-
-    Accelerate
-    Sprint/Crouch speed calculation
-    CapSprint
-    WallImpact
-    SwimMover
-    VectorVelocity / BaseMover / PlaneVelocity
-    or a ground constraint
-
-Case C:
-
-    MoveStats.Speed changes at Air -> Move and the actual loss correlates with
-    that change
-
-Then the state Movement.SpeedMult / StateSpeedMultipliers path must also be
-investigated.
-
-
-=============================================================
-END OF 2026-10-02 ADDITION
-=============================================================
-
-=============================================================
-24. 2026-10-02 — IMPORTANT TESTING CONDITION: SPEED MUST BE BUILT UP
-=============================================================
-
-The landing-loss probe must NOT assume that the player can immediately reach
-horizontal speeds of 50-60 by running straight.
-
-Observed normal behavior:
-
-    straight W movement
-        ->
-    ordinary jump
-        ->
-    landing
-        ->
-    horizontal speed remains around 36
-
-To reach the higher speeds needed to make the landing-loss effect obvious,
-the player must accumulate speed over multiple consecutive jumps while continuing
-to use the game's native air movement.
-
-Therefore the landing experiment should be performed as a multi-jump sequence.
-
-Recommended procedure:
-
-    1. Start running forward.
-    2. Keep the same forward movement through every jump.
-    3. Do NOT intentionally stop between jumps.
-    4. Do NOT disable the native camera yaw.
-    5. Allow natural air acceleration/strafe to continue.
-    6. Perform at least 4 consecutive jumps before judging the landing-loss
-       behavior.
-    7. Once the internal/real horizontal speed reaches the desired range, let
-       one clean Air -> Move landing occur and inspect the capture.
-
-The reason for keeping the natural camera/A-D movement available is that the
-game's air movement can increase horizontal speed beyond the ~36 straight-run
-value.
-
-The probe therefore needs two phases:
-
-    BUILD-UP PHASE
-        Observe consecutive jumps and current HSpeed.
-
-    CAPTURE PHASE
-        Detect the first clean Air -> Move transition after speed has been
-        sufficiently accumulated.
-
-The probe must continue logging every Air -> Move transition so that earlier
-lower-speed landings are also retained for comparison.
-
-
--------------------------------------------------------------
-24.1 MULTI-JUMP INTERPRETATION
--------------------------------------------------------------
-
-A useful comparison is:
-
-    Jump 1 landing:
-        lower HSpeed
-
-    Jump 2 landing:
-        higher HSpeed
-
-    Jump 3 landing:
-        higher HSpeed
-
-    Jump 4+ landing:
-        sufficiently high HSpeed for the friction-loss test
-
-The important question remains:
-
-    actual landing loss
-        vs
-    predicted ApplyFriction loss
-
-The speed build-up itself is not the phenomenon being measured; it is only a
-way to obtain a large enough HSpeed that one Run/ApplyFriction tick produces an
-easily measurable absolute loss.
-
-
--------------------------------------------------------------
-24.2 PROBE BEHAVIOR UPDATE
--------------------------------------------------------------
-
-The probe should therefore:
-
-    - count Air -> Move transitions;
-    - print the jump/landing number;
-    - continuously show current real and internal HSpeed;
-    - keep all previous transition records;
-    - mark the high-speed captures separately;
-    - NOT stop after the first landing.
-
-Suggested high-speed marker:
-
-    INTERNAL HSpeed >= 4000
-
-which corresponds roughly to:
-
-    real HSpeed >= 4000 / 90 ~= 44.4
-
-This threshold is only a convenience for highlighting stronger measurements;
-the probe must still log lower-speed transitions.
-
-=============================================================
-END OF 2026-10-02 MULTI-JUMP TESTING ADDITION
-=============================================================
-
-=============================================================
-25. 2026-10-02 — LANDING PROBE v1.02 MULTI-JUMP UPDATE
-=============================================================
-
-The probe itself is now treated as a multi-jump measurement tool.
-
-Version:
-    v1.02
-
-Required behavior:
-
-    - do not stop after the first Air -> Move transition;
-    - count every Air -> Move transition;
-    - retain all transition measurements;
-    - show the transition/jump count;
-    - continuously show current HSpeed;
-    - mark transitions after at least 4 jumps;
-    - allow the player to use normal camera yaw and A/D during speed build-up.
-
-The player should therefore perform a continuous sequence of jumps while
-maintaining movement.
-
-The probe does not control the jump, camera, W, A, or D. It only observes.
-
-Suggested interpretation:
-
-    Landing #1:
-        baseline low-speed measurement
-
-    Landing #2:
-        compare against #1
-
-    Landing #3:
-        compare against #2
-
-    Landing #4+:
-        high-speed measurements become useful for the ~2 speed loss test
-
-A high-speed marker is used when:
-
-    internal horizontal speed >= 4000
-
-which corresponds approximately to:
-
-    real horizontal speed >= 44.4
-
-This threshold is a display/selection aid only and is NOT a proven engine
-threshold.
-
-The scientifically relevant comparison remains:
-
-    actual HSpeed loss
-        vs
-    ApplyFriction predicted loss
-
-The multi-jump sequence exists only to obtain a sufficiently large HSpeed.
-
-
-=============================================================
-END OF 2026-10-02 v1.02 ADDITION
-=============================================================
-
-=============================================================
-26. 2026-10-02 — ACTUAL v1.02 MULTI-JUMP RESULTS
-=============================================================
-
-The user performed the v1.02 test while looking straight ahead throughout the
-test.
-
-This is important because the observed high-speed landings were NOT produced by
-deliberately changing camera yaw during the measurements.
-
-The user accumulated speed over repeated jumps and reached:
-
-    MAX internal HSpeed ~= 4747.396
-    MAX real HSpeed ~= 52.749
-
-Ten Air -> Move landings were captured.
-
-Representative results:
-
-    Landing #1:
-        previous real HSpeed = 49.648
-        current real HSpeed  = 49.300
-        actual loss          = 0.348
-        friction prediction  = 2.181
-
-    Landing #2:
-        previous real HSpeed = 51.098
-        current real HSpeed  = 49.866
-        actual loss          = 1.232
-        friction prediction  = 2.310
-
-    Landing #3:
-        previous real HSpeed = 51.592
-        current real HSpeed  = 50.660
-        actual loss          = 0.932
-        friction prediction  = 2.503
-
-    Landing #4:
-        previous real HSpeed = 52.733
-        current real HSpeed  = 50.532
-        actual loss          = 2.201
-        friction prediction  = 2.218
-        difference            = 0.017
-
-    Landing #5:
-        previous real HSpeed = 51.827
-        current real HSpeed  = 50.057
-        actual loss          = 1.770
-        friction prediction  = 2.245
-
-    Landing #6:
-        previous real HSpeed = 51.049
-        current real HSpeed  = 49.466
-        actual loss          = 1.583
-        friction prediction  = 1.998
-
-    Landing #7:
-        previous real HSpeed = 51.321
-        current real HSpeed  = 49.905
-        actual loss          = 1.416
-        friction prediction  = 1.278
-        difference            = 0.138
-
-    Landing #8:
-        previous real HSpeed = 49.381
-        current real HSpeed  = 48.318
-        actual loss          = 1.063
-        friction prediction  = 2.479
-
-    Landing #9:
-        previous real HSpeed = 49.390
-        current real HSpeed  = 48.544
-        actual loss          = 0.846
-        friction prediction  = 2.394
-
-    Landing #10:
-        previous real HSpeed = 48.429
-        current real HSpeed  = 46.348
-        actual loss          = 2.081
-        friction prediction  = 2.331
-        difference            = 0.250
-
-The exact Landing #4 match is strong evidence that the magnitude of the observed
-landing loss can be produced by ApplyFriction alone.
-
-
--------------------------------------------------------------
-26.1 IMPORTANT HIGH-SPEED OBSERVATION
--------------------------------------------------------------
-
-At the high-speed landings:
-
-    MoveStats.Speed = 1620
-    Sprint = 2
-
-therefore the nominal sprint-speed product is:
-
-    Sprint * Speed = 3240
-
-while the measured internal horizontal velocity was approximately:
-
-    4300-4750
-
-Therefore:
-
-    current internal speed > Sprint * Speed
-
-for the measured high-speed landings.
-
-The recovered Accelerate helper returns the existing velocity when:
-
-    addSpeed = wishSpeed - velocity:Dot(wishDirection)
-
-is <= 0.
-
-Consequently, if Run's effective wishSpeed at this point is bounded around
-Sprint * Speed, Accelerate may provide no positive speed addition on the landing
-tick while the current velocity remains above that desired speed.
-
-This makes the friction-only landing-loss explanation especially plausible.
-
-The exact Run-side wishSpeed construction is still NOT directly recovered, so this
-is a derived interpretation, not yet a source-level fact.
-
-
--------------------------------------------------------------
-26.2 WHY THE OTHER LANDINGS DO NOT EXACTLY MATCH
--------------------------------------------------------------
-
-The v1.02 probe compares samples taken from Heartbeat callbacks.
-
-It does NOT capture:
-
-    exact beginning of Movement.Update(dt)
-    exact end of Movement.Update(dt)
-
-and therefore the observed Air -> Move sample difference may include:
-
-    - the actual Movement.Update processing;
-    - Roblox physics between samples;
-    - collision/ground resolution;
-    - another movement/constraint operation;
-    - a different effective movement dt than the Heartbeat sample dt;
-    - ordering differences between the probe callback and the game's own update.
-
-Therefore the v1.02 measurements prove that landing losses of roughly 1-2+ real
-speed occur, and that some landings match the ApplyFriction calculation extremely
-closely, but they do NOT by themselves prove exact Run call ordering.
-
-
-=============================================================
-27. 2026-10-02 — NEXT TARGET: WRAP MOVEMENT.UPDATE()
-=============================================================
-
-The next non-line-109 investigation target is the actual:
-
-    ReplicatedStorage.Objects.Game.Character.Client.Movement
-    :Update(dt)
-
-method.
-
-Recovered source:
-
-    function t.Update(p42, p43)
-
-and inside it:
-
-    p42:SetState(
-        p42.DataRegistry:Get("State")
-    )
-
-    ...
-
-    p42:DoFunction(
-        "Move",
-        p42.State,
-        v44,
-        p43
-    )
-
-This means wrapping the real Movement.Update() can provide a much cleaner
-measurement boundary than Heartbeat sampling.
-
-Required measurements:
-
-    BEFORE Movement.Update:
-        self.State
-        DataRegistry State
-        Grounded
-        internal Velocity
-        real AssemblyLinearVelocity
-
-    exact dt argument passed into Movement.Update
-
-    AFTER Movement.Update:
-        self.State
-        DataRegistry State
-        Grounded
-        internal Velocity
-        DataRegistry Speed
-        real AssemblyLinearVelocity
-
-For an Air -> Move update call, calculate:
-
-    exact internal HSpeed before
-    exact internal HSpeed after
-
-and compare it to:
-
-    ApplyFriction predicted HSpeed
-
-using the ACTUAL dt argument received by Movement.Update.
-
-This should eliminate the major Heartbeat-sampling ambiguity.
-
-
--------------------------------------------------------------
-27.1 SAFETY / DEBUGGING RESTRICTION
--------------------------------------------------------------
-
-Do NOT hook:
-
-    line-109 Air function
-    DataRegistry:Set
-
-Those previous experiments broke the movement pipeline.
-
-The proposed v1.03 test instead wraps only:
-
-    Movement.Update
-
-and calls the original Update function normally.
-
-If the executor cannot safely hook the method, the probe must stop and report
-that limitation rather than modifying the movement logic.
-
-
-=============================================================
-END OF 2026-10-02 RESULTS + NEXT TARGET
-=============================================================
-
-=============================================================
-28. 2026-10-02 — LANDING PROBE v1.03: EXACT Movement.Update() BOUNDARY
-=============================================================
-
-The next probe version is v1.03.
-
-Unlike v1.02, it measures velocity immediately BEFORE and immediately AFTER
-the actual Movement.Update(dt) call.
-
-The exact method being observed is:
-
-    ReplicatedStorage.Objects.Game.Character.Client.Movement.Update
-
-Recovered Movement.Update order:
-
-    SetState(DataRegistry:Get("State"))
-    UpdateCanJump()
-    UpdateMoveStats()
-    DoFunction("Move", State, MoveStats, dt)
-    ...
-    RootPartOrienter:Update(dt, State)
-
-Therefore a wrapper around Movement.Update provides the cleanest available
-runtime boundary around the state transition and current movement function.
-
-The probe records:
-
-    exact dt argument
-    pre State
-    post State
-    pre DataRegistry State
-    post DataRegistry State
-    pre Grounded
-    post Grounded
-    pre internal Velocity
-    post internal Velocity
-    pre internal HSpeed
-    post internal HSpeed
-    pre real AssemblyLinearVelocity
-    post real AssemblyLinearVelocity
-    Friction
-    RunDeaccel
-    MoveStats.Speed
-    Sprint
-
-For every Air -> Move Update call it calculates:
-
-    actual internal HSpeed loss
-
-and:
-
-    ApplyFriction predicted loss
-
-using the exact dt passed to Movement.Update.
-
-
--------------------------------------------------------------
-28.1 WHY v1.03 IS BETTER THAN v1.02
--------------------------------------------------------------
-
-v1.02 sampled around Heartbeat.
-
-Therefore its Air -> Move comparison could include timing outside the movement
-function itself.
-
-v1.03 instead compares:
-
-    BEFORE Movement.Update
-             |
-             v
-        original Update
-             |
-             v
-    AFTER Movement.Update
-
-The original function is still executed normally.
-
-This removes the major ambiguity about which frame interval is being measured.
-
-
--------------------------------------------------------------
-28.2 WHAT v1.03 CAN PROVE
--------------------------------------------------------------
-
-If an Air -> Move Update call shows:
-
-    actual HSpeed loss ~= ApplyFriction prediction
-
-using the exact Movement.Update dt,
-
-then ApplyFriction becomes strongly supported as the direct source of the
-landing loss inside the Run-side update.
-
-If:
-
-    actual loss differs significantly,
-
-then another operation inside Run or the resulting constraint/physics path must
-be responsible for the difference.
-
-The probe still does not claim exact ApplyFriction call ORDER inside Run, because
-Run's own bytecode remains unavailable.
-
-
-=============================================================
-END OF 2026-10-02 v1.03 PROBE NOTES
-=============================================================
-
-=============================================================
-29. 2026-10-02 — v1.03 RESULT: MOVEMENT.UPDATE HOOK IS TOO INVASIVE
-=============================================================
-
-The v1.03 Movement.Update() wrapper caused repeated runtime errors.
-
-Observed side effect:
-
-    camera can still rotate
-    character no longer follows the camera's horizontal rotation correctly
-
-This is consistent with the recovered Movement.Update() structure:
-
-    SetState(...)
-    UpdateCanJump()
-    UpdateMoveStats()
-    DoFunction("Move", ...)
-    ...
-    RootPartOrienter:Update(dt, State)
-
-Therefore breaking the wrapper/original-call path can prevent the final
-RootPartOrienter update from executing correctly.
-
-Conclusion:
-
-    DO NOT continue using a Movement.Update hook for the landing experiment.
-
-The exact error text from the user's executor was reported as repeated references
-to the wrapper/update function (line 588 / hookupdate / update), but the complete
-runtime error string was not preserved in the report.
-
-
--------------------------------------------------------------
-29.1 NEW INVESTIGATION STRATEGY
--------------------------------------------------------------
-
-The next probe should leave Movement.Update itself completely untouched.
-
-The target is the narrower movement-function layer:
-
-    Movement.Update
-        ->
-    DoFunction("Move")
-        ->
-    MoveFunction.Move
-        ->
-    Functions[Movement.MoveType]
-        ->
-    Run or Air
-
-The purpose is to observe the velocity handed through the movement function
-without breaking the outer Update() and RootPartOrienter path.
-
-Priority:
-
-    1. identify the exact live MoveFunction.Move function;
-    2. safely observe its arguments and returned values;
-    3. identify the Air -> Run call boundary;
-    4. compare Velocity immediately before/after the movement function;
-    5. preserve the original return values exactly.
-
-Any hook at this layer must be removed immediately if character rotation,
-movement, or camera synchronization changes.
-
-
--------------------------------------------------------------
-29.2 IMPORTANT LIMITATION
--------------------------------------------------------------
-
-Even this narrower hook may still affect movement if the executor's hookfunction
-implementation changes call semantics.
-
-Therefore the first version of the next probe should have a SAFE MODE:
-
-    observation only
-    no DataRegistry writes
-    no velocity writes
-    no camera writes
-    no state writes
-    original return values forwarded unchanged
-
-If the game behavior changes merely from installing the observation hook,
-the hook itself is rejected and a non-hook runtime tracer must be used instead.
-
-
-=============================================================
-END OF 2026-10-02 v1.03 RESULT
-=============================================================
-
-=============================================================
-30. 2026-10-02 — NEW TARGET: MoveFunction.Move() BOUNDARY
-=============================================================
-
-The recovered code gives a narrower and cleaner execution boundary than
-Movement.Update():
-
-    Movement.Update()
-        ->
-    Movement:DoFunction("Move", State, MoveStats, dt)
-        ->
-    MoveFunction:Move(dt, State, MoveStats)
-        ->
-    StateInfo:GetState(State)
-        ->
-    state.Movement.MoveType
-        ->
-    Functions[MoveType](dt, Movement, DataRegistry, Character, MoveStats)
-
-Therefore the exact Air -> Run transition can be observed around:
-
-    MoveFunction.Move()
-
-without intercepting the outer Movement.Update().
-
-This preserves the rest of the Update() pipeline, including:
-
-    RootPartOrienter:Update(dt, State)
-
-which was broken/affected by the previous Movement.Update hook.
-
-
--------------------------------------------------------------
-30.1 EXACT MoveFunction.Move ARGUMENTS — SOURCE CONFIRMED
--------------------------------------------------------------
-
-Recovered source:
-
-    function t.Move(p3, p4, p5, p6)
-
-where:
-
-    p3 = MoveFunction self
-    p4 = dt
-    p5 = State
-    p6 = MoveStats
-
-Then:
-
-    local v7 = StateInfo:GetState(p5)
-    local Movement = v7.Movement
-
-    return Functions[Movement.MoveType](
-        p4,
-        Movement,
-        p3.DataRegistry,
-        p3.Character,
-        p6
-    )
-
-Thus a wrapper around MoveFunction.Move can record:
-
-    exact dt
-    exact State
-    exact MoveType
-
-and compare DataRegistry["Velocity"] immediately before and after the chosen
-Air/Run movement function.
-
-
--------------------------------------------------------------
-30.2 v1.04 REQUIREMENTS
--------------------------------------------------------------
-
-The next probe must:
-
-    - hook ONLY MoveFunction.Move;
-    - forward all original varargs unchanged;
-    - never write DataRegistry;
-    - never write Velocity;
-    - never write camera state;
-    - never replace Air or Run directly;
-    - retain the original return values;
-    - count Air -> Move / MoveType Air -> Run transitions;
-    - keep the multi-jump speed build-up behavior.
-
-For each Air -> Run boundary record:
-
-    dt
-    State before
-    MoveType before
-    internal Velocity before
-    internal HSpeed before
-    internal Velocity after
-    internal HSpeed after
-    real AssemblyLinearVelocity before
-    real AssemblyLinearVelocity after
-    Friction
-    RunDeaccel
-    Speed
-    Sprint
-
-Then calculate:
-
-    actual HSpeed loss
-
-and:
-
-    ApplyFriction prediction
-
-using the exact MoveFunction.Move dt.
-
-
--------------------------------------------------------------
-30.3 WHAT THIS TEST DISTINGUISHES
--------------------------------------------------------------
-
-This boundary can answer a more precise question than v1.02:
-
-    Did the Air/Run movement-function invocation itself change internal Velocity?
-
-Possible outcomes:
-
-    A.
-        Air -> Run movement call
-        actual loss ~= ApplyFriction prediction
-
-        Strong evidence that ApplyFriction inside the Run-side movement
-        function is the relevant source.
-
-    B.
-        Air -> Run movement call
-        actual loss is near zero
-
-        The landing loss is occurring outside the Run movement function,
-        such as Roblox ground resolution, another movement pass, or a
-        constraint/physics operation.
-
-    C.
-        Air -> Run movement call
-        actual loss differs substantially from friction prediction
-
-        Another operation inside the Run function is contributing.
-
-
--------------------------------------------------------------
-30.4 IMPORTANT INTERPRETATION RULE
--------------------------------------------------------------
-
-The MoveFunction.Move boundary is narrower than Movement.Update but still
-contains the entire selected Run function.
-
-Therefore it can establish whether the loss occurs inside:
-
-    Functions["Run"]
-
-but cannot by itself establish the exact statement order inside Run.
-
-The exact order between:
-
-    ApplyFriction
-    Accelerate
-    CapSprint
-    WallImpact
-    SwimMover
-    BaseMover
-    PlaneVelocity
-
-remains unresolved until the Run bytecode/source becomes available.
-
-
-=============================================================
-END OF 2026-10-02 v1.04 INVESTIGATION TARGET
-=============================================================
-
-=============================================================
-31. 2026-10-02 — v1.04 PRECISE AIR/RUN MOVEMENT-FUNCTION PROBE
-=============================================================
-
-v1.03 was rejected as an observation method because wrapping Movement.Update()
-altered the normal movement/camera behavior.
-
-The next probe wraps only:
-
-    MoveFunction.Move()
-
-Recovered call chain:
-
-    Movement.Update()
-        ->
-    Movement:DoFunction("Move", State, MoveStats, dt)
-        ->
-    MoveFunction:Move(dt, State, MoveStats)
-        ->
-    StateInfo:GetState(State)
-        ->
-    Functions[Movement.MoveType](...)
-
-Therefore v1.04 preserves the outer Movement.Update() function and the final
-RootPartOrienter update.
-
-The probe records each selected movement-function invocation.
-
-For Air:
-
-    State = Air
-    MoveType = Air
-
-For the normal grounded state:
-
-    State = Move
-    MoveType = Run
-
-The first Run invocation after an Air invocation is treated as the landing-side
-Run call.
-
-
--------------------------------------------------------------
-31.1 THREE DISTINCT MEASUREMENTS
--------------------------------------------------------------
-
-v1.04 separates three effects:
-
-    A. LAST AIR -> FIRST RUN PRE
-        Velocity change between the end of the last Air movement call and the
-        beginning of the first Run movement call.
-
-        This can reveal changes occurring OUTSIDE the selected movement
-        function, such as physics/ground resolution/state transition timing.
-
-    B. FIRST RUN PRE -> FIRST RUN POST
-        Velocity change DURING the actual Functions["Run"] call.
-
-        This is the most important measurement.
-
-    C. APPLYFRICTION PREDICTION
-        Calculated using the exact dt argument passed into MoveFunction.Move()
-        for that Run call.
-
-This allows direct comparison of:
-
-    Run pre
-        ->
-    Run post
-
-against:
-
-    ApplyFriction expected change.
-
-
--------------------------------------------------------------
-31.2 EXPECTED DECISION
--------------------------------------------------------------
-
-If:
-
-    Run pre -> Run post loss
-        ~= ApplyFriction prediction
-
-then the landing loss is strongly localized to the Run movement function and
-matches the recovered friction helper.
-
-If:
-
-    last Air post -> first Run pre loss
-        is large
-
-but:
-
-    Run pre -> Run post loss
-        is near zero
-
-then the loss occurs outside Functions["Run"].
-
-If:
-
-    Run pre -> Run post
-        differs substantially from ApplyFriction
-
-then another operation inside Run contributes.
-
-
--------------------------------------------------------------
-31.3 IMPORTANT BEHAVIOR PRESERVATION
--------------------------------------------------------------
-
-v1.04:
-
-    - does NOT hook Movement.Update
-    - does NOT hook Functions["Air"]
-    - does NOT hook Functions["Run"]
-    - does NOT hook DataRegistry:Set
-    - does NOT modify Velocity
-    - does NOT modify camera
-    - forwards all original MoveFunction.Move arguments
-    - forwards all original return values
-
-The wrapper must remain observation-only.
-
-Because the previous v1.03 Movement.Update hook can remain installed for the
-duration of a client session, v1.04 testing should be performed in a fresh game
-session after leaving/rejoining the game.
-
-
-=============================================================
-END OF 2026-10-02 v1.04 PRECISE PROBE
-=============================================================
-
-=============================================================
-32. 2026-10-02 — v1.04 SCRIPT CORRECTION
-=============================================================
-
-Before running v1.04, a wrapper-helper bug was found in the delivered test script:
-the helper returned a success boolean as its first result while the script assigned
-that first result directly to object/function variables.
-
-Therefore:
-
-    v1.04 MUST NOT be used.
-
-Corrected version:
-
-    v1.05
-
-The v1.05 script uses a simple single-result protected accessor instead.
-
-The underlying investigation target is unchanged:
-
-    hook ONLY MoveFunction.Move
-    leave Movement.Update untouched
-    leave Air/Run untouched
-    leave DataRegistry:Set untouched
-    compare:
-        last Air post
-        first Run pre
-        first Run post
-    use exact dt passed to MoveFunction.Move
-
-
--------------------------------------------------------------
-32.1 FRESH SESSION REQUIRED
--------------------------------------------------------------
-
-Because v1.03 may have installed a Movement.Update hook into the current client,
-the corrected v1.05 test should be performed after leaving/rejoining the game.
-
-This ensures the old Movement.Update wrapper is no longer active before testing
-MoveFunction.Move.
-
-
-=============================================================
-END OF 2026-10-02 v1.04 CORRECTION
-=============================================================
-
-=============================================================
-33. 2026-10-02 — v1.05 PATH ERROR CORRECTION
-=============================================================
-
-The v1.05 script reported:
-
-    MoveFunction object not found
-
-This was caused by an incorrect object path in the probe.
-
-Recovered Movement.Init() proves:
-
-    p9.MoveFunction =
-        require(script.MoveFunction).new(p9)
-
-where p9 is the Movement object.
-
-Therefore the runtime ownership is:
-
-    GameCharacter
-        |
-        +-- Movement
-              |
-              +-- MoveFunction
-                    |
-                    +-- Move
-
-NOT:
-
-    GameCharacter
-        |
-        +-- MoveFunction
-
-
--------------------------------------------------------------
-33.1 CORRECT RUNTIME PATH
--------------------------------------------------------------
-
-The probe must retrieve:
-
-    GameCharacter.Movement
-        -> Movement.MoveFunction
-        -> Movement.MoveFunction.Move
-
-The previous v1.05 failure was therefore a probe-path error, not evidence that
-MoveFunction is absent from the live movement controller.
-
-
--------------------------------------------------------------
-33.2 v1.06 CORRECTION
--------------------------------------------------------------
-
-v1.06 will use:
-
-    Movement.MoveFunction
-
-as the MoveFunction object.
-
-All other investigation rules remain unchanged:
-
-    - do not hook Movement.Update
-    - do not hook Functions["Air"]
-    - do not hook Functions["Run"]
-    - do not hook DataRegistry:Set
-    - do not write Velocity
-    - preserve original arguments
-    - preserve original return values
-    - compare Air -> Run movement calls
-    - support multi-jump speed build-up
-
-
-=============================================================
-END OF 2026-10-02 v1.05 PATH CORRECTION
-=============================================================
-
-
-=============================================================
-36. 2026-10-02 — v1.07 RESULT: CHARACTER LOOKUP BUG
-=============================================================
-
-v1.07 did not reach the movement introspection stage because:
-
-    GameCharacter = false
-    ERROR = Local Character not found
-
-This is a probe lookup error.
-
-The v1.07 script incorrectly tested:
-
-    type(characterService.GetLocalCharacter) == "function"
-
-directly on the Roblox Instance.
-
-The previously recovered runtime path is:
-
-    ReplicatedStorage.Services.Asset.CharacterService
-
-and the live service API is:
-
-    CharacterService:GetLocalCharacter()
-
-The next revision must obtain the service/module correctly, then call
-GetLocalCharacter() after the character system has initialized.
-
-No conclusion about movement physics may be drawn from this failed run.
-
-=============================================================
-END OF 2026-10-02 v1.07 RESULT
-=============================================================
-
-
-=============================================================
-37. 2026-10-02 — v1.08 CHARACTER SERVICE ACCESS CORRECTION
-=============================================================
-
-v1.08 keeps the non-invasive introspection strategy from v1.07.
-
-Only the local-character acquisition is changed.
-
-The probe will:
-
-    1. locate ReplicatedStorage.Services.Asset.CharacterService;
-    2. report its ClassName;
-    3. require it when it is a ModuleScript;
-    4. attempt GetLocalCharacter() on the resulting service table/object;
-    5. retry briefly so the character controller has time to initialize.
-
-No movement function is hooked and no game state is modified.
-
-=============================================================
-END OF 2026-10-02 v1.08 PLAN
-=============================================================
-
-
-=============================================================
-38. 2026-10-02 — v1.08 RESULT: getupvalues() INCOMPATIBILITY
-=============================================================
-
-v1.08 successfully reached the live runtime objects:
-
-    CharacterService = required successfully
-    GameCharacter = table
-    GameCharacter.Movement = FOUND
-    Movement.MoveFunction = FOUND
-    Movement.MoveFunction.Move = FOUND
-
-Therefore the character-service lookup is now confirmed correct.
-
-However:
-
-    Functions table = NOT FOUND
-
-and no individual MoveFunction.Move upvalues were printed.
-
-This does NOT contradict the previously recovered MoveFunction source,
-which explicitly contains:
-
-    upvalue StateInfo
-    upvalue Functions
-
-The likely cause is executor-specific behavior of:
-
-    debug.getupvalues(function)
-
-The next probe must therefore use the indexed API:
-
-    debug.getupvalue(function, index)
-
-for indexes 1..N and print BOTH:
-
-    returned upvalue name
-    returned upvalue value
-
-It should also inspect MoveFunction.Move constants/prototypes directly.
-
-No hooks or writes are permitted.
-
-=============================================================
-END OF 2026-10-02 v1.08 RESULT
-=============================================================
-
-
-=============================================================
-39. 2026-10-02 — v1.09 PLAN: INDEXED UPVALUE INSPECTION
-=============================================================
-
-v1.08 confirmed the live MoveFunction.Move function but could not expose its
-captured upvalues through debug.getupvalues().
-
-v1.09 will use executor-compatible indexed inspection:
-
-    debug.getupvalue(MoveFunction.Move, index)
-
-for a sequence of indexes.
-
-For every returned upvalue the probe will print:
-
-    index
-    upvalue name
-    value type
-    function info when applicable
-
-The first goal is to recover the live:
-
-    StateInfo
-    Functions
-
-references directly from the Move closure.
-
-Then, once Functions is found:
-
-    Functions["Air"]
-    Functions["Run"]
-
-will be inspected without modifying either function.
-
-MoveFunction.Move constants and prototypes will also be queried independently.
-
-Strictly non-invasive:
-
-    no hookfunction
-    no DataRegistry writes
-    no Velocity writes
-    no State writes
-    no camera writes
-
-=============================================================
-END OF 2026-10-02 v1.09 PLAN
-=============================================================
-
-
-=============================================================
-40. 2026-10-02 — v1.09 RESULT: MoveFunction.Move IS EXECUTOR WRAPPER
-=============================================================
-
-v1.09 reached the live runtime method, but debug inspection showed:
-
-    MoveFunction.Move
-    source = =Opiumware
-    line = 1
-    params = 0
-
-and:
-
-    debug.getupvalue(...)
-    ERROR = closure has no upvalues
-
-with the only constant:
-
-    __newlclosure_wrapper
-
-Therefore the live property:
-
-    Movement.MoveFunction.Move
-
-is an executor-generated wrapper, not the original game Lua closure.
-
-This explains why the expected Move source upvalues:
-
-    StateInfo
-    Functions
-
-cannot be recovered from that runtime function object.
-
-No conclusion about the actual MoveFunction implementation may be drawn from
-the wrapper's empty upvalue list.
-
--------------------------------------------------------------
-40.1 NEW DISCOVERY ROUTE
--------------------------------------------------------------
-
-The original game functions must be located independently of the wrapper.
-
-Preferred targets:
-
-    the required MoveFunction module's original function
-    the Functions module/table itself
-    Functions["Air"]
-    Functions["Run"]
-
-The next probe should scan accessible GC objects/tables and identify functions
-whose debug source/name/line match the recovered movement modules.
-
-Priority:
-
-    1. find the original Functions table containing Air and Run;
-    2. print the real Air function info;
-    3. print the real Run function info;
-    4. inspect their indexed upvalues;
-    5. inspect their constants;
-    6. inspect their nested prototypes;
-    7. inspect helper tables/functions when exposed.
-
-Strict safety remains:
-
-    no hookfunction
-    no writes
-    no movement calls
-    no state changes
-    no camera changes
-
-=============================================================
-END OF 2026-10-02 v1.09 RESULT
-=============================================================
-
-
-=============================================================
-41. 2026-10-02 — v1.10 PLAN: REQUIRE ORIGINAL MOVEMENT MODULES
-=============================================================
-
-v1.09 proved that the live instance property:
-
-    Movement.MoveFunction.Move
-
-is an executor-generated __newlclosure_wrapper.
-
-The recovered source hierarchy provides a cleaner route:
-
-    ReplicatedStorage
-      .Objects
-        .Game
-          .Character
-            .Client
-              .Movement
-                .MoveFunction
-                  .Functions
-
-MoveFunction is a ModuleScript whose source previously recovered:
-
-    function t.Move(p3, p4, p5, p6)
-        ...
-        return Functions[Movement.MoveType](
-            p4,
-            Movement,
-            p3.DataRegistry,
-            p3.Character,
-            p6
-        )
-    end
-
-Therefore the next probe will directly require:
-
-    Movement.MoveFunction ModuleScript
-
-and inspect:
-
-    OriginalMoveModule.Move
-
-instead of:
-
-    GameCharacter.Movement.MoveFunction.Move
-
-It will also directly require:
-
-    MoveFunctionModule.Functions
-
-and inspect:
-
-    Functions["Air"]
-    Functions["Run"]
-
-This should bypass the executor's __newlclosure_wrapper entirely.
-
-No hooks and no game-state writes are used.
-
-=============================================================
-END OF 2026-10-02 v1.10 PLAN
-=============================================================
-
-
-=============================================================
-43. 2026-10-02 — v1.11 PLAN: DIRECT RUN DECOMPILATION
-=============================================================
-
-The immediate target is now the complete original:
-
-    Functions["Run"]
-
-from:
-
-    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-
-v1.11 performs no hooks and no movement modifications.
-
-Primary attempt:
-
-    decompile(Functions["Run"])
-
-Fallback:
-
-    scan getgc() for function closures whose debug info matches the recovered
-    Run source/module/line and attempt decompile() on those candidates.
-
-The purpose is to recover the full Run body and determine the exact execution
-order and conditions for:
-
-    ApplyFriction
-    CapSprint
-    Accelerate
-    WallImpact
-    SwimMover
-    BaseMover
-    PlaneVelocity
-    VectorVelocity
-
-This is the direct requested decompilation attempt.
-
-=============================================================
-END OF 2026-10-02 v1.11 PLAN
-=============================================================
-
-
-=============================================================
-44. 2026-10-02 — v1.12 RESULT: FUNCTION BYTECODE INACCESSIBLE
-=============================================================
-
-v1.12 confirmed the exact limitation:
-
-    decompile(Functions["Run"])
-        -> failed to get function bytecode
-
-GC scanning found exactly one matching original Run closure:
-
-    source = ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-    line = 23
-
-Attempting decompile() on that GC candidate failed with the same bytecode error.
-
-Therefore:
-
-    The executor can expose:
-        source
-        line
-        constants
-        function object
-
-    but cannot retrieve bytecode for the Run closure.
-
-The investigation must stop trying to decompile the function object directly.
-
-Next target:
-
-    decompile(Functions ModuleScript)
-
-rather than:
-
-    decompile(Functions["Run"])
-
-This may allow retrieval of the complete source because the executor may have
-script-level bytecode access even when closure-level bytecode access fails.
-
-Potential secondary diagnostic:
-
-    getscriptbytecode(FunctionsScript)
-
-when exposed by the executor.
-
-The objective remains unchanged:
-
-    recover the full Run body and identify the operation that changes horizontal
-    Velocity during/around the Air -> Move landing transition.
-
-=============================================================
-END OF 2026-10-02 v1.12 RESULT
-=============================================================
-
-
-=============================================================
-45. 2026-10-02 — HANDOFF / STOP POINT FOR FUTURE SESSION
-=============================================================
-
-CURRENT INVESTIGATION GOAL
--------------------------------------------------------------
-
-The ONLY active investigation is:
-
-    identify the exact operation that removes horizontal speed when the
-    character lands and transitions from Air to grounded Move/Run.
-
-This is NOT the A -> B solver investigation.
-
-The practical symptom being investigated is:
-
-    repeated jumping / air movement can build horizontal speed
-    but landing causes a horizontal-speed reduction.
-
-The desired end result is to identify the exact code path responsible so it
-can later be changed without breaking the rest of the movement system.
-
-
-=============================================================
-CONFIRMED MOVEMENT ARCHITECTURE
-=============================================================
-
-Primary path:
-
-    ReplicatedStorage.Objects.Game.Character.Client.Movement
-
-Movement initialization creates:
-
-    Movement.StateInfo = require(Shared.StateInfo)
-    Movement.MoveStats = require(script.MoveStats).new(Movement)
-    Movement.MoveFunction = require(script.MoveFunction).new(Movement)
-    Movement.RootPartOrienter = require(script.RootPartOrienter).new(Movement)
-
-Runtime ownership:
-
-    GameCharacter
-        |
-        +-- Movement
-              |
-              +-- MoveFunction
-                    |
-                    +-- Move
-
-IMPORTANT:
-
-    GameCharacter.MoveFunction is WRONG.
-    GameCharacter.Movement.MoveFunction is CORRECT.
-
-The CharacterService used to obtain the local runtime character is:
-
-    ReplicatedStorage.Services.Asset.CharacterService
-
-The correct runtime access is:
-
-    local CharacterService =
-        require(
-            ReplicatedStorage.Services.Asset.CharacterService
-        )
-
-    local GameCharacter =
-        CharacterService:GetLocalCharacter()
-
-
-=============================================================
-CONFIRMED MoveFunction SOURCE / CALL CHAIN
-=============================================================
-
-Recovered MoveFunction source conceptually:
-
-    function t.Move(p3, p4, p5, p6)
-
-        local stateInfo = StateInfo:GetState(p5)
-
-        if stateInfo then
-
-            local Movement = stateInfo.Movement
-
-            if Movement then
-
-                if Movement.MoveType
-                    and
-                    Functions[Movement.MoveType]
-                then
-
-                    return Functions[Movement.MoveType](
-                        p4,
-                        Movement,
-                        p3.DataRegistry,
-                        p3.Character,
-                        p6
-                    )
-
-                end
-            end
-
-        else
-
-            return
-
-        end
-    end
-
-Therefore:
-
-    Movement.Update()
-        ->
-    DoFunction("Move", State, MoveStats, dt)
-        ->
-    MoveFunction.Move(dt, State, MoveStats)
-        ->
-    StateInfo:GetState(State)
-        ->
-    Functions[MoveType](...)
-        ->
-    Air / Run / other movement function
-
-
-=============================================================
-CONFIRMED STATES / MOVETYPE
-=============================================================
-
-Normal airborne state:
-
-    State = "Air"
-    MoveType = "Air"
-
-Normal grounded movement state:
-
-    State = "Move"
-    MoveType = "Run"
-
-Therefore the landing path of interest is:
-
-    Air
-        ->
-    Move
-        ->
-    Run
-
-
-=============================================================
-CONFIRMED ORIGINAL FUNCTIONS MODULE
-=============================================================
-
-Original module:
-
-    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-
-It is a ModuleScript.
-
-require(FunctionsScript) returns a table containing:
-
-    Air          source line 109, params 5
-    Run          source line 23,  params 5
-    Slide        source line 190, params 5
-    GrappleMove  source line 244, params 5
-    Climb        source line 251, params 5
-    ClimbStart   source line 354, params 4
-    ClimbEnd     source line 384, params 4
-    LungeMove    source line 394, params 5
-
-Most important:
-
-    Functions["Run"]
-
-is confirmed to be the ORIGINAL game function with:
-
-    source =
-        ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-
-    line = 23
-    params = 5
-
-
-=============================================================
-CONFIRMED Run CONSTANTS
-=============================================================
-
-debug.getconstants(Functions["Run"]) succeeds and returns 52 constants.
-
-Important Run constants, in the order exposed:
-
-    JumpingActive
-    Get
-    MoveDirection
-    GlobalMoveDirection
-    Swimming
-    X
-    Z
-    Vector3
-    new
-    BhopEnabled
-    JumpQueued
-    LookCFrame
-    Velocity
-    Sprint
-    ApplyFriction
-    0.5
-    Crouching
-    -0.5
-    Y
-    0
-    Unit
-    CapSprint
-    ADS
-    SprintAcceleration
-    2
-    SprintCap
-    math
-    clamp
-    Magnitude
-    WalkSpeedMultiplier
-    Emote
-    lerp
-    1
-    Speed
-    RunAccel
-    Accelerate
-    WallImpact
-    SwimMover
-    VectorVelocity
-    BaseMover
-    PlaneVelocity
-    Vector2
-
-This confirms that the Run function references:
-
-    ApplyFriction
-    CapSprint
-    SprintAcceleration
-    SprintCap
-    Accelerate
-    WallImpact
-    SwimMover
-    VectorVelocity
-    BaseMover
-    PlaneVelocity
-
-The exact execution ORDER is still unresolved.
-
-
-=============================================================
-CONFIRMED Air CONSTANTS
-=============================================================
-
-debug.getconstants(Functions["Air"]) succeeds and returns 57 constants.
-
-Important Air constants:
-
-    Velocity
-    Get
-    MoveDirection
-    Z
-    ApplyFriction
-    WallrunDirection
-    Wallrunning
-    -0.99
-    X
-    0.99
-    AI
-    GetAttribute
-    GlobalMoveDirection
-    LookCFrame
-    VectorToWorldSpace
-    Magnitude
-    Speed
-    Unit
-    Dot
-    AirAcceleration
-    2
-    0
-    AirStrafeAcceleration
-    Swimming
-    Accelerate
-    AirControl
-    antiNan
-    magnitude
-    SprintCap
-    math
-    clamp
-    WallImpact
-    BaseMover
-    PlaneVelocity
-    Vector2
-    new
-    Force
-    0.5
-    HumanoidRootPart
-    GetMass
-    workspace
-    Gravity
-    WallrunForce
-    Sprint
-
-Air and Run both reference ApplyFriction.
-
-
-=============================================================
-CONFIRMED MOVE STATS
-=============================================================
-
-Recovered BaseStats:
+Base table recovered:
 
     SprintAcceleration = 1
     SprintCap = 2
@@ -3566,917 +51,1048 @@ Recovered BaseStats:
     BhopEnabled = false
     GroundedDistCheck = 2.9
 
-During tested runtime sessions:
+Important:
 
-    MoveStats.Speed = 1620
-    Sprint = 2
-    Friction = 5
-    RunDeaccel = 1190
+MoveStats can be modified at runtime by state/perk/emote/etc. logic, so the
+BaseStats values are not guaranteed to be the final active values in every
+state.
 
-So the nominal:
+Confirmed important base values:
 
-    Sprint * Speed
+    Speed                  = 1500
+    SprintCap              = 2
+    RunAccel               = 1
+    Friction               = 5
+    RunDeaccel             = 700
+    AirStrafeAcceleration  = 182
+    AirAcceleration        = 1
+    JumpHeight             = 3
+    JumpSpeedMultiplier    = 1.45
+    BhopEnabled            = false
+    GroundedDistCheck      = 2.9
 
-was:
 
-    3240 internal velocity units
+============================================================
+2. INTERNAL VELOCITY VS REAL ROBLOX VELOCITY
+============================================================
 
-while high-speed tests exceeded 3240 internal units.
+The game has its own movement velocity in DataRegistry:
 
+    DataRegistry["Velocity"]
 
-=============================================================
-RECOVERED ApplyFriction HELPER
-=============================================================
+This is NOT numerically the same as:
 
-Location:
+    HumanoidRootPart.AssemblyLinearVelocity
 
-    ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
+Confirmed runtime scale:
 
-Recovered function is ApplyFriction, approximately line 47.
+    Movement.Update()
+        -> calculates Speed from internal Velocity
+        -> internal horizontal velocity is roughly real horizontal speed * 90
 
-Logic recovered:
+The recovered movement code contains the relationship:
 
-    Velocity = DataRegistry:Get("Velocity")
-    magnitude = Velocity.magnitude
-
-    RunDeaccel = stats.RunDeaccel
-    Friction = stats.Friction
-
-    if Swimming then
-        RunDeaccel *= 0.6
-        Friction *= 0.6
-    end
-
-    v4 = max(RunDeaccel, magnitude)
-
-    v5 =
-        magnitude
-        -
-        v4 * Friction * dt * mode-factor
-
-    clamp v5 to >= 0
-
-    if v5 > 0 then
-        multiplier = v5 / magnitude
-    end
-
-    return Velocity * multiplier
-
-Important consequence:
-
-    when magnitude > RunDeaccel,
-
-    v4 = magnitude
-
-so the effective loss can approximately become:
-
-    magnitude * Friction * dt
-
-for the relevant mode factor.
-
-The exact mode-factor branches were partially recovered previously.
-
-
-=============================================================
-RECOVERED Accelerate HELPER
-=============================================================
-
-Location:
-
-    Functions.Helpers
-    approximately line 177
-
-Recovered logic:
-
-    currentSpeed =
-        velocity:Dot(wishDirection)
-
-    addSpeed =
-        wishSpeed - currentSpeed
-
-    if addSpeed <= 0 then
-        return velocity
-    end
-
-    accelSpeed =
-        acceleration * deltaTime * wishSpeed
-
-    if accelSpeed > addSpeed then
-        accelSpeed = addSpeed
-    end
-
-    return
-        velocity
-        +
-        addSpeed * wishDirection
-
-A runtime test previously observed an effective factor around 10 in tested
-air calls:
-
-    accelSpeed =
-        acceleration * 10 * dt * wishSpeed
-
-The exact reason for that runtime factor remains contextual to the call path.
-
-
-=============================================================
-RECOVERED AirControl HELPER
-=============================================================
-
-Location:
-
-    Functions.Helpers
-    approximately line 164
-
-Observed argument structure:
-
-    arg1 = self/table
-    arg2 = vector whose Z is tested
-    arg3 = number often around 1620
-    arg4 = lateral/right direction vector
-    arg5 = current Velocity
-    arg6 = dt
-
-Recovered logic:
-
-    Z = arg2.Z
-
-    if abs(Z) < 0.001
-        or
-        abs(arg3) < 0.001
-    then
-        return arg5
-    end
-
-    magnitude = arg5.magnitude
-    unit = arg5.unit
-    dot = unit:Dot(arg4)
-
-    unused =
-        32 * (1 * dot * dot * dt)
-
-    return
-        unit *
-        Vector3.new(
-            magnitude,
-            0,
-            magnitude
-        )
-
-This helper itself does not explain the landing loss.
-
-
-=============================================================
-RECOVERED JUMP SPEED LOGIC
-=============================================================
-
-Jump() contains the horizontal-speed rewrite:
-
-    v5 =
-        JumpSpeedMultiplier
-        *
-        HumanoidRootPart.CFrame.lookVector:Dot(
-            Velocity.unit
-        ) ^ 2
-
-    if Velocity.magnitude < Sprint * Speed * v5 then
-
-        v6 =
-            Velocity.magnitude
-            *
-            JumpSpeedMultiplier
-
-        v7 =
-            Sprint
-            *
-            Speed
-            *
-            v5
-
-        v8 =
-            math.min(v6, v7)
-
-        DataRegistry:Set(
-            "Velocity",
-            (
-                DataRegistry:Get("Velocity")
-                *
-                Vector3.new(1,0,1)
-            ).unit
-            *
-            v8
-        )
-
-    end
-
-Therefore looking down changes jump-time horizontal speed because of:
-
-    (HumanoidRootPart.lookVector · Velocity.unit)^2
-
-This is a separate known issue and NOT the current landing investigation.
-
-
-=============================================================
-INTERNAL VS REAL VELOCITY SCALE
-=============================================================
-
-Movement velocity stored in DataRegistry is approximately:
-
-    internal velocity ~= real horizontal velocity * 90
-
-Movement.Update derives:
-
-    Speed =
-        Velocity.Magnitude / 90
-
-therefore real-world horizontal speed is approximately:
-
-    internal HSpeed / 90
-
-
-=============================================================
-v1.02 LANDING DATA — IMPORTANT HISTORICAL RESULT
-=============================================================
-
-v1.02 used Heartbeat-style sampling around the Air -> Move transition.
-
-It recorded 10 representative landings.
-
-Representative values:
-
-    #1
-        49.648 -> 49.300
-        actual loss = 0.348
-        predicted friction = 2.181
-
-    #2
-        51.098 -> 49.866
-        actual loss = 1.232
-        predicted friction = 2.310
-
-    #3
-        51.592 -> 50.660
-        actual loss = 0.932
-        predicted friction = 2.503
-
-    #4
-        52.733 -> 50.532
-        actual loss = 2.201
-        predicted friction = 2.218
-        difference = 0.017
-
-    #5
-        51.827 -> 50.057
-        actual loss = 1.770
-        predicted friction = 2.245
-
-    #6
-        51.049 -> 49.466
-        actual loss = 1.583
-        predicted friction = 1.998
-
-    #7
-        51.321 -> 49.905
-        actual loss = 1.416
-        predicted friction = 1.278
-        difference = 0.138
-
-    #8
-        49.381 -> 48.318
-        actual loss = 1.063
-        predicted friction = 2.479
-
-    #9
-        49.390 -> 48.544
-        actual loss = 0.846
-        predicted friction = 2.394
-
-    #10
-        48.429 -> 46.348
-        actual loss = 2.081
-        predicted friction = 2.331
-
-One landing (#4) was an extremely close match to ApplyFriction prediction.
-
-This is useful evidence, but NOT final proof because v1.02 sampling was outside
-the exact movement-function call boundary.
-
-
-=============================================================
-v1.03 — REJECTED
-=============================================================
-
-Attempted:
-
-    hook Movement.Update()
-
-Reason:
-
-    compare exact Velocity before/after Movement.Update(dt)
-
-Problem:
-
-    hook caused runtime errors and movement/camera side effects.
-
-Observed:
-
-    camera could rotate
-    character no longer followed camera horizontal rotation correctly
-
-Conclusion:
-
-    Movement.Update hook is too invasive.
-
-Do NOT use v1.03 again.
-
-
-=============================================================
-v1.04 / v1.05 / v1.06 HISTORY
-=============================================================
-
-v1.04:
-
-    initial wrapper helper had an argument/result handling bug.
-    Rejected before use.
-
-v1.05:
-
-    corrected wrapper logic but used wrong object path:
-
-        GameCharacter.MoveFunction
-
-    which does not exist.
-
-v1.06:
-
-    corrected runtime path:
-
-        GameCharacter.Movement.MoveFunction.Move
-
-    Hook target installed successfully.
-
-However v1.06 broke normal movement.
-
-User observed:
-
-    - normal landing stopped behaving normally;
-    - character could appear suspended/sliding over the floor as if still airborne;
-    - speed did not lose normally on landing.
-
-The log also showed repeated stale observations from LANDING #26 through #76:
-
-    LAST AIR remained:
-        Velocity = (129.475, 0.000, 4234.887)
-        HSpeed = 4236.865723
-
-    FIRST RUN PRE remained:
-        Velocity = (129.475, 0.000, 4234.887)
-        HSpeed = 4236.865723
-
-    FIRST RUN POST remained identical.
-
-Conclusion:
-
-    MoveFunction.Move hook is unsafe under this executor.
-
-Do NOT use MoveFunction.Move hooks again.
-
-
-=============================================================
-v1.07 / v1.08 / v1.09 / v1.10 / v1.11 / v1.12 / v1.13
-=============================================================
-
-v1.07:
-
-    Intended non-invasive upvalue/prototype inspection.
-    Character lookup initially failed because CharacterService was treated as a
-    direct object method rather than requiring the ModuleScript.
-
-v1.08:
-
-    Correct CharacterService require succeeded.
-    GameCharacter found.
-    Movement found.
-    Movement.MoveFunction found.
-    Movement.MoveFunction.Move found.
-
-    However debug.getupvalues(MoveFunction.Move) exposed nothing useful.
-
-v1.09:
-
-    Indexed debug.getupvalue() was attempted.
-
-    Result:
-
-        MoveFunction.Move
-        source = =Opiumware
-        line = 1
-        params = 0
-
-        constant:
-            __newlclosure_wrapper
-
-    Therefore the runtime property MoveFunction.Move is an executor wrapper.
-
-v1.10:
-
-    Directly requiring the original Movement.MoveFunction ModuleScript still
-    produced a function object whose debug information was:
-
-        source = =Opiumware
-        line = 1
-        params = 0
-
-        constant:
-            __newlclosure_wrapper
-
-    However direct requiring the original Functions ModuleScript succeeded and
-    exposed the original game function objects:
-
-        Functions["Air"]
-        source = ReplicatedStorage...MoveFunction.Functions
-        line = 109
-        params = 5
-
-        Functions["Run"]
-        source = ReplicatedStorage...MoveFunction.Functions
-        line = 23
-        params = 5
-
-    This is the current reliable way to obtain original Air/Run closures.
-
-v1.11:
-
-    Direct decompile(Functions["Run"]) was attempted.
-
-    Failed:
-
-        Opiumware:381: failed to get function bytecode
-
-    GC scan found exactly one matching closure:
-
-        source =
-            ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
-        line = 23
-        params = 5
-
-    decompile() of that GC candidate failed with:
-
-        Opiumware:543: failed to get function bytecode
-
-v1.12:
-
-    Repeated the same direct function decompilation with mandatory clipboard
-    handling.
-
-    Result remained:
-
-        failed to get function bytecode
-
-v1.13:
-
-    Attempted script-level decompilation of the entire Functions ModuleScript
-    rather than Functions["Run"].
-
-    The executor returned:
-
-        decompiler error:
-        invalid Luau bytecode:
-        Failure(Error { input: [...], code: Verify })
-
-    The returned input clearly contains:
-
-        Run
-        Air
-        Slide
-        GrappleMove
-        Climb
-        Helpers
-        ApplyFriction
-        Accelerate
-        AirControl
-        BaseMover
-        PlaneVelocity
-        WallImpact
-        SwimMover
-        and many other known constants/instructions.
-
-    This strongly indicates the executor received the current module's Luau
-    bytecode but its bytecode parser/verifier cannot decode the format.
-
-Current interpretation:
-
-    Roblox updated the movement scripts / Luau bytecode format,
-    while the installed Opiumware decompiler/parser appears not to support the
-    new bytecode version yet.
-
-This is the current stopping point.
-
-
-=============================================================
-CURRENT STOP POINT
-=============================================================
-
-STOP HERE.
-
-Do NOT continue with:
-
-    Movement.Update hooks
-    MoveFunction.Move hooks
-    Air/Run hooks
-    DataRegistry:Set hooks
-
-Do NOT spend time re-running function-level decompile().
-
-Do NOT return to the A -> B solver.
-
-The useful next action when the executor/decompiler is updated is:
-
-    1. run decompile() on the Functions ModuleScript again;
-    2. if it succeeds, extract the COMPLETE Functions module source;
-    3. inspect the exact Run function from line 23;
-    4. determine the exact order/conditions for:
-           ApplyFriction
-           CapSprint
-           Accelerate
-           WallImpact
-           SwimMover
-           BaseMover
-           PlaneVelocity
-           VectorVelocity
-    5. identify exactly what changes DataRegistry["Velocity"] on landing;
-    6. only then design the smallest safe modification.
-
-The current evidence already makes ApplyFriction a strong candidate, but it is
-NOT yet the final proven answer because the exact Run execution order is still
-unavailable.
-
-
-=============================================================
-FUTURE SESSION HANDOFF
-=============================================================
-
-When continuing in a new chat, provide this file:
-
-    Camera_Jump_Physics.txt
-
-The future investigation should resume at:
-
-    section 45
-    CURRENT STOP POINT
-
-The first sentence to preserve as the active objective is:
-
-    "Find the exact operation that removes horizontal speed when Air transitions
-     to grounded Move/Run; current blocker is executor incompatibility with the
-     updated Luau bytecode."
-
-=============================================================
-END OF 2026-10-02 HANDOFF
-=============================================================
-
-
-=============================================================
-46. 2026-10-05 — COMPLETE Run SOURCE RECOVERED
-=============================================================
-
-The Functions ModuleScript was successfully decompiled.
-
-Script path:
-
-    game:GetService("ReplicatedStorage").Objects.Game.Character.Client.Movement.MoveFunction.Functions
-
-Executor:
-
-    OpiumwareMac v2.5.4
-
-The complete module source is now available.
-
-Most important recovered function:
-
-    Run = function(p6, p7, p8, p9, p10)
-
-with:
-
-    p6 = dt
-    p7 = Movement/state movement data
-    p8 = DataRegistry
-    p9 = Character
-    p10 = MoveStats
-
--------------------------------------------------------------
-46.1 EXACT Run ORDER
--------------------------------------------------------------
-
-For normal non-swimming grounded movement:
-
-    1. Read JumpingActive
-    2. Read MoveDirection
-    3. Read GlobalMoveDirection
-    4. Read Swimming
-    5. Flatten GlobalMoveDirection Y to 0 when not swimming
-    6. Skip Run body only when:
-           BhopEnabled and JumpingActive
-        OR:
-           JumpQueued == true
-
-    Otherwise:
-
-    7. Read LookCFrame
-    8. Read Velocity
-    9. Read Sprint
-
-   10. CALL:
-           Helpers:ApplyFriction(
-               p6, p7, p8, p9, p10, 1
-           )
-
-       Result:
-           v11
-
-   11. Build movement direction and sprint factor v12
-   12. Calculate Magnitude
-   13. Calculate v16 from WalkSpeedMultiplier / SprintCap / Emote
-   14. CALL:
-           Helpers:Accelerate(
-               v11,
-               GlobalMoveDirection,
-               Magnitude * (p10.Speed * v16),
-               12 * p10.RunAccel,
-               p6,
-               Swimming
-           )
-
-   15. CALL:
-           Helpers:WallImpact(
-               p6, p7, p8, p9, p10,
-               [result of Accelerate]
-           )
-
-       Result:
-           v18
-
-   16. For normal non-swimming movement:
-           return
-           {
-               BaseMover = {
-                   PlaneVelocity = Vector2.new(v18.X, v18.Z)
-               }
-           },
-           {
-               Sprint = v19,
-               Velocity = v18
-           }
-
-Therefore the exact normal Run velocity pipeline is:
-
-    Velocity
-        ->
-    ApplyFriction
-        ->
-    Accelerate
-        ->
-    WallImpact
-        ->
-    returned Velocity / PlaneVelocity
-
--------------------------------------------------------------
-46.2 LANDING SPEED-LOSS SOURCE
--------------------------------------------------------------
-
-This resolves the main investigation.
-
-The normal grounded Run function explicitly calls:
-
-    Helpers:ApplyFriction(..., 1)
-
-BEFORE:
-
-    Helpers:Accelerate(...)
-
-Therefore when Air transitions to grounded Move/Run, the grounded Run path first
-takes the current Velocity and passes it through ApplyFriction.
-
-The recovered Run source does NOT contain any separate explicit landing-only
-velocity reduction before ApplyFriction.
-
-Thus the previously observed immediate horizontal speed reduction on landing
-is explained directly by the Run-side ApplyFriction call, subject to the
-conditions that the normal Run branch is executing.
-
-This is now substantially stronger than the earlier v1.02 inference because
-the complete Run source establishes the exact call order.
-
--------------------------------------------------------------
-46.3 IMPORTANT ACCELERATION DETAIL
--------------------------------------------------------------
-
-Run does NOT simply take the friction result as the final velocity.
-
-After ApplyFriction:
-
-    v11 = ApplyFriction(...)
-
-Run then calls:
-
-    Accelerate(
-        v11,
-        GlobalMoveDirection,
-        Magnitude * (Speed * v16),
-        12 * RunAccel,
-        dt,
-        Swimming
-    )
-
-Therefore the final grounded velocity can be:
-
-    friction result
-        PLUS / PRESERVED BY
-    acceleration result
-
-depending on current velocity, desired movement direction, wish speed and
-acceleration conditions.
-
-Consequently:
-
-    ApplyFriction = direct first operation responsible for reducing velocity
-
-but:
-
-    final landing speed change = interaction of ApplyFriction + Accelerate +
-    WallImpact.
-
-This distinction must be preserved.
-
--------------------------------------------------------------
-46.4 HIGH-SPEED IMPLICATION
--------------------------------------------------------------
-
-From the recovered Run code:
-
-    wishSpeed =
-        Magnitude
-        *
-        (p10.Speed * v16)
-
-and:
-
-    acceleration =
-        12 * p10.RunAccel
-
-The Accelerate helper itself only adds velocity when:
-
-    wishSpeed - currentSpeed > 0
-
-Therefore if current horizontal velocity exceeds the current Run wish-speed
-in the relevant direction, Accelerate may add little or nothing.
-
-This explains why ApplyFriction can be the dominant source of landing speed
-loss during high-speed movement.
-
-Exact final contribution still depends on the actual vector dot product and
-the calculated v12/v16 values for that frame.
-
--------------------------------------------------------------
-46.5 NO SEPARATE LANDING FRICTION BRANCH IN RUN
--------------------------------------------------------------
-
-The recovered Run source contains:
-
-    if not (BhopEnabled and JumpingActive)
-        and JumpQueued ~= true
-    then
-        ...
-        Helpers:ApplyFriction(..., 1)
-        ...
-    end
-
-There is no explicit:
-
-    if State == Move and previous State == Air then ...
-
-landing-specific friction branch inside Run.
-
-Therefore the observed landing slowdown is not a special "landing friction"
-statement inside Run.
-
-It is the normal grounded Run friction being applied immediately after the
-movement state becomes grounded.
-
--------------------------------------------------------------
-46.6 CURRENT ANSWER
--------------------------------------------------------------
-
-Question:
-
-    What exact code removes horizontal speed when landing?
-
-Answer:
-
-    The grounded Run movement function calls:
-
-        Helpers:ApplyFriction(p6, p7, p8, p9, p10, 1)
-
-    before Accelerate() and WallImpact().
-
-    ApplyFriction is therefore the first confirmed direct velocity-reducing
-    operation in the grounded movement path.
-
-The complete source order is now proven.
-
--------------------------------------------------------------
-46.7 NEXT SAFE MODIFICATION TARGET
--------------------------------------------------------------
-
-Do NOT hook:
-
-    Movement.Update
-    MoveFunction.Move
-    Functions["Run"]
-
-Those hooks previously caused movement side effects under the executor.
-
-The source-level modification should instead target the actual implementation of:
-
-    Helpers:ApplyFriction
-
-or reproduce/override only the friction result at a safer integration point.
-
-Before changing anything, recover the current Helpers source and determine the
-exact meaning of the final parameter:
-
-    1
-
-and the exact friction formula/branches used by the helper.
-
-The goal is to change ONLY grounded friction/landing speed loss while preserving:
-
-    Accelerate
-    WallImpact
-    PlaneVelocity
-    air movement
-    camera
-    character rotation
-    jump logic
-
-=============================================================
-END OF 2026-10-05 COMPLETE Run SOURCE RECOVERED
-=============================================================
-
-
-=============================================================
-47. 2026-10-05 — COMPLETE ApplyFriction SOURCE RECOVERED
-=============================================================
-
-The complete Helpers module was successfully decompiled.
-
-Script path:
-
-    game:GetService("ReplicatedStorage").Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
-
-Executor:
-
-    OpiumwareMac v2.5.4
-
-The exact ApplyFriction implementation is now known.
-
--------------------------------------------------------------
-47.1 EXACT ApplyFriction SIGNATURE / ARGUMENT MAPPING
--------------------------------------------------------------
-
-Source:
-
-    function t.ApplyFriction(_2, p7: number, p8, p9, _3, p10, p11)
-
-It is called from Run with:
-
-    Helpers:ApplyFriction(
-        p6,
-        p7,
-        p8,
-        p9,
-        p10,
-        1
-    )
+    Speed = Velocity.Magnitude / 90
 
 Therefore:
 
+    real speed ~= internal horizontal velocity magnitude / 90
+    internal velocity ~= real horizontal speed * 90
+
+Example:
+
+    real speed ~= 50
+    internal velocity ~= 4500
+
+Observed internal values in air movement were several thousand while
+AssemblyLinearVelocity was much smaller.
+
+Do not mix these two velocity representations when calculating movement.
+
+
+============================================================
+3. EXACT JUMP SPEED LOGIC
+============================================================
+
+The discovered Jump() function contains:
+
+    local Speed = v3.Speed
+
+    local v5 =
+        v3.JumpSpeedMultiplier *
+        v_u_1.Character.HumanoidRootPart.CFrame.lookVector:Dot(Velocity.unit) ^ 2
+
+    local magnitude = Velocity.magnitude
+
+    if magnitude < Sprint * Speed * v5 then
+
+        local v6 = magnitude * v3.JumpSpeedMultiplier
+        local v7 = Sprint * Speed * v5
+        local v8 = math.min(v6, v7)
+
+        v_u_1.DataRegistry:Set(
+            "Velocity",
+            (v_u_1.DataRegistry:Get("Velocity") * Vector3.new(1, 0, 1)).unit * v8
+        )
+    end
+
+So the jump-time horizontal speed target is:
+
+    targetCap =
+        Sprint
+        * Speed
+        * JumpSpeedMultiplier
+        * (HumanoidRootPart.lookVector · Velocity.unit)^2
+
+and the rewritten horizontal magnitude is:
+
+    min(
+        |Velocity| * JumpSpeedMultiplier,
+        targetCap
+    )
+
+The direction is based on the existing DataRegistry Velocity after removing Y.
+
+
+============================================================
+4. WHY LOOKING DOWN REDUCES JUMP SPEED
+============================================================
+
+This is directly confirmed by the Jump() source.
+
+The relevant factor is:
+
+    (HumanoidRootPart.lookVector · Velocity.unit)^2
+
+For approximately horizontal Velocity aligned with character facing:
+
+    dot ~= cos(pitch)
+
+therefore:
+
+    dot^2 ~= cos(pitch)^2
+
+Useful mathematical reference:
+
+    0°  -> 1.000
+    30° -> 0.750
+    45° -> 0.500
+    60° -> 0.250
+    75° -> 0.067
+    90° -> 0.000
+
+Actual runtime values depend on the full 3D Velocity direction and relative yaw.
+
+Important:
+
+    JumpHeight is NOT the cause of this horizontal speed reduction.
+
+The reduction comes from the HRP lookVector / Velocity dot product.
+
+
+============================================================
+5. JUMP FLOW
+============================================================
+
+Recovered Jump() flow, at the confirmed level:
+
+    1. Reject if Downed.
+    2. Reject while carrying a nonzero carried state.
+    3. If MoveStats.Speed == 0, do not perform the speed adjustment.
+    4. Read Velocity, Sprint and MoveStats.
+    5. Calculate HRP lookVector · Velocity.unit.
+    6. Square that dot product and multiply by JumpSpeedMultiplier.
+    7. Calculate the jump-time horizontal speed cap.
+    8. Rewrite horizontal Velocity if current magnitude is below the cap.
+    9. Set Humanoid.JumpHeight.
+   10. Set Humanoid state to Jumping.
+   11. Wallrun jumps have additional wallrun-specific velocity/vertical handling.
+
+
+============================================================
+6. CAMERA AND CHARACTER ROTATION ARE DIFFERENT SYSTEMS
+============================================================
+
+The tested active ordinary camera path is:
+
+    Players.<Player>.PlayerScripts.PlayerModule.CameraModule.ClassicCamera
+
+The active camera pipeline is:
+
+    CameraInput
+        ->
+    getRotation()
+        ->
+    ClassicCamera.Update()
+        ->
+    CameraCFrame
+
+Character yaw is handled separately through the movement/character system.
+
+A recovered character-orientation path reads:
+
+    DataRegistry:Get("LookCFrame")
+
+then extracts yaw:
+
+    local _, yaw, _ = LookCFrame:ToOrientation()
+
+and constructs yaw-only orientation:
+
+    CFrame.new(position)
+        * CFrame.Angles(0, yaw, 0)
+
+Observed RootPartOrientation types include:
+
+    MoveDir
+    EmotingMoveDir
+    Camera
+    Velocity
+
+Important consequence:
+
+    workspace.CurrentCamera.CFrame.LookVector
+        is not the same thing as
+    HumanoidRootPart.CFrame.lookVector
+
+Jump() uses:
+
+    HumanoidRootPart.CFrame.lookVector
+
+not the workspace camera lookVector directly.
+
+
+============================================================
+7. CAMERA INPUT STATE
+============================================================
+
+CameraInput path:
+
+    Players.<Player>.PlayerScripts.PlayerModule.CameraModule.CameraInput
+
+getRotation() has the following relevant upvalues:
+
+    upvalue[1] = GameSettings
+
+    upvalue[2] = keyboard-related table
+        I
+        Left
+        Right
+        O
+        None
+
+    upvalue[3] = gamepad table
+        None = Vector2
+        Thumbstick2 = Vector2
+
+    upvalue[4] = touch/mouse movement state
+        Pinch
+        Pan
+        Movement
+        Wheel
+
+    upvalue[6] contains:
+        Move
+        Pinch
+
+Confirmed getRotation constants include camera-input sensitivity/constants such as:
+
+    4.18879032
+    3.2253685
+    0.00575958658
+    0.080634214
+    0.0195825938
+    2.0943951023931953
+
+The exact useful structural fact is the shared Movement state table.
+
+
+============================================================
+8. CONFIRMED MOUSE CAMERA PATH
+============================================================
+
+CameraInput.inputChanged captures the same state table used by getRotation.
+
+The input handler references:
+
+    UserInputType
+    Touch
+    MouseMovement
+    Delta
+    Vector2.new
+    X
+    Y
+    Movement
+
+Therefore the confirmed native path is:
+
+    MouseMovement
+        ->
+    CameraInput.inputChanged
+        ->
+    Movement = Vector2(...)
+        ->
+    CameraInput.getRotation()
+        ->
+    ClassicCamera.Update()
+        ->
+    CameraCFrame
+
+
+============================================================
+9. PROGRAMMATIC CAMERA ROTATION
+============================================================
+
+Confirmed working test:
+
+Find CameraInput.getRotation.
+
+Then:
+
+    local movementTable = debug.getupvalues(getRotation)[4]
+
+Injecting:
+
+    movementTable.Movement = Vector2.new(3, 0)
+
+while bound in the appropriate RenderStep position successfully rotated the
+active camera.
+
+This proves that camera rotation can be injected into the native camera-input
+pipeline without directly assigning:
+
+    workspace.CurrentCamera.CFrame
+
+
+============================================================
+10. CAMERA INPUT RESET
+============================================================
+
+CameraInput.resetInputForFrameEnd captures the same state table.
+
+Its constants include:
+
+    Movement
+    Move
+    Pinch
+    Wheel
+    Pan
+    Vector2
+    new
+
+Therefore Movement is frame-oriented camera input state and is processed/reset
+as part of the camera update cycle.
+
+
+============================================================
+11. DATREGISTRY STRUCTURE USED BY MOVEMENT/REPLICATION
+============================================================
+
+Path:
+
+    Character.DataRegistry
+
+Confirmed relevant methods:
+
+    Set(key, value)
+    Get(key)
+
+Recovered Get():
+
+    function t.Get(p19, p20)
+        return p19.Data[p20]
+    end
+
+Recovered Set() behavior, in relevant form:
+
+    if p15.Data[p16] ~= p17 then
+        p15:SetTerm(p16, p17)
+
+        if p15.Parent.Local and Serializer:CanSend(p16) then
+            local encoded = Serializer:EncodeTerm(p16, p17)
+
+            if not p15.ToSend[p16]
+                or Serializer:DecodeTerm(p16, p15.ToSend[p16])
+                   ~= Serializer:DecodeTerm(p16, encoded)
+            then
+                p15.DataEmpty = false
+                p15.ToSend[p16] = encoded
+            end
+        end
+    end
+
+UpdateCycle():
+
+    local v22, v23 = Serializer:EncodedDataToPacket(p21.ToSend)
+
+    if v22 then
+        ReplicatedStorage.Events.UpdateCharacterDataRegistry:FireServer(v22)
+    end
+
+    if v23 then
+        ReplicatedStorage.Events.UpdateCharacterDataRegistryUnreliable:FireServer(v23)
+    end
+
+    p21.ToSend = {}
+    p21.DataEmpty = true
+
+Important:
+
+DataRegistry.Set() is the normal point where a changed term gets placed into
+ToSend for network replication.
+
+A direct write into DataRegistry.Data is therefore not equivalent to a normal
+replicated Set() operation.
+
+
+============================================================
+12. LOOKY TERM — EXACT SOURCE
+============================================================
+
+Path:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.Terms
+
+The LookY term is:
+
+    LookY = {
+        ID = 6,
+        Type = "Number",
+        OwnerClientOnly = false,
+        ClientSendable = true,
+        Unreliable = true
+    }
+
+Therefore LookY is explicitly:
+
+    client-sendable
+    NOT owner-client-only
+    unreliable
+
+This is the confirmed network property of the look-pitch term.
+
+
+============================================================
+13. LOOKY IS CALCULATED FROM CAMERA PITCH
+============================================================
+
+The Movement.Terms entry for LookY has:
+
+    Term = "LookY"
+    DisabledValue = 0
+    FunctionActiveOnServer = false
+
+Its CalculateFunction is:
+
+    local Y2 = v_u_3:GetCFrame().lookVector.Y
+    local v20 = math.asin(Y2) * 40 + 0.5
+    return math.floor(v20) / 40
+
+So the game's LookY value is a quantized pitch angle in radians.
+
+It is NOT:
+
+    sin(pitch)
+
+It is effectively:
+
+    LookY =
+        floor(
+            asin(CameraCFrame.lookVector.Y) * 40 + 0.5
+        ) / 40
+
+Quantization step:
+
+    1 / 40 radian ~= 0.025 rad
+
+
+============================================================
+14. WHY DIRECTLY FORCING DATREGISTRY["LOOKY"] DID NOT WORK
+============================================================
+
+This was tested and the reason was recovered.
+
+Character.Update() does, for local characters:
+
+    DataRegistry:Set("LookCFrame", CameraService:GetCFrame())
+
+Then, when movement is active:
+
+    Movement:UpdateTerms(...)
+
+The Movement.Terms system recalculates LookY from the live camera CFrame.
+
+Therefore a later direct assignment such as:
+
+    DataRegistry:Set("LookY", target)
+
+can be overwritten by Movement.UpdateTerms() before UpdateCycle() sends the
+actual term.
+
+This was observed in diagnostics: a manually forced target could exist briefly,
+but the outgoing value later became the native camera-derived value.
+
+Conclusion:
+
+    Do NOT treat a RenderStep write to DataRegistry["LookY"] as the reliable
+    source of the game's outgoing LookY value.
+
+
+============================================================
+15. CONFIRMED SOLUTION POINT FOR RAGE LOOK
+============================================================
+
+The correct integration point is the native Movement.Terms CalculateFunction.
+
+Working test:
+
+    1. Find:
+       ReplicatedStorage.Objects.Game.Character.Client.Movement.Terms
+
+    2. require() the module.
+
+    3. Find the entry where:
+           entry.Term == "LookY"
+
+    4. Save:
+           entry.CalculateFunction
+
+    5. Replace only the CalculateFunction with one returning the target
+       quantized LookY.
+
+For a target physical pitch of about -70 degrees:
+
+    RAGE_LOOK_PITCH = -math.rad(70)
+
+The game's own quantization gives:
+
+    RAGE_LOOK_Y =
+        math.floor(RAGE_LOOK_PITCH * 40 + 0.5) / 40
+
+which equals:
+
+    -1.225
+
+A standalone runtime test using this exact Terms replacement produced:
+
+    DataRegistry["LookY"] = -1.225
+    ToSend["LookY"]         = -1.225
+
+This is important because it proves the value reached the normal DataRegistry
+send queue rather than being only a temporary local override.
+
+This is the confirmed mechanism used by the DeadEye Rage Look implementation.
+
+
+============================================================
+16. RAGE LOOK PHYSICAL CFRAME HOOK
+============================================================
+
+The game physics need to believe the character is looking down, but the actual
+camera should remain visually unchanged.
+
+The confirmed local technique is:
+
+    intercept DataRegistry.Get()
+
+and only for:
+
+    key == "LookCFrame"
+
+return a fake CFrame with:
+
+    same position
+    same horizontal/yaw orientation
+    target pitch, approximately -70 degrees
+
+Do NOT modify:
+
+    HumanoidRootPart.CFrame
+    workspace.CurrentCamera.CFrame
+    RootPartOrienter
+    Head.Transform
+    Head.C0
+
+The purpose of this hook is specifically to affect code that reads:
+
+    DataRegistry:Get("LookCFrame")
+
+for movement/physics logic.
+
+Most importantly, the Jump() slowdown reads:
+
+    HumanoidRootPart.CFrame.lookVector
+
+so the effect of the physical-look solution is to make the character's actual
+movement/physics look downward through the native character-orientation/data
+path without visually forcing the local camera downward.
+
+The currently used DeadEye implementation keeps the LookCFrame hook separate
+from the LookY replication path.
+
+
+============================================================
+17. CURRENT RAGE LOOK ARCHITECTURE
+============================================================
+
+Confirmed architecture used in DeadEye v1.140:
+
+    Visual camera
+        |
+        +--> remains unchanged
+        |
+        v
+    native camera CFrame
+
+    Movement.Terms["LookY"].CalculateFunction
+        |
+        +--> returns quantized target pitch (-1.225 for -70°)
+        |
+        v
+    DataRegistry:Set("LookY", ...)
+        |
+        v
+    ToSend["LookY"]
+        |
+        v
+    UpdateCycle()
+        |
+        v
+    UpdateCharacterDataRegistryUnreliable
+        |
+        v
+    server
+        |
+        v
+    other clients receive LookY
+
+
+    Separately:
+
+    DataRegistry.Get("LookCFrame")
+        |
+        +--> fake CFrame for local movement/physics reads
+        |
+        v
+    movement / jump calculations
+
+The two mechanisms solve different problems:
+
+    LookCFrame hook
+        = local physics input
+
+    Movement Terms LookY replacement
+        = native LookY value generation + replication path
+
+
+============================================================
+18. LOOKY RECEIVE / REPLICATION PATH ON OTHER CLIENTS
+============================================================
+
+The client-side receive path was recovered.
+
+Other clients receive:
+
+    ReplicatedStorage.Events.UpdateCharacterDataRegistry
+    ReplicatedStorage.Events.UpdateCharacterDataRegistryUnreliable
+
+The unreliable receive handler calls the same character update logic.
+
+Recovered flow:
+
+    UpdateCharacterDataRegistryUnreliable.OnClientEvent
+        ->
+    updateCharacterFromData(packet)
+        ->
+    Serializer:Decode(packet)
+        ->
+    CharacterService:GetCharacterFromTag(...)
+        ->
+    Tag.DataRegistry:ServerToClient(decodedData)
+
+Therefore a replicated LookY term reaches the receiving character's local
+DataRegistry.
+
+
+============================================================
+19. JOINTS CONSUME LOOKY
+============================================================
+
+The Joints module reacts to LookY changes.
+
+Confirmed behavior:
+
+    RegistryTermUpdated("LookY")
+        ->
+    p49.LookY = DataRegistry:Get("LookY")
+
+During Joints.Update():
+
+    compare LastLookY vs LookY
+
+    if changed:
+        SetC1s(ReadNewC1s(LookY, Gyro), ...)
+
+The animation/interpolation path contains:
+
+    local v38 =
+        ((p37 == nil and 0 or p37) + 1.5707963267948966)
+        / 3.141592653589793
+
+This converts LookY into the interpolation parameter used by the joint
+animation code.
+
+LowerTorso and HumanoidRootPart are excluded from these C1 changes; the
+LookY-driven joint updates are applied to the other relevant joints.
+
+Therefore:
+
+    network LookY
+        ->
+    receiving DataRegistry
+        ->
+    Joints.LookY
+        ->
+    joint C1 update
+
+This establishes the native client-side consumer of LookY.
+
+
+============================================================
+20. INTERPOLATELIMBS
+============================================================
+
+Path:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Joints.InterpolateLimbs
+
+The recovered InterpolateLimbs module is an animation interpolation helper.
+
+It does NOT provide the networking mechanism for LookY.
+
+Its role in the confirmed chain is only the conversion/interpolation of joint
+CFrame changes after Joints decides that LookY changed.
+
+
+============================================================
+21. CHARACTER UPDATE ORDER
+============================================================
+
+Relevant recovered Character.Update() order:
+
+    if p22.Local then
+        p22.DataRegistry:Set(
+            "LookCFrame",
+            (CameraService:GetCFrame())
+        )
+        ...
+    end
+
+    if p22.Movement then
+        p22.Movement:UpdateTerms(...)
+    end
+
+    ...
+
+    p22.Joints:Update(...)
+
+    ...
+
+    p22.DataRegistry:UpdateCycle(...)
+
+This order explains several important observations:
+
+    Camera CFrame
+        ->
+    local DataRegistry terms are updated
+        ->
+    Joints are updated
+        ->
+    DataRegistry send queue is flushed
+
+Therefore the native term-generation stage occurs before the network flush.
+
+
+============================================================
+22. CONFIRMED DATAREGISTRY UPDATE / NETWORK MODEL
+============================================================
+
+The confirmed data path for a locally changed sendable term is:
+
+    DataRegistry:Set(term, value)
+        ->
+    SetTerm(...)
+        ->
+    Serializer:CanSend(term)
+        ->
+    Serializer:EncodeTerm(...)
+        ->
+    DataRegistry.ToSend[term]
+        ->
+    UpdateCycle()
+        ->
+    Serializer:EncodedDataToPacket(ToSend)
+        ->
+    reliable or unreliable UpdateCharacterDataRegistry event
+
+For LookY specifically:
+
+    Terms.LookY.Unreliable = true
+
+so it goes through:
+
+    ReplicatedStorage.Events.UpdateCharacterDataRegistryUnreliable
+
+
+============================================================
+23. MOVEMENT AIR FUNCTIONS
+============================================================
+
+Path:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
+    .MoveFunction.Functions
+
+Real movement functions using AirAcceleration and AirStrafeAcceleration were
+found at source line positions around:
+
+    109
+    190
+
+Line numbers are not guaranteed stable between game updates.
+
+Both functions capture the same helper table containing:
+
+    Accelerate
+    WallImpact
+    ApplyFriction
+    AirControl
+
+
+============================================================
+24. ACCELERATE HELPER — EXACT MATHEMATICS
+============================================================
+
+Path:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
+    .MoveFunction.Functions.Helpers
+
+Function:
+
+    Accelerate
+
+Recovered core logic:
+
+    if special == true then
+        acceleration *= 0.4
+        wishSpeed *= 1.3
+    end
+
+    currentSpeed = currentVelocity:Dot(wishDirection)
+
+    addSpeed = wishSpeed - currentSpeed
+
+    if addSpeed <= 0 then
+        return currentVelocity
+    end
+
+    accelSpeed = acceleration * deltaTime * wishSpeed
+
+    if addSpeed >= accelSpeed then
+        addSpeed = accelSpeed
+    end
+
+    return currentVelocity + addSpeed * wishDirection
+
+This internal helper formula is confirmed.
+
+The helper structure is therefore:
+
+    currentSpeed = V · W
+    addSpeed     = wishSpeed - currentSpeed
+
+    if addSpeed <= 0:
+        no acceleration
+
+    acceleration cap:
+        acceleration * dt * wishSpeed
+
+    actual added velocity:
+        wishDirection * min(addSpeed, accelSpeed)
+
+
+============================================================
+25. CONFIRMED AIR ACCELERATE CALL LAYOUT
+============================================================
+
+Runtime argument tracing established the helper call layout as:
+
+    Accelerate(
+        self,
+        velocity,
+        wishDirection,
+        acceleration,
+        wishSpeed,
+        deltaTime,
+        special
+    )
+
+In tested normal air calls:
+
+    acceleration = 182
+    wishSpeed    = 182
+    deltaTime    ~= 0.008
+
+Runtime tracing also confirmed an effective factor of 10 in the tested air
+acceleration result:
+
+    accelSpeed =
+        acceleration
+        * 10
+        * deltaTime
+        * wishSpeed
+
+Therefore the tested effective air behavior is:
+
+    accelSpeed =
+        182 * 10 * dt * 182
+
+when both acceleration and wishSpeed are 182.
+
+This factor was confirmed by matching the computed return vector against the
+observed return vector.
+
+
+============================================================
+26. CONFIRMED AIR ACCELERATION NUMERIC EXAMPLE
+============================================================
+
+One tested jump-transition call:
+
+    Velocity     = (2529.051, 0, 416.207)
+    WishDir      = (-0.128, 0, 0.992)
+    Acceleration = 182
+    WishSpeed    = 182
+    dt           = 0.007786
+
+Measured:
+
+    Dot =
+        Velocity · WishDir
+        = 89.816742
+
+Therefore:
+
+    addSpeed =
+        182 - 89.816742
+        = 92.183258
+
+Effective acceleration cap:
+
+    182 * 10 * 0.007786 * 182
+        = 2579.089909
+
+Since:
+
+    92.183258 < 2579.089909
+
+the actual velocity delta is:
+
+    Delta =
+        92.183258 * (-0.128, 0, 0.992)
+
+approximately:
+
+    (-11.773, 0, 91.428)
+
+Observed return:
+
+    (2517.278, 0, 507.635)
+
+which matches the calculation.
+
+Subsequent tested Freefall Accelerate calls followed the same relationship.
+
+
+============================================================
+27. AIR CONTROL HELPER — ONLY CONFIRMED FACTS
+============================================================
+
+Function:
+
+    AirControl
+
+Path:
+
+    ...Movement.MoveFunction.Functions.Helpers
+
+Confirmed decompile fragments:
+
+    local Z = v1.Z
+
+    if math.abs(Z) < 0.001 or math.abs(v3) < 0.001 then
+        return v2
+    end
+
+    local magnitude = v2.magnitude
+    local unit = v2.unit
+    local v4 = unit:Dot(v5)
+
+    local _ = 32 * (1 * v4 * v4 * v6)
+
+    return unit * Vector3.new(magnitude, 0, magnitude)
+
+Confirmed facts:
+
+    - reads Z from one argument;
+    - rejects near-zero Z or near-zero v3;
+    - uses current velocity magnitude/unit direction;
+    - calculates a dot product with another vector;
+    - contains a 32 * dot^2 * ... expression;
+    - returns a vector based on current magnitude with Y removed.
+
+Do NOT claim a complete AirControl equation or purpose from this file.
+
+The exact semantic meaning of the intermediate 32*dot^2 term and exact operation
+order were not established strongly enough to promote them to confirmed.
+
+
+============================================================
+28. APPLYFRICTION HELPER — EXACT FORMULA
+============================================================
+
+Path:
+
+    ...Movement.MoveFunction.Functions.Helpers
+
+Function:
+
+    ApplyFriction
+
+Recovered signature:
+
+    function t.ApplyFriction(_2, p7, p8, p9, _3, p10, p11)
+
+Confirmed Run-side argument mapping:
+
     p7  = Run dt
-    p8  = Movement/state movement data
+    p8  = movement/state data
     p9  = DataRegistry
     _3  = Character
     p10 = MoveStats
     p11 = friction multiplier / mode factor
 
-For normal Run:
+Normal Run passes:
 
     p11 = 1
 
--------------------------------------------------------------
-47.2 EXACT FRICTION FORMULA
--------------------------------------------------------------
 
-ApplyFriction does:
+============================================================
+29. APPLYFRICTION — EXACT SOURCE LOGIC
+============================================================
+
+The helper does:
 
     Velocity =
         DataRegistry:Get("Velocity")
@@ -4493,7 +1109,7 @@ ApplyFriction does:
 If Swimming:
 
     RunDeaccel *= 0.6
-    Friction *= 0.6
+    Friction   *= 0.6
 
 Then:
 
@@ -4511,173 +1127,151 @@ Then:
 
     v13 =
         magnitude
-        -
-        v12 * Friction * dt * p11
+        - v12 * Friction * dt * p11
 
-Then clamp:
+Clamp:
 
     v14 = max(v13, 0)
 
-Then:
+Then, if magnitude > 0:
 
-    if magnitude > 0 then
-        v14 = v14 / magnitude
-    end
+    v14 = v14 / magnitude
 
 Finally:
 
     return Velocity * v14
 
-Therefore, for nonzero horizontal Velocity, the magnitude reduction is exactly:
+For nonzero velocity, the subtracted amount before clamping is:
 
     loss =
         max(RunDeaccel, magnitude)
-        *
-        Friction
-        *
-        dt
-        *
-        p11
+        * Friction
+        * dt
+        * p11
 
-for the amount before the nonnegative clamp.
 
--------------------------------------------------------------
-47.3 NORMAL RUN LANDING CASE
--------------------------------------------------------------
+============================================================
+30. APPLYFRICTION NORMAL RUN CASE
+============================================================
 
-Run passes:
+Normal Run:
 
     p11 = 1
 
-and normal movement is not swimming.
+Non-swimming:
+
+    RunDeaccel = unchanged
+    Friction   = unchanged
 
 Therefore:
 
     loss =
         max(RunDeaccel, |Velocity|)
-        *
-        Friction
-        *
-        dt
+        * Friction
+        * dt
 
-For the tested high-speed runtime values:
+At high internal speeds where:
 
-    RunDeaccel = 1190
-    Friction   = 5
-    dt         ~= 0.0083
+    |Velocity| > RunDeaccel
 
-and high-speed magnitude was above 1190.
+the formula simplifies to:
+
+    newMagnitude / oldMagnitude =
+        1 - Friction * dt
+
+With:
+
+    Friction = 5
+
+and a tested:
+
+    dt ~= 0.0083
+
+the multiplier is approximately:
+
+    1 - 5 * 0.0083
+    ~= 0.9585
+
+For another tested:
+
+    dt = 0.007786
+
+the multiplier is:
+
+    1 - 5 * 0.007786
+    = 0.96107
+
+These are direct consequences of the recovered source formula.
+
+
+============================================================
+31. APPLYFRICTION AND THE OBSERVED LANDING LOSS
+============================================================
+
+Recovered Run source establishes that normal grounded movement executes:
+
+    ApplyFriction(...)
+        ->
+    Accelerate(...)
+        ->
+    WallImpact(...)
+
+The complete ApplyFriction source establishes exactly how the first operation
+reduces DataRegistry["Velocity"].
+
+At high internal speeds:
+
+    |Velocity| > RunDeaccel
+
+so:
+
+    friction multiplier =
+        1 - 5 * dt
+
+and the first Run tick can remove several percent of internal speed.
+
+Example at:
+
+    real horizontal speed ~= 50
+    internal speed ~= 4500
+    dt = 0.007786
+
+friction-only reduction:
+
+    4500 * (1 - 0.96107)
+        ~= 175.2 internal
+
+converted through the confirmed /90 scale:
+
+    175.2 / 90
+        ~= 1.95 real speed
+
+This is a numerical match to the previously observed approximately 2-unit
+landing reduction.
+
+Important:
+
+The file now treats the source-level ApplyFriction reduction as confirmed.
+The exact complete final landing delta is still the result of the whole Run
+pipeline because Accelerate and WallImpact execute afterward.
 
 Therefore:
 
-    loss =
-        |Velocity| * 5 * dt
+    ApplyFriction = confirmed direct velocity-reducing operation
 
-Approximate fractional loss:
+while:
 
-    5 * 0.0083
-    ~= 0.0415
+    final landing speed change =
+        interaction of ApplyFriction + Accelerate + WallImpact + other Run logic
 
-So approximately:
 
-    4.15% of the current internal velocity per Run tick
+============================================================
+32. APPLYFRICTION MODIFICATION LEVER
+============================================================
 
-is removed by ApplyFriction at those dt values.
+The recovered helper multiplies the friction subtraction by:
 
-Because internal velocity is approximately 90x real velocity, this directly
-corresponds to the observed ~2 real-speed-unit loss at internal HSpeed around
-4300-4750.
-
-Example:
-
-    internal HSpeed = 4300
-    dt = 0.0083
-
-    loss ~= 4300 * 5 * 0.0083
-         ~= 178.45 internal
-
-    real loss ~= 178.45 / 90
-              ~= 1.98
-
-This matches the historical v1.02 landing observations closely.
-
--------------------------------------------------------------
-47.4 WHY ApplyFriction WAS THE OBSERVED LANDING LOSS
--------------------------------------------------------------
-
-The complete Run source proves:
-
-    ApplyFriction
-        ->
-    Accelerate
-        ->
-    WallImpact
-
-The complete ApplyFriction source now proves exactly how the first step reduces
-Velocity.
-
-For high-speed grounded movement:
-
-    current HSpeed > RunDeaccel
-
-so the helper uses:
-
-    v12 = current magnitude
-
-and subtracts:
-
-    magnitude * Friction * dt
-
-before returning the reduced velocity.
-
-Thus the direct landing-side reduction previously observed is now explained by
-the actual source code, not just correlation.
-
--------------------------------------------------------------
-47.5 IMPORTANT: ACCELERATE CAN OFFSET SOME LOSS
--------------------------------------------------------------
-
-The actual final Run velocity is not just the friction result.
-
-Run performs:
-
-    v11 = ApplyFriction(...)
-
-then:
-
-    Accelerate(
-        v11,
-        GlobalMoveDirection,
-        Magnitude * (Speed * v16),
-        12 * RunAccel,
-        dt,
-        Swimming
-    )
-
-Accelerate returns the input unchanged when:
-
-    wishSpeed - velocity:Dot(wishDirection) <= 0
-
-Therefore at sufficiently high speed / unfavorable direction, Accelerate may
-add nothing and ApplyFriction remains the dominant final loss.
-
-At lower speed or aligned movement, Accelerate can partially or fully offset
-the friction reduction.
-
--------------------------------------------------------------
-47.6 EXACT MODIFICATION LEVER
--------------------------------------------------------------
-
-For normal Run the final ApplyFriction parameter is:
-
-    p11 = 1
-
-The helper multiplies the entire friction subtraction by p11:
-
-    v13 =
-        magnitude
-        -
-        v12 * Friction * dt * p11
+    p11
 
 Therefore:
 
@@ -4685,301 +1279,676 @@ Therefore:
         -> normal friction
 
     p11 = 0
-        -> no friction subtraction
+        -> no friction subtraction for that call
 
-    p11 = smaller value
+    p11 = smaller positive value
         -> proportionally reduced friction
 
-This is now the cleanest source-level control for eliminating landing speed loss
-while leaving the subsequent Accelerate and WallImpact logic unchanged.
-
-However, changing the Run call from:
-
-    Helpers:ApplyFriction(..., 1)
-
-to:
-
-    Helpers:ApplyFriction(..., 0)
-
-would disable friction for the entire normal Run update, not exclusively the
-first frame after landing.
-
-Therefore a future modification must decide whether the intended behavior is:
-
-    A. remove all grounded Run friction
-
-or:
-
-    B. preserve ordinary grounded friction but skip/reduce it only on the
-       Air -> Move landing transition.
-
-The source now provides the exact lever needed for either implementation.
-
--------------------------------------------------------------
-47.7 OTHER APPLYFRICTION USES
--------------------------------------------------------------
-
-The recovered source shows ApplyFriction is also used by Air and Slide.
-
-Air:
-
-    if MoveDirection2.Z > 0 then
-        Velocity =
-            Helpers:ApplyFriction(..., 1)
-    end
-
-Slide:
-
-    Helpers:ApplyFriction(..., 0.1)
-
-Therefore changing ApplyFriction itself globally would also affect Air and Slide.
-
-For preserving air/slide behavior, the safer future target is the normal Run call
-site rather than globally changing the helper function.
-
-=============================================================
-END OF 2026-10-05 COMPLETE ApplyFriction SOURCE RECOVERED
-=============================================================
-
-
-=============================================================
-48. 2026-10-05 — NO LAND FRICTION IMPLEMENTATION (DeadEye v1.139)
-=============================================================
-
-Implemented the first targeted runtime modification based on the recovered
-Functions.Run and Helpers.ApplyFriction source.
-
-Goal:
-
-    Remove the direct ApplyFriction speed loss only on the first normal Run
-    update after the movement system has been in Air.
-
-The implementation intentionally does NOT replace the native Run function
-logic. It only intercepts the ApplyFriction call from the native Run execution.
-
--------------------------------------------------------------
-48.1 HOOK STRUCTURE
--------------------------------------------------------------
-
-Three closures are tracked:
-
-    Functions.Air
-    Functions.Run
-    Helpers.ApplyFriction
-
-Air hook:
-
-    landingFrictionLastWasAir = true
-
-This records that the movement system is currently processing an Air update.
-
-Run hook:
-
-    previousWasAir = landingFrictionLastWasAir
-    landingFrictionLastWasAir = false
-
-    landingFrictionSkipNext =
-        mainJump.noLandingFriction
-        and previousWasAir
-
-Thus the next Run knows whether it is the first grounded update following Air.
-
-ApplyFriction hook:
-
-    if landingFrictionSkipNext and p11 == 1 then
-        landingFrictionSkipNext = false
-        return p9:Get("Velocity")
-    end
-
-Normal Run passes:
+Normal Run uses:
 
     p11 = 1
 
-Returning the current DataRegistry Velocity is therefore equivalent to using
-ApplyFriction with an effective friction factor of zero for exactly that call.
+Air and Slide also use ApplyFriction, with different call contexts.
 
-The original ApplyFriction is used for every other call.
+Known call:
 
--------------------------------------------------------------
-48.2 WHAT REMAINS NATIVE
--------------------------------------------------------------
+    Slide:
+        ApplyFriction(..., 0.1)
 
-The original Functions.Run closure is still executed.
+Known Air-side use:
 
-Therefore the following remain untouched:
+    ApplyFriction(..., 1)
+    under its own branch conditions
 
-    Run state selection
-    sprint calculation
-    direction calculation
+Therefore globally replacing ApplyFriction is not equivalent to modifying only
+ground landing behavior.
+
+
+============================================================
+33. MOVEMENT STATE TRANSITION — CONFIRMED
+============================================================
+
+Movement.SetState(newState) was recovered.
+
+When state changes, it:
+
+    1. gets current MoveStats;
+    2. ends previous state;
+    3. starts new state;
+    4. reads new StateInfo;
+    5. applies Perk StateSpeedMultipliers;
+    6. applies Movement.SpeedMult through:
+           MoveStats:SpeedChange("State", Movement.SpeedMult)
+    7. applies Movement.DisableSprinting;
+    8. updates PlatformStand / Massless / collision state;
+    9. sets State = newState;
+   10. enables new-state constraints.
+
+No active functions named:
+
+    AirEnd
+    RunStart
+
+were found in the recovered Functions table.
+
+Therefore there is no confirmed dedicated AirEnd/RunStart movement function
+to target.
+
+
+============================================================
+34. MOVEMENT.UPDATE ORDER — CONFIRMED
+============================================================
+
+Recovered Movement.Update(dt):
+
+    p42:SetState(p42.DataRegistry:Get("State"))
+    p42:UpdateCanJump()
+    p42.MoveStats:UpdateMoveStats()
+    local v44 = p42.MoveStats:GetMoveStats()
+    p42:DoFunction("Move", p42.State, v44, dt)
+
+MoveFunction.Move() then:
+
+    StateInfo:GetState(state)
+        ->
+    state.Movement
+        ->
+    Movement.MoveType
+        ->
+    Functions[Movement.MoveType](...)
+
+For the Air -> Move transition:
+
+    SetState("Move")
+        ->
+    MoveStats state modifiers
+        ->
+    p42.State = "Move"
+        ->
+    DoFunction("Move")
+        ->
+    Functions["Run"](...)
+
+Thus the first Run call happens in the same Movement.Update tick in which the
+Air -> Move state is committed.
+
+
+============================================================
+35. STATE SPEED MODIFIER
+============================================================
+
+SetState can change:
+
+    MoveStats.Speed
+
+through:
+
+    MoveStats:SpeedChange("State", Movement.SpeedMult)
+
+MoveStats.UpdateAttributes() then combines active SpeedChanges.
+
+Confirmed:
+
+    Air -> Move state transition can change MoveStats.Speed before Run.
+
+The recovered SetState code does not directly rewrite:
+
+    DataRegistry["Velocity"]
+
+through this speed modifier.
+
+Run nevertheless uses MoveStats.Speed-related values, so this modifier can
+change the resulting grounded movement behavior.
+
+
+============================================================
+36. RUN FUNCTION — CONFIRMED SOURCE FACTS
+============================================================
+
+Active Run function:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
+    .MoveFunction.Functions
+
+Recovered function metadata during investigation:
+
+    linedefined = 23
+    numparams = 5
+
+Direct bytecode decompilation of the active Run closure was unavailable in the
+tested executor.
+
+However, source recovery around the active movement implementation confirms
+Run contains logic involving:
+
+    JumpingActive
+    MoveDirection
+    GlobalMoveDirection
+    Swimming
+    X
+    Z
+    BhopEnabled
+    JumpQueued
+    LookCFrame
+    Velocity
+    Sprint
+    ApplyFriction
+    Crouching
+    CapSprint
+    ADS
+    SprintAcceleration
+    SprintCap
+    Magnitude
     WalkSpeedMultiplier
+    Emote
+    Speed
+    RunAccel
     Accelerate
     WallImpact
-    final BaseMover PlaneVelocity
-    returned Velocity
-    all other Run logic
+    SwimMover
+    VectorVelocity
+    BaseMover
+    PlaneVelocity
 
-Air still executes the original Functions.Air closure.
-
-Slide and its ApplyFriction(..., 0.1) are unaffected because the override only
-accepts p11 == 1 and only arms itself from an Air -> Run transition.
-
--------------------------------------------------------------
-48.3 GUI / CONFIG
--------------------------------------------------------------
-
-Added Main-page toggle:
-
-    NO LAND FRICTION
-
-State:
-
-    mainJump.noLandingFriction
-
-Saved config key:
-
-    savedConfig.main.noLandingFriction
-
-Default:
-
-    false
-
-Therefore existing behavior remains unchanged until the new toggle is enabled.
-
-When enabled:
-
-    first normal Run ApplyFriction after Air -> skipped
-    subsequent Run ApplyFriction -> normal
-    Air ApplyFriction -> normal
-    Slide ApplyFriction -> normal
-
--------------------------------------------------------------
-48.4 CLEANUP / RELOAD SAFETY
--------------------------------------------------------------
-
-All three hooks keep their original closures.
-
-Global cleanup:
-
-    genv.DEADEYE_LANDING_FRICTION_CLEANUP
-
-The cleanup restores:
-
-    Functions.Air
-    Functions.Run
-    Helpers.ApplyFriction
-
-The previous instance cleanup is called at DeadEye startup, so re-executing the
-script does not intentionally stack another set of these hooks.
-
-The main DeadEye cleanup also restores the hooks and clears the global cleanup
-entry.
-
--------------------------------------------------------------
-48.5 TEST TO PERFORM IN-GAME
--------------------------------------------------------------
-
-With:
-
-    NO LAND FRICTION = OFF
-
-landing behavior should remain identical to the native game.
-
-With:
-
-    NO LAND FRICTION = ON
-
-perform repeated jumps while holding the same movement direction.
-
-Expected result:
-
-    Air movement continues normally.
-    On landing, the ~4% ApplyFriction loss from the first Run tick disappears.
-    Accelerate still runs normally afterward.
-    Normal grounded friction resumes on the next Run tick.
-
-If the measured speed still drops on landing, the next investigation target is
-not ApplyFriction's formula itself anymore, but whether the movement-state
-transition or the post-Run mover simulation introduces an additional loss.
-
-DeadEye version containing this implementation:
-
-    v1.139
-
-=============================================================
-END OF 2026-10-05 NO LAND FRICTION IMPLEMENTATION
-=============================================================
+The exact native Run bytecode is not treated as fully recovered.
 
 
-=============================================================
-49. 2026-10-05 — STANDALONE TEST v1.02 AFTER HOOK FAILURE
-=============================================================
+============================================================
+37. CONFIRMED AIR FUNCTION FACTS
+============================================================
 
-The first standalone No_Landing_Friction_Test v1.01 caused movement to break:
-the character fell and horizontal speed would not rise above approximately
-50 real movement speed.
+A recovered active air movement function around source line 109 had:
 
-The previous implementation hooked all three:
+    linedefined = 109
+    numparams = 5
 
-    Functions.Air
-    Functions.Run
-    Helpers.ApplyFriction
+Direct decompilation returned:
 
-That approach is rejected.
+    failed to get function bytecode
 
-The new standalone v1.02 was changed to hook ONLY:
+So the exact full function body is not treated as recovered source.
 
-    Helpers.ApplyFriction
+Nevertheless, runtime/source inspection confirmed that the function references:
 
-Functions.Run and Functions.Air are no longer replaced.
+    Velocity
+    MoveDirection
+    GlobalMoveDirection
+    LookCFrame
+    VectorToWorldSpace
+    Dot
+    AirAcceleration
+    AirStrafeAcceleration
+    Accelerate
+    AirControl
+    WallImpact
+    BaseMover
+    PlaneVelocity
+    wallrun/force-related values
 
-The hook preserves the complete native ApplyFriction signature:
+Its only captured helper table contained:
 
-    self
-    dt
-    movementData
-    dataRegistry
-    character
-    moveStats
-    frictionFactor
+    Accelerate
+    WallImpact
+    ApplyFriction
+    AirControl
 
-A previous broken implementation had omitted one argument, shifting the
-parameters and producing:
+No additional hidden movement helper was found in that upvalue.
 
-    Helpers:59: attempt to perform arithmetic on number and nil
 
-The new implementation forwards all 7 arguments exactly.
+============================================================
+38. AIR MOVEMENT — CONFIRMED RUNTIME OBSERVATIONS
+============================================================
 
-To distinguish the normal Run call without hooking Run itself, v1.02 inspects
-the caller source line using:
+Tested air movement established:
 
-    debug.info(2, "l")
+    AirStrafeAcceleration = 182
+    AirAcceleration       = 1
 
-The recovered Functions source confirms the normal Run ApplyFriction call is
-at source line 41.
+and demonstrated Accelerate calls using:
 
-The intended sequence is:
+    acceleration = 182
+    wishSpeed    = 182
 
-    Air ApplyFriction
-        -> mark sawAirFriction = true
-        -> native ApplyFriction unchanged
+The internal velocity rotates substantially during air strafe and may increase
+slightly in magnitude.
 
-    first Run ApplyFriction
-        -> detect caller line 41
-        -> if enabled and sawAirFriction:
-             return current DataRegistry Velocity
-        -> otherwise native ApplyFriction
+The confirmed Accelerate behavior explains the observed acceleration when
+wishDirection has a nonzero component perpendicular to current velocity.
 
-Therefore the new test does not replace either movement-state function.
+No unverified claim about an engine maximum camera turn rate is stored here.
 
-DeadEye.lua remains unchanged at:
 
-    v1.138
+============================================================
+39. WISH DIRECTION — ONLY CONFIRMED OBSERVATIONS
+============================================================
 
-Standalone test:
+Runtime tests established camera-relative lateral steering behavior for the
+tested W/A/D combinations.
 
-    No_Landing_Friction_Test.lua
-    v1.02
+In tested air cases:
 
-=============================================================
-END OF 2026-10-05 STANDALONE TEST v1.02
-=============================================================
+    lateral A/D steering affects the selected wish direction
+
+and the movement implementation references:
+
+    GlobalMoveDirection
+    LookCFrame:VectorToWorldSpace(...)
+
+The exact complete source branch selecting every W/A/D combination is not
+considered fully recovered because the active line-109 bytecode could not be
+decompiled.
+
+No speculative "optimal camera angle" formula is included in this file.
+
+
+============================================================
+40. LOOK / RAGE LOOK — PRACTICAL REVERSE-ENGINEERING SUMMARY
+============================================================
+
+The confirmed problem:
+
+    Looking down affects jump horizontal speed because Jump() uses
+    HumanoidRootPart.CFrame.lookVector.
+
+The confirmed split solution:
+
+    A. Physical movement side:
+       intercept DataRegistry.Get("LookCFrame")
+       and return a fake CFrame with target pitch while preserving yaw/position.
+
+    B. Native LookY side:
+       replace the Movement.Terms["LookY"].CalculateFunction
+       so Movement:UpdateTerms() produces the desired quantized pitch.
+
+The old approach:
+
+    repeatedly writing DataRegistry["LookY"]
+
+is not reliable because Movement.UpdateTerms() recalculates it before the
+network flush.
+
+The working Terms approach:
+
+    target pitch = -70 degrees
+    quantized LookY = -1.225
+
+and the test produced:
+
+    DataRegistry["LookY"] = -1.225
+    ToSend["LookY"] = -1.225
+
+This means the value entered the game's normal replication queue.
+
+
+============================================================
+41. LOOKY REPLICATION — CONFIRMED END-TO-END CLIENT ARCHITECTURE
+============================================================
+
+Sending side:
+
+    Movement.Terms["LookY"].CalculateFunction()
+        ->
+    Movement:UpdateTerms()
+        ->
+    DataRegistry:Set("LookY", value)
+        ->
+    Serializer:CanSend("LookY")
+        ->
+    Serializer:EncodeTerm("LookY", value)
+        ->
+    DataRegistry.ToSend["LookY"]
+        ->
+    DataRegistry:UpdateCycle()
+        ->
+    Serializer:EncodedDataToPacket(...)
+        ->
+    UpdateCharacterDataRegistryUnreliable:FireServer(...)
+
+Because:
+
+    Terms.LookY.Unreliable = true
+
+
+Receiving side:
+
+    UpdateCharacterDataRegistryUnreliable.OnClientEvent
+        ->
+    updateCharacterFromData(packet)
+        ->
+    Serializer:Decode(packet)
+        ->
+    CharacterService character lookup by Tag
+        ->
+    Tag.DataRegistry:ServerToClient(decodedData)
+        ->
+    receiving DataRegistry["LookY"]
+
+Then:
+
+    Joints RegistryTermUpdated("LookY")
+        ->
+    Joints.LookY
+        ->
+    Joints.Update()
+        ->
+    SetC1s(ReadNewC1s(LookY, Gyro), ...)
+
+This is the confirmed native client data flow.
+
+
+============================================================
+42. WHAT HAS NOT BEEN CONFIRMED ABOUT RAGE LOOK
+============================================================
+
+The following point must NOT be presented as already proven:
+
+    "Another player definitely sees the exact -70° head pose"
+
+The network path and receiving-side consumer are confirmed.
+
+The local Terms test confirmed that -1.225 enters the normal ToSend queue.
+
+The actual final visual result on another player still requires an in-game
+two-client observation after the current implementation is enabled.
+
+So:
+
+    network generation = confirmed
+    network receive path = confirmed
+    Joints consumer = confirmed
+    remote visual appearance = requires direct two-client validation
+
+
+============================================================
+43. REJECTED / UNSAFE APPROACHES
+============================================================
+
+These are kept only to prevent repeating known-bad experiments.
+
+1. Hooking the active line-109 movement function
+
+A previous hook broke movement/air turning and produced:
+
+    "479: attempt to call a nil value"
+
+Do not hook line 109 as a movement implementation target.
+
+2. Hooking Registry.Set incorrectly
+
+A previous implementation produced:
+
+    "109: attempt to get connection:: get (not a valid member)"
+
+Do not use that broken Set hook pattern.
+
+3. Directly forcing LookY in a loop
+
+This was overwritten by Movement.UpdateTerms() before the normal network flush.
+
+Do not use repeated DataRegistry["LookY"] writes as the primary Rage Look
+replication mechanism.
+
+4. Modifying the actual camera CFrame for the physical-look problem
+
+The confirmed working direction keeps the visible camera unchanged and instead
+separates the physical LookCFrame read from the visual camera.
+
+
+============================================================
+44. DISCOVERY PATHS — CAMERA
+============================================================
+
+Stable rediscovery:
+
+    1. getgc(true)
+    2. Find source containing:
+           PlayerModule.CameraModule.ClassicCamera
+    3. Match:
+           Update
+    4. debug.getupvalues(Update)[1]
+           -> live ClassicCamera controller
+    5. debug.getupvalues(Update)[4]
+           -> CameraInput
+    6. Find:
+           CameraInput.getRotation
+    7. debug.getupvalues(getRotation)[4]
+           -> Movement/Pan/Pinch/Wheel input table
+
+
+============================================================
+45. DISCOVERY PATHS — MOVEMENT HELPERS
+============================================================
+
+Stable structural path:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement
+        .MoveFunction.Functions
+        .MoveFunction.Functions.Helpers
+
+Helpers table:
+
+    Accelerate
+    ApplyFriction
+    AirControl
+    WallImpact
+
+Recovered helper locations during this investigation:
+
+    Accelerate     -> Helpers source around line 177
+    AirControl     -> Helpers source around line 164
+    ApplyFriction  -> Helpers source around line 47
+
+Line numbers may change after game updates.
+
+
+============================================================
+46. DISCOVERY PATHS — LOOKY
+============================================================
+
+Stable structural path:
+
+    ReplicatedStorage.Objects.Game.Character.Client.Movement.Terms
+
+Find the table entry:
+
+    entry.Term == "LookY"
+
+Inspect:
+
+    entry.ID
+    entry.Type
+    entry.OwnerClientOnly
+    entry.ClientSendable
+    entry.Unreliable
+    entry.CalculateFunction
+
+The current confirmed LookY metadata is:
+
+    ID = 6
+    Type = "Number"
+    OwnerClientOnly = false
+    ClientSendable = true
+    Unreliable = true
+
+
+============================================================
+47. DISCOVERY PATHS — DATAREGISTRY / EVENTS
+============================================================
+
+DataRegistry methods of interest:
+
+    Get
+    Set
+    ServerToClient
+    UpdateCycle
+
+Network events of interest:
+
+    ReplicatedStorage.Events.UpdateCharacterDataRegistry
+    ReplicatedStorage.Events.UpdateCharacterDataRegistryUnreliable
+
+Serializer methods of interest:
+
+    CanSend
+    EncodeTerm
+    DecodeTerm
+    EncodedDataToPacket
+    Decode
+
+
+============================================================
+48. CORE CONFIRMED MODEL
+============================================================
+
+MOVEMENT VELOCITY:
+
+    DataRegistry["Velocity"]
+        = internal movement velocity
+
+    real speed ~= internal speed / 90
+
+
+JUMP:
+
+    horizontal jump cap depends on:
+
+    Sprint
+    * Speed
+    * JumpSpeedMultiplier
+    * (HRP.lookVector · Velocity.unit)^2
+
+
+LOOK DOWN:
+
+    physical downward HRP look
+        -> smaller lookVector/Velocity dot
+        -> smaller squared factor
+        -> lower jump-time horizontal speed cap
+
+
+CAMERA:
+
+    CameraInput
+        -> getRotation
+        -> ClassicCamera
+        -> CameraCFrame
+
+
+LOOKY:
+
+    LookY is a quantized pitch in radians:
+
+    floor(asin(CameraCFrame.lookVector.Y) * 40 + 0.5) / 40
+
+
+LOOKY NETWORK:
+
+    Movement.Terms CalculateFunction
+        -> DataRegistry.Set
+        -> ToSend
+        -> UpdateCycle
+        -> unreliable replication event
+        -> receiving DataRegistry
+        -> Joints
+        -> joint C1 changes
+
+
+RAGE LOOK:
+
+    DataRegistry.Get("LookCFrame") hook
+        = local physical/physics-facing side
+
+    Movement.Terms["LookY"].CalculateFunction replacement
+        = native LookY generation / replication side
+
+
+GROUNDED FRICTION:
+
+    Run
+        -> ApplyFriction
+        -> Accelerate
+        -> WallImpact
+
+
+APPLYFRICTION:
+
+    loss =
+        max(RunDeaccel, |Velocity|)
+        * Friction
+        * dt
+        * frictionFactor
+
+
+AIR ACCELERATION:
+
+    Accelerate:
+        addSpeed = wishSpeed - Velocity·wishDirection
+
+        if addSpeed <= 0:
+            no addition
+
+        accelSpeed =
+            acceleration * dt * wishSpeed
+
+    In the tested air path, runtime results matched an effective factor of 10:
+
+        acceleration * 10 * dt * wishSpeed
+
+
+============================================================
+49. OPEN ITEMS THAT ARE STILL GENUINELY UNRESOLVED
+============================================================
+
+These are not hypotheses; they are explicitly marked as not recovered.
+
+    1. Complete bytecode/source for the active line-109 air function.
+
+    2. Complete bytecode/source for the active Run function.
+
+    3. Full semantic meaning and operation ordering of AirControl.
+
+    4. Exact complete source branch for all W/A/D wish-direction cases.
+
+    5. Full exact ordering of every Run sub-operation around:
+           friction
+           acceleration
+           wall impact
+           sprint/cap
+           movers
+
+    6. Exact frame-level timing between:
+           CameraInput
+           CameraCFrame
+           DataRegistry LookCFrame
+           HumanoidRootPart.CFrame
+           Jump
+
+    7. Direct two-client visual confirmation that replicated LookY=-1.225
+       produces the intended remote head/upper-body pose.
+
+    8. Any values/line numbers that can change after a game update.
+
+
+============================================================
+50. MAINTENANCE RULE FOR THIS FILE
+============================================================
+
+Only add a statement to the confirmed sections when at least one of these is
+true:
+
+    - it is directly present in recovered source/decompile;
+    - runtime tracing measured it and the source behavior matches;
+    - a controlled test reproduced the expected result.
+
+When evidence is incomplete:
+
+    put it in section 49 instead of presenting it as fact.
+
+When a hypothesis is disproven:
+
+    remove it from the main findings rather than leaving the old statement
+    active with ambiguous wording.
+
+============================================================
+END OF CONFIRMED FINDINGS
+============================================================
