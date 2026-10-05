@@ -2846,3 +2846,313 @@ as confirmed until that test is performed.
 =============================================================
 END OF 2026-10-05 W+A / W+D AIR EVIDENCE STATUS
 =============================================================
+
+
+============================================================
+54. 2026-10-05 — KEYBOARD VECTORS + MOUSE CAMERA ROTATION — CONFIRMED
+============================================================
+
+The actual Keyboard controller and CameraInput module are now recovered.
+This removes the previous uncertainty about W/A/D vector signs and the
+mouse-delta-to-camera-rotation conversion.
+
+-------------------------------------------------------------
+54.1 EXACT KEYBOARD MOVEMENT VALUES
+-------------------------------------------------------------
+
+Path:
+
+    Players.LocalPlayer.PlayerScripts.PlayerModule.ControlModule.Keyboard
+
+Keyboard assigns:
+
+    Forward:
+        forwardValue = -1
+
+    Backward:
+        backwardValue = +1
+
+    Left:
+        leftValue = -1
+
+    Right:
+        rightValue = +1
+
+and UpdateMovement() constructs:
+
+    moveVector =
+        Vector3.new(
+            leftValue + rightValue,
+            0,
+            forwardValue + backwardValue
+        )
+
+Therefore the actual keyboard vectors are:
+
+    W  = Vector3.new( 0, 0,-1)
+    S  = Vector3.new( 0, 0, 1)
+    A  = Vector3.new(-1, 0, 0)
+    D  = Vector3.new( 1, 0, 0)
+
+Diagonal values before any later Air() processing are:
+
+    W+A = Vector3.new(-1, 0,-1)
+    W+D = Vector3.new( 1, 0,-1)
+
+    S+A = Vector3.new(-1, 0, 1)
+    S+D = Vector3.new( 1, 0, 1)
+
+The Keyboard module itself does not normalize these vectors.
+
+
+-------------------------------------------------------------
+54.2 W+A / W+D COLLAPSE TO A/D IN AIR — NOW DIRECTLY CONFIRMED
+-------------------------------------------------------------
+
+Air() begins with:
+
+    if MoveDirection2.Z < 0 then
+        MoveDirection2 =
+            MoveDirection2 * Vector3.new(1, 1, 0)
+    end
+
+For W+A:
+
+    (-1, 0,-1)
+        ->
+    (-1, 0, 0)
+
+For W+D:
+
+    ( 1, 0,-1)
+        ->
+    ( 1, 0, 0)
+
+Therefore, in the actual keyboard/controller implementation:
+
+    W+A -> A
+    W+D -> D
+
+inside the airborne Air() calculation.
+
+This is now fully confirmed from the game's actual Keyboard source plus the
+Air() source, not from a generic Roblox input assumption.
+
+Because after the transformation:
+
+    MoveDirection.Z == 0
+    MoveDirection.X ~= 0
+
+the same pure-lateral AirStrafeAcceleration branch is selected.
+
+Therefore W+A/W+D use the same airborne WishDirection construction and
+AirStrafeAcceleration path as A/D.
+
+-------------------------------------------------------------
+54.3 S IS A DIFFERENT AIR CASE
+-------------------------------------------------------------
+
+Keyboard confirms:
+
+    S = Vector3.new(0, 0, 1)
+
+Air() checks:
+
+    if MoveDirection2.Z > 0 then
+        Velocity = Helpers:ApplyFriction(..., 1)
+    end
+
+So S enters the positive-Z branch that applies the Air-side friction operation.
+
+This is consistent with the user's runtime observation that S does not build
+speed.
+
+No separate theory about S speed gain is added beyond this source fact and the
+observed behavior.
+
+
+-------------------------------------------------------------
+54.4 EXACT MOUSE INPUT TO CAMERA ROTATION
+-------------------------------------------------------------
+
+Path:
+
+    Players.LocalPlayer.PlayerScripts.PlayerModule.CameraModule.CameraInput
+
+Mouse input:
+
+    UserInputService.InputChanged
+        ->
+    inputChanged()
+
+For MouseMovement:
+
+    local Delta2 = p64.Delta
+    t5.Movement = Vector2.new(Delta2.X, Delta2.Y)
+
+Then getRotation():
+
+    local Movement = t5.Movement
+
+    return (
+        ...
+        + Movement * v_u_3
+        + ...
+    ) * v24
+
+with:
+
+    v_u_3 =
+        Vector2.new(0.66, 0.66)
+        * 0.008726646259971648
+
+Therefore:
+
+    v_u_3.X = 0.00575958658
+    v_u_3.Y = 0.00575958658
+
+For normal non-inverted Y:
+
+    1 mouse-pixel horizontal delta
+        ->
+    0.00575958658 rad
+        ->
+    0.33 degrees
+
+So:
+
+    CameraYawDelta ~= MouseDeltaX * 0.33 degrees
+
+For vertical input, the same base 0.33 degrees/pixel is multiplied by the
+camera-Y inversion value.
+
+This is the exact scaling inside CameraInput.getRotation().
+
+
+-------------------------------------------------------------
+54.5 MOUSE MOVEMENT IS NOT MULTIPLIED BY DT
+-------------------------------------------------------------
+
+The mouse term is:
+
+    Movement * v_u_3
+
+while the keyboard/gamepad terms have p22-dependent scaling:
+
+    keyboard term:
+        (...)*p22*2.094...
+
+    gamepad term:
+        Thumbstick * sensitivity * p22
+
+The mouse Movement term itself is not multiplied by p22.
+
+Therefore the recovered CameraInput code treats the MouseMovement delta as a
+per-input-event angular increment rather than a speed value multiplied by
+frame delta.
+
+
+-------------------------------------------------------------
+54.6 CAMERA INPUT RESET
+-------------------------------------------------------------
+
+At frame end:
+
+    t5.Movement = Vector2.new()
+
+and other transient camera input fields are reset.
+
+Therefore a MouseMovement delta is transient input consumed by getRotation()
+rather than a persistent accumulated yaw value inside CameraInput.
+
+
+-------------------------------------------------------------
+54.7 COMPLETE CONFIRMED A/D + MOUSE CAMERA PIPELINE
+-------------------------------------------------------------
+
+For D:
+
+    keyboard:
+        MoveDirection = (1, 0, 0)
+
+    camera:
+        MouseMovement.X
+            ->
+        camera yaw change
+            ->
+        LookCFrame
+
+    Air():
+        WishDirection =
+            LookCFrame:VectorToWorldSpace(MoveDirection)
+
+    then:
+
+        Dot = Velocity · WishDirection
+
+        addSpeed = 182 - Dot
+
+        accelSpeed = 182 * dt * 182
+
+        addSpeed = min(addSpeed, accelSpeed)
+
+        Velocity += WishDirection * addSpeed
+
+For A:
+
+    same chain, with:
+
+        MoveDirection = (-1, 0, 0)
+
+For W+A/W+D:
+
+    W is first represented in the keyboard vector,
+    then Air() removes its negative-Z component,
+    leaving exactly A/D before the LookCFrame transform.
+
+Therefore the simultaneous camera/A-D interaction is completely determined by
+the relative orientation between:
+
+    horizontal Velocity
+
+and:
+
+    camera-relative A/D WishDirection.
+
+
+-------------------------------------------------------------
+54.8 PRACTICAL CAMERA STEERING RESOLUTION
+-------------------------------------------------------------
+
+The previously derived optimal pure-A/D condition was:
+
+    WishDirection perpendicular to Velocity
+
+For D this means:
+
+    CameraRight perpendicular to Velocity
+
+For A:
+
+    -CameraRight perpendicular to Velocity
+
+Because CameraLook is perpendicular to CameraRight in the normal camera
+orientation, the equivalent target is:
+
+    horizontal CameraLook aligned with horizontal Velocity
+
+The mouse control resolution is now known:
+
+    ~0.33 degrees per horizontal mouse pixel
+
+Therefore an adaptive controller can convert a desired camera yaw change into
+an approximate mouse-equivalent amount:
+
+    mousePixels ~= desiredDegrees / 0.33
+
+This is an input-resolution conversion, not a claim about physical mouse
+sensitivity outside the game's CameraInput layer.
+
+=============================================================
+END OF 2026-10-05 KEYBOARD + CAMERA INPUT FINDINGS
+============================================================
