@@ -12951,7 +12951,7 @@ function mainJump.getCrouchSpamSensorLayout(char)
 
     return Vector3.new(
         2,
-        0.20,
+        0.40,
         1
     ), center
 end
@@ -12989,7 +12989,7 @@ function mainJump.createCrouchSpamSensor(char)
     sensor.Size =
         sensorSize
 
-    sensor.Transparency = 0.5
+    sensor.Transparency = 1
     sensor.Color = Color3.fromRGB(
         255,
         80,
@@ -13030,7 +13030,7 @@ function mainJump.createCrouchSpamSensor(char)
                 center.X,
                 center.Y
                     + (sensor.Size.Y * 0.5)
-                    - 2.00,
+                    - 1.79,
                 center.Z
             )
             * CFrame.Angles(
