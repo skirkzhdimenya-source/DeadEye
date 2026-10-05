@@ -2719,257 +2719,130 @@ END OF 2026-10-05 PURE A/D + CAMERA STRAFE LAW
 
 
 ============================================================
-53. 2026-10-05 — W+A / W+D VS PURE A/D DURING AIR — CONFIRMED
+53. 2026-10-05 — W+A / W+D DURING AIR — EVIDENCE STATUS
 ============================================================
 
-The complete Air() function resolves why W+A/W+D can feel almost identical to
-pure A/D during flight.
-
-The standard Roblox Keyboard controller builds movement as:
-
-    X = left + right
-    Z = forward + backward
-
-with:
-
-    W / Forward = -1 Z
-    S / Backward = +1 Z
-    A = -1 X
-    D = +1 X
-
-This matches the game's MoveDirection input convention.
-
--------------------------------------------------------------
-53.1 THE AIR FUNCTION REMOVES THE W COMPONENT
--------------------------------------------------------------
-
-At the start of Air():
+The complete Air() source shows:
 
     if MoveDirection2.Z < 0 then
         MoveDirection2 =
             MoveDirection2 * Vector3.new(1, 1, 0)
     end
 
-For W:
+Therefore any input state with:
 
-    MoveDirection2.Z < 0
+    MoveDirection.Z < 0
 
-so Z is set to zero.
+has its Z component removed before the airborne WishDirection is built.
 
-For W+A:
-
-    MoveDirection2 ~= (-x, 0, -z)
-
-after the branch:
-
-    MoveDirection2 ~= (-x, 0, 0)
-
-For W+D:
-
-    MoveDirection2 ~= (+x, 0, -z)
-
-after the branch:
-
-    MoveDirection2 ~= (+x, 0, 0)
-
-Therefore the forward W component is explicitly removed before the air
-WishDirection is constructed.
-
+This is confirmed.
 
 -------------------------------------------------------------
-53.2 W+A / W+D THEN ENTER THE SAME PURE-LATERAL BRANCH AS A/D
+53.1 WHAT THE PROVIDED SOURCE DOES NOT PROVE
 -------------------------------------------------------------
 
-After the W-removal:
+Movement.Terms["MoveDirection"] calculates:
 
-    MoveDirection2.Z == 0
+    local v15 = ControlModule:GetMoveVector()
 
-and for W+A/W+D:
+The provided decompile does NOT include the internal ControlModule implementation.
 
-    MoveDirection2.X ~= 0
+Therefore this file must NOT state from source alone that:
 
-Therefore the Air() code enters:
+    W -> Z < 0
+    S -> Z > 0
+    W+A -> exactly A
+    W+D -> exactly D
 
-    if MoveDirection2.Z == 0 and MoveDirection2.X ~= 0 then
-        v28 = math.min(AirStrafeAcceleration, v26)
-        v27 = AirStrafeAcceleration
-    else
-        v28 = v26
-    end
-
-So W+A and W+D use the same dedicated AirStrafeAcceleration branch as pure
-A/D.
-
-With:
-
-    AirStrafeAcceleration = 182
-
-the branch forces:
-
-    acceleration = 182
-    wishSpeed   = min(182, v26)
-
-For normal nonzero A/D input, v26 is large enough that:
-
-    wishSpeed = 182
-
+Those are standard-controller assumptions unless verified from this game's
+actual ControlModule runtime or source.
 
 -------------------------------------------------------------
-53.3 W+A / W+D HAVE THE SAME WISHDIRECTION AS A/D AFTER NORMALIZATION
+53.2 WHAT IS CONFIRMED FOR ANY Z<0 INPUT
 -------------------------------------------------------------
 
-The client constructs:
+If a runtime test shows:
+
+    MoveDirection.Z < 0
+
+then Air() immediately removes that forward component:
+
+    Vector3.new(X, Y, Z)
+        ->
+    Vector3.new(X, Y, 0)
+
+Afterward the client constructs:
 
     v25 =
         LookCFrame:VectorToWorldSpace(MoveDirection2)
 
-Then:
+and pure surviving lateral input can enter:
 
-    if v25 ~= Vector3.new(0, 0, 0) then
-        v25 = v25.Unit
+    MoveDirection2.Z == 0
+    MoveDirection2.X ~= 0
+
+which selects:
+
+    AirStrafeAcceleration
+
+and causes:
+
+    AirControl
+        ->
+    immediate return
+
+because AirControl checks:
+
+    abs(MoveDirection2.Z) < 0.001
+
+-------------------------------------------------------------
+53.3 USER RUNTIME OBSERVATION
+-------------------------------------------------------------
+
+The user has independently verified during gameplay that holding S does not
+allow building speed.
+
+That observation is compatible with the source branch:
+
+    if MoveDirection2.Z > 0 then
+        Velocity = ApplyFriction(..., 1)
     end
 
-Because the W Z component was already removed, only the surviving A/D X
-component remains.
-
-After normalization:
-
-    W+A -> same lateral direction as A
-    W+D -> same lateral direction as D
-
-The original diagonal magnitude does not matter for the final direction.
-
-Thus the camera-relative WishDirection is the same as pure A/D.
-
+but the exact complete S behavior is not being promoted to a source-proven
+formula here.
 
 -------------------------------------------------------------
-53.4 AIRCONTROL IS ALSO SKIPPED
+53.4 CURRENT CONCLUSION
 -------------------------------------------------------------
 
-AirControl receives:
+Confirmed:
 
-    MoveDirection2
+    Inputs with MoveDirection.Z < 0
+        -> forward Z is removed
+        -> remaining pure lateral input can enter the same A/D air-strafe path
 
-which now has:
+Not yet source-confirmed:
 
-    MoveDirection2.Z == 0
+    exact W / A / D values produced by this game's ControlModule
+    exact W+A / W+D equivalence to A / D
 
-Therefore:
+A future runtime test of DataRegistry["MoveDirection"] while holding:
 
-    AirControl()
-        -> immediate return
-
-So W+A/W+D do not introduce an additional AirControl steering operation after
-the W component has been removed.
-
-
--------------------------------------------------------------
-53.5 AIR FRICTION IS ALSO NOT ENTERED FOR W+A/W+D
--------------------------------------------------------------
-
-The Air() function applies its initial Air-side friction only while:
-
-    MoveDirection2.Z > 0
-
-But for W+A/W+D the sequence is:
-
-    original Z < 0
-        ->
-    Z is replaced by 0
-        ->
-    Z > 0 is false
-
-Therefore the Air() ApplyFriction call is skipped.
-
-This is also the same relevant behavior as pure A/D, where:
-
-    MoveDirection2.Z == 0
-
-
--------------------------------------------------------------
-53.6 FINAL RESULT
--------------------------------------------------------------
-
-For normal flight and standard keyboard input:
-
-    W+A
-        -> W component removed
-        -> behaves as A for the Air() movement calculation
-
-    W+D
-        -> W component removed
-        -> behaves as D for the Air() movement calculation
-
+    W
     A
-        -> remains A
-
     D
-        -> remains D
+    W+A
+    W+D
 
-Therefore, for horizontal air movement, the game intentionally collapses:
+would resolve this without relying on generic Roblox input conventions.
+
+Do not treat the earlier unconditional statement:
 
     W+A == A
     W+D == D
 
-inside the recovered Air() calculation.
-
-This explains why gameplay testing can show little or no difference between
-holding A/D alone and W+A/W+D during flight.
-
-
--------------------------------------------------------------
-53.7 CAMERA ROTATION CONSEQUENCE
--------------------------------------------------------------
-
-Because W+A/W+D become the corresponding pure A/D direction before
-LookCFrame:VectorToWorldSpace() and before Accelerate():
-
-    camera yaw + W+A
-        = camera yaw + A
-
-    camera yaw + W+D
-        = camera yaw + D
-
-Therefore the previously derived pure A/D camera-strafe law also applies to
-W+A/W+D for normal airborne movement.
-
-The optimal condition remains:
-
-    WishDirection perpendicular to horizontal Velocity
-
-and the equivalent practical camera condition remains:
-
-    CameraLook aligned with horizontal Velocity
-
-for the corresponding A/D side.
-
-No separate W+A/W+D camera-steering equation is necessary for this normal
-airborne path.
-
-
--------------------------------------------------------------
-53.8 IMPORTANT SCOPE
--------------------------------------------------------------
-
-This conclusion applies to the recovered Air() function and standard keyboard
-input where:
-
-    W -> Z < 0
-
-It does NOT automatically apply to:
-
-    S+A
-    S+D
-    wallrunning-specific input modification
-    other controllers that generate a different MoveDirection convention
-
-S inputs are different because:
-
-    S -> Z > 0
-
-and therefore do not enter the W-removal branch.
-
+as confirmed until that test is performed.
 
 =============================================================
-END OF 2026-10-05 W+A / W+D AIR FINDINGS
+END OF 2026-10-05 W+A / W+D AIR EVIDENCE STATUS
 =============================================================
