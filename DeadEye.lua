@@ -11025,24 +11025,28 @@ function mainJump.setAirTurnSpeed(value, persist)
 end
 
 --// =========================================================
+--// =========================================================
 --// RAGE LOOK
 --//
---// RAGE LOOK keeps the real camera untouched.
+--// RAGE LOOK keeps the real camera and HumanoidRootPart
+--// physically untouched while making the game's own LookY
+--// calculation return a forced downward pitch.
 --//
---// Physical side:
+--// Replication path:
+--//     Movement.Terms.LookY.CalculateFunction()
+--//     -> DataRegistry:Set("LookY", value)
+--//     -> Serializer / ToSend
+--//     -> UpdateCharacterDataRegistryUnreliable
+--//     -> other clients
+--//
+--// Physical movement path:
 --//     DataRegistry:Get("LookCFrame")
---//     -> fake CFrame with forced downward pitch
+--//     -> fake downward-pitched CFrame
 --//
---// Visual head side:
---//     DataRegistry:Get("LookY")
---//     -> fake LookVector Y component
---//
---// The game's Joints controller also stores:
---//     Joints.LookY
---//     Joints.LastLookY
---//
---// Both are held at the same fake value so camera movement
---// cannot pull the head back toward the real camera pitch.
+--// Visual path:
+--//     LookY -> Joints.RegistryTermUpdated()
+--//           -> InterpolateLimbs
+--//           -> Motor6D.C1
 --//
 --// NEVER modifies:
 --//     Camera.CFrame
@@ -11055,8 +11059,13 @@ end
 local RAGE_LOOK_PITCH =
     -math.rad(70)
 
+-- The game quantizes LookY to 1/40 radian:
+-- floor(angle * 40 + 0.5) / 40
 local RAGE_LOOK_Y =
-    math.sin(RAGE_LOOK_PITCH)
+    math.floor(
+        RAGE_LOOK_PITCH * 40
+        + 0.5
+    ) / 40
 
 mainJump.rageLookHookInstalled =
     false
@@ -11067,13 +11076,16 @@ mainJump.rageLookDataRegistryGet =
 mainJump.rageLookOriginalDataRegistryGet =
     nil
 
-mainJump.rageLookJoints =
+mainJump.rageLookLookYEntry =
     nil
 
-mainJump.rageLookOriginalLookY =
+mainJump.rageLookOriginalLookYCalculate =
     nil
 
-mainJump.rageLookOriginalLastLookY =
+mainJump.rageLookTerms =
+    nil
+
+mainJump.rageLookMode =
     nil
 
 function mainJump.getRageLookFakeCFrame(
@@ -11133,8 +11145,7 @@ function mainJump.findRageLookDataRegistryGet()
         return nil
     end
 
-    local getFunction =
-        nil
+    local getFunction
 
     pcall(function()
         getFunction =
@@ -11148,30 +11159,46 @@ function mainJump.findRageLookDataRegistryGet()
     return getFunction
 end
 
-function mainJump.findRageLookJoints()
+function mainJump.findRageLookTerms()
 
-    local object =
-        getCharacterObject()
+    local movementModule =
+        ReplicatedStorage
+            :WaitForChild("Objects")
+            :WaitForChild("Game")
+            :WaitForChild("Character")
+            :WaitForChild("Client")
+            :WaitForChild("Movement")
 
-    if not object
-        or not object.DataRegistry
+    local termsModule =
+        movementModule:WaitForChild(
+            "Terms"
+        )
+
+    local terms
+
+    local success =
+        pcall(function()
+            terms =
+                require(
+                    termsModule
+                )
+        end)
+
+    if not success
+        or type(terms) ~= "table"
     then
-        return nil
+        return nil, nil
     end
 
-    local found =
-        nil
-
-    pcall(function()
-        found =
-            object.DataRegistry.Parent.Joints
-    end)
-
-    if type(found) ~= "table" then
-        return nil
+    for _, entry in ipairs(
+        terms.Children or {}
+    ) do
+        if entry.Term == "LookY" then
+            return terms, entry
+        end
     end
 
-    return found
+    return terms, nil
 end
 
 function mainJump.installRageLookHook()
@@ -11180,10 +11207,17 @@ function mainJump.installRageLookHook()
         return true
     end
 
-    if type(hookfunction) ~= "function" then
+    local terms, lookYEntry =
+        mainJump.findRageLookTerms()
+
+    if not terms
+        or not lookYEntry
+        or type(lookYEntry.CalculateFunction)
+            ~= "function"
+    then
 
         warn(
-            "[DeadEye] Rage Look: hookfunction unavailable"
+            "[DeadEye] Rage Look: Movement.Terms LookY not found"
         )
 
         return false
@@ -11201,21 +11235,16 @@ function mainJump.installRageLookHook()
         return false
     end
 
-    local joints =
-        mainJump.findRageLookJoints()
-
-    if type(joints) ~= "table" then
+    if type(hookfunction) ~= "function" then
 
         warn(
-            "[DeadEye] Rage Look: Joints table not found"
+            "[DeadEye] Rage Look: hookfunction unavailable"
         )
 
         return false
     end
 
-    local originalGet =
-        nil
-
+    local originalGet
     local hookOK =
         pcall(function()
 
@@ -11239,31 +11268,19 @@ function mainJump.installRageLookHook()
 
                         if mainJump.rageLookEnabled
                             and not cleaned
+                            and key == "LookCFrame"
+                            and typeof(results[1]) == "CFrame"
                         then
 
-                            if key == "LookCFrame"
-                                and typeof(results[1]) == "CFrame"
-                            then
+                            local fakeCFrame =
+                                mainJump.getRageLookFakeCFrame(
+                                    results[1]
+                                )
 
-                                local fakeCFrame =
-                                    mainJump.getRageLookFakeCFrame(
-                                        results[1]
-                                    )
-
-                                if fakeCFrame then
-                                    results[1] =
-                                        fakeCFrame
-                                end
-
-                            elseif key == "LookY"
-                                and type(results[1]) == "number"
-                            then
-
+                            if fakeCFrame then
                                 results[1] =
-                                    RAGE_LOOK_Y
-
+                                    fakeCFrame
                             end
-
                         end
 
                         return table.unpack(
@@ -11293,92 +11310,51 @@ function mainJump.installRageLookHook()
     mainJump.rageLookOriginalDataRegistryGet =
         originalGet
 
-    mainJump.rageLookJoints =
-        joints
+    mainJump.rageLookTerms =
+        terms
 
-    pcall(function()
-        mainJump.rageLookOriginalLookY =
-            joints.LookY
-    end)
+    mainJump.rageLookLookYEntry =
+        lookYEntry
 
-    pcall(function()
-        mainJump.rageLookOriginalLastLookY =
-            joints.LastLookY
-    end)
+    mainJump.rageLookOriginalLookYCalculate =
+        lookYEntry.CalculateFunction
+
+    -- The game's Movement.UpdateTerms() will now call this
+    -- function itself and then DataRegistry:Set("LookY", ...).
+    lookYEntry.CalculateFunction =
+        function(_)
+            return RAGE_LOOK_Y
+        end
 
     mainJump.rageLookHookInstalled =
         true
 
     mainJump.rageLookMode =
-        "DataRegistry LookCFrame + LookY"
+        "Movement Terms LookY + DataRegistry LookCFrame"
 
     return true
 end
 
-function mainJump.updateRageLookVisual()
-
-    local joints =
-        mainJump.rageLookJoints
-
-    if type(joints) ~= "table" then
-
-        joints =
-            mainJump.findRageLookJoints()
-
-        mainJump.rageLookJoints =
-            joints
-    end
-
-    if type(joints) ~= "table" then
-        return
-    end
-
-    pcall(function()
-
-        if type(joints.LookY) == "number" then
-            joints.LookY =
-                RAGE_LOOK_Y
-        end
-
-    end)
-
-    pcall(function()
-
-        if type(joints.LastLookY) == "number" then
-            joints.LastLookY =
-                RAGE_LOOK_Y
-        end
-
-    end)
-end
-
-function mainJump.bindRageLookVisual()
-
-    pcall(function()
-        RunService:UnbindToRenderStep(
-            "DeadEyeRageLookVisual"
-        )
-    end)
-
-    RunService:BindToRenderStep(
-        "DeadEyeRageLookVisual",
-        Enum.RenderPriority.Last.Value,
-        function()
-            if not mainJump.rageLookEnabled
-                or cleaned
-            then
-                return
-            end
-
-            mainJump.updateRageLookVisual()
-        end
-    )
-end
-
 function mainJump.uninstallRageLookHook()
 
-    if not mainJump.rageLookHookInstalled then
-        return
+    local terms =
+        mainJump.rageLookTerms
+
+    local lookYEntry =
+        mainJump.rageLookLookYEntry
+
+    local originalLookYCalculate =
+        mainJump.rageLookOriginalLookYCalculate
+
+    if lookYEntry
+        and type(originalLookYCalculate)
+            == "function"
+    then
+
+        pcall(function()
+            lookYEntry.CalculateFunction =
+                originalLookYCalculate
+        end)
     end
 
     local registryGet =
@@ -11393,38 +11369,11 @@ function mainJump.uninstallRageLookHook()
     then
 
         pcall(function()
-
             hookfunction(
                 registryGet,
                 originalGet
             )
-
         end)
-    end
-
-    local joints =
-        mainJump.rageLookJoints
-
-    if type(joints) == "table" then
-
-        if type(mainJump.rageLookOriginalLookY) == "number" then
-
-            pcall(function()
-                joints.LookY =
-                    mainJump.rageLookOriginalLookY
-            end)
-
-        end
-
-        if type(mainJump.rageLookOriginalLastLookY) == "number" then
-
-            pcall(function()
-                joints.LastLookY =
-                    mainJump.rageLookOriginalLastLookY
-            end)
-
-        end
-
     end
 
     mainJump.rageLookHookInstalled =
@@ -11436,13 +11385,13 @@ function mainJump.uninstallRageLookHook()
     mainJump.rageLookOriginalDataRegistryGet =
         nil
 
-    mainJump.rageLookJoints =
+    mainJump.rageLookLookYEntry =
         nil
 
-    mainJump.rageLookOriginalLookY =
+    mainJump.rageLookOriginalLookYCalculate =
         nil
 
-    mainJump.rageLookOriginalLastLookY =
+    mainJump.rageLookTerms =
         nil
 
     mainJump.rageLookMode =
@@ -11458,7 +11407,7 @@ function mainJump.setRageLookEnabled(state)
 
         if mainJump.rageLookEnabled then
 
-            mainJump.updateRageLookVisual()
+            mainJump.saveConfig()
             mainJump.update()
 
             return true
@@ -11489,19 +11438,10 @@ function mainJump.setRageLookEnabled(state)
         mainJump.rageLookEnabled =
             true
 
-        mainJump.updateRageLookVisual()
-        mainJump.bindRageLookVisual()
-
     else
 
         mainJump.rageLookEnabled =
             false
-
-        pcall(function()
-            RunService:UnbindToRenderStep(
-                "DeadEyeRageLookVisual"
-            )
-        end)
 
         mainJump.uninstallRageLookHook()
 
