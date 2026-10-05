@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.138"
+local SCRIPT_VERSION = "1.139"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -100,6 +100,11 @@ end
 if genv.DEADEYE_RAGE_LOOK_CLEANUP then
     pcall(function()
         genv.DEADEYE_RAGE_LOOK_CLEANUP()
+    end)
+end
+if genv.DEADEYE_LANDING_FRICTION_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_LANDING_FRICTION_CLEANUP()
     end)
 end
 --// =========================================================
@@ -10192,6 +10197,7 @@ local mainJump = {
     enabled = false,
     lookEnabled = false,
     airTurnEnabled = false,
+    noLandingFriction = false,
     airTurnSpeed = 180,
     jumpDelay = 0.01,
     hotkeyName = "Z",
@@ -10299,6 +10305,10 @@ mainJump.airTurnSpeed =
         30,
         360
     )
+mainJump.noLandingFriction =
+    savedConfig.main
+    and savedConfig.main.noLandingFriction == true
+    or false
 local function mainConnect(connection)
     table.insert(
         mainJump.connections,
@@ -10327,6 +10337,7 @@ function mainJump.saveConfig()
         rageLook = mainJump.rageLookEnabled,
         airTurn = mainJump.airTurnEnabled,
         airTurnSpeed = mainJump.airTurnSpeed,
+        noLandingFriction = mainJump.noLandingFriction,
         crouchSpamDelay = mainJump.crouchSpamDelay,
         crouchSpamHotkey = mainJump.crouchSpamHotkeyName
     }
@@ -10334,6 +10345,199 @@ function mainJump.saveConfig()
         saveSavedConfig()
     end)
 end
+
+
+--// =========================================================
+--// LANDING FRICTION OVERRIDE
+--// =========================================================
+--// When enabled, only the first normal Run friction call after an
+--// Air movement update is skipped. The game's original Run function,
+--// Accelerate, WallImpact, Air and Slide logic remain intact.
+local landingFrictionFunctions = nil
+local landingFrictionHelpers = nil
+local landingFrictionOriginalRun = nil
+local landingFrictionOriginalAir = nil
+local landingFrictionOriginalApplyFriction = nil
+local landingFrictionHooksInstalled = false
+local landingFrictionLastWasAir = false
+local landingFrictionSkipNext = false
+
+local function uninstallLandingFrictionHooks()
+    landingFrictionSkipNext = false
+    landingFrictionLastWasAir = false
+
+    if not landingFrictionHooksInstalled then
+        return
+    end
+
+    if type(hookfunction) ~= "function" then
+        landingFrictionHooksInstalled = false
+        return
+    end
+
+    if landingFrictionFunctions
+        and landingFrictionOriginalAir
+    then
+        pcall(function()
+            hookfunction(
+                landingFrictionFunctions.Air,
+                landingFrictionOriginalAir
+            )
+        end)
+    end
+
+    if landingFrictionFunctions
+        and landingFrictionOriginalRun
+    then
+        pcall(function()
+            hookfunction(
+                landingFrictionFunctions.Run,
+                landingFrictionOriginalRun
+            )
+        end)
+    end
+
+    if landingFrictionHelpers
+        and landingFrictionOriginalApplyFriction
+    then
+        pcall(function()
+            hookfunction(
+                landingFrictionHelpers.ApplyFriction,
+                landingFrictionOriginalApplyFriction
+            )
+        end)
+    end
+
+    landingFrictionFunctions = nil
+    landingFrictionHelpers = nil
+    landingFrictionOriginalRun = nil
+    landingFrictionOriginalAir = nil
+    landingFrictionOriginalApplyFriction = nil
+    landingFrictionHooksInstalled = false
+end
+
+local function installLandingFrictionHooks()
+    if landingFrictionHooksInstalled then
+        return true
+    end
+
+    if type(hookfunction) ~= "function" then
+        warn(
+            "[DeadEye] Landing Friction: hookfunction is unavailable"
+        )
+        return false
+    end
+
+    local ok, result = pcall(function()
+        local functionsModule =
+            ReplicatedStorage
+            .Objects.Game.Character.Client.Movement
+            .MoveFunction.Functions
+
+        local helpersModule =
+            functionsModule.Helpers
+
+        local functionsTable =
+            require(functionsModule)
+
+        local helpersTable =
+            require(helpersModule)
+
+        if type(functionsTable) ~= "table"
+            or type(functionsTable.Run) ~= "function"
+            or type(functionsTable.Air) ~= "function"
+            or type(helpersTable) ~= "table"
+            or type(helpersTable.ApplyFriction) ~= "function"
+        then
+            error(
+                "Movement Functions/Helpers API was not recovered"
+            )
+        end
+
+        landingFrictionFunctions =
+            functionsTable
+        landingFrictionHelpers =
+            helpersTable
+
+        landingFrictionOriginalAir =
+            hookfunction(
+                functionsTable.Air,
+                function(...)
+                    --// Any new Air update starts a fresh airborne phase.
+                    --// Clear a stale pending skip before running the native Air.
+                    landingFrictionSkipNext = false
+                    landingFrictionLastWasAir = true
+
+                    return landingFrictionOriginalAir(...)
+                end
+            )
+
+        landingFrictionOriginalRun =
+            hookfunction(
+                functionsTable.Run,
+                function(...)
+                    local previousWasAir =
+                        landingFrictionLastWasAir
+
+                    landingFrictionLastWasAir = false
+                    landingFrictionSkipNext =
+                        mainJump.noLandingFriction
+                        and previousWasAir
+                        or false
+
+                    --// Run itself stays completely native. Its original
+                    --// ApplyFriction call is intercepted exactly once.
+                    return landingFrictionOriginalRun(...)
+                end
+            )
+
+        landingFrictionOriginalApplyFriction =
+            hookfunction(
+                helpersTable.ApplyFriction,
+                function(self, p7, p8, p9, p10, p11)
+                    if landingFrictionSkipNext
+                        and p11 == 1
+                    then
+                        --// Normal Run passes p11 = 1.
+                        --// Returning the current registry Velocity is
+                        --// equivalent to ApplyFriction(..., 0) for this call.
+                        landingFrictionSkipNext = false
+
+                        return p9:Get("Velocity")
+                    end
+
+                    return landingFrictionOriginalApplyFriction(
+                        self,
+                        p7,
+                        p8,
+                        p9,
+                        p10,
+                        p11
+                    )
+                end
+            )
+
+        landingFrictionHooksInstalled = true
+        return true
+    end)
+
+    if not ok then
+        warn(
+            "[DeadEye] Landing Friction hook install failed:",
+            result
+        )
+
+        uninstallLandingFrictionHooks()
+        return false
+    end
+
+    return true
+end
+
+installLandingFrictionHooks()
+
+genv.DEADEYE_LANDING_FRICTION_CLEANUP =
+    uninstallLandingFrictionHooks
 
 --// =========================================================
 --// CAMERA LOOK / JUMP
@@ -11734,6 +11938,28 @@ function mainJump.update()
         end
     end
 
+    if mainJump.noLandingFrictionToggle then
+        if mainJump.noLandingFriction then
+            mainJump.noLandingFrictionToggle.Text =
+                "ON"
+            mainJump.noLandingFrictionToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            mainJump.noLandingFrictionToggle.Text =
+                "OFF"
+            mainJump.noLandingFrictionToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end
+
     if mainJump.airTurnToggle then
         if mainJump.airTurnEnabled then
             mainJump.airTurnToggle.Text =
@@ -11830,6 +12056,14 @@ function mainJump.setEnabled(state)
 
     mainJump.update()
 end
+function mainJump.setNoLandingFrictionEnabled(state)
+    mainJump.noLandingFriction =
+        state and true or false
+
+    mainJump.update()
+    mainJump.saveConfig()
+end
+
 function mainJump.setDelay(value)
     value =
         tonumber(
@@ -14164,10 +14398,74 @@ mainConnect(
     )
 )
 
+
+__UI.noLandingFrictionRow =
+    mainRow(
+        "NO LAND FRICTION",
+        6
+    )
+local noLandingFrictionLabel =
+    autoLabel:Clone()
+noLandingFrictionLabel.Text =
+    "NO LAND FRICTION"
+noLandingFrictionLabel.Parent =
+    __UI.noLandingFrictionRow
+
+mainJump.noLandingFrictionToggle =
+    Instance.new("TextButton")
+mainJump.noLandingFrictionToggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+mainJump.noLandingFrictionToggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+mainJump.noLandingFrictionToggle.BorderSizePixel =
+    0
+mainJump.noLandingFrictionToggle.TextSize =
+    10
+mainJump.noLandingFrictionToggle.Font =
+    Enum.Font.GothamBold
+mainJump.noLandingFrictionToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.noLandingFrictionToggle.Parent =
+    __UI.noLandingFrictionRow
+
+__UI.noLandingFrictionToggleCorner =
+    Instance.new("UICorner")
+__UI.noLandingFrictionToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+__UI.noLandingFrictionToggleCorner.Parent =
+    mainJump.noLandingFrictionToggle
+
+mainConnect(
+    mainJump.noLandingFrictionToggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setNoLandingFrictionEnabled(
+                not mainJump.noLandingFriction
+            )
+        end
+    )
+)
+
 __UI.airTurnSpeedRow =
     mainRow(
         "TURN SPEED",
-        6
+        7
     )
 local airTurnSpeedLabel =
     autoLabel:Clone()
@@ -14405,7 +14703,7 @@ mainConnect(
 __UI.delayRow =
     mainRow(
         "DELAY",
-        7
+        8
     )
 __UI.delayLabel =
     autoLabel:Clone()
@@ -14528,7 +14826,7 @@ mainConnect(
 __UI.hotkeyRow =
     mainRow(
         "HOTKEY",
-        8
+        9
     )
 __UI.hotkeyLabel =
     autoLabel:Clone()
@@ -14593,7 +14891,7 @@ mainConnect(
 __UI.hideRow =
     mainRow(
         "HIDE UI",
-        9
+        10
     )
 __UI.hideLabel =
     autoLabel:Clone()
@@ -20469,6 +20767,12 @@ local function cleanup()
     pcall(function()
         mainJump.destroyCrouchSpamSensor()
     end)
+
+    pcall(function()
+        uninstallLandingFrictionHooks()
+    end)
+
+    genv.DEADEYE_LANDING_FRICTION_CLEANUP = nil
 
     enabled = false
 
