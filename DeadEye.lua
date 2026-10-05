@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.136
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.137
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.136"
+local SCRIPT_VERSION = "1.137"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -13030,7 +13030,7 @@ function mainJump.createCrouchSpamSensor(char)
                 center.X,
                 center.Y
                     + (sensor.Size.Y * 0.5)
-                    - 0.50,
+                    - 2.00,
                 center.Z
             )
             * CFrame.Angles(
