@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.143
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.144
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.143"
+local SCRIPT_VERSION = "1.144"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10818,6 +10818,15 @@ function mainJump.bindAirTurnRender()
                 return
             end
 
+            --// When the camera is behind the character, left/right
+            --// screen input is reversed relative to the normal forward view.
+            local cameraBackward =
+                mainJump.isCameraLookingBackward()
+
+            if cameraBackward then
+                turning = -turning
+            end
+
             local movementState =
                 mainJump.findLookMovementState()
 
@@ -10981,6 +10990,11 @@ function mainJump.bindAirTurnRender()
                     * SMART_AIR_TURN_GAIN
                     / SMART_AIR_TURN_INPUT_RADIANS
                     * -1
+
+                if cameraBackward then
+                    correctionPixels =
+                        -correctionPixels
+                end
 
                 correctionPixels =
                     math.clamp(
