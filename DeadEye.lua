@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.163"
+local SCRIPT_VERSION = "1.164"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -7954,6 +7954,7 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
 
     pcall(function()
         restoreDeadEyeVisualState()
+        releaseDeadEyeVisualLocalTransparency()
     end)
 end
 local lastUnusualPOVState = nil
@@ -8185,11 +8186,6 @@ local function saveDeadEyeVisualState(
     end)
 
     pcall(function()
-        state.LocalTransparencyModifier =
-            object.LocalTransparencyModifier
-    end)
-
-    pcall(function()
         state.Enabled =
             object.Enabled
     end)
@@ -8212,11 +8208,6 @@ local function restoreDeadEyeVisualState()
                         state.Transparency
                 end
 
-                if state.LocalTransparencyModifier ~= nil then
-                    object.LocalTransparencyModifier =
-                        state.LocalTransparencyModifier
-                end
-
                 if state.Enabled ~= nil then
                     object.Enabled =
                         state.Enabled
@@ -8229,6 +8220,51 @@ local function restoreDeadEyeVisualState()
     end
 
     lastUnusualPOVTransparency = nil
+end
+
+local function releaseDeadEyeVisualLocalTransparency()
+    local roots = {
+        UnusualFns.getUnusualVisualRig(),
+        UnusualFns.getUnusualPlayerCharacter(),
+        workspace:FindFirstChild(
+            "DeadEyeUnusualAnimatedVisuals"
+        ),
+        workspace:FindFirstChild(
+            "DeadEyeUnusualVisuals"
+        )
+    }
+
+    local seen = {}
+
+    for _, root in ipairs(roots) do
+        if root and not seen[root] then
+            seen[root] = true
+
+            for _, object in ipairs(root:GetDescendants()) do
+                local tagged = false
+
+                pcall(function()
+                    tagged =
+                        object:GetAttribute(
+                            "DeadEyeUnusualFX"
+                        ) == true
+
+                    if not tagged and object:IsA("BasePart") then
+                        tagged =
+                            object:GetAttribute(
+                                "DeadEyeFirstPersonCosmetic"
+                            ) == true
+                    end
+                end)
+
+                if tagged and object.Parent then
+                    pcall(function()
+                        object.LocalTransparencyModifier = 0
+                    end)
+                end
+            end
+        end
+    end
 end
 
 local function hideDeadEyeVisualObject(
@@ -8250,7 +8286,6 @@ local function hideDeadEyeVisualObject(
             or object:IsA("Texture")
         then
             object.Transparency = 1
-            object.LocalTransparencyModifier = 0
             return
         end
 
@@ -8401,6 +8436,7 @@ function UnusualFns.setUnusualFXForPOV(
 
     if not firstPerson then
         restoreDeadEyeVisualState()
+        releaseDeadEyeVisualLocalTransparency()
     end
 
     --// The animation source is always hidden regardless of POV.
