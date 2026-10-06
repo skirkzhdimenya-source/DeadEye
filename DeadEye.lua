@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.178
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.179
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.178"
+local SCRIPT_VERSION = "1.179"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -2790,9 +2790,18 @@ function cosmetic.refreshRig()
                 if not cosmeticObjectsBeforeAdd[object]
                     and (
                         object:IsA("Accessory")
-                        or isStockUnusualPOVTransparencyObject(
-                            object
-                        )
+                        or object:IsA("BasePart")
+                        or object:IsA("Decal")
+                        or object:IsA("Texture")
+                        or object:IsA("ParticleEmitter")
+                        or object:IsA("Trail")
+                        or object:IsA("Beam")
+                        or object:IsA("BillboardGui")
+                        or object:IsA("SurfaceGui")
+                        or object:IsA("Sparkles")
+                        or object:IsA("Fire")
+                        or object:IsA("Smoke")
+                        or object:IsA("Highlight")
                     )
                 then
                     pcall(function()
