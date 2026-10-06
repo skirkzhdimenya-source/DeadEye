@@ -16428,9 +16428,6 @@ end)
 mainJump.setAirTurnSpeed(
     mainJump.airTurnSpeed,
     false
-)mainJump.setAirTurnSpeed(
-    mainJump.airTurnSpeed,
-    false
 )
 mainJump.setCrouchSpamDelay(
     mainJump.crouchSpamDelay
