@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.169
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.170
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.169"
+local SCRIPT_VERSION = "1.170"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8430,7 +8430,17 @@ function UnusualFns.syncNativeParticlePOV(
         if object and object.Parent then
             pcall(function()
                 if firstPerson then
+                    --// Native behavior disables emission.
                     object.Enabled = false
+
+                    --// The clean replacement must disappear immediately.
+                    --// Enabled=false only stops NEW particles; particles
+                    --// that were already emitted would otherwise remain
+                    --// visible until their Lifetime expires.
+                    pcall(function()
+                        object:Clear()
+                    end)
+
                 else
                     object.Enabled = enabled
                 end
@@ -8439,6 +8449,22 @@ function UnusualFns.syncNativeParticlePOV(
             unusualRuntime.nativeParticleStates[
                 object
             ] = nil
+        end
+    end
+
+    --// Some Unusuals use actual Trail objects in addition to,
+    --// or instead of, ParticleEmitters. Clear their existing
+    --// rendered history in first person as well.
+    if firstPerson then
+        for _, object in ipairs(
+            visualRig:GetDescendants()
+        ) do
+            if object:IsA("Trail") then
+                pcall(function()
+                    object.Enabled = false
+                    object:Clear()
+                end)
+            end
         end
     end
 end
