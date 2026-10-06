@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.186
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.187
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.186"
+local SCRIPT_VERSION = "1.187"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8122,6 +8122,31 @@ function UnusualFns.getUnusualViewmodel()
     return viewmodel
 end
 
+function UnusualFns.isUnusualPOVRuntimeActive()
+    --// The menu uses MenuView.VisualModel. Do not run DeadEye's
+    --// gameplay Unusual POV particle/trail controller there.
+    --// Native P1/P3 handling is only mirrored for the real
+    --// gameplay visual rig: workspace.Rigs.<LocalPlayer>.
+    local rigs =
+        workspace:FindFirstChild("Rigs")
+
+    if not rigs then
+        return false
+    end
+
+    local liveRig =
+        rigs:FindFirstChild(
+            LocalPlayer.Name
+        )
+
+    return liveRig
+        and liveRig:IsA("Model")
+        and liveRig:FindFirstChildOfClass(
+            "Humanoid"
+        )
+        ~= nil
+end
+
 function UnusualFns.isUnusualFirstPerson()
     --// Use the game's exact first-person measurement.
     --// Native TransparencyController:
@@ -8833,6 +8858,10 @@ function UnusualFns.setUnusualFXForPOV(
     firstPerson,
     _deltaTime
 )
+    if not UnusualFns.isUnusualPOVRuntimeActive() then
+        return
+    end
+
     --// Mirror the native live-rig ParticleEmitter behavior first.
     UnusualFns.syncNativeParticlePOV(
         UnusualFns.getUnusualVisualRig(),
@@ -8917,6 +8946,14 @@ function UnusualFns.updateUnusualPOV()
         return
     end
 
+    if not UnusualFns.isUnusualPOVRuntimeActive() then
+        lastUnusualPOVState = false
+        UnusualFns.clearNativeParticlePOV(
+            true
+        )
+        return
+    end
+
     UnusualFns.syncUnusualViewmodelAppearance()
 
     lastUnusualPOVState =
@@ -8986,6 +9023,25 @@ RunService:BindToRenderStep(
         --// CameraModule writes CurrentCamera.CFrame and Focus at
         --// Enum.RenderPriority.Camera. Run after that, like the native
         --// transparency calculation uses the current frame's camera.
+        if not UnusualFns.isUnusualPOVRuntimeActive() then
+            UnusualFns.clearNativeParticlePOV(
+                true
+            )
+            return
+        end
+
+        local gameplayRig =
+            UnusualFns.getUnusualVisualRig()
+
+        if gameplayRig
+            and unusualRuntime.nativeParticleRig
+                ~= gameplayRig
+        then
+            UnusualFns.bindNativeParticlePOV(
+                gameplayRig
+            )
+        end
+
         local firstPerson =
             UnusualFns.isUnusualFirstPerson()
 
@@ -8996,12 +9052,15 @@ RunService:BindToRenderStep(
     end
 )
 
---// Keep the native equipped Unusual covered even before
---// DeadEye replacement is enabled.
+--// Keep the native equipped Unusual covered before replacement,
+--// but only after the real gameplay visual rig exists.
+--// MenuView.VisualModel must never be put under the gameplay POV controller.
 pcall(function()
-    UnusualFns.bindNativeParticlePOV(
-        UnusualFns.getUnusualVisualRig()
-    )
+    if UnusualFns.isUnusualPOVRuntimeActive() then
+        UnusualFns.bindNativeParticlePOV(
+            UnusualFns.getUnusualVisualRig()
+        )
+    end
 end)
 
 UnusualFns.addUnusualConnection(
