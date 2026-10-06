@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.158"
+local SCRIPT_VERSION = "1.159"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -87,6 +87,11 @@ pcall(function()
     end
 end)
 
+if genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP()
+    end)
+end
 if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP then
     pcall(function()
         genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP()
@@ -113,11 +118,6 @@ end
 if genv.UNUSUAL_SWAPPER_CLEANUP then
     pcall(function()
         genv.UNUSUAL_SWAPPER_CLEANUP()
-    end)
-end
-if genv.DEADEYE_UNUSUAL_POV_TRAIL_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_UNUSUAL_POV_TRAIL_CLEANUP()
     end)
 end
 if genv.DEADEYE_PORTRAIT_CLEANUP then
@@ -7937,7 +7937,14 @@ end
 --// In 1P the game hides the 3P rig with LocalTransparencyModifier.
 --// =========================================================
 genv.DEADEYE_UNUSUAL_POV_RUNNING = true
-genv.DEADEYE_UNUSUAL_POV_TRAIL_CLEANUP = restoreDeadEyeTrailTransparency
+genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
+    pcall(function()
+        RunService:UnbindFromRenderStep(
+            "DeadEyeUnusualPOVTransparency"
+        )
+    end)
+    lastUnusualPOVTransparency = nil
+end
 local lastUnusualPOVState = nil
 function UnusualFns.getUnusualViewmodel()
     local camera =
@@ -8104,7 +8111,7 @@ end
 --// The stock controller handles BasePart + Decal.
 --// With its particle-hiding feature enabled it also processes
 --// Beam/ParticleEmitter/Trail/Fire/Smoke/Sparkles/Explosion.
---// DeadEye additionally reproduces the observed full hiding of Trail.
+--// Trail is handled by the same LocalTransparencyModifier path as stock.
 --//
 --// DeadEye visuals use:
 --//   DeadEyeUnusualFX
@@ -8128,7 +8135,6 @@ local unusualPovTransparencyClasses = {
 }
 
 local lastUnusualPOVTransparency = nil
-local unusualPovOriginalTrailState = setmetatable({}, { __mode = "k" })
 
 local function isGameFirstPersonTransparencyClass(
     object
@@ -8273,87 +8279,52 @@ function UnusualFns.setUnusualFXForPOV(
                     )
                 then
                     pcall(function()
-                        if object:IsA("Trail") then
-                            --// Stock TransparencyController only supplies the
-                            --// ~0.91 LTM value at the observed 1P camera
-                            --// distance, which would leave a faint Trail.
-                            --// The game's actual visual result is fully hidden,
-                            --// so reproduce that result for DeadEye Trails by
-                            --// disabling and clearing them in first person.
-                            if unusualPovOriginalTrailState[object] == nil then
-                                unusualPovOriginalTrailState[object] = {
-                                    Enabled = object.Enabled,
-                                    LocalTransparencyModifier =
-                                        object.LocalTransparencyModifier
-                                }
-                            end
-
-                            if firstPerson then
-                                object.LocalTransparencyModifier = 1
-                                object.Enabled = false
-                                object:Clear()
-                            else
-                                object.Enabled =
-                                    unusualPovOriginalTrailState[object].Enabled
-
-                                object.LocalTransparencyModifier =
-                                    transparency
-                            end
-                        else
-                            object.LocalTransparencyModifier =
-                                transparency
-                        end
+                        --// Stock behavior does not toggle or clear Trail.
+                        --// Trail has its own LocalTransparencyModifier, and the
+                        --// exact camera-derived value is what the game applies.
+                        object.LocalTransparencyModifier =
+                            transparency
                     end)
                 end
             end
         end
     end
 end
-local function restoreDeadEyeTrailTransparency()
-    for trail, state in pairs(
-        unusualPovOriginalTrailState
-    ) do
-        if trail
-            and trail.Parent
-            and state
-        then
-            pcall(function()
-                trail.Enabled =
-                    state.Enabled
-                trail.LocalTransparencyModifier =
-                    state.LocalTransparencyModifier
-            end)
-        end
-
-        unusualPovOriginalTrailState[trail] = nil
-    end
-
-    lastUnusualPOVTransparency = nil
-end
-
-function UnusualFns.updateUnusualPOV(
-    deltaTime
-)
+function UnusualFns.updateUnusualPOV()
     if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
         return
     end
 
     UnusualFns.syncUnusualViewmodelAppearance()
 
-    local firstPerson =
-        UnusualFns.isUnusualFirstPerson()
-
     lastUnusualPOVState =
-        firstPerson
-
-    --// This must run continuously, not only when POV changes,
-    --// because the game's transparency value changes continuously
-    --// during the camera transition.
-    UnusualFns.setUnusualFXForPOV(
-        firstPerson,
-        deltaTime
-    )
+        UnusualFns.isUnusualFirstPerson()
 end
+pcall(function()
+    RunService:UnbindFromRenderStep(
+        "DeadEyeUnusualPOVTransparency"
+    )
+end)
+
+RunService:BindToRenderStep(
+    "DeadEyeUnusualPOVTransparency",
+    Enum.RenderPriority.Camera.Value + 1,
+    function(deltaTime)
+        if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
+            return
+        end
+
+        --// IMPORTANT:
+        --// Run after the game's cameraRenderUpdate has written the NEW
+        --// CurrentCamera.CFrame and Focus, matching the stock controller's
+        --// execution point as closely as possible.
+        UnusualFns.setUnusualFXForPOV(
+            false,
+            deltaTime
+        )
+    end
+)
+
 UnusualFns.addUnusualConnection(
     RunService.Heartbeat:Connect(
         function(deltaTime)
@@ -8363,7 +8334,7 @@ UnusualFns.addUnusualConnection(
             end
 
             unusualRuntime.updateAnimatedParts()
-            UnusualFns.updateUnusualPOV(deltaTime)
+            UnusualFns.updateUnusualPOV()
 
             if unusualEnabled
                 and not unusualReapplyBusy
