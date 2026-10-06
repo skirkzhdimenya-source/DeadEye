@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.149
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.150
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.149"
+local SCRIPT_VERSION = "1.150"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -14972,76 +14972,10 @@ mainConnect(
     )
 )
 
-__UI.hideRow =
-    mainRow(
-        "HIDE UI",
-        8
-    )
-__UI.hideLabel =
-    autoLabel:Clone()
-__UI.hideLabel.Text =
-    "HIDE UI"
-__UI.hideLabel.Parent =
-    __UI.hideRow
-mainJump.hideUIHotkeyBox =
-    Instance.new("TextButton")
-mainJump.hideUIHotkeyBox.Size =
-    UDim2.new(
-        1,
-        -120,
-        0,
-        28
-    )
-mainJump.hideUIHotkeyBox.Position =
-    UDim2.new(
-        0,
-        105,
-        0.5,
-        -14
-    )
-mainJump.hideUIHotkeyBox.BackgroundColor3 =
-    Color3.fromRGB(
-        32,
-        32,
-        32
-    )
-mainJump.hideUIHotkeyBox.BorderSizePixel = 0
-mainJump.hideUIHotkeyBox.Text =
-    mainJump.hideUIHotkeyName
-mainJump.hideUIHotkeyBox.TextSize = 11
-mainJump.hideUIHotkeyBox.Font =
-            Enum.Font.GothamBold
-mainJump.hideUIHotkeyBox.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-mainJump.hideUIHotkeyBox.Parent =
-    __UI.hideRow
-__UI.hideCorner =
-    Instance.new("UICorner")
-__UI.hideCorner.CornerRadius =
-    UDim.new(
-        0,
-        5
-    )
-__UI.hideCorner.Parent =
-    mainJump.hideUIHotkeyBox
-mainConnect(
-    mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
-        function()
-            mainJump.startCapture(
-                "hide"
-            )
-        end
-    )
-)
-
 __UI.benchTrimpRow =
     mainRow(
         "BENCH TRIMP",
-        9
+        8
     )
 
 local benchTrimpLabel =
@@ -15158,6 +15092,74 @@ mainConnect(
         function()
             mainJump.setBenchTrimpEnabled(
                 not mainJump.benchTrimpEnabled
+            )
+        end
+    )
+)
+
+
+--// HIDE UI MUST ALWAYS BE THE LOWEST / LAST ROW IN MAIN.
+__UI.hideRow =
+    mainRow(
+        "HIDE UI",
+        9
+    )
+__UI.hideLabel =
+    autoLabel:Clone()
+__UI.hideLabel.Text =
+    "HIDE UI"
+__UI.hideLabel.Parent =
+    __UI.hideRow
+mainJump.hideUIHotkeyBox =
+    Instance.new("TextButton")
+mainJump.hideUIHotkeyBox.Size =
+    UDim2.new(
+        1,
+        -120,
+        0,
+        28
+    )
+mainJump.hideUIHotkeyBox.Position =
+    UDim2.new(
+        0,
+        105,
+        0.5,
+        -14
+    )
+mainJump.hideUIHotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.hideUIHotkeyBox.BorderSizePixel = 0
+mainJump.hideUIHotkeyBox.Text =
+    mainJump.hideUIHotkeyName
+mainJump.hideUIHotkeyBox.TextSize = 11
+mainJump.hideUIHotkeyBox.Font =
+            Enum.Font.GothamBold
+mainJump.hideUIHotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.hideUIHotkeyBox.Parent =
+    __UI.hideRow
+__UI.hideCorner =
+    Instance.new("UICorner")
+__UI.hideCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+__UI.hideCorner.Parent =
+    mainJump.hideUIHotkeyBox
+mainConnect(
+    mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
+        function()
+            mainJump.startCapture(
+                "hide"
             )
         end
     )
