@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.170
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.171
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.170"
+local SCRIPT_VERSION = "1.171"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -1815,6 +1815,7 @@ local unusualRuntime = {
     nativeParticleStates = {},
     nativeParticleRig = nil,
     nativeParticleConnection = nil,
+    nativeParticleLastFirstPerson = nil,
     reapplyGeneration = 0,
     animationSource = nil,
     animationLinks = {},
@@ -7649,6 +7650,11 @@ function UnusualFns.restoreUnusual()
                     playerCharacter
                 )
             end)
+
+            --// Keep P1 handling on the currently native Unusual.
+            UnusualFns.bindNativeParticlePOV(
+                visualRig
+            )
         end
 
         unusualActive =
@@ -7714,6 +7720,12 @@ function UnusualFns.restoreUnusual()
                 playerCharacter
             )
         end
+
+        --// The original effect is now the live effect again.
+        --// Keep the same instant P1/P3 behavior on it.
+        UnusualFns.bindNativeParticlePOV(
+            visualRig
+        )
     end
 
     unusualActive =
@@ -8329,6 +8341,7 @@ function UnusualFns.clearNativeParticlePOV(
     )
 
     unusualRuntime.nativeParticleRig = nil
+    unusualRuntime.nativeParticleLastFirstPerson = nil
 end
 
 function UnusualFns.bindNativeParticlePOV(
@@ -8358,37 +8371,41 @@ function UnusualFns.bindNativeParticlePOV(
     unusualRuntime.nativeParticleConnection =
         visualRig.DescendantAdded:Connect(
             function(object)
-                if not unusualEnabled
-                    or unusualRuntime.nativeParticleRig
-                        ~= visualRig
+                if unusualRuntime.nativeParticleRig
+                    ~= visualRig
                 then
                     return
                 end
 
-                if object:IsA("ParticleEmitter") then
-                    local current =
-                        object.Enabled
+                local firstPerson = false
 
+                pcall(function()
+                    firstPerson =
+                        UnusualFns.isUnusualFirstPerson()
+                end)
+
+                if object:IsA("ParticleEmitter") then
                     if unusualRuntime.nativeParticleStates[
                         object
                     ] == nil
                     then
                         unusualRuntime.nativeParticleStates[
                             object
-                        ] = current
+                        ] = object.Enabled
                     end
-
-                    local firstPerson =
-                        false
-
-                    pcall(function()
-                        firstPerson =
-                            UnusualFns.isUnusualFirstPerson()
-                    end)
 
                     if firstPerson then
                         pcall(function()
                             object.Enabled = false
+                            object:Clear()
+                        end)
+                    end
+
+                elseif object:IsA("Trail") then
+                    if firstPerson then
+                        pcall(function()
+                            object.Enabled = false
+                            object:Clear()
                         end)
                     end
                 end
@@ -8400,16 +8417,14 @@ function UnusualFns.syncNativeParticlePOV(
     visualRig,
     firstPerson
 )
-    if not unusualEnabled
-        or not visualRig
+    if not visualRig
         or unusualRuntime.nativeParticleRig
             ~= visualRig
     then
         return
     end
 
-    --// Register dynamically-created ParticleEmitters before
-    --// applying the current POV state.
+    --// Register newly-created ParticleEmitters.
     for _, object in ipairs(
         visualRig:GetDescendants()
     ) do
@@ -8424,23 +8439,49 @@ function UnusualFns.syncNativeParticlePOV(
         end
     end
 
+    local enteredFirstPerson =
+        firstPerson
+        and unusualRuntime.nativeParticleLastFirstPerson
+            ~= true
+
+    local leftFirstPerson =
+        not firstPerson
+        and unusualRuntime.nativeParticleLastFirstPerson
+            == true
+
+    --// Returning to 3P restores the exact saved enabled state.
+    if leftFirstPerson then
+        for object, enabled in pairs(
+            unusualRuntime.nativeParticleStates
+        ) do
+            if object and object.Parent then
+                pcall(function()
+                    object.Enabled = enabled
+                end)
+            else
+                unusualRuntime.nativeParticleStates[
+                    object
+                ] = nil
+            end
+        end
+    end
+
     for object, enabled in pairs(
         unusualRuntime.nativeParticleStates
     ) do
         if object and object.Parent then
             pcall(function()
                 if firstPerson then
-                    --// Native behavior disables emission.
+                    local wasEnabled =
+                        object.Enabled
+
                     object.Enabled = false
 
-                    --// The clean replacement must disappear immediately.
-                    --// Enabled=false only stops NEW particles; particles
-                    --// that were already emitted would otherwise remain
-                    --// visible until their Lifetime expires.
-                    pcall(function()
+                    if enteredFirstPerson
+                        or wasEnabled == true
+                    then
                         object:Clear()
-                    end)
-
+                    end
                 else
                     object.Enabled = enabled
                 end
@@ -8452,21 +8493,29 @@ function UnusualFns.syncNativeParticlePOV(
         end
     end
 
-    --// Some Unusuals use actual Trail objects in addition to,
-    --// or instead of, ParticleEmitters. Clear their existing
-    --// rendered history in first person as well.
     if firstPerson then
         for _, object in ipairs(
             visualRig:GetDescendants()
         ) do
             if object:IsA("Trail") then
                 pcall(function()
+                    local wasEnabled =
+                        object.Enabled
+
                     object.Enabled = false
-                    object:Clear()
+
+                    if enteredFirstPerson
+                        or wasEnabled == true
+                    then
+                        object:Clear()
+                    end
                 end)
             end
         end
     end
+
+    unusualRuntime.nativeParticleLastFirstPerson =
+        firstPerson
 end
 
 function UnusualFns.setUnusualFXForPOV(
@@ -8635,6 +8684,14 @@ RunService:BindToRenderStep(
         )
     end
 )
+
+--// Keep the native equipped Unusual covered even before
+--// DeadEye replacement is enabled.
+pcall(function()
+    UnusualFns.bindNativeParticlePOV(
+        UnusualFns.getUnusualVisualRig()
+    )
+end)
 
 UnusualFns.addUnusualConnection(
     RunService.Heartbeat:Connect(
