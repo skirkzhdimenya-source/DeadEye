@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.202
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.203
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.202"
+local SCRIPT_VERSION = "1.203"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -16314,9 +16314,9 @@ mainJump.autoJumpModePicker.Name =
 mainJump.autoJumpModePicker.Size =
     UDim2.new(
         0,
-        77,
+        94,
         0,
-        88
+        110
     )
 
 mainJump.autoJumpModePicker.Position =
@@ -16342,6 +16342,9 @@ mainJump.autoJumpModePicker.BackgroundTransparency =
 
 mainJump.autoJumpModePicker.ClipsDescendants =
     false
+
+mainJump.autoJumpModePicker.Active =
+    true
 
 mainJump.autoJumpModePicker.BorderSizePixel =
     0
@@ -16373,17 +16376,17 @@ local autoJumpModeScroll =
 autoJumpModeScroll.Size =
     UDim2.new(
         1,
-        -8,
+        -12,
         1,
-        -8
+        -12
     )
 
 autoJumpModeScroll.Position =
     UDim2.new(
         0,
-        4,
+        6,
         0,
-        4
+        6
     )
 
 autoJumpModeScroll.BackgroundTransparency =
@@ -16394,6 +16397,9 @@ autoJumpModeScroll.BorderSizePixel =
 
 autoJumpModeScroll.ScrollBarThickness =
     4
+
+autoJumpModeScroll.Active =
+    true
 
 autoJumpModeScroll.ScrollingDirection =
     Enum.ScrollingDirection.Y
@@ -16439,13 +16445,13 @@ local autoJumpModePadding =
 autoJumpModePadding.PaddingTop =
     UDim.new(
         0,
-        1
+        6
     )
 
 autoJumpModePadding.PaddingBottom =
     UDim.new(
         0,
-        1
+        6
     )
 
 autoJumpModePadding.Parent =
@@ -24177,7 +24183,9 @@ function __UI.styleButtonMotion(button)
     addConnection(
         button.MouseEnter:Connect(
             function()
-                if not button.Parent then
+                if not button.Parent
+                    or button:GetAttribute("DeadEyeHoverSuppressed")
+                then
                     return
                 end
 
@@ -24207,6 +24215,22 @@ function __UI.styleButtonMotion(button)
                     return
                 end
 
+                if button:GetAttribute("DeadEyeHoverSuppressed") then
+                    hovered = false
+
+                    pcall(function()
+                        if shadow then
+                            shadow.Transparency = 1
+                        end
+
+                        if scale then
+                            scale.Scale = 1
+                        end
+                    end)
+
+                    return
+                end
+
                 hovered = false
 
                 tweenScale(
@@ -24225,7 +24249,9 @@ function __UI.styleButtonMotion(button)
     addConnection(
         button.MouseButton1Down:Connect(
             function()
-                if not button.Parent then
+                if not button.Parent
+                    or button:GetAttribute("DeadEyeHoverSuppressed")
+                then
                     return
                 end
 
@@ -24248,6 +24274,20 @@ function __UI.styleButtonMotion(button)
         button.MouseButton1Up:Connect(
             function()
                 if not button.Parent then
+                    return
+                end
+
+                if button:GetAttribute("DeadEyeHoverSuppressed") then
+                    pcall(function()
+                        if shadow then
+                            shadow.Transparency = 1
+                        end
+
+                        if scale then
+                            scale.Scale = 1
+                        end
+                    end)
+
                     return
                 end
 
