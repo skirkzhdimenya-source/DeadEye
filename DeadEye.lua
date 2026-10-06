@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.176
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.177
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.176"
+local SCRIPT_VERSION = "1.177"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -1886,6 +1886,12 @@ others.status = nil
 others.fieldButtons = {}
 others.fieldBoxes = {}
 others.firstPersonTransparency = {}
+
+--// Native-like first-person transparency state for DeadEye-created cosmetics.
+--// These objects are not part of the native TransparencyController cache,
+--// so mirror the exact camera-distance formula onto only the tagged visuals.
+local deadEyeCosmeticTransparencyState = {}
+local deadEyeCosmeticLastTransparency = nil
 local unusualConnections = {}
 local unusualDestroyed = false
 local unusualReapplyBusy = false
@@ -6441,6 +6447,174 @@ unusualRuntime.updateAnimatedParts = function()
 
     end
 end
+
+
+--// =========================================================
+--// DEADEYE COSMETIC FIRST-PERSON TRANSPARENCY
+--//
+--// Native TransparencyController uses the current camera
+--// Focus -> CFrame distance and applies that value to its
+--// cached BaseParts/Decals.
+--//
+--// DeadEye-created cosmetic parts are added after the native
+--// cache was built, so the native controller never sees them.
+--// Mirror that exact behavior ONLY for objects tagged with
+--// DeadEyeFirstPersonCosmetic. Stock avatar head/hair/accessories
+--// are never touched here.
+--// =========================================================
+local function getNativeCharacterTransparency(
+    deltaTime
+)
+    local camera =
+        workspace.CurrentCamera
+
+    if not camera then
+        deadEyeCosmeticLastTransparency = nil
+        return 0
+    end
+
+    local magnitude =
+        (
+            camera.Focus.Position
+            - camera.CFrame.Position
+        ).Magnitude
+
+    local transparency =
+        magnitude < 2
+        and 1 - (magnitude - 0.5) / 1.5
+        or 0
+
+    transparency =
+        transparency < 0.5
+        and 0
+        or transparency
+
+    if deadEyeCosmeticLastTransparency
+        and transparency < 1
+        and deadEyeCosmeticLastTransparency < 0.95
+    then
+        local delta =
+            transparency
+            - deadEyeCosmeticLastTransparency
+
+        local step =
+            2.8 * (deltaTime or 0)
+
+        transparency =
+            deadEyeCosmeticLastTransparency
+            + math.clamp(
+                delta,
+                -step,
+                step
+            )
+    end
+
+    transparency =
+        math.clamp(
+            math.round(
+                transparency * 100
+            ) / 100,
+            0,
+            1
+        )
+
+    deadEyeCosmeticLastTransparency =
+        transparency
+
+    return transparency
+end
+
+local function syncDeadEyeFirstPersonCosmetics(
+    deltaTime
+)
+    local transparency =
+        getNativeCharacterTransparency(
+            deltaTime
+        )
+
+    local seen = {}
+
+    forEachDeadEyeUnusualVisualObject(
+        function(object)
+            local tagged = false
+
+            pcall(function()
+                tagged =
+                    object:GetAttribute(
+                        "DeadEyeFirstPersonCosmetic"
+                    ) == true
+            end)
+
+            if not tagged then
+                return
+            end
+
+            if object:IsA("BasePart")
+                or object:IsA("Decal")
+            then
+                seen[object] = true
+
+                if deadEyeCosmeticTransparencyState[
+                    object
+                ] == nil
+                then
+                    local oldTransparency =
+                        object:IsA("BasePart")
+                        and object.LocalTransparencyModifier
+                        or 0
+
+                    deadEyeCosmeticTransparencyState[
+                        object
+                    ] = oldTransparency
+                end
+
+                pcall(function()
+                    object.LocalTransparencyModifier =
+                        transparency
+                end)
+            end
+        end
+    )
+
+    for object, oldTransparency in pairs(
+        deadEyeCosmeticTransparencyState
+    ) do
+        if not object
+            or not object.Parent
+            or not seen[object]
+        then
+            if object
+                and object.Parent
+                and object:IsA("BasePart")
+            then
+                pcall(function()
+                    object.LocalTransparencyModifier =
+                        oldTransparency
+                end)
+            end
+
+            deadEyeCosmeticTransparencyState[
+                object
+            ] = nil
+        end
+    end
+end
+
+pcall(function()
+    RunService:UnbindFromRenderStep(
+        "DeadEyeFirstPersonCosmeticTransparency"
+    )
+end)
+
+RunService:BindToRenderStep(
+    "DeadEyeFirstPersonCosmeticTransparency",
+    Enum.RenderPriority.Camera.Value + 2,
+    function(deltaTime)
+        syncDeadEyeFirstPersonCosmetics(
+            deltaTime
+        )
+    end
+)
 
 --// =========================================================
 --// CREATE LOCAL ANCHOR FOR NESTED BASEPART
