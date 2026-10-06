@@ -2077,3 +2077,303 @@ function t2.Update(p32, p33)
 	end
 end
 return t2
+
+
+
+==================================================
+SOURCE #7
+==================================================
+PATH:
+ReplicatedStorage.Services.Client.CameraService
+
+SOURCE CONTENT:
+
+local t = {}
+if game:GetService("RunService"):IsServer() then
+	return nil
+end
+function tween(p1, p2, p3, p4, p5, p6)
+	--[[ line: 13 | upvalues: none]]
+	local v7 = TweenInfo.new(p3, p4, p5, 0, p6, 0)
+	local v8 = game:GetService("TweenService"):Create(p1, v7, p2)
+	v8:Play()
+	return v8
+end
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Services = ReplicatedStorage:WaitForChild("Services")
+local v_u_9 = require((Services:WaitForChild("Client"):WaitForChild("EffectsService")))
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local v_u_10 = require((Shared:WaitForChild("UserData"):WaitForChild("ClientHooks"):WaitForChild("useSettings")))
+t.Settings = require(script.BaseSettings)
+t.FOVAdjusters = {}
+t.FOVAdjusting = {}
+t.BaseFOV = 70
+t.MaxY = 80
+t.MinY = -80
+t.ShiftLockEnabled = false
+t.ShiftLockCache = {}
+t.OffsetCFrames = {}
+t.CameraCenterOffset = CFrame.new()
+t.OriginOffsets = { Default = Vector3.new() }
+t.FOVTweens = {}
+function t.Update(p11: {[any]: any}, _)
+	--[[ line: 52 | upvalues: none]]
+	local BaseFOV = p11.BaseFOV
+	for _2, v12 in pairs(p11.FOVAdjusters) do
+		BaseFOV = BaseFOV * v12
+	end
+	workspace.CurrentCamera.FieldOfView = BaseFOV
+end
+function t.SetBaseFOV(_3, p13)
+	--[[ line: 60 | upvalues: (copy) v_u_10, (copy) t]]
+	if p13 then
+		t.Overridden = true
+	else
+		p13 = v_u_10.Get("FOV")
+		t.Overridden = false
+	end
+	t.BaseFOV = p13
+end
+function t.TweenOriginOffset(p_u_14, p_u_15, p16)
+	--[[ line: 70 | upvalues: (copy) t, (copy) v_u_9]]
+	if not t.TweenOffset then
+		t.TweenOffset = Instance.new("Vector3Value")
+	end
+	local v_u_17 = tick()
+	t.TweeningOffset = v_u_17
+	t.TweenOffset.Value = t.OriginOffsets.Default
+	v_u_9:PlayEffect("Tween", t.TweenOffset, { Value = p16 }, p_u_15, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+	task.spawn(function()
+		--[[ line: 78 | upvalues: (copy) p_u_14, (copy) v_u_17, (copy) p_u_15]]
+		repeat
+			p_u_14.OriginOffsets.Default = p_u_14.TweenOffset.Value
+			task.wait()
+		until p_u_15 <= tick() - v_u_17 or p_u_14.TweeningOffset ~= v_u_17
+		if p_u_14.TweeningOffset == v_u_17 then
+			p_u_14.TweeningOffset = nil
+		end
+	end)
+end
+function t.KeyUsed(_4, _5)
+	--[[ line: 89 | upvalues: none]]
+end
+function t.SetSubject(_6, p18)
+	--[[ line: 93 | upvalues: (copy) t]]
+	t.CameraSubject = p18
+end
+function t.SetFakeSubject(_7, p19)
+	--[[ line: 97 | upvalues: (copy) t]]
+	t.FakeCameraSubject = p19
+end
+function t.ReturnCFrameAndFocus(_8, p20, p21, p22)
+	--[[ line: 101 | upvalues: (copy) t]]
+	if t.CameraSubject then
+		return t:UpdateCameraTransition(t.CameraSubject.CFrame, t.CameraSubject.CFrame, p22)
+	end
+	if not game.Players.LocalPlayer:GetAttribute("VR") then
+		p20 = t:LimitByDeadzone(p20)
+	end
+	t.CameraCFrame = p20
+	t.CameraFocus = p21
+	local v23, v24 = t:SetOffsets(p20, p21)
+	local v25, v26 = t:UpdateCameraTransition(v23, v24, p22)
+	if t.FakeCameraSubject then
+		return t:UpdateCameraTransition(t.FakeCameraSubject.CFrame, t.FakeCameraSubject.CFrame, p22)
+	end
+	return v25, v26
+end
+function t.LimitByDeadzone(_9, p27)
+	--[[ line: 119 | upvalues: (copy) t]]
+	if t.maxDeadzone and (t.minDeadzone and (t.CameraDeadzone or game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.PrimaryPart)) then
+		local v28, v29, v30 = p27:ToOrientation()
+		local _10, v31, _11 = (t.CameraDeadzone or game.Players.LocalPlayer.Character.PrimaryPart).CFrame:ToOrientation()
+		local v32 = v29 - v31
+		if math.abs(v32) >= 3.141592653589793 then
+			local v33
+			if v29 > 0 then
+				v33 = 3.141592653589793 - v29
+			else
+				v33 = -3.141592653589793 - v29
+			end
+			local v34
+			if v31 > 0 then
+				v34 = 3.141592653589793 - v31
+			else
+				v34 = -3.141592653589793 - v31
+			end
+			v31 = v29 + (v33 - v34)
+		end
+		local v35 = CFrame.new()
+		if t.maxDeadzone + v31 >= t.minDeadzone + v31 then
+			local Angles = CFrame.Angles
+			local v36 = t.minDeadzone + v31
+			local v37 = t.maxDeadzone + v31
+			v35 = Angles(0, math.clamp(v29, v36, v37), 0)
+		end
+		p27 = CFrame.new(p27.p) * v35 * CFrame.Angles(v28, 0, v30)
+	end
+	return p27
+end
+function t.SetDeadzonePart(_12, p38)
+	--[[ line: 152 | upvalues: (copy) t]]
+	t.CameraDeadzone = p38
+end
+function t.SetMinDeadzone(_13, p39)
+	--[[ line: 156 | upvalues: (copy) t]]
+	t.minDeadzone = p39
+end
+function t.SetMaxDeadzone(_14, p40)
+	--[[ line: 160 | upvalues: (copy) t]]
+	t.maxDeadzone = p40
+end
+function t.ReturnCFrameAndFocusWithoutController(_15, p41)
+	--[[ line: 165 | upvalues: (copy) t]]
+	if t.CameraSubject and t.CameraSubject.Parent then
+		Vector3.new()
+		local CFrame2 = t.CameraSubject.CFrame
+		local CFrame3 = t.CameraSubject.CFrame
+		t.CameraCFrame = CFrame2
+		t.CameraFocus = CFrame3
+		local v42, v43 = t:UpdateCameraTransition(CFrame2, CFrame3, p41)
+		return v42, v43
+	end
+end
+function t.SetCFrame(_16, p44)
+	--[[ line: 178 | upvalues: (copy) t]]
+	t.CameraCFrame = p44
+	workspace.CurrentCamera.CFrame = p44
+end
+function t.Transition(p45, p46)
+	--[[ line: 183 | upvalues: none]]
+	p45.CameraTransition = {
+		lastGoal = workspace.CurrentCamera.CFrame,
+		lastFocus = workspace.CurrentCamera.Focus,
+		lastTick = tick(),
+		lastDuration = p46
+	}
+end
+function t.UpdateCameraTransition(_17, p47, p48, _18)
+	--[[ line: 193 | upvalues: (copy) t]]
+	if not t.CameraTransition then
+		return p47, p48
+	end
+	if t.CameraTransition.lastTick and tick() - t.CameraTransition.lastTick >= t.CameraTransition.lastDuration then
+		t.CameraTransition = nil
+		return p47, p48
+	end
+	if t.CameraTransition.lastTick then
+		local v49 = 3.141592653589793 * ((tick() - t.CameraTransition.lastTick) / t.CameraTransition.lastDuration) * 0.5
+		local v50 = math.sin(v49)
+		p47 = t.CameraTransition.lastGoal:lerp(p47, v50)
+		p48 = t.CameraTransition.lastFocus:lerp(p48, v50)
+	end
+	return p47, p48
+end
+function t.SetOffsets(_19, p51, p52)
+	--[[ line: 208 | upvalues: (copy) t]]
+	local v53 = CFrame.new(p51.p) * t.CameraCenterOffset * (p51 - p51.p)
+	for _20, v54 in pairs(t.OffsetCFrames) do
+		v53 = v53 * v54
+	end
+	return v53, p52
+end
+function t.GetCFrame(_21)
+	--[[ line: 216 | upvalues: (copy) t]]
+	return t.CameraCFrame or CFrame.new()
+end
+function t.GetFocus(_22)
+	--[[ line: 220 | upvalues: (copy) t]]
+	return t.CameraFocus or CFrame.new()
+end
+function t.TweenFOV(_23, p_u_55: string, p56: number, p_u_57: number)
+	--[[ line: 224 | upvalues: (copy) t]]
+	if not t.FOVTweens[p_u_55] then
+		t.FOVTweens[p_u_55] = { Instance.new("NumberValue") }
+		t.FOVTweens[p_u_55][1].Value = 1
+	end
+	local v_u_58 = t.FOVTweens[p_u_55]
+	tween(v_u_58[1], { Value = p56 }, p_u_57, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, false)
+	local v_u_59 = tick()
+	v_u_58[2] = v_u_59
+	task.spawn(function()
+		--[[ line: 233 | upvalues: (ref) t, (copy) p_u_55, (copy) v_u_58, (copy) v_u_59, (copy) p_u_57]]
+		repeat
+			t:AdjustFOV(p_u_55, v_u_58[1].Value)
+			task.wait()
+		until not t.FOVTweens[p_u_55] or (v_u_58[2] ~= v_u_59 or p_u_57 <= tick() - v_u_59)
+		if t.FOVTweens[p_u_55] and v_u_58[2] == v_u_59 then
+			task.wait(60)
+			if v_u_58[2] == v_u_59 and t.FOVTweens[p_u_55] then
+				t.FOVTweens[p_u_55][1]:Destroy()
+				t.FOVTweens[p_u_55] = nil
+			end
+		end
+	end)
+end
+function t.AdjustFOV(_24, p60: string, p61: number, p62: boolean)
+	--[[ line: 250 | upvalues: (copy) t]]
+	t.FOVAdjusters[p60] = p61
+	if p62 then
+		t.FOVTweens[p60] = nil
+	end
+end
+function t.GetAdjustedFOV(_25, p63: string)
+	--[[ line: 257 | upvalues: (copy) t]]
+	return t.FOVAdjusters[p63] or 1
+end
+game:GetService("RunService").RenderStepped:Connect(function(p64)
+	--[[ line: 261 | upvalues: (copy) t]]
+	t:Update(p64)
+end)
+function t.ToggleShiftLock(_26, p65)
+	--[[ line: 265 | upvalues: (copy) t]]
+	t.ShiftLockEnabled = p65
+end
+function t.SetMaxY(p66, p67)
+	--[[ line: 269 | upvalues: none]]
+	p66.MaxY = p67
+end
+function t.SetMinY(p68, p69)
+	--[[ line: 273 | upvalues: none]]
+	p68.MinY = p69
+end
+function t.SetShiftLockOffset(_27, p70, p71, p72)
+	--[[ line: 277 | upvalues: (copy) t, (copy) v_u_9]]
+	local v73 = p72 == nil and "Default" or p72
+	if t.ShiftLockCache[v73] == nil then
+		t.ShiftLockCache[v73] = { Instance.new("Vector3Value") }
+		t.ShiftLockCache[v73][1].Value = Vector3.new()
+	end
+	local v74 = t.ShiftLockCache[v73]
+	if t.ShiftLockCache[v73][2] then
+		local v75 = v74[1]
+		v74[2]:Cancel()
+		v74[2] = nil
+		v74[1] = v75
+	end
+	if (p71 or 0) == 0 then
+		v74[1].Value = p70
+	else
+		v74[2] = v_u_9:PlayEffect("Tween", v74[1], { Value = p70 }, p71 or 0, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+	end
+end
+function t.GetShiftLockOffset(_28)
+	--[[ line: 301 | upvalues: (copy) t]]
+	local v76 = Vector3.new()
+	for _29, v77 in pairs(t.ShiftLockCache) do
+		v76 = v76 + v77[1].Value
+	end
+	return v76
+end
+function t.SetCameraOffset(_30, p78, p79)
+	--[[ line: 309 | upvalues: (copy) t]]
+	t.OffsetCFrames[p78] = p79
+end
+v_u_10.Changed:Connect(function()
+	--[[ line: 313 | upvalues: (copy) t]]
+	if not t.Overridden then
+		t:SetBaseFOV(nil)
+	end
+end)
+t:SetBaseFOV(nil)
+return t
