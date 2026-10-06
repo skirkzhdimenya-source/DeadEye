@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.159"
+local SCRIPT_VERSION = "1.160"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -6056,6 +6056,14 @@ unusualRuntime.createVisualMirror = function(
     clone.Parent =
         folder
 
+    --// The mirrored nested visual is another visible copy of the
+    --// Unusual effect. Tag the whole clone so first-person handling
+    --// also reaches its Trail/Beam/ParticleEmitter descendants.
+    UnusualFns.tagUnusualFX(
+        clone,
+        id
+    )
+
     local links = {}
 
     for _, sourcePart in ipairs(
@@ -8235,6 +8243,16 @@ function UnusualFns.setUnusualFXForPOV(
     table.insert(
         roots,
         animatedFolder
+    )
+
+    local mirrorFolder =
+        workspace:FindFirstChild(
+            "DeadEyeUnusualVisuals"
+        )
+
+    table.insert(
+        roots,
+        mirrorFolder
     )
 
     local seenRoots = {}
