@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.171"
+local SCRIPT_VERSION = "1.172"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -19365,6 +19365,12 @@ local function cleanupUnusual()
                 return
             end
 
+            --// From this point onward DeadEye must stop controlling
+            --// the native effect. The final Unusual is recreated only
+            --// through the game's own RigService.AddCosmetics path.
+            --// This lets the game's original effect/transparency handlers
+            --// own the restored objects again.
+            UnusualFns.clearNativeParticlePOV(false)
             UnusualFns.removeOurUnusualFX()
 
             --// If the real equipped Unusual changed, never recreate the
@@ -19377,16 +19383,37 @@ local function cleanupUnusual()
                 return
             end
 
-            local nativePresent = false
+            local AddCosmetics =
+                require(
+                    ReplicatedStorage.Services.Asset.RigService:WaitForChild(
+                        "AddCosmetics"
+                    )
+                )
 
-            --// First restore the exact native snapshot. Then verify the
-            --// current rig still contains matching native effect content.
-            if runtimeSnapshot then
-                UnusualFns.restoreNativeUnusualSnapshot(
-                    runtimeSnapshot,
+            --// Remove any stale copy of the current Unusual first.
+            pcall(function()
+                UnusualFns.removeOriginalUnusualFX(
+                    runtimeRestoreId,
                     finalVisualRig,
                     finalPlayerCharacter
                 )
+            end)
+
+            task.wait()
+
+            --// Recreate the Unusual through the native game pipeline.
+            local nativeAdded =
+                pcall(function()
+                    AddCosmetics(
+                        finalVisualRig,
+                        {
+                            runtimeRestoreId
+                        }
+                    )
+                end)
+
+            if nativeAdded then
+                task.wait(0.05)
 
                 local verify =
                     UnusualFns.captureNativeUnusualSnapshot(
@@ -19395,28 +19422,7 @@ local function cleanupUnusual()
                         finalPlayerCharacter
                     )
 
-                nativePresent =
-                    verify ~= nil
-            end
-
-            if not nativePresent then
-                --// Snapshot may be unavailable after a round/skin rebuild.
-                --// Fall back to the registry's original Unusual visual.
-                UnusualFns.removeOriginalUnusualFX(
-                    runtimeRestoreId,
-                    finalVisualRig,
-                    finalPlayerCharacter
-                )
-                task.wait()
-
-                local appliedFinal =
-                    applyUnusualFX(
-                        runtimeRestoreId,
-                        finalVisualRig,
-                        finalPlayerCharacter
-                    )
-
-                if appliedFinal then
+                if verify then
                     preserveFinalRestoredUnusualFX = true
                 end
             end
