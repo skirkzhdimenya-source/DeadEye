@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.184
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.185
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.184"
+local SCRIPT_VERSION = "1.185"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10523,44 +10523,172 @@ end
 
 local function othersBuildNativeVisibilityEntries()
     local entries = {}
-    local seenParts = {}
 
-    local function addPartTree(root)
-        if not root
-            or not root.Parent
-            or not root:IsA("BasePart")
-            or seenParts[root]
-        then
-            return
+    local function isVisibilityRoot(object)
+        if not object or not object:IsA("BasePart") then
+            return false
         end
 
-        seenParts[root] = true
+        local name = object.Name
 
-        table.insert(
-            entries,
-            {
-                root,
-                root:GetDescendants()
-            }
-        )
+        return name == "Head"
+            or name == "Torso"
+            or name == "Left Arm"
+            or name == "Right Arm"
+            or name == "Left Leg"
+            or name == "Right Leg"
+            or name == "UpperTorso"
+            or name == "LowerTorso"
+            or name == "LeftUpperArm"
+            or name == "LeftLowerArm"
+            or name == "LeftHand"
+            or name == "RightUpperArm"
+            or name == "RightLowerArm"
+            or name == "RightHand"
+            or name == "LeftUpperLeg"
+            or name == "LeftLowerLeg"
+            or name == "LeftFoot"
+            or name == "RightUpperLeg"
+            or name == "RightLowerLeg"
+            or name == "RightFoot"
+            or name == "HumanoidRootPart"
+        end
+
+    local function addEntry(root)
+        if not root or not root.Parent or not root:IsA("BasePart") then
+            return nil
+        end
+
+        for _, entry in ipairs(entries) do
+            if entry[1] == root then
+                return entry
+            end
+        end
+
+        local entry = {
+            root,
+            root:GetDescendants()
+        }
+
+        table.insert(entries, entry)
+
+        return entry
     end
 
-    local function scanTree(node)
-        if not node
-            or not node.Parent
-        then
+    local function getAttachmentHost(accessory, model)
+        local handle =
+            accessory:FindFirstChild("Handle")
+
+        if not handle or not handle:IsA("BasePart") then
+            return nil
+        end
+
+        --// Accessories have body-attachment objects inside Handle.
+        --// Resolve the destination limb from the attachment name first.
+        local attachmentNames = {}
+
+        for _, object in ipairs(handle:GetDescendants()) do
+            if object:IsA("Attachment") then
+                table.insert(
+                    attachmentNames,
+                    object.Name
+                )
+            end
+        end
+
+        local candidates = {}
+
+        for _, part in ipairs(model:GetChildren()) do
+            if part:IsA("BasePart")
+                and isVisibilityRoot(part)
+            then
+                table.insert(candidates, part)
+            end
+        end
+
+        local preferredNames = {
+            HatAttachment = {"Head"},
+            HairAttachment = {"Head"},
+            FaceFrontAttachment = {"Head"},
+            FaceCenterAttachment = {"Head"},
+            NeckAttachment = {"Torso", "UpperTorso"},
+            WaistFrontAttachment = {"Torso", "LowerTorso"},
+            WaistCenterAttachment = {"Torso", "LowerTorso"},
+            WaistBackAttachment = {"Torso", "LowerTorso"},
+            BodyFrontAttachment = {"Torso", "UpperTorso"},
+            BodyBackAttachment = {"Torso", "UpperTorso"},
+            LeftShoulderAttachment = {"Left Arm", "LeftUpperArm"},
+            RightShoulderAttachment = {"Right Arm", "RightUpperArm"}
+        }
+
+        for _, attachmentName in ipairs(attachmentNames) do
+            local preferred = preferredNames[attachmentName]
+
+            if preferred then
+                for _, candidateName in ipairs(preferred) do
+                    for _, candidate in ipairs(candidates) do
+                        if candidate.Name == candidateName then
+                            return candidate
+                        end
+                    end
+                end
+            end
+        end
+
+        --// Fallback: head-worn accessories (hair/hat/face/etc.)
+        --// belong to Head. This is also the important case for P1:
+        --// the native Visibility handler then applies Head's visibility
+        --// state to the complete accessory tree.
+        local head =
+            model:FindFirstChild("Head")
+
+        if head and head:IsA("BasePart") then
+            return head
+        end
+
+        return nil
+    end
+
+    local function addAccessoryToHost(accessory, model)
+        local host =
+            getAttachmentHost(
+                accessory,
+                model
+            )
+
+        if not host then
             return
         end
 
-        if node:IsA("BasePart") then
-            addPartTree(node)
+        local entry =
+            addEntry(host)
+
+        if not entry then
             return
         end
 
-        for _, child in ipairs(
-            node:GetChildren()
-        ) do
-            scanTree(child)
+        local seen = {}
+
+        for _, object in ipairs(entry[2]) do
+            seen[object] = true
+        end
+
+        local handle =
+            accessory:FindFirstChild("Handle")
+
+        if handle and not seen[handle] then
+            table.insert(entry[2], handle)
+            seen[handle] = true
+
+            for _, object in ipairs(handle:GetDescendants()) do
+                if not seen[object] then
+                    table.insert(
+                        entry[2],
+                        object
+                    )
+                    seen[object] = true
+                end
+            end
         end
     end
 
@@ -10570,19 +10698,37 @@ local function othersBuildNativeVisibilityEntries()
         local model =
             humanoid.Parent
 
-        if model
-            and model.Parent
-        then
-            --// Scan the entire Others model.
-            --//
-            --// Direct body BaseParts become roots such as Head/Torso.
-            --// Accessory descendants such as Hair/Handle are also
-            --// picked up, so the native SetVisibility() receives them
-            --// exactly as renderable character parts.
+        if model and model.Parent then
+            --// Only canonical character BaseParts are used as Visibility
+            --// roots. This is critical: an Accessory Handle named "Handle"
+            --// must NEVER become the root, because native SetVisibility()
+            --// decides visibility from the root's name.
             for _, child in ipairs(
                 model:GetChildren()
             ) do
-                scanTree(child)
+                if child:IsA("BasePart")
+                    and isVisibilityRoot(child)
+                then
+                    addEntry(child)
+                elseif child:IsA("Accessory") then
+                    addAccessoryToHost(
+                        child,
+                        model
+                    )
+                end
+            end
+
+            --// Some accessory systems nest Accessories deeper than the
+            --// direct model children, so catch every remaining one.
+            for _, object in ipairs(
+                model:GetDescendants()
+            ) do
+                if object:IsA("Accessory") then
+                    addAccessoryToHost(
+                        object,
+                        model
+                    )
+                end
             end
         end
     end
