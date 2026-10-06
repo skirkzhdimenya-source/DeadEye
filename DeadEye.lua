@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.155"
+local SCRIPT_VERSION = "1.156"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8106,16 +8106,12 @@ end
 --//
 --// Tool descendants are excluded exactly like the game.
 --// =========================================================
-local unusualPovParticleHidingEnabled = false
-
-pcall(function()
-    unusualPovParticleHidingEnabled =
-        UserSettings():IsUserFeatureEnabled(
-            "UserHideCharacterParticlesInFirstPerson"
-        )
-end)
-
-local unusualPovParticleClasses = {
+--// The observed game behavior hides these visual classes in 1P.
+--// Do not gate them on the executor's UserSettings feature-flag result:
+--// that flag can disagree with the live game's effective behavior.
+local unusualPovTransparencyClasses = {
+    BasePart = true,
+    Decal = true,
     Beam = true,
     ParticleEmitter = true,
     Trail = true,
@@ -8130,21 +8126,9 @@ local lastUnusualPOVTransparency = nil
 local function isGameFirstPersonTransparencyClass(
     object
 )
-    if object:IsA("BasePart")
-        or object:IsA("Decal")
-    then
-        return true
-    end
-
-    if unusualPovParticleHidingEnabled
-        and unusualPovParticleClasses[
-            object.ClassName
-        ]
-    then
-        return true
-    end
-
-    return false
+    return unusualPovTransparencyClasses[
+        object.ClassName
+    ] == true
 end
 
 local function updateGameFirstPersonTransparency(
