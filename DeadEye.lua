@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.165
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.166
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.165"
+local SCRIPT_VERSION = "1.166"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -7945,7 +7945,8 @@ end
 --// 1P uses workspace.Camera.Viewmodel.Clothing.
 --//
 --// Viewmodel appearance is copied from the real visual rig.
---// Unusual FX visibility follows the game's TransparencyController logic.
+--// Unusual FX visibility mirrors the native Unusual behavior
+--// observed on a completely clean server.
 --// =========================================================
 local lastUnusualPOVState = nil
 
@@ -8117,30 +8118,34 @@ function UnusualFns.syncUnusualViewmodelAppearance()
 end
 
 --// =========================================================
---// DEAD EYE UNUSUAL POV TRANSPARENCY
+--// DEAD EYE UNUSUAL POV VISIBILITY
 --//
---// This is intentionally based on the game's own
---// TransparencyController, not a saved Transparency/Enabled snapshot.
+--// Native clean-server observation:
 --//
---// Original game algorithm:
---//   magnitude = (Camera.Focus.p - Camera.CoordinateFrame.p).magnitude
---//   target = magnitude < 2 and 1 - (magnitude - 0.5) / 1.5 or 0
---//   target = target < 0.5 and 0 or target
---//   smooth by 2.8 * deltaTime
---//   round to 2 decimals
---//   clamp to 0..1
---//   write LocalTransparencyModifier
+--// ORIGINAL UNUSUAL:
+--//   3P:
+--//     ParticleEmitter Enabled = true
+--//     ParticleEmitter LTM = 0
+--//     PointLight Enabled = true
 --//
---// Important:
---//   - No Transparency snapshot.
---//   - No Enabled snapshot.
---//   - No Trail:Clear().
---//   - No restore phase.
---//   Every frame writes the current native LocalTransparencyModifier
---// value, so newly-created DeadEye visual objects also follow it.
+--//   1P:
+--//     ParticleEmitter Enabled = false
+--//     ParticleEmitter LTM = 0
+--//     PointLight Enabled = true
 --//
---// The game's valid classes are copied from its TransparencyController.
---// Tool descendants are excluded exactly like the original.
+--// The native result did NOT use the SOURCE #6 transparency
+--// formula for these Unusual ParticleEmitters.
+--//
+--// Therefore DeadEye mirrors the actual observed Unusual behavior:
+--//   3P -> Enabled = true,  LTM = 0
+--//   1P -> Enabled = false, LTM = 0
+--//
+--// No camera-distance transparency is applied to DeadEye Unusual FX.
+--// No Transparency property is changed.
+--// No snapshot/restore system is used.
+--//
+--// SOURCE #6 remains relevant for native character transparency,
+--// but its LTM formula must NOT be applied to these Unusual emitters.
 --// =========================================================
 local unusualPovTransparencyClasses = {
     BasePart = true,
@@ -8154,8 +8159,6 @@ local unusualPovTransparencyClasses = {
     Explosion = true
 }
 
-local lastUnusualPOVTransparency = nil
-
 local function isStockUnusualPOVTransparencyObject(
     object
 )
@@ -8163,86 +8166,9 @@ local function isStockUnusualPOVTransparencyObject(
         return false
     end
 
-    return object:IsA("BasePart")
-        or object:IsA("Decal")
-        or object:IsA("Beam")
-        or object:IsA("ParticleEmitter")
-        or object:IsA("Trail")
-        or object:IsA("Fire")
-        or object:IsA("Smoke")
-        or object:IsA("Sparkles")
-        or object:IsA("Explosion")
-end
-
-local function getUnusualPOVTransparencyTarget(
-    camera,
-    deltaTime
-)
-    if not camera then
-        return 0
-    end
-
-    local magnitude =
-        (
-            camera.Focus.p
-            - camera.CoordinateFrame.p
-        ).magnitude
-
-    local transparency
-
-    if magnitude < 2 then
-        transparency =
-            1
-            - (magnitude - 0.5) / 1.5
-    else
-        transparency = 0
-    end
-
-    if transparency < 0.5 then
-        transparency = 0
-    end
-
-    if lastUnusualPOVTransparency
-        and transparency < 1
-        and lastUnusualPOVTransparency < 0.95
-    then
-        local difference =
-            transparency
-            - lastUnusualPOVTransparency
-
-        local step =
-            2.8 * deltaTime
-
-        local clamped =
-            math.clamp(
-                difference,
-                -step,
-                step
-            )
-
-        transparency =
-            lastUnusualPOVTransparency
-            + clamped
-    end
-
-    --// CameraUtils.Round replacement.
-    --// The native controller rounds the value to 2 decimals.
-    local rounded =
-        math.floor(
-            transparency * 100 + 0.5
-        ) / 100
-
-    transparency =
-        math.clamp(
-            rounded,
-            0,
-            1
-        )
-
-    lastUnusualPOVTransparency =
-        transparency
-
-    return transparency
+    return unusualPovTransparencyClasses[
+        object.ClassName
+    ] == true
 end
 
 local function forEachDeadEyeUnusualVisualObject(
@@ -8338,34 +8264,44 @@ end
 
 function UnusualFns.setUnusualFXForPOV(
     firstPerson,
-    deltaTime
+    _deltaTime
 )
-    local camera =
-        workspace.CurrentCamera
-
-    local transparency =
-        getUnusualPOVTransparencyTarget(
-            camera,
-            deltaTime
-        )
+    --// Native observation proved that the original Unusual
+    --// ParticleEmitters are DISABLED in 1P rather than faded.
+    --
+    --// DeadEye visual copies are tagged separately, so mirror
+    --// that exact state onto our replacement emitters.
 
     forEachDeadEyeUnusualVisualObject(
         function(object)
             pcall(function()
-                --// The game uses LocalTransparencyModifier as the
-                --// POV-only render layer. Do not touch native
-                --// Transparency/Enabled state of the effect itself.
-                object.LocalTransparencyModifier =
-                    transparency
+                if object:IsA("ParticleEmitter") then
+                    --// Native 3P = enabled, native 1P = disabled.
+                    object.Enabled = not firstPerson
+
+                    --// Native Unusual ParticleEmitters stay at LTM 0.
+                    object.LocalTransparencyModifier = 0
+
+                elseif object:IsA("BasePart")
+                    or object:IsA("Decal")
+                    or object:IsA("Beam")
+                    or object:IsA("Trail")
+                    or object:IsA("Fire")
+                    or object:IsA("Smoke")
+                    or object:IsA("Sparkles")
+                    or object:IsA("Explosion")
+                then
+                    --// The clean native test did not show these classes
+                    --// being faded as part of this Unusual. Never apply
+                    --// the old 0..1 camera-distance transparency to them.
+                    object.LocalTransparencyModifier = 0
+                end
             end)
         end
     )
 
-    --// Always keep the hidden animation driver invisible.
+    --// The animation-only runtime clone must remain invisible.
     hideUnusualAnimationSourceVisuals()
-
-    --// Keep this argument observable for existing callers.
-    firstPerson = firstPerson
 end
 
 function UnusualFns.updateUnusualPOV()
@@ -8388,14 +8324,17 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
         )
     end)
 
-    --// Native logic has no snapshot to restore.
-    --// Explicitly return our tagged visual layer to 0 now.
-    lastUnusualPOVTransparency = nil
-
+    --// Return DeadEye's Unusual layer to the native 3P state.
+    --// Native ParticleEmitters are enabled and have LTM = 0 in 3P.
     pcall(function()
         forEachDeadEyeUnusualVisualObject(
             function(object)
-                object.LocalTransparencyModifier = 0
+                if object:IsA("ParticleEmitter") then
+                    object.Enabled = true
+                    object.LocalTransparencyModifier = 0
+                elseif isStockUnusualPOVTransparencyObject(object) then
+                    object.LocalTransparencyModifier = 0
+                end
             end
         )
     end)
