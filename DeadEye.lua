@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.157"
+local SCRIPT_VERSION = "1.158"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8101,10 +8101,10 @@ end
 --//   4. Rounds to 2 decimals.
 --//   5. Clamps to 0..1.
 --//
---// The game always handles BasePart + Decal.
---// If UserHideCharacterParticlesInFirstPerson is enabled,
---// it also handles Beam/ParticleEmitter/Trail/Fire/Smoke/
---// Sparkles/Explosion.
+--// The stock controller handles BasePart + Decal.
+--// With its particle-hiding feature enabled it also processes
+--// Beam/ParticleEmitter/Trail/Fire/Smoke/Sparkles/Explosion.
+--// DeadEye additionally reproduces the observed full hiding of Trail.
 --//
 --// DeadEye visuals use:
 --//   DeadEyeUnusualFX
@@ -8274,11 +8274,12 @@ function UnusualFns.setUnusualFXForPOV(
                 then
                     pcall(function()
                         if object:IsA("Trail") then
-                            --// A Trail can still be faintly visible at the
-                            --// game's ~0.91 first-person modifier. The live
-                            --// game behavior observed for these visuals is
-                            --// fully hidden, so force the local Trail modifier
-                            --// to 1 while in first person.
+                            --// Stock TransparencyController only supplies the
+                            --// ~0.91 LTM value at the observed 1P camera
+                            --// distance, which would leave a faint Trail.
+                            --// The game's actual visual result is fully hidden,
+                            --// so reproduce that result for DeadEye Trails by
+                            --// disabling and clearing them in first person.
                             if unusualPovOriginalTrailState[object] == nil then
                                 unusualPovOriginalTrailState[object] = {
                                     Enabled = object.Enabled,
@@ -8287,8 +8288,17 @@ function UnusualFns.setUnusualFXForPOV(
                                 }
                             end
 
-                            object.LocalTransparencyModifier =
-                                firstPerson and 1 or transparency
+                            if firstPerson then
+                                object.LocalTransparencyModifier = 1
+                                object.Enabled = false
+                                object:Clear()
+                            else
+                                object.Enabled =
+                                    unusualPovOriginalTrailState[object].Enabled
+
+                                object.LocalTransparencyModifier =
+                                    transparency
+                            end
                         else
                             object.LocalTransparencyModifier =
                                 transparency
