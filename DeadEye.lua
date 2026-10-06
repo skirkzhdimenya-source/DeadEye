@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.189
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.190
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -2776,10 +2776,57 @@ function cosmetic.refreshRig()
                     )
                 )
 
-            AddCosmetics(
-                live,
-                equipped
-            )
+            --// RigService:AddCosmetics() can emit a harmless warning when
+            --// a cosmetic contains CharacterClassic without the expected
+            --// HumanoidRootPart limb. The cosmetic still applies correctly.
+            --// Suppress ONLY this exact AddCosmetics warning; preserve every
+            --// other warn() message.
+            local previousWarn =
+                warn
+
+            warn =
+                function(...)
+                    local args = {
+                        ...
+                    }
+
+                    local first =
+                        tostring(
+                            args[1]
+                        )
+
+                    if first
+                        :find(
+                            "^%[AddCosmetics%] Rig has no limb named "HumanoidRootPart" for cosmetic "CharacterClassic"$"
+                        )
+                    then
+                        return
+                    end
+
+                    previousWarn(
+                        table.unpack(
+                            args
+                        )
+                    )
+                end
+
+            local addCosmeticsOK,
+                addCosmeticsError =
+                pcall(function()
+                    AddCosmetics(
+                        live,
+                        equipped
+                    )
+                end)
+
+            warn =
+                previousWarn
+
+            if not addCosmeticsOK then
+                error(
+                    addCosmeticsError
+                )
+            end
 
             --// Mark every newly-created cosmetic visual, regardless
             --// whether SWAP is ON. Tag the Accessory itself and
