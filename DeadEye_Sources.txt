@@ -2555,3 +2555,102 @@ function t.ReturnCameraDeviation(p23, p24, p25, p26, p27)
 	return p23.SpringReferences[p24.Name](p24, p25, p26, p27, p23.LastCFrame) or CFrame.new()
 end
 return t
+
+
+==================================================
+SOURCE #11
+==================================================
+PATH:
+game:GetService("ReplicatedStorage").Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelCreator.Clothing
+
+SOURCE CONTENT:
+
+return function(p1, p2)
+	--[[ line: 1 | upvalues: none]]
+	if p1.Clothing:FindFirstChildOfClass("Shirt") ~= nil then
+		p1.Clothing:FindFirstChildOfClass("Shirt"):Destroy()
+	end
+	if p2.Player:FindFirstChildOfClass("Shirt") ~= nil and p1.Clothing:FindFirstChildOfClass("Shirt") == nil then
+		p2.Player:FindFirstChildOfClass("Shirt"):Clone().Parent = p1.Clothing
+	end
+	if p2.Player:FindFirstChildOfClass("BodyColors") ~= nil and p1.Clothing:FindFirstChildOfClass("BodyColors") == nil then
+		p2.Player:FindFirstChildOfClass("BodyColors"):Clone().Parent = p1.Clothing
+	end
+	if p2.LeftArm == 0 or (p2.LeftArm == "" or p2.Player.Humanoid.RigType == Enum.HumanoidRigType.R6) then
+		if p2.RightArm ~= 0 and (p2.RightArm ~= "" and p2.Player.Humanoid.RigType ~= Enum.HumanoidRigType.R6) then
+			local v3 = p2.Player:Clone()
+			for _, v4 in pairs((v3:GetDescendants())) do
+				if v4:IsA("BasePart") and (v4.Name ~= "LeftHand" and v4.Name ~= "RightHand") then
+					v4.Size = v4.Size * Vector3.new(1, 2, 1)
+				elseif v4:IsA("Motor6D") then
+					v4.C0 = CFrame.new(v4.C0.p * Vector3.new(1, 2, 1)) * (v4.C0 - v4.C0.p)
+					v4.C1 = CFrame.new(v4.C1.p * Vector3.new(1, 2, 1)) * (v4.C1 - v4.C1.p)
+				end
+			end
+			local RightUpperArm = v3.RightUpperArm
+			local RightLowerArm = v3.RightLowerArm
+			local RightHand = v3.RightHand
+			p1.Clothing["Right Arm"].RightUpperArm.Part1 = RightUpperArm
+			p1.Clothing.RightUpperArm:Destroy()
+			p1.Clothing.RightLowerArm:Destroy()
+			p1.Clothing.RightHand:Destroy()
+			RightUpperArm.Parent = p1.Clothing
+			RightLowerArm.Parent = p1.Clothing
+			RightHand.Parent = p1.Clothing
+			local p = (RightUpperArm.CFrame * CFrame.new(0, RightUpperArm.Size.Y / 2, 0)).p
+			local p3 = (RightHand.CFrame * CFrame.new(0, -RightHand.Size.Y / 1.5, 0)).p
+			p1.Clothing["Right Arm"].RightUpperArm.Part1 = RightUpperArm
+			p1.Clothing["Right Arm"].RightUpperArm.C0 = CFrame.new(0, -RightUpperArm.Size.Y + (p - p3).magnitude, 0) * CFrame.Angles(0, -1.5707963267948966, 0)
+			v3:Destroy()
+		end
+	else
+		local v5 = p2.Player:Clone()
+		for _2, v6 in pairs((v5:GetDescendants())) do
+			if v6:IsA("BasePart") and (v6.Name ~= "LeftHand" and v6.Name ~= "RightHand") then
+				v6.Size = v6.Size * Vector3.new(1, 2, 1)
+			elseif v6:IsA("Motor6D") then
+				v6.C0 = CFrame.new(v6.C0.p * Vector3.new(1, 2, 1)) * (v6.C0 - v6.C0.p)
+				v6.C1 = CFrame.new(v6.C1.p * Vector3.new(1, 2, 1)) * (v6.C1 - v6.C1.p)
+			end
+		end
+		local LeftUpperArm = v5.LeftUpperArm
+		local LeftLowerArm = v5.LeftLowerArm
+		local LeftHand = v5.LeftHand
+		p1.Clothing.LeftUpperArm:Destroy()
+		p1.Clothing.LeftLowerArm:Destroy()
+		p1.Clothing.LeftHand:Destroy()
+		LeftUpperArm.Parent = p1.Clothing
+		LeftLowerArm.Parent = p1.Clothing
+		LeftHand.Parent = p1.Clothing
+		local p4 = (LeftUpperArm.CFrame * CFrame.new(0, LeftUpperArm.Size.Y / 2, 0)).p
+		local p5 = (LeftHand.CFrame * CFrame.new(0, -LeftHand.Size.Y / 1.5, 0)).p
+		p1.Clothing["Left Arm"].LeftUpperArm.Part1 = LeftUpperArm
+		p1.Clothing["Left Arm"].LeftUpperArm.C0 = CFrame.new(0, -LeftUpperArm.Size.Y + (p4 - p5).magnitude, 0) * CFrame.Angles(0, 1.5707963267948966, 0)
+		if p2.RightArm ~= 0 and p2.RightArm ~= "" then
+			local RightUpperArm2 = v5.RightUpperArm
+			local RightLowerArm2 = v5.RightLowerArm
+			local RightHand2 = v5.RightHand
+			p1.Clothing.RightUpperArm:Destroy()
+			p1.Clothing.RightLowerArm:Destroy()
+			p1.Clothing.RightHand:Destroy()
+			RightUpperArm2.Parent = p1.Clothing
+			RightLowerArm2.Parent = p1.Clothing
+			RightHand2.Parent = p1.Clothing
+			local p6 = (RightUpperArm2.CFrame * CFrame.new(0, RightUpperArm2.Size.Y / 2, 0)).p
+			local p7 = (RightHand2.CFrame * CFrame.new(0, -RightHand2.Size.Y / 1.5, 0)).p
+			p1.Clothing["Right Arm"].RightUpperArm.Part1 = RightUpperArm2
+			p1.Clothing["Right Arm"].RightUpperArm.C0 = CFrame.new(0, -RightUpperArm2.Size.Y + (p6 - p7).magnitude, 0) * CFrame.Angles(0, -1.5707963267948966, 0)
+		end
+		v5:Destroy()
+	end
+	for _3, v7 in pairs((p1.Clothing:GetDescendants())) do
+		if v7:IsA("BasePart") then
+			v7.CanCollide = false
+			v7.CanQuery = false
+			v7.CanTouch = false
+			v7.CastShadow = false
+		elseif v7:IsA("Weld") or v7:IsA("Motor6D") then
+			v7.Name = "ClothingWeld"
+		end
+	end
+end
