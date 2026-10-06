@@ -4547,7 +4547,7 @@ function t.AddPortal(p_u_22, p_u_23, p24)
 	v_u_28.Attachment1.CFrame = CFrame.new(0, -0.375, -0.058) * CFrame.Angles(1.5707963267948966, 0, 0)
 	tween(v_u_28.Attachment1, { CFrame = CFrame.new(0, -3.725, -0.575) * CFrame.Angles(1.5707963267948966, 0, 0) }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
 	v_u_28.Attachment2.CFrame = CFrame.new(0, 0.378, -0.058) * CFrame.Angles(1.5707963267948966, 0, 0)
-	tween(v_u_28.Attachment2, { CFrame = CFrame.new(0, 3.775, -0.575) * CFrame.Angles(1.5707963267948966, 0, 0) }, 0.18, Enum.EasingDirection.Out, false)
+	tween(v_u_28.Attachment2, { CFrame = CFrame.new(0, 3.775, -0.575) * CFrame.Angles(1.5707963267948966, 0, 0) }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
 	v_u_28.Attachment3.CFrame = CFrame.new(0, 0, -0.058)
 	tween(v_u_28.Attachment3, { CFrame = CFrame.new(0, 0, -0.575) }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
 	v_u_28.Attachment1.Left.CurveSize0 = 0.33
