@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.179
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.180
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.179"
+local SCRIPT_VERSION = "1.180"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8730,13 +8730,18 @@ local function syncDeadEyeCosmeticsWithNativeVisibility()
     for _, object in ipairs(
         nativeModel:GetDescendants()
     ) do
-        if object:IsA("Accessory")
-            and hasAttribute(
-                object,
-                "DeadEyeFirstPersonCosmetic"
-            )
-        then
-            local handle =
+        local tagged = false
+
+        if object:IsA("Accessory") then
+            pcall(function()
+                tagged =
+                    object:GetAttribute(
+                        "DeadEyeFirstPersonCosmetic"
+                    ) == true
+            end)
+        end
+
+        if tagged then
                 object:FindFirstChild("Handle")
 
             local host =
