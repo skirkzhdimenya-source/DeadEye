@@ -1544,3 +1544,93 @@ IMPORTANT FOR OUR FUTURE TESTS:
 
 SOURCE CONTENT:
     Полный исходник предоставлен пользователем в чате 2026-10-06.
+
+
+==================================================
+SOURCE #7
+==================================================
+PATH:
+Runtime test:
+    Workspace.Players.<LocalPlayer>.Character
+
+PURPOSE:
+Подтверждённый runtime-результат сравнения 3rd Person -> First Person
+для конкретного персонажа DEN919191.
+
+TEST:
+    FIRST PERSON VISIBILITY TEST v1.02
+
+STATE A:
+    3rd Person
+    Camera distance = 6.0003
+    Camera type = Custom
+    Camera subject = Workspace.Players.DEN919191.Humanoid
+
+STATE B:
+    First Person
+    Camera distance = 0.6329
+    Camera type = Custom
+    Camera subject = Workspace.Players.DEN919191.Humanoid
+
+TOTAL VISUAL OBJECTS:
+    3rd Person = 4
+    First Person = 4
+
+CHANGED:
+    PATH:
+        DEN919191.HumanoidRootPart
+
+    CLASS:
+        MeshPart
+
+    Transparency:
+        1.0000 -> 1.0000
+
+    LocalTransparencyModifier:
+        0.0000 -> 1.0000
+
+    Accessory:
+        false
+
+    Tool:
+        false
+
+UNCHANGED:
+    PATH:
+        DEN919191.HumanoidRootPart.JumpPos.Double
+
+    CLASS:
+        ParticleEmitter
+
+    PATH:
+        DEN919191.HumanoidRootPart.Slide.SlideParticles
+
+    CLASS:
+        ParticleEmitter
+
+    PATH:
+        DEN919191.Right Leg
+
+    CLASS:
+        Part
+
+    Right Leg:
+        Transparency = 1.0000 -> 1.0000
+        LocalTransparencyModifier = 0.0000 -> 0.0000
+
+CONFIRMED CONCLUSION:
+    В текущей runtime-модели персонажа First Person изменил
+    только LocalTransparencyModifier у HumanoidRootPart.
+
+    Ни один другой объект из GetDescendants(), подходящий под
+    использованные визуальные классы, не изменил
+    LocalTransparencyModifier или Transparency.
+
+    Right Leg остаётся невидимой из-за собственного
+    Transparency = 1, а не из-за First Person.
+
+IMPORTANT:
+    Этот результат не доказывает, что весь видимый персонаж
+    физически находится внутри Workspace.Players.DEN919191.
+    Следующий тест должен просканировать полное дерево character,
+    связанные Models/Folders и отдельно объекты Rig/CharacterService.
