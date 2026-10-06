@@ -2797,7 +2797,7 @@ function cosmetic.refreshRig()
 
                     if first
                         :find(
-                            "^%[AddCosmetics%] Rig has no limb named "HumanoidRootPart" for cosmetic "CharacterClassic"$"
+                            '^%[AddCosmetics%] Rig has no limb named "HumanoidRootPart" for cosmetic "CharacterClassic"$'
                         )
                     then
                         return
