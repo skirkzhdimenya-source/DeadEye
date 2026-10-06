@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.194
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.195
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.194"
+local SCRIPT_VERSION = "1.195"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -15222,24 +15222,52 @@ function mainJump.createSensors(char)
     --// We do NOT use Movement:JumpReact() here because native
     --// AttemptJump() calls EndClimb() before attempting the jump.
     --//
-    --// If Bench Trimp is enabled at the same time, its existing
-    --// handler owns Climbing so both systems never fire twice.
+    --// Bench Trimp may also be enabled while AutoJump is active.
+    --// Keep ONE AutoJump connection alive so switching Bench Trimp
+    --// OFF later immediately returns Climbing ownership to AutoJump.
+    --// When Bench Trimp is ON, this callback simply does nothing.
     --// =====================================================
-    if mainJump.benchTrimpEnabled then
-        mainJump.autoJumpClimbingConnection = nil
-    else
-        mainJump.autoJumpClimbingConnection =
-            mainJump.humanoid.StateChanged:Connect(
-                function(_, newState)
+    mainJump.autoJumpClimbingConnection =
+        mainJump.humanoid.StateChanged:Connect(
+            function(_, newState)
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or cleaned
+                    or not mainJump.enabled
+                    or mainJump.character ~= char
+                then
+                    return
+                end
+
+                if mainJump.benchTrimpEnabled then
+                    return
+                end
+
+                if newState
+                    ~= Enum.HumanoidStateType.Climbing
+                then
+                    return
+                end
+
+                if not mainJump.canJump(true) then
+                    return
+                end
+
+                task.defer(function()
                     if not genv.DEADEYE_MAIN_RUNNING
                         or cleaned
                         or not mainJump.enabled
                         or mainJump.character ~= char
+                        or not mainJump.humanoid
+                        or not mainJump.humanoid.Parent
                     then
                         return
                     end
 
-                    if newState
+                    if mainJump.benchTrimpEnabled then
+                        return
+                    end
+
+                    if mainJump.humanoid:GetState()
                         ~= Enum.HumanoidStateType.Climbing
                     then
                         return
@@ -15249,36 +15277,14 @@ function mainJump.createSensors(char)
                         return
                     end
 
-                    task.defer(function()
-                        if not genv.DEADEYE_MAIN_RUNNING
-                            or cleaned
-                            or not mainJump.enabled
-                            or mainJump.character ~= char
-                            or not mainJump.humanoid
-                            or not mainJump.humanoid.Parent
-                        then
-                            return
-                        end
-
-                        if mainJump.humanoid:GetState()
-                            ~= Enum.HumanoidStateType.Climbing
-                        then
-                            return
-                        end
-
-                        if not mainJump.canJump(true) then
-                            return
-                        end
-
-                        pcall(function()
-                            mainJump.humanoid:ChangeState(
-                                Enum.HumanoidStateType.Jumping
-                            )
-                        end)
+                    pcall(function()
+                        mainJump.humanoid:ChangeState(
+                            Enum.HumanoidStateType.Jumping
+                        )
                     end)
-                end
-            )
-    end
+                end)
+            end
+        )
 
     mainJump.lookTriggeredThisAir = false
 
