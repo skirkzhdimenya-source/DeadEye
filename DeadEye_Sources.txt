@@ -3176,7 +3176,7 @@ return function(p1, _, _2, p2, _3)
 		p1.Spring.d = 0.7
 		p1.Spring.t = Vector3.new(-0.02199999988079071, 0, 0)
 		local p3 = p1.Spring.p
-		return CFrame.Angles(p3.X, p3.Y, p3.Spring.p.Z)
+		return CFrame.Angles(p3.X, p3.Y, p3.Z)
 	end
 	p1.Spring.t = Vector3.new()
 	p1.State = 0
