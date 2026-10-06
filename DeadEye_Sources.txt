@@ -1409,3 +1409,138 @@ SOURCE CONTENT:
 
 NEXT REQUIRED SOURCE:
     Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
+
+
+==================================================
+SOURCE #6
+==================================================
+PATH:
+Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
+
+PURPOSE:
+Штатная Roblox-система скрытия локального персонажа при
+приближении камеры / First Person.
+
+KEY FINDINGS:
+    - Не изменяет BasePart.Transparency.
+    - Использует BasePart.LocalTransparencyModifier.
+    - По умолчанию обрабатывает BasePart и Decal.
+    - При включённом UserHideCharacterParticlesInFirstPerson
+      также может обрабатывать:
+          Beam
+          ParticleEmitter
+          Trail
+          Fire
+          Smoke
+          Sparkles
+          Explosion
+    - Объекты внутри Tool намеренно исключаются из обычного
+      First Person скрытия.
+    - При исчезновении/появлении descendants кэш обновляется.
+    - При выключении системы все закэшированные части получают:
+          LocalTransparencyModifier = 0
+
+FIRST PERSON / DISTANCE LOGIC:
+    TransparencyController.Update() получает:
+        CurrentCamera = workspace.CurrentCamera
+
+    затем:
+        magnitude =
+            (CurrentCamera.Focus.p
+             - CurrentCamera.CoordinateFrame.p).magnitude
+
+    если:
+        magnitude < 2
+
+    то вычисляется степень прозрачности:
+        1 - (magnitude - 0.5) / 1.5
+
+    затем значение ограничивается диапазоном 0..1.
+
+    Поэтому полностью близкое First Person состояние даёт:
+        LocalTransparencyModifier ~= 1
+
+    а при удалении камеры значение плавно возвращается к 0.
+
+CACHED PARTS:
+    SetupTransparency(character)
+        -> TeardownTransparency()
+        -> CachePartsRecursive(character)
+
+    CachePartsRecursive() добавляет в cachedParts только
+    IsValidPartToModify() объекты.
+
+TOOL RULE:
+    HasToolAncestor(part)
+        -> true, если сам part находится внутри Tool
+           или любой его ancestor является Tool.
+
+    IsValidPartToModify()
+        -> для обычного BasePart/Decal:
+           return not HasToolAncestor(part)
+
+    То есть содержимое Tool не попадает в обычный
+    скрываемый First Person cache.
+
+CHARACTER SUBJECT:
+    SetSubject(subject)
+        -> если subject является Humanoid:
+           используется subject.Parent как character model.
+
+        -> если subject является VehicleSeat с Occupant:
+           используется Occupant.Parent.
+
+        -> иначе:
+           TeardownTransparency()
+
+VR SPECIAL CASE:
+    Если:
+        VRService.VREnabled
+        and VRService.AvatarGestures
+
+    тогда прозрачность применяется не ко всему cachedParts,
+    а только:
+        AccessoryType.Hat
+        AccessoryType.Hair
+        AccessoryType.Face
+        AccessoryType.Eyebrow
+        AccessoryType.Eyelash
+        или объекту с Name == "Head"
+
+    Остальные части в этом VR-режиме получают:
+        LocalTransparencyModifier = 0
+
+NON-VR:
+    Для обычного режима каждый объект cachedParts получает:
+        LocalTransparencyModifier = transparency
+
+ANIMATION / SMOOTHING:
+    При изменении дистанции значение может плавно двигаться
+    с ограничением скорости:
+        2.8 * deltaTime
+
+    После этого значение округляется через:
+        CameraUtils.Round(value, 2)
+
+    и ограничивается:
+        0..1
+
+CONFIRMED CONCLUSION:
+    Штатный First Person здесь реализован прежде всего как
+    локальное изменение LocalTransparencyModifier у частей
+    персонажа, а не как удаление объектов.
+
+IMPORTANT FOR OUR FUTURE TESTS:
+    Нужно отдельно проверить runtime-модель персонажа,
+    чтобы установить, какие конкретно descendants попадают
+    в cachedParts:
+        Head
+        Hair
+        Face decal
+        body parts
+        accessories
+        tool
+        custom cosmetic parts
+
+SOURCE CONTENT:
+    Полный исходник предоставлен пользователем в чате 2026-10-06.
