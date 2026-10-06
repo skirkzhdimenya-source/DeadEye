@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.197"
+local SCRIPT_VERSION = "1.198"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -16279,7 +16279,10 @@ mainJump.autoJumpModePicker.BackgroundColor3 =
     )
 
 mainJump.autoJumpModePicker.BackgroundTransparency =
-    0.04
+    0
+
+mainJump.autoJumpModePicker.ClipsDescendants =
+    false
 
 mainJump.autoJumpModePicker.BorderSizePixel =
     0
@@ -16420,6 +16423,10 @@ local function createAutoJumpModeOption(
     button.AutoButtonColor =
         false
 
+    --// Match ordinary DeadEye button glass.
+    button.BackgroundTransparency =
+        0.30
+
     button.Text =
         text
 
@@ -16543,8 +16550,6 @@ mainConnect(
             end
         end
     )
-)
-
 )
 
 __UI.lookRow =
@@ -23717,6 +23722,7 @@ for _, object in ipairs(
     elseif object:IsA("Frame")
         and object ~= MainSurface
         and object ~= MainHeader
+        and object ~= mainJump.autoJumpModePicker
     then
         pcall(function()
             object.BackgroundTransparency =
@@ -23774,9 +23780,26 @@ function __UI.styleButtonMotion(button)
     --// Keep the existing centered enlargement unchanged.
     local hasLayout = false
 
+    --// Auto Jump mode options use the same centered scale
+    --// animation as ordinary DeadEye buttons, even though
+    --// their parent contains a UIListLayout.
+    local forceButtonScale =
+        string.sub(
+            tostring(button.Name),
+            1,
+            14
+        ) == "AutoJumpMode_"
+
+    if forceButtonScale then
+        hasLayout = false
+    end
+
     for _, child in ipairs(
         parent:GetChildren()
     ) do
+        if forceButtonScale then
+            break
+        end
         if child:IsA("UIGridLayout")
             or child:IsA("UIListLayout")
             or child:IsA("UITableLayout")
