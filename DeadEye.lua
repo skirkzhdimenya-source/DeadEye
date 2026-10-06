@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.161"
+local SCRIPT_VERSION = "1.162"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -7951,7 +7951,10 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
             "DeadEyeUnusualPOVTransparency"
         )
     end)
-    lastUnusualPOVTransparency = nil
+
+    pcall(function()
+        restoreDeadEyeVisualState()
+    end)
 end
 local lastUnusualPOVState = nil
 function UnusualFns.getUnusualViewmodel()
@@ -8133,91 +8136,137 @@ end
 local unusualPovTransparencyClasses = {
     BasePart = true,
     Decal = true,
+    Texture = true,
     Beam = true,
     ParticleEmitter = true,
     Trail = true,
     Fire = true,
     Smoke = true,
     Sparkles = true,
-    Explosion = true
+    Explosion = true,
+    Highlight = true,
+    PointLight = true,
+    SpotLight = true,
+    SurfaceLight = true,
+    BillboardGui = true
 }
 
+--// DeadEye creates extra visual geometry (anchors/mirrors) that is not
+--// part of the game's original character rig. The game's own camera
+--// hiding therefore cannot hide these copies automatically.
+--// Store their native render properties and hide the COMPLETE DeadEye-owned
+--// visual tree in first person.
+local unusualPovSavedVisualState = setmetatable({}, { __mode = "k" })
 local lastUnusualPOVTransparency = nil
 
-local function isGameFirstPersonTransparencyClass(
+local function saveDeadEyeVisualState(
     object
 )
-    return unusualPovTransparencyClasses[
-        object.ClassName
-    ] == true
+    if unusualPovSavedVisualState[object] ~= nil then
+        return
+    end
+
+    local state = {}
+
+    pcall(function()
+        state.Transparency =
+            object.Transparency
+    end)
+
+    pcall(function()
+        state.LocalTransparencyModifier =
+            object.LocalTransparencyModifier
+    end)
+
+    pcall(function()
+        state.Enabled =
+            object.Enabled
+    end)
+
+    unusualPovSavedVisualState[object] =
+        state
 end
 
-local function updateGameFirstPersonTransparency(
-    deltaTime
+local function restoreDeadEyeVisualState()
+    for object, state in pairs(
+        unusualPovSavedVisualState
+    ) do
+        if object
+            and object.Parent
+            and state
+        then
+            pcall(function()
+                if state.Transparency ~= nil then
+                    object.Transparency =
+                        state.Transparency
+                end
+
+                if state.LocalTransparencyModifier ~= nil then
+                    object.LocalTransparencyModifier =
+                        state.LocalTransparencyModifier
+                end
+
+                if state.Enabled ~= nil then
+                    object.Enabled =
+                        state.Enabled
+                end
+            end)
+        end
+
+        unusualPovSavedVisualState[object] =
+            nil
+    end
+
+    lastUnusualPOVTransparency = nil
+end
+
+local function hideDeadEyeVisualObject(
+    object
 )
-    local camera =
-        workspace.CurrentCamera
-
-    if not camera then
-        lastUnusualPOVTransparency = 0
-        return 0
+    if not unusualPovTransparencyClasses[
+        object.ClassName
+    ] then
+        return
     end
 
-    local magnitude =
-        (
-            camera.Focus.p
-            - camera.CoordinateFrame.p
-        ).magnitude
+    saveDeadEyeVisualState(
+        object
+    )
 
-    local transparency =
-        magnitude < 2
-        and 1 - (magnitude - 0.5) / 1.5
-        or 0
+    pcall(function()
+        if object:IsA("BasePart")
+            or object:IsA("Decal")
+            or object:IsA("Texture")
+        then
+            object.Transparency = 1
+            object.LocalTransparencyModifier = 0
+            return
+        end
 
-    if transparency < 0.5 then
-        transparency = 0
-    end
+        if object:IsA("Trail")
+            or object:IsA("ParticleEmitter")
+        then
+            object.Enabled = false
+            pcall(function()
+                object:Clear()
+            end)
+            return
+        end
 
-    --// Exact smoothing branch from the game's TransparencyController.
-    if lastUnusualPOVTransparency
-        and transparency < 1
-        and lastUnusualPOVTransparency < 0.95
-    then
-        local delta =
-            transparency
-            - lastUnusualPOVTransparency
-
-        local rate =
-            2.8 * deltaTime
-
-        delta =
-            math.clamp(
-                delta,
-                -rate,
-                rate
-            )
-
-        transparency =
-            lastUnusualPOVTransparency
-            + delta
-    end
-
-    local rounded =
-        math.floor(
-            transparency * 100 + 0.5
-        ) / 100
-
-    local result =
-        math.clamp(
-            rounded,
-            0,
-            1
-        )
-
-    lastUnusualPOVTransparency =
-        result
-
-    return result
+        if object:IsA("Beam")
+            or object:IsA("Fire")
+            or object:IsA("Smoke")
+            or object:IsA("Sparkles")
+            or object:IsA("Explosion")
+            or object:IsA("Highlight")
+            or object:IsA("PointLight")
+            or object:IsA("SpotLight")
+            or object:IsA("SurfaceLight")
+            or object:IsA("BillboardGui")
+        then
+            object.Enabled = false
+        end
+    end)
 end
 
 local function hideUnusualAnimationSourceVisuals()
@@ -8230,32 +8279,26 @@ local function hideUnusualAnimationSourceVisuals()
         return
     end
 
-    --// animationSource is deliberately a NON-RENDERING clone used only
-    --// to drive animations. Some Unusual client scripts can re-enable
-    --// their own FX after the initial safety pass, so enforce invisibility
-    --// every camera frame.
+    --// animationSource is an animation-only copy and must never render.
     for _, object in ipairs(
         source:GetDescendants()
     ) do
         if unusualPovTransparencyClasses[
             object.ClassName
-        ]
-        then
+        ] then
             pcall(function()
-                object.LocalTransparencyModifier = 1
-            end)
-        end
-
-        if object:IsA("ParticleEmitter")
-            or object:IsA("Trail")
-            or object:IsA("Beam")
-            or object:IsA("Fire")
-            or object:IsA("Smoke")
-            or object:IsA("Sparkles")
-            or object:IsA("Explosion")
-        then
-            pcall(function()
-                object.Enabled = false
+                if object:IsA("BasePart")
+                    or object:IsA("Decal")
+                    or object:IsA("Texture")
+                then
+                    object.Transparency = 1
+                    object.LocalTransparencyModifier = 1
+                else
+                    object.Enabled = false
+                    pcall(function()
+                        object:Clear()
+                    end)
+                end
             end)
         end
     end
@@ -8265,14 +8308,6 @@ function UnusualFns.setUnusualFXForPOV(
     firstPerson,
     deltaTime
 )
-    local transparency =
-        updateGameFirstPersonTransparency(
-            deltaTime
-            or 0
-        )
-
-    hideUnusualAnimationSourceVisuals()
-
     local roots = {
         UnusualFns.getUnusualVisualRig(),
         UnusualFns.getUnusualPlayerCharacter()
@@ -8283,11 +8318,6 @@ function UnusualFns.setUnusualFXForPOV(
             "DeadEyeUnusualAnimatedVisuals"
         )
 
-    table.insert(
-        roots,
-        animatedFolder
-    )
-
     local mirrorFolder =
         workspace:FindFirstChild(
             "DeadEyeUnusualVisuals"
@@ -8295,9 +8325,16 @@ function UnusualFns.setUnusualFXForPOV(
 
     table.insert(
         roots,
+        animatedFolder
+    )
+
+    table.insert(
+        roots,
         mirrorFolder
     )
 
+    --// DeadEye-owned tagged visuals live on the real rig, in mirror
+    --// folders, and in anchor siblings under the rig.
     local seenRoots = {}
 
     for _, root in ipairs(
@@ -8320,37 +8357,45 @@ function UnusualFns.setUnusualFXForPOV(
                         object:GetAttribute(
                             "DeadEyeUnusualFX"
                         ) == true
+                end)
 
-                    if not tagged
-                        and object:IsA("BasePart")
-                    then
+                if not tagged
+                    and object:IsA("BasePart")
+                then
+                    pcall(function()
                         tagged =
                             object:GetAttribute(
                                 "DeadEyeFirstPersonCosmetic"
                             ) == true
-                    end
-                end)
+                    end)
+                end
 
                 if tagged
-                    and isGameFirstPersonTransparencyClass(
-                        object
-                    )
                     and not object:FindFirstAncestorOfClass(
                         "Tool"
                     )
                 then
-                    pcall(function()
-                        --// Stock behavior does not toggle or clear Trail.
-                        --// Trail has its own LocalTransparencyModifier, and the
-                        --// exact camera-derived value is what the game applies.
-                        object.LocalTransparencyModifier =
-                            transparency
-                    end)
+                    if firstPerson then
+                        hideDeadEyeVisualObject(
+                            object
+                        )
+                    else
+                        --// Restoration is handled centrally below so a
+                        --// visual created while in 1P is also restored.
+                    end
                 end
             end
         end
     end
+
+    if not firstPerson then
+        restoreDeadEyeVisualState()
+    end
+
+    --// The animation source is always hidden regardless of POV.
+    hideUnusualAnimationSourceVisuals()
 end
+
 function UnusualFns.updateUnusualPOV()
     if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
         return
@@ -8379,8 +8424,11 @@ RunService:BindToRenderStep(
         --// Run after the game's cameraRenderUpdate has written the NEW
         --// CurrentCamera.CFrame and Focus, matching the stock controller's
         --// execution point as closely as possible.
+        local firstPerson =
+            UnusualFns.isUnusualFirstPerson()
+
         UnusualFns.setUnusualFXForPOV(
-            false,
+            firstPerson,
             deltaTime
         )
     end
