@@ -19725,7 +19725,6 @@ local function cleanupUnusual()
     --// The game's AddCosmetics(CharacterClassic) path can receive a
     --// cosmetic rig that does not contain the expected HumanoidRootPart
     --// limb and produces repeated shutdown errors.
-    //
     --// The active/native snapshot is already handled above. Cleanup
     --// must not call AddCosmetics again.
 
