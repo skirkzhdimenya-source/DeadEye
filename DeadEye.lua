@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.162"
+local SCRIPT_VERSION = "1.163"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -7975,64 +7975,75 @@ end
 function UnusualFns.isUnusualFirstPerson()
     local visualRig =
         UnusualFns.getUnusualVisualRig()
-    if not visualRig then
-        return false
-    end
-    local bodyNames = {
-        "Head",
-        "Torso",
-        "Left Arm",
-        "Right Arm",
-        "Left Leg",
-        "Right Leg"
-    }
-    local total = 0
-    local hidden = 0
-    for _, name in ipairs(
-        bodyNames
-    ) do
-        local part =
-            visualRig:FindFirstChild(
-                name
-            )
-        if part
-            and part:IsA("BasePart")
-        then
-            total += 1
-            if part.LocalTransparencyModifier
-                >= 0.99
-            then
-                hidden += 1
-            end
-        end
-    end
-    if total > 0
-        and hidden >= math.ceil(
-            total * 0.5
-        )
-    then
-        return true
-    end
-    --// Fallback only when the rig does not expose
-    --// LocalTransparencyModifier yet.
+
     local camera =
         workspace.CurrentCamera
+
     local head =
-        visualRig:FindFirstChild(
+        visualRig
+        and visualRig:FindFirstChild(
             "Head"
         )
+
+    --// The camera distance is the reliable transition signal.
+    --// Runtime measurements:
+    --//   1P ~= 0.63 studs
+    --//   3P ~= 6.00 studs
+    --// Check this FIRST. During the 1P -> 3P transition the game's
+    --// LocalTransparencyModifier can still be 1 for a few frames,
+    --// which previously made DeadEye think we were still in 1P and
+    --// prevented restoration.
     if camera
         and head
+        and head:IsA("BasePart")
     then
         local distance =
             (
                 camera.CFrame.Position
                 - head.Position
             ).Magnitude
-        if distance < 1.5 then
-            return true
+
+        return distance <= 1.5
+    end
+
+    --// Fallback for frames where the visual rig/head is unavailable.
+    if visualRig then
+        local bodyNames = {
+            "Head",
+            "Torso",
+            "Left Arm",
+            "Right Arm",
+            "Left Leg",
+            "Right Leg"
+        }
+
+        local total = 0
+        local hidden = 0
+
+        for _, name in ipairs(
+            bodyNames
+        ) do
+            local part =
+                visualRig:FindFirstChild(
+                    name
+                )
+
+            if part
+                and part:IsA("BasePart")
+            then
+                total += 1
+
+                if part.LocalTransparencyModifier >= 0.99 then
+                    hidden += 1
+                end
+            end
+        end
+
+        if total > 0 then
+            return hidden >= math.ceil(total * 0.5)
         end
     end
+
     return false
 end
 function UnusualFns.syncUnusualViewmodelAppearance()
