@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.160"
+local SCRIPT_VERSION = "1.161"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8220,6 +8220,47 @@ local function updateGameFirstPersonTransparency(
     return result
 end
 
+local function hideUnusualAnimationSourceVisuals()
+    local source =
+        unusualRuntime.animationSource
+
+    if not source
+        or not source.Parent
+    then
+        return
+    end
+
+    --// animationSource is deliberately a NON-RENDERING clone used only
+    --// to drive animations. Some Unusual client scripts can re-enable
+    --// their own FX after the initial safety pass, so enforce invisibility
+    --// every camera frame.
+    for _, object in ipairs(
+        source:GetDescendants()
+    ) do
+        if unusualPovTransparencyClasses[
+            object.ClassName
+        ]
+        then
+            pcall(function()
+                object.LocalTransparencyModifier = 1
+            end)
+        end
+
+        if object:IsA("ParticleEmitter")
+            or object:IsA("Trail")
+            or object:IsA("Beam")
+            or object:IsA("Fire")
+            or object:IsA("Smoke")
+            or object:IsA("Sparkles")
+            or object:IsA("Explosion")
+        then
+            pcall(function()
+                object.Enabled = false
+            end)
+        end
+    end
+end
+
 function UnusualFns.setUnusualFXForPOV(
     firstPerson,
     deltaTime
@@ -8229,6 +8270,8 @@ function UnusualFns.setUnusualFXForPOV(
             deltaTime
             or 0
         )
+
+    hideUnusualAnimationSourceVisuals()
 
     local roots = {
         UnusualFns.getUnusualVisualRig(),
