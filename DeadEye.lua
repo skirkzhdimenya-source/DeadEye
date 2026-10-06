@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.177
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.178
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.177"
+local SCRIPT_VERSION = "1.178"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -1887,11 +1887,6 @@ others.fieldButtons = {}
 others.fieldBoxes = {}
 others.firstPersonTransparency = {}
 
---// Native-like first-person transparency state for DeadEye-created cosmetics.
---// These objects are not part of the native TransparencyController cache,
---// so mirror the exact camera-distance formula onto only the tagged visuals.
-local deadEyeCosmeticTransparencyState = {}
-local deadEyeCosmeticLastTransparency = nil
 local unusualConnections = {}
 local unusualDestroyed = false
 local unusualReapplyBusy = false
@@ -2786,13 +2781,19 @@ function cosmetic.refreshRig()
                 equipped
             )
 
-            --// Mark every newly-created cosmetic visual, regardless of
-            --// whether SWAP is ON. This also covers direct ADD actions.
+            --// Mark every newly-created cosmetic visual, regardless
+            --// whether SWAP is ON. Tag the Accessory itself and
+            --// supported visual descendants for native Visibility.
             for _, object in ipairs(
                 live:GetDescendants()
             ) do
                 if not cosmeticObjectsBeforeAdd[object]
-                    and object:IsA("BasePart")
+                    and (
+                        object:IsA("Accessory")
+                        or isStockUnusualPOVTransparencyObject(
+                            object
+                        )
+                    )
                 then
                     pcall(function()
                         object:SetAttribute(
@@ -8616,169 +8617,201 @@ function UnusualFns.syncNativeParticlePOV(
 end
 
 --// =========================================================
---// DEADEYE COSMETIC FIRST-PERSON TRANSPARENCY
---//
---// Native TransparencyController uses the current camera
---// Focus -> CFrame distance and applies that value to its
---// cached BaseParts/Decals.
---//
---// DeadEye-created cosmetic parts are added after the native
---// cache was built, so the native controller never sees them.
---// Mirror that exact behavior ONLY for objects tagged with
---// DeadEyeFirstPersonCosmetic. Stock avatar head/hair/accessories
---// are never touched here.
 --// =========================================================
-local function getNativeCharacterTransparency(
-    deltaTime
-)
-    local camera =
-        workspace.CurrentCamera
-
-    if not camera then
-        deadEyeCosmeticLastTransparency = nil
-        return 0
+--// DEADEYE COSMETICS -> NATIVE VISIBILITY
+--//
+--// DeadEye-created cosmetics are added after the game's
+--// original Visibility limb cache is built. Feed only those
+--// objects back through the game's own SetVisibility() path.
+--//
+--// Stock avatar head/hair/accessories are never tagged and
+--// therefore never enter this path.
+--// =========================================================
+local function getDeadEyeAccessoryHostPart(accessory, nativeModel)
+    if not accessory or not nativeModel then
+        return nil
     end
 
-    local magnitude =
-        (
-            camera.Focus.Position
-            - camera.CFrame.Position
-        ).Magnitude
-
-    local transparency =
-        magnitude < 2
-        and 1 - (magnitude - 0.5) / 1.5
-        or 0
-
-    transparency =
-        transparency < 0.5
-        and 0
-        or transparency
-
-    if deadEyeCosmeticLastTransparency
-        and transparency < 1
-        and deadEyeCosmeticLastTransparency < 0.95
-    then
-        local delta =
-            transparency
-            - deadEyeCosmeticLastTransparency
-
-        local step =
-            2.8 * (deltaTime or 0)
-
-        transparency =
-            deadEyeCosmeticLastTransparency
-            + math.clamp(
-                delta,
-                -step,
-                step
-            )
+    local handle = accessory:FindFirstChild("Handle")
+    if not handle then
+        return nil
     end
 
-    transparency =
-        math.clamp(
-            math.round(
-                transparency * 100
-            ) / 100,
-            0,
-            1
-        )
+    --// Match Accessory attachments to native rig attachments.
+    for _, object in ipairs(handle:GetDescendants()) do
+        if object:IsA("Attachment") then
+            local nativeAttachment =
+                nativeModel:FindFirstChild(
+                    object.Name,
+                    true
+                )
 
-    deadEyeCosmeticLastTransparency =
-        transparency
+            if nativeAttachment
+                and nativeAttachment:IsA("Attachment")
+                and not nativeAttachment:IsDescendantOf(accessory)
+                and nativeAttachment.Parent
+                and nativeAttachment.Parent:IsA("BasePart")
+            then
+                return nativeAttachment.Parent
+            end
+        end
+    end
 
-    return transparency
-end
-
-local function syncDeadEyeFirstPersonCosmetics(
-    deltaTime
-)
-    local transparency =
-        getNativeCharacterTransparency(
-            deltaTime
-        )
-
-    local seen = {}
-
-    forEachDeadEyeUnusualVisualObject(
-        function(object)
-            local tagged = false
+    --// Match weld/motor/constraint connections.
+    for _, object in ipairs(handle:GetDescendants()) do
+        if object:IsA("Weld")
+            or object:IsA("Motor6D")
+            or object:IsA("WeldConstraint")
+        then
+            local part0
+            local part1
 
             pcall(function()
-                tagged =
-                    object:GetAttribute(
-                        "DeadEyeFirstPersonCosmetic"
-                    ) == true
+                part0 = object.Part0
             end)
 
-            if not tagged then
-                return
+            pcall(function()
+                part1 = object.Part1
+            end)
+
+            if part0 and part0:IsDescendantOf(nativeModel) then
+                return part0
             end
 
-            if object:IsA("BasePart")
-                or object:IsA("Decal")
-            then
-                seen[object] = true
-
-                if deadEyeCosmeticTransparencyState[
-                    object
-                ] == nil
-                then
-                    local oldTransparency =
-                        object:IsA("BasePart")
-                        and object.LocalTransparencyModifier
-                        or 0
-
-                    deadEyeCosmeticTransparencyState[
-                        object
-                    ] = oldTransparency
-                end
-
-                pcall(function()
-                    object.LocalTransparencyModifier =
-                        transparency
-                end)
+            if part1 and part1:IsDescendantOf(nativeModel) then
+                return part1
             end
-        end
-    )
-
-    for object, oldTransparency in pairs(
-        deadEyeCosmeticTransparencyState
-    ) do
-        if not object
-            or not object.Parent
-            or not seen[object]
-        then
-            if object
-                and object.Parent
-                and object:IsA("BasePart")
-            then
-                pcall(function()
-                    object.LocalTransparencyModifier =
-                        oldTransparency
-                end)
-            end
-
-            deadEyeCosmeticTransparencyState[
-                object
-            ] = nil
         end
     end
+
+    return nativeModel:FindFirstChild(
+        "Head",
+        true
+    )
+end
+
+local function syncDeadEyeCosmeticsWithNativeVisibility()
+    local characterObject =
+        getCharacterObject()
+
+    if not characterObject
+        or not characterObject.Rig
+        or not characterObject.Rig.Rig
+    then
+        return
+    end
+
+    local visibility =
+        characterObject.Visibility
+
+    local nativeModel =
+        characterObject.Rig.Rig.Model
+
+    if not visibility
+        or not nativeModel
+        or not nativeModel.Parent
+    then
+        return
+    end
+
+    local entries = {}
+    local grouped = {}
+    local seen = {}
+
+    for _, object in ipairs(
+        nativeModel:GetDescendants()
+    ) do
+        if object:IsA("Accessory")
+            and hasAttribute(
+                object,
+                "DeadEyeFirstPersonCosmetic"
+            )
+        then
+            local handle =
+                object:FindFirstChild("Handle")
+
+            local host =
+                getDeadEyeAccessoryHostPart(
+                    object,
+                    nativeModel
+                )
+
+            if host
+                and handle
+                and not seen[handle]
+            then
+                seen[handle] = true
+
+                local group =
+                    grouped[host]
+
+                if not group then
+                    group = {}
+                    grouped[host] = group
+                end
+
+                table.insert(
+                    group,
+                    handle
+                )
+
+                for _, child in ipairs(
+                    handle:GetDescendants()
+                ) do
+                    if isStockUnusualPOVTransparencyObject(
+                        child
+                    )
+                    and not seen[child]
+                    then
+                        seen[child] = true
+
+                        table.insert(
+                            group,
+                            child
+                        )
+                    end
+                end
+            end
+        end
+    end
+
+    for host, objects in pairs(grouped) do
+        if host
+            and host.Parent
+            and #objects > 0
+        then
+            table.insert(
+                entries,
+                {
+                    host,
+                    objects
+                }
+            )
+        end
+    end
+
+    if #entries == 0 then
+        return
+    end
+
+    --// This is the game's actual Visibility implementation:
+    --// Visibility.UpdateVisibility() -> SetVisibility().
+    pcall(function()
+        visibility:UpdateVisibility(entries)
+    end)
 end
 
 pcall(function()
     RunService:UnbindFromRenderStep(
-        "DeadEyeFirstPersonCosmeticTransparency"
+        "DeadEyeFirstPersonCosmeticVisibility"
     )
 end)
 
 RunService:BindToRenderStep(
-    "DeadEyeFirstPersonCosmeticTransparency",
+    "DeadEyeFirstPersonCosmeticVisibility",
     Enum.RenderPriority.Camera.Value + 2,
-    function(deltaTime)
-        syncDeadEyeFirstPersonCosmetics(
-            deltaTime
-        )
+    function()
+        syncDeadEyeCosmeticsWithNativeVisibility()
     end
 )
 
