@@ -2455,3 +2455,103 @@ function t.CopyViewmodel(p7, p8)
 	end
 end
 return t
+
+
+==================================================
+SOURCE #10
+==================================================
+PATH:
+game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Services = ReplicatedStorage:WaitForChild("Services")
+local v_u_1 = require((Services:WaitForChild("Client"):WaitForChild("CameraService")))
+local useSettings = require(ReplicatedStorage.Shared.UserData.ClientHooks.useSettings)
+function t.new(p2)
+	--[[ line: 12 | upvalues: (copy) t]]
+	return setmetatable({
+		LastCFrame = nil,
+		Springs = {},
+		MetaData = {},
+		SpringReferences = {},
+		Parent = p2,
+		Character = p2.Character,
+		DataRegistry = p2.DataRegistry
+	}, t)
+end
+function t.Init(p3, p4)
+	--[[ line: 26 | upvalues: (copy) useSettings]]
+	p3.Viewmodel = p4
+	local SpringList = script.SpringList
+	if useSettings.Get("LegacyCamera") then
+		SpringList = script.SpringList_Legacy
+	end
+	local t2 = {}
+	local t3 = {}
+	for v5, v6 in pairs(require(SpringList)) do
+		if v6.Speed ~= nil and v6.Damping ~= nil then
+			v6.Spring = require(script.Spring).new((Vector3.new()))
+			v6.Spring.s = v6.Speed
+			v6.Spring.d = v6.Damping
+		end
+		v6.Name = v5
+		table.insert(t2, v6)
+	end
+	while true do
+		local v7 = nil
+		for _, v8 in pairs(t2) do
+			if v7 == nil or v7.Order > v8.Order then
+				v7 = v8
+			end
+		end
+		if v7 ~= nil then
+			for v9, v10 in pairs(t2) do
+				if v10 == v7 then
+					table.remove(t2, v9)
+				end
+			end
+			table.insert(t3, v7)
+		end
+		if #t2 == 0 then
+			p3.Springs = t3
+			for _2, v11 in pairs((SpringList.Functions:GetChildren())) do
+				p3.SpringReferences[v11.Name] = require(v11)
+			end
+			return
+		end
+	end
+end
+function t.GetDeviationCFrame(p12, p13)
+	--[[ line: 68 | upvalues: (copy) v_u_1]]
+	local v14 = CFrame.new()
+	local v15 = CFrame.new()
+	local v16 = CFrame.new()
+	if p12.LastCFrame == nil then
+		p12.LastCFrame = v_u_1:GetCFrame()
+		return false
+	end
+	for _3, v17 in pairs(p12.Springs) do
+		if v17.Type == "Root" then
+			v14 = v14 * p12:ReturnRootDeviation(v17, p13, p12.Viewmodel, p12.DataRegistry)
+		elseif v17.Type == "BeforeRoot" then
+			v15 = v15 * p12:ReturnRootDeviation(v17, p13, p12.Viewmodel, p12.DataRegistry)
+		elseif v17.Type == "Camera" then
+			v16 = v16 * p12:ReturnCameraDeviation(v17, p13, p12.Viewmodel, p12.DataRegistry)
+		end
+	end
+	p12.LastCFrame = v_u_1:GetCFrame()
+	return v14, v15, v16
+end
+function t.ReturnRootDeviation(p18, p19, p20, p21, p22)
+	--[[ line: 90 | upvalues: none]]
+	return p18.SpringReferences[p19.Name](p19, p20, p21, p22, p18.LastCFrame) or CFrame.new()
+end
+function t.ReturnCameraDeviation(p23, p24, p25, p26, p27)
+	--[[ line: 94 | upvalues: none]]
+	return p23.SpringReferences[p24.Name](p24, p25, p26, p27, p23.LastCFrame) or CFrame.new()
+end
+return t
