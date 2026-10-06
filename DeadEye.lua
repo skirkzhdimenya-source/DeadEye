@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.151
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.152
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.151"
+local SCRIPT_VERSION = "1.152"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -15500,14 +15500,14 @@ mainJump.crouchSpamHotkeyBox =
 mainJump.crouchSpamHotkeyBox.Size =
     UDim2.new(
         0,
-        60,
+        72,
         0,
         28
     )
 mainJump.crouchSpamHotkeyBox.Position =
     UDim2.new(
         1,
-        -327,
+        -235,
         0.5,
         -14
     )
@@ -15557,14 +15557,14 @@ mainJump.crouchSpamDelayBox =
 mainJump.crouchSpamDelayBox.Size =
     UDim2.new(
         0,
-        60,
+        72,
         0,
         28
     )
 mainJump.crouchSpamDelayBox.Position =
     UDim2.new(
         1,
-        -262,
+        -155,
         0.5,
         -14
     )
@@ -15619,9 +15619,79 @@ mainConnect(
     )
 )
 
---// REVERSE LOOK MODE
---// WITH = follows CROUCH SPAM
---// SOLO = independent ON/OFF
+mainJump.crouchSpamToggle =
+    Instance.new("TextButton")
+mainJump.crouchSpamToggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+mainJump.crouchSpamToggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+mainJump.crouchSpamToggle.BackgroundColor3 =
+    Color3.fromRGB(
+        47,
+        52,
+        61
+    )
+mainJump.crouchSpamToggle.BorderSizePixel = 0
+mainJump.crouchSpamToggle.TextSize = 10
+mainJump.crouchSpamToggle.Font =
+    Enum.Font.GothamBold
+mainJump.crouchSpamToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.crouchSpamToggle.Parent =
+    __UI.crouchSpamRow
+
+__UI.crouchSpamToggleCorner =
+    Instance.new("UICorner")
+__UI.crouchSpamToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+__UI.crouchSpamToggleCorner.Parent =
+    mainJump.crouchSpamToggle
+
+mainConnect(
+    mainJump.crouchSpamToggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setCrouchSpamEnabled(
+                not mainJump.crouchSpamEnabled
+            )
+        end
+    )
+)
+
+--// =========================================================
+--// REVERSE LOOK GUI
+--// Dedicated row directly below CROUCH SPAM.
+--// WITH = Reverse Look follows CROUCH SPAM.
+--// SOLO = Reverse Look has its own ON/OFF toggle.
+--// =========================================================
+__UI.reverseLookRow =
+    mainRow(
+        "REVERSE LOOK",
+        8
+    )
+
+local reverseLookLabel =
+    autoLabel:Clone()
+reverseLookLabel.Text =
+    "REVERSE LOOK"
+reverseLookLabel.Parent =
+    __UI.reverseLookRow
 
 mainJump.reverseLookModeButton =
     Instance.new("TextButton")
@@ -15629,7 +15699,7 @@ mainJump.reverseLookModeButton =
 mainJump.reverseLookModeButton.Size =
     UDim2.new(
         0,
-        67,
+        72,
         0,
         28
     )
@@ -15637,7 +15707,7 @@ mainJump.reverseLookModeButton.Size =
 mainJump.reverseLookModeButton.Position =
     UDim2.new(
         1,
-        -197,
+        -155,
         0.5,
         -14
     )
@@ -15659,7 +15729,7 @@ mainJump.reverseLookModeButton.Text =
     ""
 
 mainJump.reverseLookModeButton.Parent =
-    __UI.crouchSpamRow
+    __UI.reverseLookRow
 
 local reverseLookModeCorner =
     Instance.new("UICorner")
@@ -15679,7 +15749,7 @@ mainJump.reverseLookModeKnob =
 mainJump.reverseLookModeKnob.Size =
     UDim2.new(
         0,
-        31,
+        34,
         0,
         24
     )
@@ -15687,7 +15757,7 @@ mainJump.reverseLookModeKnob.Size =
 mainJump.reverseLookModeKnob.Position =
     UDim2.new(
         0,
-        34,
+        37,
         0.5,
         -12
     )
@@ -15726,7 +15796,7 @@ mainJump.reverseLookModeWithLabel =
 mainJump.reverseLookModeWithLabel.Size =
     UDim2.new(
         0,
-        31,
+        34,
         0,
         28
     )
@@ -15770,7 +15840,7 @@ mainJump.reverseLookModeSoloLabel =
 mainJump.reverseLookModeSoloLabel.Size =
     UDim2.new(
         0,
-        31,
+        34,
         0,
         28
     )
@@ -15778,7 +15848,7 @@ mainJump.reverseLookModeSoloLabel.Size =
 mainJump.reverseLookModeSoloLabel.Position =
     UDim2.new(
         0,
-        34,
+        37,
         0,
         0
     )
@@ -15811,7 +15881,6 @@ mainJump.reverseLookModeSoloLabel.Parent =
 mainConnect(
     mainJump.reverseLookModeButton.MouseButton1Click:Connect(
         function()
-
             local newMode
 
             if mainJump.reverseLookMode
@@ -15827,19 +15896,18 @@ mainConnect(
             mainJump.setReverseLookMode(
                 newMode
             )
-
         end
     )
 )
 
---// Standalone Reverse Look ON/OFF.
+--// Reverse Look standalone toggle.
 mainJump.reverseLookToggle =
     Instance.new("TextButton")
 
 mainJump.reverseLookToggle.Size =
     UDim2.new(
         0,
-        55,
+        65,
         0,
         28
     )
@@ -15847,7 +15915,7 @@ mainJump.reverseLookToggle.Size =
 mainJump.reverseLookToggle.Position =
     UDim2.new(
         1,
-        -125,
+        -75,
         0.5,
         -14
     )
@@ -15863,7 +15931,7 @@ mainJump.reverseLookToggle.BorderSizePixel =
     0
 
 mainJump.reverseLookToggle.TextSize =
-    9
+    10
 
 mainJump.reverseLookToggle.Font =
     Enum.Font.GothamBold
@@ -15879,7 +15947,7 @@ mainJump.reverseLookToggle.AutoButtonColor =
     false
 
 mainJump.reverseLookToggle.Parent =
-    __UI.crouchSpamRow
+    __UI.reverseLookRow
 
 local reverseLookToggleCorner =
     Instance.new("UICorner")
@@ -15896,7 +15964,6 @@ reverseLookToggleCorner.Parent =
 mainConnect(
     mainJump.reverseLookToggle.MouseButton1Click:Connect(
         function()
-
             if mainJump.reverseLookMode
                 ~= "without"
             then
@@ -15906,7 +15973,6 @@ mainConnect(
             mainJump.setReverseLookEnabled(
                 not mainJump.reverseLookEnabled
             )
-
         end
     )
 )
@@ -15915,65 +15981,10 @@ mainJump.updateReverseLookUI(
     false
 )
 
-mainJump.crouchSpamToggle =
-    Instance.new("TextButton")
-mainJump.crouchSpamToggle.Size =
-    UDim2.new(
-        0,
-        55,
-        0,
-        28
-    )
-mainJump.crouchSpamToggle.Position =
-    UDim2.new(
-        1,
-        -65,
-        0.5,
-        -14
-    )
-mainJump.crouchSpamToggle.BackgroundColor3 =
-    Color3.fromRGB(
-        47,
-        52,
-        61
-    )
-mainJump.crouchSpamToggle.BorderSizePixel = 0
-mainJump.crouchSpamToggle.TextSize = 10
-mainJump.crouchSpamToggle.Font =
-    Enum.Font.GothamBold
-mainJump.crouchSpamToggle.TextColor3 =
-    Color3.fromRGB(
-        255,
-        255,
-        255
-    )
-mainJump.crouchSpamToggle.Parent =
-    __UI.crouchSpamRow
-
-__UI.crouchSpamToggleCorner =
-    Instance.new("UICorner")
-__UI.crouchSpamToggleCorner.CornerRadius =
-    UDim.new(
-        0,
-        5
-    )
-__UI.crouchSpamToggleCorner.Parent =
-    mainJump.crouchSpamToggle
-
-mainConnect(
-    mainJump.crouchSpamToggle.MouseButton1Click:Connect(
-        function()
-            mainJump.setCrouchSpamEnabled(
-                not mainJump.crouchSpamEnabled
-            )
-        end
-    )
-)
-
 __UI.benchTrimpRow =
     mainRow(
         "BENCH TRIMP",
-        8
+        9
     )
 
 local benchTrimpLabel =
@@ -16100,7 +16111,7 @@ mainConnect(
 __UI.hideRow =
     mainRow(
         "HIDE UI",
-        9
+        10
     )
 __UI.hideLabel =
     autoLabel:Clone()
