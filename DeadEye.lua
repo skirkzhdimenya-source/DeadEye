@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.194"
+local SCRIPT_VERSION = "1.195"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -13760,6 +13760,42 @@ function mainJump.setAutoJumpMode(mode, persist)
     mainJump.update()
 end
 
+function mainJump.setupAutoJumpCharacter(char)
+    if not char
+        or not char:IsA("Model")
+    then
+        return
+    end
+
+    mainJump.stopLegitJumpLoop()
+    mainJump.destroySensors()
+
+    mainJump.character =
+        char
+
+    mainJump.humanoid =
+        char:WaitForChild(
+            "Humanoid"
+        )
+
+    mainJump.root =
+        char:WaitForChild(
+            "HumanoidRootPart"
+        )
+
+    if mainJump.autoJumpMode == "legit" then
+        if mainJump.enabled then
+            mainJump.bindLegitJumpLoop()
+        end
+    else
+        pcall(function()
+            mainJump.createSensors(
+                char
+            )
+        end)
+    end
+end
+
 function mainJump.setDelay(value)
     value =
         tonumber(
@@ -17922,20 +17958,30 @@ mainConnect(
                 nil
 
             if genv.DEADEYE_MAIN_RUNNING then
-                mainJump.createSensors(char)
-                mainJump.bindBenchTrimp(char)
+                mainJump.setupAutoJumpCharacter(
+                    char
+                )
+                mainJump.bindBenchTrimp(
+                    char
+                )
             end
         end
     )
 )
+
 if LocalPlayer.Character
     and genv.DEADEYE_MAIN_RUNNING
 then
     task.spawn(
         function()
-            mainJump.createSensors(
+            if not genv.DEADEYE_MAIN_RUNNING then
+                return
+            end
+
+            mainJump.setupAutoJumpCharacter(
                 LocalPlayer.Character
             )
+
             mainJump.bindBenchTrimp(
                 LocalPlayer.Character
             )
