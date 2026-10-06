@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.203
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.204
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.203"
+local SCRIPT_VERSION = "1.204"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -16316,7 +16316,7 @@ mainJump.autoJumpModePicker.Size =
         0,
         94,
         0,
-        110
+        86
     )
 
 mainJump.autoJumpModePicker.Position =
@@ -16368,6 +16368,28 @@ autoJumpModePickerCorner.CornerRadius =
     )
 
 autoJumpModePickerCorner.Parent =
+    mainJump.autoJumpModePicker
+
+local autoJumpModePickerStroke =
+    Instance.new("UIStroke")
+
+autoJumpModePickerStroke.Color =
+    Color3.fromRGB(
+        78,
+        84,
+        96
+    )
+
+autoJumpModePickerStroke.Thickness =
+    1
+
+autoJumpModePickerStroke.Transparency =
+    0.18
+
+autoJumpModePickerStroke.ApplyStrokeMode =
+    Enum.ApplyStrokeMode.Border
+
+autoJumpModePickerStroke.Parent =
     mainJump.autoJumpModePicker
 
 local autoJumpModeScroll =
@@ -16445,13 +16467,13 @@ local autoJumpModePadding =
 autoJumpModePadding.PaddingTop =
     UDim.new(
         0,
-        6
+        4
     )
 
 autoJumpModePadding.PaddingBottom =
     UDim.new(
         0,
-        6
+        4
     )
 
 autoJumpModePadding.Parent =
@@ -16573,8 +16595,11 @@ local function positionAutoJumpModePicker()
     local x =
         buttonPosition.X
         - mainPosition.X
-        + button.AbsoluteSize.X
-        - picker.AbsoluteSize.X
+        + (
+            button.AbsoluteSize.X
+            - picker.AbsoluteSize.X
+        )
+        / 2
 
     local y =
         buttonPosition.Y
@@ -16611,6 +16636,85 @@ mainConnect(
             if picker.Visible then
                 positionAutoJumpModePicker()
             end
+        end
+    )
+)
+
+local function closeAutoJumpModePicker()
+    if not mainJump.autoJumpModePicker
+        or not mainJump.autoJumpModePicker.Visible
+    then
+        return
+    end
+
+    mainJump.autoJumpModePicker.Visible =
+        false
+
+    pcall(function()
+        __UI.setAutoJumpModePickerHoverSuppressed(
+            false
+        )
+    end)
+end
+
+mainConnect(
+    UserInputService.InputBegan:Connect(
+        function(input, gameProcessed)
+            if gameProcessed then
+                return
+            end
+
+            if input.UserInputType ~=
+                    Enum.UserInputType.MouseButton1
+                and input.UserInputType ~=
+                    Enum.UserInputType.Touch
+            then
+                return
+            end
+
+            local picker =
+                mainJump.autoJumpModePicker
+
+            local button =
+                mainJump.autoJumpModeButton
+
+            if not picker
+                or not picker.Visible
+            then
+                return
+            end
+
+            local inputPosition =
+                input.Position
+
+            local function inside(guiObject)
+                if not guiObject
+                    or not guiObject.Visible
+                then
+                    return false
+                end
+
+                local position =
+                    guiObject.AbsolutePosition
+
+                local size =
+                    guiObject.AbsoluteSize
+
+                return inputPosition.X >= position.X
+                    and inputPosition.X <= position.X + size.X
+                    and inputPosition.Y >= position.Y
+                    and inputPosition.Y <= position.Y + size.Y
+            end
+
+            --// Clicking the selector itself is handled by its own
+            --// MouseButton1Click connection; do not close it here.
+            if inside(picker)
+                or inside(button)
+            then
+                return
+            end
+
+            closeAutoJumpModePicker()
         end
     )
 )
