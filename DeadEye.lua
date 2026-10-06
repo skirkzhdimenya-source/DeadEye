@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.150
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.151
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.150"
+local SCRIPT_VERSION = "1.151"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -95,6 +95,11 @@ end
 if genv.DEADEYE_MAIN_AIR_TURN_CLEANUP then
     pcall(function()
         genv.DEADEYE_MAIN_AIR_TURN_CLEANUP()
+    end)
+end
+if genv.DEADEYE_REVERSE_LOOK_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_REVERSE_LOOK_CLEANUP()
     end)
 end
 if genv.DEADEYE_RAGE_LOOK_CLEANUP then
@@ -170,6 +175,8 @@ local savedConfig = {
         airTurnHotkey = "O",
         crouchSpamDelay = 0.03,
         crouchSpamHotkey = "I",
+        reverseLookMode = "without",
+        reverseLookEnabled = false,
         benchTrimpHotkey = "P",
         benchTrimpEnabled = false
     },
@@ -246,6 +253,16 @@ function loadSavedConfig()
 
     if savedConfig.main.rageLook ~= true then
         savedConfig.main.rageLook = false
+    end
+
+    if savedConfig.main.reverseLookMode ~= "with"
+        and savedConfig.main.reverseLookMode ~= "without"
+    then
+        savedConfig.main.reverseLookMode = "without"
+    end
+
+    if savedConfig.main.reverseLookEnabled ~= true then
+        savedConfig.main.reverseLookEnabled = false
     end
 
     if type(decoded.gui) == "table" then
@@ -10203,6 +10220,8 @@ local mainJump = {
     crouchSpamEnabled = false,
     crouchSpamDelay = 0.03,
     crouchSpamHotkeyName = "I",
+    reverseLookMode = "without",
+    reverseLookEnabled = false,
     benchTrimpEnabled = false,
     benchTrimpHotkeyName = "P",
     benchTrimpStateConnection = nil,
@@ -10248,6 +10267,16 @@ local mainJump = {
     rageLookSavedCFrame = nil,
     rageLookCameraSpoofed = false,
     rageLookMode = nil,
+    reverseLookHookInstalled = false,
+    reverseLookSetFunction = nil,
+    reverseLookOriginalSet = nil,
+    reverseLookGetFunction = nil,
+    reverseLookOriginalGet = nil,
+    reverseLookModeButton = nil,
+    reverseLookModeKnob = nil,
+    reverseLookModeWithLabel = nil,
+    reverseLookModeSoloLabel = nil,
+    reverseLookToggle = nil,
     frontSensorTouchConnection = nil,
     connections = {}
 }
@@ -10318,6 +10347,16 @@ mainJump.rageLookEnabled =
     savedConfig.main
     and savedConfig.main.rageLook == true
     or false
+mainJump.reverseLookMode =
+    savedConfig.main
+    and savedConfig.main.reverseLookMode
+        == "with"
+    and "with"
+    or "without"
+mainJump.reverseLookEnabled =
+    savedConfig.main
+    and savedConfig.main.reverseLookEnabled == true
+    or false
 mainJump.airTurnEnabled =
     savedConfig.main
     and savedConfig.main.airTurn == true
@@ -10363,6 +10402,8 @@ function mainJump.saveConfig()
         airTurnHotkey = mainJump.airTurnHotkeyName,
         crouchSpamDelay = mainJump.crouchSpamDelay,
         crouchSpamHotkey = mainJump.crouchSpamHotkeyName,
+        reverseLookMode = mainJump.reverseLookMode,
+        reverseLookEnabled = mainJump.reverseLookEnabled,
         benchTrimpHotkey = mainJump.benchTrimpHotkeyName,
         benchTrimpEnabled = mainJump.benchTrimpEnabled
     }
@@ -11702,6 +11743,663 @@ function mainJump.setLookEnabled(state)
     mainJump.update()
 end
 
+--// =========================================================
+--// REVERSE GAME LOOK
+--//
+--// Integrated version of the confirmed standalone v1.04 test.
+--//
+--// WITH:
+--//   Reverse Look is active only while CROUCH SPAM is active.
+--//
+--// WITHOUT / SOLO:
+--//   Reverse Look has its own ON/OFF button.
+--//
+--// REVERSE LOOK:
+--//   DataRegistry.Set("LookCFrame", value)
+--//   -> yaw +180°
+--//
+--// A/D COMPENSATION:
+--//   DataRegistry.Get("MoveDirection")
+--//   -> X *= -1
+--//
+--// IMPORTANT:
+--//   CameraInput is NOT modified.
+--//   workspace.CurrentCamera.CFrame is NOT modified.
+--//   HumanoidRootPart.CFrame is NOT modified directly.
+--//   LookY is NOT modified.
+--// =========================================================
+
+local REVERSE_LOOK_YAW =
+    math.rad(180)
+
+local ReverseLookTweenService =
+    game:GetService("TweenService")
+
+local reverseLookUITweens = {}
+
+local function reverseLookTween(
+    object,
+    properties
+)
+    if not object then
+        return
+    end
+
+    local oldTween =
+        reverseLookUITweens[object]
+
+    if oldTween then
+        pcall(function()
+            oldTween:Cancel()
+        end)
+    end
+
+    local tween
+
+    local success =
+        pcall(function()
+            tween =
+                ReverseLookTweenService:Create(
+                    object,
+                    TweenInfo.new(
+                        0.18,
+                        Enum.EasingStyle.Quart,
+                        Enum.EasingDirection.Out
+                    ),
+                    properties
+                )
+        end)
+
+    if not success
+        or not tween
+    then
+        return
+    end
+
+    reverseLookUITweens[object] =
+        tween
+
+    tween:Play()
+end
+
+function mainJump.isReverseLookActive()
+
+    if cleaned then
+        return false
+    end
+
+    if mainJump.reverseLookMode
+        == "with"
+    then
+        return mainJump.crouchSpamEnabled == true
+    end
+
+    return mainJump.reverseLookEnabled == true
+end
+
+function mainJump.getReverseLookCFrame(
+    realCFrame
+)
+
+    if typeof(realCFrame) ~= "CFrame" then
+        return nil
+    end
+
+    local lookVector =
+        realCFrame.LookVector
+
+    local flatLook =
+        Vector3.new(
+            lookVector.X,
+            0,
+            lookVector.Z
+        )
+
+    if flatLook.Magnitude < 0.000001 then
+        return realCFrame
+    end
+
+    flatLook =
+        flatLook.Unit
+
+    local pitch =
+        math.asin(
+            math.clamp(
+                lookVector.Y,
+                -1,
+                1
+            )
+        )
+
+    local baseCFrame =
+        CFrame.lookAt(
+            realCFrame.Position,
+            realCFrame.Position + flatLook,
+            Vector3.yAxis
+        )
+
+    return
+        baseCFrame
+        * CFrame.Angles(
+            0,
+            REVERSE_LOOK_YAW,
+            0
+        )
+        * CFrame.Angles(
+            pitch,
+            0,
+            0
+        )
+end
+
+function mainJump.findReverseLookRegistry()
+
+    local object =
+        getCharacterObject()
+
+    if not object
+        or not object.DataRegistry
+    then
+        return nil
+    end
+
+    return object.DataRegistry
+end
+
+function mainJump.installReverseLookHooks()
+
+    if mainJump.reverseLookHookInstalled then
+        return true
+    end
+
+    if type(hookfunction) ~= "function" then
+        warn(
+            "[DeadEye] Reverse Look: hookfunction unavailable"
+        )
+        return false
+    end
+
+    local registry =
+        mainJump.findReverseLookRegistry()
+
+    if not registry then
+        warn(
+            "[DeadEye] Reverse Look: DataRegistry not found"
+        )
+        return false
+    end
+
+    local setTarget
+    local getTarget
+
+    pcall(function()
+        setTarget =
+            registry.Set
+
+        getTarget =
+            registry.Get
+    end)
+
+    if type(setTarget) ~= "function" then
+        warn(
+            "[DeadEye] Reverse Look: DataRegistry.Set not found"
+        )
+        return false
+    end
+
+    if type(getTarget) ~= "function" then
+        warn(
+            "[DeadEye] Reverse Look: DataRegistry.Get not found"
+        )
+        return false
+    end
+
+    local savedSet
+    local savedGet
+
+    local setSuccess =
+        pcall(function()
+
+            savedSet =
+                hookfunction(
+                    setTarget,
+                    function(
+                        self,
+                        key,
+                        value,
+                        ...
+                    )
+
+                        if key == "LookCFrame"
+                            and typeof(value)
+                                == "CFrame"
+                            and mainJump.isReverseLookActive()
+                        then
+
+                            local fakeCFrame =
+                                mainJump.getReverseLookCFrame(
+                                    value
+                                )
+
+                            if fakeCFrame then
+                                return savedSet(
+                                    self,
+                                    key,
+                                    fakeCFrame,
+                                    ...
+                                )
+                            end
+                        end
+
+                        return savedSet(
+                            self,
+                            key,
+                            value,
+                            ...
+                        )
+                    end
+                )
+
+        end)
+
+    if not setSuccess
+        or type(savedSet) ~= "function"
+    then
+
+        warn(
+            "[DeadEye] Reverse Look: failed to hook DataRegistry.Set"
+        )
+
+        return false
+    end
+
+    mainJump.reverseLookSetFunction =
+        setTarget
+
+    mainJump.reverseLookOriginalSet =
+        savedSet
+
+    local getSuccess =
+        pcall(function()
+
+            savedGet =
+                hookfunction(
+                    getTarget,
+                    function(
+                        self,
+                        key,
+                        ...
+                    )
+
+                        local results =
+                            table.pack(
+                                savedGet(
+                                    self,
+                                    key,
+                                    ...
+                                )
+                            )
+
+                        if key == "MoveDirection"
+                            and typeof(results[1])
+                                == "Vector3"
+                            and mainJump.isReverseLookActive()
+                        then
+
+                            local value =
+                                results[1]
+
+                            results[1] =
+                                Vector3.new(
+                                    -value.X,
+                                    value.Y,
+                                    value.Z
+                                )
+
+                        end
+
+                        return table.unpack(
+                            results,
+                            1,
+                            results.n
+                        )
+                    end
+                )
+
+        end)
+
+    if not getSuccess
+        or type(savedGet) ~= "function"
+    then
+
+        pcall(function()
+            hookfunction(
+                setTarget,
+                savedSet
+            )
+        end)
+
+        mainJump.reverseLookSetFunction =
+            nil
+
+        mainJump.reverseLookOriginalSet =
+            nil
+
+        warn(
+            "[DeadEye] Reverse Look: failed to hook DataRegistry.Get"
+        )
+
+        return false
+    end
+
+    mainJump.reverseLookGetFunction =
+        getTarget
+
+    mainJump.reverseLookOriginalGet =
+        savedGet
+
+    mainJump.reverseLookHookInstalled =
+        true
+
+    return true
+end
+
+function mainJump.uninstallReverseLookHooks()
+
+    local setTarget =
+        mainJump.reverseLookSetFunction
+
+    local savedSet =
+        mainJump.reverseLookOriginalSet
+
+    local getTarget =
+        mainJump.reverseLookGetFunction
+
+    local savedGet =
+        mainJump.reverseLookOriginalGet
+
+    if setTarget
+        and savedSet
+        and type(hookfunction) == "function"
+    then
+        pcall(function()
+            hookfunction(
+                setTarget,
+                savedSet
+            )
+        end)
+    end
+
+    if getTarget
+        and savedGet
+        and type(hookfunction) == "function"
+    then
+        pcall(function()
+            hookfunction(
+                getTarget,
+                savedGet
+            )
+        end)
+    end
+
+    mainJump.reverseLookSetFunction =
+        nil
+
+    mainJump.reverseLookOriginalSet =
+        nil
+
+    mainJump.reverseLookGetFunction =
+        nil
+
+    mainJump.reverseLookOriginalGet =
+        nil
+
+    mainJump.reverseLookHookInstalled =
+        false
+end
+
+function mainJump.setReverseLookEnabled(
+    state,
+    persist
+)
+
+    mainJump.reverseLookEnabled =
+        state and true or false
+
+    if not mainJump.reverseLookHookInstalled then
+        mainJump.installReverseLookHooks()
+    end
+
+    if persist ~= false then
+        mainJump.saveConfig()
+    end
+
+    mainJump.update()
+end
+
+function mainJump.setReverseLookMode(
+    mode
+)
+
+    if mode ~= "with"
+        and mode ~= "without"
+    then
+        mode = "without"
+    end
+
+    mainJump.reverseLookMode =
+        mode
+
+    if not mainJump.reverseLookHookInstalled then
+        mainJump.installReverseLookHooks()
+    end
+
+    mainJump.saveConfig()
+    mainJump.update()
+end
+
+function mainJump.updateReverseLookUI(
+    animated
+)
+
+    local mode =
+        mainJump.reverseLookMode
+        == "with"
+        and "with"
+        or "without"
+
+    if mainJump.reverseLookModeButton
+        and mainJump.reverseLookModeKnob
+        and mainJump.reverseLookModeWithLabel
+        and mainJump.reverseLookModeSoloLabel
+    then
+
+        local knobPosition
+
+        if mode == "with" then
+            knobPosition =
+                UDim2.new(
+                    0,
+                    2,
+                    0.5,
+                    -12
+                )
+        else
+            knobPosition =
+                UDim2.new(
+                    0,
+                    34,
+                    0.5,
+                    -12
+                )
+        end
+
+        if animated then
+            reverseLookTween(
+                mainJump.reverseLookModeKnob,
+                {
+                    Position = knobPosition
+                }
+            )
+
+            reverseLookTween(
+                mainJump.reverseLookModeWithLabel,
+                {
+                    TextColor3 =
+                        mode == "with"
+                        and Color3.fromRGB(
+                            255,
+                            255,
+                            255
+                        )
+                        or Color3.fromRGB(
+                            145,
+                            145,
+                            145
+                        )
+                }
+            )
+
+            reverseLookTween(
+                mainJump.reverseLookModeSoloLabel,
+                {
+                    TextColor3 =
+                        mode == "without"
+                        and Color3.fromRGB(
+                            255,
+                            255,
+                            255
+                        )
+                        or Color3.fromRGB(
+                            145,
+                            145,
+                            145
+                        )
+                }
+            )
+
+            reverseLookTween(
+                mainJump.reverseLookModeButton,
+                {
+                    BackgroundColor3 =
+                        mode == "with"
+                        and Color3.fromRGB(
+                            34,
+                            34,
+                            34
+                        )
+                        or Color3.fromRGB(
+                            34,
+                            34,
+                            34
+                        )
+                }
+            )
+        else
+            mainJump.reverseLookModeKnob.Position =
+                knobPosition
+
+            mainJump.reverseLookModeWithLabel.TextColor3 =
+                mode == "with"
+                and Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+                or Color3.fromRGB(
+                    145,
+                    145,
+                    145
+                )
+
+            mainJump.reverseLookModeSoloLabel.TextColor3 =
+                mode == "without"
+                and Color3.fromRGB(
+                    255,
+                    255,
+                    255
+                )
+                or Color3.fromRGB(
+                    145,
+                    145,
+                    145
+                )
+        end
+
+    end
+
+    if mainJump.reverseLookToggle then
+
+        if mode == "with" then
+
+            mainJump.reverseLookToggle.Text =
+                "AUTO"
+
+            mainJump.reverseLookToggle.Active =
+                false
+
+            if animated then
+                reverseLookTween(
+                    mainJump.reverseLookToggle,
+                    {
+                        BackgroundColor3 =
+                            Color3.fromRGB(
+                                47,
+                                52,
+                                61
+                            )
+                    }
+                )
+            else
+                mainJump.reverseLookToggle.BackgroundColor3 =
+                    Color3.fromRGB(
+                        47,
+                        52,
+                        61
+                    )
+            end
+
+        else
+
+            mainJump.reverseLookToggle.Active =
+                true
+
+            mainJump.reverseLookToggle.Text =
+                mainJump.reverseLookEnabled
+                and "ON"
+                or "OFF"
+
+            local targetColor =
+                mainJump.reverseLookEnabled
+                and Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+                or Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+
+            if animated then
+                reverseLookTween(
+                    mainJump.reverseLookToggle,
+                    {
+                        BackgroundColor3 =
+                            targetColor
+                    }
+                )
+            else
+                mainJump.reverseLookToggle.BackgroundColor3 =
+                    targetColor
+            end
+
+        end
+
+    end
+end
+
 function mainJump.update()
     if not mainJump.toggle then
         return
@@ -11813,6 +12511,10 @@ function mainJump.update()
                 )
         end
     end
+
+    mainJump.updateReverseLookUI(
+        true
+    )
 
     if mainJump.benchTrimpToggle then
         if mainJump.benchTrimpEnabled then
@@ -14798,14 +15500,14 @@ mainJump.crouchSpamHotkeyBox =
 mainJump.crouchSpamHotkeyBox.Size =
     UDim2.new(
         0,
-        72,
+        60,
         0,
         28
     )
 mainJump.crouchSpamHotkeyBox.Position =
     UDim2.new(
         1,
-        -235,
+        -327,
         0.5,
         -14
     )
@@ -14855,14 +15557,14 @@ mainJump.crouchSpamDelayBox =
 mainJump.crouchSpamDelayBox.Size =
     UDim2.new(
         0,
-        72,
+        60,
         0,
         28
     )
 mainJump.crouchSpamDelayBox.Position =
     UDim2.new(
         1,
-        -155,
+        -262,
         0.5,
         -14
     )
@@ -14917,19 +15619,315 @@ mainConnect(
     )
 )
 
+--// REVERSE LOOK MODE
+--// WITH = follows CROUCH SPAM
+--// SOLO = independent ON/OFF
+
+mainJump.reverseLookModeButton =
+    Instance.new("TextButton")
+
+mainJump.reverseLookModeButton.Size =
+    UDim2.new(
+        0,
+        67,
+        0,
+        28
+    )
+
+mainJump.reverseLookModeButton.Position =
+    UDim2.new(
+        1,
+        -197,
+        0.5,
+        -14
+    )
+
+mainJump.reverseLookModeButton.BackgroundColor3 =
+    Color3.fromRGB(
+        34,
+        34,
+        34
+    )
+
+mainJump.reverseLookModeButton.BorderSizePixel =
+    0
+
+mainJump.reverseLookModeButton.AutoButtonColor =
+    false
+
+mainJump.reverseLookModeButton.Text =
+    ""
+
+mainJump.reverseLookModeButton.Parent =
+    __UI.crouchSpamRow
+
+local reverseLookModeCorner =
+    Instance.new("UICorner")
+
+reverseLookModeCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+reverseLookModeCorner.Parent =
+    mainJump.reverseLookModeButton
+
+mainJump.reverseLookModeKnob =
+    Instance.new("Frame")
+
+mainJump.reverseLookModeKnob.Size =
+    UDim2.new(
+        0,
+        31,
+        0,
+        24
+    )
+
+mainJump.reverseLookModeKnob.Position =
+    UDim2.new(
+        0,
+        34,
+        0.5,
+        -12
+    )
+
+mainJump.reverseLookModeKnob.BackgroundColor3 =
+    Color3.fromRGB(
+        68,
+        74,
+        84
+    )
+
+mainJump.reverseLookModeKnob.BorderSizePixel =
+    0
+
+mainJump.reverseLookModeKnob.Active =
+    false
+
+mainJump.reverseLookModeKnob.Parent =
+    mainJump.reverseLookModeButton
+
+local reverseLookModeKnobCorner =
+    Instance.new("UICorner")
+
+reverseLookModeKnobCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+reverseLookModeKnobCorner.Parent =
+    mainJump.reverseLookModeKnob
+
+mainJump.reverseLookModeWithLabel =
+    Instance.new("TextLabel")
+
+mainJump.reverseLookModeWithLabel.Size =
+    UDim2.new(
+        0,
+        31,
+        0,
+        28
+    )
+
+mainJump.reverseLookModeWithLabel.Position =
+    UDim2.new(
+        0,
+        2,
+        0,
+        0
+    )
+
+mainJump.reverseLookModeWithLabel.BackgroundTransparency =
+    1
+
+mainJump.reverseLookModeWithLabel.Text =
+    "WITH"
+
+mainJump.reverseLookModeWithLabel.TextSize =
+    8
+
+mainJump.reverseLookModeWithLabel.Font =
+    Enum.Font.GothamBold
+
+mainJump.reverseLookModeWithLabel.TextColor3 =
+    Color3.fromRGB(
+        145,
+        145,
+        145
+    )
+
+mainJump.reverseLookModeWithLabel.TextXAlignment =
+    Enum.TextXAlignment.Center
+
+mainJump.reverseLookModeWithLabel.Parent =
+    mainJump.reverseLookModeButton
+
+mainJump.reverseLookModeSoloLabel =
+    Instance.new("TextLabel")
+
+mainJump.reverseLookModeSoloLabel.Size =
+    UDim2.new(
+        0,
+        31,
+        0,
+        28
+    )
+
+mainJump.reverseLookModeSoloLabel.Position =
+    UDim2.new(
+        0,
+        34,
+        0,
+        0
+    )
+
+mainJump.reverseLookModeSoloLabel.BackgroundTransparency =
+    1
+
+mainJump.reverseLookModeSoloLabel.Text =
+    "SOLO"
+
+mainJump.reverseLookModeSoloLabel.TextSize =
+    8
+
+mainJump.reverseLookModeSoloLabel.Font =
+    Enum.Font.GothamBold
+
+mainJump.reverseLookModeSoloLabel.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+mainJump.reverseLookModeSoloLabel.TextXAlignment =
+    Enum.TextXAlignment.Center
+
+mainJump.reverseLookModeSoloLabel.Parent =
+    mainJump.reverseLookModeButton
+
+mainConnect(
+    mainJump.reverseLookModeButton.MouseButton1Click:Connect(
+        function()
+
+            local newMode
+
+            if mainJump.reverseLookMode
+                == "with"
+            then
+                newMode =
+                    "without"
+            else
+                newMode =
+                    "with"
+            end
+
+            mainJump.setReverseLookMode(
+                newMode
+            )
+
+        end
+    )
+)
+
+--// Standalone Reverse Look ON/OFF.
+mainJump.reverseLookToggle =
+    Instance.new("TextButton")
+
+mainJump.reverseLookToggle.Size =
+    UDim2.new(
+        0,
+        55,
+        0,
+        28
+    )
+
+mainJump.reverseLookToggle.Position =
+    UDim2.new(
+        1,
+        -125,
+        0.5,
+        -14
+    )
+
+mainJump.reverseLookToggle.BackgroundColor3 =
+    Color3.fromRGB(
+        47,
+        52,
+        61
+    )
+
+mainJump.reverseLookToggle.BorderSizePixel =
+    0
+
+mainJump.reverseLookToggle.TextSize =
+    9
+
+mainJump.reverseLookToggle.Font =
+    Enum.Font.GothamBold
+
+mainJump.reverseLookToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+mainJump.reverseLookToggle.AutoButtonColor =
+    false
+
+mainJump.reverseLookToggle.Parent =
+    __UI.crouchSpamRow
+
+local reverseLookToggleCorner =
+    Instance.new("UICorner")
+
+reverseLookToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+reverseLookToggleCorner.Parent =
+    mainJump.reverseLookToggle
+
+mainConnect(
+    mainJump.reverseLookToggle.MouseButton1Click:Connect(
+        function()
+
+            if mainJump.reverseLookMode
+                ~= "without"
+            then
+                return
+            end
+
+            mainJump.setReverseLookEnabled(
+                not mainJump.reverseLookEnabled
+            )
+
+        end
+    )
+)
+
+mainJump.updateReverseLookUI(
+    false
+)
+
 mainJump.crouchSpamToggle =
     Instance.new("TextButton")
 mainJump.crouchSpamToggle.Size =
     UDim2.new(
         0,
-        65,
+        55,
         0,
         28
     )
 mainJump.crouchSpamToggle.Position =
     UDim2.new(
         1,
-        -75,
+        -65,
         0.5,
         -14
     )
@@ -15423,7 +16421,14 @@ then
         end
     )
 end
+pcall(function()
+    mainJump.installReverseLookHooks()
+end)
+
 mainJump.setAirTurnSpeed(
+    mainJump.airTurnSpeed,
+    false
+)mainJump.setAirTurnSpeed(
     mainJump.airTurnSpeed,
     false
 )
@@ -15462,6 +16467,27 @@ genv.DEADEYE_MAIN_AIR_TURN_CLEANUP =
     function()
         pcall(function()
             mainJump.unbindAirTurnRender()
+        end)
+    end
+
+genv.DEADEYE_REVERSE_LOOK =
+    function(state)
+        mainJump.setReverseLookEnabled(
+            state
+        )
+    end
+
+genv.DEADEYE_REVERSE_LOOK_CLEANUP =
+    function()
+        pcall(function()
+            mainJump.setReverseLookEnabled(
+                false,
+                false
+            )
+        end)
+
+        pcall(function()
+            mainJump.uninstallReverseLookHooks()
         end)
     end
 
@@ -20990,6 +22016,10 @@ local function cleanup()
     end)
 
     pcall(function()
+        mainJump.uninstallReverseLookHooks()
+    end)
+
+    pcall(function()
         mainJump.destroySensors()
         mainJump.manualJumpActive = false
         mainJump.lookAutoJumpCycle = false
@@ -21073,6 +22103,12 @@ local function cleanup()
     end)
 
     genv.EMOTE_SWAPPER_CLEANUP =
+        nil
+
+    genv.DEADEYE_REVERSE_LOOK_CLEANUP =
+        nil
+
+    genv.DEADEYE_REVERSE_LOOK =
         nil
 end
 genv.EMOTE_SWAPPER_CLEANUP =
