@@ -1350,65 +1350,515 @@ SOURCE #5
 PATH:
 Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule
 
-PURPOSE:
-Основной клиентский CameraModule. Управляет:
-    - CameraMode
-    - выбором camera controller
-    - LockFirstPerson
-    - TransparencyController
-    - CameraSubject
-    - CameraType
-    - обновлением камеры на RenderStep
-    - CameraInput
-    - Occlusion modules
-
-CONFIRMED FIRST PERSON PATH:
-    GetCameraMovementModeFromSettings()
-    -> если Players.LocalPlayer.CameraMode
-       == Enum.CameraMode.LockFirstPerson,
-       принудительно выбирается Classic
-
-    OnLocalPlayerCameraPropertyChanged("CameraMode")
-    -> ActivateCameraController()
-    -> если LockFirstPerson:
-       UpdateForDistancePropertyChange()
-
-CONFIRMED TRANSPARENCY CONNECTION:
-    t.new()
-    -> activeTransparencyController = v_u_14.new()
-
-    OnCameraSubjectChanged()
-    -> activeTransparencyController:SetSubject(CameraSubject)
-
-IMPORTANT:
-    В самом CameraModule нет прямой логики изменения
-    Head.Transparency / LocalTransparencyModifier.
-    За визуальное скрытие персонажа отвечает отдельный:
-
-    Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
-
 SOURCE CONTENT:
-    Предоставлен пользователем в чате 2026-10-06.
-    Это исходник CameraModule с функциями:
-        t.new()
-        GetCameraMovementModeFromSettings()
-        ActivateOcclusionModule()
-        ActivateCameraController()
-        OnCameraSubjectChanged()
-        OnCameraTypeChanged()
-        OnCurrentCameraChanged()
-        OnLocalPlayerCameraPropertyChanged()
-        OnUserGameSettingsPropertyChanged()
-        OnPreferredInputChanged()
-        Update()
-        OnCharacterAdded()
-        OnCharacterRemoving()
-        OnPlayerAdded()
-        OnPlayerRemoving()
-        OnMouseLockToggled()
 
-NEXT REQUIRED SOURCE:
-    Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
+local v_u_1 = require((game:GetService("ReplicatedStorage"):WaitForChild("Services"):WaitForChild("Client"):WaitForChild("CameraService")))
+local t = {}
+t.__index = t
+local t2 = {
+	"CameraMinZoomDistance",
+	"CameraMaxZoomDistance",
+	"CameraMode",
+	"DevCameraOcclusionMode",
+	"DevComputerCameraMode",
+	"DevTouchCameraMode",
+	"DevComputerMovementMode",
+	"DevTouchMovementMode",
+	"DevEnableMouseLock"
+}
+local t3 = {
+	"ComputerCameraMovementMode",
+	"ComputerMovementMode",
+	"ControlMode",
+	"GamepadCameraSensitivity",
+	"MouseSensitivity",
+	"RotationType",
+	"TouchCameraMovementMode",
+	"TouchMovementMode"
+}
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local VRService = game:GetService("VRService")
+local UserGameSettings = UserSettings():GetService("UserGameSettings")
+local CommonUtils = script.Parent:WaitForChild("CommonUtils")
+local v_u_2 = require((CommonUtils:WaitForChild("ConnectionUtil")))
+local v3 = require((CommonUtils:WaitForChild("FlagUtil")))
+local v_u_4 = require((script:WaitForChild("CameraUtils")))
+local v_u_5 = require((script:WaitForChild("CameraInput")))
+local v_u_6 = require((script:WaitForChild("ClassicCamera")))
+local v_u_7 = require((script:WaitForChild("OrbitalCamera")))
+local v_u_8 = require((script:WaitForChild("LegacyCamera")))
+local v_u_9 = require((script:WaitForChild("VehicleCamera")))
+local v_u_10 = require((script:WaitForChild("VRCamera")))
+local v_u_11 = require((script:WaitForChild("VRVehicleCamera")))
+local v_u_12 = require((script:WaitForChild("Invisicam")))
+local v_u_13 = require((script:WaitForChild("Poppercam")))
+local v_u_14 = require((script:WaitForChild("TransparencyController")))
+local v_u_15 = require((script:WaitForChild("MouseLockController")))
+local t4 = {}
+local t5 = {}
+if not Players.LocalPlayer then
+	return {}
+end
+local LocalPlayer = Players.LocalPlayer
+assert(LocalPlayer, "Strict typing check")
+local PlayerScripts = Players.LocalPlayer:WaitForChild("PlayerScripts")
+PlayerScripts:RegisterTouchCameraMovementMode(Enum.TouchCameraMovementMode.Default)
+PlayerScripts:RegisterTouchCameraMovementMode(Enum.TouchCameraMovementMode.Follow)
+PlayerScripts:RegisterTouchCameraMovementMode(Enum.TouchCameraMovementMode.Classic)
+PlayerScripts:RegisterComputerCameraMovementMode(Enum.ComputerCameraMovementMode.Default)
+PlayerScripts:RegisterComputerCameraMovementMode(Enum.ComputerCameraMovementMode.Follow)
+PlayerScripts:RegisterComputerCameraMovementMode(Enum.ComputerCameraMovementMode.Classic)
+PlayerScripts:RegisterComputerCameraMovementMode(Enum.ComputerCameraMovementMode.CameraToggle)
+local UserPlayerConnectionMemoryLeak = v3.getUserFlag("UserPlayerConnectionMemoryLeak")
+local UserPSFixCameraControllerReset = v3.getUserFlag("UserPSFixCameraControllerReset")
+function t.new()
+	--[[ line: 146 | upvalues: (copy) v_u_14, (copy) UserPlayerConnectionMemoryLeak, (copy) v_u_2, (copy) t, (copy) Players, (copy) v_u_15, (copy) RunService, (copy) t2, (copy) t3, (copy) UserGameSettings, (copy) UserInputService]]
+	local t6 = { activeTransparencyController = v_u_14.new() }
+	local v16
+	if UserPlayerConnectionMemoryLeak then
+		v16 = v_u_2.new()
+	else
+		v16 = nil
+	end
+	t6.connectionUtil = v16
+	local v17 = t
+	local v_u_18 = setmetatable(t6, v17)
+	v_u_18.activeCameraController = nil
+	v_u_18.activeOcclusionModule = nil
+	v_u_18.activeMouseLockController = nil
+	v_u_18.currentComputerCameraMovementMode = nil
+	v_u_18.cameraSubjectChangedConn = nil
+	v_u_18.cameraTypeChangedConn = nil
+	for _, v19 in pairs((Players:GetPlayers())) do
+		v_u_18:OnPlayerAdded(v19)
+	end
+	Players.PlayerAdded:Connect(function(p20)
+		--[[ line: 169 | upvalues: (copy) v_u_18]]
+		v_u_18:OnPlayerAdded(p20)
+	end)
+	if UserPlayerConnectionMemoryLeak then
+		Players.PlayerRemoving:Connect(function(p21)
+			--[[ line: 174 | upvalues: (copy) v_u_18]]
+			v_u_18:OnPlayerRemoving(p21)
+		end)
+	end
+	v_u_18.activeTransparencyController:Enable(false)
+	v_u_18.activeMouseLockController = v_u_15.new()
+	local activeMouseLockController = v_u_18.activeMouseLockController
+	assert(activeMouseLockController, "Strict typing check")
+	local v22 = v_u_18.activeMouseLockController:GetBindableToggleEvent()
+	if v22 then
+		v22:Connect(function()
+			--[[ line: 187 | upvalues: (copy) v_u_18]]
+			v_u_18:OnMouseLockToggled()
+		end)
+	end
+	v_u_18:ActivateCameraController()
+	v_u_18:ActivateOcclusionModule(Players.LocalPlayer.DevCameraOcclusionMode)
+	v_u_18:OnCurrentCameraChanged()
+	RunService:BindToRenderStep("cameraRenderUpdate", Enum.RenderPriority.Camera.Value, function(p23)
+		--[[ line: 195 | upvalues: (copy) v_u_18]]
+		v_u_18:Update(p23)
+	end)
+	for _2, v_u_24 in pairs(t2) do
+		Players.LocalPlayer:GetPropertyChangedSignal(v_u_24):Connect(function()
+			--[[ line: 199 | upvalues: (copy) v_u_18, (copy) v_u_24]]
+			v_u_18:OnLocalPlayerCameraPropertyChanged(v_u_24)
+		end)
+	end
+	for _3, v_u_25 in pairs(t3) do
+		UserGameSettings:GetPropertyChangedSignal(v_u_25):Connect(function()
+			--[[ line: 205 | upvalues: (copy) v_u_18, (copy) v_u_25]]
+			v_u_18:OnUserGameSettingsPropertyChanged(v_u_25)
+		end)
+	end
+	game.Workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
+		--[[ line: 209 | upvalues: (copy) v_u_18]]
+		v_u_18:OnCurrentCameraChanged()
+	end)
+	UserInputService:GetPropertyChangedSignal("PreferredInput"):Connect(function()
+		--[[ line: 212 | upvalues: (copy) v_u_18]]
+		v_u_18:OnPreferredInputChanged()
+	end)
+	return v_u_18
+end
+function t.GetCameraMovementModeFromSettings(_4)
+	--[[ line: 219 | upvalues: (copy) Players, (copy) v_u_4, (copy) UserInputService, (copy) UserGameSettings]]
+	if Players.LocalPlayer.CameraMode == Enum.CameraMode.LockFirstPerson then
+		return v_u_4.ConvertCameraModeEnumToStandard(Enum.ComputerCameraMovementMode.Classic)
+	end
+	local v26, v27
+	if UserInputService.PreferredInput == Enum.PreferredInput.Touch then
+		v26 = v_u_4.ConvertCameraModeEnumToStandard(Players.LocalPlayer.DevTouchCameraMode)
+		v27 = v_u_4.ConvertCameraModeEnumToStandard(UserGameSettings.TouchCameraMovementMode)
+	else
+		v26 = v_u_4.ConvertCameraModeEnumToStandard(Players.LocalPlayer.DevComputerCameraMode)
+		v27 = v_u_4.ConvertCameraModeEnumToStandard(UserGameSettings.ComputerCameraMovementMode)
+	end
+	if v26 == Enum.DevComputerCameraMovementMode.UserChoice then
+		return v27
+	end
+	return v26
+end
+function t.ActivateOcclusionModule(p28, p29)
+	--[[ line: 244 | upvalues: (copy) v_u_13, (copy) v_u_12, (copy) t5, (copy) Players]]
+	local v30
+	if p29 == Enum.DevCameraOcclusionMode.Zoom then
+		v30 = v_u_13
+	else
+		if p29 ~= Enum.DevCameraOcclusionMode.Invisicam then
+			warn("CameraScript ActivateOcclusionModule called with unsupported mode")
+			return
+		end
+		v30 = v_u_12
+	end
+	p28.occlusionMode = p29
+	if p28.activeOcclusionModule and p28.activeOcclusionModule:GetOcclusionMode() == p29 then
+		if not p28.activeOcclusionModule:GetEnabled() then
+			p28.activeOcclusionModule:Enable(true)
+		end
+	else
+		local activeOcclusionModule = p28.activeOcclusionModule
+		p28.activeOcclusionModule = t5[v30]
+		if not p28.activeOcclusionModule then
+			p28.activeOcclusionModule = v30.new()
+			if p28.activeOcclusionModule then
+				t5[v30] = p28.activeOcclusionModule
+			end
+		end
+		if p28.activeOcclusionModule then
+			if p28.activeOcclusionModule:GetOcclusionMode() ~= p29 then
+				warn("CameraScript ActivateOcclusionModule mismatch: ", p28.activeOcclusionModule:GetOcclusionMode(), "~=", p29)
+			end
+			if activeOcclusionModule then
+				if activeOcclusionModule == p28.activeOcclusionModule then
+					warn("CameraScript ActivateOcclusionModule failure to detect already running correct module")
+				else
+					activeOcclusionModule:Enable(false)
+				end
+			end
+			if p29 == Enum.DevCameraOcclusionMode.Invisicam then
+				if Players.LocalPlayer.Character then
+					p28.activeOcclusionModule:CharacterAdded(Players.LocalPlayer.Character, Players.LocalPlayer)
+				end
+			else
+				for _5, v31 in pairs((Players:GetPlayers())) do
+					if v31 and v31.Character then
+						p28.activeOcclusionModule:CharacterAdded(v31.Character, v31)
+					end
+				end
+				p28.activeOcclusionModule:OnCameraSubjectChanged(game.Workspace.CurrentCamera.CameraSubject)
+			end
+			p28.activeOcclusionModule:Enable(true)
+		end
+	end
+end
+function t.ShouldUseVehicleCamera(p32)
+	--[[ line: 323 | upvalues: none]]
+	local CurrentCamera = workspace.CurrentCamera
+	if not CurrentCamera then
+		return false
+	end
+	local CameraType = CurrentCamera.CameraType
+	local CameraSubject = CurrentCamera.CameraSubject
+	local v33
+	if CameraType == Enum.CameraType.Custom then
+		v33 = true
+	else
+		v33 = CameraType == Enum.CameraType.Follow
+	end
+	local v34 = CameraSubject and CameraSubject:IsA("VehicleSeat") or false
+	local v35 = p32.occlusionMode ~= Enum.DevCameraOcclusionMode.Invisicam
+	if v34 then
+		if not v33 then
+			v35 = v33
+		end
+	else
+		v35 = v34
+	end
+	return v35
+end
+function t.ActivateCameraController(p36)
+	--[[ line: 339 | upvalues: (copy) v_u_8, (copy) VRService, (copy) v_u_10, (copy) v_u_6, (copy) v_u_7, (copy) v_u_11, (copy) v_u_9, (copy) t4, (copy) UserPSFixCameraControllerReset]]
+	local CameraType2 = workspace.CurrentCamera.CameraType
+	local v37 = p36:GetCameraMovementModeFromSettings()
+	local v38 = nil
+	if CameraType2 == Enum.CameraType.Scriptable then
+		if p36.activeCameraController then
+			p36.activeCameraController:Enable(false)
+			p36.activeCameraController = nil
+		end
+	else
+		if CameraType2 == Enum.CameraType.Custom then
+			v37 = p36:GetCameraMovementModeFromSettings()
+		elseif CameraType2 == Enum.CameraType.Track then
+			v37 = Enum.ComputerCameraMovementMode.Classic
+		elseif CameraType2 == Enum.CameraType.Follow then
+			v37 = Enum.ComputerCameraMovementMode.Follow
+		elseif CameraType2 == Enum.CameraType.Orbital then
+			v37 = Enum.ComputerCameraMovementMode.Orbital
+		elseif CameraType2 == Enum.CameraType.Attach or (CameraType2 == Enum.CameraType.Watch or CameraType2 == Enum.CameraType.Fixed) then
+			v38 = v_u_8
+		else
+			warn("CameraScript encountered an unhandled Camera.CameraType value: ", CameraType2)
+		end
+		if not v38 then
+			if VRService.VREnabled then
+				v38 = v_u_10
+			elseif v37 == Enum.ComputerCameraMovementMode.Classic or (v37 == Enum.ComputerCameraMovementMode.Follow or (v37 == Enum.ComputerCameraMovementMode.Default or v37 == Enum.ComputerCameraMovementMode.CameraToggle)) then
+				v38 = v_u_6
+			else
+				if v37 ~= Enum.ComputerCameraMovementMode.Orbital then
+					warn("ActivateCameraController did not select a module.")
+					return
+				end
+				v38 = v_u_7
+			end
+		end
+		if p36:ShouldUseVehicleCamera() then
+			if VRService.VREnabled then
+				v38 = v_u_11
+			else
+				v38 = v_u_9
+			end
+		end
+		local v39
+		if t4[v38] then
+			v39 = t4[v38]
+			if UserPSFixCameraControllerReset then
+				if v39.Reset and p36.activeCameraController ~= v39 then
+					v39:Reset()
+				end
+			elseif v39.Reset then
+				v39:Reset()
+			end
+		else
+			v39 = v38.new()
+			t4[v38] = v39
+		end
+		if p36.activeCameraController then
+			if p36.activeCameraController == v39 then
+				if not p36.activeCameraController:GetEnabled() then
+					p36.activeCameraController:Enable(true)
+				end
+			else
+				p36.activeCameraController:Enable(false)
+				p36.activeCameraController = v39
+				p36.activeCameraController:Enable(true)
+			end
+		elseif v39 ~= nil then
+			p36.activeCameraController = v39
+			local activeCameraController = p36.activeCameraController
+			assert(activeCameraController, "Strict typing check")
+			p36.activeCameraController:Enable(true)
+		end
+		if p36.activeCameraController then
+			p36.activeCameraController:SetCameraMovementMode(v37)
+			p36.activeCameraController:SetCameraType(CameraType2)
+		end
+	end
+end
+function t.OnCameraSubjectChanged(p40)
+	--[[ line: 445 | upvalues: none]]
+	local CurrentCamera2 = workspace.CurrentCamera
+	local v41
+	if CurrentCamera2 then
+		v41 = CurrentCamera2.CameraSubject
+	else
+		v41 = nil
+	end
+	if p40.activeTransparencyController then
+		p40.activeTransparencyController:SetSubject(v41)
+	end
+	if p40.activeOcclusionModule then
+		p40.activeOcclusionModule:OnCameraSubjectChanged(v41)
+	end
+	p40:ActivateCameraController()
+end
+function t.OnCameraTypeChanged(p42, p43)
+	--[[ line: 460 | upvalues: (copy) UserInputService, (copy) v_u_4]]
+	if p43 == Enum.CameraType.Scriptable and UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter then
+		v_u_4.restoreMouseBehavior()
+	end
+	p42:ActivateCameraController()
+end
+function t.OnCurrentCameraChanged(p_u_44)
+	--[[ line: 472 | upvalues: none]]
+	local CurrentCamera3 = game.Workspace.CurrentCamera
+	if CurrentCamera3 then
+		if p_u_44.cameraSubjectChangedConn then
+			p_u_44.cameraSubjectChangedConn:Disconnect()
+		end
+		if p_u_44.cameraTypeChangedConn then
+			p_u_44.cameraTypeChangedConn:Disconnect()
+		end
+		p_u_44.cameraSubjectChangedConn = CurrentCamera3:GetPropertyChangedSignal("CameraSubject"):Connect(function()
+			--[[ line: 484 | upvalues: (copy) p_u_44]]
+			p_u_44:OnCameraSubjectChanged()
+		end)
+		p_u_44.cameraTypeChangedConn = CurrentCamera3:GetPropertyChangedSignal("CameraType"):Connect(function()
+			--[[ line: 488 | upvalues: (copy) p_u_44, (copy) CurrentCamera3]]
+			p_u_44:OnCameraTypeChanged(CurrentCamera3.CameraType)
+		end)
+		p_u_44:OnCameraSubjectChanged()
+		p_u_44:OnCameraTypeChanged(CurrentCamera3.CameraType)
+	end
+end
+function t.OnLocalPlayerCameraPropertyChanged(p45: {[any]: any}, p46: string)
+	--[[ line: 496 | upvalues: (copy) Players]]
+	if p46 == "CameraMode" then
+		if Players.LocalPlayer.CameraMode == Enum.CameraMode.LockFirstPerson then
+			if not p45.activeCameraController or p45.activeCameraController:GetModuleName() ~= "ClassicCamera" then
+				p45:ActivateCameraController()
+			end
+			if p45.activeCameraController then
+				p45.activeCameraController:UpdateForDistancePropertyChange()
+			end
+		elseif Players.LocalPlayer.CameraMode == Enum.CameraMode.Classic then
+			p45:ActivateCameraController()
+		else
+			warn("Unhandled value for property player.CameraMode: ", Players.LocalPlayer.CameraMode)
+		end
+	elseif p46 == "DevComputerCameraMode" or p46 == "DevTouchCameraMode" then
+		p45:ActivateCameraController()
+		return
+	elseif p46 == "DevCameraOcclusionMode" then
+		p45:ActivateOcclusionModule(Players.LocalPlayer.DevCameraOcclusionMode)
+		return
+	elseif p46 == "CameraMinZoomDistance" or p46 == "CameraMaxZoomDistance" then
+		if p45.activeCameraController then
+			p45.activeCameraController:UpdateForDistancePropertyChange()
+		end
+	elseif p46 == "DevTouchMovementMode" then
+		return
+	elseif p46 ~= "DevComputerMovementMode" then
+		local _6 = p46 == "DevEnableMouseLock"
+	end
+end
+function t.OnUserGameSettingsPropertyChanged(p47: {[any]: any}, p48: string)
+	--[[ line: 538 | upvalues: none]]
+	if p48 == "ComputerCameraMovementMode" or p48 == "TouchCameraMovementMode" then
+		p47:ActivateCameraController()
+	end
+end
+function t.OnPreferredInputChanged(p49)
+	--[[ line: 544 | upvalues: none]]
+	p49:ActivateCameraController()
+end
+function t.Update(p50, p51)
+	--[[ line: 554 | upvalues: (copy) v_u_1, (copy) v_u_5]]
+	local v52, v53
+	if p50.activeCameraController then
+		p50.activeCameraController:SetIsMouseLocked(v_u_1.ShiftLockEnabled)
+		p50.activeCameraController.MinY = v_u_1.MinY
+		p50.activeCameraController.MaxY = v_u_1.MaxY
+		p50.activeCameraController:SetMouseLockOffset((v_u_1:GetShiftLockOffset()))
+		v52, v53 = p50.activeCameraController:Update(p51)
+		if v52 and v53 then
+			if p50.activeOcclusionModule then
+				v52, v53 = p50.activeOcclusionModule:Update(p51, v52, v53)
+			end
+			v52, v53 = v_u_1:ReturnCFrameAndFocus(v52, v53, p51)
+		end
+	else
+		v52, v53 = v_u_1:ReturnCFrameAndFocusWithoutController(p51)
+	end
+	if v52 and v53 then
+		local CurrentCamera4 = game.Workspace.CurrentCamera
+		CurrentCamera4.CFrame = v52
+		CurrentCamera4.Focus = v53
+		if game.Players.LocalPlayer then
+			local t7 = {
+				1,
+				0,
+				0,
+				0,
+				1,
+				0,
+				0,
+				0,
+				1
+			}
+			if game.Players.LocalPlayer:GetAttribute("StretchX") then
+				t7[1] = game.Players.LocalPlayer:GetAttribute("StretchX")
+			end
+			if game.Players.LocalPlayer:GetAttribute("StretchY") then
+				t7[5] = game.Players.LocalPlayer:GetAttribute("StretchY")
+			end
+			if game.Players.LocalPlayer.Character then
+				if game.Players.LocalPlayer.Character:GetAttribute("StretchX") then
+					t7[1] = game.Players.LocalPlayer.Character:GetAttribute("StretchX")
+				end
+				if game.Players.LocalPlayer.Character:GetAttribute("StretchY") then
+					t7[5] = game.Players.LocalPlayer.Character:GetAttribute("StretchY")
+				end
+			end
+			CurrentCamera4.CFrame = CurrentCamera4.CFrame * CFrame.new(0, 0, 0, table.unpack(t7))
+		end
+		local _7 = p50.activeTransparencyController
+		if v_u_5.getInputEnabled() then
+			v_u_5.resetInputForFrameEnd()
+		end
+	end
+end
+function t.OnCharacterAdded(p54: {[any]: any}, p55: userdata, p56: userdata)
+	--[[ line: 616 | upvalues: none]]
+	if p54.activeOcclusionModule then
+		p54.activeOcclusionModule:CharacterAdded(p55, p56)
+	end
+end
+function t.OnCharacterRemoving(p57, p58, p59)
+	--[[ line: 622 | upvalues: none]]
+	if p57.activeOcclusionModule then
+		p57.activeOcclusionModule:CharacterRemoving(p58, p59)
+	end
+end
+function t.OnPlayerAdded(p_u_60: {[any]: any}, p_u_61: userdata)
+	--[[ line: 628 | upvalues: (copy) UserPlayerConnectionMemoryLeak]]
+	if UserPlayerConnectionMemoryLeak then
+		if p_u_60.connectionUtil then
+			p_u_60.connectionUtil:trackConnection(("%*CharacterAdded"):format(p_u_61.UserId), (p_u_61.CharacterAdded:Connect(function(p62)
+				--[[ line: 632 | upvalues: (copy) p_u_60, (copy) p_u_61]]
+				p_u_60:OnCharacterAdded(p62, p_u_61)
+			end)))
+			p_u_60.connectionUtil:trackConnection(("%*CharacterRemoving"):format(p_u_61.UserId), (p_u_61.CharacterRemoving:Connect(function(p64)
+				--[[ line: 640 | upvalues: (copy) p_u_60, (copy) p_u_61]]
+				p_u_60:OnCharacterAdded(p64, p_u_61)
+			end)))
+			p_u_61.CharacterRemoving:Connect(function(p65)
+				--[[ line: 643 | upvalues: (copy) p_u_60, (copy) p_u_61]]
+				p_u_60:OnCharacterRemoving(p65, p_u_61)
+			end)
+		end
+	end
+	p_u_61.CharacterAdded:Connect(function(p64)
+		--[[ line: 640 | upvalues: (copy) p_u_60, (copy) p_u_61]]
+		p_u_60:OnCharacterAdded(p64, p_u_61)
+	end)
+	p_u_61.CharacterRemoving:Connect(function(p65)
+		--[[ line: 643 | upvalues: (copy) p_u_60, (copy) p_u_61]]
+		p_u_60:OnCharacterRemoving(p65, p_u_61)
+	end)
+end
+function t.OnPlayerRemoving(p66: {[any]: any}, p67: userdata)
+	--[[ line: 649 | upvalues: none]]
+	if p66.connectionUtil then
+		p66.connectionUtil:disconnect((("%*CharacterAdded"):format(p67.UserId)))
+		p66.connectionUtil:disconnect(("%*CharacterRemoving"):format(p67.UserId))
+	end
+end
+function t.OnMouseLockToggled(p68)
+	--[[ line: 657 | upvalues: none]]
+	if p68.activeMouseLockController then
+		p68.activeMouseLockController:GetIsMouseLocked()
+		p68.activeMouseLockController:GetMouseLockOffset()
+		local _8 = p68.activeCameraController
+	end
+end
+t.new()
+return {}
 
 
 ==================================================
@@ -1417,220 +1867,213 @@ SOURCE #6
 PATH:
 Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
 
-PURPOSE:
-Штатная Roblox-система скрытия локального персонажа при
-приближении камеры / First Person.
-
-KEY FINDINGS:
-    - Не изменяет BasePart.Transparency.
-    - Использует BasePart.LocalTransparencyModifier.
-    - По умолчанию обрабатывает BasePart и Decal.
-    - При включённом UserHideCharacterParticlesInFirstPerson
-      также может обрабатывать:
-          Beam
-          ParticleEmitter
-          Trail
-          Fire
-          Smoke
-          Sparkles
-          Explosion
-    - Объекты внутри Tool намеренно исключаются из обычного
-      First Person скрытия.
-    - При исчезновении/появлении descendants кэш обновляется.
-    - При выключении системы все закэшированные части получают:
-          LocalTransparencyModifier = 0
-
-FIRST PERSON / DISTANCE LOGIC:
-    TransparencyController.Update() получает:
-        CurrentCamera = workspace.CurrentCamera
-
-    затем:
-        magnitude =
-            (CurrentCamera.Focus.p
-             - CurrentCamera.CoordinateFrame.p).magnitude
-
-    если:
-        magnitude < 2
-
-    то вычисляется степень прозрачности:
-        1 - (magnitude - 0.5) / 1.5
-
-    затем значение ограничивается диапазоном 0..1.
-
-    Поэтому полностью близкое First Person состояние даёт:
-        LocalTransparencyModifier ~= 1
-
-    а при удалении камеры значение плавно возвращается к 0.
-
-CACHED PARTS:
-    SetupTransparency(character)
-        -> TeardownTransparency()
-        -> CachePartsRecursive(character)
-
-    CachePartsRecursive() добавляет в cachedParts только
-    IsValidPartToModify() объекты.
-
-TOOL RULE:
-    HasToolAncestor(part)
-        -> true, если сам part находится внутри Tool
-           или любой его ancestor является Tool.
-
-    IsValidPartToModify()
-        -> для обычного BasePart/Decal:
-           return not HasToolAncestor(part)
-
-    То есть содержимое Tool не попадает в обычный
-    скрываемый First Person cache.
-
-CHARACTER SUBJECT:
-    SetSubject(subject)
-        -> если subject является Humanoid:
-           используется subject.Parent как character model.
-
-        -> если subject является VehicleSeat с Occupant:
-           используется Occupant.Parent.
-
-        -> иначе:
-           TeardownTransparency()
-
-VR SPECIAL CASE:
-    Если:
-        VRService.VREnabled
-        and VRService.AvatarGestures
-
-    тогда прозрачность применяется не ко всему cachedParts,
-    а только:
-        AccessoryType.Hat
-        AccessoryType.Hair
-        AccessoryType.Face
-        AccessoryType.Eyebrow
-        AccessoryType.Eyelash
-        или объекту с Name == "Head"
-
-    Остальные части в этом VR-режиме получают:
-        LocalTransparencyModifier = 0
-
-NON-VR:
-    Для обычного режима каждый объект cachedParts получает:
-        LocalTransparencyModifier = transparency
-
-ANIMATION / SMOOTHING:
-    При изменении дистанции значение может плавно двигаться
-    с ограничением скорости:
-        2.8 * deltaTime
-
-    После этого значение округляется через:
-        CameraUtils.Round(value, 2)
-
-    и ограничивается:
-        0..1
-
-CONFIRMED CONCLUSION:
-    Штатный First Person здесь реализован прежде всего как
-    локальное изменение LocalTransparencyModifier у частей
-    персонажа, а не как удаление объектов.
-
-IMPORTANT FOR OUR FUTURE TESTS:
-    Нужно отдельно проверить runtime-модель персонажа,
-    чтобы установить, какие конкретно descendants попадают
-    в cachedParts:
-        Head
-        Hair
-        Face decal
-        body parts
-        accessories
-        tool
-        custom cosmetic parts
-
 SOURCE CONTENT:
-    Полный исходник предоставлен пользователем в чате 2026-10-06.
 
-
-==================================================
-SOURCE #7
-==================================================
-PATH:
-Runtime test:
-    Workspace.Players.<LocalPlayer>.Character
-
-PURPOSE:
-Подтверждённый runtime-результат сравнения 3rd Person -> First Person
-для конкретного персонажа DEN919191.
-
-TEST:
-    FIRST PERSON VISIBILITY TEST v1.02
-
-STATE A:
-    3rd Person
-    Camera distance = 6.0003
-    Camera type = Custom
-    Camera subject = Workspace.Players.DEN919191.Humanoid
-
-STATE B:
-    First Person
-    Camera distance = 0.6329
-    Camera type = Custom
-    Camera subject = Workspace.Players.DEN919191.Humanoid
-
-TOTAL VISUAL OBJECTS:
-    3rd Person = 4
-    First Person = 4
-
-CHANGED:
-    PATH:
-        DEN919191.HumanoidRootPart
-
-    CLASS:
-        MeshPart
-
-    Transparency:
-        1.0000 -> 1.0000
-
-    LocalTransparencyModifier:
-        0.0000 -> 1.0000
-
-    Accessory:
-        false
-
-    Tool:
-        false
-
-UNCHANGED:
-    PATH:
-        DEN919191.HumanoidRootPart.JumpPos.Double
-
-    CLASS:
-        ParticleEmitter
-
-    PATH:
-        DEN919191.HumanoidRootPart.Slide.SlideParticles
-
-    CLASS:
-        ParticleEmitter
-
-    PATH:
-        DEN919191.Right Leg
-
-    CLASS:
-        Part
-
-    Right Leg:
-        Transparency = 1.0000 -> 1.0000
-        LocalTransparencyModifier = 0.0000 -> 0.0000
-
-CONFIRMED CONCLUSION:
-    В текущей runtime-модели персонажа First Person изменил
-    только LocalTransparencyModifier у HumanoidRootPart.
-
-    Ни один другой объект из GetDescendants(), подходящий под
-    использованные визуальные классы, не изменил
-    LocalTransparencyModifier или Transparency.
-
-    Right Leg остаётся невидимой из-за собственного
-    Transparency = 1, а не из-за First Person.
-
-IMPORTANT:
-    Этот результат не доказывает, что весь видимый персонаж
-    физически находится внутри Workspace.Players.DEN919191.
-    Следующий тест должен просканировать полное дерево character,
-    связанные Models/Folders и отдельно объекты Rig/CharacterService.
+local VRService = game:GetService("VRService")
+local t = {
+	"BasePart",
+	"Decal",
+	"Beam",
+	"ParticleEmitter",
+	"Trail",
+	"Fire",
+	"Smoke",
+	"Sparkles",
+	"Explosion"
+}
+local v_u_1 = require((script.Parent:WaitForChild("CameraUtils")))
+local v2, v3 = pcall(function()
+	--[[ line: 27 | upvalues: none]]
+	return UserSettings():IsUserFeatureEnabled("UserHideCharacterParticlesInFirstPerson")
+end)
+local v_u_4 = v2 and v3
+local t2 = {}
+t2.__index = t2
+function t2.new()
+	--[[ line: 38 | upvalues: (copy) t2]]
+	local v5 = t2
+	local v6 = setmetatable({}, v5)
+	v6.transparencyDirty = false
+	v6.enabled = false
+	v6.lastTransparency = nil
+	v6.descendantAddedConn = nil
+	v6.descendantRemovingConn = nil
+	v6.toolDescendantAddedConns = {}
+	v6.toolDescendantRemovingConns = {}
+	v6.cachedParts = {}
+	return v6
+end
+function t2.HasToolAncestor(p7: {[any]: any}, p8: userdata)
+	--[[ line: 54 | upvalues: none]]
+	if p8.Parent == nil then
+		return false
+	end
+	local Parent = p8.Parent
+	assert(Parent, "")
+	return p8.Parent:IsA("Tool") or p7:HasToolAncestor(p8.Parent)
+end
+function t2.IsValidPartToModify(p9: {[any]: any}, p10: userdata)
+	--[[ line: 60 | upvalues: (ref) v_u_4, (copy) t]]
+	if v_u_4 then
+		for _, v11 in t do
+			if p10:IsA(v11) then
+				return not p9:HasToolAncestor(p10)
+			end
+		end
+		return false
+	end
+	if p10:IsA("BasePart") or p10:IsA("Decal") then
+		return not p9:HasToolAncestor(p10)
+	end
+	return false
+end
+function t2.CachePartsRecursive(p12, p13)
+	--[[ line: 76 | upvalues: none]]
+	if p13 then
+		if p12:IsValidPartToModify(p13) then
+			p12.cachedParts[p13] = true
+			p12.transparencyDirty = true
+		end
+		for _2, v14 in pairs((p13:GetChildren())) do
+			p12:CachePartsRecursive(v14)
+		end
+	end
+end
+function t2.TeardownTransparency(p15)
+	--[[ line: 88 | upvalues: none]]
+	for v16, _3 in pairs(p15.cachedParts) do
+		v16.LocalTransparencyModifier = 0
+	end
+	p15.cachedParts = {}
+	p15.transparencyDirty = true
+	p15.lastTransparency = nil
+	if p15.descendantAddedConn then
+		p15.descendantAddedConn:disconnect()
+		p15.descendantAddedConn = nil
+	end
+	if p15.descendantRemovingConn then
+		p15.descendantRemovingConn:disconnect()
+		p15.descendantRemovingConn = nil
+	end
+	for v17, v18 in pairs(p15.toolDescendantAddedConns) do
+		v18:Disconnect()
+		p15.toolDescendantAddedConns[v17] = nil
+	end
+	for v19, v20 in pairs(p15.toolDescendantRemovingConns) do
+		v20:Disconnect()
+		p15.toolDescendantRemovingConns[v19] = nil
+	end
+end
+function t2.SetupTransparency(p_u_21, p_u_22)
+	--[[ line: 114 | upvalues: none]]
+	p_u_21:TeardownTransparency()
+	if p_u_21.descendantAddedConn then
+		p_u_21.descendantAddedConn:disconnect()
+	end
+	p_u_21.descendantAddedConn = p_u_22.DescendantAdded:Connect(function(p23)
+		--[[ line: 118 | upvalues: (copy) p_u_21, (copy) p_u_22]]
+		if p_u_21:IsValidPartToModify(p23) then
+			p_u_21.cachedParts[p23] = true
+			p_u_21.transparencyDirty = true
+		elseif p23:IsA("Tool") then
+			if p_u_21.toolDescendantAddedConns[p23] then
+				p_u_21.toolDescendantAddedConns[p23]:Disconnect()
+			end
+			p_u_21.toolDescendantAddedConns[p23] = p23.DescendantAdded:Connect(function(p24)
+				--[[ line: 126 | upvalues: (ref) p_u_21]]
+				p_u_21.cachedParts[p24] = nil
+				if p24:IsA("BasePart") or p24:IsA("Decal") then
+					p24.LocalTransparencyModifier = 0
+				end
+			end)
+			if p_u_21.toolDescendantRemovingConns[p23] then
+				p_u_21.toolDescendantRemovingConns[p23]:disconnect()
+			end
+			p_u_21.toolDescendantRemovingConns[p23] = p23.DescendantRemoving:Connect(function(p25)
+				--[[ line: 134 | upvalues: (ref) p_u_22, (ref) p_u_21]]
+				wait()
+				if p_u_22 and (p25 and (p25:IsDescendantOf(p_u_22) and p_u_21:IsValidPartToModify(p25))) then
+					p_u_21.cachedParts[p25] = true
+					p_u_21.transparencyDirty = true
+				end
+			end)
+		end
+	end)
+	if p_u_21.descendantRemovingConn then
+		p_u_21.descendantRemovingConn:disconnect()
+	end
+	p_u_21.descendantRemovingConn = p_u_22.DescendantRemoving:connect(function(p26)
+		--[[ line: 146 | upvalues: (copy) p_u_21]]
+		if p_u_21.cachedParts[p26] then
+			p_u_21.cachedParts[p26] = nil
+			p26.LocalTransparencyModifier = 0
+		end
+	end)
+	p_u_21:CachePartsRecursive(p_u_22)
+end
+function t2.Enable(p27: {[any]: any}, p28: boolean)
+	--[[ line: 157 | upvalues: none]]
+	if p27.enabled ~= p28 then
+		p27.enabled = p28
+	end
+end
+function t2.SetSubject(p29, p30)
+	--[[ line: 163 | upvalues: none]]
+	local v31
+	if p30 and p30:IsA("Humanoid") then
+		v31 = p30.Parent
+	else
+		v31 = nil
+	end
+	if p30 and (p30:IsA("VehicleSeat") and p30.Occupant) then
+		v31 = p30.Occupant.Parent
+	end
+	if v31 then
+		p29:SetupTransparency(v31)
+	else
+		p29:TeardownTransparency()
+	end
+end
+function t2.Update(p32, p33)
+	--[[ line: 178 | upvalues: (copy) v_u_1, (copy) VRService]]
+	local CurrentCamera = workspace.CurrentCamera
+	if CurrentCamera and p32.enabled then
+		local magnitude = (CurrentCamera.Focus.p - CurrentCamera.CoordinateFrame.p).magnitude
+		local v34 = magnitude < 2 and 1 - (magnitude - 0.5) / 1.5 or 0
+		local v35 = v34 < 0.5 and 0 or v34
+		if p32.lastTransparency and (v35 < 1 and p32.lastTransparency < 0.95) then
+			local v36 = v35 - p32.lastTransparency
+			local v37 = 2.8 * p33
+			local v38 = -v37
+			local v39 = math.clamp(v36, v38, v37)
+			v35 = p32.lastTransparency + v39
+		else
+			p32.transparencyDirty = true
+		end
+		local v40 = v_u_1.Round(v35, 2)
+		local v41 = math.clamp(v40, 0, 1)
+		if p32.transparencyDirty or p32.lastTransparency ~= v41 then
+			for v42, _4 in pairs(p32.cachedParts) do
+				if VRService.VREnabled and VRService.AvatarGestures then
+					local t3 = {
+						[Enum.AccessoryType.Hat] = true,
+						[Enum.AccessoryType.Hair] = true,
+						[Enum.AccessoryType.Face] = true,
+						[Enum.AccessoryType.Eyebrow] = true,
+						[Enum.AccessoryType.Eyelash] = true
+					}
+					if v42.Parent:IsA("Accessory") and t3[v42.Parent.AccessoryType] or v42.Name == "Head" then
+						v42.LocalTransparencyModifier = v41
+					else
+						v42.LocalTransparencyModifier = 0
+					end
+				else
+					v42.LocalTransparencyModifier = v41
+				end
+			end
+			p32.transparencyDirty = false
+			p32.lastTransparency = v41
+		end
+	end
+end
+return t2
