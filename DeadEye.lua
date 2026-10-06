@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.195"
+local SCRIPT_VERSION = "1.196"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -881,6 +881,9 @@ Main.BackgroundTransparency =
     1
 Main.BorderSizePixel =
     0
+
+Main.ClipsDescendants =
+    false
 Main.ClipsDescendants =
     true
 Main.Parent =
@@ -11298,6 +11301,7 @@ local mainJump = {
     legitJumpConnection = nil,
     autoJumpModeButton = nil,
     autoJumpModePicker = nil,
+    autoJumpModePickerPositionConnection = nil,
     connections = {}
 }
 mainJump.jumpDelay =
@@ -16288,7 +16292,7 @@ mainJump.autoJumpModePicker.Visible =
     false
 
 mainJump.autoJumpModePicker.Parent =
-    __UI.autoJumpModeRow
+    Main
 
 local autoJumpModePickerCorner =
     Instance.new("UICorner")
@@ -16482,11 +16486,74 @@ createAutoJumpModeOption(
     "RAGE"
 )
 
+local function positionAutoJumpModePicker()
+    local picker =
+        mainJump.autoJumpModePicker
+
+    local button =
+        mainJump.autoJumpModeButton
+
+    if not picker
+        or not button
+        or not button.Parent
+        or not Main
+    then
+        return
+    end
+
+    local mainPosition =
+        Main.AbsolutePosition
+
+    local buttonPosition =
+        button.AbsolutePosition
+
+    local x =
+        buttonPosition.X
+        - mainPosition.X
+        + button.AbsoluteSize.X
+        - picker.AbsoluteSize.X
+
+    local y =
+        buttonPosition.Y
+        - mainPosition.Y
+        + button.AbsoluteSize.Y
+        + 5
+
+    picker.Position =
+        UDim2.fromOffset(
+            x,
+            y
+        )
+end
+
 mainConnect(
     mainJump.autoJumpModeButton.MouseButton1Click:Connect(
         function()
-            mainJump.autoJumpModePicker.Visible =
-                not mainJump.autoJumpModePicker.Visible
+            local picker =
+                mainJump.autoJumpModePicker
+
+            if not picker then
+                return
+            end
+
+            picker.Visible =
+                not picker.Visible
+
+            if picker.Visible then
+                positionAutoJumpModePicker()
+            end
+        end
+    )
+)
+
+mainJump.autoJumpModePickerPositionConnection =
+    RunService.RenderStepped:Connect(
+        function()
+            if mainJump.autoJumpModePicker
+                and mainJump.autoJumpModePicker.Visible
+            then
+                positionAutoJumpModePicker()
+            end
         end
     )
 )
