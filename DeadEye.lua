@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.205
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.206
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.205"
+local SCRIPT_VERSION = "1.206"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -16316,7 +16316,7 @@ mainJump.autoJumpModePicker.Size =
         0,
         94,
         0,
-        86
+        94
     )
 
 mainJump.autoJumpModePicker.Position =
@@ -16347,14 +16347,7 @@ mainJump.autoJumpModePicker.Active =
     true
 
 mainJump.autoJumpModePicker.BorderSizePixel =
-    1
-
-mainJump.autoJumpModePicker.BorderColor3 =
-    Color3.fromRGB(
-        78,
-        84,
-        96
-    )
+    0
 
 mainJump.autoJumpModePicker.ZIndex =
     80
@@ -16373,6 +16366,29 @@ autoJumpModePickerCorner.CornerRadius =
         0,
         7
     )
+
+autoJumpModePickerCorner.Parent =
+    mainJump.autoJumpModePicker
+
+--// Reuse the existing local register for the picker outline.
+autoJumpModePickerCorner =
+    Instance.new("UIStroke")
+
+autoJumpModePickerCorner.Color =
+    Color3.fromRGB(
+        92,
+        99,
+        113
+    )
+
+autoJumpModePickerCorner.Thickness =
+    1
+
+autoJumpModePickerCorner.Transparency =
+    0
+
+autoJumpModePickerCorner.ApplyStrokeMode =
+    Enum.ApplyStrokeMode.Border
 
 autoJumpModePickerCorner.Parent =
     mainJump.autoJumpModePicker
@@ -16452,13 +16468,13 @@ local autoJumpModePadding =
 autoJumpModePadding.PaddingTop =
     UDim.new(
         0,
-        4
+        6
     )
 
 autoJumpModePadding.PaddingBottom =
     UDim.new(
         0,
-        4
+        6
     )
 
 autoJumpModePadding.Parent =
