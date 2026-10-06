@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.199"
+local SCRIPT_VERSION = "1.200"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -16255,9 +16255,9 @@ mainJump.autoJumpModePicker.Name =
 mainJump.autoJumpModePicker.Size =
     UDim2.new(
         0,
-        92,
+        77,
         0,
-        76
+        72
     )
 
 mainJump.autoJumpModePicker.Position =
@@ -16274,6 +16274,9 @@ mainJump.autoJumpModePicker.BackgroundColor3 =
         35,
         42
     )
+
+mainJump.autoJumpModePicker.BackgroundTransparency =
+    0
 
 mainJump.autoJumpModePicker.BackgroundTransparency =
     0
@@ -16393,75 +16396,40 @@ local function createAutoJumpModeOption(
     mode,
     text
 )
+    --// Clone the real Auto Jump Mode selector button so the picker
+    --// buttons use the EXACT same visual base: size, background,
+    --// transparency, font, text sizing and corner radius.
     local button =
-        Instance.new("TextButton")
+        mainJump.autoJumpModeButton:Clone()
 
     button.Name =
         "AutoJumpMode_" .. mode
 
-    button.Size =
-        UDim2.new(
-            1,
-            -2,
+    button.Position =
+        UDim2.fromScale(
             0,
-            30
+            0
         )
 
-    button.BackgroundColor3 =
-        Color3.fromRGB(
-            47,
-            52,
-            61
-        )
+    button.Size =
+        mainJump.autoJumpModeButton.Size
 
-    button.BorderSizePixel =
-        0
-
-    button.AutoButtonColor =
-        false
-
-    --// Match ordinary DeadEye button glass.
-    button.BackgroundTransparency =
-        0.30
+    button.AnchorPoint =
+        mainJump.autoJumpModeButton.AnchorPoint
 
     button.Text =
         text
-
-    button.TextSize =
-        10
-
-    button.Font =
-        Enum.Font.GothamBold
-
-    button.TextColor3 =
-        Color3.fromRGB(
-            255,
-            255,
-            255
-        )
-
-    button.ZIndex =
-        82
 
     button.LayoutOrder =
         mode == "legit"
         and 1
         or 2
 
+    button.ZIndex =
+        82
+
     button.Parent =
         autoJumpModeScroll
-
-    local corner =
-        Instance.new("UICorner")
-
-    corner.CornerRadius =
-        UDim.new(
-            0,
-            5
-        )
-
-    corner.Parent =
-        button
 
     mainConnect(
         button.MouseButton1Click:Connect(
@@ -23833,28 +23801,9 @@ function __UI.styleButtonMotion(button)
     --// Keep the existing centered enlargement unchanged.
     local hasLayout = false
 
-    local pickerModeButton =
-        string.sub(
-            tostring(button.Name),
-            1,
-            13
-        ) == "AutoJumpMode_"
-
-    --// Picker buttons must use the same centered scale animation
-    --// as ordinary DeadEye buttons.
-    local forceButtonScale =
-        pickerModeButton
-
-    if forceButtonScale then
-        hasLayout = false
-    end
-
     for _, child in ipairs(
         parent:GetChildren()
     ) do
-        if forceButtonScale then
-            break
-        end
         if child:IsA("UIGridLayout")
             or child:IsA("UIListLayout")
             or child:IsA("UITableLayout")
@@ -23964,79 +23913,10 @@ function __UI.styleButtonMotion(button)
         )
 
     if not shadow then
-        local success, result
-
-        if pickerModeButton then
-            success, result =
-                pcall(function()
-                    local glow =
-                        Instance.new("Frame")
-
-                    glow.Name =
-                        "DeadEyeHoverGlow"
-
-                    glow.Size =
-                        UDim2.fromOffset(
-                            62,
-                            16
-                        )
-
-                    glow.AnchorPoint =
-                        Vector2.new(
-                            0.5,
-                            0.5
-                        )
-
-                    glow.Position =
-                        UDim2.new(
-                            0.5,
-                            0,
-                            0.5,
-                            0
-                        )
-
-                    glow.BackgroundColor3 =
-                        Color3.fromRGB(
-                            190,
-                            204,
-                            226
-                        )
-
-                    glow.BackgroundTransparency =
-                        1
-
-                    glow.BorderSizePixel =
-                        0
-
-                    glow.ZIndex =
-                        81
-
-                    glow.Active =
-                        false
-
-                    local glowCorner =
-                        Instance.new("UICorner")
-
-                    glowCorner.CornerRadius =
-                        UDim.new(
-                            1,
-                            0
-                        )
-
-                    glowCorner.Parent =
-                        glow
-
-                    glow.Parent =
-                        button
-
-                    return glow
-                end)
-        else
-            success, result =
-                pcall(function()
-                    return Instance.new("UIShadow")
-                end)
-        end
+        local success, result =
+            pcall(function()
+                return Instance.new("UIShadow")
+            end)
 
         if success
             and result
@@ -24211,14 +24091,6 @@ function __UI.styleButtonMotion(button)
                     return
                 end
 
-                if not pickerModeButton
-                    and button:GetAttribute(
-                        "DeadEyeHoverSuppressed"
-                    )
-                then
-                    return
-                end
-
                 hovered = true
 
                 tweenScale(
@@ -24245,14 +24117,6 @@ function __UI.styleButtonMotion(button)
                     return
                 end
 
-                if not pickerModeButton
-                    and button:GetAttribute(
-                        "DeadEyeHoverSuppressed"
-                    )
-                then
-                    return
-                end
-
                 hovered = false
 
                 tweenScale(
@@ -24275,14 +24139,6 @@ function __UI.styleButtonMotion(button)
                     return
                 end
 
-                if not pickerModeButton
-                    and button:GetAttribute(
-                        "DeadEyeHoverSuppressed"
-                    )
-                then
-                    return
-                end
-
                 tweenScale(
                     0.994,
                     pressInfo
@@ -24302,14 +24158,6 @@ function __UI.styleButtonMotion(button)
         button.MouseButton1Up:Connect(
             function()
                 if not button.Parent then
-                    return
-                end
-
-                if not pickerModeButton
-                    and button:GetAttribute(
-                        "DeadEyeHoverSuppressed"
-                    )
-                then
                     return
                 end
 
