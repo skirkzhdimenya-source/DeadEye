@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.152
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.153
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.152"
+local SCRIPT_VERSION = "1.153"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12228,7 +12228,7 @@ function mainJump.updateReverseLookUI(
             knobPosition =
                 UDim2.new(
                     0,
-                    34,
+                    36,
                     0.5,
                     -12
                 )
@@ -15757,7 +15757,7 @@ mainJump.reverseLookModeKnob.Size =
 mainJump.reverseLookModeKnob.Position =
     UDim2.new(
         0,
-        37,
+        36,
         0.5,
         -12
     )
