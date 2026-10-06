@@ -2654,3 +2654,47 @@ return function(p1, p2)
 		end
 	end
 end
+
+
+==================================================
+SOURCE #12
+==================================================
+PATH:
+game:GetService("ReplicatedStorage").Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList
+
+SOURCE CONTENT:
+
+return {
+	Position = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "BeforeRoot",
+		Order = 1
+	},
+	ADS = { Type = "Root", Order = 2 },
+	Offset = { Type = "Root", Order = 3 },
+	Sway = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "Root",
+		Order = 4
+	},
+	Viewbob = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "Root",
+		Order = 5
+	},
+	Camera = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "Camera",
+		Order = 6
+	},
+	Grounded = {
+		Speed = 12,
+		Damping = 0.7,
+		Type = "Camera",
+		Order = 7
+	}
+}
