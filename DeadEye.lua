@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.191
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.192
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,8 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.191"
+local SCRIPT_VERSION = "1.192"
+--// Others settings are persisted on edit/unfocus and again during cleanup. This reminder must stay near script start.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -17876,13 +17877,14 @@ function others.row(
         box.FocusLost:Connect(
             function(enterPressed)
                 if enterPressed then
-                    if others.applyField(
+                    others.applyField(
                         slot,
                         box.Text
-                    ) then
-                        others.saveConfig()
-                    end
+                    )
                 end
+                --// Persist the current Others field even when the
+                --// user only edits it and closes/unfocuses the GUI.
+                others.saveConfig()
             end
         )
     )
@@ -22954,6 +22956,13 @@ local function cleanup()
     if cleaned then
         return
     end
+
+    --// Save the complete Others state before destroying its TextBoxes.
+    --// This also persists Avatar Import text and values changed without
+    --// pressing APPLY / ENTER.
+    pcall(function()
+        others.saveConfig()
+    end)
 
     pcall(function()
         ScreenGui.Enabled = false
