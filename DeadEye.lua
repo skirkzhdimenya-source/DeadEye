@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.156"
+local SCRIPT_VERSION = "1.157"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -113,6 +113,11 @@ end
 if genv.UNUSUAL_SWAPPER_CLEANUP then
     pcall(function()
         genv.UNUSUAL_SWAPPER_CLEANUP()
+    end)
+end
+if genv.DEADEYE_UNUSUAL_POV_TRAIL_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_UNUSUAL_POV_TRAIL_CLEANUP()
     end)
 end
 if genv.DEADEYE_PORTRAIT_CLEANUP then
@@ -7932,6 +7937,7 @@ end
 --// In 1P the game hides the 3P rig with LocalTransparencyModifier.
 --// =========================================================
 genv.DEADEYE_UNUSUAL_POV_RUNNING = true
+genv.DEADEYE_UNUSUAL_POV_TRAIL_CLEANUP = restoreDeadEyeTrailTransparency
 local lastUnusualPOVState = nil
 function UnusualFns.getUnusualViewmodel()
     local camera =
@@ -8122,6 +8128,7 @@ local unusualPovTransparencyClasses = {
 }
 
 local lastUnusualPOVTransparency = nil
+local unusualPovOriginalTrailState = setmetatable({}, { __mode = "k" })
 
 local function isGameFirstPersonTransparencyClass(
     object
@@ -8266,14 +8273,54 @@ function UnusualFns.setUnusualFXForPOV(
                     )
                 then
                     pcall(function()
-                        object.LocalTransparencyModifier =
-                            transparency
+                        if object:IsA("Trail") then
+                            --// A Trail can still be faintly visible at the
+                            --// game's ~0.91 first-person modifier. The live
+                            --// game behavior observed for these visuals is
+                            --// fully hidden, so force the local Trail modifier
+                            --// to 1 while in first person.
+                            if unusualPovOriginalTrailState[object] == nil then
+                                unusualPovOriginalTrailState[object] = {
+                                    Enabled = object.Enabled,
+                                    LocalTransparencyModifier =
+                                        object.LocalTransparencyModifier
+                                }
+                            end
+
+                            object.LocalTransparencyModifier =
+                                firstPerson and 1 or transparency
+                        else
+                            object.LocalTransparencyModifier =
+                                transparency
+                        end
                     end)
                 end
             end
         end
     end
 end
+local function restoreDeadEyeTrailTransparency()
+    for trail, state in pairs(
+        unusualPovOriginalTrailState
+    ) do
+        if trail
+            and trail.Parent
+            and state
+        then
+            pcall(function()
+                trail.Enabled =
+                    state.Enabled
+                trail.LocalTransparencyModifier =
+                    state.LocalTransparencyModifier
+            end)
+        end
+
+        unusualPovOriginalTrailState[trail] = nil
+    end
+
+    lastUnusualPOVTransparency = nil
+end
+
 function UnusualFns.updateUnusualPOV(
     deltaTime
 )
