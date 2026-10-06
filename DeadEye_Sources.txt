@@ -4992,3 +4992,373 @@ function t.Activate(_2, _3, p9)
 	end
 end
 return t
+
+==================================================
+SOURCE #40
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.ViewmodelOffset1
+==================================================
+
+return function(p1, _, _2, _3, p2)
+	--[[ line: 1 | upvalues: none]]
+	local v3, v4, v5 = ((p2 or workspace.CurrentCamera.CFrame):inverse() * workspace.CurrentCamera.CFrame):ToOrientation()
+	p1.Spring.t = Vector3.new(v3, v4, v5)
+	local v6 = -p1.Spring.p * 0.5
+	return CFrame.Angles(0, v6.Y, 0) * CFrame.Angles(v6.X, 0, 0)
+end
+
+==================================================
+SOURCE #41
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.CameraOffset1
+==================================================
+
+return function(p1, _, p2, _2, p3)
+	--[[ line: 1 | upvalues: none]]
+	local v4, v5, v6 = ((p3 or workspace.CurrentCamera.CFrame):inverse() * workspace.CurrentCamera.CFrame):ToOrientation()
+	p1.Spring.t = Vector3.new(v4, v5, v6)
+	local Y = (-p1.Spring.p * 0.5).Y
+	local v7 = math.abs(Y) < 0.0001 and 0 or Y
+	return CFrame.Angles(0, 0, -v7 * 0.1) * p2.HumanoidRootPart.CamPart.Transform
+end
+
+==================================================
+SOURCE #42
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.ViewmodelOffset2
+==================================================
+
+local LocalPlayer = game.Players.LocalPlayer
+return function(p1, _, _2, p2, _3)
+	--[[ line: 2 | upvalues: (copy) LocalPlayer]]
+	local AssemblyLinearVelocity = LocalPlayer.Character.PrimaryPart.AssemblyLinearVelocity
+	local v3 = (AssemblyLinearVelocity.Y - (p1.LastVelocity or AssemblyLinearVelocity.Y)) * 0.005
+	local v4 = -math.clamp(v3, -0.15, 0.4)
+	local v5 = Vector3.new(0, v4, 0)
+	p1.LastVelocity = AssemblyLinearVelocity.Y
+	for _4, v6 in pairs(p2:Get("ActiveBinds") or {}) do
+		if v6 == "ADS" then
+			p1.Spring.t = v5
+			return CFrame.new(p1.Spring.p)
+		end
+	end
+	local v7 = p2:Get("MoveDirection") * 0.15
+	if not p2:Get("Grounded") or p2:Get("Speed") < 1 then
+		v7 = Vector3.new()
+	end
+	p1.Spring.t = v5 - v7
+	return CFrame.new(p1.Spring.p)
+end
+
+==================================================
+SOURCE #43
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.SprintCamOffset
+==================================================
+
+local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local v_u_1 = require((Services:WaitForChild("Client"):WaitForChild("CameraService")))
+return function(p2, p3, _, p4, _2)
+	--[[ line: 5 | upvalues: (copy) v_u_1]]
+	if not p2.OtherBob then
+		p2.OtherBob = CFrame.new()
+	end
+	local Speed = p4:Get("Speed")
+	local MoveDirection = p4:Get("MoveDirection")
+	local v5 = (Speed - 20) / 12
+	local v6 = math.clamp(v5, 0, 1)
+	local v7 = not p4:Get("Grounded")
+	for _3, v8 in pairs(p4:Get("BindsActive") or {}) do
+		if v8 == "ADS" then
+			v7 = true
+			break
+		end
+	end
+	local v9, _4, _5 = p4:Get("LookCFrame"):ToOrientation()
+	local v10 = CFrame.Angles(-v9, 0, 0)
+	if v7 then
+		p2.OtherBob = p2.OtherBob:lerp(CFrame.new(), 0.5)
+		p2.Spring.t = Vector3.new()
+		local v11 = v_u_1
+		local Sprint = v_u_1:GetAdjustedFOV("Sprint")
+		v11:AdjustFOV("Sprint", (math.lerp(Sprint, 1, p3)))
+		return CFrame.Angles(p2.Spring.p.X, p2.Spring.p.Y, p2.Spring.p.Z) * p2.OtherBob + v10.lookVector * 1.1
+	end
+	if (v_u_1:GetAdjustedFOV("Fear") or 1) <= 1.1 then
+		local v12 = v_u_1
+		local Sprint2 = v_u_1:GetAdjustedFOV("Sprint")
+		local v13 = math.lerp(1, 1.15, v6)
+		v12:AdjustFOV("Sprint", (math.lerp(Sprint2, v13, p3)))
+	else
+		local v14 = v_u_1
+		local Sprint3 = v_u_1:GetAdjustedFOV("Sprint")
+		v14:AdjustFOV("Sprint", (math.lerp(Sprint3, 1, p3)))
+	end
+	if p4:Get("Speed") > 1 then
+		local OtherBob = p2.OtherBob
+		local new = CFrame.new
+		local v15 = 1 - v6 * 2
+		local v16 = math.clamp(v15, 0, 1)
+		local v17 = tick() * 12 * 2
+		local v18 = v16 * math.sin(v17) * 0.01
+		local v19 = tick() * 12 * 2
+		p2.OtherBob = OtherBob:lerp(new(0, v18 + v6 * math.sin(v19) * 0.18, 0), 0.5)
+	else
+		p2.OtherBob = p2.OtherBob:lerp(CFrame.new(), 0.5)
+	end
+	local v20 = MoveDirection == Vector3.new() and 0 or -(MoveDirection.unit.X * 0.05 * v6)
+	local Spring = p2.Spring
+	local v21 = tick() * 12
+	local v22 = math.sin(v21) ^ 2 * 0.005 * v6
+	local v23 = tick() * 12
+	local v24 = math.sin(v23) * 0.005 * v6
+	local v25 = tick() * 12
+	local v26 = math.cos(v25) * 0.004 * v6 + v20
+	Spring.t = Vector3.new(v22, v24, v26)
+	return CFrame.Angles(p2.Spring.p.X, p2.Spring.p.Y, p2.Spring.p.Z) * p2.OtherBob + v10.lookVector * 1.1
+end
+
+==================================================
+SOURCE #44
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.ADS
+==================================================
+
+function lerp(p1, p2, p3)
+	--[[ line: 1 | upvalues: none]]
+	return p1 + (p2 - p1) * p3
+end
+return function(p4, p5, p6, p7)
+	--[[ line: 5 | upvalues: none]]
+	local v8 = false
+	for _, v9 in pairs(p7:Get("ActiveBinds") or {}) do
+		if v9 == "ADS" then
+			v8 = true
+		end
+	end
+	if p4.LastCFrame == nil then
+		p4.LastCFrame = CFrame.new()
+	end
+	if v8 == false then
+		local LastCFrame = p4.LastCFrame
+		local v10 = CFrame.new()
+		local v11 = p5 * 10
+		p4.LastCFrame = LastCFrame:lerp(v10, (math.min(v11, 1)))
+		return p4.LastCFrame
+	end
+	local v12 = CFrame.new()
+	local p = p6.HumanoidRootPart.ADS.CFrame:inverse().p
+	local v13 = (p6.HumanoidRootPart.ADS.CFrame - p6.HumanoidRootPart.ADS.CFrame.p):inverse()
+	local v14 = CFrame.new(v13.p + p) * (v13 - v13.p) * v12
+	local LastCFrame2 = p4.LastCFrame
+	local v15 = p5 * 10
+	p4.LastCFrame = LastCFrame2:lerp(v14, (math.min(v15, 1)))
+	return p4.LastCFrame
+end
+
+==================================================
+SOURCE #45
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.CameraBob
+==================================================
+
+function lerp(p1, p2, p3)
+	--[[ line: 1 | upvalues: none]]
+	return p1 + (p2 - p1) * p3
+end
+return function(p4, _, _2, p5)
+	--[[ line: 5 | upvalues: none]]
+	if not p4.CameraBob then
+		p4.CameraBob = CFrame.new()
+	end
+	if p5:Get("ToolViewbob") ~= false then
+		local v6 = false
+		for _3, v7 in pairs(p5:Get("ActiveBinds") or {}) do
+			if v7 == "ADS" then
+				v6 = true
+			end
+		end
+		if v6 then
+			if p5:Get("Speed") > 1 then
+				local CameraBob = p4.CameraBob
+				local new = CFrame.new
+				local v8 = tick() * 8
+				local v9 = math.cos(v8) / 75
+				local v10 = tick() * 16
+				local v11 = new(v9, -math.sin(v10) / 75, 0)
+				local Angles = CFrame.Angles
+				local v12 = (tick() + 0.1) * 8
+				local v13 = math.cos(v12) * 0.004
+				local v14 = tick() * 8 - 0.1
+				p4.CameraBob = CameraBob:lerp(v11 * Angles(0, v13, math.cos(v14) / 270), 0.2)
+			else
+				local CameraBob2 = p4.CameraBob
+				local new2 = CFrame.new
+				local v15 = tick() * 0.3
+				local v16 = math.sin(v15) * 0.001
+				local v17 = tick()
+				local v18 = v16 + math.cos(v17) * 0.0006
+				local v19 = tick()
+				local v20 = math.sin(v19) * 0.003
+				local v21 = tick() * 0.4
+				local v22 = math.cos(v21) * 0.0008
+				local v23 = tick() + 0.2
+				p4.CameraBob = CameraBob2:lerp(new2(v18, v20, v22 + math.cos(v23) * 0.006), 0.06)
+			end
+		elseif p5:Get("Speed") > 1 and p5:Get("Grounded") then
+			local v24 = (p5:Get("Speed") - 20) / 12
+			local v25 = math.clamp(v24, 0, 1)
+			local v26
+			if v25 == 0 then
+				local new3 = CFrame.new
+				local v27 = tick() * 9
+				local v28 = math.cos(v27) * 0.04
+				local v29 = tick() * 9
+				local v30 = new3(v28, math.cos(v29) ^ 2 * 0.07, 0)
+				local Angles2 = CFrame.Angles
+				local v31 = 0.25 + tick() * 9
+				local v32 = Angles2(0, math.sin(v31) * 0.03, 0)
+				local Angles3 = CFrame.Angles
+				local v33 = tick() * 9
+				local v34 = math.cos(v33) ^ 2 * 0.015
+				local v35 = tick() * 9
+				v26 = v30 * (v32 * Angles3(v34, 0, math.cos(v35) * 0.01))
+			elseif v25 >= 0.5 then
+				local new4 = CFrame.new
+				local v36 = tick() * 12
+				local v37 = v25 * math.cos(v36) * 0.5
+				local v38 = tick() * 12
+				local v39 = new4(v37, v25 * math.cos(v38) ^ 2 * 0.2, 0)
+				local Angles4 = CFrame.Angles
+				local v40 = 0.25 + tick() * 12
+				local v41 = Angles4(0, v25 * math.sin(v40) * 0.09, 0)
+				local Angles5 = CFrame.Angles
+				local v42 = tick() * 12
+				local v43 = v25 * math.cos(v42) ^ 2 * 0.05
+				local v44 = tick() * 12
+				v26 = v39 * (v41 * Angles5(v43, 0, v25 * math.cos(v44) * 0.08))
+			else
+				local new5 = CFrame.new
+				local v45 = tick() * 9
+				local v46 = math.cos(v45) * 0.04
+				local v47 = tick() * 9
+				local v48 = new5(v46, math.cos(v47) ^ 2 * 0.07, 0)
+				local Angles6 = CFrame.Angles
+				local v49 = 0.25 + tick() * 9
+				local v50 = Angles6(0, math.sin(v49) * 0.03, 0)
+				local Angles7 = CFrame.Angles
+				local v51 = tick() * 9
+				local v52 = math.cos(v51) ^ 2 * 0.015
+				local v53 = tick() * 9
+				local v54 = v48 * (v50 * Angles7(v52, 0, math.cos(v53) * 0.01))
+				local new6 = CFrame.new
+				local v55 = tick() * 12
+				local v56 = v25 * math.cos(v55) * 0.5
+				local v57 = tick() * 12
+				local v58 = new6(v56, v25 * math.cos(v57) ^ 2 * 0.2, 0)
+				local Angles8 = CFrame.Angles
+				local v59 = 0.25 + tick() * 12
+				local v60 = Angles8(0, v25 * math.sin(v59) * 0.09, 0)
+				local Angles9 = CFrame.Angles
+				local v61 = tick() * 12
+				local v62 = v25 * math.cos(v61) ^ 2 * 0.05
+				local v63 = tick() * 12
+				v26 = v54:lerp(v58 * (v60 * Angles9(v62, 0, v25 * math.cos(v63) * 0.08)), v25 * 2)
+			end
+			p4.CameraBob = p4.CameraBob:lerp(v26, 0.2)
+		else
+			local CameraBob3 = p4.CameraBob
+			local new7 = CFrame.new
+			local v64 = tick() * 0.3
+			local v65 = math.sin(v64) * 0.001
+			local v66 = tick()
+			local v67 = v65 + math.cos(v66) * 0.006
+			local v68 = tick()
+			local v69 = math.sin(v68) * 0.003
+			local v70 = tick() * 0.4
+			local v71 = math.cos(v70) * 0.0008
+			local v72 = tick() + 0.2
+			p4.CameraBob = CameraBob3:lerp(new7(v67, v69, v71 + math.cos(v72) * 0.006), 0.06)
+		end
+		return CFrame.new(p4.CameraBob.Position * 0.5) * (p4.CameraBob - p4.CameraBob.Position)
+	end
+end
+
+==================================================
+SOURCE #46
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.Grounded
+==================================================
+
+return function(p1, _, _2, p2, _3)
+	--[[ line: 1 | upvalues: none]]
+	local Grounded = p2:Get("Grounded")
+	if p1.Grounded == Grounded then
+		if p1.PlayingAnim and (p1.Spring.p - p1.Spring.t).magnitude <= 0.008 then
+			p1.PlayingAnim = false
+			p1.Spring.t = Vector3.new(0, 0, 0)
+		end
+		local p = p1.Spring.p
+		return CFrame.Angles(p.X, p.Y, p.Z)
+	end
+	p1.Grounded = Grounded
+	if Grounded then
+		local Y = p2:Get("ActualVelocity").Y
+		local v3 = (math.abs(Y) - 9) / 10
+		local v4 = math.clamp(v3, 0, 3)
+		p1.Spring.s = 17
+		p1.Spring.d = 0.5
+		local Spring = p1.Spring
+		local v5 = v4 * -0.03
+		Spring.t = Vector3.new(v5, 0, 0)
+		local Spring2 = p1.Spring
+		local v6 = v4 * -0.025
+		Spring2.v = Vector3.new(v6, 0, 0)
+		p1.PlayingAnim = true
+	else
+		p1.Spring.v = Vector3.new(-0.20000000298023224, 0, 0)
+		p1.Spring.t = Vector3.new(0, 0, 0)
+		p1.PlayingAnim = false
+	end
+	local p3 = p1.Spring.p
+	return CFrame.Angles(p3.X, p3.Y, p3.Z)
+end
+
+==================================================
+SOURCE #47
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.Slide
+==================================================
+
+return function(p1, _, _2, p2, _3)
+	--[[ line: 1 | upvalues: none]]
+	local v3 = p2:Get("ViewmodelAnimationType") == "Slide"
+	if v3 == p1.Sliding then
+		if p1.Sliding then
+			if p1.State == 0 then
+				if (p1.Spring.p - p1.Spring.t).magnitude <= 0.03 then
+					p1.State = 1
+					p1.Spring.t = Vector3.new(0.07999999821186066, 0, 0)
+				end
+			elseif p1.State == 1 and (p1.Spring.p - p1.Spring.t).magnitude <= 0.003 then
+				p1.State = 2
+				p1.Spring.s = 8
+				p1.Spring.d = 0.7
+				p1.Spring.t = Vector3.new()
+			end
+		end
+		local p = p1.Spring.p
+		return CFrame.Angles(p.X, p.Y, p.Z)
+	end
+	if v3 then
+		p1.Sliding = v3
+		p1.State = 0
+		p1.Spring.s = 16
+		p1.Spring.d = 0.7
+		p1.Spring.t = Vector3.new(-0.03999999910593033, 0, 0)
+		local p3 = p1.Spring.p
+		return CFrame.Angles(p3.X, p3.Y, p3.Z)
+	end
+	p1.Spring.t = Vector3.new()
+	p1.State = 0
+end
