@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.199
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.201
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.200"
+local SCRIPT_VERSION = "1.201"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -16257,7 +16257,7 @@ mainJump.autoJumpModePicker.Size =
         0,
         77,
         0,
-        72
+        88
     )
 
 mainJump.autoJumpModePicker.Position =
@@ -16362,7 +16362,7 @@ local autoJumpModeLayout =
 autoJumpModeLayout.Padding =
     UDim.new(
         0,
-        4
+        12
     )
 
 autoJumpModeLayout.HorizontalAlignment =
@@ -16420,16 +16420,37 @@ local function createAutoJumpModeOption(
     button.Text =
         text
 
-    button.LayoutOrder =
+    local buttonHolder =
+        Instance.new("Frame")
+
+    buttonHolder.Name =
+        "AutoJumpModeHolder_" .. mode
+
+    buttonHolder.Size =
+        button.Size
+
+    buttonHolder.BackgroundTransparency =
+        1
+
+    buttonHolder.BorderSizePixel =
+        0
+
+    buttonHolder.LayoutOrder =
         mode == "legit"
         and 1
         or 2
 
-    button.ZIndex =
+    buttonHolder.ZIndex =
         82
 
-    button.Parent =
+    buttonHolder.Parent =
         autoJumpModeScroll
+
+    button.ZIndex =
+        83
+
+    button.Parent =
+        buttonHolder
 
     mainConnect(
         button.MouseButton1Click:Connect(
