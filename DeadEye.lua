@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.148
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.149
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.148"
+local SCRIPT_VERSION = "1.149"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -170,7 +170,8 @@ local savedConfig = {
         airTurnHotkey = "O",
         crouchSpamDelay = 0.03,
         crouchSpamHotkey = "I",
-        benchTrimpHotkey = "P"
+        benchTrimpHotkey = "P",
+        benchTrimpEnabled = false
     },
     gui = {
         x = 35,
@@ -10292,6 +10293,10 @@ mainJump.benchTrimpHotkeyName =
         and savedConfig.main.benchTrimpHotkey
         or "P"
     )
+mainJump.benchTrimpEnabled =
+    savedConfig.main
+    and savedConfig.main.benchTrimpEnabled == true
+    or false
 mainJump.smartAirTurnEnabled =
     savedConfig.main
     and savedConfig.main.smartAirTurn == true
@@ -10358,7 +10363,8 @@ function mainJump.saveConfig()
         airTurnHotkey = mainJump.airTurnHotkeyName,
         crouchSpamDelay = mainJump.crouchSpamDelay,
         crouchSpamHotkey = mainJump.crouchSpamHotkeyName,
-        benchTrimpHotkey = mainJump.benchTrimpHotkeyName
+        benchTrimpHotkey = mainJump.benchTrimpHotkeyName,
+        benchTrimpEnabled = mainJump.benchTrimpEnabled
     }
     pcall(function()
         saveSavedConfig()
@@ -12880,6 +12886,7 @@ function mainJump.setBenchTrimpEnabled(state)
         end
     end
 
+    mainJump.saveConfig()
     mainJump.update()
 end
 
@@ -15421,6 +15428,16 @@ mainJump.setAirTurnSpeed(
 mainJump.setCrouchSpamDelay(
     mainJump.crouchSpamDelay
 )
+
+if mainJump.benchTrimpEnabled then
+    pcall(function()
+        mainJump.bindBenchTrimp(
+            mainJump.character
+            or LocalPlayer.Character
+        )
+    end)
+end
+
 mainJump.update()
 
 if mainJump.rageLookEnabled then
