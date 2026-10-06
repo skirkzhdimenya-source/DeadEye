@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.185
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.186
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.185"
+local SCRIPT_VERSION = "1.186"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -19721,97 +19721,13 @@ local function cleanupUnusual()
         cosmetic.cleanup()
     end)
 
-    --// Cosmetic cleanup can rebuild the live rig asynchronously after
-    --// ApplyDescriptionResetAsync(). Restore the native Unusual only after
-    --// that rebuild, and retry until the final rig actually contains it.
-    local preserveFinalRestoredUnusualFX = false
-
-    for attempt = 1, 8 do
-        if attempt > 1 then
-            task.wait(0.15)
-        end
-
-        pcall(function()
-            local finalVisualRig =
-                UnusualFns.getUnusualVisualRig()
-            local finalPlayerCharacter =
-                UnusualFns.getUnusualPlayerCharacter()
-
-            if not finalVisualRig
-                or not runtimeRestoreId
-                or runtimeRestoreId == 0
-            then
-                return
-            end
-
-            --// From this point onward DeadEye must stop controlling
-            --// the native effect. The final Unusual is recreated only
-            --// through the game's own RigService.AddCosmetics path.
-            --// This lets the game's original effect/transparency handlers
-            --// own the restored objects again.
-            UnusualFns.clearNativeParticlePOV(false)
-            UnusualFns.removeOurUnusualFX()
-
-            --// If the real equipped Unusual changed, never recreate the
-            --// old configured effect.
-            if runtimeCurrentEquippedId
-                and runtimeOriginalId
-                and tonumber(runtimeCurrentEquippedId)
-                    ~= tonumber(runtimeOriginalId)
-            then
-                return
-            end
-
-            local AddCosmetics =
-                require(
-                    ReplicatedStorage.Services.Asset.RigService:WaitForChild(
-                        "AddCosmetics"
-                    )
-                )
-
-            --// Remove any stale copy of the current Unusual first.
-            pcall(function()
-                UnusualFns.removeOriginalUnusualFX(
-                    runtimeRestoreId,
-                    finalVisualRig,
-                    finalPlayerCharacter
-                )
-            end)
-
-            task.wait()
-
-            --// Recreate the Unusual through the native game pipeline.
-            local nativeAdded =
-                pcall(function()
-                    AddCosmetics(
-                        finalVisualRig,
-                        {
-                            runtimeRestoreId
-                        }
-                    )
-                end)
-
-            if nativeAdded then
-                task.wait(0.05)
-
-                --// The final Unusual was added after Rig.Limbs was built.
-                --// Refresh the native cached limb descendants and make the
-                --// game's own Visibility handler process the restored FX.
-                refreshNativeVisibilityAfterUnusualRestore()
-
-                local verify =
-                    UnusualFns.captureNativeUnusualSnapshot(
-                        runtimeRestoreId,
-                        finalVisualRig,
-                        finalPlayerCharacter
-                    )
-
-                if verify then
-                    preserveFinalRestoredUnusualFX = true
-                end
-            end
-        end)
-    end
+    --// Do not rebuild the native Unusual here.
+    --// The game's AddCosmetics(CharacterClassic) path can receive a
+    --// cosmetic rig that does not contain the expected HumanoidRootPart
+    --// limb and produces repeated shutdown errors.
+    //
+    --// The active/native snapshot is already handled above. Cleanup
+    --// must not call AddCosmetics again.
 
     unusualRuntime.originalId =
         nil
