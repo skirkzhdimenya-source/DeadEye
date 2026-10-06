@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.206
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.207
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.206"
+local SCRIPT_VERSION = "1.207"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -809,8 +809,8 @@ end
 --// =========================================================
 --// WINDOW SIZE LIMITS
 --// =========================================================
-local MIN_WINDOW_WIDTH = 480
-local MIN_WINDOW_HEIGHT = 285
+local MIN_WINDOW_WIDTH = 490
+local MIN_WINDOW_HEIGHT = 295
 local RESIZE_EDGE = 8
 --// =========================================================
 --// SCREEN GUI
@@ -860,7 +860,7 @@ Main.Size =
         ),
         0,
         math.max(
-            285,
+            MIN_WINDOW_HEIGHT,
             savedConfig.gui.height
         )
     )
@@ -16376,9 +16376,9 @@ autoJumpModePickerCorner =
 
 autoJumpModePickerCorner.Color =
     Color3.fromRGB(
-        92,
-        99,
-        113
+        42,
+        46,
+        54
     )
 
 autoJumpModePickerCorner.Thickness =
