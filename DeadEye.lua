@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.183
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.184
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.183"
+local SCRIPT_VERSION = "1.184"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10779,11 +10779,6 @@ function others.applyDescription(
     local applied = 0
     local lastError
 
-    --// Capture all descendants that ApplyDescription creates before
-    --// the async rebuild begins. This covers body parts, all accessory
-    --// categories, handles, face assets, clothing visuals and effects.
-    othersBeginFirstPersonCapture()
-
     for _, humanoid in ipairs(
         others.getHumanoids()
     ) do
@@ -10839,15 +10834,6 @@ function others.applyDescription(
         end
         return false
     end
-
-    --// ApplyDescription created the complete Others visual hierarchy.
-    --// The DescendantAdded capture above has recorded every object
-    --// created by this application. The dedicated first-person pass
-    --// now mirrors the native camera transparency behavior onto
-    --// those objects only.
-    pcall(function()
-        othersClearFirstPersonCaptureConnections()
-    end)
 
     pcall(function()
         if others.status then
