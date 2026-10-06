@@ -3374,3 +3374,1621 @@ return {
 		Order = 8
 	}
 }
+
+
+==================================================
+SOURCE #23
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Animation
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+game:GetService("ReplicatedStorage")
+function t.new(p1)
+	--[[ line: 11 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule,
+		Animations = {},
+		Legacy = {}
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 30 | upvalues: none]]
+	p2.AnimationController = p2.Viewmodel:FindFirstChildOfClass("Humanoid") or p2.Viewmodel:FindFirstChildOfClass("AnimationController")
+	for _, v3 in pairs((p2.BaseViewmodelModule.Animations:GetDescendants())) do
+		if v3:IsA("Animation") then
+			local v4 = p2.AnimationController:LoadAnimation(v3)
+			if p2.Animations[v3.Name] == nil then
+				p2.Animations[v3.Name] = {}
+			end
+			p2.Legacy[v3.Name] = true
+			local v5 = p2.Animations[v3.Name]
+			table.insert(v5, v4)
+		end
+	end
+	if p2.ViewmodelModule ~= p2.BaseViewmodelModule and p2.ViewmodelModule:FindFirstChild("Animations") ~= nil then
+		for _2, v6 in pairs((p2.ViewmodelModule.Animations:GetDescendants())) do
+			if v6:IsA("Animation") then
+				if p2.Legacy[v6.Name] == true then
+					p2.Animations[v6.Name] = {}
+					p2.Legacy[v6.Name] = nil
+				end
+				local v7 = p2.AnimationController:LoadAnimation(v6)
+				if p2.Animations[v6.Name] == nil then
+					p2.Animations[v6.Name] = {}
+				end
+				local v8 = p2.Animations[v6.Name]
+				table.insert(v8, v7)
+			end
+		end
+	end
+end
+function t.Activate(p9, p10, _3)
+	--[[ line: 59 | upvalues: none]]
+	for _4, v11 in pairs(p9.Animations[p10.Name] or {}) do
+		v11:Stop(p10.StopLength or 0)
+	end
+	if p10.Stop == true then
+		return
+	else
+		local v12 = p9.Animations[p10.Name][math.random(1, #p9.Animations[p10.Name])]
+		if v12.IsPlaying ~= true or p10.DontPlayIfPlaying ~= true then
+			v12:Play(v12.Animation:GetAttribute("TransitionWeight") or p10.TransitionLength)
+			v12:AdjustWeight(v12.Animation:GetAttribute("Weight") or p10.Weight or 1)
+			v12:AdjustSpeed(v12.Animation:GetAttribute("Speed") or p10.Speed or 1)
+		end
+	end
+end
+return t
+
+
+==================================================
+SOURCE #24
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Particles
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+game:GetService("ReplicatedStorage")
+function t.new(p1)
+	--[[ line: 11 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 29 | upvalues: none]]
+	p2.Attachments = {}
+	for _, v3 in pairs((p2.Viewmodel:GetDescendants())) do
+		if v3:IsA("Attachment") then
+			local Attachments = p2.Attachments
+			table.insert(Attachments, v3)
+		end
+	end
+end
+function t.Activate(p4, p5, _2)
+	--[[ line: 38 | upvalues: none]]
+	for _3, v6 in pairs(p4.Attachments) do
+		if v6.Name == p5.Name then
+			for _4, v7 in pairs((v6:GetChildren())) do
+				if v7:IsA("ParticleEmitter") then
+					if v7:GetAttribute("EmitRate") == nil then
+						if v7:FindFirstChild("EmitRate") == nil then
+							v7:Emit(1)
+						else
+							v7:Emit(v7.EmitRate.Value)
+						end
+					else
+						v7:Emit((v7:GetAttribute("EmitRate")))
+					end
+				end
+			end
+		end
+	end
+end
+return t
+
+
+==================================================
+SOURCE #25
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Sound
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+game:GetService("ReplicatedStorage")
+function t.new(p1)
+	--[[ line: 11 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 29 | upvalues: none]]
+	p2.Sounds = {}
+	for _, v3 in pairs((p2.Viewmodel:GetDescendants())) do
+		if v3:IsA("Sound") then
+			if p2.Sounds[v3.Name] == nil then
+				p2.Sounds[v3.Name] = {}
+			end
+			local v4 = p2.Sounds[v3.Name]
+			table.insert(v4, v3)
+		end
+	end
+end
+function t.Activate(p5, p6, _2)
+	--[[ line: 41 | upvalues: none]]
+	if p5.Sounds[p6.Name] == nil then
+		return
+	elseif p5.Viewmodel ~= nil and p5.Viewmodel.Parent ~= nil then
+		local v7 = p5.Sounds[p6.Name][math.random(1, #p5.Sounds[p6.Name])]:Clone()
+		v7.Parent = p5.Viewmodel.HumanoidRootPart.SoundLocation
+		v7:Play()
+		game:GetService("Debris"):AddItem(v7, p6.Duration or 2)
+	end
+end
+return t
+
+
+==================================================
+SOURCE #26
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Tracer
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local v_u_1 = require((Services:WaitForChild("Client"):WaitForChild("EffectsService")))
+function t.new(p2)
+	--[[ line: 13 | upvalues: (copy) v_u_1, (copy) t]]
+	return setmetatable({
+		Character = p2.Character,
+		Viewmodel = p2.Viewmodel,
+		ViewmodelModule = p2.ViewmodelModule,
+		ViewmodelInfo = p2.ViewmodelInfo,
+		Tool = p2.Tool,
+		DataRegistry = p2.DataRegistry,
+		BaseViewmodelModule = p2.BaseViewmodelModule,
+		Tracer = v_u_1:GetMisc("Tracer")
+	}, t)
+end
+function t.Init(_)
+	--[[ line: 32 | upvalues: none]]
+end
+function t.Activate(p3, p4, p5)
+	--[[ line: 36 | upvalues: none]]
+	if p5 then
+		if p5[1] == nil then
+			return
+		elseif p4.Start == nil then
+			if typeof(p5) == "table" then
+				local v6 = p5[1]
+				if typeof(v6) == "table" then
+					for _2, v7 in pairs(p5) do
+						p3.Tracer:CreateTracer(p4, nil, v7[1], v7[2], v7[3])
+					end
+				else
+					p3.Tracer:CreateTracer(p4, nil, p5[1], p5[2], p5[3])
+				end
+			else
+				p3.Tracer:CreateTracer(p4, nil, p5[1], p5[2], p5[3])
+				return
+			end
+		else
+			local v8 = nil
+			for v9 = 1, #p4.Start do
+				if p4.Start[v9] == "Viewmodel" then
+					v8 = p3.Viewmodel
+				else
+					v8 = v8[p4.Start[v9]]
+				end
+			end
+			if v8 == nil then
+				return
+			else
+				local WorldPosition = v8.WorldPosition
+				if typeof(p5) == "table" then
+					local v10 = p5[1]
+					if typeof(v10) == "table" then
+						for _3, v11 in pairs(p5) do
+							p3.Tracer:CreateTracer(p4, WorldPosition, v11[1], v11[2], v11[3])
+						end
+					else
+						p3.Tracer:CreateTracer(p4, WorldPosition, p5[1], p5[2], p5[3])
+					end
+				else
+					p3.Tracer:CreateTracer(p4, WorldPosition, p5[1], p5[2], p5[3])
+					return
+				end
+			end
+		end
+	else
+		return
+	end
+end
+return t
+
+
+==================================================
+SOURCE #27
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.LightsVisible
+
+SOURCE CONTENT:
+
+function tween(p1, p2, p3, p4, p5, p6)
+	--[[ line: 8 | upvalues: none]]
+	local v7 = TweenInfo.new(p3, p4, p5, 0, p6, 0)
+	game:GetService("TweenService"):Create(p1, v7, p2):Play()
+end
+local t = {}
+t.__index = t
+game:GetService("ReplicatedStorage")
+function t.new(p8)
+	--[[ line: 27 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p8.Character,
+		Viewmodel = p8.Viewmodel,
+		ViewmodelModule = p8.ViewmodelModule,
+		ViewmodelInfo = p8.ViewmodelInfo,
+		Tool = p8.Tool,
+		DataRegistry = p8.DataRegistry,
+		BaseViewmodelModule = p8.BaseViewmodelModule
+	}, t)
+end
+function t.Init(p9)
+	--[[ line: 45 | upvalues: none]]
+	p9.Lights = {}
+	for _, v10 in pairs((p9.Viewmodel:GetDescendants())) do
+		if v10:IsA("Light") or v10:IsA("ParticleEmitter") then
+			local Lights = p9.Lights
+			table.insert(Lights, v10)
+		end
+	end
+end
+function t.Activate(p11, p12, _2)
+	--[[ line: 54 | upvalues: none]]
+	if p12.Type == "Enable" then
+		for _3, v13 in pairs(p11.Lights) do
+			v13.Enabled = true
+			local v14 = game.Players.LocalPlayer:GetAttribute("QualityLevel") or 8
+			if v14 > 0 and v14 <= 4 then
+				if v13:GetAttribute("OldBrightness") == nil then
+					v13:SetAttribute("OldBrightness", v13.Brightness)
+				end
+				v13.Brightness = v13:GetAttribute("OldBrightness") * 0.3
+			elseif v13:GetAttribute("OldBrightness") ~= nil then
+				v13.Brightness = v13:GetAttribute("OldBrightness")
+			end
+		end
+		return
+	elseif p12.Type == "Disable" then
+		for _4, v15 in pairs(p11.Lights) do
+			v15.Enabled = false
+		end
+		return
+	elseif p12.Type == "EnableSlow" then
+		for _5, v16 in pairs(p11.Lights) do
+			if v16:IsA("Light") then
+				local Brightness = v16.Brightness
+				if v16:GetAttribute("OldBrightness") == nil then
+					v16:SetAttribute("OldBrightness", Brightness)
+				end
+				v16.Brightness = 0
+				local v17 = game.Players.LocalPlayer:GetAttribute("QualityLevel") or 8
+				if v17 > 0 and v17 <= 4 then
+					Brightness = Brightness * 0.3
+				end
+				tween(v16, { Brightness = Brightness }, 0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+			end
+		end
+		return
+	elseif p12.Type == "DisableSlow" then
+		for _6, v18 in pairs(p11.Lights) do
+			if v18:IsA("Light") then
+				local _7 = v18.Brightness
+				if v18:GetAttribute("OldBrightness") == nil then
+					v18:SetAttribute("OldBrightness", v18.Brightness)
+				end
+				tween(v18, { Brightness = 0 }, 0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+			end
+		end
+	elseif p12.Type == "GraphicsChanged" then
+		for _8, v19 in pairs(p11.Lights) do
+			if v19:IsA("Light") then
+				local v20 = game.Players.LocalPlayer:GetAttribute("QualityLevel") or 8
+				if v20 > 0 and v20 <= 4 then
+					if v19:GetAttribute("OldBrightness") == nil then
+						v19:SetAttribute("OldBrightness", v19.Brightness)
+					end
+					v19.Brightness = v19:GetAttribute("OldBrightness") * 0.3
+				elseif v19:GetAttribute("OldBrightness") ~= nil then
+					v19.Brightness = v19:GetAttribute("OldBrightness")
+				end
+			end
+		end
+	end
+end
+return t
+
+
+==================================================
+SOURCE #28
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.MovementAnimations
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local useSettings = require(ReplicatedStorage.Shared.UserData.ClientHooks.useSettings)
+local StateInfo = require(ReplicatedStorage.Objects.Game.Character.Shared.StateInfo)
+function t.new(p1)
+	--[[ line: 13 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule,
+		Animations = {},
+		CurrentC1 = CFrame.new(0, 2, -4)
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 33 | upvalues: (copy) useSettings]]
+	p2.AnimationController = p2.Viewmodel:FindFirstChildOfClass("Humanoid") or p2.Viewmodel:FindFirstChildOfClass("AnimationController")
+	local t2 = {
+		"Idle",
+		"Jump",
+		"Mantle",
+		"Slide"
+	}
+	for _, v3 in pairs((p2.BaseViewmodelModule.Animations:GetDescendants())) do
+		if v3:IsA("Animation") then
+			for _2, v4 in pairs(t2) do
+				if v4 == v3.Name then
+					local Animations = p2.Animations
+					local AnimationController = p2.Viewmodel.AnimationController
+					table.insert(Animations, (AnimationController:LoadAnimation(v3)))
+				end
+			end
+		end
+	end
+	p2.SprintViewmodels = useSettings.Get("SprintViewmodel")
+	p2.LeftArm = p2.Viewmodel.PrimaryPart:FindFirstChild("Left Arm")
+	p2.RightArm = p2.Viewmodel.PrimaryPart:FindFirstChild("Right Arm")
+end
+function t.Activate(p5, p6, _3, p7)
+	--[[ line: 58 | upvalues: (copy) StateInfo]]
+	if p5.LeftArm then
+		local v8 = CFrame.new()
+		local Speed = p5.DataRegistry:Get("Speed")
+		local LookY = p5.DataRegistry:Get("LookY")
+		local v9 = StateInfo:GetState((p5.DataRegistry:Get("State")))
+		local v10 = Speed or 0 or 0
+		local v11 = (LookY < 0 and 0 or LookY) / 1.4
+		local LeftArm = p5.LeftArm
+		local new = CFrame.new
+		local v12 = -1.5 - v11 * 1.5
+		local v13 = -3 + v11 * 0.5
+		LeftArm.C0 = new((Vector3.new(-1.5, v12, v13)))
+		local RightArm = p5.RightArm
+		local new2 = CFrame.new
+		local v14 = -1.5 - v11 * 1.5
+		local v15 = -3 + v11 * 0.5
+		RightArm.C0 = new2((Vector3.new(1.5, v14, v15)))
+		if p5.SprintViewmodels == false then
+			v8 = CFrame.new(0, 2, -4)
+			for _4, v16 in pairs(p5.Animations) do
+				if v16.Animation.Name == "Idle" then
+					if v16.IsPlaying == false then
+						v16:Play()
+					end
+					v16:AdjustSpeed(0)
+					v16:AdjustWeight(0.001, 0.3)
+				elseif v16.Animation.Name ~= "Idle" and v16.IsPlaying == true then
+					v16:Stop(p6.TransitionTimes[v16.Animation.Name] or 0.3)
+				end
+			end
+		elseif v9.ViewmodelAnimationType == "Slide" then
+			for _5, v17 in pairs(p5.Animations) do
+				if v17.Animation.Name == "Slide" and v17.IsPlaying == false then
+					v17:Play(0.25)
+					v17:AdjustSpeed(v17.Animation:GetAttribute("Speed") or 1)
+				elseif v17.Animation.Name ~= "Slide" and (v17.IsPlaying == true and v17.Animation.Name ~= "Idle") then
+					v17:Stop(p6.TransitionTimes[v17.Animation.Name] or 0.3)
+				end
+			end
+		elseif v9.ViewmodelAnimationType == "Air" then
+			if v10 <= 25 then
+				v8 = CFrame.new(0, 2, -4)
+			end
+			for _6, v18 in pairs(p5.Animations) do
+				if v18.Animation.Name == "Jump" and (v18.IsPlaying == false and v10 > 25) then
+					v18:Play(0.15, 0.75, 0.9)
+				elseif v18.Animation.Name ~= "Jump" and (v18.IsPlaying == true and v18.Animation.Name ~= "Idle") then
+					v18:Stop(p6.TransitionTimes[v18.Animation.Name] or 0.3)
+				end
+			end
+		else
+			v8 = CFrame.new(0, 2, -4)
+			if v10 > 23 then
+				v8 = CFrame.new()
+			end
+			for _7, v19 in pairs(p5.Animations) do
+				if v19.Animation.Name == "Idle" then
+					if v19.IsPlaying == false then
+						v19:Play()
+					end
+					v19:AdjustSpeed(v19.Animation:GetAttribute("Speed") or 1)
+					local v20 = v10 / 28
+					v19:AdjustWeight(math.clamp(v20, 0.001, 0.8), 0.3)
+				elseif v19.Animation.Name ~= "Idle" and v19.IsPlaying == true then
+					v19:Stop(p6.TransitionTimes[v19.Animation.Name] or 0.3)
+				end
+			end
+		end
+		local CurrentC1 = p5.CurrentC1
+		local v21 = p7 * 5
+		p5.CurrentC1 = CurrentC1:lerp(v8, (math.clamp(v21, 0, 1)))
+		p5.LeftArm.C1 = p5.CurrentC1
+		p5.RightArm.C1 = p5.CurrentC1
+	end
+end
+return t
+
+
+==================================================
+SOURCE #29
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.ToolMovementAnimations
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Services = ReplicatedStorage:WaitForChild("Services")
+require((Services:WaitForChild("Client"):WaitForChild("CameraService")))
+local useSettings = require(ReplicatedStorage.Shared.UserData.ClientHooks.useSettings)
+local StateInfo = require(ReplicatedStorage.Objects.Game.Character.Shared.StateInfo)
+function t.new(p1)
+	--[[ line: 15 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule,
+		Animations = {},
+		CurrentC0 = CFrame.new(-1.5, -5.5, 5)
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 35 | upvalues: (copy) useSettings]]
+	p2.AnimationController = p2.Viewmodel:FindFirstChildOfClass("Humanoid") or p2.Viewmodel:FindFirstChildOfClass("AnimationController")
+	local t2 = { "Idle", "Sprint", "Slide" }
+	for _, v3 in pairs((p2.BaseViewmodelModule.Animations:GetDescendants())) do
+		if v3:IsA("Animation") then
+			for _2, v4 in pairs(t2) do
+				if v4 == v3.Name then
+					local Animations = p2.Animations
+					local AnimationController = p2.Viewmodel.AnimationController
+					table.insert(Animations, (AnimationController:LoadAnimation(v3)))
+				end
+			end
+		end
+	end
+	if p2.ViewmodelModule and p2.ViewmodelModule:FindFirstChild("Animations") then
+		for _3, v5 in pairs((p2.ViewmodelModule.Animations:GetDescendants())) do
+			if v5:IsA("Animation") then
+				for _4, v6 in pairs(t2) do
+					if v6 == v5.Name then
+						for v7, v8 in pairs(p2.Animations) do
+							if v8.Animation == v5 then
+								table.remove(p2.Animations, v7)
+							end
+						end
+						local Animations2 = p2.Animations
+						local AnimationController2 = p2.AnimationController
+						table.insert(Animations2, (AnimationController2:LoadAnimation(v5)))
+					end
+				end
+			end
+		end
+	end
+	p2.LeftArm = p2.Viewmodel.HumanoidRootPart:FindFirstChild("Left Arm")
+	p2.SprintViewmodels = useSettings.Get("SprintViewmodel")
+end
+function t.Activate(p9, p10, _5, p11)
+	--[[ line: 75 | upvalues: (copy) StateInfo]]
+	local Speed = p9.DataRegistry:Get("Speed")
+	local _6 = (p9.DataRegistry:Get("LookY") or 0) / 1.4
+	local v12 = 0
+	local v13 = StateInfo:GetState((p9.DataRegistry:Get("State")))
+	if p9.SprintViewmodels == false then
+		for _7, v14 in pairs(p9.Animations) do
+			if v14.Animation.Name == "Idle" then
+				if v14.IsPlaying == false then
+					v14:Play()
+				end
+				v14:AdjustSpeed(0)
+				v14:AdjustWeight(0.001)
+			elseif v14.IsPlaying == true then
+				v14:Stop(p10.TransitionTimes[v14.Animation.Name] or 0.15)
+			end
+		end
+	elseif v13.ViewmodelAnimationType == "Slide" then
+		for _8, v15 in pairs(p9.Animations) do
+			if v15.Animation.Name == "Slide" and v15.IsPlaying == false then
+				v15:Play(0.25)
+				v15:AdjustSpeed(v15.Animation:GetAttribute("Speed") or 1)
+			elseif v15.Animation.Name ~= "Slide" and (v15.IsPlaying == true and (v15.Animation.Name ~= "Idle" or p10.StopIdle ~= false)) then
+				v15:Stop(p10.TransitionTimes[v15.Animation.Name] or 0.3)
+			end
+		end
+	elseif v13.ViewmodelAnimationType == "Air" then
+		for _9, v16 in pairs(p9.Animations) do
+			if v16.Animation.Name == "Jump" and v16.IsPlaying == false then
+				v16:Play(0.15, 0.75, 0.9)
+			elseif v16.Animation.Name ~= "Jump" and (v16.IsPlaying == true and (v16.Animation.Name ~= "Idle" or p10.StopIdle ~= false)) then
+				v16:Stop(p10.TransitionTimes[v16.Animation.Name] or 0.3)
+			end
+		end
+	elseif Speed > 8 then
+		for _10, v17 in pairs(p9.Animations) do
+			if v17.Animation.Name == "Sprint" and Speed > 8 then
+				if v17.IsPlaying == false then
+					v17:Play()
+				end
+				v17:AdjustSpeed(v17.Animation:GetAttribute("Speed") or 1)
+				local v18 = (Speed - 8) / 40
+				v17:AdjustWeight(math.clamp(v18, 0.001, 0.8) * (p10.SprintWeight or 1))
+			elseif v17.IsPlaying == true and (v17.Animation.Name ~= "Idle" or p10.StopIdle ~= false) then
+				v17:Stop(p10.TransitionTimes[v17.Animation.Name] or 0.15)
+			end
+		end
+	else
+		for _11, v19 in pairs(p9.Animations) do
+			if v19.Animation.Name == "Idle" then
+				if v19.IsPlaying == false then
+					v19:Play()
+				end
+			elseif v19.IsPlaying == true and (v19.Animation.Name ~= "Idle" or p10.StopIdle ~= false) then
+				v19:Stop(p10.TransitionTimes[v19.Animation.Name] or 0.15)
+			end
+		end
+	end
+	local CurrentC0 = p9.CurrentC0
+	local new = CFrame.new
+	local v20 = -5.5 - v12 * 1.5
+	local v21 = 5 + v12 * 0.5
+	local v22 = new((Vector3.new(-1.5, v20, v21)))
+	local v23 = p11 * 5
+	p9.CurrentC0 = CurrentC0:lerp(v22, (math.clamp(v23, 0, 1)))
+	local CurrentC02 = p9.CurrentC0
+	p9.LeftArm.C0 = CurrentC02
+end
+return t
+
+
+==================================================
+SOURCE #30
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Radar
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+function tween(p1, p2, p3, p4, p5, p6)
+	--[[ line: 9 | upvalues: none]]
+	local v7 = TweenInfo.new(p3, p4, p5, 0, p6, 0)
+	game:GetService("TweenService"):Create(p1, v7, p2):Play()
+end
+local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+require((Services:WaitForChild("Client"):WaitForChild("EffectsService")))
+function t.new(p8)
+	--[[ line: 29 | upvalues: (copy) t]]
+	return setmetatable({
+		PingSound = nil,
+		Character = p8.Character,
+		Viewmodel = p8.Viewmodel,
+		ViewmodelModule = p8.ViewmodelModule,
+		ViewmodelInfo = p8.ViewmodelInfo,
+		Tool = p8.Tool,
+		DataRegistry = p8.DataRegistry,
+		BaseViewmodelModule = p8.BaseViewmodelModule,
+		EmitParticles = {},
+		ConstantParticles = {}
+	}, t)
+end
+function t.Init(p9)
+	--[[ line: 50 | upvalues: none]]
+	for _, v10 in pairs((p9.Viewmodel:GetDescendants())) do
+		if v10:IsA("Sound") and (v10.Name == "Beep" or v10.Name == "Ping") then
+			p9.PingSound = v10
+		elseif v10:IsA("ParticleEmitter") then
+			if v10.Name == "Wave" or v10:GetAttribute("EmitRate") ~= nil then
+				local EmitParticles = p9.EmitParticles
+				table.insert(EmitParticles, v10)
+			else
+				v10.Enabled = false
+				local ConstantParticles = p9.ConstantParticles
+				table.insert(ConstantParticles, { v10 })
+			end
+		end
+	end
+end
+function t.HUDRing(_2)
+	--[[ line: 67 | upvalues: (copy) LocalPlayer]]
+	pcall(function()
+		--[[ line: 69 | upvalues: (ref) LocalPlayer]]
+		local ElementFrame = LocalPlayer.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ElementFrame
+		local v11 = ElementFrame.Element.Radar.Ring:Clone()
+		v11.Parent = ElementFrame.Element.Radar
+		v11.Name = "RingClone"
+		v11.ImageTransparency = 0.5
+		tween(v11, { ImageTransparency = 1 }, 1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+		v11:TweenSize(UDim2.new(1.4, 0, 1.4, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 1, false)
+		game:GetService("Debris"):AddItem(v11, 1)
+	end)
+end
+function t.GetWaitTime(_3)
+	--[[ line: 81 | upvalues: (copy) LocalPlayer]]
+	local v12 = 800
+	for _4, v13 in pairs((workspace.Players:GetChildren())) do
+		if v13:GetAttribute("Team") ~= "Menu" and (v13:GetAttribute("AI") == true and (v13:GetAttribute("Team") ~= LocalPlayer.Character:GetAttribute("Team") and (v13.Name ~= "Decoy" and (v13.PrimaryPart and (v13.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).magnitude < v12)))) then
+			v12 = (v13.PrimaryPart.Position - LocalPlayer.Character.PrimaryPlayerPart.Position).magnitude
+		end
+	end
+	local v14 = (v12 / 120) ^ 0.75
+	return math.clamp(v14, 0.25, 4)
+end
+function t.Activate(p15, _5, _6)
+	--[[ line: 93 | upvalues: none]]
+	for _7, v16 in pairs(p15.ConstantParticles) do
+		if v16[1] ~= nil and tick() - (v16[2] or 0) > 1 / v16[1].Rate then
+			v16[2] = tick()
+			v16[1]:Emit(1)
+		end
+	end
+	if tick() - (p15.LastWaited or 0) > (p15.WaitTime or 0) then
+		p15.WaitTime = p15:GetWaitTime()
+		p15.LastWaited = tick()
+		if p15.PingSound ~= nil then
+			p15.PingSound:Play()
+		end
+		for _8, v17 in pairs(p15.EmitParticles) do
+			v17:Emit(v17:GetAttribute("EmitRate") or 1)
+		end
+		p15:HUDRing()
+	end
+end
+return t
+
+
+==================================================
+SOURCE #31
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Compass
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+game:GetService("ReplicatedStorage")
+local CurrentCamera = workspace.CurrentCamera
+function t.new(p1)
+	--[[ line: 12 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 29 | upvalues: none]]
+	for _, v3 in pairs((p2.Viewmodel:GetDescendants())) do
+		if v3:IsA("Motor6D") and v3.Name == "Spinner" then
+			p2.Spinner = v3
+			p2.OldC0 = v3.C0
+		end
+	end
+end
+function t.GetTarget(_2)
+	--[[ line: 38 | upvalues: (copy) CurrentCamera]]
+	local v4 = Vector3.new(0, 0, -1000000)
+	for _3, v5 in pairs((workspace.Map.Parts.Objectives:GetChildren())) do
+		if v5:GetAttribute("Completed") == false and (v5.PrimaryPart ~= nil and (v4 == Vector3.new(0, 0, -1000000) or (v4 - CurrentCamera.CFrame.Position).magnitude > (v5.PrimaryPart.Position - CurrentCamera.CFrame.Position).magnitude)) then
+			v4 = v5.PrimaryPart.Position
+		end
+	end
+	return v4
+end
+function t.Activate(p6, _4, _5)
+	--[[ line: 50 | upvalues: (copy) CurrentCamera]]
+	if p6.Spinner and p6.OldC0 then
+		local lookVector = CurrentCamera.CFrame.lookVector
+		local v7 = p6:GetTarget()
+		p6.DataRegistry:Set("CompassTarget", v7)
+		local v8 = v7 - p6.Viewmodel.Tool.Main.Position
+		local Spinner = p6.Spinner
+		local C0 = p6.Spinner.C0
+		local OldC0 = p6.OldC0
+		local Angles = CFrame.Angles
+		local Z = lookVector.Z
+		local X = lookVector.X
+		local v9 = math.atan2(Z, X)
+		local Z2 = v8.Z
+		local X2 = v8.X
+		Spinner.C0 = C0:lerp(OldC0 * Angles(0, v9 - math.atan2(Z2, X2), 0), 0.5)
+	end
+end
+return t
+
+
+==================================================
+SOURCE #32
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Timer
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local v_u_1 = require((Services:WaitForChild("Data"):WaitForChild("ServerStateRegistryService")))
+function t.new(p2)
+	--[[ line: 13 | upvalues: (copy) t]]
+	return setmetatable({
+		TimerText = nil,
+		Character = p2.Character,
+		Viewmodel = p2.Viewmodel,
+		ViewmodelModule = p2.ViewmodelModule,
+		ViewmodelInfo = p2.ViewmodelInfo,
+		Tool = p2.Tool,
+		DataRegistry = p2.DataRegistry,
+		BaseViewmodelModule = p2.BaseViewmodelModule
+	}, t)
+end
+function t.Init(p3)
+	--[[ line: 32 | upvalues: none]]
+	for _, v4 in pairs((p3.Viewmodel:GetDescendants())) do
+		if v4:IsA("TextLabel") and v4.Name == "Timer" then
+			p3.TimerText = v4
+		end
+	end
+end
+function t.Activate(p5, _2, _3)
+	--[[ line: 40 | upvalues: (copy) v_u_1]]
+	if p5.TimerText then
+		local v6 = v_u_1:Get("Time") or 0
+		local v7 = math.max(0, v6)
+		local v8 = v7 / 60
+		local v9 = math.floor(v8)
+		local v10 = math.floor(v7) % 60
+		local TimerText = p5.TimerText
+		local v11 = string.format("%02d:%02d", v9, v10)
+		TimerText.Text = string.sub(v11, 2)
+	end
+end
+return t
+
+
+==================================================
+SOURCE #33
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Grapple
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+game:GetService("ReplicatedStorage")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Projectiles = workspace:WaitForChild("Effects"):WaitForChild("Ignore"):WaitForChild("Projectiles")
+function t.new(p1)
+	--[[ line: 14 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule
+	}, t)
+end
+function t.Init(p2, p3)
+	--[[ line: 31 | upvalues: none]]
+	local ViewmodelModule = p2.ViewmodelModule
+	local v4
+	if ViewmodelModule:FindFirstChild("Animations") then
+		v4 = ViewmodelModule.Animations
+	else
+		v4 = p2.BaseViewmodelModule.Animations
+	end
+	for _, v5 in pairs((v4:GetChildren())) do
+		if v5:IsA("Animation") and v5.Name == "Firing" then
+			p2.FiringAnimation = p2.Viewmodel.AnimationController:LoadAnimation(v5)
+		end
+	end
+	p2.Rig = p3
+	if p2.Rig then
+		p2.RigModel = p2.Rig.Model
+	end
+end
+function t.UpdateVisibility(p6, p7)
+	--[[ line: 49 | upvalues: none]]
+	if p6.RigModel then
+		local Tool = p6.RigModel.Tool
+		if p7 == false and p6.Enabled ~= false then
+			p6.DataRegistry:Set("Grappling", false)
+			p6.Enabled = false
+			for _2, v8 in pairs((p6.Viewmodel:GetDescendants())) do
+				if v8:IsA("BasePart") and (v8.Name == "Grapple1" or (v8.Name == "Grapple2" or v8.Name == "Grapple")) and v8:GetAttribute("OldTransparency") ~= nil then
+					v8.Transparency = v8:GetAttribute("OldTransparency")
+				end
+			end
+			for _3, v9 in pairs((Tool:GetDescendants())) do
+				if v9:IsA("BasePart") and (v9.Name == "Grapple1" or (v9.Name == "Grapple2" or v9.Name == "Grapple")) and v9:GetAttribute("OldTransparency") ~= nil then
+					v9.Transparency = v9:GetAttribute("OldTransparency")
+				end
+			end
+		end
+		if p7 == true and p6.Enabled ~= true then
+			p6.Enabled = true
+			for _4, v10 in pairs((p6.Viewmodel:GetDescendants())) do
+				if v10:IsA("BasePart") and (v10.Name == "Grapple1" or (v10.Name == "Grapple2" or v10.Name == "Grapple")) then
+					if v10:GetAttribute("OldTransparency") == nil then
+						v10:SetAttribute("OldTransparency", v10.Transparency)
+					end
+					v10.Transparency = 1
+				end
+			end
+			for _5, v11 in pairs((Tool:GetDescendants())) do
+				if v11:IsA("BasePart") and (v11.Name == "Grapple1" or (v11.Name == "Grapple2" or v11.Name == "Grapple")) then
+					if v11:GetAttribute("OldTransparency") == nil then
+						v11:SetAttribute("OldTransparency", v11.Transparency)
+					end
+					v11.Transparency = 1
+				end
+			end
+		end
+	end
+end
+function t.Activate(p12, _6, _7, p13)
+	--[[ line: 104 | upvalues: (copy) LocalPlayer, (copy) Projectiles]]
+	local Character = LocalPlayer.Character
+	local Tool2 = p12.RigModel.Tool
+	local v14 = nil
+	local v15 = nil
+	for _8, v16 in pairs((Projectiles:GetChildren())) do
+		if v16.Name == "Grapple" and v16:GetAttribute("Creator") == Character:GetAttribute("Tag") then
+			if v16:GetAttribute("Done") == true then
+				v15 = v16
+				v14 = v15
+				local _9 = v15
+				v15 = v14
+				_9 = v14
+			else
+				v14 = v16
+			end
+		end
+	end
+	p12:UpdateVisibility(v14 ~= nil)
+	local v17 = CFrame.new()
+	if v15 == nil then
+		if p12.FiringAnimation ~= nil and p12.FiringAnimation.IsPlaying == true then
+			p12.FiringAnimation:Stop(0.4)
+		end
+		if p12.SpringConstraint ~= nil then
+			p12.SpringConstraint:Destroy()
+			script.Disconnect:Play()
+		end
+		p12.SpringConstraint = nil
+		Tool2:SetAttribute("GrappleActive", nil)
+		p12.Viewmodel.HumanoidRootPart.Main.C0 = p12.Viewmodel.HumanoidRootPart.Main.C0:lerp(CFrame.new(1.26, -1.394, -2.984) * CFrame.Angles(0.05691518690753509, 0.07819075048934597, 0.1706932008450454), 0.1)
+	else
+		if p12.SpringConstraint == nil then
+			p12.SpringConstraint = script.SpringConstraint:Clone()
+			p12.SpringConstraint.Parent = Tool2
+			p12.SpringConstraint.Enabled = true
+			p12.SpringConstraint.Attachment0 = Character.HumanoidRootPart.VelPos
+			p12.SpringConstraint.Attachment1 = v15.Hitbox.Start
+			p12.SpringConstraint.Parent = Tool2
+			script.Connect:Play()
+		end
+		if p12.SpringConstraint.Attachment1.WorldPosition * Vector3.new(1, 0, 1) ~= Character.HumanoidRootPart.Position * Vector3.new(1, 0, 1) then
+			local HumanoidRootPart = Character.HumanoidRootPart
+			local p = CFrame.new(Character.HumanoidRootPart.CFrame.p)
+			local new = CFrame.new
+			local Position = Character.PrimaryPart.Position
+			local X = p12.SpringConstraint.Attachment1.WorldPosition.X
+			local Y = game.Players.LocalPlayer.Character.PrimaryPart.Position.Y
+			local Z = p12.SpringConstraint.Attachment1.WorldPosition.Z
+			HumanoidRootPart.CFrame = p * (new(Position, (Vector3.new(X, Y, Z))) - game.Players.LocalPlayer.Character.PrimaryPart.Position)
+		end
+		Tool2:SetAttribute("GrappleActive", true)
+		if p12.FiringAnimation ~= nil and p12.FiringAnimation.IsPlaying ~= true then
+			p12.FiringAnimation:Play(0.5)
+		end
+		local v18 = p12.Viewmodel.HumanoidRootPart.CFrame - p12.Viewmodel.HumanoidRootPart.Position
+		p12.Viewmodel.HumanoidRootPart.Main.C0 = p12.Viewmodel.HumanoidRootPart.Main.C0:lerp(v18:inverse() * CFrame.new(Vector3.new(), p12.SpringConstraint.Attachment1.WorldPosition - p12.Viewmodel.HumanoidRootPart.CFrame.p) * CFrame.new(1.26, -1.394, -2.984) * CFrame.Angles(0.05691518690753509, 0.07819075048934597, 0.1706932008450454), 0.3)
+		v17 = v18:inverse() * CFrame.new(Vector3.new(), p12.SpringConstraint.Attachment1.WorldPosition - p12.Viewmodel.HumanoidRootPart.CFrame.p)
+	end
+	local v19 = p12.DataRegistry:Get("LookY") or 0
+	local v20 = p12.Viewmodel.HumanoidRootPart["Left Arm"]
+	local C0 = p12.Viewmodel.HumanoidRootPart["Left Arm"].C0
+	local new2 = CFrame.new
+	local v21 = -5.5 - v19 * 1.5
+	local v22 = 5 + v19 * 0.5
+	local v23 = v17 * new2((Vector3.new(-1.5, v21, v22)))
+	local v24 = p13 * 10
+	v20.C0 = C0:lerp(v23, (math.clamp(v24, 0, 1)))
+end
+return t
+
+
+==================================================
+SOURCE #34
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Portal
+
+SOURCE CONTENT:
+
+function lerp(p1, p2, p3)
+	--[[ line: 6 | upvalues: none]]
+	return p1 + (p2 - p1) * p3
+end
+function tween(p4, p5, p6, p7, p8, p9)
+	--[[ line: 10 | upvalues: none]]
+	local v10 = TweenInfo.new(p6, p7, p8, 0, p9, 0)
+	game:GetService("TweenService"):Create(p4, v10, p5):Play()
+end
+local t = {}
+t.__index = t
+local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
+require((Services:WaitForChild("Client"):WaitForChild("EffectsService")))
+local CharacterService = require(Services.Asset.CharacterService)
+local CameraService = require(Services.Client.CameraService)
+require(script.Portal)
+require(script.Reflect)
+function t.new(p11)
+	--[[ line: 37 | upvalues: (copy) t]]
+	return setmetatable({
+		Character = p11.Character,
+		Viewmodel = p11.Viewmodel,
+		ViewmodelModule = p11.ViewmodelModule,
+		ViewmodelInfo = p11.ViewmodelInfo,
+		Tool = p11.Tool,
+		DataRegistry = p11.DataRegistry,
+		BaseViewmodelModule = p11.BaseViewmodelModule
+	}, t)
+end
+function t.Init(_)
+	--[[ line: 55 | upvalues: none]]
+	workspace.Effects.Portals:ClearAllChildren()
+end
+function t.Activate(p12, p13, p14)
+	--[[ line: 59 | upvalues: none]]
+	if p14 then
+		p12:CreateTracer(p13, p14)
+		if p13.Type == "Portal" then
+			return p12:CreatePortal(p13, p14)
+		end
+	end
+end
+function t.CreatePortal(p15, p16, p17)
+	--[[ line: 71 | upvalues: none]]
+	local Color = p16.Color
+	if p17[2] == nil then
+		script.Error:Play()
+		return
+	elseif p17[3] == false then
+		p15:PortalFailed(p17[1], p17[2], Color)
+	else
+		if workspace.Effects.Portals:FindFirstChild("Portal" .. Color) ~= nil then
+			workspace.Effects.Portals["Portal" .. Color]:Destroy()
+		end
+		p15:AddPortal(Color, p17)
+	end
+end
+function t.TestPortalPossibility(_2, p18, p19)
+	--[[ line: 88 | upvalues: none]]
+	local v20 = CFrame.new(p18, p18 + p19)
+	local v21 = p18 + p19
+	local _3 = {
+		v21 + v20.upVector * 7 / 2 + v20.rightVector * 4.5 / 2,
+		v21 + v20.upVector * 7 / 2 - v20.rightVector * 4.5 / 2,
+		v21 - v20.upVector * 7 / 2 + v20.rightVector * 4.5 / 2,
+		v21 - v20.upVector * 7 / 2 - v20.rightVector * 4.5 / 2,
+		v21
+	}
+end
+function t.AddPortal(p_u_22, p_u_23, p24)
+	--[[ line: 102 | upvalues: (copy) CharacterService, (copy) CameraService]]
+	local v25 = CharacterService:GetLocalCharacter()
+	if v25 and v25.ToolProfile then
+		local v26 = v25.ToolProfile:GetCurrentTool()
+		if v26 then
+			for _4, v27 in v26.Tasks:GetTasks() do
+				if v27.Resource then
+					v27.Resource:Increment(-1)
+				end
+			end
+			v25.ToolProfile:UpdateResources()
+		end
+	end
+	local v_u_28 = script["Portal" .. p_u_23]:Clone()
+	v_u_28.Parent = workspace.Effects.Portals
+	v_u_28.CFrame = CFrame.new(p24[1], p24[1] + p24[2])
+	local v29 = script.Hitbox:Clone()
+	v29.Parent = v_u_28
+	v29.CFrame = v_u_28.CFrame * CFrame.new(0, 0, -v29.Size.Z / 2)
+	v29.Touched:Connect(function(p30)
+		--[[ line: 126 | upvalues: (ref) CharacterService, (copy) p_u_23, (copy) v_u_28, (copy) p_u_22, (ref) CameraService]]
+		for _5, v31 in pairs((workspace.Effects.Portals:GetChildren())) do
+			if v31:GetAttribute("Touching") == true or tick() - (v31:GetAttribute("Debounce") or 0) <= 0.3 then
+				return
+			end
+		end
+		local v32 = CharacterService:GetLocalCharacter()
+		if v32 then
+			if game.Players.LocalPlayer.Character ~= nil and (p30.Parent == game.Players.LocalPlayer.Character and p30.Name == "HumanoidRootPart") then
+				local v33, v34, v35, v36, _6
+				if p30.Size.Y > 3 then
+					if (v32.DataRegistry:Get("Seated") or 0) ~= 0 or (v32.DataRegistry:Get("Climbing") or 0) ~= 0 then
+						return
+					end
+					v33 = p_u_23 == "Yellow" and "Blue" or "Yellow"
+					if workspace.Effects.Portals:FindFirstChild("Portal" .. v33) ~= nil then
+						v34 = workspace.Effects.Portals["Portal" .. v33]
+						v34:SetAttribute("Touching", true)
+						v34:SetAttribute("Debounce", tick())
+						v35 = v_u_28.CFrame:inverse() * game.Players.LocalPlayer.Character.PrimaryPart.CFrame
+						game.Players.LocalPlayer.Character.PrimaryPart.CFrame = v34.CFrame * v35
+						v36 = p_u_22.DataRegistry:Get("LookCFrame")
+						if v34.CFrame.lookVector:Dot(Vector3.new(0, 1, 0)) <= 0.7 and v34.CFrame.lookVector:Dot(Vector3.new(0, -1, 0)) <= 0.7 then
+							_6 = (v_u_28.CFrame - v_u_28.CFrame.p):inverse() * CFrame.Angles(0, 3.141592653589793, 0) * (v34.CFrame - v34.CFrame.p)
+							CameraService:SetCFrame(CFrame.new(v36.p) * (v34.CFrame - v34.CFrame.p))
+							p_u_22.DataRegistry:Set("ShiftMoveDirection", v34.CFrame.lookVector)
+						else
+							p_u_22.DataRegistry:Set("ShiftY", v34.CFrame.lookVector)
+						end
+						p_u_22:TeleportVisual(p_u_23)
+					end
+				else
+					local Y = p30.AssemblyLinearVelocity.Y
+					if math.abs(Y) > 1 then
+						if (v32.DataRegistry:Get("Seated") or 0) ~= 0 or (v32.DataRegistry:Get("Climbing") or 0) ~= 0 then
+							return
+						end
+						v33 = p_u_23 == "Yellow" and "Blue" or "Yellow"
+						if workspace.Effects.Portals:FindFirstChild("Portal" .. v33) ~= nil then
+							v34 = workspace.Effects.Portals["Portal" .. v33]
+							v34:SetAttribute("Touching", true)
+							v34:SetAttribute("Debounce", tick())
+							v35 = v_u_28.CFrame:inverse() * game.Players.LocalPlayer.Character.PrimaryPart.CFrame
+							game.Players.LocalPlayer.Character.PrimaryPart.CFrame = v34.CFrame * v35
+							v36 = p_u_22.DataRegistry:Get("LookCFrame")
+							if v34.CFrame.lookVector:Dot(Vector3.new(0, 1, 0)) <= 0.7 and v34.CFrame.lookVector:Dot(Vector3.new(0, -1, 0)) <= 0.7 then
+								_6 = (v_u_28.CFrame - v_u_28.CFrame.p):inverse() * CFrame.Angles(0, 3.141592653589793, 0) * (v34.CFrame - v34.CFrame.p)
+								CameraService:SetCFrame(CFrame.new(v36.p) * (v34.CFrame - v34.CFrame.p))
+								p_u_22.DataRegistry:Set("ShiftMoveDirection", v34.CFrame.lookVector)
+							else
+								p_u_22.DataRegistry:Set("ShiftY", v34.CFrame.lookVector)
+							end
+							p_u_22:TeleportVisual(p_u_23)
+						end
+					end
+				end
+			end
+		end
+	end)
+	v29.TouchEnded:Connect(function(p37)
+		--[[ line: 165 | upvalues: none]]
+		if game.Players.LocalPlayer.Character and (p37.Parent == game.Players.LocalPlayer.Character and p37.Name == "HumanoidRootPart") then
+			v_u_28:SetAttribute("Touching", nil)
+		end
+	end)
+	v_u_28.Size = Vector3.new(0.44999998807907104, 0.699999988079071, 1)
+	tween(v_u_28, { Size = Vector3.new(4.5, 7, 1) }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
+	v_u_28.Attachment1.CFrame = CFrame.new(0, -0.375, -0.058) * CFrame.Angles(1.5707963267948966, 0, 0)
+	tween(v_u_28.Attachment1, { CFrame = CFrame.new(0, -3.725, -0.575) * CFrame.Angles(1.5707963267948966, 0, 0) }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
+	v_u_28.Attachment2.CFrame = CFrame.new(0, 0.378, -0.058) * CFrame.Angles(1.5707963267948966, 0, 0)
+	tween(v_u_28.Attachment2, { CFrame = CFrame.new(0, 3.775, -0.575) * CFrame.Angles(1.5707963267948966, 0, 0) }, 0.18, Enum.EasingDirection.Out, false)
+	v_u_28.Attachment3.CFrame = CFrame.new(0, 0, -0.058)
+	tween(v_u_28.Attachment3, { CFrame = CFrame.new(0, 0, -0.575) }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
+	v_u_28.Attachment1.Left.CurveSize0 = 0.33
+	v_u_28.Attachment1.Left.CurveSize1 = -0.33
+	tween(v_u_28.Attachment1.Left, { CurveSize0 = 3.3, CurveSize1 = -3.3 }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
+	v_u_28.Attachment1.Right.CurveSize0 = -0.33
+	v_u_28.Attachment1.Right.CurveSize1 = 0.33
+	tween(v_u_28.Attachment1.Right, { CurveSize0 = -3.3, CurveSize1 = 3.3 }, 0.18, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, false)
+	for _7, v38 in pairs((v_u_28.Spawn:GetChildren())) do
+		v38:Emit(16)
+	end
+	v_u_28.Open:Play()
+	v_u_28.Open.TimePosition = 0.4
+	v_u_28.Open2:Play()
+	v_u_28.Loop:Play()
+end
+function t.TeleportVisual(_8, p39)
+	--[[ line: 200 | upvalues: (copy) CameraService]]
+	local Portal = game.Players.LocalPlayer.PlayerGui.Game.HUD.Overlay.Vignettes.Portal
+	Portal.Vignette.ImageTransparency = 0.4
+	Portal.Vignette2.ImageTransparency = 0
+	Portal.Vignette.Size = UDim2.new(2, 0, 2, 80)
+	tween(Portal.Vignette, { ImageTransparency = 1, Size = UDim2.new(2.25, 0, 2.25, 80) }, 0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+	tween(Portal.Vignette2, { ImageTransparency = 1 }, 0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+	if p39 == "Blue" then
+		Portal.Vignette.ImageColor3 = Color3.fromRGB(123, 152, 255)
+		Portal.Vignette2.ImageColor3 = Color3.fromRGB(123, 152, 255)
+	else
+		Portal.Vignette.ImageColor3 = Color3.fromRGB(255, 234, 131)
+		Portal.Vignette2.ImageColor3 = Color3.fromRGB(255, 234, 131)
+	end
+	script.Teleport:Play()
+	script.Teleport.TimePosition = 0.5
+	local v40 = tick()
+	repeat
+		CameraService:AdjustFOV("Portal", lerp(1.25, 1, (tick() - v40) / 0.6) ^ 0.5)
+		task.wait()
+	until tick() - v40 >= 0.6
+	CameraService:AdjustFOV("Portal", nil)
+end
+function t.CreateTracer(_9, p41, p42)
+	--[[ line: 225 | upvalues: none]]
+	local v43 = nil
+	for v44, v45 in pairs(p41.Start) do
+		if v44 == 1 then
+			v43 = workspace.CurrentCamera[v45]
+		else
+			v43 = v43[v45]
+		end
+	end
+	local v46 = Instance.new("Attachment", workspace.Terrain)
+	local v47 = Instance.new("Attachment", workspace.Terrain)
+	v46.CFrame = CFrame.new(v43.WorldPosition, p42[1])
+	v47.CFrame = CFrame.new(p42[1], v43.WorldPosition)
+	local v48 = script.Beam:Clone()
+	v48.Parent = v46
+	v48.Attachment0 = v46
+	v48.Attachment1 = v47
+	local magnitude = (v43.WorldPosition - p42[1]).magnitude
+	tween(v48, {
+		Width0 = 0.15,
+		Width1 = 0.15,
+		Brightness = 0,
+		CurveSize0 = math.random(-100, 100) / 2000 * magnitude,
+		CurveSize1 = math.random(-100, 100) / 2000 * magnitude
+	}, 0.45, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+	game:GetService("Debris"):AddItem(v46, 0.45)
+	game:GetService("Debris"):AddItem(v47, 0.45)
+	if p41.Color == "Yellow" then
+		v48.Color = ColorSequence.new(Color3.fromRGB(255, 215, 123))
+	else
+		v48.Color = ColorSequence.new(Color3.fromRGB(124, 144, 255))
+	end
+end
+function t.PortalFailed(_10, p49, p50, p51)
+	--[[ line: 253 | upvalues: none]]
+	script.Error:Play()
+	local v52 = Instance.new("Attachment", workspace.Terrain)
+	v52.CFrame = CFrame.new(p49, p50)
+	for _11, v53 in pairs((script[p51 .. "Fail"]:GetChildren())) do
+		local v54 = v53:Clone()
+		v54.Parent = v52
+		if v54:IsA("Sound") then
+			v54:Play()
+		else
+			v54:Emit(25)
+		end
+	end
+	game:GetService("Debris"):AddItem(v52, 2)
+end
+return t
+
+
+==================================================
+SOURCE #35
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Portal.Reflect
+
+SOURCE CONTENT:
+
+local function reflectCFrame(p1, p2)
+	--[[ line: 5 | upvalues: none]]
+	local p = p2.p
+	local LookVector = p2.LookVector
+	local v3 = p1.p - p
+	local v4 = p + (v3 - 2 * LookVector * v3:Dot(LookVector))
+	local RightVector = p1.RightVector
+	local v5 = -(RightVector - 2 * LookVector * RightVector:Dot(LookVector))
+	local UpVector = p1.UpVector
+	local v6 = UpVector - 2 * LookVector * UpVector:Dot(LookVector)
+	local v7 = -p1.LookVector
+	local v8 = v7 - 2 * LookVector * v7:Dot(LookVector)
+	return CFrame.fromMatrix(v4, v5, v6, v8)
+end
+return reflectCFrame
+
+
+==================================================
+SOURCE #36
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Portal.Portal
+
+SOURCE CONTENT:
+
+local ViewportFrame = Instance.new("ViewportFrame")
+ViewportFrame.Size = UDim2.new(1, 0, 1, 0)
+ViewportFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+ViewportFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+ViewportFrame.BackgroundTransparency = 1
+local t = {}
+t.__index = t
+function t.new(p1)
+	--[[ line: 18 | upvalues: (copy) t, (copy) ViewportFrame]]
+	local v2 = t
+	local v3 = setmetatable({}, v2)
+	v3.SurfaceGUI = p1
+	v3.Camera = Instance.new("Camera", p1)
+	v3.ViewportFrame = ViewportFrame:Clone()
+	v3.ViewportFrame.CurrentCamera = v3.Camera
+	v3.ViewportFrame.Parent = p1
+	return v3
+end
+function t.GetSurfaceInfo(p4)
+	--[[ line: 32 | upvalues: none]]
+	local Adornee = p4.SurfaceGUI.Adornee
+	local CFrame2 = Adornee.CFrame
+	local Size = Adornee.Size
+	local v5 = -Vector3.FromNormalId(p4.SurfaceGUI.Face)
+	local y = v5.y
+	local v6
+	if math.abs(y) == 1 then
+		local y2 = v5.y
+		v6 = Vector3.new(y2, 0, 0) or Vector3.new(0, 1, 0)
+	else
+		v6 = Vector3.new(0, 1, 0)
+	end
+	local v7 = CFrame.fromAxisAngle(v6, 1.5707963267948966) * v5
+	local Unit = v5:Cross(v7).Unit
+	return CFrame2 * CFrame.fromMatrix(-v5 * Size / 2, v7, Unit, v5), Vector2.new((Size * v7).Magnitude, (Size * Unit).Magnitude)
+end
+function t.RenderFrame(p8)
+	--[[ line: 47 | upvalues: none]]
+	local ViewportFrame2 = p8.ViewportFrame
+	local SurfaceGUI = p8.SurfaceGUI
+	local CurrentCamera = game.Workspace.CurrentCamera
+	local Camera = p8.Camera
+	local CFrame3 = CurrentCamera.CFrame
+	local v9, v10 = p8:GetSurfaceInfo()
+	local y3 = CurrentCamera.ViewportSize.y
+	local p = v9:PointToObjectSpace(CFrame3.p)
+	local v11 = p.x / v10.x
+	local v12 = p.y / v10.y
+	local v13 = math.abs(v11) * 2 + 1
+	local v14 = math.abs(v12) * 2 + 1
+	local v15 = v13 * v13 + v14 * v14
+	local LookVector = (CFrame3.p - v9.p):Dot(v9.LookVector)
+	local v17 = v10.y / 2
+	local v18 = math.atan2(v17, LookVector) * 2
+	local v19 = math.deg(v18)
+	local v20 = math.clamp(v19, 1, 120)
+	local v21 = v10.y / 2
+	local v22 = math.rad(v20) / 2
+	local v23 = LookVector / (v21 / math.tan(v22))
+	local v24 = (v18 > 2.0943951023931953 and v23 and v23 or 1) / v16
+	local v25 = CFrame.new(0, 0, 0, v24, 0, 0, 0, v24, 0, 0, 0, 1)
+	ViewportFrame2.Position = UDim2.new(ViewportFrame2.AnchorPoint.x - v11, 0, ViewportFrame2.AnchorPoint.y - v12, 0)
+	ViewportFrame2.Size = UDim2.new(v16, 0, v16, 0)
+	ViewportFrame2.BackgroundColor3 = SurfaceGUI.Adornee.Color
+	SurfaceGUI.CanvasSize = Vector2.new(y3 * (v10.x / v10.y), y3)
+	Camera.FieldOfView = v20
+	Camera.CFrame = CFrame.new(CFrame3.p) * (v9 - v9.p) * CFrame.Angles(0, 3.141592653589793, 0) * v25
+end
+return t
+
+
+==================================================
+SOURCE #37
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.ProjectedBeam
+
+SOURCE CONTENT:
+
+game:GetService("ReplicatedStorage"):WaitForChild("Services")
+require(script.Trajectory)
+local t = {}
+t.__index = t
+function t.new(p1)
+	--[[ line: 12 | upvalues: (copy) t]]
+	return setmetatable({
+		Reay = false,
+		Character = p1.Character,
+		Viewmodel = p1.Viewmodel,
+		ViewmodelModule = p1.ViewmodelModule,
+		ViewmodelInfo = p1.ViewmodelInfo,
+		Tool = p1.Tool,
+		DataRegistry = p1.DataRegistry,
+		BaseViewmodelModule = p1.BaseViewmodelModule
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 30 | upvalues: none]]
+	local v3 = script.ProjectedMotion:Clone()
+	v3.Parent = p2.Viewmodel.Tool
+	v3.Attachment0 = p2.Viewmodel.Tool.Main.StartAt
+	v3.Attachment1 = p2.Viewmodel.Tool.Main.EndAt
+	local v4 = script.Particle:Clone()
+	v4.Parent = v3.Attachment1
+	v4.Enabled = true
+	p2.Beam = v3
+end
+function t.Activate(p5, p6, _, p7)
+	--[[ line: 41 | upvalues: none]]
+	if p6.Ready then
+		p5.Ready = true
+		return
+	else
+		if p6.Ready == false then
+			p5.Ready = false
+		end
+		if p5.Ready == true then
+			p5.Beam.Enabled = true
+			p5.deb = true
+			local v8, v9, v10, v11 = FindTrajectory(p6)
+			local v12, v13, v14, v15 = require(script.Trajectory):getCurve(p6.Gravity, v8, v10, v9)
+			if p5.Beam.CurveSize0 == 0 then
+				p5.Beam.CurveSize0 = v14
+				p5.Beam.CurveSize1 = v15
+			else
+				local Beam = p5.Beam
+				local v16 = lerp
+				local CurveSize0 = p5.Beam.CurveSize0
+				local v17 = p7 * 16
+				Beam.CurveSize0 = v16(CurveSize0, v14, (math.min(v17, 1)))
+				local Beam2 = p5.Beam
+				local v18 = lerp
+				local CurveSize1 = p5.Beam.CurveSize1
+				local v19 = p7 * 16
+				Beam2.CurveSize1 = v18(CurveSize1, v15, (math.min(v19, 1)))
+			end
+			p5.Beam.Attachment0.WorldCFrame = CFrame.new(v10) * (v12 - v12.Position)
+			p5.Beam.Attachment1.WorldCFrame = CFrame.new(v11) * (v13 - v13.Position)
+		else
+			p5.Beam.Enabled = false
+			p5.Beam.Attachment1.Position = Vector3.new(0, 50000, 0)
+		end
+	end
+end
+function lerp(p20, p21, p22)
+	--[[ line: 69 | upvalues: none]]
+	return p20 + (p21 - p20) * p22
+end
+function FindTrajectory(p23)
+	--[[ line: 72 | upvalues: none]]
+	local WorldCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.GrenadePos.WorldCFrame
+	local lookVector = workspace.CurrentCamera.CFrame.lookVector
+	if game.Players.LocalPlayer.Character:GetAttribute("VR") == true then
+		lookVector = (game.Players.LocalPlayer.Character.HumanoidRootPart.RightHand.WorldCFrame * CFrame.Angles(-1.5707963267948966, 0, 0)).lookVector
+	end
+	local Angles = CFrame.Angles
+	local Y = lookVector.Y
+	local v24 = -math.asin(Y) - 0.5235987755982988
+	local v25 = (WorldCFrame * Angles(0, math.clamp(v24, -1.4207963267948966, 1.4207963267948966), 0)).lookVector * p23.ThrowVelocity
+	local p = WorldCFrame.p
+	local v26 = RaycastParams.new()
+	v26.FilterDescendantsInstances = { workspace.Map.Parts, workspace.Vehicles, workspace.Terrain }
+	v26.FilterType = Enum.RaycastFilterType.Include
+	v26.IgnoreWater = true
+	local v27 = v25
+	local v28 = 0
+	while true do
+		local v29 = p + v25 * 0.15
+		v25 = v25 + p23.Gravity * 0.15
+		local v30 = workspace:Raycast(p, v29 - p, v26)
+		if v30 == nil then
+			v28 = v28 + 0.15
+			p = v29
+		else
+			v28 = v28 + (p - v30.Position).magnitude / p23.ThrowVelocity * 0.15
+			p = v30.Position
+		end
+		if v30 ~= nil or p.Y < WorldCFrame.p.Y - 10 then
+			return v27, v28, WorldCFrame.p, p
+		end
+	end
+end
+return t
+
+
+==================================================
+SOURCE #38
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.ProjectedBeam.Trajectory
+
+SOURCE CONTENT:
+
+local t = {}
+local function fitBeamToCubicBezier(p1: vector, p2: vector, p3: vector, p4: vector)
+	--[[ line: 5 | upvalues: none]]
+	local v5 = p2 - p1
+	local v6 = p4 - p3
+	local Unit = v5.Unit
+	local Unit2 = v6.Unit
+	local v7 = Unit:Cross(Vector3.new(0, 1, 0))
+	return CFrame.fromMatrix(p1, Unit, v7), CFrame.fromMatrix(p4, Unit2, v7), v5.Magnitude, v6.Magnitude
+end
+function t.getCurveOld(_, p8: vector, p9: vector, p10: number, p11: number)
+	--[[ line: 22 | upvalues: (copy) fitBeamToCubicBezier]]
+	local v12 = p9 - p9.Y * Vector3.new(0, 1, 0)
+	local v13 = Vector2.new(v12.Magnitude, p9.Y)
+	local v14 = p10 - p8.Y
+	local v15 = p9.Y ^ 2 + p11 * 2 * v14
+	local v16 = -(math.sqrt(v15) + p9.Y) / p11
+	local v17 = Vector2.new(p9.X * v16, v14)
+	local v18 = v13 + Vector2.new(0, p11 * v16)
+	local v19 = v13 * (v17:Cross(v18) / v13:Cross(v18))
+	local Unit3 = v12.Unit
+	local v20 = p8 + v19.X * Unit3 + v19.Y * Vector3.new(0, 1, 0)
+	local v21 = p8 + v17.X * Unit3 + v17.Y * Vector3.new(0, 1, 0)
+	return fitBeamToCubicBezier(p8, (p8 + v20 * 2) * 0.3333333333333333, (v20 * 2 + v21) * 0.3333333333333333, v21)
+end
+function t.getCurve(_2, p22, p23, p24, p25)
+	--[[ line: 52 | upvalues: none]]
+	local v26 = 0.5 * p22 * p25 * p25 + p23 * p25 + p24
+	local v27 = v26 - (p22 * p25 * p25 + p23 * p25) / 3
+	local v28 = (0.125 * p22 * p25 * p25 + 0.5 * p23 * p25 + p24 - 0.125 * (p24 + v26)) / 0.375 - v27
+	local magnitude = (v28 - p24).magnitude
+	local magnitude2 = (v27 - v26).magnitude
+	local unit = (p24 - v26).unit
+	local unit2 = (v28 - p24).unit
+	local unit3 = unit2:Cross(unit).unit
+	local unit4 = (v27 - v26).unit
+	local unit5 = unit4:Cross(unit).unit
+	local unit6 = unit3:Cross(unit2).unit
+	return CFrame.new(p24.x, p24.y, p24.z, unit2.x, unit3.x, unit6.x, unit2.y, unit3.y, unit6.y, unit2.z, unit3.z, unit6.z), CFrame.new(v26.x, v26.y, v26.z, unit4.x, unit5.x, unit6.x, unit4.y, unit5.y, unit6.y, unit4.z, unit5.z, unit6.z), magnitude, -magnitude2
+end
+return t
+
+
+==================================================
+SOURCE #39
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Radio
+
+SOURCE CONTENT:
+
+function tween(p1, p2, p3, p4, p5, p6)
+	--[[ line: 6 | upvalues: none]]
+	local v7 = TweenInfo.new(p3, p4, p5, 0, p6, 0)
+	game:GetService("TweenService"):Create(p1, v7, p2):Play()
+end
+local t = {}
+t.__index = t
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Services = ReplicatedStorage:WaitForChild("Services")
+require((Services:WaitForChild("Data"):WaitForChild("ServerStateRegistryService")))
+function t.new(p8)
+	--[[ line: 27 | upvalues: (copy) t]]
+	return setmetatable({
+		TimerText = nil,
+		Character = p8.Character,
+		Viewmodel = p8.Viewmodel,
+		ViewmodelModule = p8.ViewmodelModule,
+		ViewmodelInfo = p8.ViewmodelInfo,
+		Tool = p8.Tool,
+		DataRegistry = p8.DataRegistry,
+		BaseViewmodelModule = p8.BaseViewmodelModule
+	}, t)
+end
+function t.Init(_)
+	--[[ line: 46 | upvalues: none]]
+end
+function t.Activate(_2, _3, p9)
+	--[[ line: 50 | upvalues: (copy) ReplicatedStorage]]
+	local v10 = nil
+	if p9 then
+		for _4, v11 in pairs((workspace.Players:GetChildren())) do
+			if v11:GetAttribute("Tag") == p9 then
+				v10 = v11
+			end
+		end
+	end
+	if v10 ~= nil and v10.PrimaryPart ~= nil then
+		if workspace.Effects:FindFirstChild(game.Players.LocalPlayer.Character.Name) ~= nil then
+			workspace.Effects:FindFirstChild(game.Players.LocalPlayer.Character.Name):Destroy()
+		end
+		local v12 = ReplicatedStorage.Tools.Radio.Variants.Default.RadioPart:Clone()
+		v12.Parent = workspace.Effects
+		v12.CFrame = CFrame.new(v10.PrimaryPart.Position)
+		v12.ToneSound:Play()
+		v12.Name = game.Players.LocalPlayer.Character.Name
+		game:GetService("Debris"):AddItem(v12, 3.3)
+		for _5, v_u_13 in pairs((v12:GetDescendants())) do
+			if v_u_13:IsA("TextLabel") then
+				v_u_13.TextTransparency = 1
+				v_u_13.TextStrokeTransparency = 1
+				tween(v_u_13, { TextTransparency = 0, TextStrokeTransparency = 0.5 }, 0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+				task.spawn(function()
+					--[[ line: 75 | upvalues: (copy) v_u_13]]
+					task.wait(2)
+					if v_u_13 ~= nil and v_u_13.Parent ~= nil then
+						tween(v_u_13, { TextTransparency = 1, TextStrokeTransparency = 1 }, 1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+					end
+				end)
+			elseif v_u_13:IsA("ImageLabel") then
+				local ImageTransparency = v_u_13.ImageTransparency
+				v_u_13.ImageTransparency = 1
+				tween(v_u_13, { ImageTransparency = ImageTransparency }, 0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+				task.spawn(function()
+					--[[ line: 85 | upvalues: (copy) v_u_13]]
+					task.wait(2)
+					if v_u_13 ~= nil and v_u_13.Parent ~= nil then
+						tween(v_u_13, { ImageTransparency = 1 }, 1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, false)
+					end
+				end)
+			end
+		end
+	end
+end
+return t
