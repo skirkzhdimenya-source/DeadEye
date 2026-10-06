@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.193
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.194
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.193"
+local SCRIPT_VERSION = "1.194"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -11240,6 +11240,7 @@ local mainJump = {
     benchTrimpEnabled = false,
     benchTrimpHotkeyName = "P",
     benchTrimpStateConnection = nil,
+    autoJumpClimbingConnection = nil,
     smartAirTurnEnabled = false,
     airTurnHotkeyName = "O",
     crouchSpamThread = nil,
@@ -14090,6 +14091,15 @@ function mainJump.destroySensors()
         mainJump.frontSensorTouchConnection = nil
     end
 
+    --// AutoJump Climbing uses the same mechanism as Bench Trimp:
+    --// Humanoid.StateChanged -> task.defer() -> ChangeState(Jumping).
+    if mainJump.autoJumpClimbingConnection then
+        pcall(function()
+            mainJump.autoJumpClimbingConnection:Disconnect()
+        end)
+        mainJump.autoJumpClimbingConnection = nil
+    end
+
     if mainJump.rearSensorTouchConnection then
         pcall(function()
             mainJump.rearSensorTouchConnection:Disconnect()
@@ -15204,6 +15214,71 @@ function mainJump.createSensors(char)
         char:WaitForChild(
             "HumanoidRootPart"
         )
+
+    --// =====================================================
+    --// AUTOJUMP CLIMBING
+    --// =====================================================
+    --// Use the exact same proven mechanism as Bench Trimp.
+    --// We do NOT use Movement:JumpReact() here because native
+    --// AttemptJump() calls EndClimb() before attempting the jump.
+    --//
+    --// If Bench Trimp is enabled at the same time, its existing
+    --// handler owns Climbing so both systems never fire twice.
+    --// =====================================================
+    if mainJump.benchTrimpEnabled then
+        mainJump.autoJumpClimbingConnection = nil
+    else
+        mainJump.autoJumpClimbingConnection =
+            mainJump.humanoid.StateChanged:Connect(
+                function(_, newState)
+                    if not genv.DEADEYE_MAIN_RUNNING
+                        or cleaned
+                        or not mainJump.enabled
+                        or mainJump.character ~= char
+                    then
+                        return
+                    end
+
+                    if newState
+                        ~= Enum.HumanoidStateType.Climbing
+                    then
+                        return
+                    end
+
+                    if not mainJump.canJump(true) then
+                        return
+                    end
+
+                    task.defer(function()
+                        if not genv.DEADEYE_MAIN_RUNNING
+                            or cleaned
+                            or not mainJump.enabled
+                            or mainJump.character ~= char
+                            or not mainJump.humanoid
+                            or not mainJump.humanoid.Parent
+                        then
+                            return
+                        end
+
+                        if mainJump.humanoid:GetState()
+                            ~= Enum.HumanoidStateType.Climbing
+                        then
+                            return
+                        end
+
+                        if not mainJump.canJump(true) then
+                            return
+                        end
+
+                        pcall(function()
+                            mainJump.humanoid:ChangeState(
+                                Enum.HumanoidStateType.Jumping
+                            )
+                        end)
+                    end)
+                end
+            )
+    end
 
     mainJump.lookTriggeredThisAir = false
 
