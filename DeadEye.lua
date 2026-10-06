@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.180
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.181
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.180"
+local SCRIPT_VERSION = "1.181"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10680,6 +10680,20 @@ function others.applyDescription(
         end
         return false
     end
+
+    --// ApplyDescriptionResetAsync recreates the complete avatar
+    --// cosmetics hierarchy. The game's Visibility module keeps a
+    --// cached descendant list for each limb, so newly-created
+    --// head/hair/face/body/front/back/waist/neck/etc. objects can
+    --// exist without being in Visibility.Limbs yet.
+    --//
+    --// Rebuild those native limb descendant caches and immediately
+    --// run the game's own Visibility:SetVisibility() path. Do not
+    --// classify accessories by AccessoryType: native Visibility
+    --// handles every supported descendant uniformly.
+    pcall(function()
+        refreshNativeVisibilityAfterUnusualRestore()
+    end)
     if others.status then
         others.status.Text =
             "Applied"
