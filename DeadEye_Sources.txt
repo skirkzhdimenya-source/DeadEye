@@ -5362,3 +5362,387 @@ return function(p1, _, _2, p2, _3)
 	p1.Spring.t = Vector3.new()
 	p1.State = 0
 end
+
+
+==================================================
+SOURCE #48
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Visibility
+
+PURPOSE:
+Клиентский обработчик видимости частей персонажа/косметики.
+Именно здесь SetVisibility управляет:
+    - BasePart.LocalTransparencyModifier
+    - BasePart.CastShadow
+    - ParticleEmitter.Enabled
+    - ParticleEmitter.Acceleration
+    - Beam.Enabled
+    - Trail.Enabled
+    - BillboardGui.Enabled
+    - SurfaceGui.Enabled
+    - Sparkles.Enabled
+    - Fire.Enabled
+    - Decal/Texture.Transparency
+    - SpringConstraint.Enabled
+
+SOURCE CONTENT:
+
+local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local CurrentCamera = workspace.CurrentCamera
+require(Services.Client.CameraService)
+require(Services.Client.EffectsService)
+local Shared = script.Parent.Parent:WaitForChild("Shared")
+require((Shared:WaitForChild("StateInfo")))
+local t = {}
+t.__index = t
+local Types = require(script.Types)
+function t.new(p1)
+	--[[ line: 21 | upvalues: (copy) t]]
+	local t2 = {
+		Parent = p1,
+		Model = p1.Model,
+		DataRegistry = p1.DataRegistry,
+		Player = game.Players.LocalPlayer
+	}
+	local v2 = t
+	local v3 = setmetatable(t2, v2)
+	local v4 = t
+	return setmetatable(v3, v4)
+end
+function t.Init(p_u_5)
+	--[[ line: 32 | upvalues: (copy) Types]]
+	task.spawn(function()
+		--[[ line: 34 | upvalues: (copy) p_u_5, (ref) Types]]
+		task.wait(0.1)
+		local _, v8 = pcall(function()
+			repeat
+				local v6 = p_u_5.Parent and (p_u_5.Parent.Rig and p_u_5.Parent.Rig.R15) and "R15" or "Classic"
+				local v7 = Types:GetType(p_u_5.Type, v6)
+				task.wait()
+			until v7 or not (p_u_5.Model and p_u_5.Model.Parent)
+			task.wait(0.1)
+			p_u_5:UpdateVisibility()
+		end)
+		if v8 then
+			warn(v8)
+		end
+	end)
+end
+function t.Destroy(p9)
+	--[[ line: 55 | upvalues: none]]
+	if p9.Destroyed then
+		return
+	else
+		local v10 = p9.Parent.Rig:GetRigModel()
+		if v10 then
+			for _2, v11 in v10:GetDescendants() do
+				if v11:IsA("BasePart") then
+					v11.LocalTransparencyModifier = 0
+				end
+			end
+			p9.Destroyed = true
+		end
+	end
+end
+function t.Create(_3)
+	--[[ line: 71 | upvalues: none]]
+end
+function t.Update(p12, _4)
+	--[[ line: 75 | upvalues: none]]
+	if p12.Destroyed then
+		return
+	else
+		local v13 = p12:GetType()
+		if p12.Type == v13 then
+			local ToolModel = p12.Parent.ToolProfile.CharacterVisuals.ToolModel
+			if ToolModel and (p12.Type and ToolModel ~= p12.CurrentToolModel) then
+				p12.CurrentToolModel = ToolModel
+				p12:UpdateVisibility({{ p12.CurrentToolModel, (p12.CurrentToolModel:GetDescendants()) }})
+			end
+		else
+			p12.Type = v13
+			p12:UpdateVisibility()
+		end
+	end
+end
+function t.GetType(p14)
+	--[[ line: 94 | upvalues: (copy) CurrentCamera]]
+	if p14.DataRegistry:Get("Scoped") or p14.DataRegistry:Get("Hidden") then
+		return "None"
+	end
+	if p14.Player.CameraMaxZoomDistance > 1 then
+		return "All"
+	end
+	if game.Players.LocalPlayer:GetAttribute("VR") then
+		return "VR"
+	end
+	if CurrentCamera.FieldOfView > 90 then
+		return "None"
+	end
+	if p14.DataRegistry:Get("DontShowFPCharacter") then
+		return "None"
+	end
+	local v15 = p14.Parent.ToolProfile:GetCurrentTool()
+	if not v15 then
+		return "None"
+	end
+	if p14.DataRegistry:Get("LookBack") == true then
+		p14.LastLookedBack = tick()
+		return "None"
+	end
+	if tick() - (p14.LastLookedBack or 0) <= 0.4 then
+		return "None"
+	end
+	local v16 = p14.DataRegistry:Get("Speed") or 1000
+	return v15.Info.Adjustments.BothArmsVisible == true and v16 <= 20 and "BothArms" or (v15.Info.Adjustments.LeftArmVisible == true and v16 <= 20 and "LeftArm" or "NoArms")
+end
+function t.UpdateVisibility(p17, p18)
+	--[[ line: 136 | upvalues: (copy) Types]]
+	local v19 = p17.Parent.Rig.R15 and "R15" or "Classic"
+	local v20 = Types:GetType(p17.Type, v19)
+	if not p18 then
+		p18 = p17.Parent.Rig:GetLimbs()
+		local ToolModel2 = p17.Parent.ToolProfile.CharacterVisuals.ToolModel
+		if ToolModel2 then
+			local t3 = { ToolModel2, (ToolModel2:GetDescendants()) }
+			table.insert(p18, t3)
+		end
+		if p17.Model.PrimaryPart then
+			local t4 = { p17.Model.PrimaryPart, (p17.Model.PrimaryPart:GetDescendants()) }
+			table.insert(p18, t4)
+		end
+	end
+	for _5, v21 in pairs(p18) do
+		local v22 = v21[1]
+		local v23 = v21[2]
+		local v24 = v21[3]
+		p17:SetVisibility(v20, v22, v23)
+		if v24 then
+			p17:SetVisibility(v20, v22, v24)
+		end
+	end
+end
+function t.SetVisibility(p25, p26, p27, p28)
+	--[[ line: 165 | upvalues: none]]
+	local v29 = table.find(p26, p27.Name) and 0 or 1
+	if p27:IsA("BasePart") then
+		p27.LocalTransparencyModifier = v29
+		if p25.Parent.Rig.CachedData[p27] == nil then
+			p25.Parent.Rig.CachedData[p27] = { CastShadow = p27.CastShadow }
+		end
+		if v29 == 0 and p25.Type == "All" then
+			p27.CastShadow = p25.Parent.Rig.CachedData[p27].CastShadow
+		else
+			p27.CastShadow = false
+		end
+	end
+	for _6, v30 in p28 or {} do
+		if v30:IsA("BasePart") then
+			v30.LocalTransparencyModifier = v29
+			if p25.Parent.Rig.CachedData[v30] == nil then
+				p25.Parent.Rig.CachedData[v30] = { CastShadow = v30.CastShadow }
+			end
+			local v31 = p25.Parent.Rig.CachedData[v30]
+			if v29 == 0 and p25.Type == "All" then
+				v30.CastShadow = v31.CastShadow
+			else
+				v30.CastShadow = false
+			end
+		elseif v30:IsA("ParticleEmitter") then
+			if p25.Parent.Rig.CachedData[v30] == nil then
+				p25.Parent.Rig.CachedData[v30] = { Enabled = v30.Enabled, Acceleration = v30.Acceleration }
+			end
+			local v32 = p25.Parent.Rig.CachedData[v30]
+			if v29 == 0 then
+				v30.Enabled = v32.Enabled
+				v30.Acceleration = v32.Acceleration
+			else
+				v30.Enabled = false
+				v30.Acceleration = Vector3.new(0, 500000, 0)
+			end
+		elseif v30:IsA("Beam") or (v30:IsA("Trail") or (v30:IsA("BillboardGui") or (v30:IsA("SurfaceGui") or (v30:IsA("Sparkles") or v30:IsA("Fire"))))) then
+			if p25.Parent.Rig.CachedData[v30] == nil then
+				p25.Parent.Rig.CachedData[v30] = { Enabled = v30.Enabled }
+			end
+			local v33 = p25.Parent.Rig.CachedData[v30]
+			if v29 == 0 then
+				v30.Enabled = v33.Enabled
+			else
+				v30.Enabled = false
+			end
+		elseif v30:IsA("Decal") or v30:IsA("Texture") then
+			if p25.Parent.Rig.CachedData[v30] == nil then
+				p25.Parent.Rig.CachedData[v30] = { Transparency = v30.Transparency }
+			end
+			local v34 = p25.Parent.Rig.CachedData[v30]
+			if v29 == 0 then
+				v30.Transparency = v34.Transparency
+			else
+				v30.Transparency = 1
+			end
+		elseif v30:IsA("SpringConstraint") then
+			if p25.Parent.Rig.CachedData[v30] == nil then
+				p25.Parent.Rig.CachedData[v30] = { Enabled = v30.Enabled }
+			end
+			local v35 = p25.Parent.Rig.CachedData[v30]
+			if v29 == 0 then
+				v30.Enabled = v35.Enabled
+			else
+				v30.Enabled = false
+			end
+		end
+	end
+end
+return t
+
+
+==================================================
+SOURCE #49
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Visibility.Types
+
+PURPOSE:
+Набор имён частей персонажа, которые разрешено оставлять видимыми
+для каждого режима Visibility:
+    - Classic.All
+    - Classic.VR
+    - Classic.NoArms
+    - Classic.LeftArm
+    - Classic.BothArms
+    - Classic.None
+    - R15.All
+    - R15.VR
+    - R15.NoArms
+    - R15.LeftArm
+    - R15.BothArms
+    - R15.None
+
+SOURCE CONTENT:
+
+local t = {}
+t.Classic = {
+	All = {
+		"Left Arm",
+		"Right Arm",
+		"Left Leg",
+		"Right Leg",
+		"Head",
+		"Torso",
+		"Tool",
+		"HumanoidRootPart"
+	},
+	VR = {
+		"Left Arm",
+		"Right Arm",
+		"Left Leg",
+		"Right Leg",
+		"Torso",
+		"Tool"
+	},
+	NoArms = { "Left Leg", "Right Leg", "Torso" },
+	LeftArm = {
+		"Left Leg",
+		"Right Leg",
+		"Torso",
+		"Left Arm"
+	},
+	BothArms = {
+		"Left Leg",
+		"Right Leg",
+		"Torso",
+		"Left Arm",
+		"Right Arm"
+	},
+	None = {}
+}
+t.R15 = {
+	All = {
+		"LeftUpperArm",
+		"LeftLowerArm",
+		"LeftHand",
+		"RightUpperArm",
+		"RightLowerArm",
+		"RightHand",
+		"UpperTorso",
+		"LowerTorso",
+		"Head",
+		"LeftUpperLeg",
+		"LeftLowerLeg",
+		"LeftFoot",
+		"RightUpperLeg",
+		"RightLowerLeg",
+		"RightFoot",
+		"HumanoidRootPart",
+		"Tool"
+	},
+	VR = {
+		"LeftUpperArm",
+		"LeftLowerArm",
+		"LeftHand",
+		"RightUpperArm",
+		"RightLowerArm",
+		"RightHand",
+		"LeftUpperLeg",
+		"LeftLowerLeg",
+		"LeftFoot",
+		"RightUpperLeg",
+		"RightLowerLeg",
+		"RightFoot",
+		"RightUpperArm",
+		"RightLowerArm",
+		"RightHand",
+		"Tool"
+	},
+	NoArms = {
+		"LeftUpperLeg",
+		"LeftLowerLeg",
+		"LeftFoot",
+		"RightUpperLeg",
+		"RightLowerLeg",
+		"RightFoot",
+		"UpperTorso",
+		"LowerTorso"
+	},
+	LeftArm = {
+		"LeftUpperLeg",
+		"LeftLowerLeg",
+		"LeftFoot",
+		"RightUpperLeg",
+		"RightLowerLeg",
+		"RightFoot",
+		"UpperTorso",
+		"LowerTorso",
+		"LeftUpperArm",
+		"LeftLowerArm",
+		"LeftHand"
+	},
+	BothArms = {
+		"LeftUpperLeg",
+		"LeftLowerLeg",
+		"LeftFoot",
+		"RightUpperArm",
+		"RightLowerArm",
+		"RightHand",
+		"UpperTorso",
+		"LowerTorso",
+		"LeftUpperArm",
+		"LeftLowerArm",
+		"LeftHand",
+		"RightUpperArm",
+		"RightLowerArm",
+		"RightHand"
+	},
+	None = {}
+}
+function t.GetType(_, p1, p2)
+	for v3, v4 in pairs(t[p2 or "Classic"]) do
+		if v3 == p1 then
+			return v4
+		end
+	end
+end
+return t
+
+==================================================
