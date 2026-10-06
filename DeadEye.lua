@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.213
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.214
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.213"
+local SCRIPT_VERSION = "1.214"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -187,11 +187,7 @@ local savedConfig = {
         reverseLookMode = "without",
         reverseLookEnabled = false,
         benchTrimpHotkey = "P",
-        benchTrimpEnabled = false,
-        enabledStates = {
-            rageLook = false,
-            benchTrimp = false
-        }
+        benchTrimpEnabled = false
     },
     gui = {
         x = 35,
@@ -264,29 +260,16 @@ function loadSavedConfig()
         savedConfig.main.hideUIHotkey
         or "H"
 
-    savedConfig.main.enabledStates =
-        type(savedConfig.main.enabledStates) == "table"
-        and savedConfig.main.enabledStates
-        or {}
-
-    if savedConfig.main.enabledStates.rageLook == true
-        or savedConfig.main.rageLook == true
-    then
-        savedConfig.main.enabledStates.rageLook = true
-        savedConfig.main.rageLook = true
-    else
-        savedConfig.main.enabledStates.rageLook = false
+    if savedConfig.main.rageLook ~= true then
         savedConfig.main.rageLook = false
+    else
+        savedConfig.main.rageLook = true
     end
 
-    if savedConfig.main.enabledStates.benchTrimp == true
-        or savedConfig.main.benchTrimpEnabled == true
-    then
-        savedConfig.main.enabledStates.benchTrimp = true
-        savedConfig.main.benchTrimpEnabled = true
-    else
-        savedConfig.main.enabledStates.benchTrimp = false
+    if savedConfig.main.benchTrimpEnabled ~= true then
         savedConfig.main.benchTrimpEnabled = false
+    else
+        savedConfig.main.benchTrimpEnabled = true
     end
 
     if savedConfig.main.reverseLookMode ~= "with"
@@ -11385,13 +11368,7 @@ mainJump.benchTrimpHotkeyName =
     )
 mainJump.benchTrimpEnabled =
     savedConfig.main
-    and (
-        (
-            type(savedConfig.main.enabledStates) == "table"
-            and savedConfig.main.enabledStates.benchTrimp == true
-        )
-        or savedConfig.main.benchTrimpEnabled == true
-    )
+    and savedConfig.main.benchTrimpEnabled == true
     or false
 mainJump.smartAirTurnEnabled =
     savedConfig.main
@@ -11412,13 +11389,7 @@ mainJump.lookEnabled =
     or false
 mainJump.rageLookEnabled =
     savedConfig.main
-    and (
-        (
-            type(savedConfig.main.enabledStates) == "table"
-            and savedConfig.main.enabledStates.rageLook == true
-        )
-        or savedConfig.main.rageLook == true
-    )
+    and savedConfig.main.rageLook == true
     or false
 mainJump.reverseLookMode =
     savedConfig.main
@@ -11479,11 +11450,7 @@ function mainJump.saveConfig()
         reverseLookMode = mainJump.reverseLookMode,
         reverseLookEnabled = mainJump.reverseLookEnabled,
         benchTrimpHotkey = mainJump.benchTrimpHotkeyName,
-        benchTrimpEnabled = mainJump.benchTrimpEnabled,
-        enabledStates = {
-            rageLook = mainJump.rageLookEnabled == true,
-            benchTrimp = mainJump.benchTrimpEnabled == true
-        }
+        benchTrimpEnabled = mainJump.benchTrimpEnabled
     }
     pcall(function()
         saveSavedConfig()
@@ -11503,13 +11470,6 @@ function mainJump.saveEnabledStates()
 
     savedConfig.main.benchTrimpEnabled =
         mainJump.benchTrimpEnabled == true
-
-    savedConfig.main.enabledStates = {
-        rageLook =
-            mainJump.rageLookEnabled == true,
-        benchTrimp =
-            mainJump.benchTrimpEnabled == true
-    }
 
     pcall(function()
         saveSavedConfig()
@@ -12834,9 +12794,9 @@ function mainJump.setRageLookEnabled(
 
     if persist ~= false then
         mainJump.saveConfig()
+        mainJump.saveEnabledStates()
     end
 
-    mainJump.saveEnabledStates()
     mainJump.update()
 
     return true
