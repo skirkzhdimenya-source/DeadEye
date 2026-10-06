@@ -3324,3 +3324,53 @@ return { new = function(p1)
 		end }
 	return setmetatable(t, t2)
 end }
+
+
+==================================================
+SOURCE #22
+==================================================
+PATH:
+game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy
+
+SOURCE CONTENT:
+
+return {
+	ADS = { Type = "Root", Order = 1 },
+	ViewmodelOffset1 = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "Root",
+		Order = 2
+	},
+	CameraBob = { Type = "Root", Order = 3 },
+	CameraOffset1 = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "Camera",
+		Order = 4
+	},
+	ViewmodelOffset2 = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "Root",
+		Order = 5
+	},
+	Grounded = {
+		Speed = 12,
+		Damping = 0.7,
+		Type = "Camera",
+		Order = 6
+	},
+	Slide = {
+		Speed = 16,
+		Damping = 0.7,
+		Type = "Camera",
+		Order = 7
+	},
+	SprintCamOffset = {
+		Speed = 20,
+		Damping = 0.6,
+		Type = "Camera",
+		Order = 8
+	}
+}
