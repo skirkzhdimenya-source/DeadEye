@@ -2102,3 +2102,86 @@ The final objective remains:
 ============================================================
 END OF 2026-10-06 BENCH / CLIMBING / LAUNCH FINDINGS
 ============================================================
+
+
+============================================================
+20. FIRST PERSON VISIBILITY RUNTIME TEST
+============================================================
+
+TEST:
+    FIRST PERSON VISIBILITY TEST v1.02
+    FIRST PERSON CHARACTER TREE PROBE v1.00
+
+STATE A:
+    3rd Person
+    Camera distance ~= 6.0003
+    Camera type = Custom
+    Camera subject =
+        Workspace.Players.DEN919191.Humanoid
+
+STATE B:
+    First Person
+    Camera distance ~= 0.6324
+    Camera type = Custom
+    Camera subject =
+        Workspace.Players.DEN919191.Humanoid
+
+CHARACTER PROXY:
+    Workspace.Players.DEN919191
+    = physical/logical character model.
+
+VISUAL RIG:
+    Workspace.Rigs.DEN919191
+    = actual visible third-person rig.
+
+FIRST PERSON RIG CHANGES:
+    Head
+    Left Arm
+    Right Arm
+    Left Leg
+    Right Leg
+    Torso
+
+    For these parts:
+        Transparency = 0 -> 0
+        LocalTransparencyModifier = 0 -> 1
+
+ACCESSORIES:
+    Runtime Rig contained 7 Accessory objects.
+    Six visible accessory Handle parts changed:
+        LocalTransparencyModifier 0 -> 1
+        Transparency 0 -> 0
+
+CHARACTER PROXY ROOT:
+    Workspace.Players.DEN919191.HumanoidRootPart
+        Transparency = 1
+        LocalTransparencyModifier 0 -> 1
+
+SEPARATE FIRST PERSON VIEWMODEL:
+    Workspace.Camera.Viewmodel
+
+    Confirmed visible parts:
+        Clothing.LeftHand
+        Clothing.LeftLowerArm
+        Clothing.LeftUpperArm
+        Clothing.RightHand
+        Clothing.RightLowerArm
+        Clothing.RightUpperArm
+
+    These remained:
+        Transparency = 0
+        LocalTransparencyModifier = 0
+
+CONFIRMED ARCHITECTURE:
+    3rd Person:
+        Workspace.Rigs.<LocalPlayer>
+        = visible character rig
+
+    First Person:
+        Workspace.Rigs.<LocalPlayer>
+        body/accessories -> LocalTransparencyModifier = 1
+
+        Workspace.Camera.Viewmodel
+        -> separate first-person arms/hands remain visible.
+
+This section contains runtime observations only.
