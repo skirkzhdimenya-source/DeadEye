@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.196"
+local SCRIPT_VERSION = "1.197"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -11301,7 +11301,6 @@ local mainJump = {
     legitJumpConnection = nil,
     autoJumpModeButton = nil,
     autoJumpModePicker = nil,
-    autoJumpModePickerPositionConnection = nil,
     connections = {}
 }
 mainJump.jumpDelay =
@@ -16546,16 +16545,6 @@ mainConnect(
     )
 )
 
-mainJump.autoJumpModePickerPositionConnection =
-    RunService.RenderStepped:Connect(
-        function()
-            if mainJump.autoJumpModePicker
-                and mainJump.autoJumpModePicker.Visible
-            then
-                positionAutoJumpModePicker()
-            end
-        end
-    )
 )
 
 __UI.lookRow =
