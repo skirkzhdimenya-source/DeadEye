@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.201
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.202
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.201"
+local SCRIPT_VERSION = "1.202"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -13443,6 +13443,61 @@ function mainJump.updateReverseLookUI(
     end
 end
 
+function mainJump.syncAutoJumpModePickerVisual()
+    local source =
+        mainJump.autoJumpModeButton
+
+    if not source
+        or not ScreenGui
+    then
+        return
+    end
+
+    for _, object in ipairs(
+        ScreenGui:GetDescendants()
+    ) do
+        if object:IsA("TextButton")
+            and string.sub(
+                tostring(object.Name),
+                1,
+                13
+            ) == "AutoJumpMode_"
+        then
+            pcall(function()
+                object.BackgroundColor3 =
+                    source.BackgroundColor3
+
+                object.BackgroundTransparency =
+                    source.BackgroundTransparency
+
+                object.BorderSizePixel =
+                    source.BorderSizePixel
+
+                object.AutoButtonColor =
+                    source.AutoButtonColor
+
+                object.TextSize =
+                    source.TextSize
+
+                object.Font =
+                    source.Font
+
+                object.TextColor3 =
+                    source.TextColor3
+
+                object.TextStrokeColor3 =
+                    source.TextStrokeColor3
+
+                object.TextStrokeTransparency =
+                    source.TextStrokeTransparency
+
+                object.Size =
+                    source.Size
+            end)
+        end
+    end
+end
+
 function mainJump.update()
     if not mainJump.toggle then
         return
@@ -13596,6 +13651,10 @@ function mainJump.update()
                 )
         end
     end
+
+    pcall(function()
+        mainJump.syncAutoJumpModePickerVisual()
+    end)
 
     if mainJump.airTurnToggle then
         if mainJump.airTurnEnabled then
@@ -23734,6 +23793,16 @@ end
 
 --// =========================================================
 --// =========================================================
+--// =========================================================
+--// AUTO JUMP MODE PICKER - EXACT BASE VISUAL
+--//
+--// Picker options are cloned before the final glass pass. Sync
+--// them from the finished selector button before hover styling.
+--// =========================================================
+pcall(function()
+    mainJump.syncAutoJumpModePickerVisual()
+end)
+
 --// =========================================================
 --// GUI BUTTON MOTION
 --// Soft centered hover light + press animation.
