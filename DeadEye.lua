@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.212
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.213
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.212"
+local SCRIPT_VERSION = "1.213"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -43,16 +43,6 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local genv = getgenv and getgenv() or _G
-
---// Restart persistence:
---// The previous DeadEye instance must save its live Main states BEFORE
---// its runtime states are disabled. This prevents Rage Look / Bench Trimp
---// from being overwritten by stale callbacks during the next startup.
-if genv.DEADEYE_MAIN_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_MAIN_CLEANUP()
-    end)
-end
 
 --// =========================================================
 --// PURGE STALE AUTOJUMP / LOOK SENSORS
@@ -197,7 +187,11 @@ local savedConfig = {
         reverseLookMode = "without",
         reverseLookEnabled = false,
         benchTrimpHotkey = "P",
-        benchTrimpEnabled = false
+        benchTrimpEnabled = false,
+        enabledStates = {
+            rageLook = false,
+            benchTrimp = false
+        }
     },
     gui = {
         x = 35,
@@ -206,106 +200,7 @@ local savedConfig = {
         height = 320
     }
 }
-function --// =========================================================
---// DEDICATED PERSISTENCE FOR RAGE LOOK / BENCH TRIMP
---// =========================================================
---// These two states are stored separately from the large general config.
---// This prevents unrelated startup/cleanup saves from overwriting them.
-local MAIN_STATE_FILE = "DeadEye_MainState.json"
-
-local function loadDedicatedMainState()
-    if type(readfile) ~= "function" then
-        return
-    end
-
-    if type(isfile) == "function" then
-        local exists = false
-        pcall(function()
-            exists = isfile(MAIN_STATE_FILE)
-        end)
-
-        if not exists then
-            return
-        end
-    end
-
-    local ok, raw =
-        pcall(function()
-            return readfile(MAIN_STATE_FILE)
-        end)
-
-    if not ok
-        or type(raw) ~= "string"
-        or raw == ""
-    then
-        return
-    end
-
-    local decodeOK, decoded =
-        pcall(function()
-            return HttpService:JSONDecode(raw)
-        end)
-
-    if not decodeOK
-        or type(decoded) ~= "table"
-    then
-        return
-    end
-
-    savedConfig.main =
-        savedConfig.main
-        or {}
-
-    if decoded.rageLook == true
-        or decoded.rageLook == false
-    then
-        savedConfig.main.rageLook =
-            decoded.rageLook
-    end
-
-    if decoded.benchTrimp == true
-        or decoded.benchTrimp == false
-    then
-        savedConfig.main.benchTrimpEnabled =
-            decoded.benchTrimp
-    end
-end
-
-local function saveDedicatedMainState()
-    if type(writefile) ~= "function" then
-        return false
-    end
-
-    local main =
-        savedConfig.main
-        or {}
-
-    local ok, raw =
-        pcall(function()
-            return HttpService:JSONEncode({
-                rageLook = main.rageLook == true,
-                benchTrimp = main.benchTrimpEnabled == true
-            })
-        end)
-
-    if not ok
-        or type(raw) ~= "string"
-    then
-        return false
-    end
-
-    local writeOK =
-        pcall(function()
-            writefile(
-                MAIN_STATE_FILE,
-                raw
-            )
-        end)
-
-    return writeOK
-end
-
-loadDedicatedMainState()
+function loadSavedConfig()
     if type(readfile) ~= "function" then
         return
     end
@@ -369,8 +264,29 @@ loadDedicatedMainState()
         savedConfig.main.hideUIHotkey
         or "H"
 
-    if savedConfig.main.rageLook ~= true then
+    savedConfig.main.enabledStates =
+        type(savedConfig.main.enabledStates) == "table"
+        and savedConfig.main.enabledStates
+        or {}
+
+    if savedConfig.main.enabledStates.rageLook == true
+        or savedConfig.main.rageLook == true
+    then
+        savedConfig.main.enabledStates.rageLook = true
+        savedConfig.main.rageLook = true
+    else
+        savedConfig.main.enabledStates.rageLook = false
         savedConfig.main.rageLook = false
+    end
+
+    if savedConfig.main.enabledStates.benchTrimp == true
+        or savedConfig.main.benchTrimpEnabled == true
+    then
+        savedConfig.main.enabledStates.benchTrimp = true
+        savedConfig.main.benchTrimpEnabled = true
+    else
+        savedConfig.main.enabledStates.benchTrimp = false
+        savedConfig.main.benchTrimpEnabled = false
     end
 
     if savedConfig.main.reverseLookMode ~= "with"
@@ -11469,7 +11385,13 @@ mainJump.benchTrimpHotkeyName =
     )
 mainJump.benchTrimpEnabled =
     savedConfig.main
-    and savedConfig.main.benchTrimpEnabled == true
+    and (
+        (
+            type(savedConfig.main.enabledStates) == "table"
+            and savedConfig.main.enabledStates.benchTrimp == true
+        )
+        or savedConfig.main.benchTrimpEnabled == true
+    )
     or false
 mainJump.smartAirTurnEnabled =
     savedConfig.main
@@ -11490,7 +11412,13 @@ mainJump.lookEnabled =
     or false
 mainJump.rageLookEnabled =
     savedConfig.main
-    and savedConfig.main.rageLook == true
+    and (
+        (
+            type(savedConfig.main.enabledStates) == "table"
+            and savedConfig.main.enabledStates.rageLook == true
+        )
+        or savedConfig.main.rageLook == true
+    )
     or false
 mainJump.reverseLookMode =
     savedConfig.main
@@ -11551,14 +11479,40 @@ function mainJump.saveConfig()
         reverseLookMode = mainJump.reverseLookMode,
         reverseLookEnabled = mainJump.reverseLookEnabled,
         benchTrimpHotkey = mainJump.benchTrimpHotkeyName,
-        benchTrimpEnabled = mainJump.benchTrimpEnabled
+        benchTrimpEnabled = mainJump.benchTrimpEnabled,
+        enabledStates = {
+            rageLook = mainJump.rageLookEnabled == true,
+            benchTrimp = mainJump.benchTrimpEnabled == true
+        }
     }
     pcall(function()
         saveSavedConfig()
     end)
+end
+
+
+--// Persist only the two toggle states directly into DeadEye_Config.json.
+--// This does not rebuild or replace savedConfig.main.
+function mainJump.saveEnabledStates()
+    savedConfig.main =
+        savedConfig.main
+        or {}
+
+    savedConfig.main.rageLook =
+        mainJump.rageLookEnabled == true
+
+    savedConfig.main.benchTrimpEnabled =
+        mainJump.benchTrimpEnabled == true
+
+    savedConfig.main.enabledStates = {
+        rageLook =
+            mainJump.rageLookEnabled == true,
+        benchTrimp =
+            mainJump.benchTrimpEnabled == true
+    }
 
     pcall(function()
-        saveDedicatedMainState()
+        saveSavedConfig()
     end)
 end
 
@@ -12882,6 +12836,7 @@ function mainJump.setRageLookEnabled(
         mainJump.saveConfig()
     end
 
+    mainJump.saveEnabledStates()
     mainJump.update()
 
     return true
@@ -14991,6 +14946,7 @@ function mainJump.setBenchTrimpEnabled(state)
     end
 
     mainJump.saveConfig()
+    mainJump.saveEnabledStates()
     mainJump.update()
 end
 
@@ -18395,100 +18351,9 @@ genv.DEADEYE_RAGE_LOOK =
         )
     end
 
---// =========================================================
---// MAIN RESTART CLEANUP
---// =========================================================
---// IMPORTANT:
---// Save the live persisted states FIRST.
---// Then tear down the old instance without writing runtime OFF states.
---// This is used when DeadEye.lua is executed again while the old
---// instance is still alive.
-genv.DEADEYE_MAIN_CLEANUP =
-    function()
-        pcall(function()
-            mainJump.saveConfig()
-        end)
-
-        pcall(function()
-            saveDedicatedMainState()
-        end)
-
-        pcall(function()
-            if mainJump.benchTrimpStateConnection then
-                mainJump.benchTrimpStateConnection:Disconnect()
-                mainJump.benchTrimpStateConnection = nil
-            end
-        end)
-
-        pcall(function()
-            mainJump.stopCrouchSpam()
-        end)
-
-        pcall(function()
-            mainJump.destroyCrouchSpamSensor()
-        end)
-
-        pcall(function()
-            mainJump.destroySensors()
-        end)
-
-        pcall(function()
-            mainJump.unbindAirTurnRender()
-        end)
-
-        pcall(function()
-            mainJump.uninstallReverseLookHooks()
-        end)
-
-        pcall(function()
-            mainJump.uninstallRageLookHook()
-        end)
-
-        pcall(function()
-            if mainJump.lookActive
-                or mainJump.lookRestoring
-            then
-                mainJump.restoreLookNow()
-            else
-                mainJump.unbindLookRender()
-            end
-        end)
-
-        pcall(function()
-            if mainJump.lookStateConnection then
-                mainJump.lookStateConnection:Disconnect()
-                mainJump.lookStateConnection = nil
-            end
-        end)
-
-        --// Runtime shutdown only. SavedConfig already contains the
-        --// user's actual ON/OFF state from the save above.
-        mainJump.rageLookEnabled = false
-        mainJump.benchTrimpEnabled = false
-        mainJump.enabled = false
-        mainJump.lookEnabled = false
-        mainJump.rageLookEnabled = false
-        mainJump.benchTrimpEnabled = false
-        mainJump.reverseLookEnabled = false
-        mainJump.crouchSpamEnabled = false
-        mainJump.airTurnEnabled = false
-
-        pcall(function()
-            mainDisconnect()
-        end)
-
-        pcall(function()
-            mainJump.setCrouching(false)
-        end)
-
-        cleaned = true
-        genv.DEADEYE_MAIN_RUNNING = false
-    end
-
 genv.DEADEYE_RAGE_LOOK_CLEANUP =
     function()
         pcall(function()
-            --// Cleanup must NEVER persist the forced OFF runtime state.
             mainJump.setRageLookEnabled(
                 false,
                 false
@@ -23928,11 +23793,6 @@ local function cleanup()
     --// Persist Main / Reverse Look state on close as well.
     pcall(function()
         mainJump.saveConfig()
-    end)
-
-    --// Write dedicated Main states before runtime shutdown.
-    pcall(function()
-        saveDedicatedMainState()
     end)
 
     pcall(function()
