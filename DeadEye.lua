@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.193"
+local SCRIPT_VERSION = "1.194"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -173,6 +173,7 @@ local savedConfig = {
     others = {},
     main = {
         jumpDelay = 0.01,
+        autoJumpMode = "rage",
         hotkey = "Z",
         hideUIHotkey = "H",
         look = false,
@@ -11226,6 +11227,7 @@ end
 --// =========================================================
 local mainJump = {
     enabled = false,
+    autoJumpMode = "rage",
     lookEnabled = false,
     airTurnEnabled = false,
     airTurnSpeed = 180,
@@ -11293,6 +11295,9 @@ local mainJump = {
     reverseLookModeSoloLabel = nil,
     reverseLookToggle = nil,
     frontSensorTouchConnection = nil,
+    legitJumpConnection = nil,
+    autoJumpModeButton = nil,
+    autoJumpModePicker = nil,
     connections = {}
 }
 mainJump.jumpDelay =
@@ -11304,6 +11309,19 @@ mainJump.jumpDelay =
         0,
         5
     )
+mainJump.autoJumpMode =
+    tostring(
+        savedConfig.main
+        and savedConfig.main.autoJumpMode
+        or "rage"
+    ):lower()
+
+if mainJump.autoJumpMode ~= "legit"
+    and mainJump.autoJumpMode ~= "rage"
+then
+    mainJump.autoJumpMode = "rage"
+end
+
 mainJump.hotkeyName =
     tostring(
         savedConfig.main
@@ -11406,6 +11424,7 @@ end
 function mainJump.saveConfig()
     savedConfig.main = {
         jumpDelay = mainJump.jumpDelay,
+        autoJumpMode = mainJump.autoJumpMode,
         hotkey = mainJump.hotkeyName,
         hideUIHotkey =
             mainJump.hideUIHotkeyName,
@@ -13445,6 +13464,25 @@ function mainJump.update()
             )
     end
 
+    if mainJump.autoJumpModeButton then
+        mainJump.autoJumpModeButton.Text =
+            mainJump.autoJumpMode == "legit"
+            and "LEGIT"
+            or "RAGE"
+        mainJump.autoJumpModeButton.BackgroundColor3 =
+            mainJump.autoJumpMode == "legit"
+            and Color3.fromRGB(
+                68,
+                74,
+                84
+            )
+            or Color3.fromRGB(
+                47,
+                52,
+                61
+            )
+    end
+
     if mainJump.lookToggle then
         if mainJump.lookEnabled then
             mainJump.lookToggle.Text =
@@ -13592,29 +13630,37 @@ function mainJump.setEnabled(state)
             mainJump.findLookMovementState()
             mainJump.bindAirTurnRender()
         end
+
         if mainJump.character
             and mainJump.humanoid
             and mainJump.humanoid.Parent
         then
-            pcall(function()
-                mainJump.createSensors(
-                    mainJump.character
-                )
-            end)
+            if mainJump.autoJumpMode == "legit" then
+                mainJump.destroySensors()
+                mainJump.bindLegitJumpLoop()
+            else
+                pcall(function()
+                    mainJump.createSensors(
+                        mainJump.character
+                    )
+                end)
 
-            task.defer(function()
-                if not genv.DEADEYE_MAIN_RUNNING
-                    or not mainJump.enabled
-                    or not mainJump.humanoid
-                    or not mainJump.humanoid.Parent
-                then
-                    return
-                end
-                if mainJump.canJump() then
-                    mainJump.lookAutoJumpCycle = true
-                    mainJump.jump()
-                end
-            end)
+                task.defer(function()
+                    if not genv.DEADEYE_MAIN_RUNNING
+                        or not mainJump.enabled
+                        or mainJump.autoJumpMode ~= "rage"
+                        or not mainJump.humanoid
+                        or not mainJump.humanoid.Parent
+                    then
+                        return
+                    end
+
+                    if mainJump.canJump() then
+                        mainJump.lookAutoJumpCycle = true
+                        mainJump.jump()
+                    end
+                end)
+            end
         end
     else
         mainJump.needsInputRearm = true
@@ -13655,6 +13701,65 @@ function mainJump.setEnabled(state)
 
     mainJump.update()
 end
+
+function mainJump.setAutoJumpMode(mode, persist)
+    mode =
+        tostring(
+            mode or ""
+        ):lower()
+
+    if mode ~= "legit"
+        and mode ~= "rage"
+    then
+        mode = "rage"
+    end
+
+    mainJump.autoJumpMode = mode
+
+    if mainJump.enabled
+        and mainJump.character
+        and mainJump.humanoid
+        and mainJump.humanoid.Parent
+    then
+        if mode == "legit" then
+            mainJump.destroySensors()
+            mainJump.lookAutoJumpCycle = false
+            mainJump.lookTriggeredThisAir = false
+            mainJump.bindLegitJumpLoop()
+        else
+            mainJump.stopLegitJumpLoop()
+
+            pcall(function()
+                mainJump.createSensors(
+                    mainJump.character
+                )
+            end)
+
+            task.defer(function()
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or not mainJump.enabled
+                    or mainJump.autoJumpMode ~= "rage"
+                    or not mainJump.humanoid
+                    or not mainJump.humanoid.Parent
+                then
+                    return
+                end
+
+                if mainJump.canJump() then
+                    mainJump.lookAutoJumpCycle = true
+                    mainJump.jump()
+                end
+            end)
+        end
+    end
+
+    if persist ~= false then
+        mainJump.saveConfig()
+    end
+
+    mainJump.update()
+end
+
 function mainJump.setDelay(value)
     value =
         tonumber(
@@ -14065,7 +14170,62 @@ function mainJump.startCapture(kind)
             "PRESS KEY..."
     end
 end
+function mainJump.stopLegitJumpLoop()
+    if mainJump.legitJumpConnection then
+        pcall(function()
+            mainJump.legitJumpConnection:Disconnect()
+        end)
+        mainJump.legitJumpConnection = nil
+    end
+end
+
+function mainJump.bindLegitJumpLoop()
+    mainJump.stopLegitJumpLoop()
+
+    if not genv.DEADEYE_MAIN_RUNNING
+        or cleaned
+        or not mainJump.enabled
+        or mainJump.autoJumpMode ~= "legit"
+    then
+        return
+    end
+
+    mainJump.legitJumpConnection =
+        RunService.PreSimulation:Connect(
+            function()
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or cleaned
+                    or not mainJump.enabled
+                    or mainJump.autoJumpMode ~= "legit"
+                then
+                    mainJump.stopLegitJumpLoop()
+                    return
+                end
+
+                local object =
+                    getCharacterObject()
+
+                local movement =
+                    object
+                    and object.Movement
+
+                if not movement then
+                    return
+                end
+
+                pcall(function()
+                    movement:AttemptJump(
+                        nil,
+                        true
+                    )
+                end)
+            end
+        )
+end
+
 function mainJump.destroySensors()
+    mainJump.stopLegitJumpLoop()
+
     if mainJump.lookWatcherConnection then
         pcall(function()
             mainJump.lookWatcherConnection:Disconnect()
@@ -14811,6 +14971,7 @@ end
 function mainJump.contact(hit, requireCameraBackward)
     if not genv.DEADEYE_MAIN_RUNNING
         or not mainJump.enabled
+        or mainJump.autoJumpMode ~= "rage"
         or not hit
     then
         return
@@ -15979,10 +16140,325 @@ mainConnect(
     )
 )
 
+--// =========================================================
+--// AUTO JUMP MODE
+--// LEGIT = proven native AttemptJump(nil, true) on PreSimulation.
+--// RAGE = existing sensor-based DeadEye AutoJump.
+--// =========================================================
+__UI.autoJumpModeRow =
+    mainRow(
+        "AUTO JUMP MODE",
+        2
+    )
+
+local autoJumpModeLabel =
+    autoLabel:Clone()
+
+autoJumpModeLabel.Text =
+    "AUTO JUMP MODE"
+
+autoJumpModeLabel.Parent =
+    __UI.autoJumpModeRow
+
+mainJump.autoJumpModeButton =
+    Instance.new("TextButton")
+
+mainJump.autoJumpModeButton.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+
+mainJump.autoJumpModeButton.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+
+mainJump.autoJumpModeButton.BorderSizePixel =
+    0
+
+mainJump.autoJumpModeButton.TextSize =
+    10
+
+mainJump.autoJumpModeButton.Font =
+    Enum.Font.GothamBold
+
+mainJump.autoJumpModeButton.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+
+mainJump.autoJumpModeButton.Parent =
+    __UI.autoJumpModeRow
+
+local autoJumpModeCorner =
+    Instance.new("UICorner")
+
+autoJumpModeCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+
+autoJumpModeCorner.Parent =
+    mainJump.autoJumpModeButton
+
+mainJump.autoJumpModePicker =
+    Instance.new("Frame")
+
+mainJump.autoJumpModePicker.Name =
+    "AutoJumpModePicker"
+
+mainJump.autoJumpModePicker.Size =
+    UDim2.new(
+        0,
+        92,
+        0,
+        76
+    )
+
+mainJump.autoJumpModePicker.Position =
+    UDim2.new(
+        1,
+        -102,
+        1,
+        5
+    )
+
+mainJump.autoJumpModePicker.BackgroundColor3 =
+    Color3.fromRGB(
+        31,
+        35,
+        42
+    )
+
+mainJump.autoJumpModePicker.BackgroundTransparency =
+    0.04
+
+mainJump.autoJumpModePicker.BorderSizePixel =
+    0
+
+mainJump.autoJumpModePicker.ZIndex =
+    80
+
+mainJump.autoJumpModePicker.Visible =
+    false
+
+mainJump.autoJumpModePicker.Parent =
+    __UI.autoJumpModeRow
+
+local autoJumpModePickerCorner =
+    Instance.new("UICorner")
+
+autoJumpModePickerCorner.CornerRadius =
+    UDim.new(
+        0,
+        7
+    )
+
+autoJumpModePickerCorner.Parent =
+    mainJump.autoJumpModePicker
+
+local autoJumpModeScroll =
+    Instance.new("ScrollingFrame")
+
+autoJumpModeScroll.Size =
+    UDim2.new(
+        1,
+        -8,
+        1,
+        -8
+    )
+
+autoJumpModeScroll.Position =
+    UDim2.new(
+        0,
+        4,
+        0,
+        4
+    )
+
+autoJumpModeScroll.BackgroundTransparency =
+    1
+
+autoJumpModeScroll.BorderSizePixel =
+    0
+
+autoJumpModeScroll.ScrollBarThickness =
+    4
+
+autoJumpModeScroll.ScrollingDirection =
+    Enum.ScrollingDirection.Y
+
+autoJumpModeScroll.AutomaticCanvasSize =
+    Enum.AutomaticSize.Y
+
+autoJumpModeScroll.CanvasSize =
+    UDim2.new(
+        0,
+        0,
+        0,
+        0
+    )
+
+autoJumpModeScroll.ZIndex =
+    81
+
+autoJumpModeScroll.Parent =
+    mainJump.autoJumpModePicker
+
+local autoJumpModeLayout =
+    Instance.new("UIListLayout")
+
+autoJumpModeLayout.Padding =
+    UDim.new(
+        0,
+        4
+    )
+
+autoJumpModeLayout.HorizontalAlignment =
+    Enum.HorizontalAlignment.Center
+
+autoJumpModeLayout.SortOrder =
+    Enum.SortOrder.LayoutOrder
+
+autoJumpModeLayout.Parent =
+    autoJumpModeScroll
+
+local autoJumpModePadding =
+    Instance.new("UIPadding")
+
+autoJumpModePadding.PaddingTop =
+    UDim.new(
+        0,
+        1
+    )
+
+autoJumpModePadding.PaddingBottom =
+    UDim.new(
+        0,
+        1
+    )
+
+autoJumpModePadding.Parent =
+    autoJumpModeScroll
+
+local function createAutoJumpModeOption(
+    mode,
+    text
+)
+    local button =
+        Instance.new("TextButton")
+
+    button.Name =
+        "AutoJumpMode_" .. mode
+
+    button.Size =
+        UDim2.new(
+            1,
+            -2,
+            0,
+            30
+        )
+
+    button.BackgroundColor3 =
+        Color3.fromRGB(
+            47,
+            52,
+            61
+        )
+
+    button.BorderSizePixel =
+        0
+
+    button.AutoButtonColor =
+        false
+
+    button.Text =
+        text
+
+    button.TextSize =
+        10
+
+    button.Font =
+        Enum.Font.GothamBold
+
+    button.TextColor3 =
+        Color3.fromRGB(
+            255,
+            255,
+            255
+        )
+
+    button.ZIndex =
+        82
+
+    button.LayoutOrder =
+        mode == "legit"
+        and 1
+        or 2
+
+    button.Parent =
+        autoJumpModeScroll
+
+    local corner =
+        Instance.new("UICorner")
+
+    corner.CornerRadius =
+        UDim.new(
+            0,
+            5
+        )
+
+    corner.Parent =
+        button
+
+    mainConnect(
+        button.MouseButton1Click:Connect(
+            function()
+                mainJump.setAutoJumpMode(
+                    mode
+                )
+
+                mainJump.autoJumpModePicker.Visible =
+                    false
+            end
+        )
+    )
+
+    return button
+end
+
+createAutoJumpModeOption(
+    "legit",
+    "LEGIT"
+)
+
+createAutoJumpModeOption(
+    "rage",
+    "RAGE"
+)
+
+mainConnect(
+    mainJump.autoJumpModeButton.MouseButton1Click:Connect(
+        function()
+            mainJump.autoJumpModePicker.Visible =
+                not mainJump.autoJumpModePicker.Visible
+        end
+    )
+)
+
 __UI.lookRow =
     mainRow(
         "LOOK",
-        2
+        3
     )
 local lookLabel =
     autoLabel:Clone()
@@ -16040,7 +16516,7 @@ mainConnect(
 __UI.rageLookRow =
     mainRow(
         "RAGE LOOK",
-        3
+        4
     )
 local rageLookLabel =
     autoLabel:Clone()
@@ -16101,7 +16577,7 @@ mainConnect(
 __UI.airTurnRow =
     mainRow(
         "AIR TURN",
-        4
+        5
     )
 local airTurnLabel =
     autoLabel:Clone()
@@ -16219,7 +16695,7 @@ mainConnect(
 __UI.smartAirTurnRow =
     mainRow(
         "SMART AIR TURN",
-        5
+        6
     )
 
 local smartAirTurnLabel =
@@ -16281,7 +16757,7 @@ mainConnect(
 __UI.airTurnSpeedRow =
     mainRow(
         "TURN SPEED",
-        6
+        7
     )
 local airTurnSpeedLabel =
     autoLabel:Clone()
@@ -16519,7 +16995,7 @@ mainConnect(
 __UI.crouchSpamRow =
     mainRow(
         "CROUCH SPAM",
-        7
+        8
     )
 
 local crouchSpamLabel =
@@ -16717,7 +17193,7 @@ mainConnect(
 __UI.reverseLookRow =
     mainRow(
         "REVERSE LOOK",
-        8
+        9
     )
 
 local reverseLookLabel =
@@ -17018,7 +17494,7 @@ mainJump.updateReverseLookUI(
 __UI.benchTrimpRow =
     mainRow(
         "BENCH TRIMP",
-        9
+        10
     )
 
 local benchTrimpLabel =
@@ -17145,7 +17621,7 @@ mainConnect(
 __UI.hideRow =
     mainRow(
         "HIDE UI",
-        10
+        11
     )
 __UI.hideLabel =
     autoLabel:Clone()
