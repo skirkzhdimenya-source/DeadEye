@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.190
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.191
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.188"
+local SCRIPT_VERSION = "1.191"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -12679,7 +12679,10 @@ function mainJump.uninstallRageLookHook()
         nil
 end
 
-function mainJump.setRageLookEnabled(state)
+function mainJump.setRageLookEnabled(
+    state,
+    persist
+)
 
     state =
         state and true or false
@@ -12737,7 +12740,10 @@ function mainJump.setRageLookEnabled(state)
 
     end
 
-    mainJump.saveConfig()
+    if persist ~= false then
+        mainJump.saveConfig()
+    end
+
     mainJump.update()
 
     return true
@@ -17472,6 +17478,7 @@ if mainJump.rageLookEnabled then
         false
 
     mainJump.setRageLookEnabled(
+        true,
         true
     )
 end
@@ -22956,6 +22963,7 @@ local function cleanup()
 
     pcall(function()
         mainJump.setRageLookEnabled(
+            false,
             false
         )
     end)
