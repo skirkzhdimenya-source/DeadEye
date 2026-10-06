@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.204
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.205
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.204"
+local SCRIPT_VERSION = "1.205"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -16347,7 +16347,14 @@ mainJump.autoJumpModePicker.Active =
     true
 
 mainJump.autoJumpModePicker.BorderSizePixel =
-    0
+    1
+
+mainJump.autoJumpModePicker.BorderColor3 =
+    Color3.fromRGB(
+        78,
+        84,
+        96
+    )
 
 mainJump.autoJumpModePicker.ZIndex =
     80
@@ -16368,28 +16375,6 @@ autoJumpModePickerCorner.CornerRadius =
     )
 
 autoJumpModePickerCorner.Parent =
-    mainJump.autoJumpModePicker
-
-local autoJumpModePickerStroke =
-    Instance.new("UIStroke")
-
-autoJumpModePickerStroke.Color =
-    Color3.fromRGB(
-        78,
-        84,
-        96
-    )
-
-autoJumpModePickerStroke.Thickness =
-    1
-
-autoJumpModePickerStroke.Transparency =
-    0.18
-
-autoJumpModePickerStroke.ApplyStrokeMode =
-    Enum.ApplyStrokeMode.Border
-
-autoJumpModePickerStroke.Parent =
     mainJump.autoJumpModePicker
 
 local autoJumpModeScroll =
@@ -16640,23 +16625,6 @@ mainConnect(
     )
 )
 
-local function closeAutoJumpModePicker()
-    if not mainJump.autoJumpModePicker
-        or not mainJump.autoJumpModePicker.Visible
-    then
-        return
-    end
-
-    mainJump.autoJumpModePicker.Visible =
-        false
-
-    pcall(function()
-        __UI.setAutoJumpModePickerHoverSuppressed(
-            false
-        )
-    end)
-end
-
 mainConnect(
     UserInputService.InputBegan:Connect(
         function(input, gameProcessed)
@@ -16714,7 +16682,14 @@ mainConnect(
                 return
             end
 
-            closeAutoJumpModePicker()
+            picker.Visible =
+                false
+
+            pcall(function()
+                __UI.setAutoJumpModePickerHoverSuppressed(
+                    false
+                )
+            end)
         end
     )
 )
