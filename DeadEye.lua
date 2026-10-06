@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.188
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.189
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -8123,51 +8123,22 @@ function UnusualFns.getUnusualViewmodel()
 end
 
 function UnusualFns.isUnusualPOVRuntimeActive()
-    --// The game keeps workspace.Rigs.<LocalPlayer> alive in the menu,
-    --// so Rigs existing is NOT enough to identify gameplay.
+    --// CharacterService:GetLocalCharacter() is the game's actual
+    --// gameplay lifecycle signal.
     --
-    --// Native game code uses workspace.Players.<LocalPlayer>.Team
-    --// and explicitly treats Team == "Menu" as the menu state.
-    --// Use that state as the hard gate for DeadEye's gameplay-only
-    --// Unusual POV particle/trail controller.
-    local playersFolder =
-        workspace:FindFirstChild("Players")
+    --// In the menu the service returns nil even though:
+    --//   workspace.Rigs.<LocalPlayer> still exists
+    --//   MenuView.VisualModel exists
+    --//   Camera.Focus distance is 0
+    --
+    --// Once gameplay starts, the service returns the live character
+    --// object and its Model becomes workspace.Players.<LocalPlayer>.
+    --// Therefore ONLY this signal decides whether the gameplay-only
+    --// Unusual POV controller may run.
+    local characterObject =
+        getCharacterObject()
 
-    local playerModel =
-        playersFolder
-        and playersFolder:FindFirstChild(
-            LocalPlayer.Name
-        )
-
-    if playerModel then
-        local team
-        pcall(function()
-            team = playerModel:GetAttribute("Team")
-        end)
-
-        if team == "Menu" then
-            return false
-        end
-    end
-
-    local rigs =
-        workspace:FindFirstChild("Rigs")
-
-    if not rigs then
-        return false
-    end
-
-    local liveRig =
-        rigs:FindFirstChild(
-            LocalPlayer.Name
-        )
-
-    return liveRig
-        and liveRig:IsA("Model")
-        and liveRig:FindFirstChildOfClass(
-            "Humanoid"
-        )
-        ~= nil
+    return characterObject ~= nil
 end
 
 function UnusualFns.isUnusualFirstPerson()
@@ -9076,8 +9047,9 @@ RunService:BindToRenderStep(
 )
 
 --// Keep the native equipped Unusual covered before replacement,
---// but only after the real gameplay visual rig exists.
---// MenuView.VisualModel must never be put under the gameplay POV controller.
+--// but only after CharacterService reports a real gameplay character.
+--// MenuView.VisualModel / menu Rigs must never be put under the
+--// gameplay POV controller.
 pcall(function()
     if UnusualFns.isUnusualPOVRuntimeActive() then
         UnusualFns.bindNativeParticlePOV(
