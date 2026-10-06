@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.187
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.188
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.187"
+local SCRIPT_VERSION = "1.188"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8123,10 +8123,33 @@ function UnusualFns.getUnusualViewmodel()
 end
 
 function UnusualFns.isUnusualPOVRuntimeActive()
-    --// The menu uses MenuView.VisualModel. Do not run DeadEye's
-    --// gameplay Unusual POV particle/trail controller there.
-    --// Native P1/P3 handling is only mirrored for the real
-    --// gameplay visual rig: workspace.Rigs.<LocalPlayer>.
+    --// The game keeps workspace.Rigs.<LocalPlayer> alive in the menu,
+    --// so Rigs existing is NOT enough to identify gameplay.
+    --
+    --// Native game code uses workspace.Players.<LocalPlayer>.Team
+    --// and explicitly treats Team == "Menu" as the menu state.
+    --// Use that state as the hard gate for DeadEye's gameplay-only
+    --// Unusual POV particle/trail controller.
+    local playersFolder =
+        workspace:FindFirstChild("Players")
+
+    local playerModel =
+        playersFolder
+        and playersFolder:FindFirstChild(
+            LocalPlayer.Name
+        )
+
+    if playerModel then
+        local team
+        pcall(function()
+            team = playerModel:GetAttribute("Team")
+        end)
+
+        if team == "Menu" then
+            return false
+        end
+    end
+
     local rigs =
         workspace:FindFirstChild("Rigs")
 
