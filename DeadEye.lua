@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.154"
+local SCRIPT_VERSION = "1.155"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -676,8 +676,7 @@ local EmoteRuntime =
     loadstring(
         game:HttpGet(
             "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/a424881ee7e4e542b46a543aaf489734afd102ea/DeadEye_EmoteRuntime.lua"
-        ),
-        "@DeadEye_EmoteRuntime"
+        )
     )()
 
 if type(EmoteRuntime) == "function" then
@@ -20480,8 +20479,7 @@ local NativeWheel =
     loadstring(
         game:HttpGet(
             "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/8d0f6ff3659781c4beedbf2d2b33f6c6c0731fe3/DeadEye_NativeWheel.lua"
-        ),
-        "@DeadEye_NativeWheel"
+        )
     )()
 
 --// Backward-compatible guard for a cached old factory-style module.
@@ -22842,4 +22840,4 @@ updateGUI()
 pcall(function()
     setCategory("Emotes")
 end)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_Portrait.lua"), "@DeadEye_Portrait")()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_Portrait.lua"))()
