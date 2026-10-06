@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.167
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.168
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.167"
+local SCRIPT_VERSION = "1.168"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -1808,6 +1808,13 @@ local unusualRuntime = {
     --// currentEquippedId describes what the player actually has equipped.
     currentEquippedId = nil,
     nativeSnapshot = nil,
+    --// Native P1 particle state for the LIVE visual rig.
+    --// The clean-game test showed active Unusual ParticleEmitters
+    --// switching true -> false in P1. Preserve each emitter's
+    --// exact 3P Enabled value so P3 restores only what was there.
+    nativeParticleStates = {},
+    nativeParticleRig = nil,
+    nativeParticleConnection = nil,
     reapplyGeneration = 0,
     animationSource = nil,
     animationLinks = {},
@@ -7626,6 +7633,12 @@ function UnusualFns.restoreUnusual()
         and currentEquippedId ~= originalId
 
     if manuallyChanged then
+        --// The equipped Unusual changed. Do not restore the old
+        --// replacement's particle state onto the new native effect.
+        UnusualFns.clearNativeParticlePOV(
+            false
+        )
+
         if visualRig then
             UnusualFns.removeOurUnusualFX()
 
@@ -7666,6 +7679,13 @@ function UnusualFns.restoreUnusual()
         and currentEquippedId
         and currentEquippedId ~= 0
     then
+        --// Put the LIVE visual rig back to its exact 3P particle
+        --// states before removing the replacement and restoring
+        --// the native Unusual snapshot.
+        UnusualFns.clearNativeParticlePOV(
+            true
+        )
+
         UnusualFns.removeOurUnusualFX()
         task.wait()
 
@@ -7760,6 +7780,11 @@ function UnusualFns.activateUnusual()
         return false
     end
 
+    --// Reset the previous replacement's POV state.
+    UnusualFns.clearNativeParticlePOV(
+        true
+    )
+
     UnusualFns.removeOurUnusualFX()
     task.wait()
     UnusualFns.removeOriginalUnusualFX(
@@ -7791,6 +7816,14 @@ function UnusualFns.activateUnusual()
         equippedId
     unusualRuntime.replacementId =
         tonumber(unusualSlot.replaceId)
+
+    --// The replacement is now live in Rigs.<player>.
+    --// Track all of its current ParticleEmitters and any that
+    --// its client driver creates later.
+    UnusualFns.bindNativeParticlePOV(
+        visualRig
+    )
+
     return true
 end
 function UnusualFns.reapplyUnusual()
@@ -8282,10 +8315,180 @@ local function hideUnusualAnimationSourceVisuals()
     end
 end
 
+--// =========================================================
+--// NATIVE P1 PARTICLEEMITTER MIRROR
+--//
+--// Clean-game observation:
+--//   Workspace.Rigs.<player> ParticleEmitter
+--//       P1: Enabled true -> false
+--//       P3: restored to the previous state
+--//
+--// The previous DeadEye implementation only touched objects
+--// carrying DeadEyeUnusualFX. That misses ParticleEmitters
+--// spawned later by an Unusual's client driver.
+--//
+--// Fix:
+--//   1. After the replacement is installed, remember every
+--//      ParticleEmitter Enabled value in the live visual rig.
+--//   2. Watch for new ParticleEmitters added to that rig.
+--//   3. In P1, force those emitters Enabled=false.
+--//   4. In P3, restore their exact remembered Enabled value.
+--//
+--// This deliberately does NOT set everything to true on P3.
+--// Existing disabled emitters remain disabled.
+--// =========================================================
+function UnusualFns.clearNativeParticlePOV(
+    restore
+)
+    if unusualRuntime.nativeParticleConnection then
+        pcall(function()
+            unusualRuntime.nativeParticleConnection:Disconnect()
+        end)
+    end
+
+    unusualRuntime.nativeParticleConnection = nil
+
+    if restore then
+        for object, enabled in pairs(
+            unusualRuntime.nativeParticleStates
+        ) do
+            if object and object.Parent then
+                pcall(function()
+                    object.Enabled = enabled
+                end)
+            end
+        end
+    end
+
+    table.clear(
+        unusualRuntime.nativeParticleStates
+    )
+
+    unusualRuntime.nativeParticleRig = nil
+end
+
+function UnusualFns.bindNativeParticlePOV(
+    visualRig
+)
+    UnusualFns.clearNativeParticlePOV(
+        true
+    )
+
+    if not visualRig then
+        return
+    end
+
+    unusualRuntime.nativeParticleRig =
+        visualRig
+
+    for _, object in ipairs(
+        visualRig:GetDescendants()
+    ) do
+        if object:IsA("ParticleEmitter") then
+            unusualRuntime.nativeParticleStates[
+                object
+            ] = object.Enabled
+        end
+    end
+
+    unusualRuntime.nativeParticleConnection =
+        visualRig.DescendantAdded:Connect(
+            function(object)
+                if not unusualEnabled
+                    or unusualRuntime.nativeParticleRig
+                        ~= visualRig
+                then
+                    return
+                end
+
+                if object:IsA("ParticleEmitter") then
+                    local current =
+                        object.Enabled
+
+                    if unusualRuntime.nativeParticleStates[
+                        object
+                    ] == nil
+                    then
+                        unusualRuntime.nativeParticleStates[
+                            object
+                        ] = current
+                    end
+
+                    local firstPerson =
+                        false
+
+                    pcall(function()
+                        firstPerson =
+                            UnusualFns.isUnusualFirstPerson()
+                    end)
+
+                    if firstPerson then
+                        pcall(function()
+                            object.Enabled = false
+                        end)
+                    end
+                end
+            end
+        )
+end
+
+function UnusualFns.syncNativeParticlePOV(
+    visualRig,
+    firstPerson
+)
+    if not unusualEnabled
+        or not visualRig
+        or unusualRuntime.nativeParticleRig
+            ~= visualRig
+    then
+        return
+    end
+
+    --// Register dynamically-created ParticleEmitters before
+    --// applying the current POV state.
+    for _, object in ipairs(
+        visualRig:GetDescendants()
+    ) do
+        if object:IsA("ParticleEmitter")
+            and unusualRuntime.nativeParticleStates[
+                object
+            ] == nil
+        then
+            unusualRuntime.nativeParticleStates[
+                object
+            ] = object.Enabled
+        end
+    end
+
+    for object, enabled in pairs(
+        unusualRuntime.nativeParticleStates
+    ) do
+        if object and object.Parent then
+            pcall(function()
+                if firstPerson then
+                    object.Enabled = false
+                else
+                    object.Enabled = enabled
+                end
+            end)
+        else
+            unusualRuntime.nativeParticleStates[
+                object
+            ] = nil
+        end
+    end
+end
+
 function UnusualFns.setUnusualFXForPOV(
     firstPerson,
     _deltaTime
 )
+    --// Mirror the native live-rig ParticleEmitter behavior first.
+    UnusualFns.syncNativeParticlePOV(
+        UnusualFns.getUnusualVisualRig(),
+        firstPerson
+    )
+
     --// Native clean-server observation:
     --// ParticleEmitters are disabled in 1P.
     --
@@ -8376,6 +8579,13 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
     pcall(function()
         RunService:UnbindFromRenderStep(
             "DeadEyeUnusualPOVTransparency"
+        )
+    end)
+
+    --// Restore the exact 3P ParticleEmitter Enabled states.
+    pcall(function()
+        UnusualFns.clearNativeParticlePOV(
+            true
         )
     end)
 
