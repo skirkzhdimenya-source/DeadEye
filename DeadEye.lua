@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.174
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.175
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.174"
+local SCRIPT_VERSION = "1.175"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -674,12 +674,21 @@ local function refreshNativeVisibilityAfterUnusualRestore()
         return false
     end
 
-    local nativeRig =
+    --// CharacterObject.Rig is the outer Character.Rig component.
+    --// The actual RigService rig that owns Limbs/Model is:
+    --// CharacterObject.Rig.Rig
+    local rigComponent =
         characterObject.Rig
+
+    local nativeRig =
+        rigComponent
+        and rigComponent.Rig
+
     local visibility =
         characterObject.Visibility
 
-    if not nativeRig
+    if not rigComponent
+        or not nativeRig
         or not visibility
     then
         return false
@@ -694,42 +703,47 @@ local function refreshNativeVisibilityAfterUnusualRestore()
         return false
     end
 
+    --// Visibility:GetLimbs() returns this exact table:
+    --// CharacterObject.Rig.Rig.Limbs
+    --//
+    --// AddCosmetics() can create the final Unusual after those
+    --// descendant arrays were built. Refresh every limb's
+    --// descendant cache so native SetVisibility() sees the
+    --// restored ParticleEmitter/Trail/Beam objects.
     local limbs =
         nativeRig.Limbs
 
     if type(limbs) == "table" then
         for _, limb in pairs(limbs) do
-            local root =
-                type(limb) == "table"
-                and limb[1]
+            if type(limb) == "table" then
+                local root =
+                    limb[1]
 
-            if typeof(root) == "Instance"
-                and root.Parent
-            then
-                limb[2] =
-                    root:GetDescendants()
+                if typeof(root) == "Instance"
+                    and root.Parent
+                then
+                    limb[2] =
+                        root:GetDescendants()
+                end
             end
         end
     end
 
     local currentType
-    local typeOk =
-        pcall(function()
-            currentType =
-                visibility:GetType()
-        end)
 
-    if typeOk and currentType then
+    pcall(function()
+        currentType =
+            visibility:GetType()
+    end)
+
+    if currentType then
         visibility.Type =
             currentType
     end
 
-    local updateOk =
-        pcall(function()
-            visibility:UpdateVisibility()
-        end)
-
-    return updateOk
+    return pcall(function()
+        visibility:UpdateVisibility()
+    end)
 end
 --// =========================================================
 --// HELPER: SLOT BY ORIGINAL ID
