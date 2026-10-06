@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.211
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.212
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.211"
+local SCRIPT_VERSION = "1.212"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -206,7 +206,106 @@ local savedConfig = {
         height = 320
     }
 }
-function loadSavedConfig()
+function --// =========================================================
+--// DEDICATED PERSISTENCE FOR RAGE LOOK / BENCH TRIMP
+--// =========================================================
+--// These two states are stored separately from the large general config.
+--// This prevents unrelated startup/cleanup saves from overwriting them.
+local MAIN_STATE_FILE = "DeadEye_MainState.json"
+
+local function loadDedicatedMainState()
+    if type(readfile) ~= "function" then
+        return
+    end
+
+    if type(isfile) == "function" then
+        local exists = false
+        pcall(function()
+            exists = isfile(MAIN_STATE_FILE)
+        end)
+
+        if not exists then
+            return
+        end
+    end
+
+    local ok, raw =
+        pcall(function()
+            return readfile(MAIN_STATE_FILE)
+        end)
+
+    if not ok
+        or type(raw) ~= "string"
+        or raw == ""
+    then
+        return
+    end
+
+    local decodeOK, decoded =
+        pcall(function()
+            return HttpService:JSONDecode(raw)
+        end)
+
+    if not decodeOK
+        or type(decoded) ~= "table"
+    then
+        return
+    end
+
+    savedConfig.main =
+        savedConfig.main
+        or {}
+
+    if decoded.rageLook == true
+        or decoded.rageLook == false
+    then
+        savedConfig.main.rageLook =
+            decoded.rageLook
+    end
+
+    if decoded.benchTrimp == true
+        or decoded.benchTrimp == false
+    then
+        savedConfig.main.benchTrimpEnabled =
+            decoded.benchTrimp
+    end
+end
+
+local function saveDedicatedMainState()
+    if type(writefile) ~= "function" then
+        return false
+    end
+
+    local main =
+        savedConfig.main
+        or {}
+
+    local ok, raw =
+        pcall(function()
+            return HttpService:JSONEncode({
+                rageLook = main.rageLook == true,
+                benchTrimp = main.benchTrimpEnabled == true
+            })
+        end)
+
+    if not ok
+        or type(raw) ~= "string"
+    then
+        return false
+    end
+
+    local writeOK =
+        pcall(function()
+            writefile(
+                MAIN_STATE_FILE,
+                raw
+            )
+        end)
+
+    return writeOK
+end
+
+loadDedicatedMainState()
     if type(readfile) ~= "function" then
         return
     end
@@ -11457,6 +11556,10 @@ function mainJump.saveConfig()
     pcall(function()
         saveSavedConfig()
     end)
+
+    pcall(function()
+        saveDedicatedMainState()
+    end)
 end
 
 --// =========================================================
@@ -18307,6 +18410,10 @@ genv.DEADEYE_MAIN_CLEANUP =
         end)
 
         pcall(function()
+            saveDedicatedMainState()
+        end)
+
+        pcall(function()
             if mainJump.benchTrimpStateConnection then
                 mainJump.benchTrimpStateConnection:Disconnect()
                 mainJump.benchTrimpStateConnection = nil
@@ -23821,6 +23928,11 @@ local function cleanup()
     --// Persist Main / Reverse Look state on close as well.
     pcall(function()
         mainJump.saveConfig()
+    end)
+
+    --// Write dedicated Main states before runtime shutdown.
+    pcall(function()
+        saveDedicatedMainState()
     end)
 
     pcall(function()
