@@ -2377,3 +2377,81 @@ v_u_10.Changed:Connect(function()
 end)
 t:SetBaseFOV(nil)
 return t
+
+
+
+==================================================
+SOURCE #9
+==================================================
+PATH:
+game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelCreator
+
+SOURCE CONTENT:
+
+local t = {}
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Clothing = require(script.Clothing)
+local Registry = require(ReplicatedStorage.Items.Registry)
+function t.Create(_, p1)
+	--[[ line: 7 | upvalues: (copy) Clothing]]
+	if script:FindFirstChild("CachedViewmodel") ~= nil then
+		script.CachedViewmodel:Destroy()
+	end
+	local v2 = p1:Clone()
+	v2.Parent = script
+	v2.Name = "CachedViewmodel"
+	if v2:FindFirstChildOfClass("Humanoid") ~= nil then
+		v2.Humanoid:Destroy()
+	end
+	if v2:FindFirstChildOfClass("AnimationController") ~= nil then
+		v2.AnimationController:Destroy()
+	end
+	local Humanoid = Instance.new("Humanoid")
+	Humanoid.EvaluateStateMachine = false
+	Humanoid.BreakJointsOnDeath = false
+	Humanoid.RequiresNeck = false
+	Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+	Humanoid.Name = "AnimationController"
+	Humanoid.Parent = v2
+	for _2, v3 in pairs((v2:GetDescendants())) do
+		if v3:IsA("BasePart") then
+			v3.CanCollide = false
+			v3.CanQuery = false
+			v3.CanTouch = false
+			v3.CastShadow = false
+		end
+	end
+	if v2:FindFirstChild("Clothing") ~= nil then
+		Clothing(v2, workspace:WaitForChild("PlayerCache")[game.Players.LocalPlayer.Name])
+	end
+end
+function t.GetViewmodel(_3, p4)
+	--[[ line: 41 | upvalues: (copy) Registry]]
+	if p4 then
+		for _4, v5 in p4 do
+			local v6 = Registry.GetById(v5)
+			if v6 and v6.Module:FindFirstChild("Viewmodel") then
+				return v6.Module.Viewmodel
+			end
+		end
+	end
+	return script:FindFirstChild("CachedViewmodel")
+end
+function t.CopyViewmodel(p7, p8)
+	--[[ line: 55 | upvalues: none]]
+	local v9 = p7:GetViewmodel(p8)
+	if v9 then
+		local v10 = v9:Clone()
+		for _5, v11 in v10:GetDescendants() do
+			if v11:IsA("BasePart") then
+				v11.CastShadow = false
+			end
+		end
+		if not v10.PrimaryPart then
+			v10.PrimaryPart = v10.HumanoidRootPart
+		end
+		v10:SetPrimaryPartCFrame(CFrame.new(50000, 50000, 50000))
+		return v10
+	end
+end
+return t
