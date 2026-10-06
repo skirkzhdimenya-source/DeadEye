@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.210
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.211
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.210"
+local SCRIPT_VERSION = "1.211"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -43,6 +43,16 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local genv = getgenv and getgenv() or _G
+
+--// Restart persistence:
+--// The previous DeadEye instance must save its live Main states BEFORE
+--// its runtime states are disabled. This prevents Rage Look / Bench Trimp
+--// from being overwritten by stale callbacks during the next startup.
+if genv.DEADEYE_MAIN_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_MAIN_CLEANUP()
+    end)
+end
 
 --// =========================================================
 --// PURGE STALE AUTOJUMP / LOOK SENSORS
@@ -18282,10 +18292,100 @@ genv.DEADEYE_RAGE_LOOK =
         )
     end
 
+--// =========================================================
+--// MAIN RESTART CLEANUP
+--// =========================================================
+--// IMPORTANT:
+--// Save the live persisted states FIRST.
+--// Then tear down the old instance without writing runtime OFF states.
+--// This is used when DeadEye.lua is executed again while the old
+--// instance is still alive.
+genv.DEADEYE_MAIN_CLEANUP =
+    function()
+        pcall(function()
+            mainJump.saveConfig()
+        end)
+
+        pcall(function()
+            if mainJump.benchTrimpStateConnection then
+                mainJump.benchTrimpStateConnection:Disconnect()
+                mainJump.benchTrimpStateConnection = nil
+            end
+        end)
+
+        pcall(function()
+            mainJump.stopCrouchSpam()
+        end)
+
+        pcall(function()
+            mainJump.destroyCrouchSpamSensor()
+        end)
+
+        pcall(function()
+            mainJump.destroySensors()
+        end)
+
+        pcall(function()
+            mainJump.unbindAirTurnRender()
+        end)
+
+        pcall(function()
+            mainJump.uninstallReverseLookHooks()
+        end)
+
+        pcall(function()
+            mainJump.uninstallRageLookHook()
+        end)
+
+        pcall(function()
+            if mainJump.lookActive
+                or mainJump.lookRestoring
+            then
+                mainJump.restoreLookNow()
+            else
+                mainJump.unbindLookRender()
+            end
+        end)
+
+        pcall(function()
+            if mainJump.lookStateConnection then
+                mainJump.lookStateConnection:Disconnect()
+                mainJump.lookStateConnection = nil
+            end
+        end)
+
+        --// Runtime shutdown only. SavedConfig already contains the
+        --// user's actual ON/OFF state from the save above.
+        mainJump.rageLookEnabled = false
+        mainJump.benchTrimpEnabled = false
+        mainJump.reverseLookEnabled =
+            savedConfig.main
+            and savedConfig.main.reverseLookEnabled == true
+            or false
+        mainJump.crouchSpamEnabled = false
+        mainJump.airTurnEnabled =
+            savedConfig.main
+            and savedConfig.main.airTurn == true
+            or false
+
+        pcall(function()
+            mainJump.mainDisconnect()
+        end)
+
+        pcall(function()
+            mainJump.setCrouching(false)
+        end)
+
+        cleaned = true
+        genv.DEADEYE_MAIN_RUNNING = false
+    end
+
 genv.DEADEYE_RAGE_LOOK_CLEANUP =
     function()
         pcall(function()
+            --// Cleanup must NEVER persist the forced OFF runtime state.
             mainJump.setRageLookEnabled(
+                false,
                 false
             )
         end)
