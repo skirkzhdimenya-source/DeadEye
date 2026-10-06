@@ -3181,3 +3181,146 @@ return function(p1, _, _2, p2, _3)
 	p1.Spring.t = Vector3.new()
 	p1.State = 0
 end
+
+
+==================================================
+SOURCE #21
+==================================================
+PATH:
+game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.Spring
+
+SOURCE CONTENT:
+
+return { new = function(p1)
+	--[[ line: 3 | upvalues: none]]
+	local v_u_2 = tick()
+	local v_u_3 = p1 or 0
+	local v_u_4 = p1 and Vector3.new() or 0
+	local v_u_5 = p1 or 0
+	local v_u_6 = 1
+	local v_u_7 = 1
+	local function positionVelocity(p8)
+		--[[ line: 11 | upvalues: (ref) v_u_2, (ref) v_u_3, (ref) v_u_5, (ref) v_u_7, (ref) v_u_6, (ref) v_u_4]]
+		local v9 = p8 - v_u_2
+		local v10 = v_u_3 - v_u_5
+		if v_u_7 == 0 then
+			return v_u_3, 0
+		end
+		if v_u_6 >= 1 then
+			local v11 = v_u_4 / v_u_7 + v10
+			local v12 = v_u_7 * v9
+			local v13 = math.exp(v12)
+			return v_u_5 + (v10 + v11 * v_u_7 * v9) / v13, v_u_7 * (v11 - v10 - v11 * v_u_7 * v9) / v13
+		end
+		local v14 = 1 - v_u_6 ^ 2
+		local v15 = math.sqrt(v14)
+		local v16 = (v_u_4 / v_u_7 + v_u_6 * v10) / v15
+		local v17 = v15 * v_u_7 * v9
+		local v18 = math.cos(v17)
+		local v19 = v15 * v_u_7 * v9
+		local v20 = math.sin(v19)
+		local v21 = v_u_6 * v_u_7 * v9
+		local v22 = math.exp(v21)
+		return v_u_5 + (v10 * v18 + v16 * v20) / v22, v_u_7 * ((v15 * v16 - v_u_6 * v10) * v18 - (v15 * v10 + v_u_6 * v16) * v20) / v22
+	end
+	local t = { accelerate = function(_, p23)
+			--[[ line: 36 | upvalues: (copy) positionVelocity, (ref) v_u_3, (ref) v_u_4, (ref) v_u_2]]
+			local v24 = tick()
+			local v25, v26 = positionVelocity(v24)
+			v_u_3 = v25
+			v_u_4 = v26 + p23
+			v_u_2 = v24
+		end }
+	local t2 = { __index = function(_2, p27)
+			--[[ line: 45 | upvalues: (copy) positionVelocity, (ref) v_u_2, (ref) v_u_3, (ref) v_u_5, (ref) v_u_7, (ref) v_u_6, (ref) v_u_4]]
+			if p27 == "value" or (p27 == "position" or p27 == "p") then
+				local v28, _3 = positionVelocity(tick())
+				return v28
+			end
+			if p27 == "velocity" or p27 == "v" then
+				local _4, v29 = positionVelocity(tick())
+				return v29
+			end
+			if p27 == "acceleration" or p27 == "a" then
+				local v30 = tick() - v_u_2
+				local v31 = v_u_3 - v_u_5
+				if v_u_7 == 0 then
+					return 0
+				end
+				if v_u_6 >= 1 then
+					local v32 = v_u_4 / v_u_7 + v31
+					local v33 = v_u_7 ^ 2 * (v31 - 2 * v32 + v32 * v_u_7 * v30)
+					local v34 = v_u_7 * v30
+					return v33 / math.exp(v34)
+				end
+				local v35 = 1 - v_u_6 ^ 2
+				local v36 = math.sqrt(v35)
+				local v37 = (v_u_4 / v_u_7 + v_u_6 * v31) / v36
+				local v38 = v31 * v_u_6 ^ 2 - v36 * 2 * v_u_6 * v37 - v31 * v36 ^ 2
+				local v39 = v36 * v_u_7 * v30
+				local v40 = v38 * math.cos(v39)
+				local v41 = v37 * v_u_6 ^ 2 + v36 * 2 * v_u_6 * v31 - v37 * v36 ^ 2
+				local v42 = v36 * v_u_7 * v30
+				local v43 = v41 * math.sin(v42)
+				local v44 = v_u_7 ^ 2 * (v40 + v43)
+				local v45 = v_u_6 * v_u_7 * v30
+				return v44 / math.exp(v45)
+			end
+			if p27 == "target" or p27 == "t" then
+				return v_u_5
+			end
+			if p27 == "damper" or p27 == "d" then
+				return v_u_6
+			end
+			if p27 == "speed" or p27 == "s" then
+				return v_u_7
+			end
+			if p27 == "magnitude" or p27 == "m" then
+				local v46, _5 = positionVelocity(tick())
+				return v46.magnitude
+			end
+			error(p27 .. " is not a valid member of spring", 0)
+		end, __newindex = function(_6, p47, p48)
+			--[[ line: 81 | upvalues: (copy) positionVelocity, (ref) v_u_3, (ref) v_u_4, (ref) v_u_5, (ref) v_u_6, (ref) v_u_7, (ref) v_u_2]]
+			local v49 = tick()
+			if p47 == "value" or (p47 == "position" or p47 == "p") then
+				local _7, v50 = positionVelocity(v49)
+				v_u_3 = p48
+				v_u_4 = v50
+			elseif p47 == "velocity" or p47 == "v" then
+				local v51, _8 = positionVelocity(v49)
+				v_u_3 = v51
+				v_u_4 = p48
+			elseif p47 == "acceleration" or p47 == "a" then
+				local v52, v53 = positionVelocity(v49)
+				local v54 = v53 + p48
+				v_u_3 = v52
+				v_u_4 = v54
+			elseif p47 == "target" or p47 == "t" then
+				local v55, v56 = positionVelocity(v49)
+				v_u_3 = v55
+				v_u_4 = v56
+				v_u_5 = p48
+			elseif p47 == "damper" or p47 == "d" then
+				local v57, v58 = positionVelocity(v49)
+				v_u_3 = v57
+				v_u_4 = v58
+				local v59
+				if p48 < 0 then
+					v59 = 0
+				else
+					v59 = p48 < 1 and p48 and p48 or 1
+				end
+				v_u_6 = v59
+			elseif p47 == "speed" or p47 == "s" then
+				local v60, v61 = positionVelocity(v49)
+				v_u_3 = v60
+				v_u_4 = v61
+				v_u_7 = p48 < 0 and 0 or p48
+			else
+				error(p47 .. " is not a valid member of spring", 0)
+			end
+			v_u_2 = v49
+		end }
+	return setmetatable(t, t2)
+end }
