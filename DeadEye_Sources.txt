@@ -4080,7 +4080,7 @@ function t.GetWaitTime(_3)
 	local v12 = 800
 	for _4, v13 in pairs((workspace.Players:GetChildren())) do
 		if v13:GetAttribute("Team") ~= "Menu" and (v13:GetAttribute("AI") == true and (v13:GetAttribute("Team") ~= LocalPlayer.Character:GetAttribute("Team") and (v13.Name ~= "Decoy" and (v13.PrimaryPart and (v13.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).magnitude < v12)))) then
-			v12 = (v13.PrimaryPart.Position - LocalPlayer.Character.PrimaryPlayerPart.Position).magnitude
+			v12 = (v13.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).magnitude
 		end
 	end
 	local v14 = (v12 / 120) ^ 0.75
