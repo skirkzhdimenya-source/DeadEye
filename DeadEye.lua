@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.173
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.174
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.173"
+local SCRIPT_VERSION = "1.174"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -654,6 +654,82 @@ function getCharacterObject()
         return nil
     end
     return object
+end
+
+--// =========================================================
+--// REFRESH NATIVE VISIBILITY AFTER FINAL UNUSUAL RESTORE
+--// =========================================================
+--// Character.Client.Visibility stores each limb's descendant list
+--// inside Rig.Limbs. AddCosmetics() can add the final Unusual FX
+--// after those lists were originally built, so native Visibility
+--// may never see the new ParticleEmitter/Trail objects.
+--// Rebuild only the cached descendant lists, then call the game's
+--// own Visibility.UpdateVisibility() once. After this point DeadEye
+--// does not keep a custom POV loop for the restored native effect.
+local function refreshNativeVisibilityAfterUnusualRestore()
+    local characterObject =
+        getCharacterObject()
+
+    if not characterObject then
+        return false
+    end
+
+    local nativeRig =
+        characterObject.Rig
+    local visibility =
+        characterObject.Visibility
+
+    if not nativeRig
+        or not visibility
+    then
+        return false
+    end
+
+    local rigModel =
+        nativeRig.Model
+
+    if not rigModel
+        or not rigModel.Parent
+    then
+        return false
+    end
+
+    local limbs =
+        nativeRig.Limbs
+
+    if type(limbs) == "table" then
+        for _, limb in pairs(limbs) do
+            local root =
+                type(limb) == "table"
+                and limb[1]
+
+            if typeof(root) == "Instance"
+                and root.Parent
+            then
+                limb[2] =
+                    root:GetDescendants()
+            end
+        end
+    end
+
+    local currentType
+    local typeOk =
+        pcall(function()
+            currentType =
+                visibility:GetType()
+        end)
+
+    if typeOk and currentType then
+        visibility.Type =
+            currentType
+    end
+
+    local updateOk =
+        pcall(function()
+            visibility:UpdateVisibility()
+        end)
+
+    return updateOk
 end
 --// =========================================================
 --// HELPER: SLOT BY ORIGINAL ID
@@ -19414,6 +19490,11 @@ local function cleanupUnusual()
 
             if nativeAdded then
                 task.wait(0.05)
+
+                --// The final Unusual was added after Rig.Limbs was built.
+                --// Refresh the native cached limb descendants and make the
+                --// game's own Visibility handler process the restored FX.
+                refreshNativeVisibilityAfterUnusualRestore()
 
                 local verify =
                     UnusualFns.captureNativeUnusualSnapshot(
