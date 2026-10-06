@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.182
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.183
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.182"
+local SCRIPT_VERSION = "1.183"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -10504,66 +10504,65 @@ function others.getHumanoid()
 end
 
 --// =========================================================
---// OTHERS -> FIRST-PERSON VISUAL TRACKER
+--// OTHERS -> NATIVE GAME VISIBILITY BRIDGE
 --//
---// Others uses Humanoid:ApplyDescription*() on the game's
---// visual rig. That call can create a completely new hierarchy:
---// body parts, Accessories, Handles, Decals, Textures, and
---// visual effect descendants.
+--// Others uses Humanoid:ApplyDescription*() and can replace the
+--// complete visual hierarchy: body parts, Head, hair, every
+--// Accessory/Handle, Decals, Textures and effect descendants.
 --//
---// The native camera controller only knows objects that existed
---// in its own character subject/cache. Track ONLY objects created
---// by Others so stock avatar parts keep their original behavior.
---// No AccessoryType classification is used.
+--// IMPORTANT:
+--// Do NOT calculate first-person transparency here.
+--// The game already has the exact handler we need:
+--// Character.Client.Visibility:UpdateVisibility(entries)
+--// -> Visibility:SetVisibility()
+--//
+--// We feed the complete Others hierarchy directly into that
+--// native handler. This gives Others the same P1/P3 behavior as
+--// the game's own character visibility system.
 --// =========================================================
-others.firstPersonObjects =
-    others.firstPersonObjects
-    or {}
 
-others.firstPersonStates =
-    others.firstPersonStates
-    or {}
+local function othersBuildNativeVisibilityEntries()
+    local entries = {}
+    local seenParts = {}
 
-others.firstPersonCaptureConnections =
-    others.firstPersonCaptureConnections
-    or {}
+    local function addPartTree(root)
+        if not root
+            or not root.Parent
+            or not root:IsA("BasePart")
+            or seenParts[root]
+        then
+            return
+        end
 
-others.firstPersonLastTransparency = nil
+        seenParts[root] = true
 
-local function othersIsSupportedFirstPersonVisual(
-    object
-)
-    return object:IsA("BasePart")
-        or object:IsA("Decal")
-        or object:IsA("Texture")
-        or object:IsA("ParticleEmitter")
-        or object:IsA("Trail")
-        or object:IsA("Beam")
-        or object:IsA("BillboardGui")
-        or object:IsA("SurfaceGui")
-        or object:IsA("Sparkles")
-        or object:IsA("Fire")
-        or object:IsA("Smoke")
-        or object:IsA("SpringConstraint")
-        or object:IsA("Highlight")
-end
-
-local function othersClearFirstPersonCaptureConnections()
-    for _, connection in ipairs(
-        others.firstPersonCaptureConnections
-    ) do
-        pcall(function()
-            connection:Disconnect()
-        end)
+        table.insert(
+            entries,
+            {
+                root,
+                root:GetDescendants()
+            }
+        )
     end
 
-    table.clear(
-        others.firstPersonCaptureConnections
-    )
-end
+    local function scanTree(node)
+        if not node
+            or not node.Parent
+        then
+            return
+        end
 
-local function othersBeginFirstPersonCapture()
-    othersClearFirstPersonCaptureConnections()
+        if node:IsA("BasePart") then
+            addPartTree(node)
+            return
+        end
+
+        for _, child in ipairs(
+            node:GetChildren()
+        ) do
+            scanTree(child)
+        end
+    end
 
     for _, humanoid in ipairs(
         others.getHumanoids()
@@ -10571,249 +10570,92 @@ local function othersBeginFirstPersonCapture()
         local model =
             humanoid.Parent
 
-        if model then
-            local connection =
-                model.DescendantAdded:Connect(
-                    function(object)
-                        --// Every descendant created by ApplyDescription
-                        --// belongs to this Others application. Record all
-                        --// Instance types; the render pass filters only
-                        --// objects that can actually affect visibility.
-                        others.firstPersonObjects[
-                            object
-                        ] = true
-                    end
-                )
-
-            table.insert(
-                others.firstPersonCaptureConnections,
-                connection
-            )
+        if model
+            and model.Parent
+        then
+            --// Scan the entire Others model.
+            --//
+            --// Direct body BaseParts become roots such as Head/Torso.
+            --// Accessory descendants such as Hair/Handle are also
+            --// picked up, so the native SetVisibility() receives them
+            --// exactly as renderable character parts.
+            for _, child in ipairs(
+                model:GetChildren()
+            ) do
+                scanTree(child)
+            end
         end
     end
+
+    return entries
 end
 
-local function othersGetFirstPersonTransparency(
-    deltaTime
-)
-    local camera =
-        workspace.CurrentCamera
+local function othersSyncWithNativeVisibility()
+    local characterObject =
+        getCharacterObject()
 
-    if not camera then
-        return 0
-    end
-
-    local distance =
-        (
-            camera.Focus.Position
-            - camera.CFrame.Position
-        ).Magnitude
-
-    local value =
-        distance < 2
-        and 1 - (distance - 0.5) / 1.5
-        or 0
-
-    value =
-        value < 0.5
-        and 0
-        or value
-
-    if others.firstPersonLastTransparency
-        and value < 1
-        and others.firstPersonLastTransparency < 0.95
+    if not characterObject
+        or not characterObject.Visibility
     then
-        local delta =
-            value
-            - others.firstPersonLastTransparency
-
-        local step =
-            2.8 * (deltaTime or 0)
-
-        value =
-            others.firstPersonLastTransparency
-            + math.clamp(
-                delta,
-                -step,
-                step
-            )
+        return
     end
 
-    value =
-        math.clamp(
-            math.round(
-                value * 100
-            ) / 100,
-            0,
-            1
+    local visibility =
+        characterObject.Visibility
+
+    local entries =
+        othersBuildNativeVisibilityEntries()
+
+    if #entries == 0 then
+        return
+    end
+
+    --// Refresh the Type immediately from the game's own Visibility
+    --// logic so camera distance / first-person state is current before
+    --// SetVisibility() processes the Others hierarchy.
+    local currentType
+
+    pcall(function()
+        currentType =
+            visibility:GetType()
+    end)
+
+    if currentType then
+        visibility.Type =
+            currentType
+    end
+
+    --// Directly invoke the game's own handler.
+    pcall(function()
+        visibility:UpdateVisibility(
+            entries
         )
-
-    others.firstPersonLastTransparency =
-        value
-
-    return value
+    end)
 end
 
-local function othersSyncFirstPersonObjects(
-    deltaTime
-)
-    local transparency =
-        othersGetFirstPersonTransparency(
-            deltaTime
-        )
-
-    local firstPerson =
-        transparency > 0
-
-    for object in pairs(
-        others.firstPersonObjects
-    ) do
-        if not object
-            or not object.Parent
-        then
-            others.firstPersonObjects[
-                object
-            ] = nil
-
-            others.firstPersonStates[
-                object
-            ] = nil
-
-        elseif othersIsSupportedFirstPersonVisual(
-            object
-        )
-        then
-            local state =
-                others.firstPersonStates[
-                    object
-                ]
-
-            if not state then
-                state = {}
-
-                pcall(function()
-                    if object:IsA("BasePart") then
-                        state.LocalTransparencyModifier =
-                            object.LocalTransparencyModifier
-                    elseif object:IsA("Decal")
-                        or object:IsA("Texture")
-                    then
-                        state.Transparency =
-                            object.Transparency
-                    elseif object:IsA("ParticleEmitter") then
-                        state.Enabled =
-                            object.Enabled
-                        state.Acceleration =
-                            object.Acceleration
-                    elseif object:IsA("SpringConstraint")
-                        or object:IsA("Beam")
-                        or object:IsA("Trail")
-                        or object:IsA("BillboardGui")
-                        or object:IsA("SurfaceGui")
-                        or object:IsA("Sparkles")
-                        or object:IsA("Fire")
-                        or object:IsA("Smoke")
-                        or object:IsA("Highlight")
-                    then
-                        state.Enabled =
-                            object.Enabled
-                    end
-                end)
-
-                others.firstPersonStates[
-                    object
-                ] = state
-            end
-
-            pcall(function()
-                if object:IsA("BasePart") then
-                    if firstPerson then
-                        --// Same camera-distance transparency curve
-                        --// used by the native TransparencyController.
-                        object.LocalTransparencyModifier =
-                            transparency
-                    else
-                        object.LocalTransparencyModifier =
-                            state.LocalTransparencyModifier
-                            or 0
-                    end
-
-                elseif object:IsA("Decal")
-                    or object:IsA("Texture")
-                then
-                    if firstPerson then
-                        object.Transparency = 1
-                    else
-                        object.Transparency =
-                            state.Transparency
-                            or 0
-                    end
-
-                elseif object:IsA("ParticleEmitter") then
-                    if firstPerson then
-                        object.Enabled = false
-                        object.Acceleration =
-                            Vector3.new(
-                                0,
-                                500000,
-                                0
-                            )
-                    else
-                        object.Enabled =
-                            state.Enabled
-                            ~= false
-
-                        object.Acceleration =
-                            state.Acceleration
-                            or object.Acceleration
-                    end
-
-                else
-                    if firstPerson then
-                        object.Enabled = false
-                    else
-                        object.Enabled =
-                            state.Enabled
-                            ~= false
-                    end
-                end
-            end)
-        end
-    end
-
-    if not firstPerson then
-        --// Once back in 3P, forget old state for destroyed objects.
-        for object in pairs(
-            others.firstPersonStates
-        ) do
-            if not object
-                or not object.Parent
-            then
-                others.firstPersonStates[
-                    object
-                ] = nil
-            end
-        end
-    end
-end
-
+--// A previous DeadEye version used a custom Others first-person
+--// renderer. Remove that RenderStep as well as our new one so a
+--// previous script instance can never fight the native handler.
 pcall(function()
     RunService:UnbindFromRenderStep(
         "DeadEyeOthersFirstPersonVisibility"
     )
+
+    RunService:UnbindFromRenderStep(
+        "DeadEyeOthersNativeVisibility"
+    )
 end)
 
 RunService:BindToRenderStep(
-    "DeadEyeOthersFirstPersonVisibility",
+    "DeadEyeOthersNativeVisibility",
     Enum.RenderPriority.Camera.Value + 2,
-    function(deltaTime)
-        othersSyncFirstPersonObjects(
-            deltaTime
-        )
+    function()
+        othersSyncWithNativeVisibility()
     end
 )
 
 function others.ensureSnapshot()
+
     if others.originalDescription then
         return true
     end
