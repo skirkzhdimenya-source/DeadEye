@@ -18358,18 +18358,16 @@ genv.DEADEYE_MAIN_CLEANUP =
         --// user's actual ON/OFF state from the save above.
         mainJump.rageLookEnabled = false
         mainJump.benchTrimpEnabled = false
-        mainJump.reverseLookEnabled =
-            savedConfig.main
-            and savedConfig.main.reverseLookEnabled == true
-            or false
+        mainJump.enabled = false
+        mainJump.lookEnabled = false
+        mainJump.rageLookEnabled = false
+        mainJump.benchTrimpEnabled = false
+        mainJump.reverseLookEnabled = false
         mainJump.crouchSpamEnabled = false
-        mainJump.airTurnEnabled =
-            savedConfig.main
-            and savedConfig.main.airTurn == true
-            or false
+        mainJump.airTurnEnabled = false
 
         pcall(function()
-            mainJump.mainDisconnect()
+            mainDisconnect()
         end)
 
         pcall(function()
