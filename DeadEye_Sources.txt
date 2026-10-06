@@ -1342,3 +1342,70 @@ and:
     MoveFunction -> script.Parent.Parent.Parent -> Shared
 
 END OF FILE
+
+
+==================================================
+SOURCE #5
+==================================================
+PATH:
+Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule
+
+PURPOSE:
+Основной клиентский CameraModule. Управляет:
+    - CameraMode
+    - выбором camera controller
+    - LockFirstPerson
+    - TransparencyController
+    - CameraSubject
+    - CameraType
+    - обновлением камеры на RenderStep
+    - CameraInput
+    - Occlusion modules
+
+CONFIRMED FIRST PERSON PATH:
+    GetCameraMovementModeFromSettings()
+    -> если Players.LocalPlayer.CameraMode
+       == Enum.CameraMode.LockFirstPerson,
+       принудительно выбирается Classic
+
+    OnLocalPlayerCameraPropertyChanged("CameraMode")
+    -> ActivateCameraController()
+    -> если LockFirstPerson:
+       UpdateForDistancePropertyChange()
+
+CONFIRMED TRANSPARENCY CONNECTION:
+    t.new()
+    -> activeTransparencyController = v_u_14.new()
+
+    OnCameraSubjectChanged()
+    -> activeTransparencyController:SetSubject(CameraSubject)
+
+IMPORTANT:
+    В самом CameraModule нет прямой логики изменения
+    Head.Transparency / LocalTransparencyModifier.
+    За визуальное скрытие персонажа отвечает отдельный:
+
+    Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
+
+SOURCE CONTENT:
+    Предоставлен пользователем в чате 2026-10-06.
+    Это исходник CameraModule с функциями:
+        t.new()
+        GetCameraMovementModeFromSettings()
+        ActivateOcclusionModule()
+        ActivateCameraController()
+        OnCameraSubjectChanged()
+        OnCameraTypeChanged()
+        OnCurrentCameraChanged()
+        OnLocalPlayerCameraPropertyChanged()
+        OnUserGameSettingsPropertyChanged()
+        OnPreferredInputChanged()
+        Update()
+        OnCharacterAdded()
+        OnCharacterRemoving()
+        OnPlayerAdded()
+        OnPlayerRemoving()
+        OnMouseLockToggled()
+
+NEXT REQUIRED SOURCE:
+    Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
