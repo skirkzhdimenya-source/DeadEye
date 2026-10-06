@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.147
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.148
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.147"
+local SCRIPT_VERSION = "1.148"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -169,7 +169,8 @@ local savedConfig = {
         smartAirTurn = false,
         airTurnHotkey = "O",
         crouchSpamDelay = 0.03,
-        crouchSpamHotkey = "I"
+        crouchSpamHotkey = "I",
+        benchTrimpHotkey = "P"
     },
     gui = {
         x = 35,
@@ -10201,6 +10202,9 @@ local mainJump = {
     crouchSpamEnabled = false,
     crouchSpamDelay = 0.03,
     crouchSpamHotkeyName = "I",
+    benchTrimpEnabled = false,
+    benchTrimpHotkeyName = "P",
+    benchTrimpStateConnection = nil,
     smartAirTurnEnabled = false,
     airTurnHotkeyName = "O",
     crouchSpamThread = nil,
@@ -10282,6 +10286,12 @@ mainJump.crouchSpamHotkeyName =
         and savedConfig.main.crouchSpamHotkey
         or "I"
     )
+mainJump.benchTrimpHotkeyName =
+    tostring(
+        savedConfig.main
+        and savedConfig.main.benchTrimpHotkey
+        or "P"
+    )
 mainJump.smartAirTurnEnabled =
     savedConfig.main
     and savedConfig.main.smartAirTurn == true
@@ -10347,7 +10357,8 @@ function mainJump.saveConfig()
         smartAirTurn = mainJump.smartAirTurnEnabled,
         airTurnHotkey = mainJump.airTurnHotkeyName,
         crouchSpamDelay = mainJump.crouchSpamDelay,
-        crouchSpamHotkey = mainJump.crouchSpamHotkeyName
+        crouchSpamHotkey = mainJump.crouchSpamHotkeyName,
+        benchTrimpHotkey = mainJump.benchTrimpHotkeyName
     }
     pcall(function()
         saveSavedConfig()
@@ -11797,6 +11808,28 @@ function mainJump.update()
         end
     end
 
+    if mainJump.benchTrimpToggle then
+        if mainJump.benchTrimpEnabled then
+            mainJump.benchTrimpToggle.Text =
+                "ON"
+            mainJump.benchTrimpToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            mainJump.benchTrimpToggle.Text =
+                "OFF"
+            mainJump.benchTrimpToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end
+
     if mainJump.airTurnToggle then
         if mainJump.airTurnEnabled then
             mainJump.airTurnToggle.Text =
@@ -12184,6 +12217,41 @@ function mainJump.setCrouchSpamHotkey(value)
     mainJump.saveConfig()
 end
 
+local benchTrimpKey =
+    mainFindKeyCode(
+        mainJump.benchTrimpHotkeyName
+    )
+if benchTrimpKey then
+    mainJump.benchTrimpHotkeyName =
+        benchTrimpKey.Name
+else
+    mainJump.benchTrimpHotkeyName =
+        "P"
+end
+
+function mainJump.setBenchTrimpHotkey(value)
+    local key =
+        mainFindKeyCode(
+            value
+        )
+
+    if not key then
+        return
+    end
+
+    mainJump.benchTrimpHotkeyName =
+        key.Name
+
+    if mainJump.benchTrimpHotkeyBox then
+        mainJump.benchTrimpHotkeyBox.Text =
+            key.Name
+    end
+
+    mainJump.capturing = nil
+
+    mainJump.saveConfig()
+end
+
 local jumpKey =
     mainFindKeyCode(
         mainJump.hotkeyName
@@ -12249,6 +12317,9 @@ function mainJump.startCapture(kind)
             "PRESS KEY..."
     elseif kind == "crouchSpam" then
         mainJump.crouchSpamHotkeyBox.Text =
+            "PRESS KEY..."
+    elseif kind == "benchTrimp" then
+        mainJump.benchTrimpHotkeyBox.Text =
             "PRESS KEY..."
     end
 end
@@ -12564,17 +12635,23 @@ function mainJump.isGameJumpBlocked()
     return blockedByContext
 end
 
-function mainJump.canJump()
+function mainJump.canJump(benchTrimp)
     if not genv.DEADEYE_MAIN_RUNNING
-        or not mainJump.enabled
         or not mainJump.humanoid
         or mainJump.humanoid.Health <= 0
     then
         return false
     end
 
-    if mainJump.humanoid.FloorMaterial
-        == Enum.Material.Air
+    if not benchTrimp
+        and not mainJump.enabled
+    then
+        return false
+    end
+
+    if not benchTrimp
+        and mainJump.humanoid.FloorMaterial
+            == Enum.Material.Air
     then
         return false
     end
@@ -12668,6 +12745,12 @@ function mainJump.canJump()
         end
     end
 
+    if benchTrimp then
+        --// Bench Trimp fires from Climbing, so do not require
+        --// the grounded/airborne state rules used by AutoJump.
+        return true
+    end
+
     local state =
         mainJump.humanoid:GetState()
 
@@ -12677,6 +12760,127 @@ function mainJump.canJump()
             ~= Enum.HumanoidStateType.Freefall
         and state
             ~= Enum.HumanoidStateType.FallingDown
+end
+
+--// =========================================================
+--// BENCH TRIMP
+--// Force Climbing -> Jumping, gated by the same jump
+--// restrictions used by AutoJump.
+--// No independent cleanup: main GUI close owns cleanup.
+--// =========================================================
+function mainJump.bindBenchTrimp(char)
+    if mainJump.benchTrimpStateConnection then
+        pcall(function()
+            mainJump.benchTrimpStateConnection:Disconnect()
+        end)
+        mainJump.benchTrimpStateConnection = nil
+    end
+
+    if not char
+        or not char:IsA("Model")
+    then
+        return
+    end
+
+    local humanoid =
+        char:FindFirstChildOfClass(
+            "Humanoid"
+        )
+
+    if not humanoid then
+        pcall(function()
+            humanoid =
+                char:WaitForChild(
+                    "Humanoid",
+                    5
+                )
+        end)
+    end
+
+    if not humanoid then
+        return
+    end
+
+    local forcing = false
+
+    mainJump.benchTrimpStateConnection =
+        humanoid.StateChanged:Connect(
+            function(_, newState)
+                if not genv.DEADEYE_MAIN_RUNNING
+                    or cleaned
+                    or not mainJump.benchTrimpEnabled
+                    or mainJump.character ~= char
+                    or forcing
+                then
+                    return
+                end
+
+                if newState
+                    ~= Enum.HumanoidStateType.Climbing
+                then
+                    return
+                end
+
+                if not mainJump.canJump(true) then
+                    return
+                end
+
+                forcing = true
+
+                task.defer(function()
+                    if not genv.DEADEYE_MAIN_RUNNING
+                        or cleaned
+                        or not mainJump.benchTrimpEnabled
+                        or mainJump.character ~= char
+                        or not humanoid.Parent
+                    then
+                        forcing = false
+                        return
+                    end
+
+                    if humanoid:GetState()
+                        ~= Enum.HumanoidStateType.Climbing
+                    then
+                        forcing = false
+                        return
+                    end
+
+                    if not mainJump.canJump(true) then
+                        forcing = false
+                        return
+                    end
+
+                    pcall(function()
+                        humanoid:ChangeState(
+                            Enum.HumanoidStateType.Jumping
+                        )
+                    end)
+
+                    forcing = false
+                end)
+            end
+        )
+end
+
+function mainJump.setBenchTrimpEnabled(state)
+    mainJump.benchTrimpEnabled =
+        state and true or false
+
+    if mainJump.benchTrimpEnabled then
+        local char =
+            mainJump.character
+            or LocalPlayer.Character
+
+        if char then
+            pcall(function()
+                mainJump.bindBenchTrimp(
+                    char
+                )
+            end)
+        end
+    end
+
+    mainJump.update()
 end
 
 function mainJump.lookScannerSeesSurface()
@@ -14826,6 +15030,132 @@ mainConnect(
         end
     )
 )
+
+__UI.benchTrimpRow =
+    mainRow(
+        "BENCH TRIMP",
+        9
+    )
+
+local benchTrimpLabel =
+    autoLabel:Clone()
+benchTrimpLabel.Text =
+    "BENCH TRIMP"
+benchTrimpLabel.Parent =
+    __UI.benchTrimpRow
+
+mainJump.benchTrimpHotkeyBox =
+    Instance.new("TextButton")
+mainJump.benchTrimpHotkeyBox.Size =
+    UDim2.new(
+        0,
+        72,
+        0,
+        28
+    )
+mainJump.benchTrimpHotkeyBox.Position =
+    UDim2.new(
+        1,
+        -155,
+        0.5,
+        -14
+    )
+mainJump.benchTrimpHotkeyBox.BackgroundColor3 =
+    Color3.fromRGB(
+        32,
+        32,
+        32
+    )
+mainJump.benchTrimpHotkeyBox.BorderSizePixel = 0
+mainJump.benchTrimpHotkeyBox.Text =
+    mainJump.benchTrimpHotkeyName
+mainJump.benchTrimpHotkeyBox.TextSize = 10
+mainJump.benchTrimpHotkeyBox.Font =
+    Enum.Font.GothamBold
+mainJump.benchTrimpHotkeyBox.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.benchTrimpHotkeyBox.Parent =
+    __UI.benchTrimpRow
+
+local benchTrimpHotkeyCorner =
+    Instance.new("UICorner")
+benchTrimpHotkeyCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+benchTrimpHotkeyCorner.Parent =
+    mainJump.benchTrimpHotkeyBox
+
+mainConnect(
+    mainJump.benchTrimpHotkeyBox.MouseButton1Click:Connect(
+        function()
+            mainJump.startCapture(
+                "benchTrimp"
+            )
+        end
+    )
+)
+
+mainJump.benchTrimpToggle =
+    Instance.new("TextButton")
+mainJump.benchTrimpToggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+mainJump.benchTrimpToggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+mainJump.benchTrimpToggle.BackgroundColor3 =
+    Color3.fromRGB(
+        47,
+        52,
+        61
+    )
+mainJump.benchTrimpToggle.BorderSizePixel = 0
+mainJump.benchTrimpToggle.TextSize = 10
+mainJump.benchTrimpToggle.Font =
+    Enum.Font.GothamBold
+mainJump.benchTrimpToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.benchTrimpToggle.Parent =
+    __UI.benchTrimpRow
+
+local benchTrimpToggleCorner =
+    Instance.new("UICorner")
+benchTrimpToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+benchTrimpToggleCorner.Parent =
+    mainJump.benchTrimpToggle
+
+mainConnect(
+    mainJump.benchTrimpToggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setBenchTrimpEnabled(
+                not mainJump.benchTrimpEnabled
+            )
+        end
+    )
+)
+
 mainConnect(
     UserInputService.InputBegan:Connect(
         function(input)
@@ -14860,6 +15190,12 @@ mainConnect(
                     == "crouchSpam"
                 then
                     mainJump.setCrouchSpamHotkey(
+                        keyCode.Name
+                    )
+                elseif mainJump.capturing
+                    == "benchTrimp"
+                then
+                    mainJump.setBenchTrimpHotkey(
                         keyCode.Name
                     )
                 end
@@ -14901,6 +15237,16 @@ mainConnect(
             then
                 mainJump.setCrouchSpamEnabled(
                     not mainJump.crouchSpamEnabled
+                )
+            end
+
+            if input.KeyCode
+                == mainFindKeyCode(
+                    mainJump.benchTrimpHotkeyName
+                )
+            then
+                mainJump.setBenchTrimpEnabled(
+                    not mainJump.benchTrimpEnabled
                 )
             end
         end
@@ -15049,6 +15395,7 @@ mainConnect(
 
             if genv.DEADEYE_MAIN_RUNNING then
                 mainJump.createSensors(char)
+                mainJump.bindBenchTrimp(char)
             end
         end
     )
@@ -15059,6 +15406,9 @@ then
     task.spawn(
         function()
             mainJump.createSensors(
+                LocalPlayer.Character
+            )
+            mainJump.bindBenchTrimp(
                 LocalPlayer.Character
             )
         end
@@ -20625,6 +20975,14 @@ local function cleanup()
         mainJump.manualJumpActive = false
         mainJump.lookAutoJumpCycle = false
         mainJump.lookTriggeredThisAir = false
+    end)
+
+    pcall(function()
+        if mainJump.benchTrimpStateConnection then
+            mainJump.benchTrimpStateConnection:Disconnect()
+            mainJump.benchTrimpStateConnection = nil
+        end
+        mainJump.benchTrimpEnabled = false
     end)
 
     pcall(function()
