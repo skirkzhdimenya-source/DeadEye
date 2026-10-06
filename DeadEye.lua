@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.168
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.169
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.168"
+local SCRIPT_VERSION = "1.169"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8004,70 +8004,34 @@ function UnusualFns.getUnusualViewmodel()
 end
 
 function UnusualFns.isUnusualFirstPerson()
-    local visualRig =
-        UnusualFns.getUnusualVisualRig()
-
+    --// Use the game's exact first-person measurement.
+    --// Native TransparencyController:
+    --//     (Camera.Focus.Position - Camera.CFrame.Position).Magnitude < 2
+    --
+    --// Do NOT use the visual rig Head position here.
+    --// The visual rig can be offset/rebuilt while DeadEye is active,
+    --// which made the previous detector miss the real P3 -> P1 transition.
     local camera =
         workspace.CurrentCamera
 
-    local head =
-        visualRig
-        and visualRig:FindFirstChild(
-            "Head"
-        )
-
-    if camera
-        and head
-        and head:IsA("BasePart")
-    then
-        local distance =
-            (
-                camera.CFrame.Position
-                - head.Position
-            ).Magnitude
-
-        return distance <= 1.5
+    if not camera then
+        return false
     end
 
-    --// Fallback only when the visual head is unavailable.
-    if visualRig then
-        local bodyNames = {
-            "Head",
-            "Torso",
-            "Left Arm",
-            "Right Arm",
-            "Left Leg",
-            "Right Leg"
-        }
+    local focus =
+        camera.Focus
 
-        local total = 0
-        local hidden = 0
-
-        for _, name in ipairs(
-            bodyNames
-        ) do
-            local part =
-                visualRig:FindFirstChild(
-                    name
-                )
-
-            if part
-                and part:IsA("BasePart")
-            then
-                total += 1
-
-                if part.LocalTransparencyModifier >= 0.99 then
-                    hidden += 1
-                end
-            end
-        end
-
-        if total > 0 then
-            return hidden >= math.ceil(total * 0.5)
-        end
+    if not focus then
+        return false
     end
 
-    return false
+    local distance =
+        (
+            focus.Position
+            - camera.CFrame.Position
+        ).Magnitude
+
+    return distance < 2
 end
 
 function UnusualFns.syncUnusualViewmodelAppearance()
