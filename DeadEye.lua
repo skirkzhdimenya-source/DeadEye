@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.166
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.167
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.166"
+local SCRIPT_VERSION = "1.167"
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -8136,16 +8136,34 @@ end
 --// The native result did NOT use the SOURCE #6 transparency
 --// formula for these Unusual ParticleEmitters.
 --//
---// Therefore DeadEye mirrors the actual observed Unusual behavior:
---//   3P -> Enabled = true,  LTM = 0
---//   1P -> Enabled = false, LTM = 0
+--// Therefore DeadEye mirrors the native 1P disappearance across
+--// the WHOLE replacement visual layer:
+--//
+--//   ParticleEmitter:
+--//      3P -> Enabled = true,  LTM = 0
+--//      1P -> Enabled = false, LTM = 0
+--//
+--//   Trail / Beam / Fire / Smoke / Sparkles / Highlight / BillboardGui:
+--//      3P -> Enabled = true
+--//      1P -> Enabled = false
+--//
+--//   BasePart / Decal:
+--//      3P -> LTM = 0
+--//      1P -> LTM = 1
+--//
+--// This last group is important for custom "fake trails" that are
+--// actually animated geometry/parts rather than Roblox Trail objects.
+--//
+--// PointLight / SpotLight / SurfaceLight are deliberately NOT
+--// disabled here. The clean native test showed PointLight remaining
+--// Enabled=true in 1P.
 --//
 --// No camera-distance transparency is applied to DeadEye Unusual FX.
 --// No Transparency property is changed.
---// No snapshot/restore system is used.
+--// No Trail:Clear() is used.
 --//
 --// SOURCE #6 remains relevant for native character transparency,
---// but its LTM formula must NOT be applied to these Unusual emitters.
+--// but its LTM formula must NOT be applied to these replacement FX.
 --// =========================================================
 local unusualPovTransparencyClasses = {
     BasePart = true,
@@ -8156,7 +8174,9 @@ local unusualPovTransparencyClasses = {
     Fire = true,
     Smoke = true,
     Sparkles = true,
-    Explosion = true
+    Explosion = true,
+    Highlight = true,
+    BillboardGui = true
 }
 
 local function isStockUnusualPOVTransparencyObject(
@@ -8266,35 +8286,70 @@ function UnusualFns.setUnusualFXForPOV(
     firstPerson,
     _deltaTime
 )
-    --// Native observation proved that the original Unusual
-    --// ParticleEmitters are DISABLED in 1P rather than faded.
+    --// Native clean-server observation:
+    --// ParticleEmitters are disabled in 1P.
     --
-    --// DeadEye visual copies are tagged separately, so mirror
-    --// that exact state onto our replacement emitters.
+    --// DeadEye's replacement visual can contain more than
+    --// ParticleEmitters. Some Unusuals build "custom trails"
+    --// from Trail/Beam objects or animated BaseParts.
+    --
+    --// Because these objects are outside the native character
+    --// hierarchy, Roblox will not hide them automatically.
+    --// Mirror the native 1P disappearance onto every tagged
+    --// replacement visual object.
 
     forEachDeadEyeUnusualVisualObject(
         function(object)
             pcall(function()
-                if object:IsA("ParticleEmitter") then
-                    --// Native 3P = enabled, native 1P = disabled.
-                    object.Enabled = not firstPerson
+                if firstPerson then
 
-                    --// Native Unusual ParticleEmitters stay at LTM 0.
-                    object.LocalTransparencyModifier = 0
+                    if object:IsA("ParticleEmitter")
+                        or object:IsA("Trail")
+                        or object:IsA("Beam")
+                        or object:IsA("Fire")
+                        or object:IsA("Smoke")
+                        or object:IsA("Sparkles")
+                        or object:IsA("Highlight")
+                        or object:IsA("BillboardGui")
+                    then
+                        --// Disable emission/rendering immediately.
+                        object.Enabled = false
 
-                elseif object:IsA("BasePart")
-                    or object:IsA("Decal")
-                    or object:IsA("Beam")
-                    or object:IsA("Trail")
-                    or object:IsA("Fire")
-                    or object:IsA("Smoke")
-                    or object:IsA("Sparkles")
-                    or object:IsA("Explosion")
-                then
-                    --// The clean native test did not show these classes
-                    --// being faded as part of this Unusual. Never apply
-                    --// the old 0..1 camera-distance transparency to them.
-                    object.LocalTransparencyModifier = 0
+                        if object:IsA("ParticleEmitter") then
+                            --// Native ParticleEmitter LTM remains 0.
+                            object.LocalTransparencyModifier = 0
+                        end
+
+                    elseif object:IsA("BasePart")
+                        or object:IsA("Decal")
+                    then
+                        --// Hide custom geometry-based visuals,
+                        --// including fake/custom trail segments.
+                        object.LocalTransparencyModifier = 1
+                    end
+
+                    --// Do NOT disable PointLight/SpotLight/SurfaceLight.
+                    --// Native observation showed PointLight staying enabled.
+
+                else
+
+                    if object:IsA("ParticleEmitter")
+                        or object:IsA("Trail")
+                        or object:IsA("Beam")
+                        or object:IsA("Fire")
+                        or object:IsA("Smoke")
+                        or object:IsA("Sparkles")
+                        or object:IsA("Highlight")
+                        or object:IsA("BillboardGui")
+                    then
+                        object.Enabled = true
+
+                    elseif object:IsA("BasePart")
+                        or object:IsA("Decal")
+                    then
+                        object.LocalTransparencyModifier = 0
+                    end
+
                 end
             end)
         end
@@ -8325,12 +8380,22 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
     end)
 
     --// Return DeadEye's Unusual layer to the native 3P state.
-    --// Native ParticleEmitters are enabled and have LTM = 0 in 3P.
     pcall(function()
         forEachDeadEyeUnusualVisualObject(
             function(object)
-                if object:IsA("ParticleEmitter") then
+                if object:IsA("ParticleEmitter")
+                    or object:IsA("Trail")
+                    or object:IsA("Beam")
+                    or object:IsA("Fire")
+                    or object:IsA("Smoke")
+                    or object:IsA("Sparkles")
+                    or object:IsA("Highlight")
+                    or object:IsA("BillboardGui")
+                then
                     object.Enabled = true
+                elseif object:IsA("BasePart")
+                    or object:IsA("Decal")
+                then
                     object.LocalTransparencyModifier = 0
                 elseif isStockUnusualPOVTransparencyObject(object) then
                     object.LocalTransparencyModifier = 0
