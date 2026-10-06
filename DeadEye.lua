@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.192
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.193
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,8 +32,10 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.192"
---// Others settings are persisted on edit/unfocus and again during cleanup. This reminder must stay near script start.
+local SCRIPT_VERSION = "1.193"
+--// Others settings are persisted on edit/unfocus and again during cleanup.
+--// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
+--// These reminders must stay near script start.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
 local Players = game:GetService("Players")
@@ -13764,6 +13766,19 @@ function mainJump.setCrouchSpamEnabled(state)
         return
     end
 
+    --// WITH mode depends on the Reverse Look hook intercepting
+    --// DataRegistry.LookCFrame. After a script restart the saved
+    --// mode is restored, but the hook itself is not, so install it
+    --// when CROUCH SPAM is enabled as well.
+    if state
+        and mainJump.reverseLookMode == "with"
+        and not mainJump.reverseLookHookInstalled
+    then
+        pcall(function()
+            mainJump.installReverseLookHooks()
+        end)
+    end
+
     if mainJump.crouchSpamEnabled
         and mainJump.crouchSpamThread
     then
@@ -22962,6 +22977,11 @@ local function cleanup()
     --// pressing APPLY / ENTER.
     pcall(function()
         others.saveConfig()
+    end)
+
+    --// Persist Main / Reverse Look state on close as well.
+    pcall(function()
+        mainJump.saveConfig()
     end)
 
     pcall(function()
