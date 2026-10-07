@@ -2381,6 +2381,129 @@ return t
 
 
 ==================================================
+SOURCE #8
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.Constraints
+
+PURPOSE:
+Создаёт и включает/выключает physics constraints персонажа:
+    - LinearVelocity
+    - AlignPosition
+    - VectorForce
+а также обновляет их параметры из результатов MoveFunction.
+
+SOURCE CONTENT:
+
+local t = {}
+t.__index = t
+function t.new(p1)
+	--[[ line: 11 | upvalues: (copy) t]]
+	return setmetatable({
+		Parent = p1,
+		Character = p1.Character,
+		StateInfo = p1.StateInfo,
+		Constraints = {},
+		Attachments = {},
+		CenteredAttachments = {}
+	}, t)
+end
+function t.Init(p2)
+	--[[ line: 25 | upvalues: none]]
+	for _, v3 in pairs(p2.StateInfo.Constraints) do
+		local ID = v3.ID
+		if p2.Constraints[ID] == nil then
+			if v3.Type == "LinearVelocity" then
+				p2.Constraints[ID] = Instance.new("LinearVelocity", p2.Character.PrimaryPart)
+				p2.Constraints[ID].MaxForce = v3.MaxForce or 100000
+				p2.Constraints[ID].VelocityConstraintMode = v3.VelocityConstraintMode or Enum.VelocityConstraintMode.Plane
+				if v3.VelocityConstraintMode == Enum.VelocityConstraintMode.Vector then
+					p2.Constraints[ID].VectorVelocity = Vector3.new(0, 0, 0)
+				elseif v3.VelocityConstraintMode == Enum.VelocityConstraintMode.Line then
+					p2.Constraints[ID].LineDirection = Vector3.new(0, 1, 0)
+				else
+					p2.Constraints[ID].PrimaryTangentAxis = v3.PrimaryTangentAxis or Vector3.new(1, 0, 0)
+					p2.Constraints[ID].SecondaryTangentAxis = v3.SecondaryTangentAxis or Vector3.new(0, 0, 1)
+				end
+			elseif v3.Type == "AlignPosition" then
+				p2.Constraints[ID] = Instance.new("AlignPosition", p2.Character.PrimaryPart)
+				p2.Constraints[ID].MaxForce = v3.MaxForce or 10000000
+				p2.Constraints[ID].MaxVelocity = v3.MaxVelocity or 10
+				p2.Constraints[ID].Responsiveness = v3.Responsiveness or 200
+				p2.Constraints[ID].Mode = Enum.PositionAlignmentMode.OneAttachment
+			elseif v3.Type == "VectorForce" then
+				p2.Constraints[ID] = Instance.new("VectorForce", p2.Character.PrimaryPart)
+				p2.Constraints[ID].Force = v3.Force or Vector3.new()
+				p2.Constraints[ID].RelativeTo = v3.RelativeTo or Enum.ActuatorRelativeTo.World
+			end
+			if p2.Attachments[v3.AttachmentPosition] == nil then
+				p2.Attachments[v3.AttachmentPosition] = Instance.new("Attachment", p2.Character.PrimaryPart)
+				p2.Attachments[v3.AttachmentPosition].Position = v3.AttachmentPosition
+			end
+			p2.Constraints[ID].Attachment0 = p2.Attachments[v3.AttachmentPosition]
+			if v3.AttachmentPosition == Vector3.new() then
+				local CenteredAttachments = p2.CenteredAttachments
+				local v4 = p2.Attachments[v3.AttachmentPosition]
+				table.insert(CenteredAttachments, v4)
+			end
+			p2.Constraints[ID].Enabled = false
+		end
+	end
+end
+function t.SetConstraintsEnabled(p5, p6)
+	--[[ line: 65 | upvalues: none]]
+	for _2, v7 in pairs(p5.Constraints) do
+		v7.Enabled = false
+	end
+	if p6 and p6 ~= "Disabled" then
+		for _3, v8 in pairs((p5.StateInfo:GetState(p6).Movement or {}).Constraints or {}) do
+			p5.Constraints[v8].Enabled = true
+		end
+	end
+end
+function t.Update(p9, p10)
+	--[[ line: 76 | upvalues: none]]
+	for v11, v12 in pairs(p10) do
+		p9:UpdateConstraint(v11, v12)
+	end
+end
+function t.UpdateConstraint(p13, p14, p15)
+	--[[ line: 81 | upvalues: none]]
+	for v16, v17 in pairs(p15) do
+		local v17
+		if v16 == "Position" then
+			if v17 ~= v17 then
+				v17 = Vector3.new()
+			end
+			p13.Constraints[p14].Position = v17
+		elseif v16 == "Velocity" then
+			if v17 ~= v17 then
+				v17 = Vector3.new()
+			end
+			p13.Constraints[p14].Velocity = v17
+		elseif v16 == "VectorVelocity" then
+			if v17 ~= v17 then
+				v17 = Vector3.new()
+			end
+			p13.Constraints[p14].VectorVelocity = v17 * 1 / 90
+		elseif v16 == "PlaneVelocity" then
+			if v17 ~= v17 then
+				v17 = Vector2.new()
+			end
+			p13.Constraints[p14].PlaneVelocity = v17 * 1 / 90
+		elseif v16 == "Force" then
+			p13.Constraints[p14].Force = v17
+		end
+	end
+	for _4, v18 in pairs(p13.CenteredAttachments) do
+		local v19 = (4 - p13.Character.PrimaryPart.Size.Y) / 2
+		v18.Position = Vector3.new(0, v19, 0)
+	end
+end
+return t
+
+
+==================================================
 SOURCE #9
 ==================================================
 PATH:
