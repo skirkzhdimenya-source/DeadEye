@@ -1,6 +1,6 @@
 ==================================================
 DeadEye — Recovered Game Sources
-Updated: 2026-10-05
+Updated: 2026-10-08
 ==================================================
 
 Этот файл хранит исходники/декомпиляции игровых модулей, которые были
@@ -6281,3 +6281,865 @@ end
 return t
 
 END OF FILE
+
+
+==================================================
+SOURCE #51
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Shared.StateInfo
+
+PURPOSE:
+Полный StateInfo для анализа состояний движения и физических constraints.
+Здесь определены:
+    - все Physics constraints и их реальные типы
+    - VelocityConstraintMode
+    - какие constraints включаются в каждом состоянии
+    - состояния Climbing, Air, Wallrun, Grappling и т.д.
+    - GetState()
+    - GetStateOrDefault()
+    - GetConstraint()
+
+SOURCE CONTENT:
+
+game:GetService("RunService")
+local t = {
+	Constraints = {
+		{ ID = "BaseMover", Type = "LinearVelocity", AttachmentPosition = Vector3.new() },
+		{
+			ID = "SwimMover",
+			Type = "LinearVelocity",
+			AttachmentPosition = Vector3.new(),
+			VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
+		},
+		{
+			ID = "WallrunForce",
+			Type = "VectorForce",
+			AttachmentPosition = Vector3.new(),
+			Force = Vector3.new(),
+			RelativeTo = Enum.ActuatorRelativeTo.World
+		},
+		{
+			ID = "GrappleForce",
+			Type = "VectorForce",
+			AttachmentPosition = Vector3.new(),
+			Force = Vector3.new(0, 8.684000015258789, 0) * workspace.Gravity,
+			RelativeTo = Enum.ActuatorRelativeTo.World
+		},
+		{
+			ID = "ClimbAlign",
+			Type = "AlignPosition",
+			MaxForce = 10000000,
+			MaxVelocity = 30,
+			Responsiveness = 200,
+			Mode = Enum.PositionAlignmentMode.OneAttachment,
+			AttachmentPosition = Vector3.new()
+		},
+		{
+			ID = "LungePosition",
+			Type = "AlignPosition",
+			MaxForce = 10000000,
+			MaxVelocity = 60,
+			Responsiveness = 200,
+			Mode = Enum.PositionAlignmentMode.OneAttachment,
+			AttachmentPosition = Vector3.new()
+		},
+		{
+			ID = "RotateAlign",
+			Type = "AlignPosition",
+			MaxForce = 10000000,
+			MaxVelocity = 30,
+			Responsiveness = 200,
+			Mode = Enum.PositionAlignmentMode.OneAttachment,
+			AttachmentPosition = Vector3.new()
+		}
+	},
+	States = {
+		{
+			State = "Inert",
+			Animation = "Default",
+			CanInteract = false,
+			Priority = -1000,
+			Requirements = {},
+			Movement = { CanJump = false },
+			Camera = {}
+		},
+		{
+			State = "Still",
+			Animation = "Default",
+			CanInteract = false,
+			Priority = -1001,
+			Requirements = {},
+			Movement = {
+				RootPartOrientation = { Type = "None" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Stunned",
+			Animation = "Default",
+			CanInteract = false,
+			Priority = 99,
+			Requirements = { Stunned = true },
+			Movement = {
+				RootPartOrientation = { Type = "None" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Grappling",
+			Animation = "Jumping",
+			PlatformStand = true,
+			Massless = true,
+			CanEmote = false,
+			CanInteract = false,
+			Priority = 999999,
+			Requirements = { Grappling = true },
+			Movement = {
+				MoveType = "GrappleMove",
+				Constraints = { "GrappleForce" },
+				RootPartOrientation = { Type = "None" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Seated",
+			Animation = "Default",
+			PlatformStand = true,
+			Massless = true,
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CollisionsDisabled = true,
+			CanEmote = false,
+			Priority = 9999999,
+			Requirements = { Seated = true },
+			Movement = {
+				CanJump = false,
+				RootPartOrientation = { Type = "None" }
+			},
+			Camera = { Type = "Seated" }
+		},
+		{
+			State = "Lunge",
+			Animation = "Jumping",
+			PlatformStand = true,
+			Massless = true,
+			CanEmote = false,
+			CanInteract = false,
+			Priority = 98,
+			Requirements = { Lunging = true },
+			Movement = {
+				MoveType = "LungeMove",
+				Constraints = { "LungePosition" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Idle",
+			Animation = "Idle",
+			Priority = 0,
+			Requirements = {
+				Grounded = true,
+				Crouching = false,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { "<", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Move",
+			Animation = "Moving",
+			ViewmodelMoveType = "Moving",
+			Priority = 0,
+			Requirements = {
+				Grounded = true,
+				Crouching = false,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Move_RootStraight",
+			Animation = "Moving_RootStraight",
+			ViewmodelMoveType = "Moving",
+			Priority = 1,
+			Requirements = {
+				Grounded = true,
+				ToolAnimationRootStraight = true,
+				Crouching = false,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "CrouchIdle",
+			Animation = "Crouching",
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			Priority = 0,
+			Requirements = {
+				Grounded = true,
+				Crouching = true,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { "<", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				DisableSprinting = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "CrouchMove",
+			Animation = "Crouching",
+			ViewmodelMoveType = "Moving",
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			Priority = 0,
+			Requirements = {
+				Grounded = true,
+				Crouching = true,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				SpeedMult = 0.6,
+				DisableSprinting = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Crouch_RootStraight",
+			Animation = "Crouching_RootStraight",
+			ViewmodelMoveType = "Moving",
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			Priority = 1,
+			Requirements = {
+				Grounded = true,
+				ToolAnimationRootStraight = true,
+				Crouching = true,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				SpeedMult = 0.6,
+				DisableSprinting = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "WallrunLeft",
+			Animation = "WallrunningLeft",
+			ViewmodelMoveType = "WallrunningLeft",
+			ViewmodelAnimationType = "Moving",
+			Priority = 3,
+			Requirements = {
+				Grounded = false,
+				Crouching = false,
+				WallrunDirection = 1,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 20 }
+			},
+			Movement = {
+				MoveType = "Air",
+				Wallrunning = true,
+				Constraints = { "BaseMover", "WallrunForce" },
+				RootPartOrientation = { Type = "Velocity" }
+			},
+			Camera = {}
+		},
+		{
+			State = "WallrunRight",
+			Animation = "WallrunningRight",
+			ViewmodelMoveType = "WallrunningRight",
+			ViewmodelAnimationType = "Moving",
+			Priority = 3,
+			Requirements = {
+				Grounded = false,
+				Crouching = false,
+				WallrunDirection = -1,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 20 }
+			},
+			Movement = {
+				MoveType = "Air",
+				Wallrunning = true,
+				Constraints = { "BaseMover", "WallrunForce" },
+				RootPartOrientation = { Type = "Velocity" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Slide",
+			Animation = "Sliding",
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			RootDelay = 0.25,
+			ViewmodelAnimationType = "Slide",
+			Priority = 3,
+			Requirements = {
+				Grounded = true,
+				Crouching = true,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 19 }
+			},
+			Movement = {
+				MoveType = "Slide",
+				BreakDoors = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Velocity" }
+			},
+			Camera = {}
+		},
+		{
+			State = "SlideAir",
+			Animation = "Sliding",
+			RootSize = Vector3.new(2, 4, 2),
+			ViewmodelAnimationType = "Slide",
+			Priority = 3,
+			Requirements = {
+				Grounded = false,
+				Crouching = true,
+				Carrying = false,
+				Swimming = false,
+				RelativeSpeedTest = { ">", 19 }
+			},
+			Movement = {
+				MoveType = "Air",
+				BreakDoors = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Velocity" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Air",
+			Animation = "Jumping",
+			ViewmodelAnimationType = "Air",
+			Priority = 1,
+			Requirements = { Grounded = false, Carrying = false, Swimming = false },
+			Movement = {
+				MoveType = "Air",
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "Swimming",
+			Animation = "Swimming",
+			ViewmodelMoveType = "Air",
+			ViewmodelAnimationType = "Air",
+			Swimming = true,
+			C0Type = "Swimming",
+			Priority = 0,
+			Requirements = { Swimming = true, Carrying = false },
+			Movement = {
+				MoveType = "Run",
+				CanJump = false,
+				Swimming = true,
+				Constraints = { "SwimMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = {}
+		},
+		{
+			State = "CarryIdle",
+			Animation = "Idle",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CanEmote = false,
+			ThirdPersonJoint = true,
+			Priority = 0,
+			Requirements = {
+				Grounded = true,
+				Crouching = false,
+				Carrying = true,
+				RelativeSpeedTest = { "<", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				CanJump = false,
+				JumpButtonVisible = false,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = { Type = "Carry" }
+		},
+		{
+			State = "CarryMove",
+			Animation = "Moving_RootStraight",
+			ViewmodelMoveType = "Moving",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CanEmote = false,
+			ThirdPersonJoint = true,
+			Priority = 1,
+			Requirements = {
+				Grounded = true,
+				Crouching = false,
+				Carrying = true,
+				RelativeSpeedTest = { ">", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				CanJump = false,
+				JumpButtonVisible = false,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = { Type = "Carry" }
+		},
+		{
+			State = "CarryCrouchIdle",
+			Animation = "Crouching_RootStraight",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CanEmote = false,
+			ThirdPersonJoint = true,
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			Priority = 0,
+			Requirements = {
+				Grounded = true,
+				Crouching = true,
+				Carrying = true,
+				RelativeSpeedTest = { "<", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				DisableSprinting = true,
+				CanJump = false,
+				JumpButtonVisible = false,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = { Type = "Carry" }
+		},
+		{
+			State = "CarryCrouchMove",
+			Animation = "Crouching_RootStraight",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CanEmote = false,
+			ThirdPersonJoint = true,
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			Priority = 0,
+			Requirements = {
+				Grounded = true,
+				Crouching = true,
+				Carrying = true,
+				RelativeSpeedTest = { ">", 0.1 }
+			},
+			Movement = {
+				MoveType = "Run",
+				DisableSprinting = true,
+				CanJump = false,
+				JumpButtonVisible = false,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = { Type = "Carry" }
+		},
+		{
+			State = "CarrySlide",
+			Animation = "Sliding",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CanEmote = false,
+			ThirdPersonJoint = true,
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			RootDelay = 0.25,
+			ViewmodelAnimationType = "Slide",
+			Priority = 3,
+			Requirements = {
+				Grounded = true,
+				Crouching = true,
+				Carrying = true,
+				RelativeSpeedTest = { ">", 19 }
+			},
+			Movement = {
+				MoveType = "Slide",
+				BreakDoors = true,
+				CanJump = false,
+				JumpButtonVisible = false,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Velocity" }
+			},
+			Camera = { Type = "Carry" }
+		},
+		{
+			State = "CarrySlideAir",
+			Animation = "Sliding",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CanEmote = false,
+			ThirdPersonJoint = true,
+			RootSize = Vector3.new(2, 4, 2),
+			ViewmodelAnimationType = "Slide",
+			Priority = 3,
+			Requirements = {
+				Grounded = false,
+				Crouching = true,
+				Carrying = true,
+				RelativeSpeedTest = { ">", 19 }
+			},
+			Movement = {
+				MoveType = "Air",
+				BreakDoors = true,
+				CanJump = false,
+				JumpButtonVisible = false,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Velocity" }
+			},
+			Camera = { Type = "Carry" }
+		},
+		{
+			State = "CarryAir",
+			Animation = "Jumping",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			CanEmote = false,
+			ThirdPersonJoint = true,
+			ViewmodelAnimationType = "Air",
+			Priority = 1,
+			Requirements = { Grounded = false, Carrying = true },
+			Movement = {
+				MoveType = "Air",
+				CanJump = false,
+				JumpButtonVisible = false,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "Camera" }
+			},
+			Camera = { Type = "Carry" }
+		},
+		{
+			State = "Climbing",
+			Animation = "Climbing",
+			CanUseTools = false,
+			Massless = true,
+			CollisionsDisabled = true,
+			JointsEnabled = false,
+			CanEmote = false,
+			Priority = 4,
+			Requirements = { Climbing = true },
+			Movement = {
+				MoveType = "Climb",
+				CanJump = false,
+				Constraints = { "ClimbAlign" }
+			}
+		},
+		{
+			State = "Emoting",
+			Animation = "Default",
+			ViewmodelAnimationType = "Air",
+			CanUseTools = false,
+			JointsEnabled = false,
+			CanInteract = false,
+			ThirdPersonJoint = true,
+			Priority = 5,
+			Requirements = { Grounded = true, Emoting = true },
+			Movement = {
+				MoveType = "Run",
+				DisableSprinting = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "EmotingMoveDir" }
+			},
+			Camera = { Type = "Emote" }
+		},
+		{
+			State = "EmotingAir",
+			Animation = "Default",
+			ViewmodelAnimationType = "Air",
+			CanUseTools = false,
+			JointsEnabled = false,
+			CanInteract = false,
+			ThirdPersonJoint = true,
+			Priority = 5,
+			Requirements = { Grounded = false, Emoting = true },
+			Movement = {
+				MoveType = "Air",
+				DisableSprinting = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "EmotingMoveDir" }
+			},
+			Camera = { Type = "Emote" }
+		},
+		{
+			State = "EmotingSlide",
+			Animation = "Default",
+			ViewmodelAnimationType = "Slide",
+			CanUseTools = false,
+			JointsEnabled = false,
+			CanInteract = false,
+			ThirdPersonJoint = true,
+			Priority = 6,
+			Requirements = {
+				Grounded = true,
+				Crouching = true,
+				Emoting = true,
+				RelativeSpeedTest = { ">", 19 }
+			},
+			Movement = {
+				MoveType = "Slide",
+				DisableSprinting = true,
+				BreakDoors = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "EmotingMoveDir" }
+			},
+			Camera = { Type = "Emote" }
+		},
+		{
+			State = "EmotingSlideAir",
+			Animation = "Default",
+			ViewmodelAnimationType = "Slide",
+			CanUseTools = false,
+			JointsEnabled = false,
+			CanInteract = false,
+			ThirdPersonJoint = true,
+			Priority = 7,
+			Requirements = {
+				Grounded = false,
+				Crouching = true,
+				Emoting = true,
+				RelativeSpeedTest = { ">", 19 }
+			},
+			Movement = {
+				MoveType = "Air",
+				DisableSprinting = true,
+				BreakDoors = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "EmotingMoveDir" }
+			},
+			Camera = { Type = "Emote" }
+		},
+		{
+			State = "Downed",
+			RootSize = Vector3.new(2, 2.549999952316284, 2),
+			Animation = "Downed",
+			CanInteract = false,
+			CanUseTools = false,
+			JointsEnabled = false,
+			ThirdPersonJoint = true,
+			Priority = 100,
+			Requirements = { Downed = true },
+			Movement = {
+				MoveType = "Run",
+				SpeedMult = 0.3,
+				CanJump = false,
+				JumpButtonVisible = false,
+				DisableSprinting = true,
+				Constraints = { "BaseMover" },
+				RootPartOrientation = { Type = "MoveDir" }
+			},
+			Camera = { Type = "Dead" }
+		},
+		{
+			State = "Carried",
+			RootSize = Vector3.new(0.10000000149011612, 0.10000000149011612, 0.10000000149011612),
+			Animation = "None",
+			CanInteract = false,
+			CanUseTools = false,
+			JointsEnabled = false,
+			ThirdPersonJoint = true,
+			Priority = 9999,
+			Requirements = { Carried = true },
+			Movement = { CanJump = false, JumpButtonVisible = false },
+			Camera = { Type = "Carried" }
+		},
+		{
+			State = "Ragdolling",
+			RootSize = Vector3.new(0.10000000149011612, 0.10000000149011612, 0.10000000149011612),
+			Animation = "None",
+			CanUseTools = false,
+			CanInteract = false,
+			JointsEnabled = false,
+			Priority = 10000,
+			Requirements = { Ragdolling = true },
+			Movement = { CanJump = false, JumpButtonVisible = false, DisableSprinting = true },
+			Camera = { Type = "Dead" }
+		}
+	}
+}
+local t2 = {}
+local t3 = {}
+for _, v1 in t.States do
+	local State = v1.State
+	if type(State) == "string" then
+		if t2[State] then
+			warn(((`StateInfo: duplicate state name "%*" -- overwritten`):format(State)))
+		end
+		t2[State] = v1
+		local Movement = v1.Movement
+		local v2 = typeof(Movement) == "table"
+		local v3 = (`StateInfo: state "%*" has non-table Movement field`):format(State)
+		assert(v2, v3)
+	else
+		warn("StateInfo: state at index has a non-string State field")
+	end
+end
+for _2, v4 in t.Constraints do
+	local ID = v4.ID
+	if type(ID) == "string" then
+		if t3[ID] then
+			warn(((`StateInfo: duplicate constraint ID "%*" -- overwritten`):format(ID)))
+		end
+		t3[ID] = v4
+	else
+		warn("StateInfo: constraint at index has a non-string ID field")
+	end
+end
+if not t2.Idle then
+	error("StateInfo: default state "Idle" not found")
+end
+function t.GetState(_3, p5)
+	--[[ line: 1121 upvalues: (copy) t2]]
+	if type(p5) == "string" then
+		return t2[p5]
+	end
+	return nil
+end
+function t.GetStateOrDefault(_4, p6)
+	--[[ line: 1128 upvalues: (copy) t2]]
+	if type(p6) == "string" then
+		local v7 = t2[p6]
+		if v7 then
+			return v7
+		end
+	end
+end
+function t.GetConstraint(_5, p8)
+	--[[ line: 1138 upvalues: (copy) t3]]
+	if type(p8) == "string" then
+		return t3[p8]
+	end
+	return nil
+end
+return t
+
+==================================================
+SOURCE #52
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Shared.StateInfo.RequirementFunctions
+
+PURPOSE:
+Функции проверки Requirements для выбора текущего Movement state.
+
+SOURCE CONTENT:
+
+game:GetService("ReplicatedStorage"):WaitForChild("Services")
+return {
+	Grounded = function(_, p1, p2)
+		return p2:Get("Grounded") == p1
+	end,
+	Crouching = function(_2, p3, p4)
+		local Crouching = p4:Get("Crouching")
+		if Crouching == nil then
+			p4:Set("Crouching", false)
+			Crouching = false
+		end
+		return Crouching == p3
+	end,
+	Downed = function(_3, p5, p6)
+		return p6:Get("Downed") == p5
+	end,
+	RelativeSpeedTest = function(_4, p7, p8)
+		if p7[1] == "<" then
+			return (p8:Get("RelativeSpeed") or 0) < p7[2]
+		end
+		return (p8:Get("RelativeSpeed") or 0) >= p7[2]
+	end,
+	ToolAnimationRootStraight = function(_5, p9, p10)
+		local ToolAnimationRootStraight = p10:Get("ToolAnimationRootStraight")
+		if ToolAnimationRootStraight == nil then
+			ToolAnimationRootStraight = false
+		end
+		return ToolAnimationRootStraight == p9
+	end,
+	Ragdolling = function(_6, p11, p12)
+		return p12:Get("Ragdolling") == p11
+	end,
+	Carried = function(_7, p13, p14)
+		return (p14:Get("Carried") or 0) ~= 0 == p13
+	end,
+	Carrying = function(_8, p15, p16)
+		return (p16:Get("Carrying") or 0) ~= 0 == p15
+	end,
+	Emoting = function(_9, p17, p18)
+		return (p18:Get("Emote") or 0) ~= 0 == p17
+	end,
+	Grappling = function(_10, p19, p20)
+		local Grappling = p20:Get("Grappling")
+		if Grappling == nil then
+			Grappling = false
+		end
+		return Grappling == p19
+	end,
+	Swimming = function(_11, p21, p22)
+		local Swimming = p22:Get("Swimming")
+		if Swimming == nil then
+			Swimming = false
+		end
+		return Swimming == p21
+	end,
+	WallrunDirection = function(_12, p23, p24)
+		local WallrunDirection = p24:Get("WallrunDirection")
+		if WallrunDirection ~= nil and (WallrunDirection == -1 or WallrunDirection == 1) then
+			return WallrunDirection == p23
+		end
+	end,
+	Climbing = function(_13, p25, p26)
+		return (p26:Get("Climbing") or 0) ~= 0 == p25
+	end,
+	Lunging = function(_14, _15, p27)
+		return p27:Get("LungeTarget") and true or false
+	end,
+	Stunned = function(_16, _17, p28)
+		local Stunned = p28:Get("Stunned")
+		return Stunned and tick() < Stunned and true or false
+	end,
+	Seated = function(_18, _19, p29)
+		local Seated = p29:Get("Seated")
+		return Seated and Seated ~= 0 and true or false
+	end
+}
