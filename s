@@ -1,1935 +1,1277 @@
-[7997.767221] ==================================================
-[7997.767284] DeadEye Legit AutoJump Test v1.13
-[7997.767298] REAL LIVE object.Movement
-[7997.767309] REAL JumpReact(false)
-[7997.767319] ALL ORIGINAL AttemptJump CHECKS
-[7997.767328] ONLY EndClimb BLOCKED DURING CLIMBING
-[7997.767337] F7 = ON/OFF
-[7997.767345] F6 = FULL STOP + COPY LOG
-[7997.767353] ==================================================
-[7997.767362] READY
-[7997.767896] STATE: nil -> Enum.HumanoidStateType.Running | Vy=0.000312 | CanJump=true | JumpHeld=false | HumJump=false
-[7998.816936] ===== F7 -> AUTO JUMP ON =====
-[7998.817058] LIVE Movement hooked successfully
-[7998.817093] ===== RESETTING PREVIOUS JUMP STATE =====
-[7998.817135] RESET DONE | CanJump=true | JumpHeld=false | JumpEnabled=true
-[7998.820778] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=0.000312
-[7998.820902] Humanoid.Jump = true
-[7998.825144] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[7998.829611] Humanoid.Jump = true
-[7998.832940] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[7998.833048] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[7998.838264] Humanoid.Jump = true
-[7998.840547] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[7999.509381] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[7999.551389] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.096149 | CanJump=true | JumpHeld=false | HumJump=false
-[7999.561317] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[7999.561382] Humanoid.Jump = true
-[7999.564474] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[7999.569880] Humanoid.Jump = true
-[7999.572542] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[7999.572595] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[7999.577660] Humanoid.Jump = true
-[7999.580788] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[7999.594092] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8000.246377] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8000.286725] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Idle | Reg=Idle | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8000.286829] Humanoid.Jump = true
-[8000.287051] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8000.295802] Humanoid.Jump = true
-[8000.297865] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8000.297900] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8000.303203] Humanoid.Jump = true
-[8000.304947] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8000.320405] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8000.979046] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.221144 | CanJump=true | JumpHeld=false | HumJump=false
-[8001.021410] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8001.021570] Humanoid.Jump = true
-[8001.021914] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8001.021987] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.403111 | CanJump=true | JumpHeld=false | HumJump=true
-[8001.030336] Humanoid.Jump = true
-[8001.032774] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8001.039227] Humanoid.Jump = true
-[8001.041036] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8001.048818] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=false
-[8001.709654] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8001.751893] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.096149 | CanJump=true | JumpHeld=false | HumJump=false
-[8001.761587] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8001.761712] Humanoid.Jump = true
-[8001.762297] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8001.769171] Humanoid.Jump = true
-[8001.769871] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8001.778548] Humanoid.Jump = true
-[8001.780838] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8001.780892] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=true
-[8002.442522] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
-[8002.485240] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.887815 | CanJump=true | JumpHeld=false | HumJump=false
-[8002.494139] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8002.494215] Humanoid.Jump = true
-[8002.494524] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8002.502521] Humanoid.Jump = true
-[8002.503035] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8002.510051] Humanoid.Jump = true
-[8002.510361] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8002.510398] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=true
-[8003.184674] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8003.225777] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8003.225864] Humanoid.Jump = true
-[8003.226244] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8003.234917] Humanoid.Jump = true
-[8003.235272] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8003.235309] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8003.878607] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
-[8003.918416] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846146
-[8003.918480] Humanoid.Jump = true
-[8003.919478] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8003.924599] Humanoid.Jump = true
-[8003.924862] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8003.924900] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.320507 | CanJump=true | JumpHeld=false | HumJump=true
-[8003.929513] Humanoid.Jump = true
-[8003.929937] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8003.937714] Humanoid.Jump = true
-[8003.937970] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8003.945232] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
-[8004.584949] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=false
-[8004.627577] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054480
-[8004.627677] Humanoid.Jump = true
-[8004.627950] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.627983] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.446323 | CanJump=true | JumpHeld=false | HumJump=true
-[8004.635537] Humanoid.Jump = true
-[8004.636087] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.643120] Humanoid.Jump = true
-[8004.643503] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.652250] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8004.679956] Humanoid.Jump = true
-[8004.680528] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.688920] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8004.696249] Humanoid.Jump = true
-[8004.696800] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.704392] Humanoid.Jump = true
-[8004.704684] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.713989] Humanoid.Jump = true
-[8004.714409] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.714482] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=true
-[8004.721347] Humanoid.Jump = true
-[8004.721692] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8004.737875] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
-[8005.460971] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-19.762821 | CanJump=true | JumpHeld=false | HumJump=false
-[8005.494363] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.804491
-[8005.494447] Humanoid.Jump = true
-[8005.494849] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8005.501489] Humanoid.Jump = true
-[8005.501802] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8005.501883] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112181 | CanJump=true | JumpHeld=false | HumJump=true
-[8005.512243] Humanoid.Jump = true
-[8005.513582] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8005.526850] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8006.176306] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
-[8006.218701] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8006.218788] Humanoid.Jump = true
-[8006.219191] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8006.219253] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.887815 | CanJump=true | JumpHeld=false | HumJump=true
-[8006.228312] Humanoid.Jump = true
-[8006.228759] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8006.235180] Humanoid.Jump = true
-[8006.235467] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8006.244481] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8006.910659] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8006.951572] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8006.951657] Humanoid.Jump = true
-[8006.952032] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8006.952098] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.376932 | CanJump=true | JumpHeld=false | HumJump=true
-[8006.960692] Humanoid.Jump = true
-[8006.961051] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8006.968196] Humanoid.Jump = true
-[8006.968455] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8006.977499] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8007.356183] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-4.324652 | CanJump=true | JumpHeld=false | HumJump=false
-[8007.379770] Humanoid.Jump = true
-[8007.380243] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.385019] Humanoid.Jump = true
-[8007.385455] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.385522] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.394438] Humanoid.Jump = true
-[8007.394898] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.401953] Humanoid.Jump = true
-[8007.402384] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.410281] Humanoid.Jump = true
-[8007.410668] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.410714] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=42.201710 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.418615] Humanoid.Jump = true
-[8007.419341] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.426706] Humanoid.Jump = true
-[8007.427266] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.434825] Humanoid.Jump = true
-[8007.435238] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.435293] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=43.689781 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.446779] Humanoid.Jump = true
-[8007.447205] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.455213] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Jumping | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=43.357250
-[8007.455280] Humanoid.Jump = true
-[8007.455611] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.455644] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=43.643311 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.463748] Humanoid.Jump = true
-[8007.464191] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.471617] Humanoid.Jump = true
-[8007.471966] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.480338] Humanoid.Jump = true
-[8007.480717] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.480757] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=43.141998 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.487336] Humanoid.Jump = true
-[8007.487645] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.496384] Humanoid.Jump = true
-[8007.496659] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.503878] Humanoid.Jump = true
-[8007.504134] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.504170] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=41.891998 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.512650] Humanoid.Jump = true
-[8007.513021] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.519990] Humanoid.Jump = true
-[8007.520289] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.526814] Humanoid.Jump = true
-[8007.527068] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.527098] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=40.641998 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.536717] Humanoid.Jump = true
-[8007.536939] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.544488] Humanoid.Jump = true
-[8007.544723] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.552953] Humanoid.Jump = true
-[8007.553284] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.553330] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=39.392006 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.561707] Humanoid.Jump = true
-[8007.561939] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.569504] Humanoid.Jump = true
-[8007.569717] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.577788] Humanoid.Jump = true
-[8007.578017] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.578052] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=38.142014 | CanJump=true | JumpHeld=false | HumJump=true
-[8007.586268] Humanoid.Jump = true
-[8007.586478] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.594555] Humanoid.Jump = true
-[8007.594761] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.602968] Humanoid.Jump = true
-[8007.603158] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8007.603181] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=36.892021 | CanJump=true | JumpHeld=false | HumJump=true
-[8009.035250] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-24.194998
-[8009.035382] Humanoid.Jump = true
-[8009.035980] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.036007] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=15.855817 | CanJump=true | JumpHeld=false | HumJump=true
-[8009.044445] Humanoid.Jump = true
-[8009.045218] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.051367] Humanoid.Jump = true
-[8009.051963] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.060366] Humanoid.Jump = true
-[8009.061159] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.061288] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=23.435680 | CanJump=true | JumpHeld=false | HumJump=true
-[8009.068581] Humanoid.Jump = true
-[8009.069405] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.077068] Humanoid.Jump = true
-[8009.077731] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.084519] Humanoid.Jump = true
-[8009.084973] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.085041] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=22.397959 | CanJump=true | JumpHeld=false | HumJump=true
-[8009.093487] Humanoid.Jump = true
-[8009.093887] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.101121] Humanoid.Jump = true
-[8009.101397] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8009.111476] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=20.939703 | CanJump=true | JumpHeld=false | HumJump=false
-[8009.984687] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-22.601997 | CanJump=true | JumpHeld=false | HumJump=false
-[8010.010221] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-23.435333
-[8010.010329] Humanoid.Jump = true
-[8010.010730] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.018861] Humanoid.Jump = true
-[8010.019177] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.019272] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112181 | CanJump=true | JumpHeld=false | HumJump=true
-[8010.026749] Humanoid.Jump = true
-[8010.027173] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.034698] Humanoid.Jump = true
-[8010.035076] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.043023] Humanoid.Jump = true
-[8010.043317] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.051397] Humanoid.Jump = true
-[8010.051703] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.051764] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=true
-[8010.917988] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-25.804506 | CanJump=true | JumpHeld=false | HumJump=false
-[8010.951882] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-27.054510
-[8010.952027] Humanoid.Jump = true
-[8010.952633] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.961120] Humanoid.Jump = true
-[8010.961594] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.961655] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8010.968400] Humanoid.Jump = true
-[8010.968782] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.977991] Humanoid.Jump = true
-[8010.979487] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.985098] Humanoid.Jump = true
-[8010.985735] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8010.985825] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8011.659227] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8011.709813] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8011.709909] Humanoid.Jump = true
-[8011.710171] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8011.710226] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.512817 | CanJump=true | JumpHeld=false | HumJump=true
-[8011.719761] Humanoid.Jump = true
-[8011.720424] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8011.726470] Humanoid.Jump = true
-[8011.726932] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8011.735385] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=false
-[8012.378866] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
-[8012.426226] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.471148 | CanJump=true | JumpHeld=false | HumJump=false
-[8012.435031] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8012.435108] Humanoid.Jump = true
-[8012.435373] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8012.442709] Humanoid.Jump = true
-[8012.443062] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8012.451589] Humanoid.Jump = true
-[8012.451946] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8012.458804] Humanoid.Jump = true
-[8012.459117] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8012.459158] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487175 | CanJump=true | JumpHeld=false | HumJump=true
-[8013.128803] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8013.179044] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8013.179145] Humanoid.Jump = true
-[8013.179452] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8013.179501] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.512817 | CanJump=true | JumpHeld=false | HumJump=true
-[8013.187439] Humanoid.Jump = true
-[8013.187751] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8013.195005] Humanoid.Jump = true
-[8013.195334] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8013.203925] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8013.876231] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.429478 | CanJump=true | JumpHeld=false | HumJump=false
-[8013.917756] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8013.917815] Humanoid.Jump = true
-[8013.918155] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8013.918238] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.512817 | CanJump=true | JumpHeld=false | HumJump=true
-[8013.929070] Humanoid.Jump = true
-[8013.929567] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.368180] Humanoid.Jump = true
-[8014.368567] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.376952] Humanoid.Jump = true
-[8014.377450] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.377568] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=1.893670 | CanJump=true | JumpHeld=false | HumJump=true
-[8014.385283] Humanoid.Jump = true
-[8014.385824] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.393596] Humanoid.Jump = true
-[8014.393937] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.401473] Humanoid.Jump = true
-[8014.401842] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.401912] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=19.027693 | CanJump=true | JumpHeld=false | HumJump=true
-[8014.409507] Humanoid.Jump = true
-[8014.409799] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.418015] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=18.819496
-[8014.418062] Humanoid.Jump = true
-[8014.418320] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.427617] Humanoid.Jump = true
-[8014.427980] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.428037] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.777916 | CanJump=true | JumpHeld=false | HumJump=true
-[8014.435378] Humanoid.Jump = true
-[8014.435646] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.442996] Humanoid.Jump = true
-[8014.443260] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.452010] Humanoid.Jump = true
-[8014.452502] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8014.452613] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.527906 | CanJump=true | JumpHeld=false | HumJump=true
-[8015.078190] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-13.721045 | CanJump=true | JumpHeld=false | HumJump=false
-[8015.128154] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.804375
-[8015.128216] Humanoid.Jump = true
-[8015.129044] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8015.129102] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-16.221043 | CanJump=true | JumpHeld=false | HumJump=true
-[8015.136119] Humanoid.Jump = true
-[8015.136386] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8015.144265] Humanoid.Jump = true
-[8015.144471] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8015.152598] Humanoid.Jump = true
-[8015.152836] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8015.152857] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8016.359672] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-43.096123 | CanJump=true | JumpHeld=false | HumJump=false
-[8016.377622] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-43.512787
-[8016.377762] Humanoid.Jump = true
-[8016.378421] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8016.385713] Humanoid.Jump = true
-[8016.386271] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8016.386355] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8016.393354] Humanoid.Jump = true
-[8016.393688] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8016.402098] Humanoid.Jump = true
-[8016.402566] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8016.409780] Humanoid.Jump = true
-[8016.410154] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8016.410219] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8016.493046] Humanoid.Jump = true
-[8016.493458] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8016.501721] Humanoid.Jump = true
-[8016.502108] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8016.502200] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8017.226190] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-19.137819 | CanJump=true | JumpHeld=false | HumJump=false
-[8017.268488] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.804491
-[8017.268617] Humanoid.Jump = true
-[8017.269090] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8017.269158] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-4.857354 | CanJump=true | JumpHeld=false | HumJump=true
-[8017.276803] Humanoid.Jump = true
-[8017.277383] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8017.284640] Humanoid.Jump = true
-[8017.285049] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8017.292635] Humanoid.Jump = true
-[8017.292986] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8017.293041] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8017.952930] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8018.001028] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8018.001101] Humanoid.Jump = true
-[8018.001515] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8018.001558] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.388041 | CanJump=true | JumpHeld=false | HumJump=true
-[8018.009619] Humanoid.Jump = true
-[8018.009993] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8018.017559] Humanoid.Jump = true
-[8018.017807] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8018.026594] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8018.679499] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
-[8018.720145] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
-[8018.720232] Humanoid.Jump = true
-[8018.720575] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8018.720621] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-12.431654 | CanJump=true | JumpHeld=false | HumJump=true
-[8018.729387] Humanoid.Jump = true
-[8018.730368] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8018.736601] Humanoid.Jump = true
-[8018.736908] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8018.745334] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8019.419330] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.637812 | CanJump=true | JumpHeld=false | HumJump=false
-[8019.451782] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8019.451900] Humanoid.Jump = true
-[8019.452306] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8019.452385] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.559370 | CanJump=true | JumpHeld=false | HumJump=true
-[8019.461235] Humanoid.Jump = true
-[8019.461836] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8019.468421] Humanoid.Jump = true
-[8019.468818] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8019.476934] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8020.142356] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8020.185027] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8020.185080] Humanoid.Jump = true
-[8020.185415] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.185520] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-5.492300 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.193028] Humanoid.Jump = true
-[8020.193363] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.201808] Humanoid.Jump = true
-[8020.202073] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.210133] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.278839 | CanJump=true | JumpHeld=false | HumJump=false
-[8020.343066] Humanoid.Jump = true
-[8020.343387] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.351459] Humanoid.Jump = true
-[8020.351781] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.351826] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.359462] Humanoid.Jump = true
-[8020.359827] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.367249] Humanoid.Jump = true
-[8020.367566] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.376406] Humanoid.Jump = true
-[8020.376751] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.376813] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=39.138344 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.384338] Humanoid.Jump = true
-[8020.384672] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.392585] Humanoid.Jump = true
-[8020.392810] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.401230] Humanoid.Jump = true
-[8020.401573] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.401611] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=37.888229 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.409357] Humanoid.Jump = true
-[8020.409898] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.417384] Humanoid.Jump = true
-[8020.417668] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.426261] Humanoid.Jump = true
-[8020.426563] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.426605] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=36.638218 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.434829] Humanoid.Jump = true
-[8020.435118] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.445081] Humanoid.Jump = true
-[8020.445431] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.452834] Humanoid.Jump = true
-[8020.453224] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.453256] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=35.179893 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.461346] Humanoid.Jump = true
-[8020.461713] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.469451] Humanoid.Jump = true
-[8020.469751] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.477579] Humanoid.Jump = true
-[8020.477996] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.478035] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=33.929901 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.486346] Humanoid.Jump = true
-[8020.486654] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.495274] Humanoid.Jump = true
-[8020.495522] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.502643] Humanoid.Jump = true
-[8020.502886] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.502915] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=32.679909 | CanJump=true | JumpHeld=false | HumJump=true
-[8020.511560] Humanoid.Jump = true
-[8020.511827] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.519473] Humanoid.Jump = true
-[8020.519762] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8020.526214] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=31.638245 | CanJump=true | JumpHeld=false | HumJump=false
-[8021.478919] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.070118 | CanJump=true | JumpHeld=false | HumJump=false
-[8021.520296] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.736790
-[8021.520357] Humanoid.Jump = true
-[8021.520597] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8021.528325] Humanoid.Jump = true
-[8021.528860] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8021.528922] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8021.536250] Humanoid.Jump = true
-[8021.536534] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8021.544427] Humanoid.Jump = true
-[8021.544706] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8021.553331] Humanoid.Jump = true
-[8021.553720] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8021.553772] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8022.363443] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-22.471163
-[8022.363719] Humanoid.Jump = true
-[8022.364195] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8022.370061] Humanoid.Jump = true
-[8022.370525] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8022.370587] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=37.607681 | CanJump=true | JumpHeld=false | HumJump=true
-[8022.377506] Humanoid.Jump = true
-[8022.377998] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8022.389189] Humanoid.Jump = true
-[8022.389784] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8022.394630] Humanoid.Jump = true
-[8022.394962] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8022.395006] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=43.761070 | CanJump=true | JumpHeld=false | HumJump=true
-[8022.402820] Humanoid.Jump = true
-[8022.403207] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8022.411371] Humanoid.Jump = true
-[8022.411669] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8022.420392] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=42.511555 | CanJump=true | JumpHeld=false | HumJump=false
-[8024.228658] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-47.905045 | CanJump=true | JumpHeld=false | HumJump=false
-[8024.246589] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-48.113377
-[8024.246703] Humanoid.Jump = true
-[8024.247229] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8024.253590] Humanoid.Jump = true
-[8024.254037] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8024.254106] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112181 | CanJump=true | JumpHeld=false | HumJump=true
-[8024.261616] Humanoid.Jump = true
-[8024.261935] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8024.269247] Humanoid.Jump = true
-[8024.269630] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8024.277964] Humanoid.Jump = true
-[8024.278283] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8024.278353] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8024.286860] Humanoid.Jump = true
-[8024.287784] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8024.942475] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
-[8024.985958] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
-[8024.986117] Humanoid.Jump = true
-[8024.987628] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8024.987694] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.887815 | CanJump=true | JumpHeld=false | HumJump=true
-[8024.993980] Humanoid.Jump = true
-[8024.994427] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8025.011729] Humanoid.Jump = true
-[8025.013015] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8025.013101] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.278839 | CanJump=true | JumpHeld=false | HumJump=true
-[8025.708457] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-17.262814 | CanJump=true | JumpHeld=false | HumJump=false
-[8025.751073] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.929485
-[8025.751160] Humanoid.Jump = true
-[8025.751376] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8025.760265] Humanoid.Jump = true
-[8025.760801] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8025.760863] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=16.903847 | CanJump=true | JumpHeld=false | HumJump=true
-[8025.767917] Humanoid.Jump = true
-[8025.768243] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8025.783923] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8026.434077] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8026.485021] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8026.485127] Humanoid.Jump = true
-[8026.485580] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.485680] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.512817 | CanJump=true | JumpHeld=false | HumJump=true
-[8026.492785] Humanoid.Jump = true
-[8026.493207] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.501053] Humanoid.Jump = true
-[8026.501415] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.509142] Humanoid.Jump = true
-[8026.509524] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.509589] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487175 | CanJump=true | JumpHeld=false | HumJump=true
-[8026.842727] Humanoid.Jump = true
-[8026.843136] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.851728] Humanoid.Jump = true
-[8026.852235] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.852306] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=20.638962 | CanJump=true | JumpHeld=false | HumJump=true
-[8026.859974] Humanoid.Jump = true
-[8026.860315] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.868097] Humanoid.Jump = true
-[8026.868622] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.875668] Humanoid.Jump = true
-[8026.876114] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.876189] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=21.333618 | CanJump=true | JumpHeld=false | HumJump=true
-[8026.885277] Humanoid.Jump = true
-[8026.885754] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.892252] Humanoid.Jump = true
-[8026.892653] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.904728] Humanoid.Jump = true
-[8026.905250] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.905308] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=19.874943 | CanJump=true | JumpHeld=false | HumJump=true
-[8026.912350] Humanoid.Jump = true
-[8026.912813] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.920871] Humanoid.Jump = true
-[8026.921255] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.928297] Humanoid.Jump = true
-[8026.928730] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8026.928790] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=18.624784 | CanJump=true | JumpHeld=false | HumJump=true
-[8027.768104] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.646686
-[8027.768191] Humanoid.Jump = true
-[8027.768585] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8027.768655] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=13.343504 | CanJump=true | JumpHeld=false | HumJump=true
-[8027.775986] Humanoid.Jump = true
-[8027.776315] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8027.785430] Humanoid.Jump = true
-[8027.785847] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8027.792912] Humanoid.Jump = true
-[8027.793358] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8027.793411] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=30.057589 | CanJump=true | JumpHeld=false | HumJump=true
-[8027.801038] Humanoid.Jump = true
-[8027.801408] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8027.810846] Humanoid.Jump = true
-[8027.811215] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8027.821733] Humanoid.Jump = true
-[8027.822116] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8027.822170] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=28.599962 | CanJump=true | JumpHeld=false | HumJump=true
-[8029.100555] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-35.358395 | CanJump=true | JumpHeld=false | HumJump=false
-[8029.125737] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-36.191723
-[8029.125818] Humanoid.Jump = true
-[8029.126141] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.134480] Humanoid.Jump = true
-[8029.134863] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.134937] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8029.142401] Humanoid.Jump = true
-[8029.142777] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.150762] Humanoid.Jump = true
-[8029.151131] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.159252] Humanoid.Jump = true
-[8029.159522] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.159565] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8029.836528] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.429478 | CanJump=true | JumpHeld=false | HumJump=false
-[8029.877395] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8029.877477] Humanoid.Jump = true
-[8029.877805] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.886006] Humanoid.Jump = true
-[8029.886335] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.886389] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8029.894037] Humanoid.Jump = true
-[8029.894340] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8029.910374] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8030.443941] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=12.200058
-[8030.444105] Humanoid.Jump = true
-[8030.444600] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.452111] Humanoid.Jump = true
-[8030.452549] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.452642] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=38.369499 | CanJump=true | JumpHeld=false | HumJump=true
-[8030.459309] Humanoid.Jump = true
-[8030.459677] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.467957] Humanoid.Jump = true
-[8030.468396] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.479688] Humanoid.Jump = true
-[8030.480166] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.480214] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=37.689297 | CanJump=true | JumpHeld=false | HumJump=true
-[8030.487750] Humanoid.Jump = true
-[8030.488244] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.496255] Humanoid.Jump = true
-[8030.496579] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.503793] Humanoid.Jump = true
-[8030.504140] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8030.504184] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=36.440918 | CanJump=true | JumpHeld=false | HumJump=true
-[8032.076562] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-42.100750 | CanJump=true | JumpHeld=false | HumJump=false
-[8032.092672] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-42.517414
-[8032.092781] Humanoid.Jump = true
-[8032.093251] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8032.101327] Humanoid.Jump = true
-[8032.101877] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8032.101960] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8032.109611] Humanoid.Jump = true
-[8032.110117] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8032.118078] Humanoid.Jump = true
-[8032.118478] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8032.125757] Humanoid.Jump = true
-[8032.126074] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8032.126126] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8032.792325] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8032.842514] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8032.842617] Humanoid.Jump = true
-[8032.843125] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8032.843179] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.304483 | CanJump=true | JumpHeld=false | HumJump=true
-[8032.851805] Humanoid.Jump = true
-[8032.852339] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8033.500792] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.387806 | CanJump=true | JumpHeld=false | HumJump=false
-[8033.542482] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054476
-[8033.542591] Humanoid.Jump = true
-[8033.542938] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8033.551641] Humanoid.Jump = true
-[8033.552054] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8033.552119] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8034.185340] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-14.762811 | CanJump=true | JumpHeld=false | HumJump=false
-[8034.235431] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846146
-[8034.235499] Humanoid.Jump = true
-[8034.235736] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.235792] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.262814 | CanJump=true | JumpHeld=false | HumJump=true
-[8034.243988] Humanoid.Jump = true
-[8034.244245] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.252112] Humanoid.Jump = true
-[8034.252349] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.260358] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
-[8034.667392] Humanoid.Jump = true
-[8034.667869] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.667900] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=10.745317 | CanJump=true | JumpHeld=false | HumJump=true
-[8034.676335] Humanoid.Jump = true
-[8034.676865] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.684070] Humanoid.Jump = true
-[8034.684581] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.692835] Humanoid.Jump = true
-[8034.693298] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.693361] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=26.915644 | CanJump=true | JumpHeld=false | HumJump=true
-[8034.700609] Humanoid.Jump = true
-[8034.700888] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.709348] Humanoid.Jump = true
-[8034.709724] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.716817] Humanoid.Jump = true
-[8034.717154] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.717203] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=23.970936 | CanJump=true | JumpHeld=false | HumJump=true
-[8034.726038] Humanoid.Jump = true
-[8034.726349] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.733793] Humanoid.Jump = true
-[8034.734216] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.742371] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Jumping | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=23.137741
-[8034.742422] Humanoid.Jump = true
-[8034.742740] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.742766] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=22.721075 | CanJump=true | JumpHeld=false | HumJump=true
-[8034.750650] Humanoid.Jump = true
-[8034.750960] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8034.767261] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=21.471094 | CanJump=true | JumpHeld=false | HumJump=false
-[8035.824756] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-31.445620 | CanJump=true | JumpHeld=false | HumJump=false
-[8035.850987] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-32.278954
-[8035.851074] Humanoid.Jump = true
-[8035.851446] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8035.859286] Humanoid.Jump = true
-[8035.859640] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8035.859690] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8035.867282] Humanoid.Jump = true
-[8035.867543] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8035.879480] Humanoid.Jump = true
-[8035.879872] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8035.879950] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8036.401891] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-6.686083
-[8036.401982] Humanoid.Jump = true
-[8036.402393] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.409830] Humanoid.Jump = true
-[8036.410099] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.410127] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=7.565070 | CanJump=true | JumpHeld=false | HumJump=true
-[8036.417716] Humanoid.Jump = true
-[8036.417949] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.425270] Humanoid.Jump = true
-[8036.426002] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.434107] Humanoid.Jump = true
-[8036.434456] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.434495] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=24.427488 | CanJump=true | JumpHeld=false | HumJump=true
-[8036.443054] Humanoid.Jump = true
-[8036.443393] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.450729] Humanoid.Jump = true
-[8036.451027] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.459652] Humanoid.Jump = true
-[8036.459989] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.460040] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=22.315287 | CanJump=true | JumpHeld=false | HumJump=true
-[8036.467476] Humanoid.Jump = true
-[8036.467953] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.475539] Humanoid.Jump = true
-[8036.475835] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.484074] Humanoid.Jump = true
-[8036.484422] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.484467] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=21.065332 | CanJump=true | JumpHeld=false | HumJump=true
-[8036.492390] Humanoid.Jump = true
-[8036.492753] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.500656] Humanoid.Jump = true
-[8036.500938] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8036.509277] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=19.815346 | CanJump=true | JumpHeld=false | HumJump=false
-[8037.266919] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-18.101318 | CanJump=true | JumpHeld=false | HumJump=false
-[8037.301848] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-19.351322
-[8037.301996] Humanoid.Jump = true
-[8037.302422] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8037.308862] Humanoid.Jump = true
-[8037.309193] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8037.309228] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.320511 | CanJump=true | JumpHeld=false | HumJump=true
-[8037.317154] Humanoid.Jump = true
-[8037.317586] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8037.325796] Humanoid.Jump = true
-[8037.326146] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8037.334187] Humanoid.Jump = true
-[8037.334483] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8037.334534] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8037.342617] Humanoid.Jump = true
-[8037.342933] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8037.358387] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8038.117149] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.804491
-[8038.117232] Humanoid.Jump = true
-[8038.117740] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8038.125537] Humanoid.Jump = true
-[8038.126062] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8038.126090] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=20.385435 | CanJump=true | JumpHeld=false | HumJump=true
-[8038.133791] Humanoid.Jump = true
-[8038.134227] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8038.141549] Humanoid.Jump = true
-[8038.141966] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8038.150745] Humanoid.Jump = true
-[8038.151171] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8038.151219] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=31.931194 | CanJump=true | JumpHeld=false | HumJump=true
-[8038.158428] Humanoid.Jump = true
-[8038.158746] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8039.793556] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-50.360443 | CanJump=true | JumpHeld=false | HumJump=false
-[8039.810611] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-50.777107
-[8039.810655] Humanoid.Jump = true
-[8039.810820] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8039.818699] Humanoid.Jump = true
-[8039.819062] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8039.819109] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=true
-[8039.827068] Humanoid.Jump = true
-[8039.827249] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8039.835183] Humanoid.Jump = true
-[8039.835451] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8039.843700] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8040.503952] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8040.544568] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8040.544656] Humanoid.Jump = true
-[8040.544945] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8040.544986] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.887815 | CanJump=true | JumpHeld=false | HumJump=true
-[8040.553177] Humanoid.Jump = true
-[8040.553551] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8040.559814] Humanoid.Jump = true
-[8040.560202] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8040.568733] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8041.242077] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.429478 | CanJump=true | JumpHeld=false | HumJump=false
-[8041.275475] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8041.275614] Humanoid.Jump = true
-[8041.276017] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8041.284584] Humanoid.Jump = true
-[8041.285067] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8041.285151] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8041.292380] Humanoid.Jump = true
-[8041.292894] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8041.308437] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8041.342651] Humanoid.Jump = true
-[8041.343128] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8041.350880] Humanoid.Jump = true
-[8041.351158] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8041.351184] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8041.358632] Humanoid.Jump = true
-[8041.358969] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8041.366903] Humanoid.Jump = true
-[8041.367353] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8041.376676] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
-[8042.092115] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-19.137819 | CanJump=true | JumpHeld=false | HumJump=false
-[8042.134218] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.804491
-[8042.134316] Humanoid.Jump = true
-[8042.134686] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8042.142859] Humanoid.Jump = true
-[8042.143461] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8042.143536] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8042.151080] Humanoid.Jump = true
-[8042.151590] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8042.167029] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8042.808577] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=false
-[8042.859778] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8042.859919] Humanoid.Jump = true
-[8042.860276] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8042.860362] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.501168 | CanJump=true | JumpHeld=false | HumJump=true
-[8042.867587] Humanoid.Jump = true
-[8042.867841] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8042.875214] Humanoid.Jump = true
-[8042.875564] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8042.885322] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.278841 | CanJump=true | JumpHeld=false | HumJump=false
-[8043.510673] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
-[8043.559418] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
-[8043.559506] Humanoid.Jump = true
-[8043.559770] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.559805] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.262812 | CanJump=true | JumpHeld=false | HumJump=true
-[8043.569540] Humanoid.Jump = true
-[8043.570040] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.583479] Humanoid.Jump = true
-[8043.583854] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.592131] Humanoid.Jump = true
-[8043.592540] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.592595] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=20.304201 | CanJump=true | JumpHeld=false | HumJump=true
-[8043.600547] Humanoid.Jump = true
-[8043.600966] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.608347] Humanoid.Jump = true
-[8043.608751] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.616917] Humanoid.Jump = true
-[8043.617312] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.617370] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=19.054493 | CanJump=true | JumpHeld=false | HumJump=true
-[8043.626065] Humanoid.Jump = true
-[8043.626438] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.633512] Humanoid.Jump = true
-[8043.633915] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8043.642426] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.804533 | CanJump=true | JumpHeld=false | HumJump=false
-[8044.401785] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-20.320463 | CanJump=true | JumpHeld=false | HumJump=false
-[8044.435204] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-21.570467
-[8044.435248] Humanoid.Jump = true
-[8044.435474] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8044.443617] Humanoid.Jump = true
-[8044.443884] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8044.443921] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8044.452124] Humanoid.Jump = true
-[8044.452395] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8044.470185] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8045.127647] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.221144 | CanJump=true | JumpHeld=false | HumJump=false
-[8045.161564] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8045.161643] Humanoid.Jump = true
-[8045.162016] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8045.170017] Humanoid.Jump = true
-[8045.170282] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8045.170314] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8045.178618] Humanoid.Jump = true
-[8045.178954] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8045.193494] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8045.850818] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8045.901708] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8045.901854] Humanoid.Jump = true
-[8045.902344] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8045.902430] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-3.592845 | CanJump=true | JumpHeld=false | HumJump=true
-[8045.910533] Humanoid.Jump = true
-[8045.911079] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8045.917904] Humanoid.Jump = true
-[8045.918258] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8045.925646] Humanoid.Jump = true
-[8045.925979] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8045.926042] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.284676] Humanoid.Jump = true
-[8046.284953] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.285003] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-4.429523 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.293437] Humanoid.Jump = true
-[8046.293656] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.301110] Humanoid.Jump = true
-[8046.301392] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.310172] Humanoid.Jump = true
-[8046.310469] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.310507] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.318238] Humanoid.Jump = true
-[8046.318562] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.327485] Humanoid.Jump = true
-[8046.327762] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.334879] Humanoid.Jump = true
-[8046.335088] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.335112] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=34.498600 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.344466] Humanoid.Jump = true
-[8046.344726] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.350076] Humanoid.Jump = true
-[8046.350291] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.360300] Humanoid.Jump = true
-[8046.360557] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.360591] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=33.248558 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.366711] Humanoid.Jump = true
-[8046.366943] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.374521] Humanoid.Jump = true
-[8046.374774] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.383361] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=32.206882 | CanJump=true | JumpHeld=false | HumJump=false
-[8046.568028] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=22.235123
-[8046.568120] Humanoid.Jump = true
-[8046.568642] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.576134] Humanoid.Jump = true
-[8046.576520] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.576566] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=21.401892 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.584227] Humanoid.Jump = true
-[8046.584546] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.591670] Humanoid.Jump = true
-[8046.592103] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.600303] Humanoid.Jump = true
-[8046.600720] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.600756] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=20.151825 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.608313] Humanoid.Jump = true
-[8046.608665] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.617831] Humanoid.Jump = true
-[8046.618200] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.625658] Humanoid.Jump = true
-[8046.626060] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.626106] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=18.901827 | CanJump=true | JumpHeld=false | HumJump=true
-[8046.633910] Humanoid.Jump = true
-[8046.634192] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8046.649677] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=17.651823 | CanJump=true | JumpHeld=false | HumJump=false
-[8047.143009] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-7.210951 | CanJump=true | JumpHeld=false | HumJump=false
-[8047.184165] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.294283 | CanJump=true | JumpHeld=false | HumJump=false
-[8047.201484] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-9.710949
-[8047.201528] Humanoid.Jump = true
-[8047.201726] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8047.209943] Humanoid.Jump = true
-[8047.210178] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8047.210199] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8047.218517] Humanoid.Jump = true
-[8047.218799] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8047.226924] Humanoid.Jump = true
-[8047.227192] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8047.235463] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8048.092698] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-26.012840 | CanJump=true | JumpHeld=false | HumJump=false
-[8048.118770] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-26.846176
-[8048.118866] Humanoid.Jump = true
-[8048.119211] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.126364] Humanoid.Jump = true
-[8048.126576] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.126615] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.320513 | CanJump=true | JumpHeld=false | HumJump=true
-[8048.134470] Humanoid.Jump = true
-[8048.134739] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.142801] Humanoid.Jump = true
-[8048.143036] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.151536] Humanoid.Jump = true
-[8048.151853] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.151889] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8048.541873] Humanoid.Jump = true
-[8048.542370] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.550632] Humanoid.Jump = true
-[8048.550983] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.551057] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=0.596865 | CanJump=true | JumpHeld=false | HumJump=true
-[8048.558542] Humanoid.Jump = true
-[8048.558897] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.568536] Humanoid.Jump = true
-[8048.570085] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.574713] Humanoid.Jump = true
-[8048.575049] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.575106] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=2.704870 | CanJump=true | JumpHeld=false | HumJump=true
-[8048.584018] Humanoid.Jump = true
-[8048.584333] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.591897] Humanoid.Jump = true
-[8048.592415] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.600459] Humanoid.Jump = true
-[8048.600860] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.600904] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.321854 | CanJump=true | JumpHeld=false | HumJump=true
-[8048.608825] Humanoid.Jump = true
-[8048.609244] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.616316] Humanoid.Jump = true
-[8048.616647] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.625177] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=17.320869
-[8048.625388] Humanoid.Jump = true
-[8048.625815] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8048.625872] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.904203 | CanJump=true | JumpHeld=false | HumJump=true
-[8049.466318] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-24.554394 | CanJump=true | JumpHeld=false | HumJump=false
-[8049.499742] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-25.804398
-[8049.499888] Humanoid.Jump = true
-[8049.500356] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8049.509393] Humanoid.Jump = true
-[8049.509702] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8049.509753] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8049.517631] Humanoid.Jump = true
-[8049.517997] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8049.525378] Humanoid.Jump = true
-[8049.525777] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8049.533867] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8050.174364] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=false
-[8050.225045] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8050.225153] Humanoid.Jump = true
-[8050.225483] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.225560] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.887815 | CanJump=true | JumpHeld=false | HumJump=true
-[8050.233686] Humanoid.Jump = true
-[8050.234015] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.241444] Humanoid.Jump = true
-[8050.241775] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.251164] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8050.703729] Humanoid.Jump = true
-[8050.704394] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.711785] Humanoid.Jump = true
-[8050.715754] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.715792] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=20.162508 | CanJump=true | JumpHeld=false | HumJump=true
-[8050.736031] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=20.163122
-[8050.736164] Humanoid.Jump = true
-[8050.737543] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.737656] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=25.178396 | CanJump=true | JumpHeld=false | HumJump=true
-[8050.743873] Humanoid.Jump = true
-[8050.744249] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.748585] Humanoid.Jump = true
-[8050.748901] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.753128] Humanoid.Jump = true
-[8050.753402] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.760310] Humanoid.Jump = true
-[8050.760601] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8050.760638] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=23.929224 | CanJump=true | JumpHeld=false | HumJump=true
-[8050.768343] Humanoid.Jump = true
-[8050.768569] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8051.719385] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-23.987469 | CanJump=true | JumpHeld=false | HumJump=false
-[8051.754440] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-25.237473
-[8051.754570] Humanoid.Jump = true
-[8051.755711] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8051.761619] Humanoid.Jump = true
-[8051.761938] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8051.761971] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8051.770689] Humanoid.Jump = true
-[8051.771188] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8051.777757] Humanoid.Jump = true
-[8051.778273] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8051.785454] Humanoid.Jump = true
-[8051.785749] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8051.785794] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8052.516983] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=19.334009 | CanJump=true | JumpHeld=false | HumJump=false
-[8052.525700] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=19.334053
-[8052.525810] Humanoid.Jump = true
-[8052.526124] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8052.537609] Humanoid.Jump = true
-[8052.538158] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8052.538216] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=22.910275 | CanJump=true | JumpHeld=false | HumJump=true
-[8052.544974] Humanoid.Jump = true
-[8052.545355] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8052.552408] Humanoid.Jump = true
-[8052.552751] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8052.561494] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=21.660290 | CanJump=true | JumpHeld=false | HumJump=false
-[8053.417110] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-21.048059 | CanJump=true | JumpHeld=false | HumJump=false
-[8053.454399] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-22.298063
-[8053.454478] Humanoid.Jump = true
-[8053.455476] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8053.460532] Humanoid.Jump = true
-[8053.461044] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8053.461111] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8053.470504] Humanoid.Jump = true
-[8053.470785] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8053.477453] Humanoid.Jump = true
-[8053.477851] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8053.486961] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8054.266696] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-8.282977
-[8054.266890] Humanoid.Jump = true
-[8054.267189] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.276912] Humanoid.Jump = true
-[8054.277772] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.277847] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=22.888065 | CanJump=true | JumpHeld=false | HumJump=true
-[8054.283224] Humanoid.Jump = true
-[8054.283687] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.292165] Humanoid.Jump = true
-[8054.292496] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.299219] Humanoid.Jump = true
-[8054.299543] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.299607] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=21.851717 | CanJump=true | JumpHeld=false | HumJump=true
-[8054.307843] Humanoid.Jump = true
-[8054.308207] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.317254] Humanoid.Jump = true
-[8054.317611] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.324660] Humanoid.Jump = true
-[8054.324972] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8054.325067] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=20.601786 | CanJump=true | JumpHeld=false | HumJump=true
-[8055.137543] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-20.023216 | CanJump=true | JumpHeld=false | HumJump=false
-[8055.159003] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.648218
-[8055.159127] Humanoid.Jump = true
-[8055.159504] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8055.167267] Humanoid.Jump = true
-[8055.167679] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8055.167730] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8055.175408] Humanoid.Jump = true
-[8055.175812] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8055.183292] Humanoid.Jump = true
-[8055.183935] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8055.191968] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8056.117416] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-29.137850
-[8056.117544] Humanoid.Jump = true
-[8056.117856] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8056.125163] Humanoid.Jump = true
-[8056.125776] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8056.125845] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8056.134052] Humanoid.Jump = true
-[8056.134370] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8056.149513] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8057.226954] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-35.238609 | CanJump=true | JumpHeld=false | HumJump=false
-[8057.253360] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.713865
-[8057.253466] Humanoid.Jump = true
-[8057.253704] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8057.259678] Humanoid.Jump = true
-[8057.259866] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8057.259894] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.320511 | CanJump=true | JumpHeld=false | HumJump=true
-[8057.268871] Humanoid.Jump = true
-[8057.269210] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8057.276672] Humanoid.Jump = true
-[8057.276909] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8057.285362] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8057.949330] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8057.992216] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8057.992305] Humanoid.Jump = true
-[8057.992637] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8058.000442] Humanoid.Jump = true
-[8058.000824] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8058.000873] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8058.008148] Humanoid.Jump = true
-[8058.008520] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8058.023952] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8058.675410] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8058.725202] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8058.725279] Humanoid.Jump = true
-[8058.725626] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8058.725663] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.433532 | CanJump=true | JumpHeld=false | HumJump=true
-[8058.733450] Humanoid.Jump = true
-[8058.733845] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8058.741828] Humanoid.Jump = true
-[8058.742091] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8058.750732] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8059.407424] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8059.458153] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8059.458252] Humanoid.Jump = true
-[8059.458682] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.458739] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.031940 | CanJump=true | JumpHeld=false | HumJump=true
-[8059.466486] Humanoid.Jump = true
-[8059.466881] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.475217] Humanoid.Jump = true
-[8059.475759] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.483664] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8059.491384] Humanoid.Jump = true
-[8059.491816] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.498948] Humanoid.Jump = true
-[8059.499722] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.508511] Humanoid.Jump = true
-[8059.509183] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.509251] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=18.330719 | CanJump=true | JumpHeld=false | HumJump=true
-[8059.516367] Humanoid.Jump = true
-[8059.516843] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.525192] Humanoid.Jump = true
-[8059.525705] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.532748] Humanoid.Jump = true
-[8059.533183] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.533255] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.080664 | CanJump=true | JumpHeld=false | HumJump=true
-[8059.541583] Humanoid.Jump = true
-[8059.541964] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.550344] Humanoid.Jump = true
-[8059.550739] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8059.559228] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695824 | CanJump=true | JumpHeld=false | HumJump=false
-[8060.282397] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-19.554171 | CanJump=true | JumpHeld=false | HumJump=false
-[8060.316233] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.804174
-[8060.316313] Humanoid.Jump = true
-[8060.316629] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8060.324925] Humanoid.Jump = true
-[8060.325264] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8060.325311] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8060.332542] Humanoid.Jump = true
-[8060.332791] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8060.348734] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8061.001129] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8061.050615] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8061.050669] Humanoid.Jump = true
-[8061.050921] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8061.050960] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.006953 | CanJump=true | JumpHeld=false | HumJump=true
-[8061.058595] Humanoid.Jump = true
-[8061.058829] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8061.067089] Humanoid.Jump = true
-[8061.067412] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8061.076848] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.278839 | CanJump=true | JumpHeld=false | HumJump=false
-[8061.708577] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
-[8061.750780] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846146
-[8061.750880] Humanoid.Jump = true
-[8061.751319] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8061.751368] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.262814 | CanJump=true | JumpHeld=false | HumJump=true
-[8061.763877] Humanoid.Jump = true
-[8061.764516] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8061.771631] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8062.409017] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
-[8062.458752] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
-[8062.458830] Humanoid.Jump = true
-[8062.459168] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8062.459215] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-11.556181 | CanJump=true | JumpHeld=false | HumJump=true
-[8062.467717] Humanoid.Jump = true
-[8062.468172] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8062.475103] Humanoid.Jump = true
-[8062.475460] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8062.484350] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8063.141882] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8063.192637] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8063.192769] Humanoid.Jump = true
-[8063.193296] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.193396] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.422612 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.202508] Humanoid.Jump = true
-[8063.203022] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.209018] Humanoid.Jump = true
-[8063.209410] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.217482] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8063.654111] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-6.574652 | CanJump=true | JumpHeld=false | HumJump=false
-[8063.670797] Humanoid.Jump = true
-[8063.671399] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.679398] Humanoid.Jump = true
-[8063.679857] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.679928] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=43.656494 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.686439] Humanoid.Jump = true
-[8063.686891] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.692245] Humanoid.Jump = true
-[8063.692630] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.703635] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=43.031330
-[8063.703799] Humanoid.Jump = true
-[8063.704268] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.704323] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=46.003765 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.712072] Humanoid.Jump = true
-[8063.712661] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.720499] Humanoid.Jump = true
-[8063.721150] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.727838] Humanoid.Jump = true
-[8063.728199] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.728259] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=45.955933 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.735974] Humanoid.Jump = true
-[8063.736282] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.744829] Humanoid.Jump = true
-[8063.745114] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.752968] Humanoid.Jump = true
-[8063.753378] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.753427] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=44.705925 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.761408] Humanoid.Jump = true
-[8063.761717] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.768923] Humanoid.Jump = true
-[8063.769161] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.777499] Humanoid.Jump = true
-[8063.777801] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.777842] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=43.455929 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.786065] Humanoid.Jump = true
-[8063.786315] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.793683] Humanoid.Jump = true
-[8063.793907] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.802208] Humanoid.Jump = true
-[8063.802482] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.802523] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=42.205933 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.811079] Humanoid.Jump = true
-[8063.811329] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.818106] Humanoid.Jump = true
-[8063.818322] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.827451] Humanoid.Jump = true
-[8063.827759] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.827804] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=40.955940 | CanJump=true | JumpHeld=false | HumJump=true
-[8063.835152] Humanoid.Jump = true
-[8063.835394] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8063.851836] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=39.705948 | CanJump=true | JumpHeld=false | HumJump=false
-[8065.367060] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-35.502396
-[8065.367157] Humanoid.Jump = true
-[8065.367477] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8065.375836] Humanoid.Jump = true
-[8065.376274] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8065.376360] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=15.307342 | CanJump=true | JumpHeld=false | HumJump=true
-[8065.382660] Humanoid.Jump = true
-[8065.382909] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8065.390906] Humanoid.Jump = true
-[8065.391107] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8065.399511] Humanoid.Jump = true
-[8065.399728] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8065.399751] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=43.032585 | CanJump=true | JumpHeld=false | HumJump=true
-[8065.408515] Humanoid.Jump = true
-[8065.409033] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8065.416447] Humanoid.Jump = true
-[8065.416928] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8065.425177] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=41.783875 | CanJump=true | JumpHeld=false | HumJump=false
-[8067.108109] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-42.382832 | CanJump=true | JumpHeld=false | HumJump=false
-[8067.116659] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-42.382832
-[8067.116839] Humanoid.Jump = true
-[8067.117219] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.125175] Humanoid.Jump = true
-[8067.125660] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.132532] Humanoid.Jump = true
-[8067.133244] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.133286] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=true
-[8067.141478] Humanoid.Jump = true
-[8067.142009] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.150133] Humanoid.Jump = true
-[8067.151408] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.158867] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8067.958278] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-22.471163
-[8067.958387] Humanoid.Jump = true
-[8067.958784] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.967401] Humanoid.Jump = true
-[8067.967805] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.967855] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=28.703104 | CanJump=true | JumpHeld=false | HumJump=true
-[8067.975058] Humanoid.Jump = true
-[8067.975432] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.982565] Humanoid.Jump = true
-[8067.983030] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.991457] Humanoid.Jump = true
-[8067.991843] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8067.991902] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=43.531502 | CanJump=true | JumpHeld=false | HumJump=true
-[8067.999825] Humanoid.Jump = true
-[8068.000184] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8068.008052] Humanoid.Jump = true
-[8068.008433] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8068.017000] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=42.281673 | CanJump=true | JumpHeld=false | HumJump=false
-[8069.817065] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-47.718315 | CanJump=true | JumpHeld=false | HumJump=false
-[8069.834251] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-48.134979
-[8069.834346] Humanoid.Jump = true
-[8069.834850] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8069.843433] Humanoid.Jump = true
-[8069.843969] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8069.844037] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8069.851166] Humanoid.Jump = true
-[8069.851572] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8069.858808] Humanoid.Jump = true
-[8069.859147] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8069.867928] Humanoid.Jump = true
-[8069.869213] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8069.869279] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8069.876148] Humanoid.Jump = true
-[8069.876592] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8070.523164] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=false
-[8070.574729] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8070.574907] Humanoid.Jump = true
-[8070.575348] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8070.575390] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.887815 | CanJump=true | JumpHeld=false | HumJump=true
-[8070.584426] Humanoid.Jump = true
-[8070.584735] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8070.590814] Humanoid.Jump = true
-[8070.591358] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8070.600446] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8071.285291] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-17.262814 | CanJump=true | JumpHeld=false | HumJump=false
-[8071.326747] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.721151
-[8071.326818] Humanoid.Jump = true
-[8071.327063] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.334358] Humanoid.Jump = true
-[8071.334599] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.334629] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.320511 | CanJump=true | JumpHeld=false | HumJump=true
-[8071.341442] Humanoid.Jump = true
-[8071.341635] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.742430] Humanoid.Jump = true
-[8071.742908] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.750512] Humanoid.Jump = true
-[8071.750963] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.751031] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=30.310474 | CanJump=true | JumpHeld=false | HumJump=true
-[8071.759100] Humanoid.Jump = true
-[8071.759609] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.766804] Humanoid.Jump = true
-[8071.767132] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.775989] Humanoid.Jump = true
-[8071.776454] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.776525] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=36.159355 | CanJump=true | JumpHeld=false | HumJump=true
-[8071.783991] Humanoid.Jump = true
-[8071.784448] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.791899] Humanoid.Jump = true
-[8071.792206] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.800427] Humanoid.Jump = true
-[8071.800757] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8071.800799] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=34.910870 | CanJump=true | JumpHeld=false | HumJump=true
-[8073.182856] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-34.255836 | CanJump=true | JumpHeld=false | HumJump=false
-[8073.199902] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-34.672501
-[8073.199982] Humanoid.Jump = true
-[8073.200431] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8073.216944] Humanoid.Jump = true
-[8073.217846] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8073.217898] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=true
-[8073.220934] Humanoid.Jump = true
-[8073.221179] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8073.241653] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
-[8074.027321] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-13.028283
-[8074.027375] Humanoid.Jump = true
-[8074.027614] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8074.027638] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=14.273683 | CanJump=true | JumpHeld=false | HumJump=true
-[8074.036143] Humanoid.Jump = true
-[8074.036520] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8074.043736] Humanoid.Jump = true
-[8074.044057] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8074.051778] Humanoid.Jump = true
-[8074.052028] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8074.052070] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=34.878372 | CanJump=true | JumpHeld=false | HumJump=true
-[8074.060122] Humanoid.Jump = true
-[8074.060343] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8074.068631] Humanoid.Jump = true
-[8074.068819] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8074.077186] Humanoid.Jump = true
-[8074.077345] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8074.077366] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=33.629490 | CanJump=true | JumpHeld=false | HumJump=true
-[8075.417070] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-33.245708 | CanJump=true | JumpHeld=false | HumJump=false
-[8075.434433] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-9.044151
-[8075.434580] Humanoid.Jump = true
-[8075.436016] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8075.442474] Humanoid.Jump = true
-[8075.442947] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8075.443042] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8075.451320] Humanoid.Jump = true
-[8075.451794] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8075.466642] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8076.175495] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.304483
-[8076.175584] Humanoid.Jump = true
-[8076.175937] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8076.176023] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=4.554475 | CanJump=true | JumpHeld=false | HumJump=true
-[8076.185430] Humanoid.Jump = true
-[8076.185730] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8076.200910] Humanoid.Jump = true
-[8076.201154] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8076.208949] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8076.867655] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8076.914789] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.304483 | CanJump=true | JumpHeld=false | HumJump=false
-[8077.016934] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Vy=-23.304499 | CanJump=true | JumpHeld=false | HumJump=false
-[8077.408111] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-42.887791 | CanJump=true | JumpHeld=false | HumJump=false
-[8077.426298] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-43.304455
-[8077.426440] Humanoid.Jump = true
-[8077.427068] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8077.435316] Humanoid.Jump = true
-[8077.435887] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8077.435989] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=true
-[8077.443527] Humanoid.Jump = true
-[8077.444009] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8077.458843] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=false
-[8078.108364] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
-[8078.159402] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8078.159528] Humanoid.Jump = true
-[8078.160023] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8078.160117] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.524055 | CanJump=true | JumpHeld=false | HumJump=true
-[8078.168253] Humanoid.Jump = true
-[8078.168802] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8078.808084] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-14.971144 | CanJump=true | JumpHeld=false | HumJump=false
-[8078.858270] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-4.144114
-[8078.858431] Humanoid.Jump = true
-[8078.858774] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8078.858871] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=0.414875 | CanJump=true | JumpHeld=false | HumJump=true
-[8078.867328] Humanoid.Jump = true
-[8078.867972] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8079.519345] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.596141 | CanJump=true | JumpHeld=false | HumJump=false
-[8079.561427] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262812
-[8079.561511] Humanoid.Jump = true
-[8079.561861] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8079.569992] Humanoid.Jump = true
-[8079.570958] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8079.571008] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8079.577628] Humanoid.Jump = true
-[8079.577922] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8079.593877] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8080.262416] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.637812 | CanJump=true | JumpHeld=false | HumJump=false
-[8080.295753] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8080.295898] Humanoid.Jump = true
-[8080.296325] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8080.304350] Humanoid.Jump = true
-[8080.304829] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8080.304889] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8080.311692] Humanoid.Jump = true
-[8080.312199] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8080.328306] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8080.991748] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.429478 | CanJump=true | JumpHeld=false | HumJump=false
-[8081.034264] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8081.034366] Humanoid.Jump = true
-[8081.034705] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8081.042865] Humanoid.Jump = true
-[8081.043513] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8081.043591] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8081.051135] Humanoid.Jump = true
-[8081.051688] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8081.067098] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8081.707716] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=false
-[8081.758525] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8081.758608] Humanoid.Jump = true
-[8081.758822] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8081.758853] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.259480 | CanJump=true | JumpHeld=false | HumJump=true
-[8081.766960] Humanoid.Jump = true
-[8081.767469] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8081.775130] Humanoid.Jump = true
-[8081.775396] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8081.785674] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8082.489028] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-6.865948 | CanJump=true | JumpHeld=false | HumJump=false
-[8082.531286] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.111634 | CanJump=true | JumpHeld=false | HumJump=false
-[8082.574179] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-10.778298
-[8082.574317] Humanoid.Jump = true
-[8082.574917] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8082.582553] Humanoid.Jump = true
-[8082.583039] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8082.583091] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Vy=-11.172434 | CanJump=true | JumpHeld=false | HumJump=true
-[8082.591389] Humanoid.Jump = true
-[8082.591751] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8082.598991] Humanoid.Jump = true
-[8082.599256] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8082.606579] Humanoid.Jump = true
-[8082.606887] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8082.606947] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=true
-[8082.616545] Humanoid.Jump = true
-[8082.616838] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8083.268561] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
-[8083.310307] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
-[8083.310387] Humanoid.Jump = true
-[8083.310681] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8083.319073] Humanoid.Jump = true
-[8083.319398] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8083.319423] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112181 | CanJump=true | JumpHeld=false | HumJump=true
-[8083.327113] Humanoid.Jump = true
-[8083.327353] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8083.350054] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
-[8084.002038] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.221144 | CanJump=true | JumpHeld=false | HumJump=false
-[8084.044214] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8084.044315] Humanoid.Jump = true
-[8084.044656] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8084.052207] Humanoid.Jump = true
-[8084.052773] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8084.052840] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8084.060254] Humanoid.Jump = true
-[8084.060623] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8084.077259] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8084.732935] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8084.775348] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.679482
-[8084.775460] Humanoid.Jump = true
-[8084.775799] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8084.783593] Humanoid.Jump = true
-[8084.784102] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8084.784154] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8084.791354] Humanoid.Jump = true
-[8084.791708] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8084.807967] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8085.466039] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.221144 | CanJump=true | JumpHeld=false | HumJump=false
-[8085.508502] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8085.508614] Humanoid.Jump = true
-[8085.508908] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8085.516852] Humanoid.Jump = true
-[8085.517105] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8085.517141] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8085.525956] Humanoid.Jump = true
-[8085.526402] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8085.540809] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8086.198938] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.221144 | CanJump=true | JumpHeld=false | HumJump=false
-[8086.241518] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8086.241610] Humanoid.Jump = true
-[8086.241916] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8086.250104] Humanoid.Jump = true
-[8086.250376] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8086.250407] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8086.259199] Humanoid.Jump = true
-[8086.259514] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8086.274660] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8086.927124] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8086.977185] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8086.977301] Humanoid.Jump = true
-[8086.977648] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8086.977704] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-2.520690 | CanJump=true | JumpHeld=false | HumJump=true
-[8086.985298] Humanoid.Jump = true
-[8086.985676] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8086.993125] Humanoid.Jump = true
-[8086.993383] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8087.001878] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8087.650156] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
-[8087.694318] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054480
-[8087.694416] Humanoid.Jump = true
-[8087.694787] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8087.694881] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-17.471148 | CanJump=true | JumpHeld=false | HumJump=true
-[8087.702729] Humanoid.Jump = true
-[8087.703132] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8087.710836] Humanoid.Jump = true
-[8087.711131] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8087.719247] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8088.382718] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8088.433399] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
-[8088.433499] Humanoid.Jump = true
-[8088.433843] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8088.433910] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-11.767059 | CanJump=true | JumpHeld=false | HumJump=true
-[8088.442214] Humanoid.Jump = true
-[8088.442629] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8088.449929] Humanoid.Jump = true
-[8088.450301] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8088.459001] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8089.115882] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8089.158556] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8089.158641] Humanoid.Jump = true
-[8089.158971] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.166545] Humanoid.Jump = true
-[8089.166786] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.166821] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8089.174756] Humanoid.Jump = true
-[8089.175225] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.190895] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8089.840732] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8089.892134] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8089.892243] Humanoid.Jump = true
-[8089.893647] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.893709] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.379268 | CanJump=true | JumpHeld=false | HumJump=true
-[8089.900415] Humanoid.Jump = true
-[8089.900784] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.908047] Humanoid.Jump = true
-[8089.908420] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.916662] Humanoid.Jump = true
-[8089.917009] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.917050] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=28.748709 | CanJump=true | JumpHeld=false | HumJump=true
-[8089.924418] Humanoid.Jump = true
-[8089.924680] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.932620] Humanoid.Jump = true
-[8089.932892] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.953273] Humanoid.Jump = true
-[8089.953730] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8089.953826] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=26.873730 | CanJump=true | JumpHeld=false | HumJump=true
-[8091.016393] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-2.252569 | CanJump=true | JumpHeld=false | HumJump=false
-[8091.026785] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-2.252569
-[8091.026948] Humanoid.Jump = true
-[8091.028918] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.033624] Humanoid.Jump = true
-[8091.034002] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.041735] Humanoid.Jump = true
-[8091.042047] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.042102] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=23.519203 | CanJump=true | JumpHeld=false | HumJump=true
-[8091.049884] Humanoid.Jump = true
-[8091.050246] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.074573] Humanoid.Jump = true
-[8091.074942] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.083297] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=24.054991 | CanJump=true | JumpHeld=false | HumJump=false
-[8091.091472] Humanoid.Jump = true
-[8091.091917] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.099626] Humanoid.Jump = true
-[8091.099995] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.108506] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=22.804989 | CanJump=true | JumpHeld=false | HumJump=false
-[8091.485857] Humanoid.Jump = true
-[8091.486223] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.493527] Humanoid.Jump = true
-[8091.493962] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.494038] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=32.648056 | CanJump=true | JumpHeld=false | HumJump=true
-[8091.502119] Humanoid.Jump = true
-[8091.502435] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.509815] Humanoid.Jump = true
-[8091.510126] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.518229] Humanoid.Jump = true
-[8091.518582] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.518629] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=31.398306 | CanJump=true | JumpHeld=false | HumJump=true
-[8091.526537] Humanoid.Jump = true
-[8091.526760] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.535471] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=30.981640
-[8091.535537] Humanoid.Jump = true
-[8091.535826] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8091.543998] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=30.148296 | CanJump=true | JumpHeld=false | HumJump=false
-[8092.749569] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-30.060110 | CanJump=true | JumpHeld=false | HumJump=false
-[8092.774913] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-30.893446
-[8092.775025] Humanoid.Jump = true
-[8092.775388] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8092.783289] Humanoid.Jump = true
-[8092.783686] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8092.783766] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8092.791310] Humanoid.Jump = true
-[8092.791578] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8092.807948] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8093.286296] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=3.283223
-[8093.286479] Humanoid.Jump = true
-[8093.287183] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.294478] Humanoid.Jump = true
-[8093.294969] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.295028] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=37.323986 | CanJump=true | JumpHeld=false | HumJump=true
-[8093.302279] Humanoid.Jump = true
-[8093.302670] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.310307] Humanoid.Jump = true
-[8093.310787] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.318952] Humanoid.Jump = true
-[8093.319370] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.319469] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=34.281124 | CanJump=true | JumpHeld=false | HumJump=true
-[8093.327180] Humanoid.Jump = true
-[8093.327516] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.335320] Humanoid.Jump = true
-[8093.335559] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.343513] Humanoid.Jump = true
-[8093.343711] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8093.343740] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=33.031200 | CanJump=true | JumpHeld=false | HumJump=true
-[8094.700003] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-34.260582
-[8094.700113] Humanoid.Jump = true
-[8094.700523] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.708936] Humanoid.Jump = true
-[8094.709466] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.709533] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.321814 | CanJump=true | JumpHeld=false | HumJump=true
-[8094.716312] Humanoid.Jump = true
-[8094.716667] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.725308] Humanoid.Jump = true
-[8094.726785] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.732848] Humanoid.Jump = true
-[8094.733208] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.741291] Humanoid.Jump = true
-[8094.741620] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.749429] Humanoid.Jump = true
-[8094.749709] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.757629] Humanoid.Jump = true
-[8094.757998] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.766194] Humanoid.Jump = true
-[8094.766540] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8094.766610] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.904043 | CanJump=true | JumpHeld=false | HumJump=true
-[8095.440807] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.221115 | CanJump=true | JumpHeld=false | HumJump=false
-[8095.491337] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.304455
-[8095.491413] Humanoid.Jump = true
-[8095.491779] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8095.491853] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.721123 | CanJump=true | JumpHeld=false | HumJump=true
-[8095.499902] Humanoid.Jump = true
-[8095.500298] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8095.507849] Humanoid.Jump = true
-[8095.508215] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8095.516981] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
-[8096.143260] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-14.971144 | CanJump=true | JumpHeld=false | HumJump=false
-[8096.190885] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846146
-[8096.190989] Humanoid.Jump = true
-[8096.191393] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8096.191437] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-8.998374 | CanJump=true | JumpHeld=false | HumJump=true
-[8096.200907] Humanoid.Jump = true
-[8096.201301] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8096.207656] Humanoid.Jump = true
-[8096.207915] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8096.217189] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8097.108108] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-27.471178 | CanJump=true | JumpHeld=false | HumJump=false
-[8097.133350] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-28.304514
-[8097.133416] Humanoid.Jump = true
-[8097.133703] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.141539] Humanoid.Jump = true
-[8097.141821] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.141864] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8097.150213] Humanoid.Jump = true
-[8097.150525] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.157797] Humanoid.Jump = true
-[8097.158012] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.166922] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8097.667165] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-2.151827
-[8097.667269] Humanoid.Jump = true
-[8097.667699] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.676392] Humanoid.Jump = true
-[8097.677177] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.677245] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=28.419489 | CanJump=true | JumpHeld=false | HumJump=true
-[8097.683826] Humanoid.Jump = true
-[8097.684406] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.692409] Humanoid.Jump = true
-[8097.692884] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.700926] Humanoid.Jump = true
-[8097.701449] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.701495] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=37.340599 | CanJump=true | JumpHeld=false | HumJump=true
-[8097.709128] Humanoid.Jump = true
-[8097.709467] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.720066] Humanoid.Jump = true
-[8097.720585] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.728089] Humanoid.Jump = true
-[8097.728510] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8097.728562] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=35.884991 | CanJump=true | JumpHeld=false | HumJump=true
-[8099.284000] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-41.823318 | CanJump=true | JumpHeld=false | HumJump=false
-[8099.300315] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-42.239983
-[8099.300384] Humanoid.Jump = true
-[8099.300729] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8099.308675] Humanoid.Jump = true
-[8099.309005] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8099.309040] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8099.317231] Humanoid.Jump = true
-[8099.317715] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8099.324880] Humanoid.Jump = true
-[8099.325183] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8099.333389] Humanoid.Jump = true
-[8099.333690] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8099.333743] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8099.999044] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.804476 | CanJump=true | JumpHeld=false | HumJump=false
-[8100.049841] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.887815
-[8100.049928] Humanoid.Jump = true
-[8100.050179] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8100.050211] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-18.304483 | CanJump=true | JumpHeld=false | HumJump=true
-[8100.058999] Humanoid.Jump = true
-[8100.059348] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8100.068171] Humanoid.Jump = true
-[8100.068564] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8100.075771] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=false
-[8100.752112] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.637812 | CanJump=true | JumpHeld=false | HumJump=false
-[8100.802133] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.512817
-[8100.802203] Humanoid.Jump = true
-[8100.802409] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8100.802436] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-12.098557 | CanJump=true | JumpHeld=false | HumJump=true
-[8100.809217] Humanoid.Jump = true
-[8100.809537] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8100.816178] Humanoid.Jump = true
-[8100.816436] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8100.824618] Humanoid.Jump = true
-[8100.824950] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8100.824991] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=true
-[8101.284717] Humanoid.Jump = true
-[8101.285345] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.292399] Humanoid.Jump = true
-[8101.292914] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.293023] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=28.012169 | CanJump=true | JumpHeld=false | HumJump=true
-[8101.300186] Humanoid.Jump = true
-[8101.300550] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.308290] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Jumping | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=34.363140
-[8101.308349] Humanoid.Jump = true
-[8101.308644] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.317527] Humanoid.Jump = true
-[8101.318026] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.318079] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=32.181797 | CanJump=true | JumpHeld=false | HumJump=true
-[8101.325794] Humanoid.Jump = true
-[8101.326128] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.334191] Humanoid.Jump = true
-[8101.334536] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.342279] Humanoid.Jump = true
-[8101.342602] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.342656] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=30.932230 | CanJump=true | JumpHeld=false | HumJump=true
-[8101.350438] Humanoid.Jump = true
-[8101.350788] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8101.366517] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=29.682102 | CanJump=true | JumpHeld=false | HumJump=false
-[8102.556524] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-29.901316 | CanJump=true | JumpHeld=false | HumJump=false
-[8102.582534] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-30.734652
-[8102.582578] Humanoid.Jump = true
-[8102.582818] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8102.590761] Humanoid.Jump = true
-[8102.590964] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8102.590989] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=true
-[8102.599168] Humanoid.Jump = true
-[8102.599444] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8102.615223] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8103.432842] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=16.155424
-[8103.432922] Humanoid.Jump = true
-[8103.433193] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8103.441326] Humanoid.Jump = true
-[8103.441785] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8103.441820] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=39.486153 | CanJump=true | JumpHeld=false | HumJump=true
-[8103.449481] Humanoid.Jump = true
-[8103.449731] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8103.457675] Humanoid.Jump = true
-[8103.457966] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8103.465615] Humanoid.Jump = true
-[8103.465917] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8103.465961] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=37.594189 | CanJump=true | JumpHeld=false | HumJump=true
-[8103.474145] Humanoid.Jump = true
-[8103.474486] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8103.482203] Humanoid.Jump = true
-[8103.482431] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8103.490837] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=36.344204 | CanJump=true | JumpHeld=false | HumJump=false
-[8104.955637] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-36.780895 | CanJump=true | JumpHeld=false | HumJump=false
-[8104.973152] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-37.405891
-[8104.973280] Humanoid.Jump = true
-[8104.973706] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8104.982034] Humanoid.Jump = true
-[8104.982437] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8104.982505] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8104.989867] Humanoid.Jump = true
-[8104.990186] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8105.001243] Humanoid.Jump = true
-[8105.001646] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8105.009553] Humanoid.Jump = true
-[8105.009917] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8105.009969] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=true
-[8105.018056] Humanoid.Jump = true
-[8105.018488] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.215298] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-42.887791 | CanJump=true | JumpHeld=false | HumJump=false
-[8106.231628] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-43.304455
-[8106.231696] Humanoid.Jump = true
-[8106.231885] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.240569] Humanoid.Jump = true
-[8106.240828] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.240892] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=true
-[8106.247665] Humanoid.Jump = true
-[8106.247881] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.255180] Humanoid.Jump = true
-[8106.255398] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.263052] Humanoid.Jump = true
-[8106.263241] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.263263] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8106.907615] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
-[8106.957602] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
-[8106.957694] Humanoid.Jump = true
-[8106.958047] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.958099] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-9.240568 | CanJump=true | JumpHeld=false | HumJump=true
-[8106.966151] Humanoid.Jump = true
-[8106.966411] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.973995] Humanoid.Jump = true
-[8106.974269] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8106.983284] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
-[8106.991593] Humanoid.Jump = true
-[8106.991979] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8107.007801] Humanoid.Jump = true
-[8107.008112] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8107.008162] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=34.293503 | CanJump=true | JumpHeld=false | HumJump=true
-[8107.016398] Humanoid.Jump = true
-[8107.016811] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8108.347213] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-26.615133
-[8108.347314] Humanoid.Jump = true
-[8108.347691] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8108.357639] Humanoid.Jump = true
-[8108.358113] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8108.358159] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=16.918301 | CanJump=true | JumpHeld=false | HumJump=true
-[8108.389576] Humanoid.Jump = true
-[8108.390059] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8108.398348] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Vy=18.815701 | CanJump=true | JumpHeld=false | HumJump=false
-[8109.296978] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-25.975981 | CanJump=true | JumpHeld=false | HumJump=false
-[8109.322732] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-26.809317
-[8109.322859] Humanoid.Jump = true
-[8109.323343] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8109.332009] Humanoid.Jump = true
-[8109.332370] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8109.332412] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=true
-[8109.339164] Humanoid.Jump = true
-[8109.339662] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8109.354989] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=false
-[8110.016047] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.221144 | CanJump=true | JumpHeld=false | HumJump=false
-[8110.049862] AUTO ATTEMPT | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
-[8110.049996] Humanoid.Jump = true
-[8110.050478] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8110.058537] Humanoid.Jump = true
-[8110.059095] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8110.059184] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=true
-[8110.066812] Humanoid.Jump = true
-[8110.067157] >>> NATIVE-STYLE JUMP RELEASE | JumpHeldDown=false
-[8110.082914] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
-[8110.106243] ===== F7 -> AUTO JUMP OFF =====
-[8110.736463] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=false
-[8110.786652] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Vy=-4.690398 | CanJump=true | JumpHeld=false | HumJump=false
-[8111.315595] ===== F6 FULL STOP =====
+[8550.240811] ==================================================
+[8550.241959] DeadEye Legit AutoJump Test v1.16
+[8550.242007] GROUND AUTOJUMP = ENABLED
+[8550.242021] GROUND TRIGGER = DataRegistry.Grounded ONLY
+[8550.242032] LANDED DOES NOT TRIGGER JUMP
+[8550.242043] ONE GROUND JUMP UNTIL GROUNDED BECOMES FALSE
+[8550.242052] NATURAL CLIMBING PRESERVED
+[8550.242060] CLIMBING GETS ONE ORIGINAL JumpReact(false)
+[8550.242069] ALL ORIGINAL JumpReact / AttemptJump CHECKS
+[8550.242079] ONLY EndClimb BLOCKED WHILE CLIMBING
+[8550.242087] NO PARALLEL JumpReact()
+[8550.242095] F7 = ON/OFF
+[8550.242103] F6 = FULL STOP + COPY LOG
+[8550.242110] ==================================================
+[8550.242121] READY
+[8551.476099] ===== F7 -> AUTO JUMP ON =====
+[8551.476254] LIVE Movement hooked successfully
+[8551.476321] F7 INITIAL STATE | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=0.000312
+[8551.477826] >>> GROUND AUTO JUMP #1 | Hum=Enum.HumanoidStateType.Running
+[8551.477867] ==================================================
+[8551.477885] ORIGINAL JumpReact | REASON=GROUND
+[8551.477909] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=0.000312
+[8551.477986] Humanoid.Jump = true
+[8551.478217] >>> AUTO RELEASE | JumpHeldDown=false
+[8551.478261] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy 0.000312 -> 0.000312 | DeltaVy=0.000000 | CanJump=true | JumpHeld=false
+[8551.478284] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=0.000312
+[8551.491975] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8551.508702] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8552.118275] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.346143 | CanJump=true | JumpHeld=false | HumJump=false
+[8552.169681] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-17.054478 | CanJump=true | JumpHeld=false | HumJump=false
+[8552.186604] >>> GROUND AUTO JUMP #2 | Hum=Enum.HumanoidStateType.Running
+[8552.186663] ==================================================
+[8552.186681] ORIGINAL JumpReact | REASON=GROUND
+[8552.186705] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
+[8552.186726] Humanoid.Jump = true
+[8552.187007] >>> AUTO RELEASE | JumpHeldDown=false
+[8552.187050] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054478 -> -1.975327 | DeltaVy=15.079150 | CanJump=true | JumpHeld=false
+[8552.187084] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-1.975327
+[8552.196872] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8552.218744] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8552.558062] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-3.873262 | CanJump=true | JumpHeld=false | HumJump=false
+[8552.607828] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-8.854458 | CanJump=true | JumpHeld=false | HumJump=false
+[8552.635760] >>> GROUND AUTO JUMP #3 | Hum=Enum.HumanoidStateType.Running
+[8552.635837] ==================================================
+[8552.635858] ORIGINAL JumpReact | REASON=GROUND
+[8552.635877] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-9.271124
+[8552.635926] Humanoid.Jump = true
+[8552.636888] >>> AUTO RELEASE | JumpHeldDown=false
+[8552.636929] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -9.271124 -> -10.312789 | DeltaVy=-1.041665 | CanJump=true | JumpHeld=false
+[8552.636951] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-10.312789
+[8552.645260] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=false
+[8552.666963] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8553.329994] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-16.846146 | CanJump=true | JumpHeld=false | HumJump=false
+[8553.364513] >>> GROUND AUTO JUMP #4 | Hum=Enum.HumanoidStateType.Landed
+[8553.364654] ==================================================
+[8553.364685] ORIGINAL JumpReact | REASON=GROUND
+[8553.364713] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.096149
+[8553.364751] Humanoid.Jump = true
+[8553.365287] >>> AUTO RELEASE | JumpHeldDown=false
+[8553.365347] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -18.096149 -> -18.721151 | DeltaVy=-0.625002 | CanJump=true | JumpHeld=false
+[8553.365373] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-18.721151
+[8553.372795] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=false
+[8553.403879] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8553.954644] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-11.846145 | CanJump=true | JumpHeld=false | HumJump=false
+[8554.005191] >>> GROUND AUTO JUMP #5 | Hum=Enum.HumanoidStateType.Running
+[8554.005254] ==================================================
+[8554.005270] ORIGINAL JumpReact | REASON=GROUND
+[8554.005293] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-13.929475
+[8554.005333] Humanoid.Jump = true
+[8554.005675] >>> AUTO RELEASE | JumpHeldDown=false
+[8554.005700] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -13.929475 -> -14.346141 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8554.005717] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-14.346141
+[8554.005736] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-14.346141 | CanJump=true | JumpHeld=false | HumJump=true
+[8554.021019] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8554.912514] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-27.679512 | CanJump=true | JumpHeld=false | HumJump=false
+[8554.939343] >>> GROUND AUTO JUMP #6 | Hum=Enum.HumanoidStateType.Landed
+[8554.939435] ==================================================
+[8554.939468] ORIGINAL JumpReact | REASON=GROUND
+[8554.939497] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-28.512848
+[8554.939529] Humanoid.Jump = true
+[8554.940010] >>> AUTO RELEASE | JumpHeldDown=false
+[8554.940068] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -28.512848 -> -14.530560 | DeltaVy=13.982288 | CanJump=true | JumpHeld=false
+[8554.940141] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-14.530560
+[8554.947850] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8554.987394] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8555.548207] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-12.887814 | CanJump=true | JumpHeld=false | HumJump=false
+[8555.598374] >>> GROUND AUTO JUMP #7 | Hum=Enum.HumanoidStateType.Running
+[8555.598453] ==================================================
+[8555.598475] ORIGINAL JumpReact | REASON=GROUND
+[8555.598501] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-14.971144
+[8555.598535] Humanoid.Jump = true
+[8555.598767] >>> AUTO RELEASE | JumpHeldDown=false
+[8555.598805] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -14.971144 -> -15.387810 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8555.598824] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-15.387810
+[8555.598841] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=true
+[8555.614347] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8555.621676] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
+[8555.963120] >>> GROUND AUTO JUMP #8 | Hum=Enum.HumanoidStateType.Freefall
+[8555.963270] ==================================================
+[8555.963308] ORIGINAL JumpReact | REASON=GROUND
+[8555.963395] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-0.033163
+[8555.963501] Humanoid.Jump = true
+[8555.963924] >>> AUTO RELEASE | JumpHeldDown=false
+[8555.963980] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -0.033163 -> 0.191835 | DeltaVy=0.224998 | CanJump=true | JumpHeld=false
+[8555.964022] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=0.191835
+[8555.975092] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=-0.134235 | CanJump=true | JumpHeld=false | HumJump=false
+[8556.233347] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8556.321521] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.109730 | CanJump=true | JumpHeld=false | HumJump=false
+[8556.371530] >>> GROUND AUTO JUMP #9 | Hum=Enum.HumanoidStateType.Running
+[8556.371650] ==================================================
+[8556.371682] ORIGINAL JumpReact | REASON=GROUND
+[8556.371711] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.192247
+[8556.371744] Humanoid.Jump = true
+[8556.372133] >>> AUTO RELEASE | JumpHeldDown=false
+[8556.372239] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.192247 -> -17.608749 | DeltaVy=-0.416502 | CanJump=true | JumpHeld=false
+[8556.372277] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.608749
+[8556.372301] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.608749 | CanJump=true | JumpHeld=false | HumJump=true
+[8556.396316] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=true | Vy=-0.358896 | CanJump=true | JumpHeld=false | HumJump=false
+[8556.445943] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=3.554395 | CanJump=true | JumpHeld=false | HumJump=false
+[8569.355780] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=-0.416334 | CanJump=false | JumpHeld=true | HumJump=false
+[8569.420271] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=0.092662 | CanJump=false | JumpHeld=true | HumJump=false
+[8571.013208] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8571.118610] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=3.511739 | CanJump=true | JumpHeld=false | HumJump=false
+[8571.845859] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-32.738297 | CanJump=true | JumpHeld=false | HumJump=false
+[8571.880295] >>> GROUND AUTO JUMP #10 | Hum=Enum.HumanoidStateType.Landed
+[8571.880434] ==================================================
+[8571.880508] ORIGINAL JumpReact | REASON=GROUND
+[8571.880599] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.988127
+[8571.880643] Humanoid.Jump = true
+[8571.881131] >>> AUTO RELEASE | JumpHeldDown=false
+[8571.881179] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -16.988127 -> -1.236792 | DeltaVy=15.751335 | CanJump=true | JumpHeld=false
+[8571.881211] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-1.236792
+[8571.890517] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903843 | CanJump=true | JumpHeld=false | HumJump=false
+[8571.913127] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8572.518805] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.554476 | CanJump=true | JumpHeld=false | HumJump=false
+[8572.569125] >>> GROUND AUTO JUMP #11 | Hum=Enum.HumanoidStateType.Running
+[8572.569217] ==================================================
+[8572.569249] ORIGINAL JumpReact | REASON=GROUND
+[8572.569283] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637810
+[8572.569327] Humanoid.Jump = true
+[8572.569741] >>> AUTO RELEASE | JumpHeldDown=false
+[8572.569796] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.637810 -> -8.540200 | DeltaVy=8.097610 | CanJump=true | JumpHeld=false
+[8572.569828] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-8.540200
+[8572.569865] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-8.540200 | CanJump=true | JumpHeld=false | HumJump=true
+[8572.602183] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8573.218877] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
+[8573.269181] >>> GROUND AUTO JUMP #12 | Hum=Enum.HumanoidStateType.Running
+[8573.269244] ==================================================
+[8573.269261] ORIGINAL JumpReact | REASON=GROUND
+[8573.269283] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846144
+[8573.269305] Humanoid.Jump = true
+[8573.269747] >>> AUTO RELEASE | JumpHeldDown=false
+[8573.269818] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.846144 -> -4.832798 | DeltaVy=12.013345 | CanJump=true | JumpHeld=false
+[8573.269852] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-4.832798
+[8573.269880] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-4.832798 | CanJump=true | JumpHeld=false | HumJump=true
+[8573.293535] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.278839 | CanJump=true | JumpHeld=false | HumJump=false
+[8573.302025] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8573.920494] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971144 | CanJump=true | JumpHeld=false | HumJump=false
+[8573.970850] >>> GROUND AUTO JUMP #13 | Hum=Enum.HumanoidStateType.Running
+[8573.970914] ==================================================
+[8573.970934] ORIGINAL JumpReact | REASON=GROUND
+[8573.970954] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054480
+[8573.970979] Humanoid.Jump = true
+[8573.971231] >>> AUTO RELEASE | JumpHeldDown=false
+[8573.971259] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054480 -> -8.969791 | DeltaVy=8.084688 | CanJump=true | JumpHeld=false
+[8573.971275] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-8.969791
+[8573.971291] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-8.969791 | CanJump=true | JumpHeld=false | HumJump=true
+[8573.994645] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8574.621673] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
+[8574.639048] >>> GROUND AUTO JUMP #14 | Hum=Enum.HumanoidStateType.Landed
+[8574.639117] ==================================================
+[8574.639135] ORIGINAL JumpReact | REASON=GROUND
+[8574.639156] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=3.473095
+[8574.639175] Humanoid.Jump = true
+[8574.639555] >>> AUTO RELEASE | JumpHeldDown=false
+[8574.639595] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy 3.473095 -> 3.056436 | DeltaVy=-0.416659 | CanJump=true | JumpHeld=false
+[8574.639614] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=3.056436
+[8574.648970] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.111012 | CanJump=true | JumpHeld=false | HumJump=false
+[8574.705460] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8575.337451] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-17.264021 | CanJump=true | JumpHeld=false | HumJump=false
+[8575.380411] >>> GROUND AUTO JUMP #15 | Hum=Enum.HumanoidStateType.Landed
+[8575.380501] ==================================================
+[8575.380524] ORIGINAL JumpReact | REASON=GROUND
+[8575.380552] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.930693
+[8575.380583] Humanoid.Jump = true
+[8575.381067] >>> AUTO RELEASE | JumpHeldDown=false
+[8575.381121] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -18.930693 -> -9.676702 | DeltaVy=9.253990 | CanJump=true | JumpHeld=false
+[8575.381150] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-9.676702
+[8575.390052] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903843 | CanJump=true | JumpHeld=false | HumJump=false
+[8575.403757] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8576.028891] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
+[8576.071467] >>> GROUND AUTO JUMP #16 | Hum=Enum.HumanoidStateType.Landed
+[8576.071568] ==================================================
+[8576.071592] ORIGINAL JumpReact | REASON=GROUND
+[8576.071620] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637810
+[8576.071652] Humanoid.Jump = true
+[8576.072160] >>> AUTO RELEASE | JumpHeldDown=false
+[8576.072195] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -16.637810 -> -17.054478 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8576.072216] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.054478
+[8576.081932] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903843 | CanJump=true | JumpHeld=false | HumJump=false
+[8576.087786] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8576.719329] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
+[8576.761524] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-17.054478 | CanJump=true | JumpHeld=false | HumJump=false
+[8576.771067] >>> GROUND AUTO JUMP #17 | Hum=Enum.HumanoidStateType.Running
+[8576.771124] ==================================================
+[8576.771142] ORIGINAL JumpReact | REASON=GROUND
+[8576.771165] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
+[8576.771194] Humanoid.Jump = true
+[8576.771419] >>> AUTO RELEASE | JumpHeldDown=false
+[8576.771453] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054478 -> -11.784986 | DeltaVy=5.269492 | CanJump=true | JumpHeld=false
+[8576.771474] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-11.784986
+[8576.786270] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=false
+[8576.794973] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8577.423003] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.179475 | CanJump=true | JumpHeld=false | HumJump=false
+[8577.464824] >>> GROUND AUTO JUMP #18 | Hum=Enum.HumanoidStateType.Landed
+[8577.464930] ==================================================
+[8577.464957] ORIGINAL JumpReact | REASON=GROUND
+[8577.464984] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846144
+[8577.465019] Humanoid.Jump = true
+[8577.465295] >>> AUTO RELEASE | JumpHeldDown=false
+[8577.465397] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -16.846144 -> -17.262812 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8577.465429] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.262812
+[8577.474263] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8577.489637] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8578.130639] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
+[8578.170954] >>> GROUND AUTO JUMP #19 | Hum=Enum.HumanoidStateType.Landed
+[8578.171067] ==================================================
+[8578.171098] ORIGINAL JumpReact | REASON=GROUND
+[8578.171129] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
+[8578.171161] Humanoid.Jump = true
+[8578.171600] >>> AUTO RELEASE | JumpHeldDown=false
+[8578.171662] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -17.262814 -> -17.679482 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8578.171693] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.679482
+[8578.181234] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903847 | CanJump=true | JumpHeld=false | HumJump=false
+[8578.187207] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8578.653712] >>> GROUND AUTO JUMP #20 | Hum=Enum.HumanoidStateType.Freefall
+[8578.653795] ==================================================
+[8578.653815] ORIGINAL JumpReact | REASON=GROUND
+[8578.653837] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-4.577885
+[8578.653860] Humanoid.Jump = true
+[8578.654146] >>> AUTO RELEASE | JumpHeldDown=false
+[8578.654169] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -4.577885 -> 2.109352 | DeltaVy=6.687237 | CanJump=true | JumpHeld=false
+[8578.654186] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=2.109352
+[8578.664450] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=26.613802 | CanJump=true | JumpHeld=false | HumJump=false
+[8578.678901] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8578.687120] >>> GROUND AUTO JUMP #21 | Hum=Enum.HumanoidStateType.Freefall
+[8578.687199] ==================================================
+[8578.687222] ORIGINAL JumpReact | REASON=GROUND
+[8578.687246] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=24.660631
+[8578.687268] Humanoid.Jump = true
+[8578.687500] >>> AUTO RELEASE | JumpHeldDown=false
+[8578.687542] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 24.660631 -> 24.243929 | DeltaVy=-0.416702 | CanJump=true | JumpHeld=false
+[8578.687562] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=24.243929
+[8578.696587] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=23.827284 | CanJump=true | JumpHeld=false | HumJump=false
+[8578.703441] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8578.712202] >>> GROUND AUTO JUMP #22 | Hum=Enum.HumanoidStateType.Freefall
+[8578.712284] ==================================================
+[8578.712318] ORIGINAL JumpReact | REASON=GROUND
+[8578.712352] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=23.410536
+[8578.712377] Humanoid.Jump = true
+[8578.712702] >>> AUTO RELEASE | JumpHeldDown=false
+[8578.712742] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 23.410536 -> 22.993870 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8578.712763] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=22.993870
+[8578.722056] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8578.722345] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=false | Vy=22.577194 | CanJump=true | JumpHeld=false | HumJump=false
+[8579.080459] >>> GROUND AUTO JUMP #23 | Hum=Enum.HumanoidStateType.Freefall
+[8579.080539] ==================================================
+[8579.080560] ORIGINAL JumpReact | REASON=GROUND
+[8579.080584] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=5.078582
+[8579.080608] Humanoid.Jump = true
+[8579.080957] >>> AUTO RELEASE | JumpHeldDown=false
+[8579.081050] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 5.078582 -> 42.731876 | DeltaVy=37.653295 | CanJump=true | JumpHeld=false
+[8579.081093] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=42.731876
+[8579.089577] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=42.107018 | CanJump=true | JumpHeld=false | HumJump=false
+[8579.112397] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8580.645570] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-35.601254 | CanJump=true | JumpHeld=false | HumJump=false
+[8580.662740] >>> GROUND AUTO JUMP #24 | Hum=Enum.HumanoidStateType.Landed
+[8580.662837] ==================================================
+[8580.662865] ORIGINAL JumpReact | REASON=GROUND
+[8580.662894] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-36.017918
+[8580.662925] Humanoid.Jump = true
+[8580.663269] >>> AUTO RELEASE | JumpHeldDown=false
+[8580.663317] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -36.017918 -> -19.202841 | DeltaVy=16.815077 | CanJump=true | JumpHeld=false
+[8580.663343] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-19.202841
+[8580.672013] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8580.703656] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8581.453671] >>> GROUND AUTO JUMP #25 | Hum=Enum.HumanoidStateType.Freefall
+[8581.453786] ==================================================
+[8581.453814] ORIGINAL JumpReact | REASON=GROUND
+[8581.453841] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-21.637827
+[8581.453878] Humanoid.Jump = true
+[8581.454227] >>> AUTO RELEASE | JumpHeldDown=false
+[8581.454254] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -21.637827 -> 1.057789 | DeltaVy=22.695616 | CanJump=true | JumpHeld=false
+[8581.454272] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=1.057789
+[8581.463568] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=7.172316 | CanJump=true | JumpHeld=false | HumJump=false
+[8581.494936] ==================================================
+[8581.495053] NATURAL CLIMBING DETECTED #1
+[8581.495069] ==================================================
+[8581.495094] ==================================================
+[8581.495124] ORIGINAL JumpReact | REASON=NATURAL CLIMBING
+[8581.495157] BEFORE | Hum=Enum.HumanoidStateType.Climbing | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=35.571941
+[8581.495181] Humanoid.Jump = true
+[8581.495207] >>> EndClimb BLOCKED DURING CLIMBING
+[8581.495465] >>> AUTO RELEASE | JumpHeldDown=false
+[8581.495487] JumpReact RETURNED | State Enum.HumanoidStateType.Climbing -> Enum.HumanoidStateType.Climbing | Vy 35.571941 -> 22.629480 | DeltaVy=-12.942461 | CanJump=true | JumpHeld=false
+[8581.495505] AFTER | Hum=Enum.HumanoidStateType.Climbing | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=22.629480
+[8581.495528] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Climbing | Grounded=true | Vy=22.629480 | CanJump=true | JumpHeld=false | HumJump=true
+[8581.520442] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Climbing | Grounded=true | Vy=4.208054 | CanJump=true | JumpHeld=false | HumJump=false
+[8582.245259] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8582.361987] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=7.090838 | CanJump=true | JumpHeld=false | HumJump=false
+[8582.703410] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-9.992496 | CanJump=true | JumpHeld=false | HumJump=false
+[8582.749140] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-12.284160 | CanJump=true | JumpHeld=false | HumJump=false
+[8582.814888] >>> GROUND AUTO JUMP #26 | Hum=Enum.HumanoidStateType.Running
+[8582.814969] ==================================================
+[8582.814987] ORIGINAL JumpReact | REASON=GROUND
+[8582.815014] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.200822
+[8582.815047] Humanoid.Jump = true
+[8582.815372] >>> AUTO RELEASE | JumpHeldDown=false
+[8582.815410] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -15.200822 -> -15.617488 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8582.815434] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-15.617488
+[8582.826483] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8582.832139] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8583.428351] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-13.096145 | CanJump=true | JumpHeld=false | HumJump=false
+[8583.479449] >>> GROUND AUTO JUMP #27 | Hum=Enum.HumanoidStateType.Running
+[8583.479542] ==================================================
+[8583.479565] ORIGINAL JumpReact | REASON=GROUND
+[8583.479596] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.179475
+[8583.479628] Humanoid.Jump = true
+[8583.479895] >>> AUTO RELEASE | JumpHeldDown=false
+[8583.479922] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -15.179475 -> -15.596141 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8583.479942] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-15.596141
+[8583.479960] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-15.596141 | CanJump=true | JumpHeld=false | HumJump=true
+[8583.504220] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8584.253729] >>> GROUND AUTO JUMP #28 | Hum=Enum.HumanoidStateType.Freefall
+[8584.253820] ==================================================
+[8584.253844] ORIGINAL JumpReact | REASON=GROUND
+[8584.253872] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.596157
+[8584.253904] Humanoid.Jump = true
+[8584.254440] >>> AUTO RELEASE | JumpHeldDown=false
+[8584.254476] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -20.596157 -> -10.583054 | DeltaVy=10.013103 | CanJump=true | JumpHeld=false
+[8584.254495] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-10.583054
+[8584.264263] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=22.911156 | CanJump=true | JumpHeld=false | HumJump=false
+[8584.312154] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8585.228435] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-22.195427 | CanJump=true | JumpHeld=false | HumJump=false
+[8585.245870] >>> GROUND AUTO JUMP #29 | Hum=Enum.HumanoidStateType.Landed
+[8585.245944] ==================================================
+[8585.245973] ORIGINAL JumpReact | REASON=GROUND
+[8585.246001] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-22.612095
+[8585.246031] Humanoid.Jump = true
+[8585.246306] >>> AUTO RELEASE | JumpHeldDown=false
+[8585.246330] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -22.612095 -> -23.028763 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8585.246350] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-23.028763
+[8585.255682] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8585.287389] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8586.037112] >>> GROUND AUTO JUMP #30 | Hum=Enum.HumanoidStateType.Freefall
+[8586.037207] ==================================================
+[8586.037230] ORIGINAL JumpReact | REASON=GROUND
+[8586.037264] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-21.637825
+[8586.037290] Humanoid.Jump = true
+[8586.037630] >>> AUTO RELEASE | JumpHeldDown=false
+[8586.037654] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -21.637825 -> -14.759060 | DeltaVy=6.878765 | CanJump=true | JumpHeld=false
+[8586.037671] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-14.759060
+[8586.046247] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=22.290335 | CanJump=true | JumpHeld=false | HumJump=false
+[8586.087039] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8587.329300] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-31.484341 | CanJump=true | JumpHeld=false | HumJump=false
+[8587.355755] >>> GROUND AUTO JUMP #31 | Hum=Enum.HumanoidStateType.Landed
+[8587.355821] ==================================================
+[8587.355840] ORIGINAL JumpReact | REASON=GROUND
+[8587.355864] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-32.317673
+[8587.355891] Humanoid.Jump = true
+[8587.356333] >>> AUTO RELEASE | JumpHeldDown=false
+[8587.356364] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -32.317673 -> -16.076235 | DeltaVy=16.241438 | CanJump=true | JumpHeld=false
+[8587.356384] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-16.076235
+[8587.364805] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8587.405572] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8588.045315] >>> GROUND AUTO JUMP #32 | Hum=Enum.HumanoidStateType.Freefall
+[8588.045403] ==================================================
+[8588.045424] ORIGINAL JumpReact | REASON=GROUND
+[8588.045448] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.429478
+[8588.045472] Humanoid.Jump = true
+[8588.045894] >>> AUTO RELEASE | JumpHeldDown=false
+[8588.045979] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -16.429478 -> 11.775014 | DeltaVy=28.204492 | CanJump=true | JumpHeld=false
+[8588.046028] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=11.775014
+[8588.055561] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.121353 | CanJump=true | JumpHeld=false | HumJump=false
+[8588.103609] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8588.753365] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-17.878401 | CanJump=true | JumpHeld=false | HumJump=false
+[8588.792272] >>> GROUND AUTO JUMP #33 | Hum=Enum.HumanoidStateType.Landed
+[8588.792337] ==================================================
+[8588.792379] ORIGINAL JumpReact | REASON=GROUND
+[8588.792401] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-19.545073
+[8588.792447] Humanoid.Jump = true
+[8588.792799] >>> AUTO RELEASE | JumpHeldDown=false
+[8588.792886] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -19.545073 -> -9.545119 | DeltaVy=9.999953 | CanJump=true | JumpHeld=false
+[8588.792931] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-9.545119
+[8588.797188] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.320507 | CanJump=true | JumpHeld=false | HumJump=false
+[8588.844545] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8589.530027] >>> GROUND AUTO JUMP #34 | Hum=Enum.HumanoidStateType.Freefall
+[8589.530228] ==================================================
+[8589.530258] ORIGINAL JumpReact | REASON=GROUND
+[8589.530279] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-0.554867
+[8589.530300] Humanoid.Jump = true
+[8589.530582] >>> AUTO RELEASE | JumpHeldDown=false
+[8589.530617] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -0.554867 -> 23.250702 | DeltaVy=23.805569 | CanJump=true | JumpHeld=false
+[8589.530640] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=23.250702
+[8589.538249] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=25.123018 | CanJump=true | JumpHeld=false | HumJump=false
+[8589.560494] STATE: Enum.HumanoidStateType.Climbing -> Enum.HumanoidStateType.Running | Grounded=true | Vy=16.380863 | CanJump=true | JumpHeld=false | HumJump=false
+[8591.105922] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8591.255500] >>> GROUND AUTO JUMP #35 | Hum=Enum.HumanoidStateType.Running
+[8591.255649] ==================================================
+[8591.255682] ORIGINAL JumpReact | REASON=GROUND
+[8591.255710] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-13.895396
+[8591.255751] Humanoid.Jump = true
+[8591.256058] >>> AUTO RELEASE | JumpHeldDown=false
+[8591.256104] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -13.895396 -> -14.312062 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8591.256127] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-14.312062
+[8591.266292] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903843 | CanJump=true | JumpHeld=false | HumJump=false
+[8591.271978] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8591.919982] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.804474 | CanJump=true | JumpHeld=false | HumJump=false
+[8591.961275] >>> GROUND AUTO JUMP #36 | Hum=Enum.HumanoidStateType.Landed
+[8591.961375] ==================================================
+[8591.961404] ORIGINAL JumpReact | REASON=GROUND
+[8591.961434] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471146
+[8591.961473] Humanoid.Jump = true
+[8591.961935] >>> AUTO RELEASE | JumpHeldDown=false
+[8591.961999] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -17.471146 -> -17.887814 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8591.962031] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.887814
+[8591.972558] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8591.978971] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8592.586829] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-13.512813 | CanJump=true | JumpHeld=false | HumJump=false
+[8592.636150] >>> GROUND AUTO JUMP #37 | Hum=Enum.HumanoidStateType.Running
+[8592.636234] ==================================================
+[8592.636263] ORIGINAL JumpReact | REASON=GROUND
+[8592.636294] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.596143
+[8592.636324] Humanoid.Jump = true
+[8592.636716] >>> AUTO RELEASE | JumpHeldDown=false
+[8592.636751] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -15.596143 -> -16.012810 | DeltaVy=-0.416667 | CanJump=true | JumpHeld=false
+[8592.636778] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-16.012810
+[8592.636802] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-16.012810 | CanJump=true | JumpHeld=false | HumJump=true
+[8592.669656] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8593.195370] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-10.387812 | CanJump=true | JumpHeld=false | HumJump=false
+[8593.244322] >>> GROUND AUTO JUMP #38 | Hum=Enum.HumanoidStateType.Running
+[8593.244382] ==================================================
+[8593.244396] ORIGINAL JumpReact | REASON=GROUND
+[8593.244417] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-12.471142
+[8593.244440] Humanoid.Jump = true
+[8593.244638] >>> AUTO RELEASE | JumpHeldDown=false
+[8593.244656] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -12.471142 -> -12.887808 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8593.244670] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-12.887808
+[8593.244687] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-12.887808 | CanJump=true | JumpHeld=false | HumJump=true
+[8593.269242] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8594.112707] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-25.804506 | CanJump=true | JumpHeld=false | HumJump=false
+[8594.136489] >>> GROUND AUTO JUMP #39 | Hum=Enum.HumanoidStateType.Landed
+[8594.136550] ==================================================
+[8594.136569] ORIGINAL JumpReact | REASON=GROUND
+[8594.136590] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-26.637842
+[8594.136611] Humanoid.Jump = true
+[8594.136816] >>> AUTO RELEASE | JumpHeldDown=false
+[8594.136842] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -26.637842 -> -27.054510 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8594.136860] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-27.054510
+[8594.147989] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=false
+[8594.160975] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8594.780161] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.554478 | CanJump=true | JumpHeld=false | HumJump=false
+[8594.826689] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-16.846146 | CanJump=true | JumpHeld=false | HumJump=false
+[8594.834999] >>> GROUND AUTO JUMP #40 | Hum=Enum.HumanoidStateType.Running
+[8594.835089] ==================================================
+[8594.835111] ORIGINAL JumpReact | REASON=GROUND
+[8594.835135] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846146
+[8594.835166] Humanoid.Jump = true
+[8594.835655] >>> AUTO RELEASE | JumpHeldDown=false
+[8594.835681] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.846146 -> -17.471148 | DeltaVy=-0.625002 | CanJump=true | JumpHeld=false
+[8594.835697] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.471148
+[8594.857385] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
+[8594.864511] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8595.477752] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.554478 | CanJump=true | JumpHeld=false | HumJump=false
+[8595.528427] >>> GROUND AUTO JUMP #41 | Hum=Enum.HumanoidStateType.Running
+[8595.528489] ==================================================
+[8595.528509] ORIGINAL JumpReact | REASON=GROUND
+[8595.528532] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637812
+[8595.528555] Humanoid.Jump = true
+[8595.528785] >>> AUTO RELEASE | JumpHeldDown=false
+[8595.528806] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.637812 -> -17.054480 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8595.528823] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.054480
+[8595.528841] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.054480 | CanJump=true | JumpHeld=false | HumJump=true
+[8595.552745] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8596.177981] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971140 | CanJump=true | JumpHeld=false | HumJump=false
+[8596.229205] >>> GROUND AUTO JUMP #42 | Hum=Enum.HumanoidStateType.Running
+[8596.229310] ==================================================
+[8596.229333] ORIGINAL JumpReact | REASON=GROUND
+[8596.229360] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054476
+[8596.229388] Humanoid.Jump = true
+[8596.229634] >>> AUTO RELEASE | JumpHeldDown=false
+[8596.229665] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054476 -> -17.471144 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8596.229684] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.471144
+[8596.229703] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.471144 | CanJump=true | JumpHeld=false | HumJump=true
+[8596.252708] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8596.870601] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.554478 | CanJump=true | JumpHeld=false | HumJump=false
+[8596.920295] >>> GROUND AUTO JUMP #43 | Hum=Enum.HumanoidStateType.Running
+[8596.920361] ==================================================
+[8596.920380] ORIGINAL JumpReact | REASON=GROUND
+[8596.920400] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637812
+[8596.920421] Humanoid.Jump = true
+[8596.920704] >>> AUTO RELEASE | JumpHeldDown=false
+[8596.920729] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.637812 -> -17.054480 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8596.920745] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.054480
+[8596.920761] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.054480 | CanJump=true | JumpHeld=false | HumJump=true
+[8596.944266] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8597.320799] >>> GROUND AUTO JUMP #44 | Hum=Enum.HumanoidStateType.Freefall
+[8597.320883] ==================================================
+[8597.320904] ORIGINAL JumpReact | REASON=GROUND
+[8597.320928] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=3.370214
+[8597.320956] Humanoid.Jump = true
+[8597.321326] >>> AUTO RELEASE | JumpHeldDown=false
+[8597.321412] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 3.370214 -> 13.186443 | DeltaVy=9.816229 | CanJump=true | JumpHeld=false
+[8597.321453] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=13.186443
+[8597.330044] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=18.192083 | CanJump=true | JumpHeld=false | HumJump=false
+[8597.352865] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Climbing | Grounded=true | Vy=6.618331 | CanJump=true | JumpHeld=false | HumJump=false
+[8597.453028] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8597.461743] >>> GROUND AUTO JUMP #45 | Hum=Enum.HumanoidStateType.Running
+[8597.461800] ==================================================
+[8597.461819] ORIGINAL JumpReact | REASON=GROUND
+[8597.461863] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-2.441888
+[8597.461891] Humanoid.Jump = true
+[8597.462192] >>> AUTO RELEASE | JumpHeldDown=false
+[8597.462320] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -2.441888 -> -3.379457 | DeltaVy=-0.937569 | CanJump=true | JumpHeld=false
+[8597.462363] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-3.379457
+[8597.470897] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8597.478253] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8598.110837] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
+[8598.161942] >>> GROUND AUTO JUMP #46 | Hum=Enum.HumanoidStateType.Running
+[8598.162067] ==================================================
+[8598.162095] ORIGINAL JumpReact | REASON=GROUND
+[8598.162131] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
+[8598.162174] Humanoid.Jump = true
+[8598.162645] >>> AUTO RELEASE | JumpHeldDown=false
+[8598.162679] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054478 -> -6.709343 | DeltaVy=10.345135 | CanJump=true | JumpHeld=false
+[8598.162700] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-6.709343
+[8598.162723] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-6.709343 | CanJump=true | JumpHeld=false | HumJump=true
+[8598.178489] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8598.843911] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-16.637812 | CanJump=true | JumpHeld=false | HumJump=false
+[8598.869732] >>> GROUND AUTO JUMP #47 | Hum=Enum.HumanoidStateType.Landed
+[8598.869795] ==================================================
+[8598.869813] ORIGINAL JumpReact | REASON=GROUND
+[8598.869833] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471148
+[8598.869854] Humanoid.Jump = true
+[8598.870064] >>> AUTO RELEASE | JumpHeldDown=false
+[8598.870089] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -17.471148 -> -17.887815 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8598.870107] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.887815
+[8598.879334] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8598.902831] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8599.637851] >>> GROUND AUTO JUMP #48 | Hum=Enum.HumanoidStateType.Landed
+[8599.637906] ==================================================
+[8599.637922] ORIGINAL JumpReact | REASON=GROUND
+[8599.637941] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.459952
+[8599.637958] Humanoid.Jump = true
+[8599.638226] >>> AUTO RELEASE | JumpHeldDown=false
+[8599.638248] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -15.459952 -> 0.281794 | DeltaVy=15.741746 | CanJump=true | JumpHeld=false
+[8599.638262] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=0.281794
+[8599.638288] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=true | Vy=0.281794 | CanJump=true | JumpHeld=false | HumJump=true
+[8599.693833] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8601.102863] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-46.340504 | CanJump=true | JumpHeld=false | HumJump=false
+[8601.119887] >>> GROUND AUTO JUMP #49 | Hum=Enum.HumanoidStateType.Landed
+[8601.119991] ==================================================
+[8601.120020] ORIGINAL JumpReact | REASON=GROUND
+[8601.120048] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-46.757168
+[8601.120078] Humanoid.Jump = true
+[8601.120559] >>> AUTO RELEASE | JumpHeldDown=false
+[8601.120633] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -46.757168 -> -10.802295 | DeltaVy=35.954873 | CanJump=true | JumpHeld=false
+[8601.120679] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-10.802295
+[8601.130425] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8601.153168] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8601.744547] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-13.721144 | CanJump=true | JumpHeld=false | HumJump=false
+[8601.795289] >>> GROUND AUTO JUMP #50 | Hum=Enum.HumanoidStateType.Running
+[8601.795394] ==================================================
+[8601.795420] ORIGINAL JumpReact | REASON=GROUND
+[8601.795452] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.804474
+[8601.795482] Humanoid.Jump = true
+[8601.795853] >>> AUTO RELEASE | JumpHeldDown=false
+[8601.795908] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -15.804474 -> -16.221142 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8601.795935] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-16.221142
+[8601.795961] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-16.221142 | CanJump=true | JumpHeld=false | HumJump=true
+[8601.811148] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8601.819038] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
+[8602.460795] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.596143 | CanJump=true | JumpHeld=false | HumJump=false
+[8602.502884] >>> GROUND AUTO JUMP #51 | Hum=Enum.HumanoidStateType.Landed
+[8602.502960] ==================================================
+[8602.502980] ORIGINAL JumpReact | REASON=GROUND
+[8602.503000] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
+[8602.503020] Humanoid.Jump = true
+[8602.503262] >>> AUTO RELEASE | JumpHeldDown=false
+[8602.503314] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -17.262814 -> -17.679482 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8602.503337] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.679482
+[8602.512420] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112181 | CanJump=true | JumpHeld=false | HumJump=false
+[8602.527361] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8602.578004] >>> GROUND AUTO JUMP #52 | Hum=Enum.HumanoidStateType.Freefall
+[8602.578036] ==================================================
+[8602.578048] ORIGINAL JumpReact | REASON=GROUND
+[8602.578066] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=14.403847
+[8602.578084] Humanoid.Jump = true
+[8602.578276] >>> AUTO RELEASE | JumpHeldDown=false
+[8602.578294] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 14.403847 -> 13.778848 | DeltaVy=-0.624999 | CanJump=true | JumpHeld=false
+[8602.578309] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=13.778848
+[8602.587530] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8602.610949] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8603.304150] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-18.721151 | CanJump=true | JumpHeld=false | HumJump=false
+[8603.338233] >>> GROUND AUTO JUMP #53 | Hum=Enum.HumanoidStateType.Landed
+[8603.338303] ==================================================
+[8603.338323] ORIGINAL JumpReact | REASON=GROUND
+[8603.338347] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-19.971155
+[8603.338382] Humanoid.Jump = true
+[8603.338612] >>> AUTO RELEASE | JumpHeldDown=false
+[8603.338651] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -19.971155 -> -20.387823 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8603.338670] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-20.387823
+[8603.347853] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=false
+[8603.354883] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8603.811267] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=1.243252 | CanJump=true | JumpHeld=false | HumJump=false
+[8603.819660] >>> GROUND AUTO JUMP #54 | Hum=Enum.HumanoidStateType.Landed
+[8603.819714] ==================================================
+[8603.819735] ORIGINAL JumpReact | REASON=GROUND
+[8603.819763] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=1.243792
+[8603.819786] Humanoid.Jump = true
+[8603.820195] >>> AUTO RELEASE | JumpHeldDown=false
+[8603.820231] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy 1.243792 -> 24.393538 | DeltaVy=23.149746 | CanJump=true | JumpHeld=false
+[8603.820252] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=24.393538
+[8603.830041] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8603.835769] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=28.001392 | CanJump=true | JumpHeld=false | HumJump=false
+[8603.844637] >>> GROUND AUTO JUMP #55 | Hum=Enum.HumanoidStateType.Freefall
+[8603.844698] ==================================================
+[8603.844720] ORIGINAL JumpReact | REASON=GROUND
+[8603.844744] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=28.001551
+[8603.844765] Humanoid.Jump = true
+[8603.845032] >>> AUTO RELEASE | JumpHeldDown=false
+[8603.845067] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 28.001551 -> 27.584774 | DeltaVy=-0.416777 | CanJump=true | JumpHeld=false
+[8603.845088] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=27.584774
+[8603.864071] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8603.865328] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=false | Vy=26.543108 | CanJump=true | JumpHeld=false | HumJump=false
+[8604.196613] >>> GROUND AUTO JUMP #56 | Hum=Enum.HumanoidStateType.Freefall
+[8604.196688] ==================================================
+[8604.196710] ORIGINAL JumpReact | REASON=GROUND
+[8604.196735] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=10.501445
+[8604.196759] Humanoid.Jump = true
+[8604.197074] >>> AUTO RELEASE | JumpHeldDown=false
+[8604.197099] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 10.501445 -> 10.084779 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8604.197114] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=10.084779
+[8604.205729] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8604.237613] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8604.644782] >>> GROUND AUTO JUMP #57 | Hum=Enum.HumanoidStateType.Freefall
+[8604.644901] ==================================================
+[8604.644957] ORIGINAL JumpReact | REASON=GROUND
+[8604.645009] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=10.140296
+[8604.645038] Humanoid.Jump = true
+[8604.645290] >>> AUTO RELEASE | JumpHeldDown=false
+[8604.645328] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 10.140296 -> 17.935390 | DeltaVy=7.795094 | CanJump=true | JumpHeld=false
+[8604.645350] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=17.935390
+[8604.654072] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=18.953621 | CanJump=true | JumpHeld=false | HumJump=false
+[8604.827334] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8604.963386] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-5.344206 | CanJump=true | JumpHeld=false | HumJump=false
+[8605.013019] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=4.035009 | CanJump=true | JumpHeld=false | HumJump=false
+[8605.137141] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=5.046591 | CanJump=true | JumpHeld=false | HumJump=false
+[8605.402279] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-8.286744 | CanJump=true | JumpHeld=false | HumJump=false
+[8605.451802] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-10.786740 | CanJump=true | JumpHeld=false | HumJump=false
+[8605.511281] >>> GROUND AUTO JUMP #58 | Hum=Enum.HumanoidStateType.Running
+[8605.511351] ==================================================
+[8605.511367] ORIGINAL JumpReact | REASON=GROUND
+[8605.511389] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-13.286736
+[8605.511414] Humanoid.Jump = true
+[8605.511746] >>> AUTO RELEASE | JumpHeldDown=false
+[8605.511789] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -13.286736 -> -13.703403 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8605.511812] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-13.703403
+[8605.521183] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=false
+[8605.527760] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8606.278084] >>> GROUND AUTO JUMP #59 | Hum=Enum.HumanoidStateType.Freefall
+[8606.278241] ==================================================
+[8606.278266] ORIGINAL JumpReact | REASON=GROUND
+[8606.278292] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-12.556949
+[8606.278319] Humanoid.Jump = true
+[8606.278669] >>> AUTO RELEASE | JumpHeldDown=false
+[8606.278710] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -12.556949 -> 0.491044 | DeltaVy=13.047993 | CanJump=true | JumpHeld=false
+[8606.278733] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=0.491044
+[8606.287919] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=18.800236 | CanJump=true | JumpHeld=false | HumJump=false
+[8606.345313] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8607.235939] >>> GROUND AUTO JUMP #60 | Hum=Enum.HumanoidStateType.Landed
+[8607.236032] ==================================================
+[8607.236054] ORIGINAL JumpReact | REASON=GROUND
+[8607.236078] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-22.398584
+[8607.236104] Humanoid.Jump = true
+[8607.236402] >>> AUTO RELEASE | JumpHeldDown=false
+[8607.236445] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -22.398584 -> -2.283278 | DeltaVy=20.115307 | CanJump=true | JumpHeld=false
+[8607.236467] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-2.283278
+[8607.236490] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=true | Vy=-2.283278 | CanJump=true | JumpHeld=false | HumJump=true
+[8607.252088] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8607.895351] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.387808 | CanJump=true | JumpHeld=false | HumJump=false
+[8607.937787] >>> GROUND AUTO JUMP #61 | Hum=Enum.HumanoidStateType.Landed
+[8607.937865] ==================================================
+[8607.937891] ORIGINAL JumpReact | REASON=GROUND
+[8607.937912] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
+[8607.937936] Humanoid.Jump = true
+[8607.938184] >>> AUTO RELEASE | JumpHeldDown=false
+[8607.938212] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -17.054478 -> -8.871610 | DeltaVy=8.182868 | CanJump=true | JumpHeld=false
+[8607.938230] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-8.871610
+[8607.947119] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8607.947308] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=false | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8608.655935] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-18.512815 | CanJump=true | JumpHeld=false | HumJump=false
+[8608.696595] >>> GROUND AUTO JUMP #62 | Hum=Enum.HumanoidStateType.Landed
+[8608.696657] ==================================================
+[8608.696672] ORIGINAL JumpReact | REASON=GROUND
+[8608.696689] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.179487
+[8608.696707] Humanoid.Jump = true
+[8608.697979] >>> AUTO RELEASE | JumpHeldDown=false
+[8608.698025] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -20.179487 -> -20.387821 | DeltaVy=-0.208334 | CanJump=true | JumpHeld=false
+[8608.698051] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-20.387821
+[8608.703512] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=false
+[8608.729279] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8609.403374] >>> GROUND AUTO JUMP #63 | Hum=Enum.HumanoidStateType.Landed
+[8609.403488] ==================================================
+[8609.403524] ORIGINAL JumpReact | REASON=GROUND
+[8609.403553] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-4.869741
+[8609.403589] Humanoid.Jump = true
+[8609.404116] >>> AUTO RELEASE | JumpHeldDown=false
+[8609.404174] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -4.869741 -> 23.037050 | DeltaVy=27.906792 | CanJump=true | JumpHeld=false
+[8609.404199] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=23.037050
+[8609.404227] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=true | Vy=23.037050 | CanJump=true | JumpHeld=false | HumJump=true
+[8609.452463] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8610.260731] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-19.878637 | CanJump=true | JumpHeld=false | HumJump=false
+[8610.311455] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-22.378645 | CanJump=true | JumpHeld=false | HumJump=false
+[8610.386148] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=-26.128656 | CanJump=true | JumpHeld=false | HumJump=false
+[8610.753902] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-44.461933 | CanJump=true | JumpHeld=false | HumJump=false
+[8610.769197] >>> GROUND AUTO JUMP #64 | Hum=Enum.HumanoidStateType.Landed
+[8610.769239] ==================================================
+[8610.769254] ORIGINAL JumpReact | REASON=GROUND
+[8610.769271] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-44.878597
+[8610.769288] Humanoid.Jump = true
+[8610.769507] >>> AUTO RELEASE | JumpHeldDown=false
+[8610.769558] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -44.878597 -> -10.573019 | DeltaVy=34.305578 | CanJump=true | JumpHeld=false
+[8610.769584] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-10.573019
+[8610.779960] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8610.802502] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8611.404911] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.137812 | CanJump=true | JumpHeld=false | HumJump=false
+[8611.456244] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-11.239179 | CanJump=true | JumpHeld=false | HumJump=false
+[8611.465627] >>> GROUND AUTO JUMP #65 | Hum=Enum.HumanoidStateType.Running
+[8611.465750] ==================================================
+[8611.465795] ORIGINAL JumpReact | REASON=GROUND
+[8611.465820] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-11.239179
+[8611.465844] Humanoid.Jump = true
+[8611.466862] >>> AUTO RELEASE | JumpHeldDown=false
+[8611.466900] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -11.239179 -> -2.486859 | DeltaVy=8.752319 | CanJump=true | JumpHeld=false
+[8611.466932] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-2.486859
+[8611.477497] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.903843 | CanJump=true | JumpHeld=false | HumJump=false
+[8611.490238] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8612.093703] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-13.929477 | CanJump=true | JumpHeld=false | HumJump=false
+[8612.119765] >>> GROUND AUTO JUMP #66 | Hum=Enum.HumanoidStateType.Landed
+[8612.119885] ==================================================
+[8612.119920] ORIGINAL JumpReact | REASON=GROUND
+[8612.119947] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-14.762809
+[8612.119971] Humanoid.Jump = true
+[8612.120213] >>> AUTO RELEASE | JumpHeldDown=false
+[8612.120250] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -14.762809 -> -15.179475 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8612.120274] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-15.179475
+[8612.129123] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8612.330598] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8614.088551] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-13.293282 | CanJump=true | JumpHeld=false | HumJump=false
+[8614.136418] >>> GROUND AUTO JUMP #67 | Hum=Enum.HumanoidStateType.Running
+[8614.136489] ==================================================
+[8614.136506] ORIGINAL JumpReact | REASON=GROUND
+[8614.136533] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-15.376612
+[8614.136563] Humanoid.Jump = true
+[8614.136925] >>> AUTO RELEASE | JumpHeldDown=false
+[8614.136962] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -15.376612 -> -15.793278 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8614.136986] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-15.793278
+[8614.137018] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-15.793278 | CanJump=true | JumpHeld=false | HumJump=true
+[8614.152413] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8614.161134] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
+[8614.794192] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
+[8614.844311] >>> GROUND AUTO JUMP #68 | Hum=Enum.HumanoidStateType.Running
+[8614.844360] ==================================================
+[8614.844377] ORIGINAL JumpReact | REASON=GROUND
+[8614.844398] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
+[8614.844420] Humanoid.Jump = true
+[8614.844701] >>> AUTO RELEASE | JumpHeldDown=false
+[8614.844729] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.262814 -> -17.679482 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8614.844749] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.679482
+[8614.844769] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.679482 | CanJump=true | JumpHeld=false | HumJump=true
+[8614.869517] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=true | Vy=-1.650573 | CanJump=true | JumpHeld=false | HumJump=false
+[8614.919234] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=2.934369 | CanJump=true | JumpHeld=false | HumJump=false
+[8616.563860] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=false | JumpHeld=true | HumJump=false
+[8616.585850] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8617.196709] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.554476 | CanJump=true | JumpHeld=false | HumJump=false
+[8617.243616] >>> GROUND AUTO JUMP #69 | Hum=Enum.HumanoidStateType.Running
+[8617.243679] ==================================================
+[8617.243697] ORIGINAL JumpReact | REASON=GROUND
+[8617.243715] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637810
+[8617.243734] Humanoid.Jump = true
+[8617.243900] >>> AUTO RELEASE | JumpHeldDown=false
+[8617.243923] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.637810 -> -17.054478 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8617.243935] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Idle | Reg=Idle | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.054478
+[8617.243948] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.054478 | CanJump=true | JumpHeld=false | HumJump=true
+[8617.268355] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8617.897178] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
+[8617.939972] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-17.262812 | CanJump=true | JumpHeld=false | HumJump=false
+[8617.948231] >>> GROUND AUTO JUMP #70 | Hum=Enum.HumanoidStateType.Running
+[8617.948319] ==================================================
+[8617.948347] ORIGINAL JumpReact | REASON=GROUND
+[8617.948373] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262812
+[8617.948400] Humanoid.Jump = true
+[8617.948718] >>> AUTO RELEASE | JumpHeldDown=false
+[8617.948760] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.262812 -> -17.679480 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8617.948784] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.679480
+[8617.962704] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.903845 | CanJump=true | JumpHeld=false | HumJump=false
+[8617.980612] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8618.460305] >>> GROUND AUTO JUMP #71 | Hum=Enum.HumanoidStateType.Freefall
+[8618.460372] ==================================================
+[8618.460388] ORIGINAL JumpReact | REASON=GROUND
+[8618.460409] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-7.679484
+[8618.460431] Humanoid.Jump = true
+[8618.460729] >>> AUTO RELEASE | JumpHeldDown=false
+[8618.460761] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -7.679484 -> 10.618609 | DeltaVy=18.298093 | CanJump=true | JumpHeld=false
+[8618.460782] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=10.618609
+[8618.470770] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=23.732521 | CanJump=true | JumpHeld=false | HumJump=false
+[8618.502607] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Climbing | Grounded=true | Vy=11.282249 | CanJump=true | JumpHeld=false | HumJump=false
+[8618.560108] STATE: Enum.HumanoidStateType.Climbing -> Enum.HumanoidStateType.Running | Grounded=true | Vy=13.157804 | CanJump=true | JumpHeld=false | HumJump=false
+[8619.144048] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8619.260924] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=0.331529 | CanJump=true | JumpHeld=false | HumJump=false
+[8619.706228] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-21.960146 | CanJump=true | JumpHeld=false | HumJump=false
+[8619.728992] >>> GROUND AUTO JUMP #72 | Hum=Enum.HumanoidStateType.Landed
+[8619.729079] ==================================================
+[8619.729102] ORIGINAL JumpReact | REASON=GROUND
+[8619.729125] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-22.585148
+[8619.729151] Humanoid.Jump = true
+[8619.729539] >>> AUTO RELEASE | JumpHeldDown=false
+[8619.729584] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -22.585148 -> -23.001816 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8619.729608] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-23.001816
+[8619.739967] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903843 | CanJump=true | JumpHeld=false | HumJump=false
+[8619.754315] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8620.368546] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.554476 | CanJump=true | JumpHeld=false | HumJump=false
+[8620.410120] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-16.637810 | CanJump=true | JumpHeld=false | HumJump=false
+[8620.419922] >>> GROUND AUTO JUMP #73 | Hum=Enum.HumanoidStateType.Running
+[8620.420005] ==================================================
+[8620.420026] ORIGINAL JumpReact | REASON=GROUND
+[8620.420057] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637810
+[8620.420089] Humanoid.Jump = true
+[8620.420562] >>> AUTO RELEASE | JumpHeldDown=false
+[8620.420655] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.637810 -> -17.054478 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8620.420700] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.054478
+[8620.435316] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=false
+[8620.444116] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8621.068079] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.762809 | CanJump=true | JumpHeld=false | HumJump=false
+[8621.110549] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-17.054478 | CanJump=true | JumpHeld=false | HumJump=false
+[8621.119156] >>> GROUND AUTO JUMP #74 | Hum=Enum.HumanoidStateType.Running
+[8621.119237] ==================================================
+[8621.119263] ORIGINAL JumpReact | REASON=GROUND
+[8621.119287] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
+[8621.119311] Humanoid.Jump = true
+[8621.120773] >>> AUTO RELEASE | JumpHeldDown=false
+[8621.120837] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054478 -> -17.471146 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8621.120863] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.471146
+[8621.136052] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.695509 | CanJump=true | JumpHeld=false | HumJump=false
+[8621.143829] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8621.776737] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.387808 | CanJump=true | JumpHeld=false | HumJump=false
+[8621.818493] >>> GROUND AUTO JUMP #75 | Hum=Enum.HumanoidStateType.Running
+[8621.818558] ==================================================
+[8621.818576] ORIGINAL JumpReact | REASON=GROUND
+[8621.818597] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
+[8621.818620] Humanoid.Jump = true
+[8621.818864] >>> AUTO RELEASE | JumpHeldDown=false
+[8621.818895] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054478 -> -17.471146 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8621.818916] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.471146
+[8621.818935] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.471146 | CanJump=true | JumpHeld=false | HumJump=true
+[8621.843536] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8622.336413] >>> GROUND AUTO JUMP #76 | Hum=Enum.HumanoidStateType.Freefall
+[8622.336486] ==================================================
+[8622.336505] ORIGINAL JumpReact | REASON=GROUND
+[8622.336531] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-4.611693
+[8622.336564] Humanoid.Jump = true
+[8622.336973] >>> AUTO RELEASE | JumpHeldDown=false
+[8622.337024] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy -4.611693 -> 6.671772 | DeltaVy=11.283465 | CanJump=true | JumpHeld=false
+[8622.337048] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=6.671772
+[8622.345113] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=20.281260 | CanJump=true | JumpHeld=false | HumJump=false
+[8622.380367] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Climbing | Grounded=true | Vy=19.192099 | CanJump=true | JumpHeld=false | HumJump=false
+[8622.422629] STATE: Enum.HumanoidStateType.Climbing -> Enum.HumanoidStateType.Running | Grounded=true | Vy=18.689545 | CanJump=true | JumpHeld=false | HumJump=false
+[8622.859768] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8622.976770] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=-1.292846 | CanJump=true | JumpHeld=false | HumJump=false
+[8623.719020] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-38.376179 | CanJump=true | JumpHeld=false | HumJump=false
+[8623.735282] >>> GROUND AUTO JUMP #77 | Hum=Enum.HumanoidStateType.Landed
+[8623.735362] ==================================================
+[8623.735389] ORIGINAL JumpReact | REASON=GROUND
+[8623.735412] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-38.792843
+[8623.735437] Humanoid.Jump = true
+[8623.735744] >>> AUTO RELEASE | JumpHeldDown=false
+[8623.735797] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -38.792843 -> -9.181323 | DeltaVy=29.611520 | CanJump=true | JumpHeld=false
+[8623.735832] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-9.181323
+[8623.745572] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.320509 | CanJump=true | JumpHeld=false | HumJump=false
+[8623.776835] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8624.378854] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.346145 | CanJump=true | JumpHeld=false | HumJump=false
+[8624.429210] >>> GROUND AUTO JUMP #78 | Hum=Enum.HumanoidStateType.Running
+[8624.429258] ==================================================
+[8624.429275] ORIGINAL JumpReact | REASON=GROUND
+[8624.429294] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.429478
+[8624.429314] Humanoid.Jump = true
+[8624.429514] >>> AUTO RELEASE | JumpHeldDown=false
+[8624.429533] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.429478 -> -8.887120 | DeltaVy=7.542357 | CanJump=true | JumpHeld=false
+[8624.429547] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-8.887120
+[8624.429562] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-8.887120 | CanJump=true | JumpHeld=false | HumJump=true
+[8624.454174] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8625.085538] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.387808 | CanJump=true | JumpHeld=false | HumJump=false
+[8625.132151] >>> GROUND AUTO JUMP #79 | Hum=Enum.HumanoidStateType.Running
+[8625.132271] ==================================================
+[8625.132300] ORIGINAL JumpReact | REASON=GROUND
+[8625.132327] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.471146
+[8625.132357] Humanoid.Jump = true
+[8625.132733] >>> AUTO RELEASE | JumpHeldDown=false
+[8625.132782] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.471146 -> -17.679480 | DeltaVy=-0.208334 | CanJump=true | JumpHeld=false
+[8625.132807] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.679480
+[8625.132829] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.679480 | CanJump=true | JumpHeld=false | HumJump=true
+[8625.155763] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8625.768843] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.346141 | CanJump=true | JumpHeld=false | HumJump=false
+[8625.818694] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-16.846142 | CanJump=true | JumpHeld=false | HumJump=false
+[8625.828680] >>> GROUND AUTO JUMP #80 | Hum=Enum.HumanoidStateType.Running
+[8625.828745] ==================================================
+[8625.828763] ORIGINAL JumpReact | REASON=GROUND
+[8625.828787] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846142
+[8625.828812] Humanoid.Jump = true
+[8625.829213] >>> AUTO RELEASE | JumpHeldDown=false
+[8625.829284] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.846142 -> -4.275753 | DeltaVy=12.570388 | CanJump=true | JumpHeld=false
+[8625.829315] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-4.275753
+[8625.843422] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
+[8625.852433] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8626.476021] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.762811 | CanJump=true | JumpHeld=false | HumJump=false
+[8626.517439] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-16.846146 | CanJump=true | JumpHeld=false | HumJump=false
+[8626.527637] >>> GROUND AUTO JUMP #81 | Hum=Enum.HumanoidStateType.Running
+[8626.527698] ==================================================
+[8626.527731] ORIGINAL JumpReact | REASON=GROUND
+[8626.527752] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846146
+[8626.527774] Humanoid.Jump = true
+[8626.528098] >>> AUTO RELEASE | JumpHeldDown=false
+[8626.528139] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.846146 -> -9.115371 | DeltaVy=7.730775 | CanJump=true | JumpHeld=false
+[8626.528162] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-9.115371
+[8626.551619] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8626.551973] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
+[8627.187258] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.179477 | CanJump=true | JumpHeld=false | HumJump=false
+[8627.236833] >>> GROUND AUTO JUMP #82 | Hum=Enum.HumanoidStateType.Running
+[8627.236899] ==================================================
+[8627.236918] ORIGINAL JumpReact | REASON=GROUND
+[8627.236937] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262814
+[8627.236960] Humanoid.Jump = true
+[8627.237239] >>> AUTO RELEASE | JumpHeldDown=false
+[8627.237259] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.262814 -> -8.663644 | DeltaVy=8.599170 | CanJump=true | JumpHeld=false
+[8627.237273] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-8.663644
+[8627.237288] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-8.663644 | CanJump=true | JumpHeld=false | HumJump=true
+[8627.262255] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8627.270359] >>> GROUND AUTO JUMP #83 | Hum=Enum.HumanoidStateType.Freefall
+[8627.270422] ==================================================
+[8627.270440] ORIGINAL JumpReact | REASON=GROUND
+[8627.270458] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=14.648834
+[8627.270479] Humanoid.Jump = true
+[8627.270774] >>> AUTO RELEASE | JumpHeldDown=false
+[8627.270795] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 14.648834 -> 14.887924 | DeltaVy=0.239090 | CanJump=true | JumpHeld=false
+[8627.270808] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=14.887924
+[8627.279876] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8627.280149] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=false | Vy=18.427351 | CanJump=true | JumpHeld=false | HumJump=false
+[8627.286942] >>> GROUND AUTO JUMP #84 | Hum=Enum.HumanoidStateType.Freefall
+[8627.286994] ==================================================
+[8627.287010] ORIGINAL JumpReact | REASON=GROUND
+[8627.287026] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=18.427885
+[8627.287043] Humanoid.Jump = true
+[8627.287300] >>> AUTO RELEASE | JumpHeldDown=false
+[8627.287345] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 18.427885 -> 18.011141 | DeltaVy=-0.416744 | CanJump=true | JumpHeld=false
+[8627.287366] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=18.011141
+[8627.302755] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8627.302957] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=17.177919 | CanJump=true | JumpHeld=false | HumJump=false
+[8628.020652] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-18.655418 | CanJump=true | JumpHeld=false | HumJump=false
+[8628.061541] >>> GROUND AUTO JUMP #85 | Hum=Enum.HumanoidStateType.Running
+[8628.061587] ==================================================
+[8628.061600] ORIGINAL JumpReact | REASON=GROUND
+[8628.061617] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.322090
+[8628.061635] Humanoid.Jump = true
+[8628.061822] >>> AUTO RELEASE | JumpHeldDown=false
+[8628.061847] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -20.322090 -> -10.159818 | DeltaVy=10.162272 | CanJump=true | JumpHeld=false
+[8628.061864] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-10.159818
+[8628.061880] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-10.159818 | CanJump=true | JumpHeld=false | HumJump=true
+[8628.086424] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8628.701896] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.554476 | CanJump=true | JumpHeld=false | HumJump=false
+[8628.752256] >>> GROUND AUTO JUMP #86 | Hum=Enum.HumanoidStateType.Running
+[8628.752351] ==================================================
+[8628.752374] ORIGINAL JumpReact | REASON=GROUND
+[8628.752410] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.429476
+[8628.752444] Humanoid.Jump = true
+[8628.752885] >>> AUTO RELEASE | JumpHeldDown=false
+[8628.752951] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.429476 -> -4.053705 | DeltaVy=12.375771 | CanJump=true | JumpHeld=false
+[8628.752979] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-4.053705
+[8628.753006] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-4.053705 | CanJump=true | JumpHeld=false | HumJump=true
+[8628.784604] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8629.401816] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971144 | CanJump=true | JumpHeld=false | HumJump=false
+[8629.451806] >>> GROUND AUTO JUMP #87 | Hum=Enum.HumanoidStateType.Running
+[8629.451889] ==================================================
+[8629.451917] ORIGINAL JumpReact | REASON=GROUND
+[8629.451941] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054480
+[8629.451968] Humanoid.Jump = true
+[8629.452364] >>> AUTO RELEASE | JumpHeldDown=false
+[8629.452421] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054480 -> -8.693322 | DeltaVy=8.361157 | CanJump=true | JumpHeld=false
+[8629.452448] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-8.693322
+[8629.452470] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-8.693322 | CanJump=true | JumpHeld=false | HumJump=true
+[8629.484773] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8629.986769] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-9.137817 | CanJump=true | JumpHeld=false | HumJump=false
+[8630.037900] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-11.637814 | CanJump=true | JumpHeld=false | HumJump=false
+[8630.152029] >>> GROUND AUTO JUMP #88 | Hum=Enum.HumanoidStateType.Running
+[8630.152085] ==================================================
+[8630.152103] ORIGINAL JumpReact | REASON=GROUND
+[8630.152123] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.846144
+[8630.152146] Humanoid.Jump = true
+[8630.152347] >>> AUTO RELEASE | JumpHeldDown=false
+[8630.152370] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.846144 -> -11.473555 | DeltaVy=5.372589 | CanJump=true | JumpHeld=false
+[8630.152387] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-11.473555
+[8630.161130] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8630.168879] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8630.813328] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=false
+[8630.853835] >>> GROUND AUTO JUMP #89 | Hum=Enum.HumanoidStateType.Landed
+[8630.853914] ==================================================
+[8630.853951] ORIGINAL JumpReact | REASON=GROUND
+[8630.853975] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054480
+[8630.853998] Humanoid.Jump = true
+[8630.854220] >>> AUTO RELEASE | JumpHeldDown=false
+[8630.854245] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -17.054480 -> -17.471148 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8630.854258] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.471148
+[8630.863024] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8630.878336] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8631.493155] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.346145 | CanJump=true | JumpHeld=false | HumJump=false
+[8631.535008] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-16.429478 | CanJump=true | JumpHeld=false | HumJump=false
+[8631.545065] >>> GROUND AUTO JUMP #90 | Hum=Enum.HumanoidStateType.Running
+[8631.545172] ==================================================
+[8631.545211] ORIGINAL JumpReact | REASON=GROUND
+[8631.545241] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.429478
+[8631.545270] Humanoid.Jump = true
+[8631.545746] >>> AUTO RELEASE | JumpHeldDown=false
+[8631.545810] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.429478 -> -9.048606 | DeltaVy=7.380872 | CanJump=true | JumpHeld=false
+[8631.545838] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-9.048606
+[8631.568982] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8631.569636] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=16.487173 | CanJump=true | JumpHeld=false | HumJump=false
+[8631.610663] >>> GROUND AUTO JUMP #91 | Hum=Enum.HumanoidStateType.Freefall
+[8631.610744] ==================================================
+[8631.610767] ORIGINAL JumpReact | REASON=GROUND
+[8631.610792] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=14.820507
+[8631.610819] Humanoid.Jump = true
+[8631.611132] >>> AUTO RELEASE | JumpHeldDown=false
+[8631.611166] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 14.820507 -> 14.403841 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8631.611188] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=14.403841
+[8631.620744] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8631.654586] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8632.334481] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-18.512817 | CanJump=true | JumpHeld=false | HumJump=false
+[8632.368628] >>> GROUND AUTO JUMP #92 | Hum=Enum.HumanoidStateType.Landed
+[8632.368703] ==================================================
+[8632.368725] ORIGINAL JumpReact | REASON=GROUND
+[8632.368748] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-19.971155
+[8632.368772] Humanoid.Jump = true
+[8632.369052] >>> AUTO RELEASE | JumpHeldDown=false
+[8632.369084] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -19.971155 -> -10.868661 | DeltaVy=9.102494 | CanJump=true | JumpHeld=false
+[8632.369105] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-10.868661
+[8632.378542] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8632.402063] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8633.018009] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.762809 | CanJump=true | JumpHeld=false | HumJump=false
+[8633.027367] >>> GROUND AUTO JUMP #93 | Hum=Enum.HumanoidStateType.Landed
+[8633.027432] ==================================================
+[8633.027449] ORIGINAL JumpReact | REASON=GROUND
+[8633.027467] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-14.762809
+[8633.027487] Humanoid.Jump = true
+[8633.027719] >>> AUTO RELEASE | JumpHeldDown=false
+[8633.027748] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -14.762809 -> -15.387808 | DeltaVy=-0.624999 | CanJump=true | JumpHeld=false
+[8633.027768] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-15.387808
+[8633.042752] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.903841 | CanJump=true | JumpHeld=false | HumJump=false
+[8633.093272] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8633.719333] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-17.054480 | CanJump=true | JumpHeld=false | HumJump=false
+[8633.762155] >>> GROUND AUTO JUMP #94 | Hum=Enum.HumanoidStateType.Landed
+[8633.762216] ==================================================
+[8633.762231] ORIGINAL JumpReact | REASON=GROUND
+[8633.762250] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-18.721151
+[8633.762266] Humanoid.Jump = true
+[8633.762460] >>> AUTO RELEASE | JumpHeldDown=false
+[8633.762490] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -18.721151 -> -9.926168 | DeltaVy=8.794983 | CanJump=true | JumpHeld=false
+[8633.762506] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-9.926168
+[8633.771692] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8633.786713] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8634.410019] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.971142 | CanJump=true | JumpHeld=false | HumJump=false
+[8634.455163] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-17.054478 | CanJump=true | JumpHeld=false | HumJump=false
+[8634.464281] >>> GROUND AUTO JUMP #95 | Hum=Enum.HumanoidStateType.Running
+[8634.464399] ==================================================
+[8634.464436] ORIGINAL JumpReact | REASON=GROUND
+[8634.464461] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.054478
+[8634.464490] Humanoid.Jump = true
+[8634.464808] >>> AUTO RELEASE | JumpHeldDown=false
+[8634.464832] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.054478 -> -3.694613 | DeltaVy=13.359864 | CanJump=true | JumpHeld=false
+[8634.464847] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-3.694613
+[8634.488548] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.487175 | CanJump=true | JumpHeld=false | HumJump=false
+[8634.495940] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8634.512724] >>> GROUND AUTO JUMP #96 | Hum=Enum.HumanoidStateType.Freefall
+[8634.512823] ==================================================
+[8634.512850] ORIGINAL JumpReact | REASON=GROUND
+[8634.512871] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=15.653841
+[8634.512894] Humanoid.Jump = true
+[8634.513270] >>> AUTO RELEASE | JumpHeldDown=false
+[8634.513308] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 15.653841 -> 40.199532 | DeltaVy=24.545691 | CanJump=true | JumpHeld=false
+[8634.513339] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=40.199532
+[8634.519863] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8634.520236] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=false | Vy=39.783005 | CanJump=true | JumpHeld=false | HumJump=false
+[8634.529251] >>> GROUND AUTO JUMP #97 | Hum=Enum.HumanoidStateType.Freefall
+[8634.529312] ==================================================
+[8634.529328] ORIGINAL JumpReact | REASON=GROUND
+[8634.529347] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=39.782986
+[8634.529364] Humanoid.Jump = true
+[8634.529663] >>> AUTO RELEASE | JumpHeldDown=false
+[8634.529688] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 39.782986 -> 39.366264 | DeltaVy=-0.416721 | CanJump=true | JumpHeld=false
+[8634.529704] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=39.366264
+[8634.537504] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8634.544236] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=38.532909 | CanJump=true | JumpHeld=false | HumJump=false
+[8636.126600] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-40.425419 | CanJump=true | JumpHeld=false | HumJump=false
+[8636.144266] >>> GROUND AUTO JUMP #98 | Hum=Enum.HumanoidStateType.Landed
+[8636.144377] ==================================================
+[8636.144402] ORIGINAL JumpReact | REASON=GROUND
+[8636.144429] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-41.050415
+[8636.144456] Humanoid.Jump = true
+[8636.144929] >>> AUTO RELEASE | JumpHeldDown=false
+[8636.144979] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -41.050415 -> -20.578035 | DeltaVy=20.472380 | CanJump=true | JumpHeld=false
+[8636.145003] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-20.578035
+[8636.153425] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=false
+[8636.176745] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8636.784414] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-14.346141 | CanJump=true | JumpHeld=false | HumJump=false
+[8636.826116] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-16.429474 | CanJump=true | JumpHeld=false | HumJump=false
+[8636.835926] >>> GROUND AUTO JUMP #99 | Hum=Enum.HumanoidStateType.Running
+[8636.835989] ==================================================
+[8636.836011] ORIGINAL JumpReact | REASON=GROUND
+[8636.836046] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.429474
+[8636.836078] Humanoid.Jump = true
+[8636.836583] >>> AUTO RELEASE | JumpHeldDown=false
+[8636.836616] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.429474 -> -4.601643 | DeltaVy=11.827831 | CanJump=true | JumpHeld=false
+[8636.836638] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-4.601643
+[8636.852411] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=16.695507 | CanJump=true | JumpHeld=false | HumJump=false
+[8636.859768] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8636.918507] >>> GROUND AUTO JUMP #100 | Hum=Enum.HumanoidStateType.Freefall
+[8636.918600] ==================================================
+[8636.918626] ORIGINAL JumpReact | REASON=GROUND
+[8636.918652] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=13.987175
+[8636.918675] Humanoid.Jump = true
+[8636.918959] >>> AUTO RELEASE | JumpHeldDown=false
+[8636.919002] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 13.987175 -> 13.362176 | DeltaVy=-0.624999 | CanJump=true | JumpHeld=false
+[8636.919027] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=13.362176
+[8636.928126] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8636.951474] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8637.651572] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-18.929485 | CanJump=true | JumpHeld=false | HumJump=false
+[8637.684990] >>> GROUND AUTO JUMP #101 | Hum=Enum.HumanoidStateType.Landed
+[8637.685065] ==================================================
+[8637.685086] ORIGINAL JumpReact | REASON=GROUND
+[8637.685109] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-20.179489
+[8637.685134] Humanoid.Jump = true
+[8637.685359] >>> AUTO RELEASE | JumpHeldDown=false
+[8637.685397] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -20.179489 -> -10.879303 | DeltaVy=9.300186 | CanJump=true | JumpHeld=false
+[8637.685419] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-10.879303
+[8637.694062] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112177 | CanJump=true | JumpHeld=false | HumJump=false
+[8637.717924] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8638.226284] >>> GROUND AUTO JUMP #102 | Hum=Enum.HumanoidStateType.Freefall
+[8638.226387] ==================================================
+[8638.226405] ORIGINAL JumpReact | REASON=GROUND
+[8638.226425] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=1.648271
+[8638.226445] Humanoid.Jump = true
+[8638.226753] >>> AUTO RELEASE | JumpHeldDown=false
+[8638.226818] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 1.648271 -> 5.608125 | DeltaVy=3.959854 | CanJump=true | JumpHeld=false
+[8638.226857] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=5.608125
+[8638.239103] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=24.853767 | CanJump=true | JumpHeld=false | HumJump=false
+[8638.245196] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8638.278485] >>> GROUND AUTO JUMP #103 | Hum=Enum.HumanoidStateType.Freefall
+[8638.278561] ==================================================
+[8638.278584] ORIGINAL JumpReact | REASON=GROUND
+[8638.278602] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=24.671894
+[8638.278623] Humanoid.Jump = true
+[8638.278884] >>> AUTO RELEASE | JumpHeldDown=false
+[8638.278924] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 24.671894 -> 24.255238 | DeltaVy=-0.416656 | CanJump=true | JumpHeld=false
+[8638.278943] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=24.255238
+[8638.288039] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8638.288837] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=false | Vy=23.838577 | CanJump=true | JumpHeld=false | HumJump=false
+[8638.718712] >>> GROUND AUTO JUMP #104 | Hum=Enum.HumanoidStateType.Freefall
+[8638.718797] ==================================================
+[8638.718822] ORIGINAL JumpReact | REASON=GROUND
+[8638.718846] BEFORE | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=2.588567
+[8638.718867] Humanoid.Jump = true
+[8638.719199] >>> AUTO RELEASE | JumpHeldDown=false
+[8638.719274] JumpReact RETURNED | State Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Freefall | Vy 2.588567 -> 2.171901 | DeltaVy=-0.416667 | CanJump=true | JumpHeld=false
+[8638.719310] AFTER | Hum=Enum.HumanoidStateType.Freefall | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=2.171901
+[8638.728329] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8638.809976] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8639.286133] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-10.804483 | CanJump=true | JumpHeld=false | HumJump=false
+[8639.335970] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=false | Vy=-13.304480 | CanJump=true | JumpHeld=false | HumJump=false
+[8639.352963] >>> GROUND AUTO JUMP #105 | Hum=Enum.HumanoidStateType.Running
+[8639.353029] ==================================================
+[8639.353049] ORIGINAL JumpReact | REASON=GROUND
+[8639.353071] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-13.721146
+[8639.353092] Humanoid.Jump = true
+[8639.353339] >>> AUTO RELEASE | JumpHeldDown=false
+[8639.353380] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -13.721146 -> -14.137812 | DeltaVy=-0.416666 | CanJump=true | JumpHeld=false
+[8639.353401] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-14.137812
+[8639.363058] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8639.376316] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8640.010654] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.387810 | CanJump=true | JumpHeld=false | HumJump=false
+[8640.045043] >>> GROUND AUTO JUMP #106 | Hum=Enum.HumanoidStateType.Landed
+[8640.045121] ==================================================
+[8640.045138] ORIGINAL JumpReact | REASON=GROUND
+[8640.045159] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637812
+[8640.045193] Humanoid.Jump = true
+[8640.045565] >>> AUTO RELEASE | JumpHeldDown=false
+[8640.045621] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -16.637812 -> -17.054480 | DeltaVy=-0.416668 | CanJump=true | JumpHeld=false
+[8640.045652] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.054480
+[8640.055378] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112179 | CanJump=true | JumpHeld=false | HumJump=false
+[8640.061459] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8640.710069] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.596139 | CanJump=true | JumpHeld=false | HumJump=false
+[8640.752465] >>> GROUND AUTO JUMP #107 | Hum=Enum.HumanoidStateType.Running
+[8640.752546] ==================================================
+[8640.752571] ORIGINAL JumpReact | REASON=GROUND
+[8640.752595] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-17.262810
+[8640.752623] Humanoid.Jump = true
+[8640.752982] >>> AUTO RELEASE | JumpHeldDown=false
+[8640.753044] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -17.262810 -> -17.887812 | DeltaVy=-0.625002 | CanJump=true | JumpHeld=false
+[8640.753072] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-17.887812
+[8640.753095] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-17.887812 | CanJump=true | JumpHeld=false | HumJump=true
+[8640.776730] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8641.203597] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-3.174013 | CanJump=true | JumpHeld=false | HumJump=false
+[8641.210271] >>> GROUND AUTO JUMP #108 | Hum=Enum.HumanoidStateType.Landed
+[8641.210320] ==================================================
+[8641.210344] ORIGINAL JumpReact | REASON=GROUND
+[8641.210361] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-3.174027
+[8641.210378] Humanoid.Jump = true
+[8641.210595] >>> AUTO RELEASE | JumpHeldDown=false
+[8641.210613] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -3.174027 -> 23.961542 | DeltaVy=27.135570 | CanJump=true | JumpHeld=false
+[8641.210626] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=23.961542
+[8641.226408] STATE: Enum.HumanoidStateType.Jumping -> Enum.HumanoidStateType.Freefall | Grounded=true | Vy=42.739758 | CanJump=true | JumpHeld=false | HumJump=false
+[8641.258536] STATE: Enum.HumanoidStateType.Climbing -> Enum.HumanoidStateType.Running | Grounded=true | Vy=12.746540 | CanJump=true | JumpHeld=false | HumJump=false
+[8641.879457] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8642.019069] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Freefall | Grounded=false | Vy=17.075642 | CanJump=true | JumpHeld=false | HumJump=false
+[8642.936955] >>> GROUND AUTO JUMP #109 | Hum=Enum.HumanoidStateType.Landed
+[8642.937043] ==================================================
+[8642.937077] ORIGINAL JumpReact | REASON=GROUND
+[8642.937114] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-28.341047
+[8642.937169] Humanoid.Jump = true
+[8642.937494] >>> AUTO RELEASE | JumpHeldDown=false
+[8642.937542] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -28.341047 -> -13.365540 | DeltaVy=14.975508 | CanJump=true | JumpHeld=false
+[8642.937564] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-13.365540
+[8642.937581] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=true | Vy=-13.365540 | CanJump=true | JumpHeld=false | HumJump=true
+[8642.970520] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Climbing | Grounded=true | Vy=23.134050 | CanJump=true | JumpHeld=false | HumJump=false
+[8642.994345] STATE: Enum.HumanoidStateType.Climbing -> Enum.HumanoidStateType.Running | Grounded=true | Vy=16.267920 | CanJump=true | JumpHeld=false | HumJump=false
+[8643.961303] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8643.993734] >>> GROUND AUTO JUMP #110 | Hum=Enum.HumanoidStateType.Running
+[8643.993768] ==================================================
+[8643.993779] ORIGINAL JumpReact | REASON=GROUND
+[8643.993796] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-0.379887
+[8643.993814] Humanoid.Jump = true
+[8643.994069] >>> AUTO RELEASE | JumpHeldDown=false
+[8643.994125] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -0.379887 -> -1.119332 | DeltaVy=-0.739445 | CanJump=true | JumpHeld=false
+[8643.994149] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-1.119332
+[8644.002403] STATE: Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=17.112175 | CanJump=true | JumpHeld=false | HumJump=false
+[8644.008788] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8645.200820] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-42.679459 | CanJump=true | JumpHeld=false | HumJump=false
+[8645.217943] >>> GROUND AUTO JUMP #111 | Hum=Enum.HumanoidStateType.Landed
+[8645.218010] ==================================================
+[8645.218026] ORIGINAL JumpReact | REASON=GROUND
+[8645.218047] BEFORE | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-43.304455
+[8645.218079] Humanoid.Jump = true
+[8645.218288] >>> AUTO RELEASE | JumpHeldDown=false
+[8645.218309] JumpReact RETURNED | State Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Landed | Vy -43.304455 -> -22.093061 | DeltaVy=21.211393 | CanJump=true | JumpHeld=false
+[8645.218326] AFTER | Hum=Enum.HumanoidStateType.Landed | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-22.093061
+[8645.228284] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Jumping | Grounded=true | Vy=16.903845 | CanJump=true | JumpHeld=false | HumJump=false
+[8645.251524] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8645.871186] STATE: Enum.HumanoidStateType.Freefall -> Enum.HumanoidStateType.Landed | Grounded=false | Vy=-15.179473 | CanJump=true | JumpHeld=false | HumJump=false
+[8645.909260] >>> GROUND AUTO JUMP #112 | Hum=Enum.HumanoidStateType.Running
+[8645.909318] ==================================================
+[8645.909335] ORIGINAL JumpReact | REASON=GROUND
+[8645.909353] BEFORE | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=false | JumpEnabled=true | Vy=-16.637808
+[8645.909373] Humanoid.Jump = true
+[8645.909585] >>> AUTO RELEASE | JumpHeldDown=false
+[8645.909603] JumpReact RETURNED | State Enum.HumanoidStateType.Running -> Enum.HumanoidStateType.Running | Vy -16.637808 -> -8.649490 | DeltaVy=7.988317 | CanJump=true | JumpHeld=false
+[8645.909620] AFTER | Hum=Enum.HumanoidStateType.Running | Move=Move | Reg=Move | Climb=nil | Ending=nil | Grounded=true | JumpAmount=0 | CanJump=true | JumpHeld=false | HumJump=true | JumpEnabled=true | Vy=-8.649490
+[8645.909637] STATE: Enum.HumanoidStateType.Landed -> Enum.HumanoidStateType.Running | Grounded=true | Vy=-8.649490 | CanJump=true | JumpHeld=false | HumJump=true
+[8645.933873] >>> LEFT GROUND | GROUND JUMP RE-ARMED
+[8646.423987] ===== F6 FULL STOP =====
