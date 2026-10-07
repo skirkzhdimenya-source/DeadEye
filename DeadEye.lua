@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.214
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.216
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.215"
+local SCRIPT_VERSION = "1.216"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -11307,14 +11307,10 @@ local mainJump = {
     reverseLookToggle = nil,
     frontSensorTouchConnection = nil,
     legitJumpConnection = nil,
-    --// LEGIT AutoJump v1.19 runtime state.
+    --// LEGIT AutoJump v1.20 runtime state.
     legitMovement = nil,
     legitHumanoid = nil,
     legitRoot = nil,
-    legitHookedMovement = nil,
-    legitHookedOriginalEndClimb = nil,
-    legitHookedHadDirectEndClimb = false,
-    legitHookedDirectEndClimb = nil,
     legitActiveJumpReact = false,
     legitJumpSequence = 0,
     legitActiveJumpStartedAt = 0,
@@ -14310,89 +14306,6 @@ function mainJump.startCapture(kind)
             "PRESS KEY..."
     end
 end
-function mainJump.restoreLegitEndClimbHook()
-    if not mainJump.legitHookedMovement then
-        return
-    end
-
-    local movement =
-        mainJump.legitHookedMovement
-
-    pcall(function()
-        if mainJump.legitHookedHadDirectEndClimb then
-            movement.EndClimb =
-                mainJump.legitHookedDirectEndClimb
-        else
-            movement.EndClimb = nil
-        end
-    end)
-
-    mainJump.legitHookedMovement = nil
-    mainJump.legitHookedOriginalEndClimb = nil
-    mainJump.legitHookedHadDirectEndClimb = false
-    mainJump.legitHookedDirectEndClimb = nil
-end
-
-function mainJump.installLegitEndClimbHook(movement)
-    if not movement then
-        return false
-    end
-
-    if mainJump.legitHookedMovement == movement then
-        return true
-    end
-
-    mainJump.restoreLegitEndClimbHook()
-
-    local direct =
-        rawget(
-            movement,
-            "EndClimb"
-        )
-
-    local original
-    local ok =
-        pcall(function()
-            original =
-                movement.EndClimb
-        end)
-
-    if not ok
-        or type(original) ~= "function"
-    then
-        return false
-    end
-
-    mainJump.legitHookedMovement =
-        movement
-
-    mainJump.legitHookedOriginalEndClimb =
-        original
-
-    mainJump.legitHookedHadDirectEndClimb =
-        direct ~= nil
-
-    mainJump.legitHookedDirectEndClimb =
-        direct
-
-    movement.EndClimb =
-        function(
-            self,
-            ...
-        )
-            if mainJump.legitBlockClimbEnd then
-                return
-            end
-
-            return original(
-                self,
-                ...
-            )
-        end
-
-    return true
-end
-
 function mainJump.stopLegitJumpLoop()
     if mainJump.legitJumpConnection then
         pcall(function()
@@ -14402,10 +14315,6 @@ function mainJump.stopLegitJumpLoop()
         mainJump.legitJumpConnection = nil
     end
 
-    pcall(function()
-        mainJump.restoreLegitEndClimbHook()
-    end)
-
     mainJump.legitMovement = nil
     mainJump.legitHumanoid = nil
     mainJump.legitRoot = nil
@@ -14414,7 +14323,6 @@ function mainJump.stopLegitJumpLoop()
     mainJump.legitGroundJumpUsed = false
     mainJump.legitClimbJumpUsed = false
     mainJump.legitPreviousHumanoidState = nil
-    mainJump.legitBlockClimbEnd = false
 end
 
 function mainJump.legitSetupCharacter(
@@ -14431,10 +14339,8 @@ function mainJump.legitSetupCharacter(
 
     mainJump.legitMovement =
         movement
-
     mainJump.legitHumanoid =
         humanoid
-
     mainJump.legitRoot =
         root
 
@@ -14444,11 +14350,6 @@ function mainJump.legitSetupCharacter(
         (tonumber(mainJump.legitJumpSequence) or 0) + 1
     mainJump.legitActiveJumpReact = false
     mainJump.legitActiveJumpStartedAt = 0
-    mainJump.legitBlockClimbEnd = false
-
-    mainJump.installLegitEndClimbHook(
-        movement
-    )
 
     mainJump.legitPreviousHumanoidState =
         humanoid:GetState()
@@ -14546,32 +14447,23 @@ function mainJump.legitExecuteOriginalJumpReact(
     local sequence =
         mainJump.legitJumpSequence
 
-    mainJump.legitBlockClimbEnd =
-        reason == "NATURAL CLIMBING"
-
-    --// The game's normal JumpReact is used.
+    --// The game's real JumpReact is used.
     --// Humanoid.Jump is intentionally set BEFORE JumpReact.
     humanoid.Jump = true
 
     task.spawn(function()
-        local ok =
-            pcall(function()
-                movement:JumpReact(
-                    false
-                )
-            end)
+        pcall(function()
+            movement:JumpReact(
+                false
+            )
+        end)
 
         if mainJump.legitJumpSequence ~= sequence then
             return
         end
 
-        mainJump.legitBlockClimbEnd = false
         mainJump.legitActiveJumpReact = false
         mainJump.legitActiveJumpStartedAt = 0
-
-        if not ok then
-            return
-        end
     end)
 
     task.spawn(function()
@@ -14758,10 +14650,6 @@ function mainJump.bindLegitJumpLoop()
                         humanoid,
                         root
                     )
-                elseif mainJump.legitHookedMovement ~= movement then
-                    mainJump.installLegitEndClimbHook(
-                        movement
-                    )
                 end
 
                 local state =
@@ -14779,16 +14667,14 @@ function mainJump.bindLegitJumpLoop()
                     )
                 end
 
-                --// Re-arm one ground JumpReact on the next real
-                --// Freefall, exactly like the proven standalone test.
+                --// Re-arm one ground JumpReact on the next real Freefall.
                 if state == Enum.HumanoidStateType.Freefall
                     and mainJump.legitGroundJumpUsed
                 then
                     mainJump.legitGroundJumpUsed = false
                 end
 
-                --// A new Climbing episode starts only after leaving
-                --// the previous actual Climbing state.
+                --// Re-arm one Climbing JumpReact after leaving actual Climbing.
                 if state ~= Enum.HumanoidStateType.Climbing
                     and mainJump.legitClimbJumpUsed
                     and mainJump.legitPreviousHumanoidState
@@ -14797,7 +14683,7 @@ function mainJump.bindLegitJumpLoop()
                     mainJump.legitClimbJumpUsed = false
                 end
 
-                --// Same watchdog window as the standalone v1.19 test.
+                --// Same watchdog window as the standalone test.
                 if mainJump.legitActiveJumpReact
                     and mainJump.legitActiveJumpStartedAt > 0
                     and os.clock()
@@ -14808,7 +14694,6 @@ function mainJump.bindLegitJumpLoop()
                         movement.JumpHeldDown = false
                     end)
 
-                    mainJump.legitBlockClimbEnd = false
                     mainJump.legitActiveJumpReact = false
                     mainJump.legitActiveJumpStartedAt = 0
                 end
