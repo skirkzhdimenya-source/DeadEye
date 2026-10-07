@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.214"
+local SCRIPT_VERSION = "1.215"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -11307,6 +11307,23 @@ local mainJump = {
     reverseLookToggle = nil,
     frontSensorTouchConnection = nil,
     legitJumpConnection = nil,
+    --// LEGIT AutoJump v1.19 runtime state.
+    legitMovement = nil,
+    legitHumanoid = nil,
+    legitRoot = nil,
+    legitHookedMovement = nil,
+    legitHookedOriginalEndClimb = nil,
+    legitHookedHadDirectEndClimb = false,
+    legitHookedDirectEndClimb = nil,
+    legitActiveJumpReact = false,
+    legitJumpSequence = 0,
+    legitActiveJumpStartedAt = 0,
+    legitGroundJumpUsed = false,
+    legitGroundJumpCount = 0,
+    legitClimbJumpUsed = false,
+    legitClimbJumpCount = 0,
+    legitPreviousHumanoidState = nil,
+    legitBlockClimbEnd = false,
     autoJumpModeButton = nil,
     autoJumpModePicker = nil,
     connections = {}
@@ -14293,13 +14310,372 @@ function mainJump.startCapture(kind)
             "PRESS KEY..."
     end
 end
+function mainJump.restoreLegitEndClimbHook()
+    if not mainJump.legitHookedMovement then
+        return
+    end
+
+    local movement =
+        mainJump.legitHookedMovement
+
+    pcall(function()
+        if mainJump.legitHookedHadDirectEndClimb then
+            movement.EndClimb =
+                mainJump.legitHookedDirectEndClimb
+        else
+            movement.EndClimb = nil
+        end
+    end)
+
+    mainJump.legitHookedMovement = nil
+    mainJump.legitHookedOriginalEndClimb = nil
+    mainJump.legitHookedHadDirectEndClimb = false
+    mainJump.legitHookedDirectEndClimb = nil
+end
+
+function mainJump.installLegitEndClimbHook(movement)
+    if not movement then
+        return false
+    end
+
+    if mainJump.legitHookedMovement == movement then
+        return true
+    end
+
+    mainJump.restoreLegitEndClimbHook()
+
+    local direct =
+        rawget(
+            movement,
+            "EndClimb"
+        )
+
+    local original
+    local ok =
+        pcall(function()
+            original =
+                movement.EndClimb
+        end)
+
+    if not ok
+        or type(original) ~= "function"
+    then
+        return false
+    end
+
+    mainJump.legitHookedMovement =
+        movement
+
+    mainJump.legitHookedOriginalEndClimb =
+        original
+
+    mainJump.legitHookedHadDirectEndClimb =
+        direct ~= nil
+
+    mainJump.legitHookedDirectEndClimb =
+        direct
+
+    movement.EndClimb =
+        function(
+            self,
+            ...
+        )
+            if mainJump.legitBlockClimbEnd then
+                return
+            end
+
+            return original(
+                self,
+                ...
+            )
+        end
+
+    return true
+end
+
 function mainJump.stopLegitJumpLoop()
     if mainJump.legitJumpConnection then
         pcall(function()
             mainJump.legitJumpConnection:Disconnect()
         end)
+
         mainJump.legitJumpConnection = nil
     end
+
+    pcall(function()
+        mainJump.restoreLegitEndClimbHook()
+    end)
+
+    mainJump.legitMovement = nil
+    mainJump.legitHumanoid = nil
+    mainJump.legitRoot = nil
+    mainJump.legitActiveJumpReact = false
+    mainJump.legitActiveJumpStartedAt = 0
+    mainJump.legitGroundJumpUsed = false
+    mainJump.legitClimbJumpUsed = false
+    mainJump.legitPreviousHumanoidState = nil
+    mainJump.legitBlockClimbEnd = false
+end
+
+function mainJump.legitSetupCharacter(
+    object,
+    movement,
+    humanoid,
+    root
+)
+    if mainJump.legitMovement == movement
+        and mainJump.legitHumanoid == humanoid
+    then
+        return
+    end
+
+    mainJump.legitMovement =
+        movement
+
+    mainJump.legitHumanoid =
+        humanoid
+
+    mainJump.legitRoot =
+        root
+
+    mainJump.legitGroundJumpUsed = false
+    mainJump.legitClimbJumpUsed = false
+    mainJump.legitJumpSequence =
+        (tonumber(mainJump.legitJumpSequence) or 0) + 1
+    mainJump.legitActiveJumpReact = false
+    mainJump.legitActiveJumpStartedAt = 0
+    mainJump.legitBlockClimbEnd = false
+
+    mainJump.installLegitEndClimbHook(
+        movement
+    )
+
+    mainJump.legitPreviousHumanoidState =
+        humanoid:GetState()
+end
+
+function mainJump.legitGetGrounded(
+    movement
+)
+    local grounded = false
+
+    pcall(function()
+        grounded =
+            movement.DataRegistry:Get(
+                "Grounded"
+            ) == true
+    end)
+
+    return grounded
+end
+
+function mainJump.legitAutoRelease(
+    movement,
+    sequence
+)
+    RunService.Heartbeat:Wait()
+
+    if not genv.DEADEYE_MAIN_RUNNING
+        or cleaned
+        or not mainJump.enabled
+        or mainJump.autoJumpMode ~= "legit"
+        or sequence ~= mainJump.legitJumpSequence
+    then
+        return
+    end
+
+    if not movement
+        or type(movement.IsAlive) ~= "function"
+        or not movement:IsAlive()
+    then
+        return
+    end
+
+    pcall(function()
+        movement.JumpHeldDown = false
+    end)
+end
+
+function mainJump.legitExecuteOriginalJumpReact(
+    movement,
+    reason
+)
+    if not genv.DEADEYE_MAIN_RUNNING
+        or cleaned
+        or not mainJump.enabled
+        or mainJump.autoJumpMode ~= "legit"
+        or mainJump.legitActiveJumpReact
+    then
+        return false
+    end
+
+    if not movement
+        or type(movement.IsAlive) ~= "function"
+        or not movement:IsAlive()
+    then
+        return false
+    end
+
+    local humanoid =
+        movement.Humanoid
+
+    local character =
+        movement.Character
+
+    if not humanoid
+        or not character
+    then
+        return false
+    end
+
+    local root =
+        character:FindFirstChild(
+            "HumanoidRootPart"
+        )
+
+    if not root then
+        return false
+    end
+
+    mainJump.legitActiveJumpReact = true
+    mainJump.legitActiveJumpStartedAt = os.clock()
+
+    mainJump.legitJumpSequence =
+        (tonumber(mainJump.legitJumpSequence) or 0) + 1
+
+    local sequence =
+        mainJump.legitJumpSequence
+
+    mainJump.legitBlockClimbEnd =
+        reason == "NATURAL CLIMBING"
+
+    --// The game's normal JumpReact is used.
+    --// Humanoid.Jump is intentionally set BEFORE JumpReact.
+    humanoid.Jump = true
+
+    task.spawn(function()
+        local ok =
+            pcall(function()
+                movement:JumpReact(
+                    false
+                )
+            end)
+
+        if mainJump.legitJumpSequence ~= sequence then
+            return
+        end
+
+        mainJump.legitBlockClimbEnd = false
+        mainJump.legitActiveJumpReact = false
+        mainJump.legitActiveJumpStartedAt = 0
+
+        if not ok then
+            return
+        end
+    end)
+
+    task.spawn(function()
+        mainJump.legitAutoRelease(
+            movement,
+            sequence
+        )
+    end)
+
+    return true
+end
+
+function mainJump.legitTryGroundJump(
+    movement
+)
+    if not genv.DEADEYE_MAIN_RUNNING
+        or cleaned
+        or not mainJump.enabled
+        or mainJump.autoJumpMode ~= "legit"
+        or mainJump.legitActiveJumpReact
+        or mainJump.legitGroundJumpUsed
+    then
+        return
+    end
+
+    local humanoid =
+        movement.Humanoid
+
+    if not humanoid then
+        return
+    end
+
+    local state =
+        humanoid:GetState()
+
+    --// Climbing is always handled by its own path.
+    if state == Enum.HumanoidStateType.Climbing then
+        return
+    end
+
+    --// Ground Jump: only Running/Landed.
+    if state ~= Enum.HumanoidStateType.Running
+        and state ~= Enum.HumanoidStateType.Landed
+    then
+        return
+    end
+
+    --// Use the game's real DataRegistry.Grounded.
+    if not mainJump.legitGetGrounded(
+        movement
+    ) then
+        return
+    end
+
+    mainJump.legitGroundJumpCount =
+        (tonumber(mainJump.legitGroundJumpCount) or 0) + 1
+
+    mainJump.legitGroundJumpUsed =
+        true
+
+    mainJump.legitExecuteOriginalJumpReact(
+        movement,
+        "GROUND"
+    )
+end
+
+function mainJump.legitTryClimbJump(
+    movement
+)
+    if not genv.DEADEYE_MAIN_RUNNING
+        or cleaned
+        or not mainJump.enabled
+        or mainJump.autoJumpMode ~= "legit"
+        or mainJump.legitActiveJumpReact
+        or mainJump.legitClimbJumpUsed
+    then
+        return
+    end
+
+    local humanoid =
+        movement.Humanoid
+
+    if not humanoid then
+        return
+    end
+
+    --// Detect the ACTUAL Humanoid Climbing state directly in
+    --// PreSimulation. No Heartbeat/post-frame wait.
+    if humanoid:GetState()
+        ~= Enum.HumanoidStateType.Climbing
+    then
+        return
+    end
+
+    mainJump.legitClimbJumpCount =
+        (tonumber(mainJump.legitClimbJumpCount) or 0) + 1
+
+    mainJump.legitClimbJumpUsed =
+        true
+
+    mainJump.legitExecuteOriginalJumpReact(
+        movement,
+        "NATURAL CLIMBING"
+    )
 end
 
 function mainJump.bindLegitJumpLoop()
@@ -14325,23 +14701,120 @@ function mainJump.bindLegitJumpLoop()
                     return
                 end
 
-                local object =
-                    getCharacterObject()
+                local object,
+                    movement,
+                    humanoid,
+                    root =
+                    (function()
+                        local currentObject
+                        local currentMovement
+                        local currentHumanoid
+                        local currentRoot
 
-                local movement =
-                    object
-                    and object.Movement
+                        pcall(function()
+                            currentObject =
+                                getCharacterObject()
 
-                if not movement then
+                            currentMovement =
+                                currentObject
+                                and currentObject.Movement
+
+                            if currentMovement then
+                                currentHumanoid =
+                                    currentMovement.Humanoid
+
+                                local character =
+                                    currentMovement.Character
+
+                                if character then
+                                    currentRoot =
+                                        character:FindFirstChild(
+                                            "HumanoidRootPart"
+                                        )
+                                end
+                            end
+                        end)
+
+                        return currentObject,
+                            currentMovement,
+                            currentHumanoid,
+                            currentRoot
+                    end)()
+
+                if not object
+                    or not movement
+                    or not humanoid
+                    or not root
+                then
                     return
                 end
 
-                pcall(function()
-                    movement:AttemptJump(
-                        nil,
-                        true
+                if mainJump.legitMovement ~= movement
+                    or mainJump.legitHumanoid ~= humanoid
+                then
+                    mainJump.legitSetupCharacter(
+                        object,
+                        movement,
+                        humanoid,
+                        root
                     )
-                end)
+                elseif mainJump.legitHookedMovement ~= movement then
+                    mainJump.installLegitEndClimbHook(
+                        movement
+                    )
+                end
+
+                local state =
+                    humanoid:GetState()
+
+                --// CLIMBING FIRST.
+                if state == Enum.HumanoidStateType.Climbing then
+                    mainJump.legitTryClimbJump(
+                        movement
+                    )
+                else
+                    --// GROUND.
+                    mainJump.legitTryGroundJump(
+                        movement
+                    )
+                end
+
+                --// Re-arm one ground JumpReact on the next real
+                --// Freefall, exactly like the proven standalone test.
+                if state == Enum.HumanoidStateType.Freefall
+                    and mainJump.legitGroundJumpUsed
+                then
+                    mainJump.legitGroundJumpUsed = false
+                end
+
+                --// A new Climbing episode starts only after leaving
+                --// the previous actual Climbing state.
+                if state ~= Enum.HumanoidStateType.Climbing
+                    and mainJump.legitClimbJumpUsed
+                    and mainJump.legitPreviousHumanoidState
+                        == Enum.HumanoidStateType.Climbing
+                then
+                    mainJump.legitClimbJumpUsed = false
+                end
+
+                --// Same watchdog window as the standalone v1.19 test.
+                if mainJump.legitActiveJumpReact
+                    and mainJump.legitActiveJumpStartedAt > 0
+                    and os.clock()
+                        - mainJump.legitActiveJumpStartedAt
+                        > 0.35
+                then
+                    pcall(function()
+                        movement.JumpHeldDown = false
+                    end)
+
+                    mainJump.legitBlockClimbEnd = false
+                    mainJump.legitActiveJumpReact = false
+                    mainJump.legitActiveJumpStartedAt = 0
+                end
+
+                mainJump.legitPreviousHumanoidState =
+                    state
             end
         )
 end
@@ -16266,7 +16739,9 @@ mainConnect(
 
 --// =========================================================
 --// AUTO JUMP MODE
---// LEGIT = proven native AttemptJump(nil, true) on PreSimulation.
+--// LEGIT = v1.19 native JumpReact(false) on PreSimulation.
+--//        Grounded is read from DataRegistry; Climbing is handled
+--//        from the actual Humanoid state; no manual velocity.
 --// RAGE = existing sensor-based DeadEye AutoJump.
 --// =========================================================
 __UI.autoJumpModeRow =
