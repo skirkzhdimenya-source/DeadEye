@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.218
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.219
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.218"
+local SCRIPT_VERSION = "1.219"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -11320,8 +11320,8 @@ local mainJump = {
     legitClimbJumpCount = 0,
     legitPreviousHumanoidState = nil,
     legitBlockClimbEnd = false,
-    legitPreJumpCrouch = false,
-    legitPreJumpCrouchStartedAt = 0,
+    crouchSpamPreJump = false,
+    crouchSpamPreJumpStartedAt = 0,
     autoJumpModeButton = nil,
     autoJumpModePicker = nil,
     connections = {}
@@ -14003,27 +14003,204 @@ function mainJump.setCrouching(
     return true
 end
 
---// Crouch Spam itself is driven by PreSimulation.
---// This keeps the ON/OFF cycle independent from AutoJump timing.
-function mainJump.forceCrouchForAutoJump(
-    movementOverride
+--// Crouch Spam is driven by its own PreSimulation loop.
+--// It is completely independent from AutoJump mode and JumpReact.
+--// Normal cycle: ON -> OFF -> ON -> OFF.
+--// When falling toward a nearby collidable surface, this module
+--// predicts the landing itself, switches ON early, and holds ON
+--// until the actual landing frame.
+local CROUCH_SPAM_PREJUMP_FRAMES = 6
+local CROUCH_SPAM_PREJUMP_MAX_HOLD = 0.35
+
+function mainJump.predictCrouchSpamPreJump(
+    deltaTime
 )
-    if not mainJump.crouchSpamEnabled then
+    if not mainJump.crouchSpamEnabled
+        or mainJump.crouchSpamPreJump
+    then
         return
     end
 
-    --// If AutoJump catches us during OFF, force the next state to ON
-    --// immediately and restart the normal spam interval from that ON.
+    local character =
+        mainJump.character
+
+    local humanoid =
+        mainJump.humanoid
+
+    local root =
+        mainJump.root
+
+    if not character
+        or not character.Parent
+    then
+        character =
+            LocalPlayer.Character
+    end
+
+    if character then
+        if not humanoid
+            or not humanoid.Parent
+        then
+            humanoid =
+                character:FindFirstChildOfClass(
+                    "Humanoid"
+                )
+        end
+
+        if not root
+            or not root.Parent
+        then
+            root =
+                character:FindFirstChild(
+                    "HumanoidRootPart"
+                )
+        end
+    end
+
+    if not character
+        or not humanoid
+        or not root
+    then
+        return
+    end
+
+    mainJump.character =
+        character
+
+    mainJump.humanoid =
+        humanoid
+
+    mainJump.root =
+        root
+
+    local state =
+        humanoid:GetState()
+
+    if state ~=
+        Enum.HumanoidStateType.Freefall
+        and state ~=
+            Enum.HumanoidStateType.FallingDown
+    then
+        return
+    end
+
+    local verticalVelocity =
+        root.AssemblyLinearVelocity.Y
+
+    if verticalVelocity >= -0.05 then
+        return
+    end
+
+    local params =
+        RaycastParams.new()
+
+    params.FilterType =
+        Enum.RaycastFilterType.Exclude
+
+    params.FilterDescendantsInstances = {
+        character
+    }
+
+    params.IgnoreWater = true
+
+    local groundClearance =
+        math.max(
+            0.5,
+            (tonumber(humanoid.HipHeight) or 0)
+                + (root.Size.Y * 0.5)
+        )
+
+    local rayLength =
+        math.clamp(
+            groundClearance + 12,
+            4,
+            16
+        )
+
+    local result
+
+    local ok =
+        pcall(function()
+            result =
+                workspace:Raycast(
+                    root.Position,
+                    Vector3.new(
+                        0,
+                        -rayLength,
+                        0
+                    ),
+                    params
+                )
+        end)
+
+    if not ok
+        or not result
+    then
+        return
+    end
+
+    local instance =
+        result.Instance
+
+    local validSurface =
+        instance == workspace.Terrain
+        or (
+            instance
+            and instance:IsA("BasePart")
+            and instance.CanCollide
+        )
+
+    if not validSurface then
+        return
+    end
+
+    local gap =
+        (
+            root.Position.Y
+            - result.Position.Y
+        )
+        - groundClearance
+
+    if gap <= 0 then
+        return
+    end
+
+    local simulationDelta =
+        math.max(
+            tonumber(deltaTime) or 0,
+            1 / 240
+        )
+
+    local predictWindow =
+        simulationDelta
+        * CROUCH_SPAM_PREJUMP_FRAMES
+
+    local fallSpeed =
+        math.max(
+            math.abs(verticalVelocity),
+            0.5
+        )
+
+    local estimatedTime =
+        gap / fallSpeed
+
+    if estimatedTime > predictWindow then
+        return
+    end
+
+    mainJump.crouchSpamPreJump =
+        true
+
+    mainJump.crouchSpamPreJumpStartedAt =
+        os.clock()
+
     mainJump.crouchSpamState =
         true
 
     mainJump.crouchSpamElapsed =
         0
 
-    mainJump.setCrouching(
-        true,
-        movementOverride
-    )
+    mainJump.setCrouching(true)
 end
 
 function mainJump.startCrouchSpam()
@@ -14035,6 +14212,12 @@ function mainJump.startCrouchSpam()
         true
 
     mainJump.crouchSpamElapsed =
+        0
+
+    mainJump.crouchSpamPreJump =
+        false
+
+    mainJump.crouchSpamPreJumpStartedAt =
         0
 
     if not mainJump.setCrouching(true) then
@@ -14051,14 +14234,67 @@ function mainJump.startCrouchSpam()
                     return
                 end
 
-                --// Legit landing predictor owns the crouch state until
-                --// the actual same-frame JumpReact occurs.
-                if mainJump.autoJumpMode == "legit"
-                    and mainJump.legitPreJumpCrouch
-                then
-                    mainJump.crouchSpamState = true
-                    mainJump.crouchSpamElapsed = 0
-                    mainJump.setCrouching(true)
+                if mainJump.crouchSpamPreJump then
+                    local humanoid =
+                        mainJump.humanoid
+
+                    if humanoid then
+                        local state =
+                            humanoid:GetState()
+
+                        if state ==
+                            Enum.HumanoidStateType.Landed
+                            or state ==
+                                Enum.HumanoidStateType.Running
+                            or state ==
+                                Enum.HumanoidStateType.RunningNoPhysics
+                        then
+                            mainJump.crouchSpamPreJump =
+                                false
+
+                            mainJump.crouchSpamPreJumpStartedAt =
+                                0
+
+                            mainJump.crouchSpamState =
+                                true
+
+                            mainJump.crouchSpamElapsed =
+                                0
+
+                            mainJump.setCrouching(true)
+
+                        elseif mainJump.crouchSpamPreJumpStartedAt > 0
+                            and os.clock()
+                                - mainJump.crouchSpamPreJumpStartedAt
+                                > CROUCH_SPAM_PREJUMP_MAX_HOLD
+                        then
+                            mainJump.crouchSpamPreJump =
+                                false
+
+                            mainJump.crouchSpamPreJumpStartedAt =
+                                0
+
+                            mainJump.crouchSpamElapsed =
+                                0
+                        else
+                            mainJump.crouchSpamState =
+                                true
+
+                            mainJump.crouchSpamElapsed =
+                                0
+
+                            mainJump.setCrouching(true)
+
+                            return
+                        end
+                    end
+                end
+
+                mainJump.predictCrouchSpamPreJump(
+                    deltaTime
+                )
+
+                if mainJump.crouchSpamPreJump then
                     return
                 end
 
@@ -14115,7 +14351,13 @@ function mainJump.stopCrouchSpam()
     mainJump.crouchSpamElapsed =
         0
 
-    --// Always finish standing.
+    mainJump.crouchSpamPreJump =
+        false
+
+    mainJump.crouchSpamPreJumpStartedAt =
+        0
+
+    -- Always finish standing.
     mainJump.setCrouching(false)
 end
 
@@ -14381,12 +14623,6 @@ function mainJump.startCapture(kind)
             "PRESS KEY..."
     end
 end
---// Legit pre-jump crouch predictor.
---// Prepares crouch a few simulation steps before predicted ground contact.
---// The actual Grounded -> JumpReact timing remains untouched.
-local LEGIT_PREJUMP_CROUCH_FRAMES = 5
-local LEGIT_PREJUMP_CROUCH_MAX_HOLD = 0.35
-
 function mainJump.stopLegitJumpLoop()
     if mainJump.legitJumpConnection then
         pcall(function()
@@ -14404,8 +14640,6 @@ function mainJump.stopLegitJumpLoop()
     mainJump.legitGroundJumpUsed = false
     mainJump.legitClimbJumpUsed = false
     mainJump.legitPreviousHumanoidState = nil
-    mainJump.legitPreJumpCrouch = false
-    mainJump.legitPreJumpCrouchStartedAt = 0
 end
 
 function mainJump.legitSetupCharacter(
@@ -14433,8 +14667,6 @@ function mainJump.legitSetupCharacter(
         (tonumber(mainJump.legitJumpSequence) or 0) + 1
     mainJump.legitActiveJumpReact = false
     mainJump.legitActiveJumpStartedAt = 0
-    mainJump.legitPreJumpCrouch = false
-    mainJump.legitPreJumpCrouchStartedAt = 0
 
     mainJump.legitPreviousHumanoidState =
         humanoid:GetState()
@@ -14533,13 +14765,7 @@ function mainJump.legitExecuteOriginalJumpReact(
         mainJump.legitJumpSequence
 
     --// Force crouch ON immediately before the same-frame JumpReact.
-    mainJump.forceCrouchForAutoJump(
-        movement
-    )
-
     --// Prediction ends exactly here. The jump timing itself is unchanged.
-    mainJump.legitPreJumpCrouch = false
-    mainJump.legitPreJumpCrouchStartedAt = 0
 
     --// The game's real JumpReact is used.
     --// Humanoid.Jump is intentionally set BEFORE JumpReact.
@@ -14568,160 +14794,6 @@ function mainJump.legitExecuteOriginalJumpReact(
     end)
 
     return true
-end
-
-function mainJump.legitPredictGroundCrouch(
-    movement,
-    humanoid,
-    root,
-    deltaTime
-)
-    if not mainJump.crouchSpamEnabled
-        or mainJump.legitPreJumpCrouch
-        or not humanoid
-        or not root
-    then
-        return
-    end
-
-    local state =
-        humanoid:GetState()
-
-    if state ~=
-        Enum.HumanoidStateType.Freefall
-        and state ~=
-            Enum.HumanoidStateType.FallingDown
-    then
-        return
-    end
-
-    local verticalVelocity =
-        root.AssemblyLinearVelocity.Y
-
-    if verticalVelocity >= -0.05 then
-        return
-    end
-
-    local character =
-        movement.Character
-
-    if not character then
-        return
-    end
-
-    local params =
-        RaycastParams.new()
-
-    params.FilterType =
-        Enum.RaycastFilterType.Exclude
-
-    params.FilterDescendantsInstances = {
-        character
-    }
-
-    params.IgnoreWater = true
-
-    --// Root center -> approximate standing surface distance.
-    local groundClearance =
-        math.max(
-            0.5,
-            (tonumber(humanoid.HipHeight) or 0)
-                + (root.Size.Y * 0.5)
-        )
-
-    local rayLength =
-        math.clamp(
-            groundClearance + 12,
-            4,
-            16
-        )
-
-    local result
-
-    local ok =
-        pcall(function()
-            result =
-                workspace:Raycast(
-                    root.Position,
-                    Vector3.new(
-                        0,
-                        -rayLength,
-                        0
-                    ),
-                    params
-                )
-        end)
-
-    if not ok
-        or not result
-    then
-        return
-    end
-
-    local instance =
-        result.Instance
-
-    local validSurface =
-        instance == workspace.Terrain
-        or (
-            instance
-            and instance:IsA("BasePart")
-            and instance.CanCollide
-        )
-
-    if not validSurface then
-        return
-    end
-
-    local distance =
-        (root.Position - result.Position).Magnitude
-
-    local gap =
-        distance - groundClearance
-
-    if gap <= 0 then
-        return
-    end
-
-    local simulationDelta =
-        math.max(
-            tonumber(deltaTime) or 0,
-            1 / 240
-        )
-
-    local predictWindow =
-        simulationDelta
-        * LEGIT_PREJUMP_CROUCH_FRAMES
-
-    local fallSpeed =
-        math.max(
-            math.abs(verticalVelocity),
-            0.5
-        )
-
-    local estimatedTime =
-        gap / fallSpeed
-
-    if estimatedTime > predictWindow then
-        return
-    end
-
-    --// We are close enough to the landing that crouch must already
-    --// be ON when the normal Grounded PreSimulation arrives.
-    mainJump.legitPreJumpCrouch = true
-    mainJump.legitPreJumpCrouchStartedAt =
-        os.clock()
-
-    mainJump.crouchSpamState =
-        true
-
-    mainJump.crouchSpamElapsed =
-        0
-
-    mainJump.setCrouching(
-        true,
-        movement
-    )
 end
 
 function mainJump.legitTryGroundJump(
@@ -14831,7 +14903,7 @@ function mainJump.bindLegitJumpLoop()
 
     mainJump.legitJumpConnection =
         RunService.PreSimulation:Connect(
-            function(deltaTime)
+            function()
                 if not genv.DEADEYE_MAIN_RUNNING
                     or cleaned
                     or not mainJump.enabled
@@ -14903,15 +14975,6 @@ function mainJump.bindLegitJumpLoop()
                 local state =
                     humanoid:GetState()
 
-                --// Predict the landing a few simulation steps early.
-                --// This only prepares crouch; it never delays JumpReact.
-                mainJump.legitPredictGroundCrouch(
-                    movement,
-                    humanoid,
-                    root,
-                    deltaTime
-                )
-
                 --// CLIMBING FIRST.
                 if state == Enum.HumanoidStateType.Climbing then
                     mainJump.legitTryClimbJump(
@@ -14938,19 +15001,6 @@ function mainJump.bindLegitJumpLoop()
                         == Enum.HumanoidStateType.Climbing
                 then
                     mainJump.legitClimbJumpUsed = false
-                end
-
-                --// Cancel a stale landing prediction if the expected
-                --// landing did not happen.
-                if mainJump.legitPreJumpCrouch
-                    and mainJump.legitPreJumpCrouchStartedAt > 0
-                    and os.clock()
-                        - mainJump.legitPreJumpCrouchStartedAt
-                        > LEGIT_PREJUMP_CROUCH_MAX_HOLD
-                then
-                    mainJump.legitPreJumpCrouch = false
-                    mainJump.legitPreJumpCrouchStartedAt = 0
-                    mainJump.crouchSpamElapsed = 0
                 end
 
                 --// Same watchdog window as the standalone test.
@@ -15649,8 +15699,6 @@ function mainJump.jump(hit)
             tick()
             + LOOK_MIN_ACTIVE
     end
-
-    mainJump.forceCrouchForAutoJump()
 
     mainJump.humanoid.Jump = true
 
