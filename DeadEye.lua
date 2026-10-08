@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.219"
+local SCRIPT_VERSION = "1.220"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -115,8 +115,10 @@ if genv.DEADEYE_RAGE_LOOK_CLEANUP then
     end)
 end
 --// =========================================================
---// CROUCH SPAM uses PreSimulation; AutoJump forces ON immediately before jumping.
---// Legit also predicts near-landing and holds ON until the normal JumpReact.
+--// CROUCH SPAM uses its own PreSimulation landing signal.
+--// It is completely independent from AutoJump mode and JumpReact.
+--// When Humanoid reaches Landed while DataRegistry.Grounded is still false,
+--// Crouch Spam turns ON before the normal Grounded -> Jump transition.
 --// PREVIOUS INSTANCE CLEANUP
 --// =========================================================
 if genv.UNUSUAL_SWAPPER_CLEANUP then
@@ -14006,186 +14008,65 @@ end
 --// Crouch Spam is driven by its own PreSimulation loop.
 --// It is completely independent from AutoJump mode and JumpReact.
 --// Normal cycle: ON -> OFF -> ON -> OFF.
---// When falling toward a nearby collidable surface, this module
---// predicts the landing itself, switches ON early, and holds ON
---// until the actual landing frame.
-local CROUCH_SPAM_PREJUMP_FRAMES = 6
+--//
+--// IMPORTANT:
+--// The previous raycast/time-of-flight predictor was removed.
+--// The analyzer showed that the game's actual useful early signal is:
+--//
+--//     HumanoidStateType.Landed
+--//             ->
+--//     DataRegistry.Grounded = true
+--//             ->
+--//     AutoJump immediately sets Jump / runs JumpReact
+--//
+--// In the observed game this gives a real early window before Grounded
+--// becomes true. Crouch Spam uses that window by itself.
 local CROUCH_SPAM_PREJUMP_MAX_HOLD = 0.35
 
-function mainJump.predictCrouchSpamPreJump(
-    deltaTime
-)
+function mainJump.armCrouchSpamPreJump()
     if not mainJump.crouchSpamEnabled
         or mainJump.crouchSpamPreJump
+        or mainJump.crouchSpamState
     then
-        return
+        return false
     end
-
-    local character =
-        mainJump.character
 
     local humanoid =
         mainJump.humanoid
 
-    local root =
-        mainJump.root
-
-    if not character
-        or not character.Parent
+    if not humanoid
+        or not humanoid.Parent
     then
-        character =
-            LocalPlayer.Character
+        return false
     end
 
-    if character then
-        if not humanoid
-            or not humanoid.Parent
-        then
-            humanoid =
-                character:FindFirstChildOfClass(
-                    "Humanoid"
-                )
-        end
-
-        if not root
-            or not root.Parent
-        then
-            root =
-                character:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-        end
-    end
-
-    if not character
-        or not humanoid
-        or not root
+    if humanoid:GetState()
+        ~= Enum.HumanoidStateType.Landed
     then
-        return
+        return false
     end
 
-    mainJump.character =
-        character
+    local object =
+        getCharacterObject()
 
-    mainJump.humanoid =
-        humanoid
+    local registry =
+        object
+        and object.DataRegistry
 
-    mainJump.root =
-        root
+    local grounded
 
-    local state =
-        humanoid:GetState()
-
-    if state ~=
-        Enum.HumanoidStateType.Freefall
-        and state ~=
-            Enum.HumanoidStateType.FallingDown
-    then
-        return
-    end
-
-    local verticalVelocity =
-        root.AssemblyLinearVelocity.Y
-
-    if verticalVelocity >= -0.05 then
-        return
-    end
-
-    local params =
-        RaycastParams.new()
-
-    params.FilterType =
-        Enum.RaycastFilterType.Exclude
-
-    params.FilterDescendantsInstances = {
-        character
-    }
-
-    params.IgnoreWater = true
-
-    local groundClearance =
-        math.max(
-            0.5,
-            (tonumber(humanoid.HipHeight) or 0)
-                + (root.Size.Y * 0.5)
-        )
-
-    local rayLength =
-        math.clamp(
-            groundClearance + 12,
-            4,
-            16
-        )
-
-    local result
-
-    local ok =
+    if registry then
         pcall(function()
-            result =
-                workspace:Raycast(
-                    root.Position,
-                    Vector3.new(
-                        0,
-                        -rayLength,
-                        0
-                    ),
-                    params
+            grounded =
+                registry:Get(
+                    "Grounded"
                 )
         end)
-
-    if not ok
-        or not result
-    then
-        return
     end
 
-    local instance =
-        result.Instance
-
-    local validSurface =
-        instance == workspace.Terrain
-        or (
-            instance
-            and instance:IsA("BasePart")
-            and instance.CanCollide
-        )
-
-    if not validSurface then
-        return
-    end
-
-    local gap =
-        (
-            root.Position.Y
-            - result.Position.Y
-        )
-        - groundClearance
-
-    if gap <= 0 then
-        return
-    end
-
-    local simulationDelta =
-        math.max(
-            tonumber(deltaTime) or 0,
-            1 / 240
-        )
-
-    local predictWindow =
-        simulationDelta
-        * CROUCH_SPAM_PREJUMP_FRAMES
-
-    local fallSpeed =
-        math.max(
-            math.abs(verticalVelocity),
-            0.5
-        )
-
-    local estimatedTime =
-        gap / fallSpeed
-
-    if estimatedTime > predictWindow then
-        return
+    --// We only want the pre-Grounded window.
+    if grounded == true then
+        return false
     end
 
     mainJump.crouchSpamPreJump =
@@ -14201,6 +14082,8 @@ function mainJump.predictCrouchSpamPreJump(
         0
 
     mainJump.setCrouching(true)
+
+    return true
 end
 
 function mainJump.startCrouchSpam()
@@ -14235,66 +14118,75 @@ function mainJump.startCrouchSpam()
                 end
 
                 if mainJump.crouchSpamPreJump then
-                    local humanoid =
-                        mainJump.humanoid
+                    local object =
+                        getCharacterObject()
 
-                    if humanoid then
-                        local state =
-                            humanoid:GetState()
+                    local registry =
+                        object
+                        and object.DataRegistry
 
-                        if state ==
-                            Enum.HumanoidStateType.Landed
-                            or state ==
-                                Enum.HumanoidStateType.Running
-                            or state ==
-                                Enum.HumanoidStateType.RunningNoPhysics
-                        then
-                            mainJump.crouchSpamPreJump =
-                                false
+                    local grounded
 
-                            mainJump.crouchSpamPreJumpStartedAt =
-                                0
+                    if registry then
+                        pcall(function()
+                            grounded =
+                                registry:Get(
+                                    "Grounded"
+                                )
+                        end)
+                    end
 
-                            mainJump.crouchSpamState =
-                                true
+                    if grounded == true then
+                        --// Grounded has arrived. Keep Crouch ON for this
+                        --// exact transition so AutoJump sees no delay.
+                        mainJump.crouchSpamPreJump =
+                            false
 
-                            mainJump.crouchSpamElapsed =
-                                0
+                        mainJump.crouchSpamPreJumpStartedAt =
+                            0
 
-                            mainJump.setCrouching(true)
+                        mainJump.crouchSpamState =
+                            true
 
-                        elseif mainJump.crouchSpamPreJumpStartedAt > 0
-                            and os.clock()
-                                - mainJump.crouchSpamPreJumpStartedAt
-                                > CROUCH_SPAM_PREJUMP_MAX_HOLD
-                        then
-                            mainJump.crouchSpamPreJump =
-                                false
+                        mainJump.crouchSpamElapsed =
+                            0
 
-                            mainJump.crouchSpamPreJumpStartedAt =
-                                0
+                        mainJump.setCrouching(true)
 
-                            mainJump.crouchSpamElapsed =
-                                0
-                        else
-                            mainJump.crouchSpamState =
-                                true
+                        return
 
-                            mainJump.crouchSpamElapsed =
-                                0
+                    elseif mainJump.crouchSpamPreJumpStartedAt > 0
+                        and os.clock()
+                            - mainJump.crouchSpamPreJumpStartedAt
+                            > CROUCH_SPAM_PREJUMP_MAX_HOLD
+                    then
+                        --// Safety timeout. Resume normal ON/OFF spam.
+                        mainJump.crouchSpamPreJump =
+                            false
 
-                            mainJump.setCrouching(true)
+                        mainJump.crouchSpamPreJumpStartedAt =
+                            0
 
-                            return
-                        end
+                        mainJump.crouchSpamElapsed =
+                            0
+
+                    else
+                        --// Still inside the real pre-Grounded window.
+                        mainJump.crouchSpamState =
+                            true
+
+                        mainJump.crouchSpamElapsed =
+                            0
+
+                        mainJump.setCrouching(true)
+
+                        return
                     end
                 end
 
-                mainJump.predictCrouchSpamPreJump(
-                    deltaTime
-                )
-
-                if mainJump.crouchSpamPreJump then
+                --// Arm ONLY from Crouch Spam's own landing signal.
+                --// No AutoJump mode / Legit / JumpReact dependency.
+                if mainJump.armCrouchSpamPreJump() then
                     return
                 end
 
