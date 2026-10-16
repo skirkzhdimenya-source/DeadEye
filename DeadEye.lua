@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.234
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.235
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.234"
+local SCRIPT_VERSION = "1.235"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -21672,19 +21672,24 @@ function otherFeatures.saveConfig()
 end
 
 function otherFeatures.updateToggle()
-    if not otherFeatures.toggleButton then
+    local button = otherFeatures.toggleButton
+    if not button then
         return
     end
 
-    if otherFeatures.enabled then
-        otherFeatures.toggleButton.Text = "HIGHLIGHT: ON"
-        otherFeatures.toggleButton.BackgroundColor3 =
-            Color3.fromRGB(43, 79, 120)
-    else
-        otherFeatures.toggleButton.Text = "HIGHLIGHT: OFF"
-        otherFeatures.toggleButton.BackgroundColor3 =
-            Color3.fromRGB(47, 52, 61)
-    end
+    local isOn = otherFeatures.enabled == true
+
+    -- Match the existing DeadEye SWAP toggles and repaint the state explicitly.
+    pcall(function()
+        button.Text = isOn and "HIGHLIGHT: ON" or "HIGHLIGHT: OFF"
+        button.BackgroundColor3 = isOn
+            and Color3.fromRGB(68, 74, 84)
+            or Color3.fromRGB(47, 52, 61)
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.AutoButtonColor = false
+        button.BackgroundTransparency = 0.30
+        button.TextTransparency = 0
+    end)
 end
 
 function otherFeatures.updateHotkeyButton()
@@ -21715,9 +21720,8 @@ function otherFeatures.updateStatus()
     end
 
     otherFeatures.status.Text =
-        (otherFeatures.enabled and "ON" or "OFF")
-        .. "  |  Selected: " .. tostring(selectedCount)
-        .. "  |  Players: " .. tostring(onlineCount)
+        "SEL " .. tostring(selectedCount)
+        .. "  •  ONLINE " .. tostring(onlineCount)
 end
 
 function otherFeatures.destroyTargetHighlight(userId)
@@ -22014,7 +22018,7 @@ otherFeatures.page.Size = UDim2.new(1, -92, 1, -56)
 otherFeatures.page.Position = UDim2.new(0, 82, 0, 48)
 otherFeatures.page.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
 otherFeatures.page.BorderSizePixel = 0
-otherFeatures.page.ScrollBarThickness = 6
+otherFeatures.page.ScrollBarThickness = 5
 otherFeatures.page.CanvasSize = UDim2.new(0, 0, 0, 0)
 otherFeatures.page.AutomaticCanvasSize = Enum.AutomaticSize.Y
 otherFeatures.page.ScrollingDirection = Enum.ScrollingDirection.Y
@@ -22026,83 +22030,76 @@ otherPageCorner.CornerRadius = UDim.new(0, 9)
 otherPageCorner.Parent = otherFeatures.page
 
 local otherPagePadding = Instance.new("UIPadding")
-otherPagePadding.PaddingTop = UDim.new(0, 8)
-otherPagePadding.PaddingBottom = UDim.new(0, 8)
-otherPagePadding.PaddingLeft = UDim.new(0, 8)
-otherPagePadding.PaddingRight = UDim.new(0, 8)
+otherPagePadding.PaddingTop = UDim.new(0, 6)
+otherPagePadding.PaddingBottom = UDim.new(0, 6)
+otherPagePadding.PaddingLeft = UDim.new(0, 6)
+otherPagePadding.PaddingRight = UDim.new(0, 6)
 otherPagePadding.Parent = otherFeatures.page
 
 local otherPageLayout = Instance.new("UIListLayout")
-otherPageLayout.Padding = UDim.new(0, 6)
+otherPageLayout.Padding = UDim.new(0, 4)
 otherPageLayout.SortOrder = Enum.SortOrder.LayoutOrder
 otherPageLayout.Parent = otherFeatures.page
 
 local otherTitle = Instance.new("TextLabel")
 otherTitle.Name = "PlayerHighlightHeader"
-otherTitle.Size = UDim2.new(1, -4, 0, 22)
+otherTitle.Size = UDim2.new(1, -4, 0, 18)
 otherTitle.BackgroundTransparency = 1
 otherTitle.Text = "PLAYER HIGHLIGHT"
-otherTitle.TextSize = 11
+otherTitle.TextSize = 10
 otherTitle.Font = Enum.Font.GothamBold
-otherTitle.TextColor3 = Color3.fromRGB(172, 181, 196)
+otherTitle.TextColor3 = Color3.fromRGB(150, 150, 150)
 otherTitle.TextXAlignment = Enum.TextXAlignment.Left
 otherTitle.LayoutOrder = 1
 otherTitle.Parent = otherFeatures.page
 
-local otherDescription = Instance.new("TextLabel")
-otherDescription.Name = "PlayerHighlightDescription"
-otherDescription.Size = UDim2.new(1, -4, 0, 30)
-otherDescription.BackgroundTransparency = 1
-otherDescription.Text = "Select one or more players below. Click a selected player again to remove them."
-otherDescription.TextWrapped = true
-otherDescription.TextSize = 9
-otherDescription.Font = Enum.Font.Gotham
-otherDescription.TextColor3 = Color3.fromRGB(145, 151, 163)
-otherDescription.TextXAlignment = Enum.TextXAlignment.Left
-otherDescription.TextYAlignment = Enum.TextYAlignment.Center
-otherDescription.LayoutOrder = 2
-otherDescription.Parent = otherFeatures.page
-
+-- One compact control row, matching the 40px settings rows elsewhere in DeadEye.
 local otherControls = Instance.new("Frame")
 otherControls.Name = "PlayerHighlightControls"
-otherControls.Size = UDim2.new(1, -4, 0, 38)
-otherControls.BackgroundTransparency = 1
-otherControls.LayoutOrder = 3
+otherControls.Size = UDim2.new(1, -4, 0, 34)
+otherControls.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+otherControls.BorderSizePixel = 0
+otherControls.LayoutOrder = 2
 otherControls.Parent = otherFeatures.page
+
+local otherControlsCorner = Instance.new("UICorner")
+otherControlsCorner.CornerRadius = UDim.new(0, 6)
+otherControlsCorner.Parent = otherControls
 
 otherFeatures.toggleButton = Instance.new("TextButton")
 otherFeatures.toggleButton.Name = "HighlightToggle"
-otherFeatures.toggleButton.Size = UDim2.new(0, 105, 0, 31)
-otherFeatures.toggleButton.Position = UDim2.new(0, 0, 0, 3)
+otherFeatures.toggleButton.Size = UDim2.new(0, 100, 0, 27)
+otherFeatures.toggleButton.Position = UDim2.new(0, 5, 0.5, -13)
 otherFeatures.toggleButton.BackgroundColor3 = Color3.fromRGB(47, 52, 61)
 otherFeatures.toggleButton.BorderSizePixel = 0
 otherFeatures.toggleButton.Text = "HIGHLIGHT: OFF"
 otherFeatures.toggleButton.TextSize = 9
 otherFeatures.toggleButton.Font = Enum.Font.GothamBold
 otherFeatures.toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+otherFeatures.toggleButton.AutoButtonColor = false
 otherFeatures.toggleButton.Parent = otherControls
 
 local otherToggleCorner = Instance.new("UICorner")
-otherToggleCorner.CornerRadius = UDim.new(0, 6)
+otherToggleCorner.CornerRadius = UDim.new(0, 5)
 otherToggleCorner.Parent = otherFeatures.toggleButton
 
 local otherHotkeyLabel = Instance.new("TextLabel")
 otherHotkeyLabel.Name = "HotkeyLabel"
-otherHotkeyLabel.Size = UDim2.new(0, 45, 1, 0)
-otherHotkeyLabel.Position = UDim2.new(0, 113, 0, 0)
+otherHotkeyLabel.Size = UDim2.new(0, 35, 1, 0)
+otherHotkeyLabel.Position = UDim2.new(0, 111, 0, 0)
 otherHotkeyLabel.BackgroundTransparency = 1
-otherHotkeyLabel.Text = "HOTKEY"
+otherHotkeyLabel.Text = "KEY"
 otherHotkeyLabel.TextSize = 9
 otherHotkeyLabel.Font = Enum.Font.GothamBold
-otherHotkeyLabel.TextColor3 = Color3.fromRGB(178, 184, 194)
+otherHotkeyLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 otherHotkeyLabel.TextXAlignment = Enum.TextXAlignment.Left
 otherHotkeyLabel.Parent = otherControls
 
 otherFeatures.hotkeyButton = Instance.new("TextButton")
 otherFeatures.hotkeyButton.Name = "HotkeyButton"
-otherFeatures.hotkeyButton.Size = UDim2.new(0, 102, 0, 31)
-otherFeatures.hotkeyButton.Position = UDim2.new(0, 160, 0, 3)
-otherFeatures.hotkeyButton.BackgroundColor3 = Color3.fromRGB(43, 47, 54)
+otherFeatures.hotkeyButton.Size = UDim2.new(0, 60, 0, 27)
+otherFeatures.hotkeyButton.Position = UDim2.new(0, 144, 0.5, -13)
+otherFeatures.hotkeyButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
 otherFeatures.hotkeyButton.BorderSizePixel = 0
 otherFeatures.hotkeyButton.Text = "None"
 otherFeatures.hotkeyButton.TextSize = 10
@@ -22111,43 +22108,44 @@ otherFeatures.hotkeyButton.TextColor3 = Color3.fromRGB(236, 239, 245)
 otherFeatures.hotkeyButton.Parent = otherControls
 
 local otherHotkeyCorner = Instance.new("UICorner")
-otherHotkeyCorner.CornerRadius = UDim.new(0, 6)
+otherHotkeyCorner.CornerRadius = UDim.new(0, 5)
 otherHotkeyCorner.Parent = otherFeatures.hotkeyButton
 
 otherFeatures.status = Instance.new("TextLabel")
 otherFeatures.status.Name = "HighlightStatus"
-otherFeatures.status.Size = UDim2.new(1, -4, 0, 18)
+otherFeatures.status.Size = UDim2.new(1, -214, 1, 0)
+otherFeatures.status.Position = UDim2.new(0, 210, 0, 0)
 otherFeatures.status.BackgroundTransparency = 1
-otherFeatures.status.TextSize = 9
+otherFeatures.status.TextSize = 8
 otherFeatures.status.Font = Enum.Font.Gotham
-otherFeatures.status.TextColor3 = Color3.fromRGB(150, 158, 171)
-otherFeatures.status.TextXAlignment = Enum.TextXAlignment.Left
-otherFeatures.status.LayoutOrder = 4
-otherFeatures.status.Parent = otherFeatures.page
+otherFeatures.status.TextColor3 = Color3.fromRGB(150, 150, 150)
+otherFeatures.status.TextXAlignment = Enum.TextXAlignment.Right
+otherFeatures.status.TextTruncate = Enum.TextTruncate.AtEnd
+otherFeatures.status.Parent = otherControls
 
 local otherPlayersHeader = Instance.new("TextLabel")
 otherPlayersHeader.Name = "ServerPlayersHeader"
-otherPlayersHeader.Size = UDim2.new(1, -4, 0, 20)
+otherPlayersHeader.Size = UDim2.new(1, -4, 0, 17)
 otherPlayersHeader.BackgroundTransparency = 1
-otherPlayersHeader.Text = "SERVER PLAYERS  •  CLICK TO SELECT"
+otherPlayersHeader.Text = "SERVER PLAYERS  •  MULTI-SELECT"
 otherPlayersHeader.TextSize = 9
 otherPlayersHeader.Font = Enum.Font.GothamBold
-otherPlayersHeader.TextColor3 = Color3.fromRGB(172, 181, 196)
+otherPlayersHeader.TextColor3 = Color3.fromRGB(150, 150, 150)
 otherPlayersHeader.TextXAlignment = Enum.TextXAlignment.Left
-otherPlayersHeader.LayoutOrder = 5
+otherPlayersHeader.LayoutOrder = 3
 otherPlayersHeader.Parent = otherFeatures.page
 
 otherFeatures.playerScroll = Instance.new("ScrollingFrame")
 otherFeatures.playerScroll.Name = "ServerPlayerList"
-otherFeatures.playerScroll.Size = UDim2.new(1, -4, 0, 150)
-otherFeatures.playerScroll.BackgroundColor3 = Color3.fromRGB(27, 30, 36)
+otherFeatures.playerScroll.Size = UDim2.new(1, -4, 0, 102)
+otherFeatures.playerScroll.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 otherFeatures.playerScroll.BackgroundTransparency = 0.12
 otherFeatures.playerScroll.BorderSizePixel = 0
 otherFeatures.playerScroll.ScrollBarThickness = 4
 otherFeatures.playerScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 otherFeatures.playerScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
 otherFeatures.playerScroll.ScrollingDirection = Enum.ScrollingDirection.Y
-otherFeatures.playerScroll.LayoutOrder = 6
+otherFeatures.playerScroll.LayoutOrder = 4
 otherFeatures.playerScroll.Parent = otherFeatures.page
 
 local otherPlayerScrollCorner = Instance.new("UICorner")
@@ -22155,20 +22153,27 @@ otherPlayerScrollCorner.CornerRadius = UDim.new(0, 6)
 otherPlayerScrollCorner.Parent = otherFeatures.playerScroll
 
 local otherPlayerPadding = Instance.new("UIPadding")
-otherPlayerPadding.PaddingTop = UDim.new(0, 5)
-otherPlayerPadding.PaddingBottom = UDim.new(0, 5)
+otherPlayerPadding.PaddingTop = UDim.new(0, 4)
+otherPlayerPadding.PaddingBottom = UDim.new(0, 4)
 otherPlayerPadding.PaddingLeft = UDim.new(0, 4)
 otherPlayerPadding.PaddingRight = UDim.new(0, 4)
 otherPlayerPadding.Parent = otherFeatures.playerScroll
 
 otherFeatures.playerLayout = Instance.new("UIListLayout")
-otherFeatures.playerLayout.Padding = UDim.new(0, 4)
+otherFeatures.playerLayout.Padding = UDim.new(0, 3)
 otherFeatures.playerLayout.SortOrder = Enum.SortOrder.LayoutOrder
 otherFeatures.playerLayout.Parent = otherFeatures.playerScroll
 
 __UI.__L.addConnection(
     otherFeatures.toggleButton.MouseButton1Click:Connect(function()
         otherFeatures.setEnabled(not otherFeatures.enabled, true)
+        -- Repaint on the next UI frame too; the label and state must always agree.
+        task.defer(function()
+            if not cleaned then
+                otherFeatures.updateToggle()
+                otherFeatures.updateStatus()
+            end
+        end)
     end)
 )
 
@@ -22252,9 +22257,13 @@ otherFeatures.rebuildPlayerList()
 
 task.spawn(function()
     while not cleaned do
+        pcall(otherFeatures.updateToggle)
+        pcall(otherFeatures.updateStatus)
+
         if otherFeatures.enabled then
             pcall(otherFeatures.refreshHighlights)
         end
+
         task.wait(0.35)
     end
 
