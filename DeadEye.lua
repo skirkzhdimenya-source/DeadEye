@@ -21771,16 +21771,19 @@ function otherFeatures.getVisualRig(player)
             return visualModel
         end
 
-        local objectModel
-        pcall(function()
-            objectModel = characterObject.Model
-        end)
+        -- Match the standalone test's fallback before looking in Workspace.Rigs.
+        if rigComponent then
+            local fallbackOK, fallbackModel = pcall(function()
+                return rigComponent:GetRigModel()
+            end)
 
-        if typeof(objectModel) == "Instance"
-            and objectModel:IsA("Model")
-            and objectModel.Parent
-        then
-            return objectModel
+            if fallbackOK
+                and typeof(fallbackModel) == "Instance"
+                and fallbackModel:IsA("Model")
+                and fallbackModel.Parent
+            then
+                return fallbackModel
+            end
         end
     end
 
@@ -25199,6 +25202,8 @@ setMainMinimized = function(state)
             unusualPage.Visible = false
             unusualStatus.Visible = false
             others.page.Visible = false
+            cosmetic.page.Visible = false
+            otherFeatures.page.Visible = false
         end)
         Minimize.Text = "+"
 
@@ -25872,6 +25877,14 @@ __UI.__L.cleanup = function()
         otherFeatures.hotkeyCapture = false
         otherFeatures.updateToggle()
         otherFeatures.destroyAllHighlights()
+
+        for _, connection in ipairs(otherFeatures.playerButtonConnections) do
+            pcall(function()
+                connection:Disconnect()
+            end)
+        end
+        table.clear(otherFeatures.playerButtonConnections)
+
         otherFeatures.saveConfig()
     end)
 
