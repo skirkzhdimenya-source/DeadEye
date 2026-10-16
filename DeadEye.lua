@@ -22163,14 +22163,18 @@ otherFeatures.playerLayout.Padding = UDim.new(0, 4)
 otherFeatures.playerLayout.SortOrder = Enum.SortOrder.LayoutOrder
 otherFeatures.playerLayout.Parent = otherFeatures.playerScroll
 
-otherFeatures.toggleButton.MouseButton1Click:Connect(function()
-    otherFeatures.setEnabled(not otherFeatures.enabled, true)
-end)
+__UI.__L.addConnection(
+    otherFeatures.toggleButton.MouseButton1Click:Connect(function()
+        otherFeatures.setEnabled(not otherFeatures.enabled, true)
+    end)
+)
 
-otherFeatures.hotkeyButton.MouseButton1Click:Connect(function()
-    otherFeatures.hotkeyCapture = true
-    otherFeatures.updateHotkeyButton()
-end)
+__UI.__L.addConnection(
+    otherFeatures.hotkeyButton.MouseButton1Click:Connect(function()
+        otherFeatures.hotkeyCapture = true
+        otherFeatures.updateHotkeyButton()
+    end)
+)
 
 __UI.__L.addConnection(
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -22427,6 +22431,7 @@ __UI.__L.setCategory = function(category)
 
     pcall(function()
         Status.Visible = false
+        Toggle.Visible = false
         unusualStatus.Visible = false
         unusualPicker.Visible = false
         mainPage.Visible = false
