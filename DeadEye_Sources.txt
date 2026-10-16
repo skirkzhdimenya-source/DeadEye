@@ -8880,3 +8880,89 @@ BindableEvent.Event:Connect(function()
 	end
 end)
 return t
+
+
+==================================================
+SOURCE #58
+==================================================
+PATH:
+ReplicatedStorage.Shared.UserData.ClientHooks.useLoadout
+
+PURPOSE:
+Клиентское зеркало экипировки игрока.
+GetEquippedFromSlot() возвращает локальный кэш слотов; Loadout remote
+обновляет его через события sync/patch и вызывает Changed.
+TryEquip()/TryUnequip() лишь отправляют серверный запрос. Источник нужен,
+чтобы отделять фактически экипированный UnusualSlot от локальной визуальной
+подмены и понимать, почему изменение таблицы экипировки не равно немедленной
+пересборке уже существующего workspace.Rigs/<player>.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local Signal = require(ReplicatedStorage.Shared.Generics.Signal)
+local Config = require(ReplicatedStorage.Shared.UserData.Loadout.Config)
+local Remotes = require(ReplicatedStorage.Shared.UserData.Events.Remotes)
+local UserOwnsPackage = require(ReplicatedStorage.Shared.Marketplace.UserOwnsPackage)
+local Loadout = Remotes.Channels.Loadout
+local Equip = Remotes.Requests.Equip
+local t = { Changed = Signal.new() }
+local t2 = {}
+function t.GetSlotTypeForSlot(p1: string)
+	return Config.Slots[p1]
+end
+function t.GetSlots()
+	return Config.Slots
+end
+function t.IsSlotAvailable(p2: string)
+	if Config.Slots[p2] == nil then
+		return false
+	end
+	return UserOwnsPackage.IsSlotUnlocked(Players.LocalPlayer, p2)
+end
+function t.GetEquippedFromSlot(p3: string)
+	return t2[p3] or 0
+end
+function t.IsEquipped(p4: number)
+	for v5, v6 in t2 do
+		if v6 == p4 then
+			return true, v5
+		end
+	end
+	return false, nil
+end
+function t.GetEquipped()
+	return table.freeze(table.clone(t2))
+end
+function t.Observe(p7: (...any) -> ...any)
+	p7()
+	local v_u_8 = t.Changed:Connect(p7)
+	return function()
+		v_u_8:Disconnect()
+	end
+end
+function t.TryEquip(p9: string, p10: number)
+	Equip:FireServer(p9, p10)
+end
+function t.TryUnequip(p11: string)
+	Equip:FireServer(p11, nil)
+end
+Loadout.OnClientEvent:Connect(function(p12: string, p13)
+	if p12 == "sync" then
+		t2 = p13 or {}
+		t.Changed:Fire()
+	elseif p12 == "patch" then
+		for v14, v15 in p13 do
+			if v15 == 0 then
+				t2[v14] = nil
+			else
+				t2[v14] = v15
+			end
+		end
+		t.Changed:Fire()
+	end
+end)
+return table.freeze(t)
