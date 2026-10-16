@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.219
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.221
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.220"
+local SCRIPT_VERSION = "1.221"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -4993,6 +4993,49 @@ end
 --// NEEDED ATTACHMENTS
 --// =========================================================
 
+local function isUnusualJointObject(object)
+
+    return object:IsA("Weld")
+        or object:IsA("WeldConstraint")
+        or object:IsA("Motor6D")
+        or object:IsA("Motor")
+
+end
+
+local unusualNestedJointCache = setmetatable(
+    {},
+    { __mode = "k" }
+)
+
+local function unusualJointHasNestedBasePart(joint)
+
+    local cached =
+        unusualNestedJointCache[joint]
+
+    if cached ~= nil then
+        return cached
+    end
+
+    local found = false
+
+    for _, descendant in ipairs(
+        joint:GetDescendants()
+    ) do
+
+        if descendant:IsA("BasePart") then
+            found = true
+            break
+        end
+
+    end
+
+    unusualNestedJointCache[joint] =
+        found
+
+    return found
+
+end
+
 local function unusualObjectBelongsToPart(
     object,
     sourcePart
@@ -5006,6 +5049,15 @@ local function unusualObjectBelongsToPart(
     do
 
         if parent:IsA("BasePart") then
+            return false
+        end
+
+        --// A joint subtree containing nested BaseParts is installed whole.
+        --// Do not separately clone FX carried inside that same subtree.
+        if parent.Parent == sourcePart
+            and isUnusualJointObject(parent)
+            and unusualJointHasNestedBasePart(parent)
+        then
             return false
         end
 
@@ -6677,6 +6729,181 @@ end
 --// INSTALL ONE SOURCE PART
 --// =========================================================
 
+--// =========================================================
+--// CLONE / REBIND COMPLETE WELDED COSMETIC TREES
+--// =========================================================
+
+local function mapUnusualCloneTree(
+    sourceRoot,
+    cloneRoot,
+    map
+)
+
+    map[sourceRoot] = cloneRoot
+
+    local sourceChildren = sourceRoot:GetChildren()
+    local cloneChildren = cloneRoot:GetChildren()
+    local used = {}
+
+    for _, sourceChild in ipairs(sourceChildren) do
+        for _, cloneChild in ipairs(cloneChildren) do
+            if not used[cloneChild]
+                and cloneChild.Name == sourceChild.Name
+                and cloneChild.ClassName == sourceChild.ClassName
+            then
+                used[cloneChild] = true
+                mapUnusualCloneTree(sourceChild, cloneChild, map)
+                break
+            end
+        end
+    end
+end
+
+local function rebindUnusualCloneTree(
+    sourceRoot,
+    cloneRoot,
+    map,
+    sourcePart,
+    targetPart
+)
+
+    local sourceObjects = { sourceRoot }
+
+    for _, descendant in ipairs(sourceRoot:GetDescendants()) do
+        table.insert(sourceObjects, descendant)
+    end
+
+    for _, sourceObject in ipairs(sourceObjects) do
+        local cloneObject = map[sourceObject]
+
+        if cloneObject then
+            if isUnusualJointObject(sourceObject) then
+                for _, property in ipairs({ "Part0", "Part1" }) do
+                    local originalPart
+
+                    pcall(function()
+                        originalPart = sourceObject[property]
+                    end)
+
+                    if originalPart then
+                        local reboundPart
+
+                        if sourcePart and originalPart == sourcePart then
+                            reboundPart = targetPart
+                        elseif originalPart == targetPart then
+                            reboundPart = targetPart
+                        else
+                            reboundPart = map[originalPart]
+                        end
+
+                        --// Resolve references to sibling body parts on the live rig.
+                        if not reboundPart and targetPart and targetPart.Parent then
+                            local candidate =
+                                targetPart.Parent:FindFirstChild(originalPart.Name)
+
+                            if candidate and candidate:IsA("BasePart") then
+                                reboundPart = candidate
+                            end
+                        end
+
+                        if reboundPart then
+                            pcall(function()
+                                cloneObject[property] = reboundPart
+                            end)
+                        elseif sourcePart
+                            and sourcePart.Parent
+                            and originalPart:IsDescendantOf(sourcePart.Parent)
+                        then
+                            --// Do not leave the clone connected to a template limb.
+                            pcall(function()
+                                cloneObject[property] = nil
+                            end)
+                        end
+                    end
+                end
+            elseif sourceObject:IsA("Beam") or sourceObject:IsA("Trail") then
+                for _, property in ipairs({ "Attachment0", "Attachment1" }) do
+                    local originalAttachment
+
+                    pcall(function()
+                        originalAttachment = sourceObject[property]
+                    end)
+
+                    local reboundAttachment =
+                        originalAttachment and map[originalAttachment]
+
+                    if reboundAttachment then
+                        pcall(function()
+                            cloneObject[property] = reboundAttachment
+                        end)
+                    end
+                end
+            end
+        end
+    end
+end
+
+local function installUnusualWeldedTree(
+    sourcePart,
+    targetPart,
+    rootJoint,
+    id
+)
+
+    if not isUnusualJointObject(rootJoint)
+        or not unusualJointHasNestedBasePart(rootJoint)
+    then
+        return false
+    end
+
+    local clone
+    local ok = pcall(function()
+        clone = rootJoint:Clone()
+    end)
+
+    if not ok or not clone then
+        warn(
+            "[UnusualSwapper] Failed to clone welded tree:",
+            rootJoint:GetFullName()
+        )
+        return false
+    end
+
+    local cloneMap = {}
+    mapUnusualCloneTree(rootJoint, clone, cloneMap)
+
+    --// Keep the Weld and its nested MeshParts/FX hierarchy together.
+    clone.Parent = targetPart
+
+    rebindUnusualCloneTree(
+        rootJoint,
+        clone,
+        cloneMap,
+        sourcePart,
+        targetPart
+    )
+
+    for _, object in ipairs(clone:GetDescendants()) do
+        if object:IsA("BasePart") then
+            pcall(function()
+                object.Anchored = false
+                object.Massless = true
+                object.CanCollide = false
+                object.CanTouch = false
+                object.CanQuery = false
+            end)
+        elseif object:IsA("Script") then
+            --// Match the native AddCosmetics behavior for scripts in cosmetics.
+            pcall(function()
+                object.Enabled = true
+            end)
+        end
+    end
+
+    UnusualFns.tagUnusualFX(clone, id)
+    return true
+end
+
 local function installUnusualPartFX(
     sourcePart,
     targetPart,
@@ -6756,6 +6983,22 @@ local function installUnusualPartFX(
 
         end
 
+    end
+
+    --// Some Unusuals store geometry under direct Weld children of a body part
+    --// (for example, Horns Of Toxicity). Clone the whole subtree so nested
+    --// MeshParts, SurfaceAppearance, Attachments and FX stay connected.
+    for _, child in ipairs(sourcePart:GetChildren()) do
+        if isUnusualJointObject(child)
+            and unusualJointHasNestedBasePart(child)
+        then
+            installUnusualWeldedTree(
+                sourcePart,
+                targetPart,
+                child,
+                id
+            )
+        end
     end
 
     --// Direct extra BaseParts are handled by the
@@ -7281,16 +7524,25 @@ function UnusualFns.buildOriginalUnusualSignature(
                 sourcePart:GetChildren()
             ) do
 
-                if (
-                    object:IsA("Weld")
-                    or object:IsA("WeldConstraint")
-                    or object:IsA("Motor6D")
-                    or object:IsA("Motor")
+                if isUnusualJointObject(object)
                     or object:IsA("CFrameValue")
-                ) then
+                then
+
+                    --// Record joint roots that contain actual nested geometry.
+                    if isUnusualJointObject(object)
+                        and unusualJointHasNestedBasePart(object)
+                    then
+                        table.insert(
+                            objects,
+                            {
+                                Class = object.ClassName,
+                                Name = object.Name,
+                                WholeTree = true
+                            }
+                        )
+                    end
 
                     continue
-
                 end
 
                 if hasEffectContent(object) then
@@ -7589,29 +7841,36 @@ function UnusualFns.captureNativeUnusualSnapshot(
                 joints = {}
             }
 
-            for _, existing in ipairs(
-                targetPart:GetChildren()
-            ) do
-                local matched = false
+            for _, existing in ipairs(targetPart:GetChildren()) do
+                local matchedInfo = nil
 
                 for _, info in ipairs(objects) do
                     if matchesObject(existing, info) then
-                        matched = true
+                        matchedInfo = info
                         break
                     end
                 end
 
-                if matched then
+                if matchedInfo then
                     local clone
                     pcall(function()
                         clone = existing:Clone()
                     end)
 
                     if clone then
-                        table.insert(
-                            partSnapshot.objects,
-                            clone
-                        )
+                        if matchedInfo.WholeTree then
+                            local cloneMap = {}
+                            mapUnusualCloneTree(existing, clone, cloneMap)
+                            rebindUnusualCloneTree(
+                                existing,
+                                clone,
+                                cloneMap,
+                                nil,
+                                targetPart
+                            )
+                        end
+
+                        table.insert(partSnapshot.objects, clone)
                     end
                 end
             end
@@ -7625,7 +7884,9 @@ function UnusualFns.captureNativeUnusualSnapshot(
                     or joint:IsA("Motor")
                 then
                     for _, info in ipairs(objects) do
-                        if joint.Name == info.Name then
+                        if joint.Name == info.Name
+                            and not info.WholeTree
+                        then
                             local clone
                             pcall(function()
                                 clone = joint:Clone()
@@ -7722,6 +7983,22 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                     end)
 
                     if clone then
+                        local cloneMap = {}
+
+                        mapUnusualCloneTree(
+                            savedObject,
+                            clone,
+                            cloneMap
+                        )
+
+                        rebindUnusualCloneTree(
+                            savedObject,
+                            clone,
+                            cloneMap,
+                            nil,
+                            targetPart
+                        )
+
                         clone.Parent =
                             targetPart
                         restored = true
