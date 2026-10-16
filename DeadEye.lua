@@ -45,6 +45,18 @@ local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local genv = getgenv and getgenv() or _G
 
+-- Stop the standalone test version if it is still loaded.
+pcall(function()
+    local previousFOVFix =
+        genv.DeadEyeFOVBodyVisibilityFix
+
+    if type(previousFOVFix) == "table"
+        and type(previousFOVFix.Stop) == "function"
+    then
+        previousFOVFix.Stop()
+    end
+end)
+
 --// =========================================================
 --// PURGE STALE AUTOJUMP / LOOK SENSORS
 --// =========================================================
