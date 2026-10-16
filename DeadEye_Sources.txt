@@ -8966,3 +8966,180 @@ Loadout.OnClientEvent:Connect(function(p12: string, p13)
 	end
 end)
 return table.freeze(t)
+
+
+==================================================
+SOURCE #59
+==================================================
+PATH:
+ReplicatedStorage.Items.Registry.Query
+
+PURPOSE:
+Вспомогательный фильтр реестра предметов. Query.new() получает уже
+собранные записи и поддерживает All/Any/None/Include/Exclude/Get/Ids.
+Не содержит моделей отдельных Unusual и не применяет эффекты к персонажу.
+Для полного экспорта эффектов нужно пройти Registry.GetAll() и читать
+ModuleScript каждого найденного предмета, а затем отдельно исследовать
+клиентский путь обновления визуального рига.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local v_u_1: {[any]: any} = table.freeze({})
+local t = {}
+t.__index = t
+function t.new(p2: {[any]: any}, p3: number, p4: {[any]: any}, p5: {[any]: any})
+	local v6 = t
+	return setmetatable({
+		_entries = p2,
+		_count = p3,
+		_buckets = p4,
+		_sizes = p5,
+		_all = {},
+		_any = {},
+		_none = {},
+		_include = {},
+		_exclude = {}
+	}, v6)
+end
+function t.All(p7, ...)
+	for _, v8 in { ... } do
+		local _all = p7._all
+		table.insert(_all, v8)
+	end
+	return p7
+end
+function t.Any(p9, ...)
+	local t2 = { ... }
+	if #t2 > 0 then
+		local _any = p9._any
+		table.insert(_any, t2)
+	end
+	return p9
+end
+function t.None(p10, ...)
+	for _2, v11 in { ... } do
+		local _none = p10._none
+		table.insert(_none, v11)
+	end
+	return p10
+end
+function t.Include(p12, p13: (...any) -> ...any)
+	local _include = p12._include
+	table.insert(_include, p13)
+	return p12
+end
+function t.Exclude(p14, p15: (...any) -> ...any)
+	local _exclude = p14._exclude
+	table.insert(_exclude, p15)
+	return p14
+end
+local function matches(p16, p17: {[any]: any})
+	for _3, v18 in p16._all do
+		local Id = p17.Id
+		local v19 = p16._buckets[v18]
+		local v20
+		if v19 == nil then
+			v20 = false
+		else
+			v20 = v19[Id] ~= nil
+		end
+		if not v20 then
+			return false
+		end
+	end
+	for _4, v21 in p16._any do
+		local v22 = false
+		for _5, v23 in v21 do
+			local Id2: number = p17.Id
+			local v24 = p16._buckets[v23]
+			local v25
+			if v24 == nil then
+				v25 = false
+			else
+				v25 = v24[Id2] ~= nil
+			end
+			if v25 then
+				v22 = true
+				break
+			end
+		end
+		if not v22 then
+			return false
+		end
+	end
+	for _6, v26 in p16._none do
+		local Id3 = p17.Id
+		local v27 = p16._buckets[v26]
+		local v28
+		if v27 == nil then
+			v28 = false
+		else
+			v28 = v27[Id3] ~= nil
+		end
+		if v28 then
+			return false
+		end
+	end
+	for _7, v29 in p16._include do
+		if not v29(p17) then
+			return false
+		end
+	end
+	for _8, v30 in p16._exclude do
+		if v30(p17) then
+			return false
+		end
+	end
+	return true
+end
+function t.Get(p31)
+	local _entries = p31._entries
+	local _count = p31._count
+	for _9, v32 in p31._all do
+		local v33 = p31._sizes[v32] or 0
+		if v33 < _count then
+			_entries = p31._buckets[v32] or v_u_1
+			_count = v33
+		end
+	end
+	if _entries == p31._entries then
+		local v34 = 1 / 0
+		local v35 = nil
+		for _10, v36 in p31._any do
+			local v37 = 0
+			for _11, v38 in v36 do
+				v37 = v37 + (p31._sizes[v38] or 0)
+			end
+			if v37 < v34 then
+				v35 = v36
+				v34 = v37
+			end
+		end
+		if v35 ~= nil and v34 < _count then
+			_entries = {}
+			for _12, v39 in v35 do
+				for v40, v41 in p31._buckets[v39] or v_u_1 do
+					_entries[v40] = v41
+				end
+			end
+		end
+	end
+	local t3 = {}
+	for v42, v43 in _entries do
+		if matches(p31, v43) then
+			t3[v42] = v43
+		end
+	end
+	return t3
+end
+function t.Ids(p44)
+	local t4 = {}
+	for v45 in p44:Get() do
+		table.insert(t4, v45)
+	end
+	table.sort(t4)
+	return t4
+end
+return t
