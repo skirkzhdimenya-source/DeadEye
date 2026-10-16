@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.221
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.222
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,12 +32,13 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.221"
+local SCRIPT_VERSION = "1.222"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local __UI = {}
+__UI.__L = {}
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -51,7 +52,7 @@ local genv = getgenv and getgenv() or _G
 --// connections alive because their sensor Parts were not destroyed
 --// during cleanup. Destroying the named sensor Parts disconnects
 --// those old callbacks and prevents stale arithmetic errors.
-local function purgeStaleMainJumpSensors()
+__UI.__L.purgeStaleMainJumpSensors = function()
     local character =
         LocalPlayer
         and LocalPlayer.Character
@@ -81,7 +82,7 @@ local function purgeStaleMainJumpSensors()
     end
 end
 
-purgeStaleMainJumpSensors()
+__UI.__L.purgeStaleMainJumpSensors()
 
 pcall(function()
     if genv.DEADEYE_MAIN_SENSORS_CLEANUP then
@@ -156,16 +157,16 @@ __UI.ClientItemService = require(
 __UI.EmoteService = require(
     ReplicatedStorage.Services.Items.EmoteService
 )
-local Registry = require(
+__UI.__L.Registry = require(
     ReplicatedStorage.Items.Registry
 )
-local HttpService = game:GetService("HttpService")
+__UI.__L.HttpService = game:GetService("HttpService")
 --// =========================================================
 --// SETTINGS
 --// =========================================================
-local SLOT_COUNT = 12
-local CONFIG_FILE = "DeadEye_Config.json"
-local savedConfig = {
+__UI.__L.SLOT_COUNT = 12
+__UI.__L.CONFIG_FILE = "DeadEye_Config.json"
+__UI.__L.savedConfig = {
     version = 1,
     emotes = {},
     unusual = {},
@@ -207,7 +208,7 @@ function loadSavedConfig()
     if type(isfile) == "function" then
         local exists = false
         pcall(function()
-            exists = isfile(CONFIG_FILE)
+            exists = isfile(__UI.__L.CONFIG_FILE)
         end)
         if not exists then
             return
@@ -216,7 +217,7 @@ function loadSavedConfig()
     success, raw =
         pcall(function()
             return readfile(
-                CONFIG_FILE
+                __UI.__L.CONFIG_FILE
             )
         end)
     if not success
@@ -227,7 +228,7 @@ function loadSavedConfig()
     end
     local decodeSuccess, decoded =
         pcall(function()
-            return HttpService:JSONDecode(
+            return __UI.__L.HttpService:JSONDecode(
                 raw
             )
         end)
@@ -240,85 +241,85 @@ function loadSavedConfig()
         return
     end
     if type(decoded.emotes) == "table" then
-        savedConfig.emotes =
+        __UI.__L.savedConfig.emotes =
             decoded.emotes
     end
     if type(decoded.unusual) == "table" then
-        savedConfig.unusual =
+        __UI.__L.savedConfig.unusual =
             decoded.unusual
     end
     if type(decoded.cosmetic) == "table" then
-        savedConfig.cosmetic =
+        __UI.__L.savedConfig.cosmetic =
             decoded.cosmetic
     end
     if type(decoded.others) == "table" then
-        savedConfig.others =
+        __UI.__L.savedConfig.others =
             decoded.others
     end
     if type(decoded.main) == "table" then
-        savedConfig.main =
+        __UI.__L.savedConfig.main =
             decoded.main
     end
-    savedConfig.main.hideUIHotkey =
-        savedConfig.main.hideUIHotkey
+    __UI.__L.savedConfig.main.hideUIHotkey =
+        __UI.__L.savedConfig.main.hideUIHotkey
         or "H"
 
-    if savedConfig.main.rageLook ~= true then
-        savedConfig.main.rageLook = false
+    if __UI.__L.savedConfig.main.rageLook ~= true then
+        __UI.__L.savedConfig.main.rageLook = false
     else
-        savedConfig.main.rageLook = true
+        __UI.__L.savedConfig.main.rageLook = true
     end
 
-    if savedConfig.main.benchTrimpEnabled ~= true then
-        savedConfig.main.benchTrimpEnabled = false
+    if __UI.__L.savedConfig.main.benchTrimpEnabled ~= true then
+        __UI.__L.savedConfig.main.benchTrimpEnabled = false
     else
-        savedConfig.main.benchTrimpEnabled = true
+        __UI.__L.savedConfig.main.benchTrimpEnabled = true
     end
 
-    if savedConfig.main.reverseLookMode ~= "with"
-        and savedConfig.main.reverseLookMode ~= "without"
+    if __UI.__L.savedConfig.main.reverseLookMode ~= "with"
+        and __UI.__L.savedConfig.main.reverseLookMode ~= "without"
     then
-        savedConfig.main.reverseLookMode = "without"
+        __UI.__L.savedConfig.main.reverseLookMode = "without"
     end
 
-    if savedConfig.main.reverseLookEnabled ~= true then
-        savedConfig.main.reverseLookEnabled = false
+    if __UI.__L.savedConfig.main.reverseLookEnabled ~= true then
+        __UI.__L.savedConfig.main.reverseLookEnabled = false
     end
 
     if type(decoded.gui) == "table" then
-        savedConfig.gui = savedConfig.gui or {}
+        __UI.__L.savedConfig.gui = __UI.__L.savedConfig.gui or {}
 
-        savedConfig.gui.x =
+        __UI.__L.savedConfig.gui.x =
             tonumber(decoded.gui.x)
-            or savedConfig.gui.x
+            or __UI.__L.savedConfig.gui.x
             or 35
 
-        savedConfig.gui.y =
+        __UI.__L.savedConfig.gui.y =
             tonumber(decoded.gui.y)
-            or savedConfig.gui.y
+            or __UI.__L.savedConfig.gui.y
             or 80
 
-        savedConfig.gui.width =
+        __UI.__L.savedConfig.gui.width =
             tonumber(decoded.gui.width)
-            or savedConfig.gui.width
+            or __UI.__L.savedConfig.gui.width
             or 455
 
-        savedConfig.gui.height =
+        __UI.__L.savedConfig.gui.height =
             tonumber(decoded.gui.height)
-            or savedConfig.gui.height
+            or __UI.__L.savedConfig.gui.height
             or 320
     end
 
-    savedConfig.gui.x =
-        tonumber(savedConfig.gui.x) or 35
-    savedConfig.gui.y =
-        tonumber(savedConfig.gui.y) or 80
-    savedConfig.gui.width =
-        tonumber(savedConfig.gui.width) or 455
-    savedConfig.gui.height =
-        tonumber(savedConfig.gui.height) or 320
+    __UI.__L.savedConfig.gui.x =
+        tonumber(__UI.__L.savedConfig.gui.x) or 35
+    __UI.__L.savedConfig.gui.y =
+        tonumber(__UI.__L.savedConfig.gui.y) or 80
+    __UI.__L.savedConfig.gui.width =
+        tonumber(__UI.__L.savedConfig.gui.width) or 455
+    __UI.__L.savedConfig.gui.height =
+        tonumber(__UI.__L.savedConfig.gui.height) or 320
 
-    savedConfig.version =
+    __UI.__L.savedConfig.version =
         tonumber(decoded.version)
         or 1
 end
@@ -328,8 +329,8 @@ function saveSavedConfig()
     end
     local success, raw =
         pcall(function()
-            return HttpService:JSONEncode(
-                savedConfig
+            return __UI.__L.HttpService:JSONEncode(
+                __UI.__L.savedConfig
             )
         end)
     if not success
@@ -344,7 +345,7 @@ function saveSavedConfig()
     local writeSuccess, writeError =
         pcall(function()
             writefile(
-                CONFIG_FILE,
+                __UI.__L.CONFIG_FILE,
                 raw
             )
         end)
@@ -367,9 +368,9 @@ loadSavedConfig()
 --// =========================================================
 --// SLOTS
 --// =========================================================
-local slots = {}
-for i = 1, SLOT_COUNT do
-    slots[i] = {
+__UI.__L.slots = {}
+for i = 1, __UI.__L.SLOT_COUNT do
+    __UI.__L.slots[i] = {
         originalId = nil,
         replaceId = nil,
         originalName = nil,
@@ -377,25 +378,25 @@ for i = 1, SLOT_COUNT do
     }
 end
 --// DEFAULT SLOT
-slots[1].originalId = 1631
-slots[1].replaceId = 51
-slots[1].originalName = "Banger"
-slots[1].replaceName = "RockinStride"
+__UI.__L.slots[1].originalId = 1631
+__UI.__L.slots[1].replaceId = 51
+__UI.__L.slots[1].originalName = "Banger"
+__UI.__L.slots[1].replaceName = "RockinStride"
 --// Load saved Emote mappings.
-for i = 1, SLOT_COUNT do
+for i = 1, __UI.__L.SLOT_COUNT do
     local saved =
-        savedConfig.emotes[i]
+        __UI.__L.savedConfig.emotes[i]
     if type(saved) == "table" then
         local originalId =
             tonumber(saved.originalId)
         local replaceId =
             tonumber(saved.replaceId)
         if originalId then
-            slots[i].originalId =
+            __UI.__L.slots[i].originalId =
                 originalId
         end
         if replaceId then
-            slots[i].replaceId =
+            __UI.__L.slots[i].replaceId =
                 replaceId
         end
     end
@@ -404,8 +405,8 @@ end
 --// RUNTIME STATE
 --// =========================================================
 local enabled = false
-local cleaned = false
-local connections = {}
+__UI.__L.cleaned = false
+__UI.__L.connections = {}
 
 --// Native wheel visual state.
 --// Keys are logical wheel positions ("Wheel:1", "Wheel2:4"),
@@ -415,48 +416,48 @@ local connections = {}
 --// =========================================================
 --// CACHE
 --// =========================================================
-local originalModules = {}
-local replaceModules = {}
+__UI.__L.originalModules = {}
+__UI.__L.replaceModules = {}
 -- [originalId] = { [animationId] = true }
-local originalAnimationIds = {}
-local emoteList = {}
+__UI.__L.originalAnimationIds = {}
+__UI.__L.emoteList = {}
 --// =========================================================
 --// GUI STATE
 --// =========================================================
-local ScreenGui
-local Main
-local SlotsScroll
-local Picker
-local PickerScroll
-local PickerSearch
-local PickerTitle
-local PickerClose
-local Status
-local Toggle
-local activePickerSlot = nil
-local activePickerSide = nil
-local slotOriginalButtons = {}
-local slotReplaceButtons = {}
-local pickerButtons = {}
-local emotePreviewCache = {}
-local cosmeticPreviewCache = {}
-local emotePreviewCacheHolder
-local cosmeticPreviewCacheHolder
-local emotePickerPreloaded = false
-local cosmeticPickerPreloaded = false
+__UI.__L.ScreenGui
+__UI.__L.Main
+__UI.__L.SlotsScroll
+__UI.__L.Picker
+__UI.__L.PickerScroll
+__UI.__L.PickerSearch
+__UI.__L.PickerTitle
+__UI.__L.PickerClose
+__UI.__L.Status
+__UI.__L.Toggle
+__UI.__L.activePickerSlot = nil
+__UI.__L.activePickerSide = nil
+__UI.__L.slotOriginalButtons = {}
+__UI.__L.slotReplaceButtons = {}
+__UI.__L.pickerButtons = {}
+__UI.__L.emotePreviewCache = {}
+__UI.__L.cosmeticPreviewCache = {}
+__UI.__L.emotePreviewCacheHolder
+__UI.__L.cosmeticPreviewCacheHolder
+__UI.__L.emotePickerPreloaded = false
+__UI.__L.cosmeticPickerPreloaded = false
 --// =========================================================
 --// CONNECTION HELPER
 --// =========================================================
-local function addConnection(connection)
-    table.insert(connections, connection)
+__UI.__L.addConnection = function(connection)
+    table.insert(__UI.__L.connections, connection)
 end
-local function disconnectAll()
-    for _, connection in ipairs(connections) do
+__UI.__L.disconnectAll = function()
+    for _, connection in ipairs(__UI.__L.connections) do
         pcall(function()
             connection:Disconnect()
         end)
     end
-    table.clear(connections)
+    table.clear(__UI.__L.connections)
 end
 --// =========================================================
 --// NORMALIZE ANIMATION ID
@@ -492,10 +493,10 @@ end
 --// BUILD EMOTE LIST
 --// =========================================================
 function buildEmoteList()
-    table.clear(emoteList)
+    table.clear(__UI.__L.emoteList)
     local all
     local success, result = pcall(function()
-        return Registry.GetAll()
+        return __UI.__L.Registry.GetAll()
     end)
     if not success then
         warn(
@@ -523,7 +524,7 @@ function buildEmoteList()
                     tonumber(id)
                 if numericId then
                     table.insert(
-                        emoteList,
+                        __UI.__L.emoteList,
                         {
                             id = numericId,
                             name = data.Module.Name,
@@ -535,7 +536,7 @@ function buildEmoteList()
         end
     end
     table.sort(
-        emoteList,
+        __UI.__L.emoteList,
         function(a, b)
             return a.id < b.id
         end
@@ -550,15 +551,15 @@ function prepareOriginalModule(id)
     if not id then
         return nil
     end
-    if originalModules[id] then
-        return originalModules[id]
+    if __UI.__L.originalModules[id] then
+        return __UI.__L.originalModules[id]
     end
     local module =
         getItemModule(id)
     if not module then
         return nil
     end
-    originalModules[id] =
+    __UI.__L.originalModules[id] =
         module
     local animationSet = {}
     for _, object in ipairs(
@@ -574,7 +575,7 @@ function prepareOriginalModule(id)
             end
         end
     end
-    originalAnimationIds[id] =
+    __UI.__L.originalAnimationIds[id] =
         animationSet
     return module
 end
@@ -586,15 +587,15 @@ function prepareReplaceModule(id)
     if not id then
         return nil
     end
-    if replaceModules[id] then
-        return replaceModules[id]
+    if __UI.__L.replaceModules[id] then
+        return __UI.__L.replaceModules[id]
     end
     local module =
         getItemModule(id)
     if not module then
         return nil
     end
-    replaceModules[id] =
+    __UI.__L.replaceModules[id] =
         module
     return module
 end
@@ -607,7 +608,7 @@ function getEmoteName(id)
         return nil
     end
     for _, data in ipairs(
-        emoteList
+        __UI.__L.emoteList
     ) do
         if data.id == id then
             return data.name
@@ -624,9 +625,9 @@ end
 --// PREPARE ALL CONFIGURED SLOTS
 --// =========================================================
 function prepareSlots()
-    for i = 1, SLOT_COUNT do
+    for i = 1, __UI.__L.SLOT_COUNT do
         local slot =
-            slots[i]
+            __UI.__L.slots[i]
         if slot.originalId then
             local module =
                 prepareOriginalModule(
@@ -681,7 +682,7 @@ end
 --// Rebuild only the cached descendant lists, then call the game's
 --// own Visibility.UpdateVisibility() once. After this point DeadEye
 --// does not keep a custom POV loop for the restored native effect.
-local function refreshNativeVisibilityAfterUnusualRestore()
+__UI.__L.refreshNativeVisibilityAfterUnusualRestore = function()
     local characterObject =
         getCharacterObject()
 
@@ -768,9 +769,9 @@ function getSlotByOriginalId(id)
     if not id then
         return nil
     end
-    for i = 1, SLOT_COUNT do
+    for i = 1, __UI.__L.SLOT_COUNT do
         local slot =
-            slots[i]
+            __UI.__L.slots[i]
         if slot.originalId == id
             and slot.replaceId then
             return slot, i
@@ -782,131 +783,131 @@ end
 --// =========================================================
 --// EMOTE RUNTIME MODULE
 --// =========================================================
-local EmoteRuntime =
+__UI.__L.EmoteRuntime =
     loadstring(
         game:HttpGet(
             "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/a424881ee7e4e542b46a543aaf489734afd102ea/DeadEye_EmoteRuntime.lua"
         )
     )()
 
-if type(EmoteRuntime) == "function" then
-    EmoteRuntime = EmoteRuntime(
+if type(__UI.__L.EmoteRuntime) == "function" then
+    __UI.__L.EmoteRuntime = __UI.__L.EmoteRuntime(
         {
             genv = genv,
             isEnabled = function()
                 return enabled
             end,
             EmoteService = __UI.EmoteService,
-            originalAnimationIds = originalAnimationIds
+            __UI.__L.originalAnimationIds = __UI.__L.originalAnimationIds
         }
     )
 end
 
-if type(EmoteRuntime) ~= "table" then
+if type(__UI.__L.EmoteRuntime) ~= "table" then
     error(
         "[DeadEye] EmoteRuntime module did not return an API table"
     )
 end
 --// GUI PARENT
 --// =========================================================
-local guiParent
+__UI.__L.guiParent
 pcall(function()
-    guiParent = gethui()
+    __UI.__L.guiParent = gethui()
 end)
-if not guiParent then
-    guiParent =
+if not __UI.__L.guiParent then
+    __UI.__L.guiParent =
         game:GetService("CoreGui")
 end
 --// =========================================================
 --// WINDOW SIZE LIMITS
 --// =========================================================
-local MIN_WINDOW_WIDTH = 500
-local MIN_WINDOW_HEIGHT = 295
-local RESIZE_EDGE = 8
+__UI.__L.MIN_WINDOW_WIDTH = 500
+__UI.__L.MIN_WINDOW_HEIGHT = 295
+__UI.__L.RESIZE_EDGE = 8
 --// =========================================================
 --// SCREEN GUI
 --// =========================================================
-ScreenGui =
+__UI.__L.ScreenGui =
     Instance.new("ScreenGui")
-ScreenGui.Name =
+__UI.__L.ScreenGui.Name =
     "EmoteSwapperGUI"
-ScreenGui.ResetOnSpawn =
+__UI.__L.ScreenGui.ResetOnSpawn =
     false
-ScreenGui.ZIndexBehavior =
+__UI.__L.ScreenGui.ZIndexBehavior =
     Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent =
-    guiParent
+__UI.__L.ScreenGui.Parent =
+    __UI.__L.guiParent
 
-emotePreviewCacheHolder =
+__UI.__L.emotePreviewCacheHolder =
     Instance.new("Frame")
-emotePreviewCacheHolder.Name = "DeadEyeEmotePreviewCache"
-emotePreviewCacheHolder.Size = UDim2.new(0, 1, 0, 1)
-emotePreviewCacheHolder.Position = UDim2.new(0, -10000, 0, -10000)
-emotePreviewCacheHolder.BackgroundTransparency = 1
-emotePreviewCacheHolder.BorderSizePixel = 0
-emotePreviewCacheHolder.Visible = false
-emotePreviewCacheHolder.Parent = ScreenGui
+__UI.__L.emotePreviewCacheHolder.Name = "DeadEyeEmotePreviewCache"
+__UI.__L.emotePreviewCacheHolder.Size = UDim2.new(0, 1, 0, 1)
+__UI.__L.emotePreviewCacheHolder.Position = UDim2.new(0, -10000, 0, -10000)
+__UI.__L.emotePreviewCacheHolder.BackgroundTransparency = 1
+__UI.__L.emotePreviewCacheHolder.BorderSizePixel = 0
+__UI.__L.emotePreviewCacheHolder.Visible = false
+__UI.__L.emotePreviewCacheHolder.Parent = __UI.__L.ScreenGui
 
-cosmeticPreviewCacheHolder =
+__UI.__L.cosmeticPreviewCacheHolder =
     Instance.new("Frame")
-cosmeticPreviewCacheHolder.Name = "DeadEyeCosmeticPreviewCache"
-cosmeticPreviewCacheHolder.Size = UDim2.new(0, 1, 0, 1)
-cosmeticPreviewCacheHolder.Position = UDim2.new(0, -10000, 0, -10000)
-cosmeticPreviewCacheHolder.BackgroundTransparency = 1
-cosmeticPreviewCacheHolder.BorderSizePixel = 0
-cosmeticPreviewCacheHolder.Visible = false
-cosmeticPreviewCacheHolder.Parent = ScreenGui
+__UI.__L.cosmeticPreviewCacheHolder.Name = "DeadEyeCosmeticPreviewCache"
+__UI.__L.cosmeticPreviewCacheHolder.Size = UDim2.new(0, 1, 0, 1)
+__UI.__L.cosmeticPreviewCacheHolder.Position = UDim2.new(0, -10000, 0, -10000)
+__UI.__L.cosmeticPreviewCacheHolder.BackgroundTransparency = 1
+__UI.__L.cosmeticPreviewCacheHolder.BorderSizePixel = 0
+__UI.__L.cosmeticPreviewCacheHolder.Visible = false
+__UI.__L.cosmeticPreviewCacheHolder.Parent = __UI.__L.ScreenGui
 
 --// =========================================================
 --// MAIN
 --// =========================================================
-Main =
+__UI.__L.Main =
     Instance.new("Frame")
-Main.Size =
+__UI.__L.Main.Size =
     UDim2.new(
         0,
         math.max(
-            MIN_WINDOW_WIDTH,
-            savedConfig.gui.width
+            __UI.__L.MIN_WINDOW_WIDTH,
+            __UI.__L.savedConfig.gui.width
         ),
         0,
         math.max(
-            MIN_WINDOW_HEIGHT,
-            savedConfig.gui.height
+            __UI.__L.MIN_WINDOW_HEIGHT,
+            __UI.__L.savedConfig.gui.height
         )
     )
-Main.Position =
+__UI.__L.Main.Position =
     UDim2.new(
         0,
-        savedConfig.gui.x,
+        __UI.__L.savedConfig.gui.x,
         0,
-        savedConfig.gui.y
+        __UI.__L.savedConfig.gui.y
     )
-Main.BackgroundColor3 =
+__UI.__L.Main.BackgroundColor3 =
     Color3.fromRGB(
         18,
         20,
         24
     )
-Main.BackgroundTransparency =
+__UI.__L.Main.BackgroundTransparency =
     1
-Main.BorderSizePixel =
+__UI.__L.Main.BorderSizePixel =
     0
 
-Main.ClipsDescendants =
+__UI.__L.Main.ClipsDescendants =
     false
-Main.ClipsDescendants =
+__UI.__L.Main.ClipsDescendants =
     true
-Main.Parent =
-    ScreenGui
+__UI.__L.Main.Parent =
+    __UI.__L.ScreenGui
 
-local MainSurface =
+__UI.__L.MainSurface =
     Instance.new("Frame")
 
-MainSurface.Name =
+__UI.__L.MainSurface.Name =
     "MainSurface"
 
-MainSurface.Size =
+__UI.__L.MainSurface.Size =
     UDim2.new(
         1,
         -2,
@@ -914,7 +915,7 @@ MainSurface.Size =
         -2
     )
 
-MainSurface.Position =
+__UI.__L.MainSurface.Position =
     UDim2.new(
         0,
         1,
@@ -922,51 +923,51 @@ MainSurface.Position =
         1
     )
 
-MainSurface.BackgroundColor3 =
+__UI.__L.MainSurface.BackgroundColor3 =
     Color3.fromRGB(
         31,
         35,
         42
     )
 
-MainSurface.BackgroundTransparency =
+__UI.__L.MainSurface.BackgroundTransparency =
     0.10
 
-MainSurface.BorderSizePixel =
+__UI.__L.MainSurface.BorderSizePixel =
     0
 
-MainSurface.ZIndex =
+__UI.__L.MainSurface.ZIndex =
     0
 
-MainSurface.ClipsDescendants =
+__UI.__L.MainSurface.ClipsDescendants =
     true
 
-MainSurface.Parent =
-    Main
+__UI.__L.MainSurface.Parent =
+    __UI.__L.Main
 
-local MainSurfaceCorner =
+__UI.__L.MainSurfaceCorner =
     Instance.new("UICorner")
 
-MainSurfaceCorner.CornerRadius =
+__UI.__L.MainSurfaceCorner.CornerRadius =
     UDim.new(
         0,
         12
     )
 
-MainSurfaceCorner.Parent =
-    MainSurface
+__UI.__L.MainSurfaceCorner.Parent =
+    __UI.__L.MainSurface
 
-local MainSurfaceStroke =
+__UI.__L.MainSurfaceStroke =
     Instance.new("UIStroke")
 
-MainSurfaceStroke.Thickness =
+__UI.__L.MainSurfaceStroke.Thickness =
     1
 
-MainSurfaceStroke.Transparency =
+__UI.__L.MainSurfaceStroke.Transparency =
     0.66
 
-MainSurfaceStroke.Parent =
-    MainSurface
+__UI.__L.MainSurfaceStroke.Parent =
+    __UI.__L.MainSurface
 
 __UI.MainGradient =
     Instance.new("UIGradient")
@@ -1002,54 +1003,54 @@ __UI.MainGradient.Color =
 __UI.MainGradient.Transparency =
     NumberSequence.new(0.20)
 __UI.MainGradient.Parent =
-    MainSurface
+    __UI.__L.MainSurface
 
 --// MainSurface owns the outer rounded shell; keep Main itself fully transparent.
 
-local MainHeader =
+__UI.__L.MainHeader =
     Instance.new("Frame")
-MainHeader.Name =
+__UI.__L.MainHeader.Name =
     "MainHeader"
-MainHeader.Size =
+__UI.__L.MainHeader.Size =
     UDim2.new(
         1,
         -2,
         0,
         39
     )
-MainHeader.Position =
+__UI.__L.MainHeader.Position =
     UDim2.new(
         0,
         1,
         0,
         1
     )
-MainHeader.BackgroundColor3 =
+__UI.__L.MainHeader.BackgroundColor3 =
     Color3.fromRGB(
         40,
         45,
         53
     )
-MainHeader.BackgroundTransparency =
+__UI.__L.MainHeader.BackgroundTransparency =
     0.20
-MainHeader.BorderSizePixel =
+__UI.__L.MainHeader.BorderSizePixel =
     0
-MainHeader.ZIndex =
+__UI.__L.MainHeader.ZIndex =
     1
-MainHeader.Parent =
-    Main
+__UI.__L.MainHeader.Parent =
+    __UI.__L.Main
 
-local MainHeaderCorner =
+__UI.__L.MainHeaderCorner =
     Instance.new("UICorner")
 
-MainHeaderCorner.CornerRadius =
+__UI.__L.MainHeaderCorner.CornerRadius =
     UDim.new(
         0,
         11
     )
 
-MainHeaderCorner.Parent =
-    MainHeader
+__UI.__L.MainHeaderCorner.Parent =
+    __UI.__L.MainHeader
 
 __UI.MainHeaderGradient =
     Instance.new("UIGradient")
@@ -1077,7 +1078,7 @@ __UI.MainHeaderGradient.Color =
 __UI.MainHeaderGradient.Transparency =
     NumberSequence.new(0.18)
 __UI.MainHeaderGradient.Parent =
-    MainHeader
+    __UI.__L.MainHeader
 
 __UI.MainHeaderLine =
     Instance.new("Frame")
@@ -1106,94 +1107,94 @@ __UI.MainHeaderLine.BorderSizePixel =
 __UI.MainHeaderLine.ZIndex =
     1
 __UI.MainHeaderLine.Parent =
-    Main
+    __UI.__L.Main
 
 --// =========================================================
 --// TITLE
 --// =========================================================
-local MainTitle =
+__UI.__L.MainTitle =
     Instance.new("TextLabel")
-MainTitle.Size =
+__UI.__L.MainTitle.Size =
     UDim2.new(
         1,
         -105,
         0,
         36
     )
-MainTitle.Position =
+__UI.__L.MainTitle.Position =
     UDim2.new(
         0,
         12,
         0,
         2
     )
-MainTitle.BackgroundTransparency =
+__UI.__L.MainTitle.BackgroundTransparency =
     1
-MainTitle.Text =
+__UI.__L.MainTitle.Text =
     "DeadEyes v" .. SCRIPT_VERSION
-MainTitle.TextSize =
+__UI.__L.MainTitle.TextSize =
     18
-MainTitle.Font =
+__UI.__L.MainTitle.Font =
     Enum.Font.GothamBold
-MainTitle.ZIndex =
+__UI.__L.MainTitle.ZIndex =
     2
-MainTitle.TextColor3 =
+__UI.__L.MainTitle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-MainTitle.TextXAlignment =
+__UI.__L.MainTitle.TextXAlignment =
     Enum.TextXAlignment.Left
-MainTitle.Parent =
-    Main
+__UI.__L.MainTitle.Parent =
+    __UI.__L.Main
 --// =========================================================
 --// MINIMIZE
 --// =========================================================
-local Minimize =
+__UI.__L.Minimize =
     Instance.new("TextButton")
-Minimize.Size =
+__UI.__L.Minimize.Size =
     UDim2.new(
         0,
         27,
         0,
         27
     )
-Minimize.Position =
+__UI.__L.Minimize.Position =
     UDim2.new(
         1,
         -65,
         0,
         6
     )
-Minimize.BackgroundColor3 =
+__UI.__L.Minimize.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-Minimize.BorderSizePixel =
+__UI.__L.Minimize.BorderSizePixel =
     0
-Minimize.Text =
+__UI.__L.Minimize.Text =
     "−"
-Minimize.TextSize =
+__UI.__L.Minimize.TextSize =
     20
-Minimize.AutoButtonColor =
+__UI.__L.Minimize.AutoButtonColor =
     true
-Minimize.ZIndex =
+__UI.__L.Minimize.ZIndex =
     5
-Minimize.BackgroundTransparency =
+__UI.__L.Minimize.BackgroundTransparency =
     0.05
-Minimize.Font =
+__UI.__L.Minimize.Font =
     Enum.Font.GothamBold
-Minimize.TextColor3 =
+__UI.__L.Minimize.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-Minimize.Parent =
-    Main
+__UI.__L.Minimize.Parent =
+    __UI.__L.Main
 __UI.MinimizeCorner =
     Instance.new("UICorner")
 __UI.MinimizeCorner.CornerRadius =
@@ -1202,52 +1203,52 @@ __UI.MinimizeCorner.CornerRadius =
         6
     )
 __UI.MinimizeCorner.Parent =
-    Minimize
+    __UI.__L.Minimize
 --// =========================================================
 --// CLOSE
 --// =========================================================
-local Close =
+__UI.__L.Close =
     Instance.new("TextButton")
-Close.Size =
+__UI.__L.Close.Size =
     UDim2.new(
         0,
         27,
         0,
         27
     )
-Close.Position =
+__UI.__L.Close.Position =
     UDim2.new(
         1,
         -32,
         0,
         6
     )
-Close.BackgroundColor3 =
+__UI.__L.Close.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         50
     )
-Close.BackgroundTransparency =
+__UI.__L.Close.BackgroundTransparency =
     0.05
-Close.BorderSizePixel =
+__UI.__L.Close.BorderSizePixel =
     0
-Close.ZIndex =
+__UI.__L.Close.ZIndex =
     5
-Close.Text =
+__UI.__L.Close.Text =
     "×"
-Close.TextSize =
+__UI.__L.Close.TextSize =
     27
-Close.Font =
+__UI.__L.Close.Font =
     Enum.Font.GothamBold
-Close.TextColor3 =
+__UI.__L.Close.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-Close.Parent =
-    Main
+__UI.__L.Close.Parent =
+    __UI.__L.Main
 
 __UI.CloseCorner =
     Instance.new("UICorner")
@@ -1257,7 +1258,7 @@ __UI.CloseCorner.CornerRadius =
         7
     )
 __UI.CloseCorner.Parent =
-    Close
+    __UI.__L.Close
 
 __UI.CloseStroke =
     Instance.new("UIStroke")
@@ -1266,47 +1267,47 @@ __UI.CloseStroke.Thickness =
 __UI.CloseStroke.Transparency =
     0.65
 __UI.CloseStroke.Parent =
-    Close
+    __UI.__L.Close
 
 --// Header button surfaces stay solid.
 --// Their hover light is the centered UIShadow created below.
 --// =========================================================
 --// STATUS
 --// =========================================================
-Status =
+__UI.__L.Status =
     Instance.new("TextLabel")
-Status.Size =
+__UI.__L.Status.Size =
     UDim2.new(
         0,
         190,
         0,
         20
     )
-Status.Position =
+__UI.__L.Status.Position =
     UDim2.new(
         0,
         10,
         0,
         43
     )
-Status.BackgroundTransparency =
+__UI.__L.Status.BackgroundTransparency =
     1
-Status.Text =
+__UI.__L.Status.Text =
     ""
-Status.TextSize =
+__UI.__L.Status.TextSize =
     12
-Status.Font =
+__UI.__L.Status.Font =
     Enum.Font.Gotham
-Status.TextColor3 =
+__UI.__L.Status.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
-Status.TextXAlignment =
+__UI.__L.Status.TextXAlignment =
     Enum.TextXAlignment.Left
-Status.Parent =
-    Main
+__UI.__L.Status.Parent =
+    __UI.__L.Main
 --// =========================================================
 --// UNUSUAL CATEGORY
 --// ONE SLOT
@@ -1315,32 +1316,32 @@ Status.Parent =
 --//
 --// FX-only local replacement.
 --// =========================================================
-local UnusualFns = {}
-local unusualSlot = {
+__UI.__L.UnusualFns = {}
+__UI.__L.unusualSlot = {
     originalId = nil,
     replaceId = 200,
     originalName = nil,
     replaceName = nil
 }
-local unusualList = {}
-local unusualEnabled = false
-local unusualActive = false
-local unusualPicker
-local unusualPickerScroll
-local unusualPickerSearch
-local unusualPickerTitle
-local unusualPickerClose
-local unusualPickerButtons = {}
-local unusualPickerSide = nil
-local unusualIconCache = {}
-local unusualIconIdCache = {}
+__UI.__L.unusualList = {}
+__UI.__L.unusualEnabled = false
+__UI.__L.unusualActive = false
+__UI.__L.unusualPicker
+__UI.__L.unusualPickerScroll
+__UI.__L.unusualPickerSearch
+__UI.__L.unusualPickerTitle
+__UI.__L.unusualPickerClose
+__UI.__L.unusualPickerButtons = {}
+__UI.__L.unusualPickerSide = nil
+__UI.__L.unusualIconCache = {}
+__UI.__L.unusualIconIdCache = {}
 
 --// =========================================================
 --// COSMETIC CATEGORY
 --// TWO LOCAL REPLACEMENT SLOTS
 --// [Original] -> [Replace]
 --// =========================================================
-local cosmetic = {
+__UI.__L.cosmetic = {
     slots = {
         [1] = {
             originalId = nil,
@@ -1375,14 +1376,14 @@ local cosmetic = {
     }
 }
 
-local function normalizeUnusualIconKey(value)
+__UI.__L.normalizeUnusualIconKey = function(value)
     value = tostring(value or "")
     value = string.lower(value)
     value = string.gsub(value, "[^%w]", "")
     return value
 end
 
-local function isLikelyImageKey(key)
+__UI.__L.isLikelyImageKey = function(key)
     key = string.lower(
         tostring(key or "")
     )
@@ -1394,7 +1395,7 @@ local function isLikelyImageKey(key)
         or string.find(key, "preview", 1, true)
         or string.find(key, "sprite", 1, true)end
 
-local function extractAssetId(value)
+__UI.__L.extractAssetId = function(value)
     if type(value) == "number" then
         if value ~= 0 then
             return "rbxassetid://" .. tostring(math.floor(value))
@@ -1437,7 +1438,7 @@ local function extractAssetId(value)
     return nil
 end
 
-local function scanIconValue(
+__UI.__L.scanIconValue = function(
     value,
     preferred,
     depth,
@@ -1448,7 +1449,7 @@ local function scanIconValue(
     end
 
     local direct =
-        extractAssetId(
+        __UI.__L.extractAssetId(
             value
         )
 
@@ -1472,12 +1473,12 @@ local function scanIconValue(
         local keyString =
             tostring(key)
 
-        if isLikelyImageKey(
+        if __UI.__L.isLikelyImageKey(
             keyString
         )
         then
             local found =
-                scanIconValue(
+                __UI.__L.scanIconValue(
                     child,
                     true,
                     depth + 1,
@@ -1489,7 +1490,7 @@ local function scanIconValue(
             end
         elseif not preferred then
             local found =
-                scanIconValue(
+                __UI.__L.scanIconValue(
                     child,
                     false,
                     depth + 1,
@@ -1507,7 +1508,7 @@ local function scanIconValue(
     return fallback
 end
 
-local function getUnusualIconFromData(
+__UI.__L.getUnusualIconFromData = function(
     numericId,
     registryData,
     module
@@ -1517,7 +1518,7 @@ local function getUnusualIconFromData(
     local config
     pcall(function()
         config =
-            Registry.GetConfig(
+            __UI.__L.Registry.GetConfig(
                 numericId
             )
     end)
@@ -1567,7 +1568,7 @@ local function getUnusualIconFromData(
         candidates
     ) do
         local found =
-            scanIconValue(
+            __UI.__L.scanIconValue(
                 candidate,
                 false,
                 0,
@@ -1588,12 +1589,12 @@ local function getUnusualIconFromData(
                 local key =
                     obj.Name
 
-                if isLikelyImageKey(
+                if __UI.__L.isLikelyImageKey(
                     key
                 )
                 then
                     local found =
-                        extractAssetId(
+                        __UI.__L.extractAssetId(
                             obj.Value
                         )
 
@@ -1606,12 +1607,12 @@ local function getUnusualIconFromData(
             if obj:IsA("IntValue")
                 or obj:IsA("NumberValue")
             then
-                if isLikelyImageKey(
+                if __UI.__L.isLikelyImageKey(
                     obj.Name
                 )
                 then
                     local found =
-                        extractAssetId(
+                        __UI.__L.extractAssetId(
                             tostring(
                                 obj.Value
                             )
@@ -1628,7 +1629,7 @@ local function getUnusualIconFromData(
     return nil
 end
 
-local function cacheUnusualIconFromObject(icon)
+__UI.__L.cacheUnusualIconFromObject = function(icon)
     if not icon
         or not icon:IsA("ImageLabel")
         or icon.Name ~= "IconIMG"
@@ -1683,19 +1684,19 @@ local function cacheUnusualIconFromObject(icon)
 
     for _, name in ipairs(names) do
         local key =
-            normalizeUnusualIconKey(
+            __UI.__L.normalizeUnusualIconKey(
                 name
             )
 
         if key ~= ""
             and #key >= 3
         then
-            unusualIconCache[key] = image
+            __UI.__L.unusualIconCache[key] = image
         end
     end
 end
 
-local function collectCurrentUnusualIcons(playerGui)
+__UI.__L.collectCurrentUnusualIcons = function(playerGui)
     if not playerGui then
         return
     end
@@ -1706,12 +1707,12 @@ local function collectCurrentUnusualIcons(playerGui)
         if obj:IsA("ImageLabel")
             and obj.Name == "IconIMG"
         then
-            cacheUnusualIconFromObject(obj)
+            __UI.__L.cacheUnusualIconFromObject(obj)
         end
     end
 end
 
-local function findNativeUnusualScroll(playerGui)
+__UI.__L.findNativeUnusualScroll = function(playerGui)
     local menu =
         playerGui
         and playerGui:FindFirstChild(
@@ -1769,7 +1770,7 @@ local function findNativeUnusualScroll(playerGui)
     return nil
 end
 
-local function preloadNativeUnusualIcons()
+__UI.__L.preloadNativeUnusualIcons = function()
     local playerGui =
         LocalPlayer:FindFirstChild(
             "PlayerGui"
@@ -1779,12 +1780,12 @@ local function preloadNativeUnusualIcons()
         return
     end
 
-    collectCurrentUnusualIcons(
+    __UI.__L.collectCurrentUnusualIcons(
         playerGui
     )
 
     local scroll =
-        findNativeUnusualScroll(
+        __UI.__L.findNativeUnusualScroll(
             playerGui
         )
 
@@ -1855,7 +1856,7 @@ local function preloadNativeUnusualIcons()
         RunService.Heartbeat:Wait()
         RunService.Heartbeat:Wait()
 
-        collectCurrentUnusualIcons(
+        __UI.__L.collectCurrentUnusualIcons(
             playerGui
         )
     end
@@ -1880,35 +1881,35 @@ local function preloadNativeUnusualIcons()
         end)
     end
 
-    collectCurrentUnusualIcons(
+    __UI.__L.collectCurrentUnusualIcons(
         playerGui
     )
 end
-local unusualPage
-local unusualStatus
-local categoryBar
-local mainCategoryButton
-local emoteCategoryButton
-local unusualCategoryButton
-local othersCategoryButton
-local currentCategory = "Emotes"
-local mainPage
-local others = {}
-local mainMinimized = false
-local setMainMinimized
-local updateUnusualToggle
-others.originalDescription = nil
-others.targetHumanoid = nil
-others.page = nil
-others.status = nil
-others.fieldButtons = {}
-others.fieldBoxes = {}
-others.firstPersonTransparency = {}
+__UI.__L.unusualPage
+__UI.__L.unusualStatus
+__UI.__L.categoryBar
+__UI.__L.mainCategoryButton
+__UI.__L.emoteCategoryButton
+__UI.__L.unusualCategoryButton
+__UI.__L.othersCategoryButton
+__UI.__L.currentCategory = "Emotes"
+__UI.__L.mainPage
+__UI.__L.others = {}
+__UI.__L.mainMinimized = false
+__UI.__L.setMainMinimized
+__UI.__L.updateUnusualToggle
+__UI.__L.others.originalDescription = nil
+__UI.__L.others.targetHumanoid = nil
+__UI.__L.others.page = nil
+__UI.__L.others.status = nil
+__UI.__L.others.fieldButtons = {}
+__UI.__L.others.fieldBoxes = {}
+__UI.__L.others.firstPersonTransparency = {}
 
-local unusualConnections = {}
-local unusualDestroyed = false
-local unusualReapplyBusy = false
-local unusualRuntime = {
+__UI.__L.unusualConnections = {}
+__UI.__L.unusualDestroyed = false
+__UI.__L.unusualReapplyBusy = false
+__UI.__L.unusualRuntime = {
     appliedRig = nil,
     originalId = nil,
     replacementId = nil,
@@ -1935,35 +1936,35 @@ local unusualRuntime = {
 --// =========================================================
 --// UNUSUAL CONNECTION HELPER
 --// =========================================================
-function UnusualFns.addUnusualConnection(connection)
+function __UI.__L.UnusualFns.addUnusualConnection(connection)
     table.insert(
-        unusualConnections,
+        __UI.__L.unusualConnections,
         connection
     )
 end
-function UnusualFns.disconnectUnusualConnections()
+function __UI.__L.UnusualFns.disconnectUnusualConnections()
     for _, connection in ipairs(
-        unusualConnections
+        __UI.__L.unusualConnections
     ) do
         pcall(function()
             connection:Disconnect()
         end)
     end
     table.clear(
-        unusualConnections
+        __UI.__L.unusualConnections
     )
 
-    unusualReapplyBusy = false
+    __UI.__L.unusualReapplyBusy = false
 end
 --// =========================================================
 --// UNUSUAL LIST
 --// =========================================================
-function UnusualFns.buildUnusualList()
+function __UI.__L.UnusualFns.buildUnusualList()
     table.clear(
-        unusualList
+        __UI.__L.unusualList
     )
     local success, all = pcall(function()
-        return Registry.GetAll()
+        return __UI.__L.Registry.GetAll()
     end)
     if not success
         or not all
@@ -1984,7 +1985,7 @@ function UnusualFns.buildUnusualList()
             local config
             pcall(function()
                 config =
-                    Registry.GetConfig(
+                    __UI.__L.Registry.GetConfig(
                         numericId
                     )
             end)
@@ -2001,7 +2002,7 @@ function UnusualFns.buildUnusualList()
                 if not module then
                     pcall(function()
                         local entry =
-                            Registry.GetById(
+                            __UI.__L.Registry.GetById(
                                 numericId
                             )
                         if entry then
@@ -2013,20 +2014,20 @@ function UnusualFns.buildUnusualList()
                 if module then
                     seen[numericId] = true
                     local icon =
-                        getUnusualIconFromData(
+                        __UI.__L.getUnusualIconFromData(
                             numericId,
                             data,
                             module
                         )
 
                     if icon then
-                        unusualIconIdCache[
+                        __UI.__L.unusualIconIdCache[
                             numericId
                         ] = icon
                     end
 
                     table.insert(
-                        unusualList,
+                        __UI.__L.unusualList,
                         {
                             id = numericId,
                             name = module.Name,
@@ -2039,7 +2040,7 @@ function UnusualFns.buildUnusualList()
         end
     end
     table.sort(
-        unusualList,
+        __UI.__L.unusualList,
         function(a, b)
             return a.id < b.id
         end
@@ -2048,7 +2049,7 @@ function UnusualFns.buildUnusualList()
     local iconCount = 0
 
     for _, data in ipairs(
-        unusualList
+        __UI.__L.unusualList
     ) do
         if data.icon then
             iconCount += 1
@@ -2059,17 +2060,17 @@ function UnusualFns.buildUnusualList()
         "[DeadEye] Native Unusual icons:",
         tostring(iconCount),
         "/",
-        tostring(#unusualList)
+        tostring(#__UI.__L.unusualList)
     )
     end
-UnusualFns.buildUnusualList()
+__UI.__L.UnusualFns.buildUnusualList()
 --// =========================================================
 --// GET UNUSUAL NAME
 --// =========================================================
 --// =========================================================
 --// COSMETIC HELPERS
 --// =========================================================
-function cosmetic.getName(id)
+function __UI.__L.cosmetic.getName(id)
     id = tonumber(id)
     if not id then
         return nil
@@ -2077,7 +2078,7 @@ function cosmetic.getName(id)
 
     local name
     pcall(function()
-        local entry = Registry.GetById(id)
+        local entry = __UI.__L.Registry.GetById(id)
         local module =
             entry
             and entry.Module
@@ -2088,7 +2089,7 @@ function cosmetic.getName(id)
     return name
 end
 
-function cosmetic.getEquippedId(slot)
+function __UI.__L.cosmetic.getEquippedId(slot)
     local value = 0
     pcall(function()
         value =
@@ -2102,17 +2103,17 @@ function cosmetic.getEquippedId(slot)
     return tonumber(value) or 0
 end
 
-function cosmetic.updateRow(slotIndex)
+function __UI.__L.cosmetic.updateRow(slotIndex)
     local state =
-        cosmetic.slots[slotIndex]
+        __UI.__L.cosmetic.slots[slotIndex]
 
     if not state then
         return
     end
 
     local row =
-        cosmetic.page
-        and cosmetic.page:FindFirstChild(
+        __UI.__L.cosmetic.page
+        and __UI.__L.cosmetic.page:FindFirstChild(
             "CosmeticRow_"
                 .. tostring(slotIndex)
         )
@@ -2139,7 +2140,7 @@ function cosmetic.updateRow(slotIndex)
     end
 end
 
-function cosmetic.setInitialOriginal(
+function __UI.__L.cosmetic.setInitialOriginal(
     slotIndex,
     id
 )
@@ -2152,7 +2153,7 @@ function cosmetic.setInitialOriginal(
     end
 
     local state =
-        cosmetic.slots[slotIndex]
+        __UI.__L.cosmetic.slots[slotIndex]
 
     if not state
         or state.originalId
@@ -2163,21 +2164,21 @@ function cosmetic.setInitialOriginal(
     state.originalId =
         id
     state.originalName =
-        cosmetic.getName(id)
+        __UI.__L.cosmetic.getName(id)
 
-    cosmetic.saveState()
-    cosmetic.updateRow(slotIndex)
+    __UI.__L.cosmetic.saveState()
+    __UI.__L.cosmetic.updateRow(slotIndex)
 end
 
-function cosmetic.loadState()
+function __UI.__L.cosmetic.loadState()
     local saved =
-        type(savedConfig.cosmetic) == "table"
-        and savedConfig.cosmetic
+        type(__UI.__L.savedConfig.cosmetic) == "table"
+        and __UI.__L.savedConfig.cosmetic
         or {}
 
     for index = 1, 2 do
         local state =
-            cosmetic.slots[index]
+            __UI.__L.cosmetic.slots[index]
 
         local savedSlot =
             saved[
@@ -2201,7 +2202,7 @@ function cosmetic.loadState()
                 state.originalId =
                     savedOriginal
                 state.originalName =
-                    cosmetic.getName(
+                    __UI.__L.cosmetic.getName(
                         savedOriginal
                     )
             end
@@ -2212,7 +2213,7 @@ function cosmetic.loadState()
                 state.replaceId =
                     savedReplace
                 state.replaceName =
-                    cosmetic.getName(
+                    __UI.__L.cosmetic.getName(
                         savedReplace
                     )
             end
@@ -2222,13 +2223,13 @@ function cosmetic.loadState()
         -- this slot has no saved Original mapping.
         if not state.originalId then
             local equipped =
-                cosmetic.getEquippedId(index)
+                __UI.__L.cosmetic.getEquippedId(index)
 
             if equipped ~= 0 then
                 state.originalId =
                     equipped
                 state.originalName =
-                    cosmetic.getName(
+                    __UI.__L.cosmetic.getName(
                         equipped
                     )
             end
@@ -2236,31 +2237,31 @@ function cosmetic.loadState()
     end
 end
 
-function cosmetic.saveState()
-    savedConfig.cosmetic = {
+function __UI.__L.cosmetic.saveState()
+    __UI.__L.savedConfig.cosmetic = {
         slot1 = {
             originalId =
-                cosmetic.slots[1].originalId,
+                __UI.__L.cosmetic.slots[1].originalId,
             replaceId =
-                cosmetic.slots[1].replaceId
+                __UI.__L.cosmetic.slots[1].replaceId
         },
         slot2 = {
             originalId =
-                cosmetic.slots[2].originalId,
+                __UI.__L.cosmetic.slots[2].originalId,
             replaceId =
-                cosmetic.slots[2].replaceId
+                __UI.__L.cosmetic.slots[2].replaceId
         }
     }
 end
 
-function cosmetic.buildList()
+function __UI.__L.cosmetic.buildList()
     table.clear(
-        cosmetic.list
+        __UI.__L.cosmetic.list
     )
 
     local success, all =
         pcall(function()
-            return Registry.GetAll()
+            return __UI.__L.Registry.GetAll()
         end)
 
     if not success
@@ -2285,7 +2286,7 @@ function cosmetic.buildList()
             local config
             pcall(function()
                 config =
-                    Registry.GetConfig(
+                    __UI.__L.Registry.GetConfig(
                         numericId
                     )
             end)
@@ -2305,7 +2306,7 @@ function cosmetic.buildList()
                 if not module then
                     pcall(function()
                         local entry =
-                            Registry.GetById(
+                            __UI.__L.Registry.GetById(
                                 numericId
                             )
                         module =
@@ -2320,7 +2321,7 @@ function cosmetic.buildList()
                     local icon
                     pcall(function()
                         icon =
-                            getUnusualIconFromData(
+                            __UI.__L.getUnusualIconFromData(
                                 numericId,
                                 data,
                                 module
@@ -2328,7 +2329,7 @@ function cosmetic.buildList()
                     end)
 
                     table.insert(
-                        cosmetic.list,
+                        __UI.__L.cosmetic.list,
                         {
                             id = numericId,
                             name = module.Name,
@@ -2341,7 +2342,7 @@ function cosmetic.buildList()
     end
 
     table.sort(
-        cosmetic.list,
+        __UI.__L.cosmetic.list,
         function(a, b)
             return a.id < b.id
         end
@@ -2350,13 +2351,13 @@ function cosmetic.buildList()
     warn(
         "[DeadEye] Cosmetics:",
         tostring(
-            #cosmetic.list
+            #__UI.__L.cosmetic.list
         )
     )
 end
 
-function cosmetic.replaceArray(cosmetics)
-    if not cosmetic.enabled
+function __UI.__L.cosmetic.replaceArray(cosmetics)
+    if not __UI.__L.cosmetic.enabled
         or type(cosmetics) ~= "table"
     then
         return cosmetics
@@ -2373,7 +2374,7 @@ function cosmetic.replaceArray(cosmetics)
             for slotIndex = 1, 2 do
                 if not replaced[slotIndex] then
                     local state =
-                        cosmetic.slots[slotIndex]
+                        __UI.__L.cosmetic.slots[slotIndex]
 
                     if state
                         and state.originalId
@@ -2411,7 +2412,7 @@ function cosmetic.replaceArray(cosmetics)
     return result or cosmetics
 end
 
-function cosmetic.getLiveRig()
+function __UI.__L.cosmetic.getLiveRig()
     local characterObject
     local model
 
@@ -2447,8 +2448,8 @@ function cosmetic.getLiveRig()
     return characterObject.Rig
 end
 
-function cosmetic.refreshRig()
-    if cosmetic.refreshBusy then
+function __UI.__L.cosmetic.refreshRig()
+    if __UI.__L.cosmetic.refreshBusy then
         return false
     end
 
@@ -2479,8 +2480,8 @@ function cosmetic.refreshRig()
     --// Preserve the current custom skin on the same live rig.
     --// When a new rig appears, keep the saved description instead
     --// of replacing it with the game's default cache description.
-    if not cosmetic.skinDescription
-        or cosmetic.skinCharacter == live
+    if not __UI.__L.cosmetic.skinDescription
+        or __UI.__L.cosmetic.skinCharacter == live
     then
         local description
 
@@ -2510,9 +2511,9 @@ function cosmetic.refreshRig()
             return false
         end
 
-        cosmetic.skinDescription =
+        __UI.__L.cosmetic.skinDescription =
             clone
-        cosmetic.skinCharacter =
+        __UI.__L.cosmetic.skinCharacter =
             live
     end
 
@@ -2544,14 +2545,14 @@ function cosmetic.refreshRig()
     end
 
     local equippedUnusualId =
-        UnusualFns.getEquippedUnusualId()
+        __UI.__L.UnusualFns.getEquippedUnusualId()
 
     local restoreUnusualSwap =
-        unusualEnabled
-        and unusualActive
-        and unusualRuntime.originalId
+        __UI.__L.unusualEnabled
+        and __UI.__L.unusualActive
+        and __UI.__L.unusualRuntime.originalId
         and tonumber(
-            unusualRuntime.originalId
+            __UI.__L.unusualRuntime.originalId
         ) == tonumber(
             equippedUnusualId
         )
@@ -2564,7 +2565,7 @@ function cosmetic.refreshRig()
 
     if restoreUnusualSwap then
         cosmeticUnusualSnapshot =
-            unusualRuntime.nativeSnapshot
+            __UI.__L.unusualRuntime.nativeSnapshot
     elseif equippedUnusualId
         and equippedUnusualId ~= 0
     then
@@ -2572,21 +2573,21 @@ function cosmetic.refreshRig()
             tonumber(equippedUnusualId)
 
         cosmeticUnusualSnapshot =
-            UnusualFns.captureNativeUnusualSnapshot(
+            __UI.__L.UnusualFns.captureNativeUnusualSnapshot(
                 equippedUnusualId,
-                UnusualFns.getUnusualVisualRig(),
-                UnusualFns.getUnusualPlayerCharacter()
+                __UI.__L.UnusualFns.getUnusualVisualRig(),
+                __UI.__L.UnusualFns.getUnusualPlayerCharacter()
             )
     end
 
     if restoreUnusualSwap then
         pcall(function()
-            UnusualFns.removeOurUnusualFX()
+            __UI.__L.UnusualFns.removeOurUnusualFX()
         end)
-        unusualActive = false
+        __UI.__L.unusualActive = false
     end
 
-    cosmetic.refreshBusy = true
+    __UI.__L.cosmetic.refreshBusy = true
 
     local success =
         pcall(function()
@@ -2637,7 +2638,7 @@ function cosmetic.refreshRig()
 
             pcall(function()
                 humanoid:ApplyDescriptionResetAsync(
-                    cosmetic.skinDescription
+                    __UI.__L.cosmetic.skinDescription
                 )
 
                 restoredSkin = true
@@ -2646,7 +2647,7 @@ function cosmetic.refreshRig()
             if not restoredSkin then
                 pcall(function()
                     humanoid:ApplyDescriptionReset(
-                        cosmetic.skinDescription
+                        __UI.__L.cosmetic.skinDescription
                     )
 
                     restoredSkin = true
@@ -2656,7 +2657,7 @@ function cosmetic.refreshRig()
             if not restoredSkin then
                 pcall(function()
                     humanoid:ApplyDescriptionAsync(
-                        cosmetic.skinDescription
+                        __UI.__L.cosmetic.skinDescription
                     )
 
                     restoredSkin = true
@@ -2704,12 +2705,12 @@ function cosmetic.refreshRig()
                     )
 
                 local state =
-                    cosmetic.slots[
+                    __UI.__L.cosmetic.slots[
                         slotIndex
                     ]
 
                 local directAction =
-                    cosmetic.directAction[
+                    __UI.__L.cosmetic.directAction[
                         slotIndex
                     ]
 
@@ -2720,7 +2721,7 @@ function cosmetic.refreshRig()
                     local effectiveId =
                         id
 
-                    if cosmetic.enabled then
+                    if __UI.__L.cosmetic.enabled then
                         if state
                             and state.originalId
                             and state.replaceId
@@ -2880,44 +2881,44 @@ function cosmetic.refreshRig()
 
             if restoreUnusualSwap then
                 pcall(function()
-                    if UnusualFns.activateUnusual() then
-                        unusualEnabled = true
-                        unusualActive = true
-                        unusualRuntime.appliedRig =
-                            UnusualFns.getUnusualVisualRig()
+                    if __UI.__L.UnusualFns.activateUnusual() then
+                        __UI.__L.unusualEnabled = true
+                        __UI.__L.unusualActive = true
+                        __UI.__L.unusualRuntime.appliedRig =
+                            __UI.__L.UnusualFns.getUnusualVisualRig()
                     end
                 end)
             elseif restoreNativeUnusualId then
                 if cosmeticUnusualSnapshot then
                     pcall(function()
-                        UnusualFns.restoreNativeUnusualSnapshot(
+                        __UI.__L.UnusualFns.restoreNativeUnusualSnapshot(
                             cosmeticUnusualSnapshot,
-                            UnusualFns.getUnusualVisualRig(),
-                            UnusualFns.getUnusualPlayerCharacter()
+                            __UI.__L.UnusualFns.getUnusualVisualRig(),
+                            __UI.__L.UnusualFns.getUnusualPlayerCharacter()
                         )
                     end)
                 else
                     pcall(function()
                         applyUnusualFX(
                             restoreNativeUnusualId,
-                            UnusualFns.getUnusualVisualRig(),
-                            UnusualFns.getUnusualPlayerCharacter()
+                            __UI.__L.UnusualFns.getUnusualVisualRig(),
+                            __UI.__L.UnusualFns.getUnusualPlayerCharacter()
                         )
                     end)
                 end
             end
         end)
 
-    cosmetic.skinCharacter =
+    __UI.__L.cosmetic.skinCharacter =
         live
 
-    cosmetic.refreshBusy = false
+    __UI.__L.cosmetic.refreshBusy = false
 
     return success
 end
 
-function cosmetic.installHook()
-    if cosmetic.hooked
+function __UI.__L.cosmetic.installHook()
+    if __UI.__L.cosmetic.hooked
         or type(hookfunction) ~= "function"
     then
         return false
@@ -2953,7 +2954,7 @@ function cosmetic.installHook()
                         gear,
                         boombox
                     )
-                        cosmetic.lastSetRigArgs = {
+                        __UI.__L.cosmetic.lastSetRigArgs = {
                             self = self,
                             character = character,
                             rigType = rigType,
@@ -2971,8 +2972,8 @@ function cosmetic.installHook()
                         if liveBefore
                             and liveBefore:IsA("Model")
                             and (
-                                not cosmetic.skinDescription
-                                or cosmetic.skinCharacter == liveBefore
+                                not __UI.__L.cosmetic.skinDescription
+                                or __UI.__L.cosmetic.skinCharacter == liveBefore
                             )
                         then
                             local beforeHumanoid =
@@ -2988,9 +2989,9 @@ function cosmetic.installHook()
                                     local clone =
                                         description:Clone()
 
-                                    cosmetic.skinDescription =
+                                    __UI.__L.cosmetic.skinDescription =
                                         clone
-                                    cosmetic.skinCharacter =
+                                    __UI.__L.cosmetic.skinCharacter =
                                         liveBefore
                                 end)
                             end
@@ -3004,14 +3005,14 @@ function cosmetic.installHook()
                                 self,
                                 character,
                                 rigType,
-                                cosmetic.replaceArray(
+                                __UI.__L.cosmetic.replaceArray(
                                     cosmetics
                                 ),
                                 gear,
                                 boombox
                             )
 
-                        if cosmetic.skinDescription
+                        if __UI.__L.cosmetic.skinDescription
                             and type(result) == "table"
                             and result.Model
                             and result.Model:IsA("Model")
@@ -3022,10 +3023,10 @@ function cosmetic.installHook()
                         then
                             task.defer(function()
                                 if genv.DEADEYE_MAIN_RUNNING
-                                    and not cosmetic.refreshBusy
+                                    and not __UI.__L.cosmetic.refreshBusy
                                 then
                                     pcall(
-                                        cosmetic.refreshRig
+                                        __UI.__L.cosmetic.refreshRig
                                     )
                                 end
                             end)
@@ -3042,54 +3043,54 @@ function cosmetic.installHook()
         return false
     end
 
-    cosmetic.targetSetRig =
+    __UI.__L.cosmetic.targetSetRig =
         target
-    cosmetic.originalSetRig =
+    __UI.__L.cosmetic.originalSetRig =
         original
-    cosmetic.hooked = true
+    __UI.__L.cosmetic.hooked = true
 
     return true
 end
 
-function cosmetic.removeHook()
-    if not cosmetic.hooked
+function __UI.__L.cosmetic.removeHook()
+    if not __UI.__L.cosmetic.hooked
         or type(hookfunction) ~= "function"
     then
         return
     end
 
     pcall(function()
-        if cosmetic.targetSetRig
-            and cosmetic.originalSetRig
+        if __UI.__L.cosmetic.targetSetRig
+            and __UI.__L.cosmetic.originalSetRig
         then
             hookfunction(
-                cosmetic.targetSetRig,
-                cosmetic.originalSetRig
+                __UI.__L.cosmetic.targetSetRig,
+                __UI.__L.cosmetic.originalSetRig
             )
         end
     end)
 
-    cosmetic.hooked = false
-    cosmetic.targetSetRig = nil
-    cosmetic.originalSetRig = nil
-    cosmetic.lastSetRigArgs = nil
+    __UI.__L.cosmetic.hooked = false
+    __UI.__L.cosmetic.targetSetRig = nil
+    __UI.__L.cosmetic.originalSetRig = nil
+    __UI.__L.cosmetic.lastSetRigArgs = nil
 end
 
-function cosmetic.updateToggle()
+function __UI.__L.cosmetic.updateToggle()
     pcall(function()
-        if cosmetic.enabled then
-            Toggle.Text =
+        if __UI.__L.cosmetic.enabled then
+            __UI.__L.Toggle.Text =
                 "SWAP: ON"
-            Toggle.BackgroundColor3 =
+            __UI.__L.Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            Toggle.Text =
+            __UI.__L.Toggle.Text =
                 "SWAP: OFF"
-            Toggle.BackgroundColor3 =
+            __UI.__L.Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -3099,22 +3100,22 @@ function cosmetic.updateToggle()
     end)
 end
 
-function cosmetic.closePicker()
-    cosmetic.picking = false
-    cosmetic.pickerSide = nil
-    if unusualPicker then
-        unusualPicker.Visible = false
+function __UI.__L.cosmetic.closePicker()
+    __UI.__L.cosmetic.picking = false
+    __UI.__L.cosmetic.pickerSide = nil
+    if __UI.__L.unusualPicker then
+        __UI.__L.unusualPicker.Visible = false
     end
 end
 
-function cosmetic.select(
+function __UI.__L.cosmetic.select(
     slotIndex,
     side,
     id,
     name
 )
     local state =
-        cosmetic.slots[slotIndex]
+        __UI.__L.cosmetic.slots[slotIndex]
 
     if not state then
         return
@@ -3130,17 +3131,17 @@ function cosmetic.select(
         return
     end
 
-    cosmetic.directAction[slotIndex] = nil
+    __UI.__L.cosmetic.directAction[slotIndex] = nil
 
-    cosmetic.saveState()
+    __UI.__L.cosmetic.saveState()
     pcall(saveSavedConfig)
 
-    if cosmetic.enabled then
-        cosmetic.enabled = false
-        pcall(cosmetic.updateToggle)
+    if __UI.__L.cosmetic.enabled then
+        __UI.__L.cosmetic.enabled = false
+        pcall(__UI.__L.cosmetic.updateToggle)
 
         task.spawn(function()
-            pcall(cosmetic.refreshRig)
+            pcall(__UI.__L.cosmetic.refreshRig)
         end)
     end
 
@@ -3148,13 +3149,13 @@ function cosmetic.select(
     -- thread without Instance access. Never let GUI access
     -- prevent the actual selection from being saved.
     pcall(function()
-        cosmetic.closePicker()
+        __UI.__L.cosmetic.closePicker()
     end)
 
     pcall(function()
         local row =
-            cosmetic.page
-            and cosmetic.page:FindFirstChild(
+            __UI.__L.cosmetic.page
+            and __UI.__L.cosmetic.page:FindFirstChild(
                 "CosmeticRow_"
                     .. tostring(slotIndex)
             )
@@ -3191,7 +3192,7 @@ end
 --// COSMETIC NATIVE VIEWPORT PREVIEW
 --// Mirrors ClientItemService:GetVisualModel/CreateViewport.
 --// =========================================================
-function cosmetic.createPreview(
+function __UI.__L.cosmetic.createPreview(
     id,
     viewport
 )
@@ -3203,7 +3204,7 @@ function cosmetic.createPreview(
     local moduleOK =
         pcall(function()
             local entry =
-                Registry.GetById(
+                __UI.__L.Registry.GetById(
                     tonumber(id)
                 )
             module =
@@ -3464,9 +3465,9 @@ function cosmetic.createPreview(
     return true
 end
 
-function cosmetic.rebuildPicker()
+function __UI.__L.cosmetic.rebuildPicker()
     for _, button in ipairs(
-        unusualPickerButtons
+        __UI.__L.unusualPickerButtons
     ) do
         pcall(function()
             local preview =
@@ -3487,11 +3488,11 @@ function cosmetic.rebuildPicker()
                     )
 
                 if id then
-                    cosmeticPreviewCache[id] =
+                    __UI.__L.cosmeticPreviewCache[id] =
                         preview
 
                     preview.Parent =
-                        cosmeticPreviewCacheHolder
+                        __UI.__L.cosmeticPreviewCacheHolder
                 end
             end
         end)
@@ -3501,12 +3502,12 @@ function cosmetic.rebuildPicker()
         end)
     end
     table.clear(
-        unusualPickerButtons
+        __UI.__L.unusualPickerButtons
     )
 
     local query =
         string.lower(
-            unusualPickerSearch.Text
+            __UI.__L.unusualPickerSearch.Text
             or ""
         )
     local shown = 0
@@ -3543,7 +3544,7 @@ function cosmetic.rebuildPicker()
         button.LayoutOrder = 0
         button.ZIndex = 32
         button.Parent =
-            unusualPickerScroll
+            __UI.__L.unusualPickerScroll
 
         local corner =
             Instance.new(
@@ -3555,30 +3556,30 @@ function cosmetic.rebuildPicker()
             button
 
         table.insert(
-            unusualPickerButtons,
+            __UI.__L.unusualPickerButtons,
             button
         )
 
-        UnusualFns.addUnusualConnection(
+        __UI.__L.UnusualFns.addUnusualConnection(
             button.MouseButton1Click:Connect(
                 function()
                     local slotIndex =
                         tonumber(
                             string.match(
-                                cosmetic.pickerSide
+                                __UI.__L.cosmetic.pickerSide
                                     or "",
                                 "^(%d+):"
                             )
                         )
                     local side =
                         string.match(
-                            cosmetic.pickerSide
+                            __UI.__L.cosmetic.pickerSide
                                 or "",
                             "^%d+:(.+)$"
                         )
 
                     if slotIndex and side then
-                        cosmetic.select(
+                        __UI.__L.cosmetic.select(
                             slotIndex,
                             side,
                             nil,
@@ -3592,7 +3593,7 @@ function cosmetic.rebuildPicker()
     end
 
     for index, data in ipairs(
-        cosmetic.list
+        __UI.__L.cosmetic.list
     ) do
         local name =
             tostring(
@@ -3672,7 +3673,7 @@ function cosmetic.rebuildPicker()
                 button
 
             button.Parent =
-                unusualPickerScroll
+                __UI.__L.unusualPickerScroll
 
             --// UICorner does not clip descendants. The cosmetic preview
             --// contains a WorldModel, so use CanvasGroup as the rounded
@@ -3753,7 +3754,7 @@ function cosmetic.rebuildPicker()
                 preview
 
             local cachedPreview =
-                cosmeticPreviewCache[data.id]
+                __UI.__L.cosmeticPreviewCache[data.id]
 
             if cachedPreview
                 and cachedPreview.Parent
@@ -3772,7 +3773,7 @@ function cosmetic.rebuildPicker()
                     preview =
                         cachedPreview
                 else
-                    cosmeticPreviewCache[data.id] =
+                    __UI.__L.cosmeticPreviewCache[data.id] =
                         nil
 
                     preview =
@@ -3817,31 +3818,31 @@ function cosmetic.rebuildPicker()
                         cardGroup
 
                     pcall(function()
-                        cosmetic.createPreview(
+                        __UI.__L.cosmetic.createPreview(
                             data.id,
                             preview
                         )
                     end)
 
-                    cosmeticPreviewCache[
+                    __UI.__L.cosmeticPreviewCache[
                         data.id
                     ] = preview
                 end
             else
                 if cachedPreview then
-                    cosmeticPreviewCache[
+                    __UI.__L.cosmeticPreviewCache[
                         data.id
                     ] = nil
                 end
 
                 pcall(function()
-                    cosmetic.createPreview(
+                    __UI.__L.cosmetic.createPreview(
                         data.id,
                         preview
                     )
                 end)
 
-                cosmeticPreviewCache[data.id] =
+                __UI.__L.cosmeticPreviewCache[data.id] =
                     preview
             end
 
@@ -3964,30 +3965,30 @@ function cosmetic.rebuildPicker()
                 cardGroup
 
             table.insert(
-                unusualPickerButtons,
+                __UI.__L.unusualPickerButtons,
                 button
             )
 
-            UnusualFns.addUnusualConnection(
+            __UI.__L.UnusualFns.addUnusualConnection(
                 button.MouseButton1Click:Connect(
                     function()
                         local slotIndex =
                             tonumber(
                                 string.match(
-                                    cosmetic.pickerSide
+                                    __UI.__L.cosmetic.pickerSide
                                         or "",
                                     "^(%d+):"
                                 )
                             )
                         local side =
                             string.match(
-                                cosmetic.pickerSide
+                                __UI.__L.cosmetic.pickerSide
                                     or "",
                                 "^%d+:(.+)$"
                             )
 
                         if slotIndex and side then
-                            cosmetic.select(
+                            __UI.__L.cosmetic.select(
                                 slotIndex,
                                 side,
                                 data.id,
@@ -4000,17 +4001,17 @@ function cosmetic.rebuildPicker()
         end
     end
 
-    unusualPickerScroll.CanvasPosition =
+    __UI.__L.unusualPickerScroll.CanvasPosition =
         Vector2.new(
             0,
             0
         )
 
-    if unusualStatus then
-        unusualStatus.Text =
+    if __UI.__L.unusualStatus then
+        __UI.__L.unusualStatus.Text =
             "Cosmetics: "
                 .. tostring(
-                    #cosmetic.list
+                    #__UI.__L.cosmetic.list
                 )
                 .. " • "
                 .. tostring(
@@ -4018,74 +4019,74 @@ function cosmetic.rebuildPicker()
                 )
                 .. " found"
     end
-    cosmeticPickerPreloaded = true
+    __UI.__L.cosmeticPickerPreloaded = true
 end
 
-function cosmetic.openPicker(
+function __UI.__L.cosmetic.openPicker(
     slotIndex,
     side
 )
-    cosmetic.picking = true
-    cosmetic.pickerSide =
+    __UI.__L.cosmetic.picking = true
+    __UI.__L.cosmetic.pickerSide =
         tostring(slotIndex)
         .. ":"
         .. side
 
-    unusualPickerTitle.Text =
+    __UI.__L.unusualPickerTitle.Text =
         side == "Original"
         and "Select Original"
         or "Select Replacement"
-    unusualPickerSearch.Text = ""
-    if not cosmeticPickerPreloaded then
-        cosmetic.rebuildPicker()
+    __UI.__L.unusualPickerSearch.Text = ""
+    if not __UI.__L.cosmeticPickerPreloaded then
+        __UI.__L.cosmetic.rebuildPicker()
     end
 
     __UI.animatePickerAppear(
-        unusualPicker
+        __UI.__L.unusualPicker
     )
 end
 
-function cosmetic.buildUI()
-    cosmetic.page =
+function __UI.__L.cosmetic.buildUI()
+    __UI.__L.cosmetic.page =
         Instance.new(
             "ScrollingFrame"
         )
-    cosmetic.page.Name =
+    __UI.__L.cosmetic.page.Name =
         "CosmeticPage"
-    cosmetic.page.Size =
+    __UI.__L.cosmetic.page.Size =
         UDim2.new(
             1,
             -92,
             1,
             -56
         )
-    cosmetic.page.Position =
+    __UI.__L.cosmetic.page.Position =
         UDim2.new(
             0,
             82,
             0,
             48
         )
-    cosmetic.page.BackgroundColor3 =
+    __UI.__L.cosmetic.page.BackgroundColor3 =
         Color3.fromRGB(
             32,
             32,
             32
         )
-    cosmetic.page.BorderSizePixel = 0
-    cosmetic.page.ScrollBarThickness = 6
-    cosmetic.page.CanvasSize =
+    __UI.__L.cosmetic.page.BorderSizePixel = 0
+    __UI.__L.cosmetic.page.ScrollBarThickness = 6
+    __UI.__L.cosmetic.page.CanvasSize =
         UDim2.new(
             0,
             0,
             0,
             0
         )
-    cosmetic.page.AutomaticCanvasSize =
+    __UI.__L.cosmetic.page.AutomaticCanvasSize =
         Enum.AutomaticSize.Y
-    cosmetic.page.Visible = false
-    cosmetic.page.Parent =
-        Main
+    __UI.__L.cosmetic.page.Visible = false
+    __UI.__L.cosmetic.page.Parent =
+        __UI.__L.Main
 
     local corner =
         Instance.new(
@@ -4097,7 +4098,7 @@ function cosmetic.buildUI()
             9
         )
     corner.Parent =
-        cosmetic.page
+        __UI.__L.cosmetic.page
 
     local padding =
         Instance.new(
@@ -4124,7 +4125,7 @@ function cosmetic.buildUI()
             8
         )
     padding.Parent =
-        cosmetic.page
+        __UI.__L.cosmetic.page
 
     local layout =
         Instance.new(
@@ -4138,49 +4139,49 @@ function cosmetic.buildUI()
     layout.SortOrder =
         Enum.SortOrder.LayoutOrder
     layout.Parent =
-        cosmetic.page
+        __UI.__L.cosmetic.page
 
-    cosmetic.pageStatus =
+    __UI.__L.cosmetic.pageStatus =
         Instance.new(
             "TextLabel"
         )
-    cosmetic.pageStatus.Name =
+    __UI.__L.cosmetic.pageStatus.Name =
         "CosmeticStatus"
-    cosmetic.pageStatus.Size =
+    __UI.__L.cosmetic.pageStatus.Size =
         UDim2.new(
             1,
             -4,
             0,
             18
         )
-    cosmetic.pageStatus.BackgroundTransparency = 1
-    cosmetic.pageStatus.Text =
+    __UI.__L.cosmetic.pageStatus.BackgroundTransparency = 1
+    __UI.__L.cosmetic.pageStatus.Text =
         "Cosmetics: "
             .. tostring(
-                #cosmetic.list
+                #__UI.__L.cosmetic.list
             )
-    cosmetic.pageStatus.TextSize = 11
-    cosmetic.pageStatus.Font =
+    __UI.__L.cosmetic.pageStatus.TextSize = 11
+    __UI.__L.cosmetic.pageStatus.Font =
         Enum.Font.Gotham
-    cosmetic.pageStatus.TextColor3 =
+    __UI.__L.cosmetic.pageStatus.TextColor3 =
         Color3.fromRGB(
             145,
             145,
             145
         )
-    cosmetic.pageStatus.TextXAlignment =
+    __UI.__L.cosmetic.pageStatus.TextXAlignment =
         Enum.TextXAlignment.Left
-    cosmetic.pageStatus.LayoutOrder = 1
-    cosmetic.pageStatus.Parent =
-        cosmetic.page
+    __UI.__L.cosmetic.pageStatus.LayoutOrder = 1
+    __UI.__L.cosmetic.pageStatus.Parent =
+        __UI.__L.cosmetic.page
 
-    Toggle.Parent =
-        cosmetic.page
-    Toggle.LayoutOrder = 0
+    __UI.__L.Toggle.Parent =
+        __UI.__L.cosmetic.page
+    __UI.__L.Toggle.LayoutOrder = 0
 
     for slotIndex = 1, 2 do
         local state =
-            cosmetic.slots[slotIndex]
+            __UI.__L.cosmetic.slots[slotIndex]
 
         local row =
             Instance.new(
@@ -4208,7 +4209,7 @@ function cosmetic.buildUI()
         row.LayoutOrder =
             slotIndex + 1
         row.Parent =
-            cosmetic.page
+            __UI.__L.cosmetic.page
 
         local rowCorner =
             Instance.new(
@@ -4510,10 +4511,10 @@ function cosmetic.buildUI()
         removeCorner.Parent =
             removeButton
 
-        UnusualFns.addUnusualConnection(
+        __UI.__L.UnusualFns.addUnusualConnection(
             a.MouseButton1Click:Connect(
                 function()
-                    cosmetic.openPicker(
+                    __UI.__L.cosmetic.openPicker(
                         slotIndex,
                         "Original"
                     )
@@ -4521,10 +4522,10 @@ function cosmetic.buildUI()
             )
         )
 
-        UnusualFns.addUnusualConnection(
+        __UI.__L.UnusualFns.addUnusualConnection(
             b.MouseButton1Click:Connect(
                 function()
-                    cosmetic.openPicker(
+                    __UI.__L.cosmetic.openPicker(
                         slotIndex,
                         "Replace"
                     )
@@ -4532,11 +4533,11 @@ function cosmetic.buildUI()
             )
         )
 
-        UnusualFns.addUnusualConnection(
+        __UI.__L.UnusualFns.addUnusualConnection(
             addButton.MouseButton1Click:Connect(
                 function()
                     local current =
-                        cosmetic.slots[
+                        __UI.__L.cosmetic.slots[
                             slotIndex
                         ]
 
@@ -4549,24 +4550,24 @@ function cosmetic.buildUI()
                         return
                     end
 
-                    cosmetic.directAction[
+                    __UI.__L.cosmetic.directAction[
                         slotIndex
                     ] = "add"
 
                     task.spawn(function()
                         pcall(
-                            cosmetic.refreshRig
+                            __UI.__L.cosmetic.refreshRig
                         )
                     end)
                 end
             )
         )
 
-        UnusualFns.addUnusualConnection(
+        __UI.__L.UnusualFns.addUnusualConnection(
             removeButton.MouseButton1Click:Connect(
                 function()
                     local current =
-                        cosmetic.slots[
+                        __UI.__L.cosmetic.slots[
                             slotIndex
                         ]
 
@@ -4599,13 +4600,13 @@ function cosmetic.buildUI()
                         return
                     end
 
-                    cosmetic.directAction[
+                    __UI.__L.cosmetic.directAction[
                         slotIndex
                     ] = "remove"
 
                     task.spawn(function()
                         pcall(
-                            cosmetic.refreshRig
+                            __UI.__L.cosmetic.refreshRig
                         )
                     end)
                 end
@@ -4614,20 +4615,20 @@ function cosmetic.buildUI()
     end
 end
 
-function cosmetic.cleanup()
+function __UI.__L.cosmetic.cleanup()
     local wasEnabled =
-        cosmetic.enabled
+        __UI.__L.cosmetic.enabled
 
     local hadDirectAdd = false
 
     for slotIndex = 1, 2 do
-        if cosmetic.directAction[slotIndex] == "add" then
+        if __UI.__L.cosmetic.directAction[slotIndex] == "add" then
             hadDirectAdd = true
-            cosmetic.directAction[slotIndex] = "remove"
+            __UI.__L.cosmetic.directAction[slotIndex] = "remove"
         end
     end
 
-    cosmetic.enabled = false
+    __UI.__L.cosmetic.enabled = false
 
     --// A previous refresh can still be rebuilding the live rig.
     --// Wait for it to finish so cleanup cannot leave the replacement
@@ -4635,14 +4636,14 @@ function cosmetic.cleanup()
     local deadline =
         tick() + 1
 
-    while cosmetic.refreshBusy
+    while __UI.__L.cosmetic.refreshBusy
         and tick() < deadline
     do
         task.wait()
     end
 
-    if cosmetic.refreshBusy then
-        cosmetic.refreshBusy = false
+    if __UI.__L.cosmetic.refreshBusy then
+        __UI.__L.cosmetic.refreshBusy = false
     end
 
     --// Always refresh while a live skin snapshot exists. This makes
@@ -4650,41 +4651,41 @@ function cosmetic.cleanup()
     --// its visual result is still present on the rig.
     if wasEnabled
         or hadDirectAdd
-        or cosmetic.skinDescription
+        or __UI.__L.cosmetic.skinDescription
     then
         pcall(function()
-            cosmetic.refreshRig()
+            __UI.__L.cosmetic.refreshRig()
         end)
     end
 
-    cosmetic.directAction[1] = nil
-    cosmetic.directAction[2] = nil
+    __UI.__L.cosmetic.directAction[1] = nil
+    __UI.__L.cosmetic.directAction[2] = nil
 
-    cosmetic.closePicker()
-    cosmetic.refreshBusy = false
-    cosmetic.removeHook()
+    __UI.__L.cosmetic.closePicker()
+    __UI.__L.cosmetic.refreshBusy = false
+    __UI.__L.cosmetic.removeHook()
 
-    cosmetic.skinDescription = nil
-    cosmetic.skinCharacter = nil
+    __UI.__L.cosmetic.skinDescription = nil
+    __UI.__L.cosmetic.skinCharacter = nil
 
     pcall(function()
-        if cosmetic.page then
-            cosmetic.page:Destroy()
+        if __UI.__L.cosmetic.page then
+            __UI.__L.cosmetic.page:Destroy()
         end
     end)
 
-    cosmetic.page = nil
-    cosmetic.pageStatus = nil
+    __UI.__L.cosmetic.page = nil
+    __UI.__L.cosmetic.pageStatus = nil
 end
 
-function UnusualFns.getUnusualName(id)
+function __UI.__L.UnusualFns.getUnusualName(id)
     id =
         tonumber(id)
     if not id then
         return nil
     end
     for _, data in ipairs(
-        unusualList
+        __UI.__L.unusualList
     ) do
         if data.id == id then
             return data.name
@@ -4700,7 +4701,7 @@ end
 --// =========================================================
 --// CURRENT EQUIPPED UNUSUAL
 --// =========================================================
-function UnusualFns.getEquippedUnusualId()
+function __UI.__L.UnusualFns.getEquippedUnusualId()
     local value = 0
     pcall(function()
         value =
@@ -4715,17 +4716,17 @@ end
 --// First run: original = actual equipped Unusual.
 do
     local equipped =
-        UnusualFns.getEquippedUnusualId()
+        __UI.__L.UnusualFns.getEquippedUnusualId()
     if equipped ~= 0 then
-        unusualSlot.originalId =
+        __UI.__L.unusualSlot.originalId =
             equipped
-        unusualSlot.originalName =
-            UnusualFns.getUnusualName(
+        __UI.__L.unusualSlot.originalName =
+            __UI.__L.UnusualFns.getUnusualName(
                 equipped
             )
     end
     local savedUnusual =
-        savedConfig.unusual
+        __UI.__L.savedConfig.unusual
     if type(savedUnusual) == "table" then
         local savedOriginal =
             tonumber(
@@ -4736,27 +4737,27 @@ do
                 savedUnusual.replaceId
             )
         if savedOriginal then
-            unusualSlot.originalId =
+            __UI.__L.unusualSlot.originalId =
                 savedOriginal
-            unusualSlot.originalName =
-                UnusualFns.getUnusualName(
+            __UI.__L.unusualSlot.originalName =
+                __UI.__L.UnusualFns.getUnusualName(
                     savedOriginal
                 )
         end
         if savedReplace then
-            unusualSlot.replaceId =
+            __UI.__L.unusualSlot.replaceId =
                 savedReplace
         end
     end
-    unusualSlot.replaceName =
-        UnusualFns.getUnusualName(
-            unusualSlot.replaceId
+    __UI.__L.unusualSlot.replaceName =
+        __UI.__L.UnusualFns.getUnusualName(
+            __UI.__L.unusualSlot.replaceId
         )
 end
 --// =========================================================
 --// GET REAL PLAYER CHARACTER
 --// =========================================================
-function UnusualFns.getUnusualPlayerCharacter()
+function __UI.__L.UnusualFns.getUnusualPlayerCharacter()
     local folder =
         workspace:FindFirstChild(
             "Players"
@@ -4775,7 +4776,7 @@ end
 --// =========================================================
 --// GET VISUAL RIG
 --// =========================================================
-function UnusualFns.getUnusualVisualRig()
+function __UI.__L.UnusualFns.getUnusualVisualRig()
     local folder =
         workspace:FindFirstChild(
             "Rigs"
@@ -4843,7 +4844,7 @@ end
 --// =========================================================
 --// GET COSMETIC RIG
 --// =========================================================
-function UnusualFns.getUnusualCosmeticRig(
+function __UI.__L.UnusualFns.getUnusualCosmeticRig(
     id,
     visualRig
 )
@@ -4881,7 +4882,7 @@ end
 --// =========================================================
 --// FX CLASSES
 --// =========================================================
-local UNUSUAL_FX_CLASSES = {
+__UI.__L.UNUSUAL_FX_CLASSES = {
     ParticleEmitter = true,
     Trail = true,
     Beam = true,
@@ -4894,18 +4895,18 @@ local UNUSUAL_FX_CLASSES = {
     SurfaceLight = true,
     BillboardGui = true
 }
-function UnusualFns.isUnusualFX(object)
-    return UNUSUAL_FX_CLASSES[
+function __UI.__L.UnusualFns.isUnusualFX(object)
+    return __UI.__L.UNUSUAL_FX_CLASSES[
         object.ClassName
     ] == true
 end
-function UnusualFns.unusualAttachmentHasFX(
+function __UI.__L.UnusualFns.unusualAttachmentHasFX(
     attachment
 )
     for _, descendant in ipairs(
         attachment:GetDescendants()
     ) do
-        if UnusualFns.isUnusualFX(descendant) then
+        if __UI.__L.UnusualFns.isUnusualFX(descendant) then
             return true
         end
     end
@@ -4915,7 +4916,7 @@ end
 --// =========================================================
 --// TAG OUR FX
 --// =========================================================
-function UnusualFns.tagUnusualFX(
+function __UI.__L.UnusualFns.tagUnusualFX(
     object,
     id
 )
@@ -4948,7 +4949,7 @@ end
 --// MAP ATTACHMENTS
 --// =========================================================
 
-local function mapUnusualAttachments(
+__UI.__L.mapUnusualAttachments = function(
     source,
     clone,
     map
@@ -4977,7 +4978,7 @@ local function mapUnusualAttachments(
             and cloneChild:IsA("Attachment")
         then
 
-            mapUnusualAttachments(
+            __UI.__L.mapUnusualAttachments(
                 sourceChild,
                 cloneChild,
                 map
@@ -4993,7 +4994,7 @@ end
 --// NEEDED ATTACHMENTS
 --// =========================================================
 
-local function isUnusualJointObject(object)
+__UI.__L.isUnusualJointObject = function(object)
 
     return object:IsA("Weld")
         or object:IsA("WeldConstraint")
@@ -5002,15 +5003,15 @@ local function isUnusualJointObject(object)
 
 end
 
-local unusualNestedJointCache = setmetatable(
+__UI.__L.unusualNestedJointCache = setmetatable(
     {},
     { __mode = "k" }
 )
 
-local function unusualJointHasNestedBasePart(joint)
+__UI.__L.unusualJointHasNestedBasePart = function(joint)
 
     local cached =
-        unusualNestedJointCache[joint]
+        __UI.__L.unusualNestedJointCache[joint]
 
     if cached ~= nil then
         return cached
@@ -5029,14 +5030,14 @@ local function unusualJointHasNestedBasePart(joint)
 
     end
 
-    unusualNestedJointCache[joint] =
+    __UI.__L.unusualNestedJointCache[joint] =
         found
 
     return found
 
 end
 
-local function unusualObjectBelongsToPart(
+__UI.__L.unusualObjectBelongsToPart = function(
     object,
     sourcePart
 )
@@ -5055,8 +5056,8 @@ local function unusualObjectBelongsToPart(
         --// A joint subtree containing nested BaseParts is installed whole.
         --// Do not separately clone FX carried inside that same subtree.
         if parent.Parent == sourcePart
-            and isUnusualJointObject(parent)
-            and unusualJointHasNestedBasePart(parent)
+            and __UI.__L.isUnusualJointObject(parent)
+            and __UI.__L.unusualJointHasNestedBasePart(parent)
         then
             return false
         end
@@ -5070,7 +5071,7 @@ local function unusualObjectBelongsToPart(
 
 end
 
-local function getNeededUnusualAttachments(
+__UI.__L.getNeededUnusualAttachments = function(
     sourcePart)
 
     local needed = {}
@@ -5079,7 +5080,7 @@ local function getNeededUnusualAttachments(
         sourcePart:GetDescendants()
     ) do
 
-        if unusualObjectBelongsToPart(
+        if __UI.__L.unusualObjectBelongsToPart(
             object,
             sourcePart
         ) then
@@ -5089,7 +5090,7 @@ local function getNeededUnusualAttachments(
             then
 
                 if object.Attachment0
-                    and unusualObjectBelongsToPart(
+                    and __UI.__L.unusualObjectBelongsToPart(
                         object.Attachment0,
                         sourcePart
                     )
@@ -5102,7 +5103,7 @@ local function getNeededUnusualAttachments(
                 end
 
                 if object.Attachment1
-                    and unusualObjectBelongsToPart(
+                    and __UI.__L.unusualObjectBelongsToPart(
                         object.Attachment1,
                         sourcePart
                     )
@@ -5125,11 +5126,11 @@ local function getNeededUnusualAttachments(
     ) do
 
         if object:IsA("Attachment")
-            and unusualObjectBelongsToPart(
+            and __UI.__L.unusualObjectBelongsToPart(
                 object,
                 sourcePart
             )
-            and UnusualFns.unusualAttachmentHasFX(
+            and __UI.__L.UnusualFns.unusualAttachmentHasFX(
                 object
             )
         then
@@ -5178,7 +5179,7 @@ end
 --// SOURCE ATTACHMENT WORLD CFRAME
 --// =========================================================
 
-local function getUnusualAttachmentWorldCFrame(
+__UI.__L.getUnusualAttachmentWorldCFrame = function(
     attachment
 )
 
@@ -5207,7 +5208,7 @@ local function getUnusualAttachmentWorldCFrame(
     if parent and parent:IsA("Attachment") then
 
         local parentWorld =
-            getUnusualAttachmentWorldCFrame(
+            __UI.__L.getUnusualAttachmentWorldCFrame(
                 parent
             )
 
@@ -5225,7 +5226,7 @@ end
 --// HAS UNUSUAL CONTENT
 --// =========================================================
 
-local function unusualBasePartHasContent(
+__UI.__L.unusualBasePartHasContent = function(
     sourcePart
 )
 
@@ -5233,17 +5234,17 @@ local function unusualBasePartHasContent(
         sourcePart:GetDescendants()
     ) do
 
-        if unusualObjectBelongsToPart(
+        if __UI.__L.unusualObjectBelongsToPart(
             object,
             sourcePart
         ) then
 
-            if UnusualFns.isUnusualFX(object) then
+            if __UI.__L.UnusualFns.isUnusualFX(object) then
                 return true
             end
 
             if object:IsA("Attachment")
-                and UnusualFns.unusualAttachmentHasFX(
+                and __UI.__L.UnusualFns.unusualAttachmentHasFX(
                     object
                 )
             then
@@ -5261,20 +5262,20 @@ end
 --// =========================================================
 --// UNUSUAL ANIMATION SOURCE
 --// =========================================================
-unusualRuntime.destroyAnimationSource = function()
-    if unusualRuntime.animationSource then
+__UI.__L.unusualRuntime.destroyAnimationSource = function()
+    if __UI.__L.unusualRuntime.animationSource then
         pcall(function()
-            unusualRuntime.animationSource:Destroy()
+            __UI.__L.unusualRuntime.animationSource:Destroy()
         end)
     end
 
-    unusualRuntime.animationSource = nil
+    __UI.__L.unusualRuntime.animationSource = nil
     table.clear(
-        unusualRuntime.animationLinks
+        __UI.__L.unusualRuntime.animationLinks
     )
 
     for _, mirror in ipairs(
-        unusualRuntime.visualMirrors
+        __UI.__L.unusualRuntime.visualMirrors
     ) do
         if mirror.model then
             pcall(function()
@@ -5284,21 +5285,21 @@ unusualRuntime.destroyAnimationSource = function()
     end
 
     table.clear(
-        unusualRuntime.visualMirrors
+        __UI.__L.unusualRuntime.visualMirrors
     )
 
-    if unusualRuntime.specialCircling
-        and unusualRuntime.specialCircling.model
+    if __UI.__L.unusualRuntime.specialCircling
+        and __UI.__L.unusualRuntime.specialCircling.model
     then
         pcall(function()
-            unusualRuntime.specialCircling.model:Destroy()
+            __UI.__L.unusualRuntime.specialCircling.model:Destroy()
         end)
     end
 
-    unusualRuntime.specialCircling = nil
+    __UI.__L.unusualRuntime.specialCircling = nil
 
     for _, item in ipairs(
-        unusualRuntime.animatedNestedVisuals
+        __UI.__L.unusualRuntime.animatedNestedVisuals
     ) do
         if item.model then
             pcall(function()
@@ -5308,11 +5309,11 @@ unusualRuntime.destroyAnimationSource = function()
     end
 
     table.clear(
-        unusualRuntime.animatedNestedVisuals
+        __UI.__L.unusualRuntime.animatedNestedVisuals
     )
 end
 
-unusualRuntime.findRelative = function(
+__UI.__L.unusualRuntime.findRelative = function(
     root,
     object
 )
@@ -5358,7 +5359,7 @@ unusualRuntime.findRelative = function(
     return current
 end
 
-unusualRuntime.startAnimations = function(
+__UI.__L.unusualRuntime.startAnimations = function(
     root
 )
     if not root then
@@ -5478,7 +5479,7 @@ unusualRuntime.startAnimations = function(
     return started
 end
 
-unusualRuntime.installAnimatedNestedModels = function(
+__UI.__L.unusualRuntime.installAnimatedNestedModels = function(
     cosmeticRig,
     id,
     targetRig,
@@ -5841,19 +5842,19 @@ unusualRuntime.installAnimatedNestedModels = function(
                 weld.Parent =
                     root
 
-                UnusualFns.tagUnusualFX(
+                __UI.__L.UnusualFns.tagUnusualFX(
                     clone,
                     id
                 )
 
                 --// Start the same AnimationController
                 --// animation that the source effect uses.
-                unusualRuntime.startAnimations(
+                __UI.__L.unusualRuntime.startAnimations(
                     clone
                 )
 
                 table.insert(
-                    unusualRuntime.animatedNestedVisuals,
+                    __UI.__L.unusualRuntime.animatedNestedVisuals,
                     {
                         model = clone,
                         root = root
@@ -5878,12 +5879,12 @@ unusualRuntime.installAnimatedNestedModels = function(
 end
 
 
-unusualRuntime.createAnimationSource = function(
+__UI.__L.unusualRuntime.createAnimationSource = function(
     cosmeticRig,
     id,
     playerCharacter
 )
-    unusualRuntime.destroyAnimationSource()
+    __UI.__L.unusualRuntime.destroyAnimationSource()
 
     if not cosmeticRig then
         return nil
@@ -6045,7 +6046,7 @@ unusualRuntime.createAnimationSource = function(
 
     if not targetRoot then
         local rig =
-            UnusualFns.getUnusualVisualRig()
+            __UI.__L.UnusualFns.getUnusualVisualRig()
 
         if rig then
             targetRoot =
@@ -6155,7 +6156,7 @@ unusualRuntime.createAnimationSource = function(
     if not hasClientDriver then
         root.Anchored = true
 
-        unusualRuntime.startAnimations(
+        __UI.__L.unusualRuntime.startAnimations(
             source
         )
     end
@@ -6180,13 +6181,13 @@ unusualRuntime.createAnimationSource = function(
 
     end
 
-    unusualRuntime.animationSource =
+    __UI.__L.unusualRuntime.animationSource =
         source
 
     return source
 end
 
-unusualRuntime.createVisualMirror = function(
+__UI.__L.unusualRuntime.createVisualMirror = function(
     sourceModel,
     id
 )
@@ -6231,7 +6232,7 @@ unusualRuntime.createVisualMirror = function(
         tostring(id) ..
         "_" ..
         tostring(
-            #unusualRuntime.visualMirrors + 1
+            #__UI.__L.unusualRuntime.visualMirrors + 1
         )
 
     for _, object in ipairs(
@@ -6290,7 +6291,7 @@ unusualRuntime.createVisualMirror = function(
     --// The mirrored nested visual is another visible copy of the
     --// Unusual effect. Tag the whole clone so first-person handling
     --// also reaches its Trail/Beam/ParticleEmitter descendants.
-    UnusualFns.tagUnusualFX(
+    __UI.__L.UnusualFns.tagUnusualFX(
         clone,
         id
     )
@@ -6355,7 +6356,7 @@ unusualRuntime.createVisualMirror = function(
     end
 
     table.insert(
-        unusualRuntime.visualMirrors,
+        __UI.__L.unusualRuntime.visualMirrors,
         {
             model = clone,
             links = links
@@ -6365,7 +6366,7 @@ unusualRuntime.createVisualMirror = function(
     return true
 end
 
-unusualRuntime.addAnimationLink = function(
+__UI.__L.unusualRuntime.addAnimationLink = function(
     sourcePart,
     nested,
     targetPart,
@@ -6376,13 +6377,13 @@ unusualRuntime.addAnimationLink = function(
     end
 
     local animatedPart =
-        unusualRuntime.findRelative(
+        __UI.__L.unusualRuntime.findRelative(
             animatedSource,
             nested
         )
 
     local animatedRoot =
-        unusualRuntime.findRelative(
+        __UI.__L.unusualRuntime.findRelative(
             animatedSource,
             sourcePart
         )
@@ -6402,7 +6403,7 @@ unusualRuntime.addAnimationLink = function(
     end
 
     table.insert(
-        unusualRuntime.animationLinks,
+        __UI.__L.unusualRuntime.animationLinks,
         {
             sourceRoot = animatedRoot,
             sourcePart = animatedPart,
@@ -6414,9 +6415,9 @@ unusualRuntime.addAnimationLink = function(
     return true
 end
 
-unusualRuntime.updateAnimatedParts = function()
+__UI.__L.unusualRuntime.updateAnimatedParts = function()
     local source =
-        unusualRuntime.animationSource
+        __UI.__L.unusualRuntime.animationSource
 
     if not source
         or not source.Parent
@@ -6425,7 +6426,7 @@ unusualRuntime.updateAnimatedParts = function()
     end
 
     local targetRig =
-        UnusualFns.getUnusualVisualRig()
+        __UI.__L.UnusualFns.getUnusualVisualRig()
 
     local targetRoot
 
@@ -6438,7 +6439,7 @@ unusualRuntime.updateAnimatedParts = function()
 
     if not targetRoot then
         local character =
-            UnusualFns.getUnusualPlayerCharacter()
+            __UI.__L.UnusualFns.getUnusualPlayerCharacter()
 
         if character then
             targetRoot =
@@ -6448,16 +6449,16 @@ unusualRuntime.updateAnimatedParts = function()
         end
     end
 
-    if unusualRuntime.specialCircling
-        and unusualRuntime.specialCircling.root
-        and unusualRuntime.specialCircling.root.Parent
+    if __UI.__L.unusualRuntime.specialCircling
+        and __UI.__L.unusualRuntime.specialCircling.root
+        and __UI.__L.unusualRuntime.specialCircling.root.Parent
         and targetRoot
     then
 
         pcall(function()
-            unusualRuntime.specialCircling.root.CFrame =
+            __UI.__L.unusualRuntime.specialCircling.root.CFrame =
                 targetRoot.CFrame *
-                unusualRuntime.specialCircling.offset
+                __UI.__L.unusualRuntime.specialCircling.offset
         end)
 
     end
@@ -6493,7 +6494,7 @@ unusualRuntime.updateAnimatedParts = function()
     end
 
     for _, mirror in ipairs(
-        unusualRuntime.visualMirrors
+        __UI.__L.unusualRuntime.visualMirrors
     ) do
 
         if mirror.model
@@ -6524,7 +6525,7 @@ unusualRuntime.updateAnimatedParts = function()
     end
 
     for _, link in ipairs(
-        unusualRuntime.animationLinks
+        __UI.__L.unusualRuntime.animationLinks
     ) do
 
         local sourceRootPart =
@@ -6580,7 +6581,7 @@ end
 --// CREATE LOCAL ANCHOR FOR NESTED BASEPART
 --// =========================================================
 
-local function createUnusualAnchor(
+__UI.__L.createUnusualAnchor = function(
     sourceRoot,
     sourcePart,
     targetPart,
@@ -6717,7 +6718,7 @@ local function createUnusualAnchor(
     weld.Parent =
         anchor
 
-    UnusualFns.tagUnusualFX(
+    __UI.__L.UnusualFns.tagUnusualFX(
         anchor,
         id
     )
@@ -6733,7 +6734,7 @@ end
 --// CLONE / REBIND COMPLETE WELDED COSMETIC TREES
 --// =========================================================
 
-local function mapUnusualCloneTree(
+__UI.__L.mapUnusualCloneTree = function(
     sourceRoot,
     cloneRoot,
     map
@@ -6752,14 +6753,14 @@ local function mapUnusualCloneTree(
                 and cloneChild.ClassName == sourceChild.ClassName
             then
                 used[cloneChild] = true
-                mapUnusualCloneTree(sourceChild, cloneChild, map)
+                __UI.__L.mapUnusualCloneTree(sourceChild, cloneChild, map)
                 break
             end
         end
     end
 end
 
-local function rebindUnusualCloneTree(
+__UI.__L.rebindUnusualCloneTree = function(
     sourceRoot,
     cloneRoot,
     map,
@@ -6777,7 +6778,7 @@ local function rebindUnusualCloneTree(
         local cloneObject = map[sourceObject]
 
         if cloneObject then
-            if isUnusualJointObject(sourceObject) then
+            if __UI.__L.isUnusualJointObject(sourceObject) then
                 for _, property in ipairs({ "Part0", "Part1" }) do
                     local originalPart
 
@@ -6843,15 +6844,15 @@ local function rebindUnusualCloneTree(
     end
 end
 
-local function installUnusualWeldedTree(
+__UI.__L.installUnusualWeldedTree = function(
     sourcePart,
     targetPart,
     rootJoint,
     id
 )
 
-    if not isUnusualJointObject(rootJoint)
-        or not unusualJointHasNestedBasePart(rootJoint)
+    if not __UI.__L.isUnusualJointObject(rootJoint)
+        or not __UI.__L.unusualJointHasNestedBasePart(rootJoint)
     then
         return false
     end
@@ -6870,12 +6871,12 @@ local function installUnusualWeldedTree(
     end
 
     local cloneMap = {}
-    mapUnusualCloneTree(rootJoint, clone, cloneMap)
+    __UI.__L.mapUnusualCloneTree(rootJoint, clone, cloneMap)
 
     --// Keep the Weld and its nested MeshParts/FX hierarchy together.
     clone.Parent = targetPart
 
-    rebindUnusualCloneTree(
+    __UI.__L.rebindUnusualCloneTree(
         rootJoint,
         clone,
         cloneMap,
@@ -6900,11 +6901,11 @@ local function installUnusualWeldedTree(
         end
     end
 
-    UnusualFns.tagUnusualFX(clone, id)
+    __UI.__L.UnusualFns.tagUnusualFX(clone, id)
     return true
 end
 
-local function installUnusualPartFX(
+__UI.__L.installUnusualPartFX = function(
     sourcePart,
     targetPart,
     id,
@@ -6975,7 +6976,7 @@ local function installUnusualPartFX(
                     and hasAnimation
                 )
             then
-                unusualRuntime.createVisualMirror(
+                __UI.__L.unusualRuntime.createVisualMirror(
                     child,
                     id
                 )
@@ -6989,10 +6990,10 @@ local function installUnusualPartFX(
     --// (for example, Horns Of Toxicity). Clone the whole subtree so nested
     --// MeshParts, SurfaceAppearance, Attachments and FX stay connected.
     for _, child in ipairs(sourcePart:GetChildren()) do
-        if isUnusualJointObject(child)
-            and unusualJointHasNestedBasePart(child)
+        if __UI.__L.isUnusualJointObject(child)
+            and __UI.__L.unusualJointHasNestedBasePart(child)
         then
-            installUnusualWeldedTree(
+            __UI.__L.installUnusualWeldedTree(
                 sourcePart,
                 targetPart,
                 child,
@@ -7015,7 +7016,7 @@ local function installUnusualPartFX(
             anchorIndex += 1
 
             local anchor =
-                createUnusualAnchor(
+                __UI.__L.createUnusualAnchor(
                     sourcePart,
                     nested,
                     targetPart,
@@ -7029,7 +7030,7 @@ local function installUnusualPartFX(
                     anchor
 
                 local animated =
-                    unusualRuntime.addAnimationLink(
+                    __UI.__L.unusualRuntime.addAnimationLink(
                         sourcePart,
                         nested,
                         targetPart,
@@ -7058,8 +7059,8 @@ local function installUnusualPartFX(
 
                     anchor.Anchored = true
 
-                    unusualRuntime.animationLinks[
-                        #unusualRuntime.animationLinks
+                    __UI.__L.unusualRuntime.animationLinks[
+                        #__UI.__L.unusualRuntime.animationLinks
                     ].anchor =
                         anchor
                 end
@@ -7092,7 +7093,7 @@ local function installUnusualPartFX(
         if currentTargetPart then
 
             local needed =
-                getNeededUnusualAttachments(
+                __UI.__L.getNeededUnusualAttachments(
                     currentSourcePart
                 )
 
@@ -7120,12 +7121,12 @@ local function installUnusualPartFX(
                     clone.Parent =
                         currentTargetPart
 
-                    UnusualFns.tagUnusualFX(
+                    __UI.__L.UnusualFns.tagUnusualFX(
                         clone,
                         id
                     )
 
-                    mapUnusualAttachments(
+                    __UI.__L.mapUnusualAttachments(
                         attachment,
                         clone,
                         attachmentMap
@@ -7157,10 +7158,10 @@ local function installUnusualPartFX(
                 currentSourcePart:GetDescendants()
             ) do
 
-                if UnusualFns.isUnusualFX(
+                if __UI.__L.UnusualFns.isUnusualFX(
                     sourceObject
                 )
-                and unusualObjectBelongsToPart(
+                and __UI.__L.unusualObjectBelongsToPart(
                     sourceObject,
                     currentSourcePart
                 )
@@ -7234,7 +7235,7 @@ local function installUnusualPartFX(
                         clone.Parent =
                             currentTargetPart
 
-                        UnusualFns.tagUnusualFX(
+                        __UI.__L.UnusualFns.tagUnusualFX(
                             clone,
                             id
                         )
@@ -7262,7 +7263,7 @@ local function applyUnusualFX(
 )
 
     local cosmeticRig =
-        UnusualFns.getUnusualCosmeticRig(
+        __UI.__L.UnusualFns.getUnusualCosmeticRig(
             id,
             visualRig
         )
@@ -7281,14 +7282,14 @@ local function applyUnusualFX(
     --// routine destroys previous runtime/animated visuals,
     --// so the visible animated mini-rig must be installed after it.
     local animatedSource =
-        unusualRuntime.createAnimationSource(
+        __UI.__L.unusualRuntime.createAnimationSource(
             cosmeticRig,
             id,
             playerCharacter
         )
 
     local animatedNestedInstalled =
-        unusualRuntime.installAnimatedNestedModels(
+        __UI.__L.unusualRuntime.installAnimatedNestedModels(
             cosmeticRig,
             id,
             visualRig,
@@ -7355,7 +7356,7 @@ local function applyUnusualFX(
                 )
             then
 
-                installUnusualPartFX(
+                __UI.__L.installUnusualPartFX(
                     sourcePart,
                     targetPart,
                     id,
@@ -7383,13 +7384,13 @@ end
 --// =========================================================
 --// REMOVE OUR FX
 -- =========================================================
-function UnusualFns.removeOurUnusualFX()
-    unusualRuntime.destroyAnimationSource()
+function __UI.__L.UnusualFns.removeOurUnusualFX()
+    __UI.__L.unusualRuntime.destroyAnimationSource()
 
     local removed = 0
     local roots = {
-        UnusualFns.getUnusualVisualRig(),
-        UnusualFns.getUnusualPlayerCharacter()
+        __UI.__L.UnusualFns.getUnusualVisualRig(),
+        __UI.__L.UnusualFns.getUnusualPlayerCharacter()
     }
     local seen = {}
     for _, root in ipairs(
@@ -7426,7 +7427,7 @@ end
 --// =========================================================
 --// CHECK OUR INSTALLED FX
 --// =========================================================
-function UnusualFns.hasOurUnusualFX(
+function __UI.__L.UnusualFns.hasOurUnusualFX(
     root,
     id
 )
@@ -7472,12 +7473,12 @@ end
 --// =========================================================
 --// ORIGINAL SIGNATURE
 -- =========================================================
-function UnusualFns.buildOriginalUnusualSignature(
+function __UI.__L.UnusualFns.buildOriginalUnusualSignature(
     id,
     visualRig
 )
     local cosmeticRig =
-        UnusualFns.getUnusualCosmeticRig(
+        __UI.__L.UnusualFns.getUnusualCosmeticRig(
             id,
             visualRig
         )
@@ -7491,7 +7492,7 @@ function UnusualFns.buildOriginalUnusualSignature(
     local function hasEffectContent(
         object
     )
-        if UnusualFns.isUnusualFX(object) then
+        if __UI.__L.UnusualFns.isUnusualFX(object) then
             return true
         end
 
@@ -7502,7 +7503,7 @@ function UnusualFns.buildOriginalUnusualSignature(
         for _, descendant in ipairs(
             object:GetDescendants()
         ) do
-            if UnusualFns.isUnusualFX(descendant)
+            if __UI.__L.UnusualFns.isUnusualFX(descendant)
                 or descendant:IsA("BasePart")
             then
                 return true
@@ -7524,13 +7525,13 @@ function UnusualFns.buildOriginalUnusualSignature(
                 sourcePart:GetChildren()
             ) do
 
-                if isUnusualJointObject(object)
+                if __UI.__L.isUnusualJointObject(object)
                     or object:IsA("CFrameValue")
                 then
 
                     --// Record joint roots that contain actual nested geometry.
-                    if isUnusualJointObject(object)
-                        and unusualJointHasNestedBasePart(object)
+                    if __UI.__L.isUnusualJointObject(object)
+                        and __UI.__L.unusualJointHasNestedBasePart(object)
                     then
                         table.insert(
                             objects,
@@ -7584,13 +7585,13 @@ end
 --// =========================================================
 --// REMOVE ORIGINAL FX
 -- =========================================================
-function UnusualFns.removeOriginalUnusualFX(
+function __UI.__L.UnusualFns.removeOriginalUnusualFX(
     id,
     visualRig,
     playerCharacter
 )
     local signature =
-        UnusualFns.buildOriginalUnusualSignature(
+        __UI.__L.UnusualFns.buildOriginalUnusualSignature(
             id,
             visualRig
         )
@@ -7777,13 +7778,13 @@ end
 --// =========================================================
 --// RESTORE UNUSUAL
 -- =========================================================
-function UnusualFns.captureNativeUnusualSnapshot(
+function __UI.__L.UnusualFns.captureNativeUnusualSnapshot(
     id,
     visualRig,
     playerCharacter
 )
     local signature =
-        UnusualFns.buildOriginalUnusualSignature(
+        __UI.__L.UnusualFns.buildOriginalUnusualSignature(
             id,
             visualRig
         )
@@ -7860,8 +7861,8 @@ function UnusualFns.captureNativeUnusualSnapshot(
                     if clone then
                         if matchedInfo.WholeTree then
                             local cloneMap = {}
-                            mapUnusualCloneTree(existing, clone, cloneMap)
-                            rebindUnusualCloneTree(
+                            __UI.__L.mapUnusualCloneTree(existing, clone, cloneMap)
+                            __UI.__L.rebindUnusualCloneTree(
                                 existing,
                                 clone,
                                 cloneMap,
@@ -7923,7 +7924,7 @@ function UnusualFns.captureNativeUnusualSnapshot(
     return snapshot
 end
 
-function UnusualFns.restoreNativeUnusualSnapshot(
+function __UI.__L.UnusualFns.restoreNativeUnusualSnapshot(
     snapshot,
     visualRig,
     playerCharacter
@@ -7985,13 +7986,13 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                     if clone then
                         local cloneMap = {}
 
-                        mapUnusualCloneTree(
+                        __UI.__L.mapUnusualCloneTree(
                             savedObject,
                             clone,
                             cloneMap
                         )
 
-                        rebindUnusualCloneTree(
+                        __UI.__L.rebindUnusualCloneTree(
                             savedObject,
                             clone,
                             cloneMap,
@@ -8045,31 +8046,31 @@ function UnusualFns.restoreNativeUnusualSnapshot(
     return restored
 end
 
-function UnusualFns.restoreUnusual()
-    if not unusualActive
-        and not unusualRuntime.originalId
+function __UI.__L.UnusualFns.restoreUnusual()
+    if not __UI.__L.unusualActive
+        and not __UI.__L.unusualRuntime.originalId
     then
         return
     end
 
     local visualRig =
-        UnusualFns.getUnusualVisualRig()
+        __UI.__L.UnusualFns.getUnusualVisualRig()
     local playerCharacter =
-        UnusualFns.getUnusualPlayerCharacter()
+        __UI.__L.UnusualFns.getUnusualPlayerCharacter()
 
     --// Always inspect the real current loadout before restoring.
     --// unusualRuntime.originalId is the configured swap source only.
     local currentEquippedId =
         tonumber(
-            UnusualFns.getEquippedUnusualId()
+            __UI.__L.UnusualFns.getEquippedUnusualId()
         )
 
     local originalId =
         tonumber(
-            unusualRuntime.originalId
+            __UI.__L.unusualRuntime.originalId
         )
 
-    unusualRuntime.currentEquippedId =
+    __UI.__L.unusualRuntime.currentEquippedId =
         currentEquippedId
 
     --// If the player manually equipped another Unusual while the
@@ -8085,15 +8086,15 @@ function UnusualFns.restoreUnusual()
     if manuallyChanged then
         --// The equipped Unusual changed. Do not restore the old
         --// replacement's particle state onto the new native effect.
-        UnusualFns.clearNativeParticlePOV(
+        __UI.__L.UnusualFns.clearNativeParticlePOV(
             false
         )
 
         if visualRig then
-            UnusualFns.removeOurUnusualFX()
+            __UI.__L.UnusualFns.removeOurUnusualFX()
 
             pcall(function()
-                UnusualFns.removeOriginalUnusualFX(
+                __UI.__L.UnusualFns.removeOriginalUnusualFX(
                     originalId,
                     visualRig,
                     playerCharacter
@@ -8101,20 +8102,20 @@ function UnusualFns.restoreUnusual()
             end)
 
             --// Keep P1 handling on the currently native Unusual.
-            UnusualFns.bindNativeParticlePOV(
+            __UI.__L.UnusualFns.bindNativeParticlePOV(
                 visualRig
             )
         end
 
-        unusualActive =
+        __UI.__L.unusualActive =
             false
-        unusualRuntime.appliedRig =
+        __UI.__L.unusualRuntime.appliedRig =
             visualRig
-        unusualRuntime.originalId =
+        __UI.__L.unusualRuntime.originalId =
             nil
-        unusualRuntime.replacementId =
+        __UI.__L.unusualRuntime.replacementId =
             nil
-        unusualRuntime.nativeSnapshot =
+        __UI.__L.unusualRuntime.nativeSnapshot =
             nil
         return
     end
@@ -8137,16 +8138,16 @@ function UnusualFns.restoreUnusual()
         --// Put the LIVE visual rig back to its exact 3P particle
         --// states before removing the replacement and restoring
         --// the native Unusual snapshot.
-        UnusualFns.clearNativeParticlePOV(
+        __UI.__L.UnusualFns.clearNativeParticlePOV(
             true
         )
 
-        UnusualFns.removeOurUnusualFX()
+        __UI.__L.UnusualFns.removeOurUnusualFX()
         task.wait()
 
         local restored =
-            UnusualFns.restoreNativeUnusualSnapshot(
-                unusualRuntime.nativeSnapshot,
+            __UI.__L.UnusualFns.restoreNativeUnusualSnapshot(
+                __UI.__L.unusualRuntime.nativeSnapshot,
                 visualRig,
                 playerCharacter
             )
@@ -8156,7 +8157,7 @@ function UnusualFns.restoreUnusual()
             and tonumber(currentEquippedId)
                 == tonumber(originalId)
         then
-            UnusualFns.removeOriginalUnusualFX(
+            __UI.__L.UnusualFns.removeOriginalUnusualFX(
                 originalId,
                 visualRig,
                 playerCharacter
@@ -8172,150 +8173,150 @@ function UnusualFns.restoreUnusual()
 
         --// The original effect is now the live effect again.
         --// Keep the same instant P1/P3 behavior on it.
-        UnusualFns.bindNativeParticlePOV(
+        __UI.__L.UnusualFns.bindNativeParticlePOV(
             visualRig
         )
     end
 
-    unusualActive =
+    __UI.__L.unusualActive =
         false
-    unusualRuntime.appliedRig =
+    __UI.__L.unusualRuntime.appliedRig =
         nil
-    unusualRuntime.originalId =
+    __UI.__L.unusualRuntime.originalId =
         nil
-    unusualRuntime.currentEquippedId =
+    __UI.__L.unusualRuntime.currentEquippedId =
         currentEquippedId
-    unusualRuntime.replacementId =
+    __UI.__L.unusualRuntime.replacementId =
         nil
-    unusualRuntime.nativeSnapshot =
+    __UI.__L.unusualRuntime.nativeSnapshot =
         nil
 end
 --// =========================================================
 --// ACTIVATE UNUSUAL
 -- =========================================================
-function UnusualFns.activateUnusual()
-    if not unusualSlot.originalId
-        or not unusualSlot.replaceId
+function __UI.__L.UnusualFns.activateUnusual()
+    if not __UI.__L.unusualSlot.originalId
+        or not __UI.__L.unusualSlot.replaceId
     then
         return false
     end
-    if unusualSlot.originalId
-        == unusualSlot.replaceId
+    if __UI.__L.unusualSlot.originalId
+        == __UI.__L.unusualSlot.replaceId
     then
         return false
     end
 
     local equippedId =
-        UnusualFns.getEquippedUnusualId()
+        __UI.__L.UnusualFns.getEquippedUnusualId()
 
     if equippedId == 0
         or tonumber(equippedId)
-            ~= tonumber(unusualSlot.originalId)
+            ~= tonumber(__UI.__L.unusualSlot.originalId)
     then
         return false
     end
 
     local visualRig =
-        UnusualFns.getUnusualVisualRig()
+        __UI.__L.UnusualFns.getUnusualVisualRig()
     local playerCharacter =
-        UnusualFns.getUnusualPlayerCharacter()
+        __UI.__L.UnusualFns.getUnusualPlayerCharacter()
     if not visualRig then
         return false
     end
 
-    if not unusualRuntime.nativeSnapshot
+    if not __UI.__L.unusualRuntime.nativeSnapshot
         or tonumber(
-            unusualRuntime.originalId
+            __UI.__L.unusualRuntime.originalId
         ) ~= tonumber(equippedId)
-        or unusualRuntime.appliedRig ~= visualRig
+        or __UI.__L.unusualRuntime.appliedRig ~= visualRig
     then
-        unusualRuntime.nativeSnapshot =
-            UnusualFns.captureNativeUnusualSnapshot(
+        __UI.__L.unusualRuntime.nativeSnapshot =
+            __UI.__L.UnusualFns.captureNativeUnusualSnapshot(
                 equippedId,
                 visualRig,
                 playerCharacter
             )
     end
 
-    if not unusualRuntime.nativeSnapshot then
+    if not __UI.__L.unusualRuntime.nativeSnapshot then
         return false
     end
 
     --// Reset the previous replacement's POV state.
-    UnusualFns.clearNativeParticlePOV(
+    __UI.__L.UnusualFns.clearNativeParticlePOV(
         true
     )
 
-    UnusualFns.removeOurUnusualFX()
+    __UI.__L.UnusualFns.removeOurUnusualFX()
     task.wait()
-    UnusualFns.removeOriginalUnusualFX(
-        unusualSlot.originalId,
+    __UI.__L.UnusualFns.removeOriginalUnusualFX(
+        __UI.__L.unusualSlot.originalId,
         visualRig,
         playerCharacter
     )
     task.wait()
     if not applyUnusualFX(
-        unusualSlot.replaceId,
+        __UI.__L.unusualSlot.replaceId,
         visualRig,
         playerCharacter
     ) then
         task.wait()
         applyUnusualFX(
-            unusualSlot.originalId,
+            __UI.__L.unusualSlot.originalId,
             visualRig,
             playerCharacter
         )
         return false
     end
-    unusualActive =
+    __UI.__L.unusualActive =
         true
-    unusualRuntime.appliedRig =
+    __UI.__L.unusualRuntime.appliedRig =
         visualRig
-    unusualRuntime.originalId =
+    __UI.__L.unusualRuntime.originalId =
         equippedId
-    unusualRuntime.currentEquippedId =
+    __UI.__L.unusualRuntime.currentEquippedId =
         equippedId
-    unusualRuntime.replacementId =
-        tonumber(unusualSlot.replaceId)
+    __UI.__L.unusualRuntime.replacementId =
+        tonumber(__UI.__L.unusualSlot.replaceId)
 
     --// The replacement is now live in Rigs.<player>.
     --// Track all of its current ParticleEmitters and any that
     --// its client driver creates later.
-    UnusualFns.bindNativeParticlePOV(
+    __UI.__L.UnusualFns.bindNativeParticlePOV(
         visualRig
     )
 
     return true
 end
-function UnusualFns.reapplyUnusual()
-    if not unusualEnabled
-        or unusualReapplyBusy
+function __UI.__L.UnusualFns.reapplyUnusual()
+    if not __UI.__L.unusualEnabled
+        or __UI.__L.unusualReapplyBusy
     then
         return
     end
 
-    unusualReapplyBusy = true
-    unusualRuntime.reapplyGeneration += 1
+    __UI.__L.unusualReapplyBusy = true
+    __UI.__L.unusualRuntime.reapplyGeneration += 1
 
     local generation =
-        unusualRuntime.reapplyGeneration
+        __UI.__L.unusualRuntime.reapplyGeneration
 
     task.spawn(function()
 
         for attempt = 1, 20 do
 
-            if not unusualEnabled
+            if not __UI.__L.unusualEnabled
                 or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
-                or generation ~= unusualRuntime.reapplyGeneration
+                or generation ~= __UI.__L.unusualRuntime.reapplyGeneration
             then
                 break
             end
 
             local visualRig =
-                UnusualFns.getUnusualVisualRig()
+                __UI.__L.UnusualFns.getUnusualVisualRig()
 
             local playerCharacter =
-                UnusualFns.getUnusualPlayerCharacter()
+                __UI.__L.UnusualFns.getUnusualPlayerCharacter()
 
             local root =
                 visualRig
@@ -8336,27 +8337,27 @@ function UnusualFns.reapplyUnusual()
 
                 task.wait(0.2)
 
-                if not unusualEnabled
+                if not __UI.__L.unusualEnabled
                     or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
-                    or generation ~= unusualRuntime.reapplyGeneration
+                    or generation ~= __UI.__L.unusualRuntime.reapplyGeneration
                 then
                     break
                 end
 
                 local equippedId =
-                    UnusualFns.getEquippedUnusualId()
+                    __UI.__L.UnusualFns.getEquippedUnusualId()
 
                 if equippedId == 0
                     or tonumber(equippedId)
                         ~= tonumber(
-                            unusualSlot.originalId
+                            __UI.__L.unusualSlot.originalId
                         )
                 then
                     --// The player changed the actually equipped Unusual.
                     --// Do NOT restore unusualRuntime.originalId here:
                     --// that is only the configured swap rule (for example 1 -> 2).
                     --// The new equipped effect is now the real current state.
-                    unusualRuntime.currentEquippedId =
+                    __UI.__L.unusualRuntime.currentEquippedId =
                         tonumber(equippedId)
 
                     --// The game already handles the newly equipped
@@ -8365,35 +8366,35 @@ function UnusualFns.reapplyUnusual()
                     --// Do NOT call applyUnusualFX here: that would mark
                     --// the user's real effect as DeadEye-owned and cleanup
                     --// would delete it.
-                    UnusualFns.removeOurUnusualFX()
+                    __UI.__L.UnusualFns.removeOurUnusualFX()
                     task.wait()
 
                     pcall(function()
-                        UnusualFns.removeOriginalUnusualFX(
-                            unusualRuntime.originalId
-                                or unusualSlot.originalId,
+                        __UI.__L.UnusualFns.removeOriginalUnusualFX(
+                            __UI.__L.unusualRuntime.originalId
+                                or __UI.__L.unusualSlot.originalId,
                             visualRig,
                             playerCharacter
                         )
                     end)
 
-                    unusualActive = false
-                    unusualEnabled = false
-                    unusualRuntime.appliedRig = visualRig
-                    unusualRuntime.originalId = nil
-                    unusualRuntime.replacementId = nil
-                    unusualRuntime.nativeSnapshot = nil
+                    __UI.__L.unusualActive = false
+                    __UI.__L.unusualEnabled = false
+                    __UI.__L.unusualRuntime.appliedRig = visualRig
+                    __UI.__L.unusualRuntime.originalId = nil
+                    __UI.__L.unusualRuntime.replacementId = nil
+                    __UI.__L.unusualRuntime.nativeSnapshot = nil
                     genv.UNUSUAL_SWAPPER_ENABLED =
                         false
                     break
                 end
 
-                unusualActive = false
-                UnusualFns.removeOurUnusualFX()
+                __UI.__L.unusualActive = false
+                __UI.__L.UnusualFns.removeOurUnusualFX()
 
                 local ok, result =
                     pcall(function()
-                        return UnusualFns.activateUnusual()
+                        return __UI.__L.UnusualFns.activateUnusual()
                     end)
 
                 if ok
@@ -8402,19 +8403,19 @@ function UnusualFns.reapplyUnusual()
 
                     local expected =
                         (
-                            #unusualRuntime.animatedNestedVisuals > 0
+                            #__UI.__L.unusualRuntime.animatedNestedVisuals > 0
                         )
-                        or UnusualFns.hasOurUnusualFX(
+                        or __UI.__L.UnusualFns.hasOurUnusualFX(
                             visualRig,
-                            unusualSlot.replaceId
+                            __UI.__L.unusualSlot.replaceId
                         )
-                        or UnusualFns.hasOurUnusualFX(
+                        or __UI.__L.UnusualFns.hasOurUnusualFX(
                             playerCharacter,
-                            unusualSlot.replaceId
+                            __UI.__L.unusualSlot.replaceId
                         )
 
                     if expected then
-                        unusualRuntime.appliedRig =
+                        __UI.__L.unusualRuntime.appliedRig =
                             visualRig
                         break
                     end
@@ -8427,7 +8428,7 @@ function UnusualFns.reapplyUnusual()
 
         end
 
-        unusualReapplyBusy = false
+        __UI.__L.unusualReapplyBusy = false
 
     end)
 end
@@ -8442,9 +8443,9 @@ end
 --// Unusual FX visibility mirrors the native Unusual behavior
 --// observed on a completely clean server.
 --// =========================================================
-local lastUnusualPOVState = nil
+__UI.__L.lastUnusualPOVState = nil
 
-function UnusualFns.getUnusualViewmodel()
+function __UI.__L.UnusualFns.getUnusualViewmodel()
     local camera =
         workspace.CurrentCamera
 
@@ -8464,7 +8465,7 @@ function UnusualFns.getUnusualViewmodel()
     return viewmodel
 end
 
-function UnusualFns.isUnusualPOVRuntimeActive()
+function __UI.__L.UnusualFns.isUnusualPOVRuntimeActive()
     --// CharacterService:GetLocalCharacter() is the game's actual
     --// gameplay lifecycle signal.
     --
@@ -8483,7 +8484,7 @@ function UnusualFns.isUnusualPOVRuntimeActive()
     return characterObject ~= nil
 end
 
-function UnusualFns.isUnusualFirstPerson()
+function __UI.__L.UnusualFns.isUnusualFirstPerson()
     --// Use the game's exact first-person measurement.
     --// Native TransparencyController:
     --//     (Camera.Focus.Position - Camera.CFrame.Position).Magnitude < 2
@@ -8514,16 +8515,16 @@ function UnusualFns.isUnusualFirstPerson()
     return distance < 2
 end
 
-function UnusualFns.syncUnusualViewmodelAppearance()
+function __UI.__L.UnusualFns.syncUnusualViewmodelAppearance()
     local visualRig =
-        UnusualFns.getUnusualVisualRig()
+        __UI.__L.UnusualFns.getUnusualVisualRig()
 
     if not visualRig then
         return
     end
 
     local viewmodel =
-        UnusualFns.getUnusualViewmodel()
+        __UI.__L.UnusualFns.getUnusualViewmodel()
 
     if not viewmodel then
         return
@@ -8642,7 +8643,7 @@ end
 --// SOURCE #6 remains relevant for native character transparency,
 --// but its LTM formula must NOT be applied to these replacement FX.
 --// =========================================================
-local unusualPovTransparencyClasses = {
+__UI.__L.unusualPovTransparencyClasses = {
     BasePart = true,
     Decal = true,
     Beam = true,
@@ -8656,24 +8657,24 @@ local unusualPovTransparencyClasses = {
     BillboardGui = true
 }
 
-local function isStockUnusualPOVTransparencyObject(
+__UI.__L.isStockUnusualPOVTransparencyObject = function(
     object
 )
     if not object then
         return false
     end
 
-    return unusualPovTransparencyClasses[
+    return __UI.__L.unusualPovTransparencyClasses[
         object.ClassName
     ] == true
 end
 
-local function forEachDeadEyeUnusualVisualObject(
+__UI.__L.forEachDeadEyeUnusualVisualObject = function(
     callback
 )
     local roots = {
-        UnusualFns.getUnusualVisualRig(),
-        UnusualFns.getUnusualPlayerCharacter(),
+        __UI.__L.UnusualFns.getUnusualVisualRig(),
+        __UI.__L.UnusualFns.getUnusualPlayerCharacter(),
         workspace:FindFirstChild(
             "DeadEyeUnusualAnimatedVisuals"
         ),
@@ -8717,7 +8718,7 @@ local function forEachDeadEyeUnusualVisualObject(
                     and not object:FindFirstAncestorOfClass(
                         "Tool"
                     )
-                    and isStockUnusualPOVTransparencyObject(
+                    and __UI.__L.isStockUnusualPOVTransparencyObject(
                         object
                     )
                 then
@@ -8728,9 +8729,9 @@ local function forEachDeadEyeUnusualVisualObject(
     end
 end
 
-local function hideUnusualAnimationSourceVisuals()
+__UI.__L.hideUnusualAnimationSourceVisuals = function()
     local source =
-        unusualRuntime.animationSource
+        __UI.__L.unusualRuntime.animationSource
 
     if not source
         or not source.Parent
@@ -8781,20 +8782,20 @@ end
 --// This deliberately does NOT set everything to true on P3.
 --// Existing disabled emitters remain disabled.
 --// =========================================================
-function UnusualFns.clearNativeParticlePOV(
+function __UI.__L.UnusualFns.clearNativeParticlePOV(
     restore
 )
-    if unusualRuntime.nativeParticleConnection then
+    if __UI.__L.unusualRuntime.nativeParticleConnection then
         pcall(function()
-            unusualRuntime.nativeParticleConnection:Disconnect()
+            __UI.__L.unusualRuntime.nativeParticleConnection:Disconnect()
         end)
     end
 
-    unusualRuntime.nativeParticleConnection = nil
+    __UI.__L.unusualRuntime.nativeParticleConnection = nil
 
     if restore then
         for object, enabled in pairs(
-            unusualRuntime.nativeParticleStates
+            __UI.__L.unusualRuntime.nativeParticleStates
         ) do
             if object and object.Parent then
                 pcall(function()
@@ -8805,17 +8806,17 @@ function UnusualFns.clearNativeParticlePOV(
     end
 
     table.clear(
-        unusualRuntime.nativeParticleStates
+        __UI.__L.unusualRuntime.nativeParticleStates
     )
 
-    unusualRuntime.nativeParticleRig = nil
-    unusualRuntime.nativeParticleLastFirstPerson = nil
+    __UI.__L.unusualRuntime.nativeParticleRig = nil
+    __UI.__L.unusualRuntime.nativeParticleLastFirstPerson = nil
 end
 
-function UnusualFns.bindNativeParticlePOV(
+function __UI.__L.UnusualFns.bindNativeParticlePOV(
     visualRig
 )
-    UnusualFns.clearNativeParticlePOV(
+    __UI.__L.UnusualFns.clearNativeParticlePOV(
         true
     )
 
@@ -8823,23 +8824,23 @@ function UnusualFns.bindNativeParticlePOV(
         return
     end
 
-    unusualRuntime.nativeParticleRig =
+    __UI.__L.unusualRuntime.nativeParticleRig =
         visualRig
 
     for _, object in ipairs(
         visualRig:GetDescendants()
     ) do
         if object:IsA("ParticleEmitter") then
-            unusualRuntime.nativeParticleStates[
+            __UI.__L.unusualRuntime.nativeParticleStates[
                 object
             ] = object.Enabled
         end
     end
 
-    unusualRuntime.nativeParticleConnection =
+    __UI.__L.unusualRuntime.nativeParticleConnection =
         visualRig.DescendantAdded:Connect(
             function(object)
-                if unusualRuntime.nativeParticleRig
+                if __UI.__L.unusualRuntime.nativeParticleRig
                     ~= visualRig
                 then
                     return
@@ -8849,15 +8850,15 @@ function UnusualFns.bindNativeParticlePOV(
 
                 pcall(function()
                     firstPerson =
-                        UnusualFns.isUnusualFirstPerson()
+                        __UI.__L.UnusualFns.isUnusualFirstPerson()
                 end)
 
                 if object:IsA("ParticleEmitter") then
-                    if unusualRuntime.nativeParticleStates[
+                    if __UI.__L.unusualRuntime.nativeParticleStates[
                         object
                     ] == nil
                     then
-                        unusualRuntime.nativeParticleStates[
+                        __UI.__L.unusualRuntime.nativeParticleStates[
                             object
                         ] = object.Enabled
                     end
@@ -8881,12 +8882,12 @@ function UnusualFns.bindNativeParticlePOV(
         )
 end
 
-function UnusualFns.syncNativeParticlePOV(
+function __UI.__L.UnusualFns.syncNativeParticlePOV(
     visualRig,
     firstPerson
 )
     if not visualRig
-        or unusualRuntime.nativeParticleRig
+        or __UI.__L.unusualRuntime.nativeParticleRig
             ~= visualRig
     then
         return
@@ -8897,11 +8898,11 @@ function UnusualFns.syncNativeParticlePOV(
         visualRig:GetDescendants()
     ) do
         if object:IsA("ParticleEmitter")
-            and unusualRuntime.nativeParticleStates[
+            and __UI.__L.unusualRuntime.nativeParticleStates[
                 object
             ] == nil
         then
-            unusualRuntime.nativeParticleStates[
+            __UI.__L.unusualRuntime.nativeParticleStates[
                 object
             ] = object.Enabled
         end
@@ -8909,25 +8910,25 @@ function UnusualFns.syncNativeParticlePOV(
 
     local enteredFirstPerson =
         firstPerson
-        and unusualRuntime.nativeParticleLastFirstPerson
+        and __UI.__L.unusualRuntime.nativeParticleLastFirstPerson
             ~= true
 
     local leftFirstPerson =
         not firstPerson
-        and unusualRuntime.nativeParticleLastFirstPerson
+        and __UI.__L.unusualRuntime.nativeParticleLastFirstPerson
             == true
 
     --// Returning to 3P restores the exact saved enabled state.
     if leftFirstPerson then
         for object, enabled in pairs(
-            unusualRuntime.nativeParticleStates
+            __UI.__L.unusualRuntime.nativeParticleStates
         ) do
             if object and object.Parent then
                 pcall(function()
                     object.Enabled = enabled
                 end)
             else
-                unusualRuntime.nativeParticleStates[
+                __UI.__L.unusualRuntime.nativeParticleStates[
                     object
                 ] = nil
             end
@@ -8935,7 +8936,7 @@ function UnusualFns.syncNativeParticlePOV(
     end
 
     for object, enabled in pairs(
-        unusualRuntime.nativeParticleStates
+        __UI.__L.unusualRuntime.nativeParticleStates
     ) do
         if object and object.Parent then
             pcall(function()
@@ -8955,7 +8956,7 @@ function UnusualFns.syncNativeParticlePOV(
                 end
             end)
         else
-            unusualRuntime.nativeParticleStates[
+            __UI.__L.unusualRuntime.nativeParticleStates[
                 object
             ] = nil
         end
@@ -8982,7 +8983,7 @@ function UnusualFns.syncNativeParticlePOV(
         end
     end
 
-    unusualRuntime.nativeParticleLastFirstPerson =
+    __UI.__L.unusualRuntime.nativeParticleLastFirstPerson =
         firstPerson
 end
 
@@ -8997,7 +8998,7 @@ end
 --// Stock avatar head/hair/accessories are never tagged and
 --// therefore never enter this path.
 --// =========================================================
-local function getDeadEyeAccessoryHostPart(accessory, nativeModel)
+__UI.__L.getDeadEyeAccessoryHostPart = function(accessory, nativeModel)
     if not accessory or not nativeModel then
         return nil
     end
@@ -9060,7 +9061,7 @@ local function getDeadEyeAccessoryHostPart(accessory, nativeModel)
     )
 end
 
-local function syncDeadEyeCosmeticsWithNativeVisibility()
+__UI.__L.syncDeadEyeCosmeticsWithNativeVisibility = function()
     local characterObject =
         getCharacterObject()
 
@@ -9106,7 +9107,7 @@ local function syncDeadEyeCosmeticsWithNativeVisibility()
                 object:FindFirstChild("Handle")
 
             local host =
-                getDeadEyeAccessoryHostPart(
+                __UI.__L.getDeadEyeAccessoryHostPart(
                     object,
                     nativeModel
                 )
@@ -9133,7 +9134,7 @@ local function syncDeadEyeCosmeticsWithNativeVisibility()
                 for _, child in ipairs(
                     handle:GetDescendants()
                 ) do
-                    if isStockUnusualPOVTransparencyObject(
+                    if __UI.__L.isStockUnusualPOVTransparencyObject(
                         child
                     )
                     and not seen[child]
@@ -9186,21 +9187,21 @@ RunService:BindToRenderStep(
     "DeadEyeFirstPersonCosmeticVisibility",
     Enum.RenderPriority.Camera.Value + 2,
     function()
-        syncDeadEyeCosmeticsWithNativeVisibility()
+        __UI.__L.syncDeadEyeCosmeticsWithNativeVisibility()
     end
 )
 
-function UnusualFns.setUnusualFXForPOV(
+function __UI.__L.UnusualFns.setUnusualFXForPOV(
     firstPerson,
     _deltaTime
 )
-    if not UnusualFns.isUnusualPOVRuntimeActive() then
+    if not __UI.__L.UnusualFns.isUnusualPOVRuntimeActive() then
         return
     end
 
     --// Mirror the native live-rig ParticleEmitter behavior first.
-    UnusualFns.syncNativeParticlePOV(
-        UnusualFns.getUnusualVisualRig(),
+    __UI.__L.UnusualFns.syncNativeParticlePOV(
+        __UI.__L.UnusualFns.getUnusualVisualRig(),
         firstPerson
     )
 
@@ -9216,7 +9217,7 @@ function UnusualFns.setUnusualFXForPOV(
     --// Mirror the native 1P disappearance onto every tagged
     --// replacement visual object.
 
-    forEachDeadEyeUnusualVisualObject(
+    __UI.__L.forEachDeadEyeUnusualVisualObject(
         function(object)
             pcall(function()
                 if firstPerson then
@@ -9274,26 +9275,26 @@ function UnusualFns.setUnusualFXForPOV(
     )
 
     --// The animation-only runtime clone must remain invisible.
-    hideUnusualAnimationSourceVisuals()
+    __UI.__L.hideUnusualAnimationSourceVisuals()
 end
 
-function UnusualFns.updateUnusualPOV()
+function __UI.__L.UnusualFns.updateUnusualPOV()
     if not genv.DEADEYE_UNUSUAL_POV_RUNNING then
         return
     end
 
-    if not UnusualFns.isUnusualPOVRuntimeActive() then
-        lastUnusualPOVState = false
-        UnusualFns.clearNativeParticlePOV(
+    if not __UI.__L.UnusualFns.isUnusualPOVRuntimeActive() then
+        __UI.__L.lastUnusualPOVState = false
+        __UI.__L.UnusualFns.clearNativeParticlePOV(
             true
         )
         return
     end
 
-    UnusualFns.syncUnusualViewmodelAppearance()
+    __UI.__L.UnusualFns.syncUnusualViewmodelAppearance()
 
-    lastUnusualPOVState =
-        UnusualFns.isUnusualFirstPerson()
+    __UI.__L.lastUnusualPOVState =
+        __UI.__L.UnusualFns.isUnusualFirstPerson()
 end
 
 genv.DEADEYE_UNUSUAL_POV_RUNNING = true
@@ -9307,14 +9308,14 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
 
     --// Restore the exact 3P ParticleEmitter Enabled states.
     pcall(function()
-        UnusualFns.clearNativeParticlePOV(
+        __UI.__L.UnusualFns.clearNativeParticlePOV(
             true
         )
     end)
 
     --// Return DeadEye's Unusual layer to the native 3P state.
     pcall(function()
-        forEachDeadEyeUnusualVisualObject(
+        __UI.__L.forEachDeadEyeUnusualVisualObject(
             function(object)
                 if object:IsA("ParticleEmitter")
                     or object:IsA("Trail")
@@ -9330,7 +9331,7 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
                     or object:IsA("Decal")
                 then
                     object.LocalTransparencyModifier = 0
-                elseif isStockUnusualPOVTransparencyObject(object) then
+                elseif __UI.__L.isStockUnusualPOVTransparencyObject(object) then
                     object.LocalTransparencyModifier = 0
                 end
             end
@@ -9338,7 +9339,7 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
     end)
 
     pcall(function()
-        hideUnusualAnimationSourceVisuals()
+        __UI.__L.hideUnusualAnimationSourceVisuals()
     end)
 end
 
@@ -9359,29 +9360,29 @@ RunService:BindToRenderStep(
         --// CameraModule writes CurrentCamera.CFrame and Focus at
         --// Enum.RenderPriority.Camera. Run after that, like the native
         --// transparency calculation uses the current frame's camera.
-        if not UnusualFns.isUnusualPOVRuntimeActive() then
-            UnusualFns.clearNativeParticlePOV(
+        if not __UI.__L.UnusualFns.isUnusualPOVRuntimeActive() then
+            __UI.__L.UnusualFns.clearNativeParticlePOV(
                 true
             )
             return
         end
 
         local gameplayRig =
-            UnusualFns.getUnusualVisualRig()
+            __UI.__L.UnusualFns.getUnusualVisualRig()
 
         if gameplayRig
-            and unusualRuntime.nativeParticleRig
+            and __UI.__L.unusualRuntime.nativeParticleRig
                 ~= gameplayRig
         then
-            UnusualFns.bindNativeParticlePOV(
+            __UI.__L.UnusualFns.bindNativeParticlePOV(
                 gameplayRig
             )
         end
 
         local firstPerson =
-            UnusualFns.isUnusualFirstPerson()
+            __UI.__L.UnusualFns.isUnusualFirstPerson()
 
-        UnusualFns.setUnusualFXForPOV(
+        __UI.__L.UnusualFns.setUnusualFXForPOV(
             firstPerson,
             deltaTime
         )
@@ -9393,14 +9394,14 @@ RunService:BindToRenderStep(
 --// MenuView.VisualModel / menu Rigs must never be put under the
 --// gameplay POV controller.
 pcall(function()
-    if UnusualFns.isUnusualPOVRuntimeActive() then
-        UnusualFns.bindNativeParticlePOV(
-            UnusualFns.getUnusualVisualRig()
+    if __UI.__L.UnusualFns.isUnusualPOVRuntimeActive() then
+        __UI.__L.UnusualFns.bindNativeParticlePOV(
+            __UI.__L.UnusualFns.getUnusualVisualRig()
         )
     end
 end)
 
-UnusualFns.addUnusualConnection(
+__UI.__L.UnusualFns.addUnusualConnection(
     RunService.Heartbeat:Connect(
         function(deltaTime)
 
@@ -9408,35 +9409,35 @@ UnusualFns.addUnusualConnection(
                 return
             end
 
-            unusualRuntime.updateAnimatedParts()
-            UnusualFns.updateUnusualPOV()
+            __UI.__L.unusualRuntime.updateAnimatedParts()
+            __UI.__L.UnusualFns.updateUnusualPOV()
 
-            if unusualEnabled
-                and not unusualReapplyBusy
+            if __UI.__L.unusualEnabled
+                and not __UI.__L.unusualReapplyBusy
             then
 
                 local rig =
-                    UnusualFns.getUnusualVisualRig()
+                    __UI.__L.UnusualFns.getUnusualVisualRig()
 
                 if rig then
 
                     local expected =
                         (
-                            #unusualRuntime.animatedNestedVisuals > 0
+                            #__UI.__L.unusualRuntime.animatedNestedVisuals > 0
                         )
-                        or UnusualFns.hasOurUnusualFX(
+                        or __UI.__L.UnusualFns.hasOurUnusualFX(
                             rig,
-                            unusualSlot.replaceId
+                            __UI.__L.unusualSlot.replaceId
                         )
-                        or UnusualFns.hasOurUnusualFX(
-                            UnusualFns.getUnusualPlayerCharacter(),
-                            unusualSlot.replaceId
+                        or __UI.__L.UnusualFns.hasOurUnusualFX(
+                            __UI.__L.UnusualFns.getUnusualPlayerCharacter(),
+                            __UI.__L.unusualSlot.replaceId
                         )
 
-                    if unusualRuntime.appliedRig ~= rig
+                    if __UI.__L.unusualRuntime.appliedRig ~= rig
                         or not expected
                     then
-                        UnusualFns.reapplyUnusual()
+                        __UI.__L.UnusualFns.reapplyUnusual()
                     end
 
                 end
@@ -9449,49 +9450,49 @@ UnusualFns.addUnusualConnection(
 --// =========================================================
 --// UNUSUAL PAGE
 --// =========================================================
-unusualPage =
+__UI.__L.unusualPage =
     Instance.new("ScrollingFrame")
-unusualPage.Name =
+__UI.__L.unusualPage.Name =
     "UnusualPage"
-unusualPage.Size =
+__UI.__L.unusualPage.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-unusualPage.Position =
+__UI.__L.unusualPage.Position =
     UDim2.new(
         0,
         82,
         0,
         48
     )
-unusualPage.BackgroundColor3 =
+__UI.__L.unusualPage.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-unusualPage.BorderSizePixel =
+__UI.__L.unusualPage.BorderSizePixel =
     0
-unusualPage.ScrollBarThickness =
+__UI.__L.unusualPage.ScrollBarThickness =
     6
-unusualPage.CanvasSize =
+__UI.__L.unusualPage.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-unusualPage.AutomaticCanvasSize =
+__UI.__L.unusualPage.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-unusualPage.ScrollingDirection =
+__UI.__L.unusualPage.ScrollingDirection =
     Enum.ScrollingDirection.Y
-unusualPage.Visible =
+__UI.__L.unusualPage.Visible =
     false
-unusualPage.Parent =
-    Main
+__UI.__L.unusualPage.Parent =
+    __UI.__L.Main
 __UI.unusualPageCorner =
     Instance.new("UICorner")
 __UI.unusualPageCorner.CornerRadius =
@@ -9523,39 +9524,39 @@ unusualPadding.PaddingRight =
         8
     )
 unusualPadding.Parent =
-    unusualPage
-local unusualLayout =
+    __UI.__L.unusualPage
+__UI.__L.unusualLayout =
     Instance.new("UIListLayout")
-unusualLayout.Padding =
+__UI.__L.unusualLayout.Padding =
     UDim.new(
         0,
         7
     )
-unusualLayout.SortOrder =
+__UI.__L.unusualLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
-unusualLayout.Parent =
-    unusualPage
-local unusualRow =
+__UI.__L.unusualLayout.Parent =
+    __UI.__L.unusualPage
+__UI.__L.unusualRow =
     Instance.new("Frame")
-unusualRow.Size =
+__UI.__L.unusualRow.Size =
     UDim2.new(
         1,
         -4,
         0,
         48
     )
-unusualRow.BackgroundColor3 =
+__UI.__L.unusualRow.BackgroundColor3 =
     Color3.fromRGB(
         40,
         40,
         40
     )
-unusualRow.BorderSizePixel =
+__UI.__L.unusualRow.BorderSizePixel =
     0
-unusualRow.LayoutOrder =
+__UI.__L.unusualRow.LayoutOrder =
     1
-unusualRow.Parent =
-    unusualPage
+__UI.__L.unusualRow.Parent =
+    __UI.__L.unusualPage
 __UI.unusualRowCorner =
     Instance.new("UICorner")
 __UI.unusualRowCorner.CornerRadius =
@@ -9564,41 +9565,41 @@ __UI.unusualRowCorner.CornerRadius =
         7
     )
 __UI.unusualRowCorner.Parent =
-    unusualRow
-local unusualRowLabel =
+    __UI.__L.unusualRow
+__UI.__L.unusualRowLabel =
     Instance.new("TextLabel")
-unusualRowLabel.Size =
+__UI.__L.unusualRowLabel.Size =
     UDim2.new(
         0,
         60,
         1,
         0
     )
-unusualRowLabel.Position =
+__UI.__L.unusualRowLabel.Position =
     UDim2.new(
         0,
         8,
         0,
         0
     )
-unusualRowLabel.BackgroundTransparency =
+__UI.__L.unusualRowLabel.BackgroundTransparency =
     1
-unusualRowLabel.Text =
+__UI.__L.unusualRowLabel.Text =
     "UNUSUAL"
-unusualRowLabel.TextSize =
+__UI.__L.unusualRowLabel.TextSize =
     10
-unusualRowLabel.Font =
+__UI.__L.unusualRowLabel.Font =
     Enum.Font.GothamBold
-unusualRowLabel.TextColor3 =
+__UI.__L.unusualRowLabel.TextColor3 =
     Color3.fromRGB(
         210,
         210,
         210
     )
-unusualRowLabel.TextXAlignment =
+__UI.__L.unusualRowLabel.TextXAlignment =
     Enum.TextXAlignment.Left
-unusualRowLabel.Parent =
-    unusualRow
+__UI.__L.unusualRowLabel.Parent =
+    __UI.__L.unusualRow
 --// ORIGINAL
 unusualOriginalButton =
     Instance.new("TextButton")
@@ -9625,7 +9626,7 @@ unusualOriginalButton.BackgroundColor3 =
 unusualOriginalButton.BorderSizePixel =
     0
 unusualOriginalButton.Text =
-    unusualSlot.originalName
+    __UI.__L.unusualSlot.originalName
     or "Select"
 unusualOriginalButton.TextSize =
     11
@@ -9640,7 +9641,7 @@ unusualOriginalButton.TextColor3 =
 unusualOriginalButton.TextTruncate =
     Enum.TextTruncate.AtEnd
 unusualOriginalButton.Parent =
-    unusualRow
+    __UI.__L.unusualRow
 __UI.unusualOriginalCorner =
     Instance.new("UICorner")
 __UI.unusualOriginalCorner.CornerRadius =
@@ -9651,80 +9652,80 @@ __UI.unusualOriginalCorner.CornerRadius =
 __UI.unusualOriginalCorner.Parent =
     unusualOriginalButton
 --// ARROW
-local unusualArrow =
+__UI.__L.unusualArrow =
     Instance.new("TextLabel")
-unusualArrow.Size =
+__UI.__L.unusualArrow.Size =
     UDim2.new(
         0,
         24,
         0,
         32
     )
-unusualArrow.Position =
+__UI.__L.unusualArrow.Position =
     UDim2.new(
         0,
         202,
         0.5,
         -16
     )
-unusualArrow.BackgroundTransparency =
+__UI.__L.unusualArrow.BackgroundTransparency =
     1
-unusualArrow.Text =
+__UI.__L.unusualArrow.Text =
     "→"
-unusualArrow.TextSize =
+__UI.__L.unusualArrow.TextSize =
     22
-unusualArrow.Font =
+__UI.__L.unusualArrow.Font =
     Enum.Font.GothamBold
-unusualArrow.TextColor3 =
+__UI.__L.unusualArrow.TextColor3 =
     Color3.fromRGB(
         180,
         180,
         180
     )
-unusualArrow.Parent =
-    unusualRow
+__UI.__L.unusualArrow.Parent =
+    __UI.__L.unusualRow
 --// REPLACE
-local unusualReplaceButton =
+__UI.__L.unusualReplaceButton =
     Instance.new("TextButton")
-unusualReplaceButton.Size =
+__UI.__L.unusualReplaceButton.Size =
     UDim2.new(
         0,
         125,
         0,
         32
     )
-unusualReplaceButton.Position =
+__UI.__L.unusualReplaceButton.Position =
     UDim2.new(
         0,
         226,
         0.5,
         -16
     )
-unusualReplaceButton.BackgroundColor3 =
+__UI.__L.unusualReplaceButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-unusualReplaceButton.BorderSizePixel =
+__UI.__L.unusualReplaceButton.BorderSizePixel =
     0
-unusualReplaceButton.Text =
-    unusualSlot.replaceName
+__UI.__L.unusualReplaceButton.Text =
+    __UI.__L.unusualSlot.replaceName
     or "NONE"
-unusualReplaceButton.TextSize =
+__UI.__L.unusualReplaceButton.TextSize =
     11
-unusualReplaceButton.Font =
+__UI.__L.unusualReplaceButton.Font =
             Enum.Font.GothamBold
-unusualReplaceButton.TextColor3 =
+__UI.__L.unusualReplaceButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-unusualReplaceButton.TextTruncate =
+__UI.__L.unusualReplaceButton.TextTruncate =
     Enum.TextTruncate.AtEnd
-unusualReplaceButton.Parent =
-    unusualRow
+__UI.__L.unusualReplaceButton.Parent =
+    __UI.__L.unusualRow
 __UI.unusualReplaceCorner =
     Instance.new("UICorner")
 __UI.unusualReplaceCorner.CornerRadius =
@@ -9733,44 +9734,44 @@ __UI.unusualReplaceCorner.CornerRadius =
         7
     )
 __UI.unusualReplaceCorner.Parent =
-    unusualReplaceButton
+    __UI.__L.unusualReplaceButton
 --// =========================================================
 --// UNUSUAL PICKER
 -- =========================================================
-unusualPicker =
+__UI.__L.unusualPicker =
     Instance.new("Frame")
-unusualPicker.Size =
+__UI.__L.unusualPicker.Size =
     UDim2.new(
         0,
         560,
         0,
         450
     )
-unusualPicker.Position =
+__UI.__L.unusualPicker.Position =
     UDim2.new(
         0.5,
         -280,
         0.5,
         -225
     )
-unusualPicker.BackgroundColor3 =
+__UI.__L.unusualPicker.BackgroundColor3 =
     Color3.fromRGB(
         31,
         35,
         42
     )
-unusualPicker.BackgroundTransparency =
+__UI.__L.unusualPicker.BackgroundTransparency =
     0.10
-unusualPicker.BorderSizePixel =
+__UI.__L.unusualPicker.BorderSizePixel =
     0
-unusualPicker.ClipsDescendants =
+__UI.__L.unusualPicker.ClipsDescendants =
     true
-unusualPicker.Visible =
+__UI.__L.unusualPicker.Visible =
     false
-unusualPicker.ZIndex =
+__UI.__L.unusualPicker.ZIndex =
     30
-unusualPicker.Parent =
-    ScreenGui
+__UI.__L.unusualPicker.Parent =
+    __UI.__L.ScreenGui
 __UI.unusualPickerCorner =
     Instance.new("UICorner")
 __UI.unusualPickerCorner.CornerRadius =
@@ -9779,7 +9780,7 @@ __UI.unusualPickerCorner.CornerRadius =
         8
     )
 __UI.unusualPickerCorner.Parent =
-    unusualPicker
+    __UI.__L.unusualPicker
 __UI.unusualPickerStroke =
     Instance.new("UIStroke")
 __UI.unusualPickerStroke.Thickness =
@@ -9787,7 +9788,7 @@ __UI.unusualPickerStroke.Thickness =
 __UI.unusualPickerStroke.Transparency =
     0.66
 __UI.unusualPickerStroke.Parent =
-    unusualPicker
+    __UI.__L.unusualPicker
 
 __UI.unusualPickerGlass =
     Instance.new("UIGradient")
@@ -9823,92 +9824,92 @@ __UI.unusualPickerGlass.Color =
 __UI.unusualPickerGlass.Transparency =
     NumberSequence.new(0.20)
 __UI.unusualPickerGlass.Parent =
-    unusualPicker
+    __UI.__L.unusualPicker
 
-unusualPickerTitle =
+__UI.__L.unusualPickerTitle =
     Instance.new("TextLabel")
-unusualPickerTitle.Size =
+__UI.__L.unusualPickerTitle.Size =
     UDim2.new(
         1,
         -45,
         0,
         32
     )
-unusualPickerTitle.Position =
+__UI.__L.unusualPickerTitle.Position =
     UDim2.new(
         0,
         12,
         0,
         2
     )
-unusualPickerTitle.BackgroundTransparency =
+__UI.__L.unusualPickerTitle.BackgroundTransparency =
     1
-unusualPickerTitle.Text =
+__UI.__L.unusualPickerTitle.Text =
     "Unusual Selector"
-unusualPickerTitle.TextSize =
+__UI.__L.unusualPickerTitle.TextSize =
     16
-unusualPickerTitle.Font =
+__UI.__L.unusualPickerTitle.Font =
     Enum.Font.GothamBold
-unusualPickerTitle.TextColor3 =
+__UI.__L.unusualPickerTitle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-unusualPickerTitle.TextXAlignment =
+__UI.__L.unusualPickerTitle.TextXAlignment =
     Enum.TextXAlignment.Left
-unusualPickerTitle.ZIndex =
+__UI.__L.unusualPickerTitle.ZIndex =
     31
-unusualPickerTitle.Parent =
-    unusualPicker
-unusualPickerClose =
+__UI.__L.unusualPickerTitle.Parent =
+    __UI.__L.unusualPicker
+__UI.__L.unusualPickerClose =
     Instance.new("TextButton")
-unusualPickerClose.Size =
+__UI.__L.unusualPickerClose.Size =
     UDim2.new(
         0,
         27,
         0,
         27
     )
-unusualPickerClose.Position =
+__UI.__L.unusualPickerClose.Position =
     UDim2.new(
         1,
         -32,
         0,
         6
     )
-unusualPickerClose.BackgroundColor3 =
+__UI.__L.unusualPickerClose.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         50
     )
-unusualPickerClose.BackgroundTransparency =
+__UI.__L.unusualPickerClose.BackgroundTransparency =
     0.05
-unusualPickerClose.BorderSizePixel =
+__UI.__L.unusualPickerClose.BorderSizePixel =
     0
-unusualPickerClose.ZIndex =
+__UI.__L.unusualPickerClose.ZIndex =
     31
-unusualPickerClose.Text =
+__UI.__L.unusualPickerClose.Text =
     "×"
-unusualPickerClose.TextSize =
+__UI.__L.unusualPickerClose.TextSize =
     27
-unusualPickerClose.Font =
+__UI.__L.unusualPickerClose.Font =
     Enum.Font.GothamBold
-unusualPickerClose.TextColor3 =
+__UI.__L.unusualPickerClose.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-unusualPickerClose.AutoButtonColor =
+__UI.__L.unusualPickerClose.AutoButtonColor =
     false
-unusualPickerClose.Active =
+__UI.__L.unusualPickerClose.Active =
     true
-unusualPickerClose.Selectable =
+__UI.__L.unusualPickerClose.Selectable =
     false
-unusualPickerClose.Parent =
-    unusualPicker
+__UI.__L.unusualPickerClose.Parent =
+    __UI.__L.unusualPicker
 
 __UI.UnusualPickerCloseCorner =
     Instance.new("UICorner")
@@ -9918,7 +9919,7 @@ __UI.UnusualPickerCloseCorner.CornerRadius =
         7
     )
 __UI.UnusualPickerCloseCorner.Parent =
-    unusualPickerClose
+    __UI.__L.unusualPickerClose
 
 __UI.UnusualPickerCloseStroke =
     Instance.new("UIStroke")
@@ -9927,59 +9928,59 @@ __UI.UnusualPickerCloseStroke.Thickness =
 __UI.UnusualPickerCloseStroke.Transparency =
     0.65
 __UI.UnusualPickerCloseStroke.Parent =
-    unusualPickerClose
-unusualPickerSearch =
+    __UI.__L.unusualPickerClose
+__UI.__L.unusualPickerSearch =
     Instance.new("TextBox")
-unusualPickerSearch.Size =
+__UI.__L.unusualPickerSearch.Size =
     UDim2.new(
         1,
         -20,
         0,
         30
     )
-unusualPickerSearch.Position =
+__UI.__L.unusualPickerSearch.Position =
     UDim2.new(
         0,
         10,
         0,
         36
     )
-unusualPickerSearch.BackgroundColor3 =
+__UI.__L.unusualPickerSearch.BackgroundColor3 =
     Color3.fromRGB(
         40,
         45,
         53
     )
-unusualPickerSearch.BackgroundTransparency =
+__UI.__L.unusualPickerSearch.BackgroundTransparency =
     0.20
-unusualPickerSearch.BorderSizePixel =
+__UI.__L.unusualPickerSearch.BorderSizePixel =
     0
-unusualPickerSearch.ClearTextOnFocus =
+__UI.__L.unusualPickerSearch.ClearTextOnFocus =
     false
-unusualPickerSearch.PlaceholderText =
+__UI.__L.unusualPickerSearch.PlaceholderText =
     "Search by name or ID..."
-unusualPickerSearch.PlaceholderColor3 =
+__UI.__L.unusualPickerSearch.PlaceholderColor3 =
     Color3.fromRGB(
         120,
         120,
         120
     )
-unusualPickerSearch.Text =
+__UI.__L.unusualPickerSearch.Text =
     ""
-unusualPickerSearch.TextSize =
+__UI.__L.unusualPickerSearch.TextSize =
     12
-unusualPickerSearch.Font =
+__UI.__L.unusualPickerSearch.Font =
             Enum.Font.GothamBold
-unusualPickerSearch.TextColor3 =
+__UI.__L.unusualPickerSearch.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-unusualPickerSearch.ZIndex =
+__UI.__L.unusualPickerSearch.ZIndex =
     32
-unusualPickerSearch.Parent =
-    unusualPicker
+__UI.__L.unusualPickerSearch.Parent =
+    __UI.__L.unusualPicker
 __UI.unusualSearchCorner =
     Instance.new("UICorner")
 __UI.unusualSearchCorner.CornerRadius =
@@ -9988,48 +9989,48 @@ __UI.unusualSearchCorner.CornerRadius =
         6
     )
 __UI.unusualSearchCorner.Parent =
-    unusualPickerSearch
-unusualPickerScroll =
+    __UI.__L.unusualPickerSearch
+__UI.__L.unusualPickerScroll =
     Instance.new("ScrollingFrame")
-unusualPickerScroll.Size =
+__UI.__L.unusualPickerScroll.Size =
     UDim2.new(
         1,
         -16,
         1,
         -74
     )
-unusualPickerScroll.Position =
+__UI.__L.unusualPickerScroll.Position =
     UDim2.new(
         0,
         8,
         0,
         70
     )
-unusualPickerScroll.BackgroundColor3 =
+__UI.__L.unusualPickerScroll.BackgroundColor3 =
     Color3.fromRGB(
         32,
         35,
         42
     )
-unusualPickerScroll.BackgroundTransparency =
+__UI.__L.unusualPickerScroll.BackgroundTransparency =
     0.20
-unusualPickerScroll.BorderSizePixel =
+__UI.__L.unusualPickerScroll.BorderSizePixel =
     0
-unusualPickerScroll.ScrollBarThickness =
+__UI.__L.unusualPickerScroll.ScrollBarThickness =
     6
-unusualPickerScroll.CanvasSize =
+__UI.__L.unusualPickerScroll.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-unusualPickerScroll.AutomaticCanvasSize =
+__UI.__L.unusualPickerScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-unusualPickerScroll.ZIndex =
+__UI.__L.unusualPickerScroll.ZIndex =
     31
-unusualPickerScroll.Parent =
-    unusualPicker
+__UI.__L.unusualPickerScroll.Parent =
+    __UI.__L.unusualPicker
 __UI.unusualPickerScrollCorner =
     Instance.new("UICorner")
 __UI.unusualPickerScrollCorner.CornerRadius =
@@ -10038,46 +10039,46 @@ __UI.unusualPickerScrollCorner.CornerRadius =
         7
     )
 __UI.unusualPickerScrollCorner.Parent =
-    unusualPickerScroll
-local unusualPickerPadding =
+    __UI.__L.unusualPickerScroll
+__UI.__L.unusualPickerPadding =
     Instance.new("UIPadding")
-unusualPickerPadding.PaddingTop =
+__UI.__L.unusualPickerPadding.PaddingTop =
     UDim.new(0, 8)
-unusualPickerPadding.PaddingBottom =
+__UI.__L.unusualPickerPadding.PaddingBottom =
     UDim.new(0, 8)
-unusualPickerPadding.PaddingLeft =
+__UI.__L.unusualPickerPadding.PaddingLeft =
     UDim.new(0, 8)
-unusualPickerPadding.PaddingRight =
+__UI.__L.unusualPickerPadding.PaddingRight =
     UDim.new(0, 8)
-unusualPickerPadding.Parent =
-    unusualPickerScroll
-local unusualPickerGrid =
+__UI.__L.unusualPickerPadding.Parent =
+    __UI.__L.unusualPickerScroll
+__UI.__L.unusualPickerGrid =
     Instance.new("UIGridLayout")
-unusualPickerGrid.CellSize =
+__UI.__L.unusualPickerGrid.CellSize =
     UDim2.new(
         1 / 3,
         -6,
         0,
         92
     )
-unusualPickerGrid.CellPadding =
+__UI.__L.unusualPickerGrid.CellPadding =
     UDim2.new(
         0,
         6,
         0,
         8
     )
-unusualPickerGrid.SortOrder =
+__UI.__L.unusualPickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
-unusualPickerGrid.Parent =
-    unusualPickerScroll
+__UI.__L.unusualPickerGrid.Parent =
+    __UI.__L.unusualPickerScroll
 --// =========================================================
 --// REBUILD UNUSUAL PICKER
 --// =========================================================
-function UnusualFns.rebuildUnusualPicker()
+function __UI.__L.UnusualFns.rebuildUnusualPicker()
 
     pcall(function()
-        collectCurrentUnusualIcons(
+        __UI.__L.collectCurrentUnusualIcons(
             LocalPlayer:FindFirstChild(
                 "PlayerGui"
             )
@@ -10087,7 +10088,7 @@ function UnusualFns.rebuildUnusualPicker()
     local cosmeticButtonsWereRemoved = false
 
     for _, button in ipairs(
-        unusualPickerButtons
+        __UI.__L.unusualPickerButtons
     ) do
         pcall(function()
             if string.sub(
@@ -10111,10 +10112,10 @@ function UnusualFns.rebuildUnusualPicker()
                         )
 
                     if id then
-                        cosmeticPreviewCache[id] =
+                        __UI.__L.cosmeticPreviewCache[id] =
                             preview
                         preview.Parent =
-                            cosmeticPreviewCacheHolder
+                            __UI.__L.cosmeticPreviewCacheHolder
                     end
                 end
 
@@ -10128,15 +10129,15 @@ function UnusualFns.rebuildUnusualPicker()
     end
 
     if cosmeticButtonsWereRemoved then
-        cosmeticPickerPreloaded = false
+        __UI.__L.cosmeticPickerPreloaded = false
     end
 
     table.clear(
-        unusualPickerButtons
+        __UI.__L.unusualPickerButtons
     )
     local query =
         string.lower(
-            unusualPickerSearch.Text
+            __UI.__L.unusualPickerSearch.Text
                 or ""
         )
     local shown = 0
@@ -10157,7 +10158,7 @@ function UnusualFns.rebuildUnusualPicker()
         button.TextTruncate = Enum.TextTruncate.AtEnd
         button.LayoutOrder = 0
         button.ZIndex = 32
-        button.Parent = unusualPickerScroll
+        button.Parent = __UI.__L.unusualPickerScroll
 
         local corner =
             Instance.new("UICorner")
@@ -10167,41 +10168,41 @@ function UnusualFns.rebuildUnusualPicker()
         corner.Parent = button
 
         table.insert(
-            unusualPickerButtons,
+            __UI.__L.unusualPickerButtons,
             button
         )
 
-        UnusualFns.addUnusualConnection(
+        __UI.__L.UnusualFns.addUnusualConnection(
             button.MouseButton1Click:Connect(
                 function()
-                    if unusualPickerSide == "Original" then
-                        unusualSlot.originalId = nil
-                        unusualSlot.originalName = nil
+                    if __UI.__L.unusualPickerSide == "Original" then
+                        __UI.__L.unusualSlot.originalId = nil
+                        __UI.__L.unusualSlot.originalName = nil
                         unusualOriginalButton.Text = "Select"
-                    elseif unusualPickerSide == "Replace" then
-                        unusualSlot.replaceId = nil
-                        unusualSlot.replaceName = nil
-                        unusualReplaceButton.Text = "Select"
+                    elseif __UI.__L.unusualPickerSide == "Replace" then
+                        __UI.__L.unusualSlot.replaceId = nil
+                        __UI.__L.unusualSlot.replaceName = nil
+                        __UI.__L.unusualReplaceButton.Text = "Select"
                     else
                         return
                     end
 
-                    savedConfig.unusual = {
-                        originalId = unusualSlot.originalId,
-                        replaceId = unusualSlot.replaceId
+                    __UI.__L.savedConfig.unusual = {
+                        originalId = __UI.__L.unusualSlot.originalId,
+                        replaceId = __UI.__L.unusualSlot.replaceId
                     }
 
                     saveSavedConfig()
 
-                    if unusualEnabled then
-                        unusualEnabled = false
+                    if __UI.__L.unusualEnabled then
+                        __UI.__L.unusualEnabled = false
                         genv.UNUSUAL_SWAPPER_ENABLED = false
-                        UnusualFns.restoreUnusual()
-                        updateUnusualToggle()
+                        __UI.__L.UnusualFns.restoreUnusual()
+                        __UI.__L.updateUnusualToggle()
                     end
 
-                    unusualPicker.Visible = false
-                    unusualPickerSide = nil
+                    __UI.__L.unusualPicker.Visible = false
+                    __UI.__L.unusualPickerSide = nil
                 end
             )
         )
@@ -10210,7 +10211,7 @@ function UnusualFns.rebuildUnusualPicker()
     end
 
     for index, data in ipairs(
-        unusualList
+        __UI.__L.unusualList
     ) do
         local nameLower =
             string.lower(
@@ -10275,7 +10276,7 @@ function UnusualFns.rebuildUnusualPicker()
             button.ZIndex =
                 32
             button.Parent =
-                unusualPickerScroll
+                __UI.__L.unusualPickerScroll
 
             local icon =
                 Instance.new("ImageLabel")
@@ -10307,11 +10308,11 @@ function UnusualFns.rebuildUnusualPicker()
                 false
             icon.Image =
                 data.icon
-                or unusualIconIdCache[
+                or __UI.__L.unusualIconIdCache[
                     data.id
                 ]
-                or unusualIconCache[
-                    normalizeUnusualIconKey(
+                or __UI.__L.unusualIconCache[
+                    __UI.__L.normalizeUnusualIconKey(
                         data.name
                     )
                 ]
@@ -10476,45 +10477,45 @@ function UnusualFns.rebuildUnusualPicker()
             corner.Parent =
                 button
             table.insert(
-                unusualPickerButtons,
+                __UI.__L.unusualPickerButtons,
                 button
             )
-            UnusualFns.addUnusualConnection(
+            __UI.__L.UnusualFns.addUnusualConnection(
                 button.MouseButton1Click:Connect(
                     function()
-                        if unusualPickerSide
+                        if __UI.__L.unusualPickerSide
                             == "Original"
                         then
-                            unusualSlot.originalId =
+                            __UI.__L.unusualSlot.originalId =
                                 data.id
-                            unusualSlot.originalName =
+                            __UI.__L.unusualSlot.originalName =
                                 data.name
                             unusualOriginalButton.Text =
                                 data.name
-                        elseif unusualPickerSide
+                        elseif __UI.__L.unusualPickerSide
                             == "Replace"
                         then
-                            unusualSlot.replaceId =
+                            __UI.__L.unusualSlot.replaceId =
                                 data.id
-                            unusualSlot.replaceName =
+                            __UI.__L.unusualSlot.replaceName =
                                 data.name
-                            unusualReplaceButton.Text =
+                            __UI.__L.unusualReplaceButton.Text =
                                 data.name
                         end
-                        savedConfig.unusual = {
+                        __UI.__L.savedConfig.unusual = {
                             originalId =
-                                unusualSlot.originalId,
+                                __UI.__L.unusualSlot.originalId,
                             replaceId =
-                                unusualSlot.replaceId
+                                __UI.__L.unusualSlot.replaceId
                         }
                         saveSavedConfig()
-                        unusualPicker.Visible =
+                        __UI.__L.unusualPicker.Visible =
                             false
-                        unusualPickerSide =
+                        __UI.__L.unusualPickerSide =
                             nil
-                        if unusualEnabled then
+                        if __UI.__L.unusualEnabled then
                             task.spawn(
-                                UnusualFns.reapplyUnusual
+                                __UI.__L.UnusualFns.reapplyUnusual
                             )
                         end
                     end
@@ -10523,11 +10524,11 @@ function UnusualFns.rebuildUnusualPicker()
         end
     end
     pcall(function()
-        if unusualStatus then
-            unusualStatus.Text =
+        if __UI.__L.unusualStatus then
+            __UI.__L.unusualStatus.Text =
                 "Unusuals: "
                 .. tostring(
-                    #unusualList
+                    #__UI.__L.unusualList
                 )
                 .. " • "
                 .. tostring(
@@ -10536,7 +10537,7 @@ function UnusualFns.rebuildUnusualPicker()
                 .. " found"
         end
     end)
-    unusualPickerScroll.CanvasPosition =
+    __UI.__L.unusualPickerScroll.CanvasPosition =
         Vector2.new(
             0,
             0
@@ -10545,78 +10546,78 @@ end
 --// =========================================================
 --// OPEN / CLOSE PICKER
 -- =========================================================
-function UnusualFns.openUnusualPicker(
+function __UI.__L.UnusualFns.openUnusualPicker(
     side
 )
-    unusualPickerSide =
+    __UI.__L.unusualPickerSide =
         side
 
     if side == "Original" then
-        unusualPickerTitle.Text =
+        __UI.__L.unusualPickerTitle.Text =
             "Select Original"
     else
-        unusualPickerTitle.Text =
+        __UI.__L.unusualPickerTitle.Text =
             "Select Replacement"
     end
 
-    unusualPickerSearch.Text =
+    __UI.__L.unusualPickerSearch.Text =
         ""
 
-    UnusualFns.rebuildUnusualPicker()
+    __UI.__L.UnusualFns.rebuildUnusualPicker()
 
     __UI.animatePickerAppear(
-        unusualPicker
+        __UI.__L.unusualPicker
     )
 end
-function UnusualFns.closeUnusualPicker()
-    unusualPicker.Visible =
+function __UI.__L.UnusualFns.closeUnusualPicker()
+    __UI.__L.unusualPicker.Visible =
         false
-    unusualPickerSide =
+    __UI.__L.unusualPickerSide =
         nil
-    cosmetic.picking = false
-    cosmetic.pickerSide = nil
+    __UI.__L.cosmetic.picking = false
+    __UI.__L.cosmetic.pickerSide = nil
 end
-UnusualFns.addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(    unusualOriginalButton.MouseButton1Click:Connect(
         function()
-            UnusualFns.openUnusualPicker(
+            __UI.__L.UnusualFns.openUnusualPicker(
                 "Original"
             )
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    unusualReplaceButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.unusualReplaceButton.MouseButton1Click:Connect(
         function()
-            UnusualFns.openUnusualPicker(
+            __UI.__L.UnusualFns.openUnusualPicker(
                 "Replace"
             )
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    unusualPickerClose.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.unusualPickerClose.MouseButton1Click:Connect(
         function()
-            UnusualFns.closeUnusualPicker()
+            __UI.__L.UnusualFns.closeUnusualPicker()
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    unusualPickerSearch:GetPropertyChangedSignal(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.unusualPickerSearch:GetPropertyChangedSignal(
         "Text"
     ):Connect(
         function()
-            if unusualPicker.Visible then
-                if cosmetic.picking then
-                    cosmetic.rebuildPicker()
+            if __UI.__L.unusualPicker.Visible then
+                if __UI.__L.cosmetic.picking then
+                    __UI.__L.cosmetic.rebuildPicker()
                 else
-                    UnusualFns.rebuildUnusualPicker()
+                    __UI.__L.UnusualFns.rebuildUnusualPicker()
                 end
             end
         end
     )
 )
 
-UnusualFns.addUnusualConnection(
+__UI.__L.UnusualFns.addUnusualConnection(
     LocalPlayer:WaitForChild(
         "PlayerGui"
     ).DescendantAdded:Connect(
@@ -10624,16 +10625,16 @@ UnusualFns.addUnusualConnection(
             if obj:IsA("ImageLabel")
                 and obj.Name == "IconIMG"
             then
-                cacheUnusualIconFromObject(
+                __UI.__L.cacheUnusualIconFromObject(
                     obj
                 )
 
-                UnusualFns.addUnusualConnection(
+                __UI.__L.UnusualFns.addUnusualConnection(
                     obj:GetPropertyChangedSignal(
                         "Image"
                     ):Connect(
                         function()
-                            cacheUnusualIconFromObject(
+                            __UI.__L.cacheUnusualIconFromObject(
                                 obj
                             )
                         end
@@ -10647,61 +10648,61 @@ UnusualFns.addUnusualConnection(
 --// =========================================================
 --// UNUSUAL STATUS + TOGGLE USE EXISTING GUI
 -- =================================================
-local unusualStatusText =
+__UI.__L.unusualStatusText =
     Instance.new("TextLabel")
-unusualStatusText.Name =
+__UI.__L.unusualStatusText.Name =
     "UnusualStatus"
-unusualStatusText.Size =
+__UI.__L.unusualStatusText.Size =
     UDim2.new(
         0,
         260,
         0,
         20
     )
-unusualStatusText.Position =
+__UI.__L.unusualStatusText.Position =
     UDim2.new(
         0,
         82,
         0,
         43
     )
-unusualStatusText.BackgroundTransparency =
+__UI.__L.unusualStatusText.BackgroundTransparency =
     1
-unusualStatusText.Text =
+__UI.__L.unusualStatusText.Text =
     ""
-unusualStatusText.TextSize =
+__UI.__L.unusualStatusText.TextSize =
     12
-unusualStatusText.Font =
+__UI.__L.unusualStatusText.Font =
     Enum.Font.Gotham
-unusualStatusText.TextColor3 =
+__UI.__L.unusualStatusText.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
-unusualStatusText.TextXAlignment =
+__UI.__L.unusualStatusText.TextXAlignment =
     Enum.TextXAlignment.Left
-unusualStatusText.Visible =
+__UI.__L.unusualStatusText.Visible =
     false
-unusualStatusText.Parent =
-    Main
-unusualStatus =
-    unusualStatusText
-updateUnusualToggle = function()
+__UI.__L.unusualStatusText.Parent =
+    __UI.__L.Main
+__UI.__L.unusualStatus =
+    __UI.__L.unusualStatusText
+__UI.__L.updateUnusualToggle = function()
     pcall(function()
-        if unusualEnabled then
-            Toggle.Text =
+        if __UI.__L.unusualEnabled then
+            __UI.__L.Toggle.Text =
                 "SWAP: ON"
-            Toggle.BackgroundColor3 =
+            __UI.__L.Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            Toggle.Text =
+            __UI.__L.Toggle.Text =
                 "SWAP: OFF"
-            Toggle.BackgroundColor3 =
+            __UI.__L.Toggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -10714,19 +10715,19 @@ end
 --// OTHERS
 --// R6 AVATAR SCANNER / EDITOR
 --// =========================================================
-function others.saveConfig()
-    savedConfig.others =
-        savedConfig.others
+function __UI.__L.others.saveConfig()
+    __UI.__L.savedConfig.others =
+        __UI.__L.savedConfig.others
         or {}
     for _, slot in ipairs(
-        others.ACCESSORY_SLOTS or {}
+        __UI.__L.others.ACCESSORY_SLOTS or {}
     ) do
         local box =
-            others.fieldBoxes[
+            __UI.__L.others.fieldBoxes[
                 slot.property
             ]
         if box then
-            savedConfig.others[
+            __UI.__L.savedConfig.others[
                 slot.property
             ] =
                 tostring(
@@ -10736,14 +10737,14 @@ function others.saveConfig()
         end
     end
     for _, slot in ipairs(
-        others.CLOTHING_SLOTS or {}
+        __UI.__L.others.CLOTHING_SLOTS or {}
     ) do
         local box =
-            others.fieldBoxes[
+            __UI.__L.others.fieldBoxes[
                 slot.property
             ]
         if box then
-            savedConfig.others[
+            __UI.__L.savedConfig.others[
                 slot.property
             ] =
                 tostring(
@@ -10753,14 +10754,14 @@ function others.saveConfig()
         end
     end
     for _, slot in ipairs(
-        others.BODY_SLOTS or {}
+        __UI.__L.others.BODY_SLOTS or {}
     ) do
         local box =
-            others.fieldBoxes[
+            __UI.__L.others.fieldBoxes[
                 slot.property
             ]
         if box then
-            savedConfig.others[
+            __UI.__L.savedConfig.others[
                 slot.property
             ] =
                 tostring(
@@ -10769,20 +10770,20 @@ function others.saveConfig()
                 )
         end
     end
-    savedConfig.others._Headless =
+    __UI.__L.savedConfig.others._Headless =
         tostring(
-            savedConfig.others._Headless
+            __UI.__L.savedConfig.others._Headless
             or ""
         )
-    savedConfig.others._Korblox =
+    __UI.__L.savedConfig.others._Korblox =
         tostring(
-            savedConfig.others._Korblox
+            __UI.__L.savedConfig.others._Korblox
             or ""
         )
-    if others.avatarImportBox then
-        savedConfig.others._AvatarImport =
+    if __UI.__L.others.avatarImportBox then
+        __UI.__L.savedConfig.others._AvatarImport =
             tostring(
-                others.avatarImportBox.Text
+                __UI.__L.others.avatarImportBox.Text
                 or ""
             )
     end
@@ -10790,22 +10791,22 @@ function others.saveConfig()
         saveSavedConfig()
     end)
 end
-function others.loadConfig()
+function __UI.__L.others.loadConfig()
     local saved =
-        savedConfig.others
+        __UI.__L.savedConfig.others
     if type(saved) ~= "table" then
         return
     end
     for _, group in ipairs({
-        others.ACCESSORY_SLOTS,
-        others.CLOTHING_SLOTS,
-        others.BODY_SLOTS
+        __UI.__L.others.ACCESSORY_SLOTS,
+        __UI.__L.others.CLOTHING_SLOTS,
+        __UI.__L.others.BODY_SLOTS
     }) do
         for _, slot in ipairs(
             group
         ) do
             local box =
-                others.fieldBoxes[
+                __UI.__L.others.fieldBoxes[
                     slot.property
                 ]
             local value =
@@ -10823,9 +10824,9 @@ function others.loadConfig()
         end
     end
 end
-others.HEADLESS_ID = 134082579
-others.KORBLOX_ID = 139607718
-others.ACCESSORY_SLOTS = {
+__UI.__L.others.HEADLESS_ID = 134082579
+__UI.__L.others.KORBLOX_ID = 139607718
+__UI.__L.others.ACCESSORY_SLOTS = {
     {label = "Hats", property = "HatAccessory", multi = true},
     {label = "Hair", property = "HairAccessory", multi = true},
     {label = "Face Accessory", property = "FaceAccessory", multi = true},
@@ -10835,12 +10836,12 @@ others.ACCESSORY_SLOTS = {
     {label = "Back", property = "BackAccessory", multi = true},
     {label = "Waist", property = "WaistAccessory", multi = true}
 }
-others.CLOTHING_SLOTS = {
+__UI.__L.others.CLOTHING_SLOTS = {
     {label = "Shirt", property = "Shirt"},
     {label = "Pants", property = "Pants"},
     {label = "T-Shirt", property = "GraphicTShirt"}
 }
-others.BODY_SLOTS = {
+__UI.__L.others.BODY_SLOTS = {
     {label = "Head", property = "Head"},
     {label = "Torso", property = "Torso"},
     {label = "Left Arm", property = "LeftArm"},
@@ -10848,7 +10849,7 @@ others.BODY_SLOTS = {
     {label = "Left Leg", property = "LeftLeg"},
     {label = "Right Leg", property = "RightLeg"}
 }
-others.ACCESSORY_PROPERTIES = {
+__UI.__L.others.ACCESSORY_PROPERTIES = {
     "HatAccessory",
     "HairAccessory",
     "FaceAccessory",
@@ -10858,12 +10859,12 @@ others.ACCESSORY_PROPERTIES = {
     "BackAccessory",
     "WaistAccessory"
 }
-others.page = nil
-others.status = nil
-others.originalDescription = nil
-others.targetHumanoid = nil
-others.fieldBoxes = {}
-function others.getHumanoids()
+__UI.__L.others.page = nil
+__UI.__L.others.status = nil
+__UI.__L.others.originalDescription = nil
+__UI.__L.others.targetHumanoid = nil
+__UI.__L.others.fieldBoxes = {}
+function __UI.__L.others.getHumanoids()
     local result = {}
     local seen = {}
     local function add(h)
@@ -10876,7 +10877,7 @@ function others.getHumanoids()
         end
     end
     local rig =
-        UnusualFns.getUnusualVisualRig()
+        __UI.__L.UnusualFns.getUnusualVisualRig()
     if rig then
         add(
             rig:FindFirstChildOfClass(
@@ -10885,7 +10886,7 @@ function others.getHumanoids()
         )
     end
     local character =
-        UnusualFns.getUnusualPlayerCharacter()
+        __UI.__L.UnusualFns.getUnusualPlayerCharacter()
     if character then
         add(
             character:FindFirstChildOfClass(
@@ -10895,8 +10896,8 @@ function others.getHumanoids()
     end
     return result
 end
-function others.getHumanoid()
-    return others.getHumanoids()[1]
+function __UI.__L.others.getHumanoid()
+    return __UI.__L.others.getHumanoids()[1]
 end
 
 --// =========================================================
@@ -10917,7 +10918,7 @@ end
 --// the game's own character visibility system.
 --// =========================================================
 
-local function othersBuildNativeVisibilityEntries()
+__UI.__L.othersBuildNativeVisibilityEntries = function()
     local entries = {}
 
     local function isVisibilityRoot(object)
@@ -11089,7 +11090,7 @@ local function othersBuildNativeVisibilityEntries()
     end
 
     for _, humanoid in ipairs(
-        others.getHumanoids()
+        __UI.__L.others.getHumanoids()
     ) do
         local model =
             humanoid.Parent
@@ -11132,7 +11133,7 @@ local function othersBuildNativeVisibilityEntries()
     return entries
 end
 
-local function othersSyncWithNativeVisibility()
+__UI.__L.othersSyncWithNativeVisibility = function()
     local characterObject =
         getCharacterObject()
 
@@ -11146,7 +11147,7 @@ local function othersSyncWithNativeVisibility()
         characterObject.Visibility
 
     local entries =
-        othersBuildNativeVisibilityEntries()
+        __UI.__L.othersBuildNativeVisibilityEntries()
 
     if #entries == 0 then
         return
@@ -11192,17 +11193,17 @@ RunService:BindToRenderStep(
     "DeadEyeOthersNativeVisibility",
     Enum.RenderPriority.Camera.Value + 2,
     function()
-        othersSyncWithNativeVisibility()
+        __UI.__L.othersSyncWithNativeVisibility()
     end
 )
 
-function others.ensureSnapshot()
+function __UI.__L.others.ensureSnapshot()
 
-    if others.originalDescription then
+    if __UI.__L.others.originalDescription then
         return true
     end
     local humanoid =
-        others.getHumanoid()
+        __UI.__L.others.getHumanoid()
     if not humanoid then
         return false
     end
@@ -11220,32 +11221,32 @@ function others.ensureSnapshot()
     if not cloneOk or not clone then
         return false
     end
-    others.targetHumanoid =
+    __UI.__L.others.targetHumanoid =
         humanoid
-    others.originalDescription =
+    __UI.__L.others.originalDescription =
         clone
     return true
 end
-function others.isR6()
+function __UI.__L.others.isR6()
     local humanoid =
-        others.getHumanoid()
+        __UI.__L.others.getHumanoid()
     return humanoid
         and humanoid.RigType
             == Enum.HumanoidRigType.R6
 end
-function others.getDescription()
-    if not others.isR6() then
-        if others.status then
-            others.status.Text =
+function __UI.__L.others.getDescription()
+    if not __UI.__L.others.isR6() then
+        if __UI.__L.others.status then
+            __UI.__L.others.status.Text =
                 "R6 only"
         end
         return nil
     end
-    if not others.ensureSnapshot() then
+    if not __UI.__L.others.ensureSnapshot() then
         return nil
     end
     local humanoid =
-        others.getHumanoid()
+        __UI.__L.others.getHumanoid()
     if not humanoid then
         return nil
     end
@@ -11258,7 +11259,7 @@ function others.getDescription()
     end
     return nil
 end
-function others.propertyText(
+function __UI.__L.others.propertyText(
     description,
     slot
 )
@@ -11281,26 +11282,26 @@ function others.propertyText(
     end
     return tostring(number)
 end
-function others.refresh()
+function __UI.__L.others.refresh()
     local description =
-        others.getDescription()
+        __UI.__L.others.getDescription()
     if not description then
         return
     end
     local groups = {
-        others.ACCESSORY_SLOTS,
-        others.CLOTHING_SLOTS,
-        others.BODY_SLOTS
+        __UI.__L.others.ACCESSORY_SLOTS,
+        __UI.__L.others.CLOTHING_SLOTS,
+        __UI.__L.others.BODY_SLOTS
     }
     for _, group in ipairs(groups) do
         for _, slot in ipairs(group) do
             local box =
-                others.fieldBoxes[
+                __UI.__L.others.fieldBoxes[
                     slot.property
                 ]
             if box then
                 box.Text =
-                    others.propertyText(
+                    __UI.__L.others.propertyText(
                         description,
                         slot
                     )
@@ -11308,12 +11309,12 @@ function others.refresh()
         end
     end
 end
-function others.applyDescription(
+function __UI.__L.others.applyDescription(
     description
 )
-    if not others.isR6() then
-        if others.status then
-            others.status.Text =
+    if not __UI.__L.others.isR6() then
+        if __UI.__L.others.status then
+            __UI.__L.others.status.Text =
                 "R6 only"
         end
         return false
@@ -11322,7 +11323,7 @@ function others.applyDescription(
     local lastError
 
     for _, humanoid in ipairs(
-        others.getHumanoids()
+        __UI.__L.others.getHumanoids()
     ) do
         local ok, err =
             pcall(function()
@@ -11352,7 +11353,7 @@ function others.applyDescription(
     if applied == 0 then
         --// Last compatibility fallback.
         for _, humanoid in ipairs(
-            others.getHumanoids()
+            __UI.__L.others.getHumanoids()
         ) do
             local ok =
                 pcall(function()
@@ -11370,27 +11371,27 @@ function others.applyDescription(
             "[Others] Apply failed:",
             lastError
         )
-        if others.status then
-            others.status.Text =
+        if __UI.__L.others.status then
+            __UI.__L.others.status.Text =
                 "Apply Error"
         end
         return false
     end
 
     pcall(function()
-        if others.status then
-            others.status.Text =
+        if __UI.__L.others.status then
+            __UI.__L.others.status.Text =
                 "Applied"
         end
     end)
     return true
 end
-function others.applyField(
+function __UI.__L.others.applyField(
     slot,
     textValue
 )
     local description =
-        others.getDescription()
+        __UI.__L.others.getDescription()
     if not description then
         return false
     end
@@ -11449,31 +11450,31 @@ function others.applyField(
     if not ok then
         return false
     end
-    return others.applyDescription(
+    return __UI.__L.others.applyDescription(
         description
     )
 end
-function others.scan()
+function __UI.__L.others.scan()
     local description =
-        others.getDescription()
+        __UI.__L.others.getDescription()
     if not description then
         return false
     end
-    others.refresh()
-    if others.status then
-        others.status.Text =
+    __UI.__L.others.refresh()
+    if __UI.__L.others.status then
+        __UI.__L.others.status.Text =
             "Scanned • R6"
     end
     return true
 end
-function others.clearAccessories()
+function __UI.__L.others.clearAccessories()
     local description =
-        others.getDescription()
+        __UI.__L.others.getDescription()
     if not description then
         return false
     end
     for _, property in ipairs(
-        others.ACCESSORY_PROPERTIES
+        __UI.__L.others.ACCESSORY_PROPERTIES
     ) do
         pcall(function()
             description[property] = ""
@@ -11482,24 +11483,24 @@ function others.clearAccessories()
     pcall(function()
         description.Face = 0
     end)
-    return others.applyDescription(
+    return __UI.__L.others.applyDescription(
         description
     )
 end
-function others.restore(
+function __UI.__L.others.restore(
     keepSnapshot
 )
-    if not others.originalDescription then
+    if not __UI.__L.others.originalDescription then
         return false
     end
     local result =
-        others.applyDescription(
-            others.originalDescription
+        __UI.__L.others.applyDescription(
+            __UI.__L.others.originalDescription
         )
     if not keepSnapshot then
-        others.originalDescription =
+        __UI.__L.others.originalDescription =
             nil
-        others.targetHumanoid =
+        __UI.__L.others.targetHumanoid =
             nil
     end
     return result
@@ -11516,7 +11517,7 @@ end
 --// =========================================================
 --// MAIN / AUTOJUMP
 --// =========================================================
-local mainJump = {
+__UI.__L.mainJump = {
     enabled = false,
     autoJumpMode = "rage",
     lookEnabled = false,
@@ -11603,148 +11604,148 @@ local mainJump = {
     crouchSpamPreJumpStartedAt = 0,
     autoJumpModeButton = nil,
     autoJumpModePicker = nil,
-    connections = {}
+    __UI.__L.connections = {}
 }
-mainJump.jumpDelay =
+__UI.__L.mainJump.jumpDelay =
     math.clamp(
         tonumber(
-            savedConfig.main
-            and savedConfig.main.jumpDelay
+            __UI.__L.savedConfig.main
+            and __UI.__L.savedConfig.main.jumpDelay
         ) or 0.01,
         0,
         5
     )
-mainJump.autoJumpMode =
+__UI.__L.mainJump.autoJumpMode =
     tostring(
-        savedConfig.main
-        and savedConfig.main.autoJumpMode
+        __UI.__L.savedConfig.main
+        and __UI.__L.savedConfig.main.autoJumpMode
         or "rage"
     ):lower()
 
-if mainJump.autoJumpMode ~= "legit"
-    and mainJump.autoJumpMode ~= "rage"
+if __UI.__L.mainJump.autoJumpMode ~= "legit"
+    and __UI.__L.mainJump.autoJumpMode ~= "rage"
 then
-    mainJump.autoJumpMode = "rage"
+    __UI.__L.mainJump.autoJumpMode = "rage"
 end
 
-mainJump.hotkeyName =
+__UI.__L.mainJump.hotkeyName =
     tostring(
-        savedConfig.main
-        and savedConfig.main.hotkey
+        __UI.__L.savedConfig.main
+        and __UI.__L.savedConfig.main.hotkey
         or "Z"
     )
-mainJump.hideUIHotkeyName =
+__UI.__L.mainJump.hideUIHotkeyName =
     tostring(
-        savedConfig.main
-        and savedConfig.main.hideUIHotkey
+        __UI.__L.savedConfig.main
+        and __UI.__L.savedConfig.main.hideUIHotkey
         or "H"
     )
-mainJump.crouchSpamDelay =
+__UI.__L.mainJump.crouchSpamDelay =
     math.clamp(
         tonumber(
-            savedConfig.main
-            and savedConfig.main.crouchSpamDelay
+            __UI.__L.savedConfig.main
+            and __UI.__L.savedConfig.main.crouchSpamDelay
         ) or 0.03,
         0.001,
         5
     )
-mainJump.crouchSpamHotkeyName =
+__UI.__L.mainJump.crouchSpamHotkeyName =
     tostring(
-        savedConfig.main
-        and savedConfig.main.crouchSpamHotkey
+        __UI.__L.savedConfig.main
+        and __UI.__L.savedConfig.main.crouchSpamHotkey
         or "I"
     )
-mainJump.benchTrimpHotkeyName =
+__UI.__L.mainJump.benchTrimpHotkeyName =
     tostring(
-        savedConfig.main
-        and savedConfig.main.benchTrimpHotkey
+        __UI.__L.savedConfig.main
+        and __UI.__L.savedConfig.main.benchTrimpHotkey
         or "P"
     )
-mainJump.benchTrimpEnabled =
-    savedConfig.main
-    and savedConfig.main.benchTrimpEnabled == true
+__UI.__L.mainJump.benchTrimpEnabled =
+    __UI.__L.savedConfig.main
+    and __UI.__L.savedConfig.main.benchTrimpEnabled == true
     or false
-mainJump.smartAirTurnEnabled =
-    savedConfig.main
-    and savedConfig.main.smartAirTurn == true
+__UI.__L.mainJump.smartAirTurnEnabled =
+    __UI.__L.savedConfig.main
+    and __UI.__L.savedConfig.main.smartAirTurn == true
     or false
-mainJump.airTurnHotkeyName =
+__UI.__L.mainJump.airTurnHotkeyName =
     tostring(
-        savedConfig.main
+        __UI.__L.savedConfig.main
         and (
-            savedConfig.main.airTurnHotkey
-            or savedConfig.main.smartAirTurnHotkey
+            __UI.__L.savedConfig.main.airTurnHotkey
+            or __UI.__L.savedConfig.main.smartAirTurnHotkey
         )
         or "O"
     )
-mainJump.lookEnabled =
-    savedConfig.main
-    and savedConfig.main.look == true
+__UI.__L.mainJump.lookEnabled =
+    __UI.__L.savedConfig.main
+    and __UI.__L.savedConfig.main.look == true
     or false
-mainJump.rageLookEnabled =
-    savedConfig.main
-    and savedConfig.main.rageLook == true
+__UI.__L.mainJump.rageLookEnabled =
+    __UI.__L.savedConfig.main
+    and __UI.__L.savedConfig.main.rageLook == true
     or false
-mainJump.reverseLookMode =
-    savedConfig.main
-    and savedConfig.main.reverseLookMode
+__UI.__L.mainJump.reverseLookMode =
+    __UI.__L.savedConfig.main
+    and __UI.__L.savedConfig.main.reverseLookMode
         == "with"
     and "with"
     or "without"
-mainJump.reverseLookEnabled =
-    savedConfig.main
-    and savedConfig.main.reverseLookEnabled == true
+__UI.__L.mainJump.reverseLookEnabled =
+    __UI.__L.savedConfig.main
+    and __UI.__L.savedConfig.main.reverseLookEnabled == true
     or false
-mainJump.airTurnEnabled =
-    savedConfig.main
-    and savedConfig.main.airTurn == true
+__UI.__L.mainJump.airTurnEnabled =
+    __UI.__L.savedConfig.main
+    and __UI.__L.savedConfig.main.airTurn == true
     or false
-mainJump.airTurnSpeed =
+__UI.__L.mainJump.airTurnSpeed =
     math.clamp(
         tonumber(
-            savedConfig.main
-            and savedConfig.main.airTurnSpeed
+            __UI.__L.savedConfig.main
+            and __UI.__L.savedConfig.main.airTurnSpeed
         ) or 180,
         30,
         480
     )
-local function mainConnect(connection)
+__UI.__L.mainConnect = function(connection)
     table.insert(
-        mainJump.connections,
+        __UI.__L.mainJump.connections,
         connection
     )
 end
-local function mainDisconnect()
+__UI.__L.mainDisconnect = function()
     for _, connection in ipairs(
-        mainJump.connections
+        __UI.__L.mainJump.connections
     ) do
         pcall(function()
             connection:Disconnect()
         end)
     end
     table.clear(
-        mainJump.connections
+        __UI.__L.mainJump.connections
     )
 end
-function mainJump.saveConfig()
-    savedConfig.main = {
-        jumpDelay = mainJump.jumpDelay,
-        autoJumpMode = mainJump.autoJumpMode,
-        hotkey = mainJump.hotkeyName,
+function __UI.__L.mainJump.saveConfig()
+    __UI.__L.savedConfig.main = {
+        jumpDelay = __UI.__L.mainJump.jumpDelay,
+        autoJumpMode = __UI.__L.mainJump.autoJumpMode,
+        hotkey = __UI.__L.mainJump.hotkeyName,
         hideUIHotkey =
-            mainJump.hideUIHotkeyName,
-        look = mainJump.lookEnabled,
-        rageLook = mainJump.rageLookEnabled,
-        airTurn = mainJump.airTurnEnabled,
-        airTurnSpeed = mainJump.airTurnSpeed,
-        smartAirTurn = mainJump.smartAirTurnEnabled,
-        airTurnHotkey = mainJump.airTurnHotkeyName,
-        crouchSpamDelay = mainJump.crouchSpamDelay,
-        crouchSpamHotkey = mainJump.crouchSpamHotkeyName,
-        reverseLookMode = mainJump.reverseLookMode,
-        reverseLookEnabled = mainJump.reverseLookEnabled,
-        benchTrimpHotkey = mainJump.benchTrimpHotkeyName,
-        benchTrimpEnabled = mainJump.benchTrimpEnabled
+            __UI.__L.mainJump.hideUIHotkeyName,
+        look = __UI.__L.mainJump.lookEnabled,
+        rageLook = __UI.__L.mainJump.rageLookEnabled,
+        airTurn = __UI.__L.mainJump.airTurnEnabled,
+        airTurnSpeed = __UI.__L.mainJump.airTurnSpeed,
+        smartAirTurn = __UI.__L.mainJump.smartAirTurnEnabled,
+        airTurnHotkey = __UI.__L.mainJump.airTurnHotkeyName,
+        crouchSpamDelay = __UI.__L.mainJump.crouchSpamDelay,
+        crouchSpamHotkey = __UI.__L.mainJump.crouchSpamHotkeyName,
+        reverseLookMode = __UI.__L.mainJump.reverseLookMode,
+        reverseLookEnabled = __UI.__L.mainJump.reverseLookEnabled,
+        benchTrimpHotkey = __UI.__L.mainJump.benchTrimpHotkeyName,
+        benchTrimpEnabled = __UI.__L.mainJump.benchTrimpEnabled
     }
     pcall(function()
         saveSavedConfig()
@@ -11754,16 +11755,16 @@ end
 
 --// Persist only the two toggle states directly into DeadEye_Config.json.
 --// This does not rebuild or replace savedConfig.main.
-function mainJump.saveEnabledStates()
-    savedConfig.main =
-        savedConfig.main
+function __UI.__L.mainJump.saveEnabledStates()
+    __UI.__L.savedConfig.main =
+        __UI.__L.savedConfig.main
         or {}
 
-    savedConfig.main.rageLook =
-        mainJump.rageLookEnabled == true
+    __UI.__L.savedConfig.main.rageLook =
+        __UI.__L.mainJump.rageLookEnabled == true
 
-    savedConfig.main.benchTrimpEnabled =
-        mainJump.benchTrimpEnabled == true
+    __UI.__L.savedConfig.main.benchTrimpEnabled =
+        __UI.__L.mainJump.benchTrimpEnabled == true
 
     pcall(function()
         saveSavedConfig()
@@ -11775,37 +11776,37 @@ end
 --// =========================================================
 --// LOOK is deliberately tied to the AUTOJUMP sensor cycle.
 --// Manual/native jumps never call beginLook().
-local LOOK_RENDER_NAME = "DeadEyeMainLook"
-local LOOK_INPUT_RADIANS = 0.00575958658
-local LOOK_TARGET_PITCH = -math.rad(89)
-local LOOK_MAX_INPUT = 12
-local LOOK_PITCH_GAIN = 0.32
-local LOOK_RESTORE_EPSILON = math.rad(0.75)
-local LOOK_MIN_ACTIVE = 0.10
-local LOOK_MAX_AFTER_JUMP = 0.30
+__UI.__L.LOOK_RENDER_NAME = "DeadEyeMainLook"
+__UI.__L.LOOK_INPUT_RADIANS = 0.00575958658
+__UI.__L.LOOK_TARGET_PITCH = -math.rad(89)
+__UI.__L.LOOK_MAX_INPUT = 12
+__UI.__L.LOOK_PITCH_GAIN = 0.32
+__UI.__L.LOOK_RESTORE_EPSILON = math.rad(0.75)
+__UI.__L.LOOK_MIN_ACTIVE = 0.10
+__UI.__L.LOOK_MAX_AFTER_JUMP = 0.30
 
-mainJump.lookRenderBound = false
-mainJump.lookRestoreDeadline = 0
-mainJump.lookMinActiveDeadline = 0
+__UI.__L.mainJump.lookRenderBound = false
+__UI.__L.mainJump.lookRestoreDeadline = 0
+__UI.__L.mainJump.lookMinActiveDeadline = 0
 
-local function mainLookAngleDelta(target, current)
+__UI.__L.mainLookAngleDelta = function(target, current)
     return math.atan2(
         math.sin(target - current),
         math.cos(target - current)
     )
 end
 
-function mainJump.findLookMovementState()
-    if type(mainJump.lookMovementState) == "table" then
+function __UI.__L.mainJump.findLookMovementState()
+    if type(__UI.__L.mainJump.lookMovementState) == "table" then
         local valid = false
         pcall(function()
             valid =
                 typeof(
-                    mainJump.lookMovementState.Movement
+                    __UI.__L.mainJump.lookMovementState.Movement
                 ) == "Vector2"
         end)
         if valid then
-            return mainJump.lookMovementState
+            return __UI.__L.mainJump.lookMovementState
         end
     end
 
@@ -11878,7 +11879,7 @@ function mainJump.findLookMovementState()
                                     movementState.Movement
                                 ) == "Vector2"
                             then
-                                mainJump.lookMovementState =
+                                __UI.__L.mainJump.lookMovementState =
                                     movementState
 
                                 return movementState
@@ -11893,31 +11894,31 @@ function mainJump.findLookMovementState()
     return nil
 end
 
-function mainJump.unbindLookRender()
+function __UI.__L.mainJump.unbindLookRender()
     pcall(function()
         RunService:UnbindFromRenderStep(
-            LOOK_RENDER_NAME
+            __UI.__L.LOOK_RENDER_NAME
         )
     end)
 
-    mainJump.lookRenderBound = false
+    __UI.__L.mainJump.lookRenderBound = false
 end
 
-function mainJump.finishLookRestore()
-    mainJump.lookActive = false
-    mainJump.lookRestoring = false
-    mainJump.lookRestoreDeadline = 0
-    mainJump.lookMinActiveDeadline = 0
-    mainJump.lookAutoJumpCycle = false
+function __UI.__L.mainJump.finishLookRestore()
+    __UI.__L.mainJump.lookActive = false
+    __UI.__L.mainJump.lookRestoring = false
+    __UI.__L.mainJump.lookRestoreDeadline = 0
+    __UI.__L.mainJump.lookMinActiveDeadline = 0
+    __UI.__L.mainJump.lookAutoJumpCycle = false
 
-    mainJump.unbindLookRender()
+    __UI.__L.mainJump.unbindLookRender()
 end
 
-function mainJump.restoreLookNow()
+function __UI.__L.mainJump.restoreLookNow()
     local camera =
         workspace.CurrentCamera
 
-    if mainJump.lookSavedPitch
+    if __UI.__L.mainJump.lookSavedPitch
         and camera
     then
         pcall(function()
@@ -11930,48 +11931,48 @@ function mainJump.restoreLookNow()
             camera.CFrame =
                 CFrame.new(position)
                 * CFrame.fromOrientation(
-                    mainJump.lookSavedPitch,
+                    __UI.__L.mainJump.lookSavedPitch,
                     currentYaw,
                     0
                 )
         end)
     end
 
-    mainJump.finishLookRestore()
+    __UI.__L.mainJump.finishLookRestore()
 end
 
-function mainJump.bindLookRender()
-    if mainJump.lookRenderBound then
+function __UI.__L.mainJump.bindLookRender()
+    if __UI.__L.mainJump.lookRenderBound then
         return
     end
 
     pcall(function()
         RunService:UnbindFromRenderStep(
-            LOOK_RENDER_NAME
+            __UI.__L.LOOK_RENDER_NAME
         )
     end)
 
-    mainJump.lookRenderBound = true
+    __UI.__L.mainJump.lookRenderBound = true
 
     RunService:BindToRenderStep(
-        LOOK_RENDER_NAME,
+        __UI.__L.LOOK_RENDER_NAME,
         Enum.RenderPriority.Camera.Value - 1,
         function()
             if not genv.DEADEYE_MAIN_RUNNING
-                or cleaned
+                or __UI.__L.cleaned
             then
-                if mainJump.lookRestoring then
-                    mainJump.restoreLookNow()
+                if __UI.__L.mainJump.lookRestoring then
+                    __UI.__L.mainJump.restoreLookNow()
                 else
-                    mainJump.unbindLookRender()
+                    __UI.__L.mainJump.unbindLookRender()
                 end
                 return
             end
 
-            if not mainJump.lookActive
-                and not mainJump.lookRestoring
+            if not __UI.__L.mainJump.lookActive
+                and not __UI.__L.mainJump.lookRestoring
             then
-                mainJump.unbindLookRender()
+                __UI.__L.mainJump.unbindLookRender()
                 return
             end
 
@@ -12001,9 +12002,9 @@ function mainJump.bindLookRender()
             end
 
             local targetPitch =
-                mainJump.lookActive
-                and LOOK_TARGET_PITCH
-                or mainJump.lookSavedPitch
+                __UI.__L.mainJump.lookActive
+                and __UI.__L.LOOK_TARGET_PITCH
+                or __UI.__L.mainJump.lookSavedPitch
 
             if not targetPitch then
                 return
@@ -12012,38 +12013,38 @@ function mainJump.bindLookRender()
             local pitchDelta =
                 targetPitch - pitch
 
-            if mainJump.lookRestoring
+            if __UI.__L.mainJump.lookRestoring
                 and math.abs(pitchDelta)
-                    <= LOOK_RESTORE_EPSILON
+                    <= __UI.__L.LOOK_RESTORE_EPSILON
             then
-                mainJump.finishLookRestore()
+                __UI.__L.mainJump.finishLookRestore()
                 return
             end
 
-            if mainJump.lookActive then
+            if __UI.__L.mainJump.lookActive then
                 local now =
                     tick()
 
-                if mainJump.lookRestoreDeadline > 0
+                if __UI.__L.mainJump.lookRestoreDeadline > 0
                     and now
-                        >= mainJump.lookRestoreDeadline
+                        >= __UI.__L.mainJump.lookRestoreDeadline
                 then
-                    mainJump.endLook()
+                    __UI.__L.mainJump.endLook()
                     return
                 end
 
-                if mainJump.lookMinActiveDeadline > 0
+                if __UI.__L.mainJump.lookMinActiveDeadline > 0
                     and now
-                        >= mainJump.lookMinActiveDeadline
-                    and not mainJump.lookScannerSeesSurface()
+                        >= __UI.__L.mainJump.lookMinActiveDeadline
+                    and not __UI.__L.mainJump.lookScannerSeesSurface()
                 then
-                    mainJump.endLook()
+                    __UI.__L.mainJump.endLook()
                     return
                 end
             end
 
             local movementState =
-                mainJump.findLookMovementState()
+                __UI.__L.mainJump.findLookMovementState()
 
             if not movementState then
                 return
@@ -12065,10 +12066,10 @@ function mainJump.bindLookRender()
             local moveY =
                 math.clamp(
                     -pitchDelta
-                        / LOOK_INPUT_RADIANS
-                        * LOOK_PITCH_GAIN,
-                    -LOOK_MAX_INPUT,
-                    LOOK_MAX_INPUT
+                        / __UI.__L.LOOK_INPUT_RADIANS
+                        * __UI.__L.LOOK_PITCH_GAIN,
+                    -__UI.__L.LOOK_MAX_INPUT,
+                    __UI.__L.LOOK_MAX_INPUT
                 )
 
             pcall(function()
@@ -12082,12 +12083,12 @@ function mainJump.bindLookRender()
     )
 end
 
-function mainJump.beginLook()
-    if not mainJump.lookEnabled
-        or mainJump.rageLookEnabled
-        or not mainJump.enabled
-        or not mainJump.lookAutoJumpCycle
-        or cleaned
+function __UI.__L.mainJump.beginLook()
+    if not __UI.__L.mainJump.lookEnabled
+        or __UI.__L.mainJump.rageLookEnabled
+        or not __UI.__L.mainJump.enabled
+        or not __UI.__L.mainJump.lookAutoJumpCycle
+        or __UI.__L.cleaned
     then
         return
     end
@@ -12113,91 +12114,91 @@ function mainJump.beginLook()
         return
     end
 
-    if not mainJump.lookActive
-        and not mainJump.lookRestoring
+    if not __UI.__L.mainJump.lookActive
+        and not __UI.__L.mainJump.lookRestoring
     then
-        mainJump.lookSavedPitch =
+        __UI.__L.mainJump.lookSavedPitch =
             pitch
     end
 
-    mainJump.lookActive = true
-    mainJump.lookRestoring = false
-    mainJump.lookRestoreDeadline =
+    __UI.__L.mainJump.lookActive = true
+    __UI.__L.mainJump.lookRestoring = false
+    __UI.__L.mainJump.lookRestoreDeadline =
         tick()
-        + LOOK_MAX_AFTER_JUMP
-    mainJump.lookMinActiveDeadline =
+        + __UI.__L.LOOK_MAX_AFTER_JUMP
+    __UI.__L.mainJump.lookMinActiveDeadline =
         tick()
-        + LOOK_MIN_ACTIVE
+        + __UI.__L.LOOK_MIN_ACTIVE
 
-    mainJump.findLookMovementState()
-    mainJump.bindLookRender()
+    __UI.__L.mainJump.findLookMovementState()
+    __UI.__L.mainJump.bindLookRender()
 end
 
-function mainJump.endLook()
-    if not mainJump.lookActive
-        and not mainJump.lookRestoring
+function __UI.__L.mainJump.endLook()
+    if not __UI.__L.mainJump.lookActive
+        and not __UI.__L.mainJump.lookRestoring
     then
         return
     end
 
-    mainJump.lookActive = false
-    mainJump.lookRestoring = true
-    mainJump.lookRestoreDeadline = 0
+    __UI.__L.mainJump.lookActive = false
+    __UI.__L.mainJump.lookRestoring = true
+    __UI.__L.mainJump.lookRestoreDeadline = 0
 
-    mainJump.findLookMovementState()
-    mainJump.bindLookRender()
+    __UI.__L.mainJump.findLookMovementState()
+    __UI.__L.mainJump.bindLookRender()
 end
 
 
-local AIR_TURN_RENDER_NAME =
+__UI.__L.AIR_TURN_RENDER_NAME =
     "DeadEyeMainAirTurn"
 
-local AIR_TURN_MIN_SPEED = 30
-local AIR_TURN_MAX_SPEED = 600
+__UI.__L.AIR_TURN_MIN_SPEED = 30
+__UI.__L.AIR_TURN_MAX_SPEED = 600
 
-local SMART_AIR_TURN_INPUT_RADIANS = 0.00575958658
-local SMART_AIR_TURN_MAX_PIXELS = 12
-local SMART_AIR_TURN_GAIN = 1
+__UI.__L.SMART_AIR_TURN_INPUT_RADIANS = 0.00575958658
+__UI.__L.SMART_AIR_TURN_MAX_PIXELS = 12
+__UI.__L.SMART_AIR_TURN_GAIN = 1
 
-mainJump.airTurnRenderBound = false
+__UI.__L.mainJump.airTurnRenderBound = false
 
-function mainJump.unbindAirTurnRender()
-    if not mainJump.airTurnRenderBound then
+function __UI.__L.mainJump.unbindAirTurnRender()
+    if not __UI.__L.mainJump.airTurnRenderBound then
         return
     end
 
     pcall(function()
         RunService:UnbindFromRenderStep(
-            AIR_TURN_RENDER_NAME
+            __UI.__L.AIR_TURN_RENDER_NAME
         )
     end)
 
-    mainJump.airTurnRenderBound = false
+    __UI.__L.mainJump.airTurnRenderBound = false
 end
 
-function mainJump.bindAirTurnRender()
-    if mainJump.airTurnRenderBound then
+function __UI.__L.mainJump.bindAirTurnRender()
+    if __UI.__L.mainJump.airTurnRenderBound then
         return
     end
 
     pcall(function()
         RunService:UnbindFromRenderStep(
-            AIR_TURN_RENDER_NAME
+            __UI.__L.AIR_TURN_RENDER_NAME
         )
     end)
 
-    mainJump.airTurnRenderBound = true
+    __UI.__L.mainJump.airTurnRenderBound = true
 
     RunService:BindToRenderStep(
-        AIR_TURN_RENDER_NAME,
+        __UI.__L.AIR_TURN_RENDER_NAME,
         Enum.RenderPriority.Camera.Value - 2,
         function(deltaTime)
             if not genv.DEADEYE_MAIN_RUNNING
-                or cleaned
-                or not mainJump.airTurnEnabled
-                or not mainJump.enabled
+                or __UI.__L.cleaned
+                or not __UI.__L.mainJump.airTurnEnabled
+                or not __UI.__L.mainJump.enabled
             then
-                mainJump.unbindAirTurnRender()
+                __UI.__L.mainJump.unbindAirTurnRender()
                 return
             end
 
@@ -12289,8 +12290,8 @@ function mainJump.bindAirTurnRender()
             then
                 pcall(function()
                     local velocity =
-                        mainJump.root
-                        and mainJump.root.AssemblyLinearVelocity
+                        __UI.__L.mainJump.root
+                        and __UI.__L.mainJump.root.AssemblyLinearVelocity
 
                     if typeof(velocity) == "Vector3" then
                         horizontalVelocity =
@@ -12326,7 +12327,7 @@ function mainJump.bindAirTurnRender()
             end
 
             local movementState =
-                mainJump.findLookMovementState()
+                __UI.__L.mainJump.findLookMovementState()
 
             if not movementState then
                 return
@@ -12360,7 +12361,7 @@ function mainJump.bindAirTurnRender()
             --// Camera follows the actual horizontal DataRegistry Velocity.
             --// Manual mouse movement remains intact; only the correction
             --// is added to the native CameraInput movement state.
-            if mainJump.smartAirTurnEnabled then
+            if __UI.__L.mainJump.smartAirTurnEnabled then
                 local object =
                     getCharacterObject()
 
@@ -12387,7 +12388,7 @@ function mainJump.bindAirTurnRender()
                 end
 
                 local humanoid =
-                    mainJump.humanoid
+                    __UI.__L.mainJump.humanoid
 
                 local airborne =
                     true
@@ -12485,8 +12486,8 @@ function mainJump.bindAirTurnRender()
 
                 local correctionPixels =
                     error
-                    * SMART_AIR_TURN_GAIN
-                    / SMART_AIR_TURN_INPUT_RADIANS
+                    * __UI.__L.SMART_AIR_TURN_GAIN
+                    / __UI.__L.SMART_AIR_TURN_INPUT_RADIANS
                     * -1
 
                 --// Use the exact same backward-inversion rule as
@@ -12502,8 +12503,8 @@ function mainJump.bindAirTurnRender()
                 correctionPixels =
                     math.clamp(
                         correctionPixels,
-                        -SMART_AIR_TURN_MAX_PIXELS,
-                        SMART_AIR_TURN_MAX_PIXELS
+                        -__UI.__L.SMART_AIR_TURN_MAX_PIXELS,
+                        __UI.__L.SMART_AIR_TURN_MAX_PIXELS
                     )
 
                 pcall(function()
@@ -12522,13 +12523,13 @@ function mainJump.bindAirTurnRender()
             --// Fixed turn rate from the TURN SPEED slider.
             local radiansPerFrame =
                 math.rad(
-                    mainJump.airTurnSpeed
+                    __UI.__L.mainJump.airTurnSpeed
                 )
                 * dt
 
             local moveX =
                 radiansPerFrame
-                / LOOK_INPUT_RADIANS
+                / __UI.__L.LOOK_INPUT_RADIANS
                 * turning
 
             pcall(function()
@@ -12542,80 +12543,80 @@ function mainJump.bindAirTurnRender()
     )
 end
 
-function mainJump.setAirTurnEnabled(state)
-    mainJump.airTurnEnabled =
+function __UI.__L.mainJump.setAirTurnEnabled(state)
+    __UI.__L.mainJump.airTurnEnabled =
         state and true or false
 
-    if mainJump.airTurnEnabled
-        and mainJump.enabled
+    if __UI.__L.mainJump.airTurnEnabled
+        and __UI.__L.mainJump.enabled
     then
-        mainJump.findLookMovementState()
-        mainJump.bindAirTurnRender()
+        __UI.__L.mainJump.findLookMovementState()
+        __UI.__L.mainJump.bindAirTurnRender()
     else
-        mainJump.unbindAirTurnRender()
+        __UI.__L.mainJump.unbindAirTurnRender()
     end
 
-    mainJump.saveConfig()
-    mainJump.update()
+    __UI.__L.mainJump.saveConfig()
+    __UI.__L.mainJump.update()
 end
 
-function mainJump.setSmartAirTurnEnabled(state)
-    mainJump.smartAirTurnEnabled =
+function __UI.__L.mainJump.setSmartAirTurnEnabled(state)
+    __UI.__L.mainJump.smartAirTurnEnabled =
         state and true or false
 
-    if mainJump.smartAirTurnEnabled
-        and mainJump.airTurnEnabled
-        and mainJump.enabled
+    if __UI.__L.mainJump.smartAirTurnEnabled
+        and __UI.__L.mainJump.airTurnEnabled
+        and __UI.__L.mainJump.enabled
     then
-        mainJump.findLookMovementState()
-        mainJump.bindAirTurnRender()
+        __UI.__L.mainJump.findLookMovementState()
+        __UI.__L.mainJump.bindAirTurnRender()
     end
 
-    mainJump.saveConfig()
-    mainJump.update()
+    __UI.__L.mainJump.saveConfig()
+    __UI.__L.mainJump.update()
 end
 
-function mainJump.setAirTurnSpeed(value, persist)
+function __UI.__L.mainJump.setAirTurnSpeed(value, persist)
     local number =
         tonumber(value)
 
     if not number then
         number =
-            mainJump.airTurnSpeed
+            __UI.__L.mainJump.airTurnSpeed
     end
 
-    mainJump.airTurnSpeed =
+    __UI.__L.mainJump.airTurnSpeed =
         math.clamp(
             math.floor(
                 number
                 + 0.5
             ),
-            AIR_TURN_MIN_SPEED,
-            AIR_TURN_MAX_SPEED
+            __UI.__L.AIR_TURN_MIN_SPEED,
+            __UI.__L.AIR_TURN_MAX_SPEED
         )
 
-    if mainJump.airTurnSpeedValue then
-        mainJump.airTurnSpeedValue.Text =
+    if __UI.__L.mainJump.airTurnSpeedValue then
+        __UI.__L.mainJump.airTurnSpeedValue.Text =
             tostring(
-                mainJump.airTurnSpeed
+                __UI.__L.mainJump.airTurnSpeed
             )
             .. "°/s"
     end
 
-    if mainJump.airTurnSliderFill
-        and mainJump.airTurnSliderTrack
+    if __UI.__L.mainJump.airTurnSliderFill
+        and __UI.__L.mainJump.airTurnSliderTrack
     then
         local alpha =
             (
-                mainJump.airTurnSpeed
-                - AIR_TURN_MIN_SPEED
+                __UI.__L.mainJump.airTurnSpeed
+                - __UI.__L.AIR_TURN_MIN_SPEED
             )
             / (
-                AIR_TURN_MAX_SPEED
-                - AIR_TURN_MIN_SPEED
+                __UI.__L.AIR_TURN_MAX_SPEED
+                - __UI.__L.AIR_TURN_MIN_SPEED
             )
 
-        mainJump.airTurnSliderFill.Size =
+        __UI.__L.mainJump.airTurnSliderFill.Size =
             UDim2.new(
                 alpha,
                 0,
@@ -12624,20 +12625,20 @@ function mainJump.setAirTurnSpeed(value, persist)
             )
     end
 
-    if mainJump.airTurnSliderKnob
-        and mainJump.airTurnSliderTrack
+    if __UI.__L.mainJump.airTurnSliderKnob
+        and __UI.__L.mainJump.airTurnSliderTrack
     then
         local alpha =
             (
-                mainJump.airTurnSpeed
-                - AIR_TURN_MIN_SPEED
+                __UI.__L.mainJump.airTurnSpeed
+                - __UI.__L.AIR_TURN_MIN_SPEED
             )
             / (
-                AIR_TURN_MAX_SPEED
-                - AIR_TURN_MIN_SPEED
+                __UI.__L.AIR_TURN_MAX_SPEED
+                - __UI.__L.AIR_TURN_MIN_SPEED
             )
 
-        mainJump.airTurnSliderKnob.Position =
+        __UI.__L.mainJump.airTurnSliderKnob.Position =
             UDim2.new(
                 alpha,
                 -5,
@@ -12647,7 +12648,7 @@ function mainJump.setAirTurnSpeed(value, persist)
     end
 
     if persist then
-        mainJump.saveConfig()
+        __UI.__L.mainJump.saveConfig()
     end
 end
 
@@ -12683,39 +12684,39 @@ end
 --//     Head.C0
 --// =========================================================
 
-local RAGE_LOOK_PITCH =
+__UI.__L.RAGE_LOOK_PITCH =
     -math.rad(70)
 
 -- The game quantizes LookY to 1/40 radian:
 -- floor(angle * 40 + 0.5) / 40
-local RAGE_LOOK_Y =
+__UI.__L.RAGE_LOOK_Y =
     math.floor(
-        RAGE_LOOK_PITCH * 40
+        __UI.__L.RAGE_LOOK_PITCH * 40
         + 0.5
     ) / 40
 
-mainJump.rageLookHookInstalled =
+__UI.__L.mainJump.rageLookHookInstalled =
     false
 
-mainJump.rageLookDataRegistryGet =
+__UI.__L.mainJump.rageLookDataRegistryGet =
     nil
 
-mainJump.rageLookOriginalDataRegistryGet =
+__UI.__L.mainJump.rageLookOriginalDataRegistryGet =
     nil
 
-mainJump.rageLookLookYEntry =
+__UI.__L.mainJump.rageLookLookYEntry =
     nil
 
-mainJump.rageLookOriginalLookYCalculate =
+__UI.__L.mainJump.rageLookOriginalLookYCalculate =
     nil
 
-mainJump.rageLookTerms =
+__UI.__L.mainJump.rageLookTerms =
     nil
 
-mainJump.rageLookMode =
+__UI.__L.mainJump.rageLookMode =
     nil
 
-function mainJump.getRageLookFakeCFrame(
+function __UI.__L.mainJump.getRageLookFakeCFrame(
     realCFrame
 )
 
@@ -12755,13 +12756,13 @@ function mainJump.getRageLookFakeCFrame(
     return
         baseCFrame
         * CFrame.Angles(
-            RAGE_LOOK_PITCH,
+            __UI.__L.RAGE_LOOK_PITCH,
             0,
             0
         )
 end
 
-function mainJump.findRageLookDataRegistryGet()
+function __UI.__L.mainJump.findRageLookDataRegistryGet()
 
     local object =
         getCharacterObject()
@@ -12786,7 +12787,7 @@ function mainJump.findRageLookDataRegistryGet()
     return getFunction
 end
 
-function mainJump.findRageLookTerms()
+function __UI.__L.mainJump.findRageLookTerms()
 
     local movementModule =
         ReplicatedStorage
@@ -12828,14 +12829,14 @@ function mainJump.findRageLookTerms()
     return terms, nil
 end
 
-function mainJump.installRageLookHook()
+function __UI.__L.mainJump.installRageLookHook()
 
-    if mainJump.rageLookHookInstalled then
+    if __UI.__L.mainJump.rageLookHookInstalled then
         return true
     end
 
     local terms, lookYEntry =
-        mainJump.findRageLookTerms()
+        __UI.__L.mainJump.findRageLookTerms()
 
     if not terms
         or not lookYEntry
@@ -12851,7 +12852,7 @@ function mainJump.installRageLookHook()
     end
 
     local registryGet =
-        mainJump.findRageLookDataRegistryGet()
+        __UI.__L.mainJump.findRageLookDataRegistryGet()
 
     if type(registryGet) ~= "function" then
 
@@ -12893,14 +12894,14 @@ function mainJump.installRageLookHook()
                                 )
                             )
 
-                        if mainJump.rageLookEnabled
-                            and not cleaned
+                        if __UI.__L.mainJump.rageLookEnabled
+                            and not __UI.__L.cleaned
                             and key == "LookCFrame"
                             and typeof(results[1]) == "CFrame"
                         then
 
                             local fakeCFrame =
-                                mainJump.getRageLookFakeCFrame(
+                                __UI.__L.mainJump.getRageLookFakeCFrame(
                                     results[1]
                                 )
 
@@ -12931,47 +12932,47 @@ function mainJump.installRageLookHook()
         return false
     end
 
-    mainJump.rageLookDataRegistryGet =
+    __UI.__L.mainJump.rageLookDataRegistryGet =
         registryGet
 
-    mainJump.rageLookOriginalDataRegistryGet =
+    __UI.__L.mainJump.rageLookOriginalDataRegistryGet =
         originalGet
 
-    mainJump.rageLookTerms =
+    __UI.__L.mainJump.rageLookTerms =
         terms
 
-    mainJump.rageLookLookYEntry =
+    __UI.__L.mainJump.rageLookLookYEntry =
         lookYEntry
 
-    mainJump.rageLookOriginalLookYCalculate =
+    __UI.__L.mainJump.rageLookOriginalLookYCalculate =
         lookYEntry.CalculateFunction
 
     -- The game's Movement.UpdateTerms() will now call this
     -- function itself and then DataRegistry:Set("LookY", ...).
     lookYEntry.CalculateFunction =
         function(_)
-            return RAGE_LOOK_Y
+            return __UI.__L.RAGE_LOOK_Y
         end
 
-    mainJump.rageLookHookInstalled =
+    __UI.__L.mainJump.rageLookHookInstalled =
         true
 
-    mainJump.rageLookMode =
+    __UI.__L.mainJump.rageLookMode =
         "Movement Terms LookY + DataRegistry LookCFrame"
 
     return true
 end
 
-function mainJump.uninstallRageLookHook()
+function __UI.__L.mainJump.uninstallRageLookHook()
 
     local terms =
-        mainJump.rageLookTerms
+        __UI.__L.mainJump.rageLookTerms
 
     local lookYEntry =
-        mainJump.rageLookLookYEntry
+        __UI.__L.mainJump.rageLookLookYEntry
 
     local originalLookYCalculate =
-        mainJump.rageLookOriginalLookYCalculate
+        __UI.__L.mainJump.rageLookOriginalLookYCalculate
 
     if lookYEntry
         and type(originalLookYCalculate)
@@ -12985,10 +12986,10 @@ function mainJump.uninstallRageLookHook()
     end
 
     local registryGet =
-        mainJump.rageLookDataRegistryGet
+        __UI.__L.mainJump.rageLookDataRegistryGet
 
     local originalGet =
-        mainJump.rageLookOriginalDataRegistryGet
+        __UI.__L.mainJump.rageLookOriginalDataRegistryGet
 
     if registryGet
         and originalGet
@@ -13003,29 +13004,29 @@ function mainJump.uninstallRageLookHook()
         end)
     end
 
-    mainJump.rageLookHookInstalled =
+    __UI.__L.mainJump.rageLookHookInstalled =
         false
 
-    mainJump.rageLookDataRegistryGet =
+    __UI.__L.mainJump.rageLookDataRegistryGet =
         nil
 
-    mainJump.rageLookOriginalDataRegistryGet =
+    __UI.__L.mainJump.rageLookOriginalDataRegistryGet =
         nil
 
-    mainJump.rageLookLookYEntry =
+    __UI.__L.mainJump.rageLookLookYEntry =
         nil
 
-    mainJump.rageLookOriginalLookYCalculate =
+    __UI.__L.mainJump.rageLookOriginalLookYCalculate =
         nil
 
-    mainJump.rageLookTerms =
+    __UI.__L.mainJump.rageLookTerms =
         nil
 
-    mainJump.rageLookMode =
+    __UI.__L.mainJump.rageLookMode =
         nil
 end
 
-function mainJump.setRageLookEnabled(
+function __UI.__L.mainJump.setRageLookEnabled(
     state,
     persist
 )
@@ -13035,77 +13036,77 @@ function mainJump.setRageLookEnabled(
 
     if state then
 
-        if mainJump.rageLookEnabled then
+        if __UI.__L.mainJump.rageLookEnabled then
 
-            mainJump.saveConfig()
-            mainJump.update()
+            __UI.__L.mainJump.saveConfig()
+            __UI.__L.mainJump.update()
 
             return true
         end
 
         --// Normal visual LOOK must not fight Rage Look.
-        if mainJump.lookActive
-            or mainJump.lookRestoring
+        if __UI.__L.mainJump.lookActive
+            or __UI.__L.mainJump.lookRestoring
         then
 
-            mainJump.endLook()
+            __UI.__L.mainJump.endLook()
 
         end
 
         local hooked =
-            mainJump.installRageLookHook()
+            __UI.__L.mainJump.installRageLookHook()
 
         if not hooked then
 
-            mainJump.rageLookEnabled =
+            __UI.__L.mainJump.rageLookEnabled =
                 false
 
-            mainJump.update()
+            __UI.__L.mainJump.update()
 
             return false
         end
 
-        mainJump.rageLookEnabled =
+        __UI.__L.mainJump.rageLookEnabled =
             true
 
     else
 
-        mainJump.rageLookEnabled =
+        __UI.__L.mainJump.rageLookEnabled =
             false
 
-        mainJump.uninstallRageLookHook()
+        __UI.__L.mainJump.uninstallRageLookHook()
 
     end
 
-    if mainJump.rageLookMode then
+    if __UI.__L.mainJump.rageLookMode then
 
         print(
             "[DeadEye] Rage Look mode =",
-            mainJump.rageLookMode
+            __UI.__L.mainJump.rageLookMode
         )
 
     end
 
     if persist ~= false then
-        mainJump.saveConfig()
-        mainJump.saveEnabledStates()
+        __UI.__L.mainJump.saveConfig()
+        __UI.__L.mainJump.saveEnabledStates()
     end
 
-    mainJump.update()
+    __UI.__L.mainJump.update()
 
     return true
 end
 
-function mainJump.setLookEnabled(state)
-    mainJump.lookEnabled =
+function __UI.__L.mainJump.setLookEnabled(state)
+    __UI.__L.mainJump.lookEnabled =
         state and true or false
 
-    if not mainJump.lookEnabled then
-        mainJump.endLook()
+    if not __UI.__L.mainJump.lookEnabled then
+        __UI.__L.mainJump.endLook()
     end
 
-    mainJump.saveConfig()
-    mainJump.update()
+    __UI.__L.mainJump.saveConfig()
+    __UI.__L.mainJump.update()
 end
 
 --// =========================================================
@@ -13134,15 +13135,15 @@ end
 --//   LookY is NOT modified.
 --// =========================================================
 
-local REVERSE_LOOK_YAW =
+__UI.__L.REVERSE_LOOK_YAW =
     math.rad(180)
 
-local ReverseLookTweenService =
+__UI.__L.ReverseLookTweenService =
     game:GetService("TweenService")
 
-local reverseLookUITweens = {}
+__UI.__L.reverseLookUITweens = {}
 
-local function reverseLookTween(
+__UI.__L.reverseLookTween = function(
     object,
     properties
 )
@@ -13151,7 +13152,7 @@ local function reverseLookTween(
     end
 
     local oldTween =
-        reverseLookUITweens[object]
+        __UI.__L.reverseLookUITweens[object]
 
     if oldTween then
         pcall(function()
@@ -13164,7 +13165,7 @@ local function reverseLookTween(
     local success =
         pcall(function()
             tween =
-                ReverseLookTweenService:Create(
+                __UI.__L.ReverseLookTweenService:Create(
                     object,
                     TweenInfo.new(
                         0.18,
@@ -13181,28 +13182,28 @@ local function reverseLookTween(
         return
     end
 
-    reverseLookUITweens[object] =
+    __UI.__L.reverseLookUITweens[object] =
         tween
 
     tween:Play()
 end
 
-function mainJump.isReverseLookActive()
+function __UI.__L.mainJump.isReverseLookActive()
 
-    if cleaned then
+    if __UI.__L.cleaned then
         return false
     end
 
-    if mainJump.reverseLookMode
+    if __UI.__L.mainJump.reverseLookMode
         == "with"
     then
-        return mainJump.crouchSpamEnabled == true
+        return __UI.__L.mainJump.crouchSpamEnabled == true
     end
 
-    return mainJump.reverseLookEnabled == true
+    return __UI.__L.mainJump.reverseLookEnabled == true
 end
 
-function mainJump.getReverseLookCFrame(
+function __UI.__L.mainJump.getReverseLookCFrame(
     realCFrame
 )
 
@@ -13247,7 +13248,7 @@ function mainJump.getReverseLookCFrame(
         baseCFrame
         * CFrame.Angles(
             0,
-            REVERSE_LOOK_YAW,
+            __UI.__L.REVERSE_LOOK_YAW,
             0
         )
         * CFrame.Angles(
@@ -13257,7 +13258,7 @@ function mainJump.getReverseLookCFrame(
         )
 end
 
-function mainJump.findReverseLookRegistry()
+function __UI.__L.mainJump.findReverseLookRegistry()
 
     local object =
         getCharacterObject()
@@ -13271,9 +13272,9 @@ function mainJump.findReverseLookRegistry()
     return object.DataRegistry
 end
 
-function mainJump.installReverseLookHooks()
+function __UI.__L.mainJump.installReverseLookHooks()
 
-    if mainJump.reverseLookHookInstalled then
+    if __UI.__L.mainJump.reverseLookHookInstalled then
         return true
     end
 
@@ -13285,7 +13286,7 @@ function mainJump.installReverseLookHooks()
     end
 
     local registry =
-        mainJump.findReverseLookRegistry()
+        __UI.__L.mainJump.findReverseLookRegistry()
 
     if not registry then
         warn(
@@ -13338,11 +13339,11 @@ function mainJump.installReverseLookHooks()
                         if key == "LookCFrame"
                             and typeof(value)
                                 == "CFrame"
-                            and mainJump.isReverseLookActive()
+                            and __UI.__L.mainJump.isReverseLookActive()
                         then
 
                             local fakeCFrame =
-                                mainJump.getReverseLookCFrame(
+                                __UI.__L.mainJump.getReverseLookCFrame(
                                     value
                                 )
 
@@ -13378,10 +13379,10 @@ function mainJump.installReverseLookHooks()
         return false
     end
 
-    mainJump.reverseLookSetFunction =
+    __UI.__L.mainJump.reverseLookSetFunction =
         setTarget
 
-    mainJump.reverseLookOriginalSet =
+    __UI.__L.mainJump.reverseLookOriginalSet =
         savedSet
 
     local getSuccess =
@@ -13408,7 +13409,7 @@ function mainJump.installReverseLookHooks()
                         if key == "MoveDirection"
                             and typeof(results[1])
                                 == "Vector3"
-                            and mainJump.isReverseLookActive()
+                            and __UI.__L.mainJump.isReverseLookActive()
                         then
 
                             local value =
@@ -13444,10 +13445,10 @@ function mainJump.installReverseLookHooks()
             )
         end)
 
-        mainJump.reverseLookSetFunction =
+        __UI.__L.mainJump.reverseLookSetFunction =
             nil
 
-        mainJump.reverseLookOriginalSet =
+        __UI.__L.mainJump.reverseLookOriginalSet =
             nil
 
         warn(
@@ -13457,31 +13458,31 @@ function mainJump.installReverseLookHooks()
         return false
     end
 
-    mainJump.reverseLookGetFunction =
+    __UI.__L.mainJump.reverseLookGetFunction =
         getTarget
 
-    mainJump.reverseLookOriginalGet =
+    __UI.__L.mainJump.reverseLookOriginalGet =
         savedGet
 
-    mainJump.reverseLookHookInstalled =
+    __UI.__L.mainJump.reverseLookHookInstalled =
         true
 
     return true
 end
 
-function mainJump.uninstallReverseLookHooks()
+function __UI.__L.mainJump.uninstallReverseLookHooks()
 
     local setTarget =
-        mainJump.reverseLookSetFunction
+        __UI.__L.mainJump.reverseLookSetFunction
 
     local savedSet =
-        mainJump.reverseLookOriginalSet
+        __UI.__L.mainJump.reverseLookOriginalSet
 
     local getTarget =
-        mainJump.reverseLookGetFunction
+        __UI.__L.mainJump.reverseLookGetFunction
 
     local savedGet =
-        mainJump.reverseLookOriginalGet
+        __UI.__L.mainJump.reverseLookOriginalGet
 
     if setTarget
         and savedSet
@@ -13507,42 +13508,42 @@ function mainJump.uninstallReverseLookHooks()
         end)
     end
 
-    mainJump.reverseLookSetFunction =
+    __UI.__L.mainJump.reverseLookSetFunction =
         nil
 
-    mainJump.reverseLookOriginalSet =
+    __UI.__L.mainJump.reverseLookOriginalSet =
         nil
 
-    mainJump.reverseLookGetFunction =
+    __UI.__L.mainJump.reverseLookGetFunction =
         nil
 
-    mainJump.reverseLookOriginalGet =
+    __UI.__L.mainJump.reverseLookOriginalGet =
         nil
 
-    mainJump.reverseLookHookInstalled =
+    __UI.__L.mainJump.reverseLookHookInstalled =
         false
 end
 
-function mainJump.setReverseLookEnabled(
+function __UI.__L.mainJump.setReverseLookEnabled(
     state,
     persist
 )
 
-    mainJump.reverseLookEnabled =
+    __UI.__L.mainJump.reverseLookEnabled =
         state and true or false
 
-    if not mainJump.reverseLookHookInstalled then
-        mainJump.installReverseLookHooks()
+    if not __UI.__L.mainJump.reverseLookHookInstalled then
+        __UI.__L.mainJump.installReverseLookHooks()
     end
 
     if persist ~= false then
-        mainJump.saveConfig()
+        __UI.__L.mainJump.saveConfig()
     end
 
-    mainJump.update()
+    __UI.__L.mainJump.update()
 end
 
-function mainJump.setReverseLookMode(
+function __UI.__L.mainJump.setReverseLookMode(
     mode
 )
 
@@ -13552,31 +13553,31 @@ function mainJump.setReverseLookMode(
         mode = "without"
     end
 
-    mainJump.reverseLookMode =
+    __UI.__L.mainJump.reverseLookMode =
         mode
 
-    if not mainJump.reverseLookHookInstalled then
-        mainJump.installReverseLookHooks()
+    if not __UI.__L.mainJump.reverseLookHookInstalled then
+        __UI.__L.mainJump.installReverseLookHooks()
     end
 
-    mainJump.saveConfig()
-    mainJump.update()
+    __UI.__L.mainJump.saveConfig()
+    __UI.__L.mainJump.update()
 end
 
-function mainJump.updateReverseLookUI(
+function __UI.__L.mainJump.updateReverseLookUI(
     animated
 )
 
     local mode =
-        mainJump.reverseLookMode
+        __UI.__L.mainJump.reverseLookMode
         == "with"
         and "with"
         or "without"
 
-    if mainJump.reverseLookModeButton
-        and mainJump.reverseLookModeKnob
-        and mainJump.reverseLookModeWithLabel
-        and mainJump.reverseLookModeSoloLabel
+    if __UI.__L.mainJump.reverseLookModeButton
+        and __UI.__L.mainJump.reverseLookModeKnob
+        and __UI.__L.mainJump.reverseLookModeWithLabel
+        and __UI.__L.mainJump.reverseLookModeSoloLabel
     then
 
         local knobPosition
@@ -13600,15 +13601,15 @@ function mainJump.updateReverseLookUI(
         end
 
         if animated then
-            reverseLookTween(
-                mainJump.reverseLookModeKnob,
+            __UI.__L.reverseLookTween(
+                __UI.__L.mainJump.reverseLookModeKnob,
                 {
                     Position = knobPosition
                 }
             )
 
-            reverseLookTween(
-                mainJump.reverseLookModeWithLabel,
+            __UI.__L.reverseLookTween(
+                __UI.__L.mainJump.reverseLookModeWithLabel,
                 {
                     TextColor3 =
                         mode == "with"
@@ -13625,8 +13626,8 @@ function mainJump.updateReverseLookUI(
                 }
             )
 
-            reverseLookTween(
-                mainJump.reverseLookModeSoloLabel,
+            __UI.__L.reverseLookTween(
+                __UI.__L.mainJump.reverseLookModeSoloLabel,
                 {
                     TextColor3 =
                         mode == "without"
@@ -13643,8 +13644,8 @@ function mainJump.updateReverseLookUI(
                 }
             )
 
-            reverseLookTween(
-                mainJump.reverseLookModeButton,
+            __UI.__L.reverseLookTween(
+                __UI.__L.mainJump.reverseLookModeButton,
                 {
                     BackgroundColor3 =
                         mode == "with"
@@ -13661,10 +13662,10 @@ function mainJump.updateReverseLookUI(
                 }
             )
         else
-            mainJump.reverseLookModeKnob.Position =
+            __UI.__L.mainJump.reverseLookModeKnob.Position =
                 knobPosition
 
-            mainJump.reverseLookModeWithLabel.TextColor3 =
+            __UI.__L.mainJump.reverseLookModeWithLabel.TextColor3 =
                 mode == "with"
                 and Color3.fromRGB(
                     255,
@@ -13677,7 +13678,7 @@ function mainJump.updateReverseLookUI(
                     145
                 )
 
-            mainJump.reverseLookModeSoloLabel.TextColor3 =
+            __UI.__L.mainJump.reverseLookModeSoloLabel.TextColor3 =
                 mode == "without"
                 and Color3.fromRGB(
                     255,
@@ -13693,19 +13694,19 @@ function mainJump.updateReverseLookUI(
 
     end
 
-    if mainJump.reverseLookToggle then
+    if __UI.__L.mainJump.reverseLookToggle then
 
         if mode == "with" then
 
-            mainJump.reverseLookToggle.Text =
+            __UI.__L.mainJump.reverseLookToggle.Text =
                 "AUTO"
 
-            mainJump.reverseLookToggle.Active =
+            __UI.__L.mainJump.reverseLookToggle.Active =
                 false
 
             if animated then
-                reverseLookTween(
-                    mainJump.reverseLookToggle,
+                __UI.__L.reverseLookTween(
+                    __UI.__L.mainJump.reverseLookToggle,
                     {
                         BackgroundColor3 =
                             Color3.fromRGB(
@@ -13716,7 +13717,7 @@ function mainJump.updateReverseLookUI(
                     }
                 )
             else
-                mainJump.reverseLookToggle.BackgroundColor3 =
+                __UI.__L.mainJump.reverseLookToggle.BackgroundColor3 =
                     Color3.fromRGB(
                         47,
                         52,
@@ -13726,16 +13727,16 @@ function mainJump.updateReverseLookUI(
 
         else
 
-            mainJump.reverseLookToggle.Active =
+            __UI.__L.mainJump.reverseLookToggle.Active =
                 true
 
-            mainJump.reverseLookToggle.Text =
-                mainJump.reverseLookEnabled
+            __UI.__L.mainJump.reverseLookToggle.Text =
+                __UI.__L.mainJump.reverseLookEnabled
                 and "ON"
                 or "OFF"
 
             local targetColor =
-                mainJump.reverseLookEnabled
+                __UI.__L.mainJump.reverseLookEnabled
                 and Color3.fromRGB(
                     68,
                     74,
@@ -13748,15 +13749,15 @@ function mainJump.updateReverseLookUI(
                 )
 
             if animated then
-                reverseLookTween(
-                    mainJump.reverseLookToggle,
+                __UI.__L.reverseLookTween(
+                    __UI.__L.mainJump.reverseLookToggle,
                     {
                         BackgroundColor3 =
                             targetColor
                     }
                 )
             else
-                mainJump.reverseLookToggle.BackgroundColor3 =
+                __UI.__L.mainJump.reverseLookToggle.BackgroundColor3 =
                     targetColor
             end
 
@@ -13765,18 +13766,18 @@ function mainJump.updateReverseLookUI(
     end
 end
 
-function mainJump.syncAutoJumpModePickerVisual()
+function __UI.__L.mainJump.syncAutoJumpModePickerVisual()
     local source =
-        mainJump.autoJumpModeButton
+        __UI.__L.mainJump.autoJumpModeButton
 
     if not source
-        or not ScreenGui
+        or not __UI.__L.ScreenGui
     then
         return
     end
 
     for _, object in ipairs(
-        ScreenGui:GetDescendants()
+        __UI.__L.ScreenGui:GetDescendants()
     ) do
         if object:IsA("TextButton")
             and string.sub(
@@ -13820,23 +13821,23 @@ function mainJump.syncAutoJumpModePickerVisual()
     end
 end
 
-function mainJump.update()
-    if not mainJump.toggle then
+function __UI.__L.mainJump.update()
+    if not __UI.__L.mainJump.toggle then
         return
     end
-    if mainJump.enabled then
-        mainJump.toggle.Text =
+    if __UI.__L.mainJump.enabled then
+        __UI.__L.mainJump.toggle.Text =
             "ON"
-        mainJump.toggle.BackgroundColor3 =
+        __UI.__L.mainJump.toggle.BackgroundColor3 =
             Color3.fromRGB(
                 68,
                 74,
                 84
             )
     else
-        mainJump.toggle.Text =
+        __UI.__L.mainJump.toggle.Text =
             "OFF"
-        mainJump.toggle.BackgroundColor3 =
+        __UI.__L.mainJump.toggle.BackgroundColor3 =
             Color3.fromRGB(
                 47,
                 52,
@@ -13844,15 +13845,15 @@ function mainJump.update()
             )
     end
 
-    if mainJump.autoJumpModeButton then
-        mainJump.autoJumpModeButton.Text =
-            mainJump.autoJumpMode == "legit"
+    if __UI.__L.mainJump.autoJumpModeButton then
+        __UI.__L.mainJump.autoJumpModeButton.Text =
+            __UI.__L.mainJump.autoJumpMode == "legit"
             and "LEGIT"
             or "RAGE"
 
         --// Mode selection changes the label only.
         --// The button itself keeps the same normal DeadEye color.
-        mainJump.autoJumpModeButton.BackgroundColor3 =
+        __UI.__L.mainJump.autoJumpModeButton.BackgroundColor3 =
             Color3.fromRGB(
                 47,
                 52,
@@ -13860,20 +13861,20 @@ function mainJump.update()
             )
     end
 
-    if mainJump.lookToggle then
-        if mainJump.lookEnabled then
-            mainJump.lookToggle.Text =
+    if __UI.__L.mainJump.lookToggle then
+        if __UI.__L.mainJump.lookEnabled then
+            __UI.__L.mainJump.lookToggle.Text =
                 "ON"
-            mainJump.lookToggle.BackgroundColor3 =
+            __UI.__L.mainJump.lookToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            mainJump.lookToggle.Text =
+            __UI.__L.mainJump.lookToggle.Text =
                 "OFF"
-            mainJump.lookToggle.BackgroundColor3 =
+            __UI.__L.mainJump.lookToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -13882,20 +13883,20 @@ function mainJump.update()
         end
     end
 
-    if mainJump.rageLookToggle then
-        if mainJump.rageLookEnabled then
-            mainJump.rageLookToggle.Text =
+    if __UI.__L.mainJump.rageLookToggle then
+        if __UI.__L.mainJump.rageLookEnabled then
+            __UI.__L.mainJump.rageLookToggle.Text =
                 "ON"
-            mainJump.rageLookToggle.BackgroundColor3 =
+            __UI.__L.mainJump.rageLookToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            mainJump.rageLookToggle.Text =
+            __UI.__L.mainJump.rageLookToggle.Text =
                 "OFF"
-            mainJump.rageLookToggle.BackgroundColor3 =
+            __UI.__L.mainJump.rageLookToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -13904,20 +13905,20 @@ function mainJump.update()
         end
     end
 
-    if mainJump.smartAirTurnToggle then
-        if mainJump.smartAirTurnEnabled then
-            mainJump.smartAirTurnToggle.Text =
+    if __UI.__L.mainJump.smartAirTurnToggle then
+        if __UI.__L.mainJump.smartAirTurnEnabled then
+            __UI.__L.mainJump.smartAirTurnToggle.Text =
                 "ON"
-            mainJump.smartAirTurnToggle.BackgroundColor3 =
+            __UI.__L.mainJump.smartAirTurnToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            mainJump.smartAirTurnToggle.Text =
+            __UI.__L.mainJump.smartAirTurnToggle.Text =
                 "OFF"
-            mainJump.smartAirTurnToggle.BackgroundColor3 =
+            __UI.__L.mainJump.smartAirTurnToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -13926,20 +13927,20 @@ function mainJump.update()
         end
     end
 
-    if mainJump.crouchSpamToggle then
-        if mainJump.crouchSpamEnabled then
-            mainJump.crouchSpamToggle.Text =
+    if __UI.__L.mainJump.crouchSpamToggle then
+        if __UI.__L.mainJump.crouchSpamEnabled then
+            __UI.__L.mainJump.crouchSpamToggle.Text =
                 "ON"
-            mainJump.crouchSpamToggle.BackgroundColor3 =
+            __UI.__L.mainJump.crouchSpamToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            mainJump.crouchSpamToggle.Text =
+            __UI.__L.mainJump.crouchSpamToggle.Text =
                 "OFF"
-            mainJump.crouchSpamToggle.BackgroundColor3 =
+            __UI.__L.mainJump.crouchSpamToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -13948,24 +13949,24 @@ function mainJump.update()
         end
     end
 
-    mainJump.updateReverseLookUI(
+    __UI.__L.mainJump.updateReverseLookUI(
         true
     )
 
-    if mainJump.benchTrimpToggle then
-        if mainJump.benchTrimpEnabled then
-            mainJump.benchTrimpToggle.Text =
+    if __UI.__L.mainJump.benchTrimpToggle then
+        if __UI.__L.mainJump.benchTrimpEnabled then
+            __UI.__L.mainJump.benchTrimpToggle.Text =
                 "ON"
-            mainJump.benchTrimpToggle.BackgroundColor3 =
+            __UI.__L.mainJump.benchTrimpToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            mainJump.benchTrimpToggle.Text =
+            __UI.__L.mainJump.benchTrimpToggle.Text =
                 "OFF"
-            mainJump.benchTrimpToggle.BackgroundColor3 =
+            __UI.__L.mainJump.benchTrimpToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -13975,23 +13976,23 @@ function mainJump.update()
     end
 
     pcall(function()
-        mainJump.syncAutoJumpModePickerVisual()
+        __UI.__L.mainJump.syncAutoJumpModePickerVisual()
     end)
 
-    if mainJump.airTurnToggle then
-        if mainJump.airTurnEnabled then
-            mainJump.airTurnToggle.Text =
+    if __UI.__L.mainJump.airTurnToggle then
+        if __UI.__L.mainJump.airTurnEnabled then
+            __UI.__L.mainJump.airTurnToggle.Text =
                 "ON"
-            mainJump.airTurnToggle.BackgroundColor3 =
+            __UI.__L.mainJump.airTurnToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     68,
                     74,
                     84
                 )
         else
-            mainJump.airTurnToggle.Text =
+            __UI.__L.mainJump.airTurnToggle.Text =
                 "OFF"
-            mainJump.airTurnToggle.BackgroundColor3 =
+            __UI.__L.mainJump.airTurnToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -14000,90 +14001,90 @@ function mainJump.update()
         end
     end
 end
-function mainJump.setEnabled(state)
-    mainJump.enabled =
+function __UI.__L.mainJump.setEnabled(state)
+    __UI.__L.mainJump.enabled =
         state and true or false
 
-    if mainJump.enabled then
-        mainJump.needsInputRearm = false
+    if __UI.__L.mainJump.enabled then
+        __UI.__L.mainJump.needsInputRearm = false
 
-        if mainJump.airTurnEnabled then
-            mainJump.findLookMovementState()
-            mainJump.bindAirTurnRender()
+        if __UI.__L.mainJump.airTurnEnabled then
+            __UI.__L.mainJump.findLookMovementState()
+            __UI.__L.mainJump.bindAirTurnRender()
         end
 
-        if mainJump.character
-            and mainJump.humanoid
-            and mainJump.humanoid.Parent
+        if __UI.__L.mainJump.character
+            and __UI.__L.mainJump.humanoid
+            and __UI.__L.mainJump.humanoid.Parent
         then
-            if mainJump.autoJumpMode == "legit" then
-                mainJump.destroySensors()
-                mainJump.bindLegitJumpLoop()
+            if __UI.__L.mainJump.autoJumpMode == "legit" then
+                __UI.__L.mainJump.destroySensors()
+                __UI.__L.mainJump.bindLegitJumpLoop()
             else
                 pcall(function()
-                    mainJump.createSensors(
-                        mainJump.character
+                    __UI.__L.mainJump.createSensors(
+                        __UI.__L.mainJump.character
                     )
                 end)
 
                 task.defer(function()
                     if not genv.DEADEYE_MAIN_RUNNING
-                        or not mainJump.enabled
-                        or mainJump.autoJumpMode ~= "rage"
-                        or not mainJump.humanoid
-                        or not mainJump.humanoid.Parent
+                        or not __UI.__L.mainJump.enabled
+                        or __UI.__L.mainJump.autoJumpMode ~= "rage"
+                        or not __UI.__L.mainJump.humanoid
+                        or not __UI.__L.mainJump.humanoid.Parent
                     then
                         return
                     end
 
-                    if mainJump.canJump() then
-                        mainJump.lookAutoJumpCycle = true
-                        mainJump.jump()
+                    if __UI.__L.mainJump.canJump() then
+                        __UI.__L.mainJump.lookAutoJumpCycle = true
+                        __UI.__L.mainJump.jump()
                     end
                 end)
             end
         end
     else
-        mainJump.needsInputRearm = true
-        mainJump.destroySensors()
+        __UI.__L.mainJump.needsInputRearm = true
+        __UI.__L.mainJump.destroySensors()
 
-        mainJump.lookAutoJumpCycle = false
-        mainJump.lookTriggeredThisAir = false
-        mainJump.manualJumpActive = false
-        mainJump.unbindAirTurnRender()
+        __UI.__L.mainJump.lookAutoJumpCycle = false
+        __UI.__L.mainJump.lookTriggeredThisAir = false
+        __UI.__L.mainJump.manualJumpActive = false
+        __UI.__L.mainJump.unbindAirTurnRender()
 
-        if mainJump.lookWatcherConnection then
+        if __UI.__L.mainJump.lookWatcherConnection then
             pcall(function()
-                mainJump.lookWatcherConnection:Disconnect()
+                __UI.__L.mainJump.lookWatcherConnection:Disconnect()
             end)
-            mainJump.lookWatcherConnection = nil
+            __UI.__L.mainJump.lookWatcherConnection = nil
         end
 
-        mainJump.endLook()
+        __UI.__L.mainJump.endLook()
 
-        if mainJump.humanoid
-            and mainJump.humanoid.Parent
+        if __UI.__L.mainJump.humanoid
+            and __UI.__L.mainJump.humanoid.Parent
         then
             pcall(function()
-                mainJump.humanoid.Jump = false
+                __UI.__L.mainJump.humanoid.Jump = false
             end)
 
             task.defer(function()
-                if mainJump.humanoid
-                    and mainJump.humanoid.Parent
+                if __UI.__L.mainJump.humanoid
+                    and __UI.__L.mainJump.humanoid.Parent
                 then
                     pcall(function()
-                        mainJump.humanoid.Jump = false
+                        __UI.__L.mainJump.humanoid.Jump = false
                     end)
                 end
             end)
         end
     end
 
-    mainJump.update()
+    __UI.__L.mainJump.update()
 end
 
-function mainJump.setAutoJumpMode(mode, persist)
+function __UI.__L.mainJump.setAutoJumpMode(mode, persist)
     mode =
         tostring(
             mode or ""
@@ -14095,89 +14096,89 @@ function mainJump.setAutoJumpMode(mode, persist)
         mode = "rage"
     end
 
-    mainJump.autoJumpMode = mode
+    __UI.__L.mainJump.autoJumpMode = mode
 
-    if mainJump.enabled
-        and mainJump.character
-        and mainJump.humanoid
-        and mainJump.humanoid.Parent
+    if __UI.__L.mainJump.enabled
+        and __UI.__L.mainJump.character
+        and __UI.__L.mainJump.humanoid
+        and __UI.__L.mainJump.humanoid.Parent
     then
         if mode == "legit" then
-            mainJump.destroySensors()
-            mainJump.lookAutoJumpCycle = false
-            mainJump.lookTriggeredThisAir = false
-            mainJump.bindLegitJumpLoop()
+            __UI.__L.mainJump.destroySensors()
+            __UI.__L.mainJump.lookAutoJumpCycle = false
+            __UI.__L.mainJump.lookTriggeredThisAir = false
+            __UI.__L.mainJump.bindLegitJumpLoop()
         else
-            mainJump.stopLegitJumpLoop()
+            __UI.__L.mainJump.stopLegitJumpLoop()
 
             pcall(function()
-                mainJump.createSensors(
-                    mainJump.character
+                __UI.__L.mainJump.createSensors(
+                    __UI.__L.mainJump.character
                 )
             end)
 
             task.defer(function()
                 if not genv.DEADEYE_MAIN_RUNNING
-                    or not mainJump.enabled
-                    or mainJump.autoJumpMode ~= "rage"
-                    or not mainJump.humanoid
-                    or not mainJump.humanoid.Parent
+                    or not __UI.__L.mainJump.enabled
+                    or __UI.__L.mainJump.autoJumpMode ~= "rage"
+                    or not __UI.__L.mainJump.humanoid
+                    or not __UI.__L.mainJump.humanoid.Parent
                 then
                     return
                 end
 
-                if mainJump.canJump() then
-                    mainJump.lookAutoJumpCycle = true
-                    mainJump.jump()
+                if __UI.__L.mainJump.canJump() then
+                    __UI.__L.mainJump.lookAutoJumpCycle = true
+                    __UI.__L.mainJump.jump()
                 end
             end)
         end
     end
 
     if persist ~= false then
-        mainJump.saveConfig()
+        __UI.__L.mainJump.saveConfig()
     end
 
-    mainJump.update()
+    __UI.__L.mainJump.update()
 end
 
-function mainJump.setupAutoJumpCharacter(char)
+function __UI.__L.mainJump.setupAutoJumpCharacter(char)
     if not char
         or not char:IsA("Model")
     then
         return
     end
 
-    mainJump.stopLegitJumpLoop()
-    mainJump.destroySensors()
+    __UI.__L.mainJump.stopLegitJumpLoop()
+    __UI.__L.mainJump.destroySensors()
 
-    mainJump.character =
+    __UI.__L.mainJump.character =
         char
 
-    mainJump.humanoid =
+    __UI.__L.mainJump.humanoid =
         char:WaitForChild(
             "Humanoid"
         )
 
-    mainJump.root =
+    __UI.__L.mainJump.root =
         char:WaitForChild(
             "HumanoidRootPart"
         )
 
-    if mainJump.autoJumpMode == "legit" then
-        if mainJump.enabled then
-            mainJump.bindLegitJumpLoop()
+    if __UI.__L.mainJump.autoJumpMode == "legit" then
+        if __UI.__L.mainJump.enabled then
+            __UI.__L.mainJump.bindLegitJumpLoop()
         end
     else
         pcall(function()
-            mainJump.createSensors(
+            __UI.__L.mainJump.createSensors(
                 char
             )
         end)
     end
 end
 
-function mainJump.setDelay(value)
+function __UI.__L.mainJump.setDelay(value)
     value =
         tonumber(
             tostring(value or "")
@@ -14185,20 +14186,20 @@ function mainJump.setDelay(value)
     if not value then
         return
     end
-    mainJump.jumpDelay =
+    __UI.__L.mainJump.jumpDelay =
         math.clamp(
             value,
             0,
             5
         )
-    mainJump.delayBox.Text =
+    __UI.__L.mainJump.delayBox.Text =
         tostring(
-            mainJump.jumpDelay
+            __UI.__L.mainJump.jumpDelay
         )
-    mainJump.saveConfig()
+    __UI.__L.mainJump.saveConfig()
 end
 
-function mainJump.getCrouchMovement()
+function __UI.__L.mainJump.getCrouchMovement()
     local object =
         getCharacterObject()
 
@@ -14223,7 +14224,7 @@ function mainJump.getCrouchMovement()
     return movement
 end
 
-function mainJump.getCrouchMovement()
+function __UI.__L.mainJump.getCrouchMovement()
     local object =
         getCharacterObject()
 
@@ -14248,19 +14249,19 @@ function mainJump.getCrouchMovement()
     return movement
 end
 
-function mainJump.setCrouching(
+function __UI.__L.mainJump.setCrouching(
     state,
     movementOverride
 )
     local movement =
         movementOverride
-        or mainJump.getCrouchMovement()
+        or __UI.__L.mainJump.getCrouchMovement()
 
     if not movement then
         return false
     end
 
-    mainJump.crouchSpamMovement =
+    __UI.__L.mainJump.crouchSpamMovement =
         movement
 
     local ok, err =
@@ -14298,18 +14299,18 @@ end
 --//
 --// In the observed game this gives a real early window before Grounded
 --// becomes true. Crouch Spam uses that window by itself.
-local CROUCH_SPAM_PREJUMP_MAX_HOLD = 0.35
+__UI.__L.CROUCH_SPAM_PREJUMP_MAX_HOLD = 0.35
 
-function mainJump.armCrouchSpamPreJump()
-    if not mainJump.crouchSpamEnabled
-        or mainJump.crouchSpamPreJump
-        or mainJump.crouchSpamState
+function __UI.__L.mainJump.armCrouchSpamPreJump()
+    if not __UI.__L.mainJump.crouchSpamEnabled
+        or __UI.__L.mainJump.crouchSpamPreJump
+        or __UI.__L.mainJump.crouchSpamState
     then
         return false
     end
 
     local humanoid =
-        mainJump.humanoid
+        __UI.__L.mainJump.humanoid
 
     if not humanoid
         or not humanoid.Parent
@@ -14346,55 +14347,55 @@ function mainJump.armCrouchSpamPreJump()
         return false
     end
 
-    mainJump.crouchSpamPreJump =
+    __UI.__L.mainJump.crouchSpamPreJump =
         true
 
-    mainJump.crouchSpamPreJumpStartedAt =
+    __UI.__L.mainJump.crouchSpamPreJumpStartedAt =
         os.clock()
 
-    mainJump.crouchSpamState =
+    __UI.__L.mainJump.crouchSpamState =
         true
 
-    mainJump.crouchSpamElapsed =
+    __UI.__L.mainJump.crouchSpamElapsed =
         0
 
-    mainJump.setCrouching(true)
+    __UI.__L.mainJump.setCrouching(true)
 
     return true
 end
 
-function mainJump.startCrouchSpam()
-    if mainJump.crouchSpamConnection then
+function __UI.__L.mainJump.startCrouchSpam()
+    if __UI.__L.mainJump.crouchSpamConnection then
         return
     end
 
-    mainJump.crouchSpamState =
+    __UI.__L.mainJump.crouchSpamState =
         true
 
-    mainJump.crouchSpamElapsed =
+    __UI.__L.mainJump.crouchSpamElapsed =
         0
 
-    mainJump.crouchSpamPreJump =
+    __UI.__L.mainJump.crouchSpamPreJump =
         false
 
-    mainJump.crouchSpamPreJumpStartedAt =
+    __UI.__L.mainJump.crouchSpamPreJumpStartedAt =
         0
 
-    if not mainJump.setCrouching(true) then
+    if not __UI.__L.mainJump.setCrouching(true) then
         return
     end
 
-    mainJump.crouchSpamConnection =
+    __UI.__L.mainJump.crouchSpamConnection =
         RunService.PreSimulation:Connect(
             function(deltaTime)
                 if not genv.DEADEYE_MAIN_RUNNING
-                    or cleaned
-                    or not mainJump.crouchSpamEnabled
+                    or __UI.__L.cleaned
+                    or not __UI.__L.mainJump.crouchSpamEnabled
                 then
                     return
                 end
 
-                if mainJump.crouchSpamPreJump then
+                if __UI.__L.mainJump.crouchSpamPreJump then
                     local object =
                         getCharacterObject()
 
@@ -14416,46 +14417,46 @@ function mainJump.startCrouchSpam()
                     if grounded == true then
                         --// Grounded has arrived. Keep Crouch ON for this
                         --// exact transition so AutoJump sees no delay.
-                        mainJump.crouchSpamPreJump =
+                        __UI.__L.mainJump.crouchSpamPreJump =
                             false
 
-                        mainJump.crouchSpamPreJumpStartedAt =
+                        __UI.__L.mainJump.crouchSpamPreJumpStartedAt =
                             0
 
-                        mainJump.crouchSpamState =
+                        __UI.__L.mainJump.crouchSpamState =
                             true
 
-                        mainJump.crouchSpamElapsed =
+                        __UI.__L.mainJump.crouchSpamElapsed =
                             0
 
-                        mainJump.setCrouching(true)
+                        __UI.__L.mainJump.setCrouching(true)
 
                         return
 
-                    elseif mainJump.crouchSpamPreJumpStartedAt > 0
+                    elseif __UI.__L.mainJump.crouchSpamPreJumpStartedAt > 0
                         and os.clock()
-                            - mainJump.crouchSpamPreJumpStartedAt
-                            > CROUCH_SPAM_PREJUMP_MAX_HOLD
+                            - __UI.__L.mainJump.crouchSpamPreJumpStartedAt
+                            > __UI.__L.CROUCH_SPAM_PREJUMP_MAX_HOLD
                     then
                         --// Safety timeout. Resume normal ON/OFF spam.
-                        mainJump.crouchSpamPreJump =
+                        __UI.__L.mainJump.crouchSpamPreJump =
                             false
 
-                        mainJump.crouchSpamPreJumpStartedAt =
+                        __UI.__L.mainJump.crouchSpamPreJumpStartedAt =
                             0
 
-                        mainJump.crouchSpamElapsed =
+                        __UI.__L.mainJump.crouchSpamElapsed =
                             0
 
                     else
                         --// Still inside the real pre-Grounded window.
-                        mainJump.crouchSpamState =
+                        __UI.__L.mainJump.crouchSpamState =
                             true
 
-                        mainJump.crouchSpamElapsed =
+                        __UI.__L.mainJump.crouchSpamElapsed =
                             0
 
-                        mainJump.setCrouching(true)
+                        __UI.__L.mainJump.setCrouching(true)
 
                         return
                     end
@@ -14463,35 +14464,35 @@ function mainJump.startCrouchSpam()
 
                 --// Arm ONLY from Crouch Spam's own landing signal.
                 --// No AutoJump mode / Legit / JumpReact dependency.
-                if mainJump.armCrouchSpamPreJump() then
+                if __UI.__L.mainJump.armCrouchSpamPreJump() then
                     return
                 end
 
                 local delay =
                     math.max(
                         tonumber(
-                            mainJump.crouchSpamDelay
+                            __UI.__L.mainJump.crouchSpamDelay
                         ) or 0.03,
                         0.001
                     )
 
-                mainJump.crouchSpamElapsed =
-                    mainJump.crouchSpamElapsed
+                __UI.__L.mainJump.crouchSpamElapsed =
+                    __UI.__L.mainJump.crouchSpamElapsed
                     + math.max(
                         tonumber(deltaTime) or 0,
                         0
                     )
 
-                while mainJump.crouchSpamElapsed >= delay do
-                    mainJump.crouchSpamElapsed =
-                        mainJump.crouchSpamElapsed
+                while __UI.__L.mainJump.crouchSpamElapsed >= delay do
+                    __UI.__L.mainJump.crouchSpamElapsed =
+                        __UI.__L.mainJump.crouchSpamElapsed
                         - delay
 
-                    mainJump.crouchSpamState =
-                        not mainJump.crouchSpamState
+                    __UI.__L.mainJump.crouchSpamState =
+                        not __UI.__L.mainJump.crouchSpamState
 
-                    if not mainJump.setCrouching(
-                        mainJump.crouchSpamState
+                    if not __UI.__L.mainJump.setCrouching(
+                        __UI.__L.mainJump.crouchSpamState
                     )
                     then
                         return
@@ -14501,47 +14502,47 @@ function mainJump.startCrouchSpam()
         )
 end
 
-function mainJump.stopCrouchSpam()
-    if mainJump.crouchSpamConnection then
+function __UI.__L.mainJump.stopCrouchSpam()
+    if __UI.__L.mainJump.crouchSpamConnection then
         pcall(function()
-            mainJump.crouchSpamConnection:Disconnect()
+            __UI.__L.mainJump.crouchSpamConnection:Disconnect()
         end)
 
-        mainJump.crouchSpamConnection =
+        __UI.__L.mainJump.crouchSpamConnection =
             nil
     end
 
-    mainJump.crouchSpamEnabled =
+    __UI.__L.mainJump.crouchSpamEnabled =
         false
 
-    mainJump.crouchSpamState =
+    __UI.__L.mainJump.crouchSpamState =
         false
 
-    mainJump.crouchSpamElapsed =
+    __UI.__L.mainJump.crouchSpamElapsed =
         0
 
-    mainJump.crouchSpamPreJump =
+    __UI.__L.mainJump.crouchSpamPreJump =
         false
 
-    mainJump.crouchSpamPreJumpStartedAt =
+    __UI.__L.mainJump.crouchSpamPreJumpStartedAt =
         0
 
     -- Always finish standing.
-    mainJump.setCrouching(false)
+    __UI.__L.mainJump.setCrouching(false)
 end
 
-function mainJump.setCrouchSpamEnabled(state)
+function __UI.__L.mainJump.setCrouchSpamEnabled(state)
     state =
         state and true or false
 
     if not state then
-        mainJump.stopCrouchSpam()
-        mainJump.update()
-        mainJump.saveConfig()
+        __UI.__L.mainJump.stopCrouchSpam()
+        __UI.__L.mainJump.update()
+        __UI.__L.mainJump.saveConfig()
         return
     end
 
-    if cleaned then
+    if __UI.__L.cleaned then
         return
     end
 
@@ -14550,30 +14551,30 @@ function mainJump.setCrouchSpamEnabled(state)
     --// mode is restored, but the hook itself is not, so install it
     --// when CROUCH SPAM is enabled as well.
     if state
-        and mainJump.reverseLookMode == "with"
-        and not mainJump.reverseLookHookInstalled
+        and __UI.__L.mainJump.reverseLookMode == "with"
+        and not __UI.__L.mainJump.reverseLookHookInstalled
     then
         pcall(function()
-            mainJump.installReverseLookHooks()
+            __UI.__L.mainJump.installReverseLookHooks()
         end)
     end
 
-    if mainJump.crouchSpamEnabled
-        and mainJump.crouchSpamConnection
+    if __UI.__L.mainJump.crouchSpamEnabled
+        and __UI.__L.mainJump.crouchSpamConnection
     then
         return
     end
 
-    mainJump.crouchSpamEnabled =
+    __UI.__L.mainJump.crouchSpamEnabled =
         true
 
-    mainJump.startCrouchSpam()
+    __UI.__L.mainJump.startCrouchSpam()
 
-    mainJump.update()
-    mainJump.saveConfig()
+    __UI.__L.mainJump.update()
+    __UI.__L.mainJump.saveConfig()
 end
 
-function mainJump.setCrouchSpamDelay(value)
+function __UI.__L.mainJump.setCrouchSpamDelay(value)
     local number =
         tonumber(
             tostring(value or "")
@@ -14583,24 +14584,24 @@ function mainJump.setCrouchSpamDelay(value)
         return
     end
 
-    mainJump.crouchSpamDelay =
+    __UI.__L.mainJump.crouchSpamDelay =
         math.clamp(
             number,
             0.001,
             5
         )
 
-    if mainJump.crouchSpamDelayBox then
-        mainJump.crouchSpamDelayBox.Text =
+    if __UI.__L.mainJump.crouchSpamDelayBox then
+        __UI.__L.mainJump.crouchSpamDelayBox.Text =
             tostring(
-                mainJump.crouchSpamDelay
+                __UI.__L.mainJump.crouchSpamDelay
             )
     end
 
-    mainJump.saveConfig()
+    __UI.__L.mainJump.saveConfig()
 end
 
-local function mainFindKeyCode(value)
+__UI.__L.mainFindKeyCode = function(value)
     local wanted =
         tostring(
             value or ""
@@ -14617,21 +14618,21 @@ local function mainFindKeyCode(value)
     end
     return nil
 end
-local airTurnHotkeyKey =
-    mainFindKeyCode(
-        mainJump.airTurnHotkeyName
+__UI.__L.airTurnHotkeyKey =
+    __UI.__L.mainFindKeyCode(
+        __UI.__L.mainJump.airTurnHotkeyName
     )
-if airTurnHotkeyKey then
-    mainJump.airTurnHotkeyName =
-        airTurnHotkeyKey.Name
+if __UI.__L.airTurnHotkeyKey then
+    __UI.__L.mainJump.airTurnHotkeyName =
+        __UI.__L.airTurnHotkeyKey.Name
 else
-    mainJump.airTurnHotkeyName =
+    __UI.__L.mainJump.airTurnHotkeyName =
         "O"
 end
 
-function mainJump.setAirTurnHotkey(value)
+function __UI.__L.mainJump.setAirTurnHotkey(value)
     local key =
-        mainFindKeyCode(
+        __UI.__L.mainFindKeyCode(
             value
         )
 
@@ -14639,33 +14640,33 @@ function mainJump.setAirTurnHotkey(value)
         return
     end
 
-    mainJump.airTurnHotkeyName =
+    __UI.__L.mainJump.airTurnHotkeyName =
         key.Name
 
-    if mainJump.airTurnHotkeyBox then
-        mainJump.airTurnHotkeyBox.Text =
+    if __UI.__L.mainJump.airTurnHotkeyBox then
+        __UI.__L.mainJump.airTurnHotkeyBox.Text =
             key.Name
     end
 
-    mainJump.capturing = nil
-    mainJump.saveConfig()
+    __UI.__L.mainJump.capturing = nil
+    __UI.__L.mainJump.saveConfig()
 end
 
-local crouchSpamKey =
-    mainFindKeyCode(
-        mainJump.crouchSpamHotkeyName
+__UI.__L.crouchSpamKey =
+    __UI.__L.mainFindKeyCode(
+        __UI.__L.mainJump.crouchSpamHotkeyName
     )
-if crouchSpamKey then
-    mainJump.crouchSpamHotkeyName =
-        crouchSpamKey.Name
+if __UI.__L.crouchSpamKey then
+    __UI.__L.mainJump.crouchSpamHotkeyName =
+        __UI.__L.crouchSpamKey.Name
 else
-    mainJump.crouchSpamHotkeyName =
+    __UI.__L.mainJump.crouchSpamHotkeyName =
         "I"
 end
 
-function mainJump.setCrouchSpamHotkey(value)
+function __UI.__L.mainJump.setCrouchSpamHotkey(value)
     local key =
-        mainFindKeyCode(
+        __UI.__L.mainFindKeyCode(
             value
         )
 
@@ -14673,34 +14674,34 @@ function mainJump.setCrouchSpamHotkey(value)
         return
     end
 
-    mainJump.crouchSpamHotkeyName =
+    __UI.__L.mainJump.crouchSpamHotkeyName =
         key.Name
 
-    if mainJump.crouchSpamHotkeyBox then
-        mainJump.crouchSpamHotkeyBox.Text =
+    if __UI.__L.mainJump.crouchSpamHotkeyBox then
+        __UI.__L.mainJump.crouchSpamHotkeyBox.Text =
             key.Name
     end
 
-    mainJump.capturing = nil
+    __UI.__L.mainJump.capturing = nil
 
-    mainJump.saveConfig()
+    __UI.__L.mainJump.saveConfig()
 end
 
-local benchTrimpKey =
-    mainFindKeyCode(
-        mainJump.benchTrimpHotkeyName
+__UI.__L.benchTrimpKey =
+    __UI.__L.mainFindKeyCode(
+        __UI.__L.mainJump.benchTrimpHotkeyName
     )
-if benchTrimpKey then
-    mainJump.benchTrimpHotkeyName =
-        benchTrimpKey.Name
+if __UI.__L.benchTrimpKey then
+    __UI.__L.mainJump.benchTrimpHotkeyName =
+        __UI.__L.benchTrimpKey.Name
 else
-    mainJump.benchTrimpHotkeyName =
+    __UI.__L.mainJump.benchTrimpHotkeyName =
         "P"
 end
 
-function mainJump.setBenchTrimpHotkey(value)
+function __UI.__L.mainJump.setBenchTrimpHotkey(value)
     local key =
-        mainFindKeyCode(
+        __UI.__L.mainFindKeyCode(
             value
         )
 
@@ -14708,140 +14709,140 @@ function mainJump.setBenchTrimpHotkey(value)
         return
     end
 
-    mainJump.benchTrimpHotkeyName =
+    __UI.__L.mainJump.benchTrimpHotkeyName =
         key.Name
 
-    if mainJump.benchTrimpHotkeyBox then
-        mainJump.benchTrimpHotkeyBox.Text =
+    if __UI.__L.mainJump.benchTrimpHotkeyBox then
+        __UI.__L.mainJump.benchTrimpHotkeyBox.Text =
             key.Name
     end
 
-    mainJump.capturing = nil
+    __UI.__L.mainJump.capturing = nil
 
-    mainJump.saveConfig()
+    __UI.__L.mainJump.saveConfig()
 end
 
-local jumpKey =
-    mainFindKeyCode(
-        mainJump.hotkeyName
+__UI.__L.jumpKey =
+    __UI.__L.mainFindKeyCode(
+        __UI.__L.mainJump.hotkeyName
     )
-if jumpKey then
-    mainJump.hotkeyName =
-        jumpKey.Name
+if __UI.__L.jumpKey then
+    __UI.__L.mainJump.hotkeyName =
+        __UI.__L.jumpKey.Name
 else
-    mainJump.hotkeyName = "Z"
+    __UI.__L.mainJump.hotkeyName = "Z"
 end
-local hideKey =
-    mainFindKeyCode(
-        mainJump.hideUIHotkeyName
+__UI.__L.hideKey =
+    __UI.__L.mainFindKeyCode(
+        __UI.__L.mainJump.hideUIHotkeyName
     )
-if hideKey then
-    mainJump.hideUIHotkeyName =
-        hideKey.Name
+if __UI.__L.hideKey then
+    __UI.__L.mainJump.hideUIHotkeyName =
+        __UI.__L.hideKey.Name
 else
-    mainJump.hideUIHotkeyName = "H"
+    __UI.__L.mainJump.hideUIHotkeyName = "H"
 end
-function mainJump.setHotkey(value)
+function __UI.__L.mainJump.setHotkey(value)
     local key =
-        mainFindKeyCode(
+        __UI.__L.mainFindKeyCode(
             value
         )
     if not key then
         return
     end
-    mainJump.hotkeyName =
+    __UI.__L.mainJump.hotkeyName =
         key.Name
-    mainJump.hotkeyBox.Text =
+    __UI.__L.mainJump.hotkeyBox.Text =
         key.Name
-    mainJump.saveConfig()
-    mainJump.capturing = nil
+    __UI.__L.mainJump.saveConfig()
+    __UI.__L.mainJump.capturing = nil
 end
-function mainJump.setHideUIHotkey(value)
+function __UI.__L.mainJump.setHideUIHotkey(value)
     local key =
-        mainFindKeyCode(
+        __UI.__L.mainFindKeyCode(
             value
         )
     if not key then
         return
     end
-    mainJump.hideUIHotkeyName =
+    __UI.__L.mainJump.hideUIHotkeyName =
         key.Name
-    mainJump.hideUIHotkeyBox.Text =
+    __UI.__L.mainJump.hideUIHotkeyBox.Text =
         key.Name
-    mainJump.saveConfig()
-    mainJump.capturing = nil
+    __UI.__L.mainJump.saveConfig()
+    __UI.__L.mainJump.capturing = nil
 end
-function mainJump.startCapture(kind)
-    mainJump.capturing =
+function __UI.__L.mainJump.startCapture(kind)
+    __UI.__L.mainJump.capturing =
         kind
 
     if kind == "jump" then
-        mainJump.hotkeyBox.Text =
+        __UI.__L.mainJump.hotkeyBox.Text =
             "PRESS KEY..."
     elseif kind == "hide" then
-        mainJump.hideUIHotkeyBox.Text =
+        __UI.__L.mainJump.hideUIHotkeyBox.Text =
             "PRESS KEY..."
     elseif kind == "airTurn" then
-        mainJump.airTurnHotkeyBox.Text =
+        __UI.__L.mainJump.airTurnHotkeyBox.Text =
             "PRESS KEY..."
     elseif kind == "crouchSpam" then
-        mainJump.crouchSpamHotkeyBox.Text =
+        __UI.__L.mainJump.crouchSpamHotkeyBox.Text =
             "PRESS KEY..."
     elseif kind == "benchTrimp" then
-        mainJump.benchTrimpHotkeyBox.Text =
+        __UI.__L.mainJump.benchTrimpHotkeyBox.Text =
             "PRESS KEY..."
     end
 end
-function mainJump.stopLegitJumpLoop()
-    if mainJump.legitJumpConnection then
+function __UI.__L.mainJump.stopLegitJumpLoop()
+    if __UI.__L.mainJump.legitJumpConnection then
         pcall(function()
-            mainJump.legitJumpConnection:Disconnect()
+            __UI.__L.mainJump.legitJumpConnection:Disconnect()
         end)
 
-        mainJump.legitJumpConnection = nil
+        __UI.__L.mainJump.legitJumpConnection = nil
     end
 
-    mainJump.legitMovement = nil
-    mainJump.legitHumanoid = nil
-    mainJump.legitRoot = nil
-    mainJump.legitActiveJumpReact = false
-    mainJump.legitActiveJumpStartedAt = 0
-    mainJump.legitGroundJumpUsed = false
-    mainJump.legitClimbJumpUsed = false
-    mainJump.legitPreviousHumanoidState = nil
+    __UI.__L.mainJump.legitMovement = nil
+    __UI.__L.mainJump.legitHumanoid = nil
+    __UI.__L.mainJump.legitRoot = nil
+    __UI.__L.mainJump.legitActiveJumpReact = false
+    __UI.__L.mainJump.legitActiveJumpStartedAt = 0
+    __UI.__L.mainJump.legitGroundJumpUsed = false
+    __UI.__L.mainJump.legitClimbJumpUsed = false
+    __UI.__L.mainJump.legitPreviousHumanoidState = nil
 end
 
-function mainJump.legitSetupCharacter(
+function __UI.__L.mainJump.legitSetupCharacter(
     object,
     movement,
     humanoid,
     root
 )
-    if mainJump.legitMovement == movement
-        and mainJump.legitHumanoid == humanoid
+    if __UI.__L.mainJump.legitMovement == movement
+        and __UI.__L.mainJump.legitHumanoid == humanoid
     then
         return
     end
 
-    mainJump.legitMovement =
+    __UI.__L.mainJump.legitMovement =
         movement
-    mainJump.legitHumanoid =
+    __UI.__L.mainJump.legitHumanoid =
         humanoid
-    mainJump.legitRoot =
+    __UI.__L.mainJump.legitRoot =
         root
 
-    mainJump.legitGroundJumpUsed = false
-    mainJump.legitClimbJumpUsed = false
-    mainJump.legitJumpSequence =
-        (tonumber(mainJump.legitJumpSequence) or 0) + 1
-    mainJump.legitActiveJumpReact = false
-    mainJump.legitActiveJumpStartedAt = 0
+    __UI.__L.mainJump.legitGroundJumpUsed = false
+    __UI.__L.mainJump.legitClimbJumpUsed = false
+    __UI.__L.mainJump.legitJumpSequence =
+        (tonumber(__UI.__L.mainJump.legitJumpSequence) or 0) + 1
+    __UI.__L.mainJump.legitActiveJumpReact = false
+    __UI.__L.mainJump.legitActiveJumpStartedAt = 0
 
-    mainJump.legitPreviousHumanoidState =
+    __UI.__L.mainJump.legitPreviousHumanoidState =
         humanoid:GetState()
 end
 
-function mainJump.legitGetGrounded(
+function __UI.__L.mainJump.legitGetGrounded(
     movement
 )
     local grounded = false
@@ -14856,17 +14857,17 @@ function mainJump.legitGetGrounded(
     return grounded
 end
 
-function mainJump.legitAutoRelease(
+function __UI.__L.mainJump.legitAutoRelease(
     movement,
     sequence
 )
     RunService.Heartbeat:Wait()
 
     if not genv.DEADEYE_MAIN_RUNNING
-        or cleaned
-        or not mainJump.enabled
-        or mainJump.autoJumpMode ~= "legit"
-        or sequence ~= mainJump.legitJumpSequence
+        or __UI.__L.cleaned
+        or not __UI.__L.mainJump.enabled
+        or __UI.__L.mainJump.autoJumpMode ~= "legit"
+        or sequence ~= __UI.__L.mainJump.legitJumpSequence
     then
         return
     end
@@ -14883,15 +14884,15 @@ function mainJump.legitAutoRelease(
     end)
 end
 
-function mainJump.legitExecuteOriginalJumpReact(
+function __UI.__L.mainJump.legitExecuteOriginalJumpReact(
     movement,
     reason
 )
     if not genv.DEADEYE_MAIN_RUNNING
-        or cleaned
-        or not mainJump.enabled
-        or mainJump.autoJumpMode ~= "legit"
-        or mainJump.legitActiveJumpReact
+        or __UI.__L.cleaned
+        or not __UI.__L.mainJump.enabled
+        or __UI.__L.mainJump.autoJumpMode ~= "legit"
+        or __UI.__L.mainJump.legitActiveJumpReact
     then
         return false
     end
@@ -14924,14 +14925,14 @@ function mainJump.legitExecuteOriginalJumpReact(
         return false
     end
 
-    mainJump.legitActiveJumpReact = true
-    mainJump.legitActiveJumpStartedAt = os.clock()
+    __UI.__L.mainJump.legitActiveJumpReact = true
+    __UI.__L.mainJump.legitActiveJumpStartedAt = os.clock()
 
-    mainJump.legitJumpSequence =
-        (tonumber(mainJump.legitJumpSequence) or 0) + 1
+    __UI.__L.mainJump.legitJumpSequence =
+        (tonumber(__UI.__L.mainJump.legitJumpSequence) or 0) + 1
 
     local sequence =
-        mainJump.legitJumpSequence
+        __UI.__L.mainJump.legitJumpSequence
 
     --// Force crouch ON immediately before the same-frame JumpReact.
     --// Prediction ends exactly here. The jump timing itself is unchanged.
@@ -14947,16 +14948,16 @@ function mainJump.legitExecuteOriginalJumpReact(
             )
         end)
 
-        if mainJump.legitJumpSequence ~= sequence then
+        if __UI.__L.mainJump.legitJumpSequence ~= sequence then
             return
         end
 
-        mainJump.legitActiveJumpReact = false
-        mainJump.legitActiveJumpStartedAt = 0
+        __UI.__L.mainJump.legitActiveJumpReact = false
+        __UI.__L.mainJump.legitActiveJumpStartedAt = 0
     end)
 
     task.spawn(function()
-        mainJump.legitAutoRelease(
+        __UI.__L.mainJump.legitAutoRelease(
             movement,
             sequence
         )
@@ -14965,15 +14966,15 @@ function mainJump.legitExecuteOriginalJumpReact(
     return true
 end
 
-function mainJump.legitTryGroundJump(
+function __UI.__L.mainJump.legitTryGroundJump(
     movement
 )
     if not genv.DEADEYE_MAIN_RUNNING
-        or cleaned
-        or not mainJump.enabled
-        or mainJump.autoJumpMode ~= "legit"
-        or mainJump.legitActiveJumpReact
-        or mainJump.legitGroundJumpUsed
+        or __UI.__L.cleaned
+        or not __UI.__L.mainJump.enabled
+        or __UI.__L.mainJump.autoJumpMode ~= "legit"
+        or __UI.__L.mainJump.legitActiveJumpReact
+        or __UI.__L.mainJump.legitGroundJumpUsed
     then
         return
     end
@@ -15001,33 +15002,33 @@ function mainJump.legitTryGroundJump(
     end
 
     --// Use the game's real DataRegistry.Grounded.
-    if not mainJump.legitGetGrounded(
+    if not __UI.__L.mainJump.legitGetGrounded(
         movement
     ) then
         return
     end
 
-    mainJump.legitGroundJumpCount =
-        (tonumber(mainJump.legitGroundJumpCount) or 0) + 1
+    __UI.__L.mainJump.legitGroundJumpCount =
+        (tonumber(__UI.__L.mainJump.legitGroundJumpCount) or 0) + 1
 
-    mainJump.legitGroundJumpUsed =
+    __UI.__L.mainJump.legitGroundJumpUsed =
         true
 
-    mainJump.legitExecuteOriginalJumpReact(
+    __UI.__L.mainJump.legitExecuteOriginalJumpReact(
         movement,
         "GROUND"
     )
 end
 
-function mainJump.legitTryClimbJump(
+function __UI.__L.mainJump.legitTryClimbJump(
     movement
 )
     if not genv.DEADEYE_MAIN_RUNNING
-        or cleaned
-        or not mainJump.enabled
-        or mainJump.autoJumpMode ~= "legit"
-        or mainJump.legitActiveJumpReact
-        or mainJump.legitClimbJumpUsed
+        or __UI.__L.cleaned
+        or not __UI.__L.mainJump.enabled
+        or __UI.__L.mainJump.autoJumpMode ~= "legit"
+        or __UI.__L.mainJump.legitActiveJumpReact
+        or __UI.__L.mainJump.legitClimbJumpUsed
     then
         return
     end
@@ -15047,38 +15048,38 @@ function mainJump.legitTryClimbJump(
         return
     end
 
-    mainJump.legitClimbJumpCount =
-        (tonumber(mainJump.legitClimbJumpCount) or 0) + 1
+    __UI.__L.mainJump.legitClimbJumpCount =
+        (tonumber(__UI.__L.mainJump.legitClimbJumpCount) or 0) + 1
 
-    mainJump.legitClimbJumpUsed =
+    __UI.__L.mainJump.legitClimbJumpUsed =
         true
 
-    mainJump.legitExecuteOriginalJumpReact(
+    __UI.__L.mainJump.legitExecuteOriginalJumpReact(
         movement,
         "NATURAL CLIMBING"
     )
 end
 
-function mainJump.bindLegitJumpLoop()
-    mainJump.stopLegitJumpLoop()
+function __UI.__L.mainJump.bindLegitJumpLoop()
+    __UI.__L.mainJump.stopLegitJumpLoop()
 
     if not genv.DEADEYE_MAIN_RUNNING
-        or cleaned
-        or not mainJump.enabled
-        or mainJump.autoJumpMode ~= "legit"
+        or __UI.__L.cleaned
+        or not __UI.__L.mainJump.enabled
+        or __UI.__L.mainJump.autoJumpMode ~= "legit"
     then
         return
     end
 
-    mainJump.legitJumpConnection =
+    __UI.__L.mainJump.legitJumpConnection =
         RunService.PreSimulation:Connect(
             function()
                 if not genv.DEADEYE_MAIN_RUNNING
-                    or cleaned
-                    or not mainJump.enabled
-                    or mainJump.autoJumpMode ~= "legit"
+                    or __UI.__L.cleaned
+                    or not __UI.__L.mainJump.enabled
+                    or __UI.__L.mainJump.autoJumpMode ~= "legit"
                 then
-                    mainJump.stopLegitJumpLoop()
+                    __UI.__L.mainJump.stopLegitJumpLoop()
                     return
                 end
 
@@ -15130,10 +15131,10 @@ function mainJump.bindLegitJumpLoop()
                     return
                 end
 
-                if mainJump.legitMovement ~= movement
-                    or mainJump.legitHumanoid ~= humanoid
+                if __UI.__L.mainJump.legitMovement ~= movement
+                    or __UI.__L.mainJump.legitHumanoid ~= humanoid
                 then
-                    mainJump.legitSetupCharacter(
+                    __UI.__L.mainJump.legitSetupCharacter(
                         object,
                         movement,
                         humanoid,
@@ -15146,92 +15147,92 @@ function mainJump.bindLegitJumpLoop()
 
                 --// CLIMBING FIRST.
                 if state == Enum.HumanoidStateType.Climbing then
-                    mainJump.legitTryClimbJump(
+                    __UI.__L.mainJump.legitTryClimbJump(
                         movement
                     )
                 else
                     --// GROUND.
-                    mainJump.legitTryGroundJump(
+                    __UI.__L.mainJump.legitTryGroundJump(
                         movement
                     )
                 end
 
                 --// Re-arm one ground JumpReact on the next real Freefall.
                 if state == Enum.HumanoidStateType.Freefall
-                    and mainJump.legitGroundJumpUsed
+                    and __UI.__L.mainJump.legitGroundJumpUsed
                 then
-                    mainJump.legitGroundJumpUsed = false
+                    __UI.__L.mainJump.legitGroundJumpUsed = false
                 end
 
                 --// Re-arm one Climbing JumpReact after leaving actual Climbing.
                 if state ~= Enum.HumanoidStateType.Climbing
-                    and mainJump.legitClimbJumpUsed
-                    and mainJump.legitPreviousHumanoidState
+                    and __UI.__L.mainJump.legitClimbJumpUsed
+                    and __UI.__L.mainJump.legitPreviousHumanoidState
                         == Enum.HumanoidStateType.Climbing
                 then
-                    mainJump.legitClimbJumpUsed = false
+                    __UI.__L.mainJump.legitClimbJumpUsed = false
                 end
 
                 --// Same watchdog window as the standalone test.
-                if mainJump.legitActiveJumpReact
-                    and mainJump.legitActiveJumpStartedAt > 0
+                if __UI.__L.mainJump.legitActiveJumpReact
+                    and __UI.__L.mainJump.legitActiveJumpStartedAt > 0
                     and os.clock()
-                        - mainJump.legitActiveJumpStartedAt
+                        - __UI.__L.mainJump.legitActiveJumpStartedAt
                         > 0.35
                 then
                     pcall(function()
                         movement.JumpHeldDown = false
                     end)
 
-                    mainJump.legitActiveJumpReact = false
-                    mainJump.legitActiveJumpStartedAt = 0
+                    __UI.__L.mainJump.legitActiveJumpReact = false
+                    __UI.__L.mainJump.legitActiveJumpStartedAt = 0
                 end
 
-                mainJump.legitPreviousHumanoidState =
+                __UI.__L.mainJump.legitPreviousHumanoidState =
                     state
             end
         )
 end
 
-function mainJump.destroySensors()
-    mainJump.stopLegitJumpLoop()
+function __UI.__L.mainJump.destroySensors()
+    __UI.__L.mainJump.stopLegitJumpLoop()
 
-    if mainJump.lookWatcherConnection then
+    if __UI.__L.mainJump.lookWatcherConnection then
         pcall(function()
-            mainJump.lookWatcherConnection:Disconnect()
+            __UI.__L.mainJump.lookWatcherConnection:Disconnect()
         end)
-        mainJump.lookWatcherConnection = nil
+        __UI.__L.mainJump.lookWatcherConnection = nil
     end
 
-    mainJump.manualJumpActive = false
-    mainJump.lookTriggeredThisAir = false
+    __UI.__L.mainJump.manualJumpActive = false
+    __UI.__L.mainJump.lookTriggeredThisAir = false
 
-    if mainJump.sensorTouchConnection then
+    if __UI.__L.mainJump.sensorTouchConnection then
         pcall(function()
-            mainJump.sensorTouchConnection:Disconnect()
+            __UI.__L.mainJump.sensorTouchConnection:Disconnect()
         end)
-        mainJump.sensorTouchConnection = nil
+        __UI.__L.mainJump.sensorTouchConnection = nil
     end
 
-    if mainJump.frontSensorTouchConnection then
+    if __UI.__L.mainJump.frontSensorTouchConnection then
         pcall(function()
-            mainJump.frontSensorTouchConnection:Disconnect()
+            __UI.__L.mainJump.frontSensorTouchConnection:Disconnect()
         end)
-        mainJump.frontSensorTouchConnection = nil
+        __UI.__L.mainJump.frontSensorTouchConnection = nil
     end
 
-    if mainJump.rearSensorTouchConnection then
+    if __UI.__L.mainJump.rearSensorTouchConnection then
         pcall(function()
-            mainJump.rearSensorTouchConnection:Disconnect()
+            __UI.__L.mainJump.rearSensorTouchConnection:Disconnect()
         end)
-        mainJump.rearSensorTouchConnection = nil
+        __UI.__L.mainJump.rearSensorTouchConnection = nil
     end
 
-    if mainJump.jumpForwardSensorTouchConnection then
+    if __UI.__L.mainJump.jumpForwardSensorTouchConnection then
         pcall(function()
-            mainJump.jumpForwardSensorTouchConnection:Disconnect()
+            __UI.__L.mainJump.jumpForwardSensorTouchConnection:Disconnect()
         end)
-        mainJump.jumpForwardSensorTouchConnection = nil
+        __UI.__L.mainJump.jumpForwardSensorTouchConnection = nil
     end
 
     for _, key in ipairs({
@@ -15244,20 +15245,20 @@ function mainJump.destroySensors()
         "lookForwardSensorPart"
     }) do
         local sensor =
-            mainJump[key]
+            __UI.__L.mainJump[key]
 
         if sensor then
             pcall(function()
                 sensor:Destroy()
             end)
 
-            mainJump[key] = nil
+            __UI.__L.mainJump[key] = nil
         end
     end
 
 end
 
-function mainJump.isGameJumpBlocked()
+function __UI.__L.mainJump.isGameJumpBlocked()
     local object =
         getCharacterObject()
 
@@ -15325,7 +15326,7 @@ function mainJump.isGameJumpBlocked()
     end
 
     for _, root in ipairs({
-        mainJump.character,
+        __UI.__L.mainJump.character,
         LocalPlayer,
         workspace
     }) do
@@ -15502,22 +15503,22 @@ function mainJump.isGameJumpBlocked()
     return blockedByContext
 end
 
-function mainJump.canJump(benchTrimp)
+function __UI.__L.mainJump.canJump(benchTrimp)
     if not genv.DEADEYE_MAIN_RUNNING
-        or not mainJump.humanoid
-        or mainJump.humanoid.Health <= 0
+        or not __UI.__L.mainJump.humanoid
+        or __UI.__L.mainJump.humanoid.Health <= 0
     then
         return false
     end
 
     if not benchTrimp
-        and not mainJump.enabled
+        and not __UI.__L.mainJump.enabled
     then
         return false
     end
 
     if not benchTrimp
-        and mainJump.humanoid.FloorMaterial
+        and __UI.__L.mainJump.humanoid.FloorMaterial
             == Enum.Material.Air
     then
         return false
@@ -15602,12 +15603,12 @@ function mainJump.canJump(benchTrimp)
         if not emoteActive then
             --// Keep the existing generic game-level checks for
             --// non-emote states such as special-round restrictions.
-            if mainJump.isGameJumpBlocked() then
+            if __UI.__L.mainJump.isGameJumpBlocked() then
                 return false
             end
         end
     else
-        if mainJump.isGameJumpBlocked() then
+        if __UI.__L.mainJump.isGameJumpBlocked() then
             return false
         end
     end
@@ -15619,7 +15620,7 @@ function mainJump.canJump(benchTrimp)
     end
 
     local state =
-        mainJump.humanoid:GetState()
+        __UI.__L.mainJump.humanoid:GetState()
 
     return state
         ~= Enum.HumanoidStateType.Jumping
@@ -15635,12 +15636,12 @@ end
 --// restrictions used by AutoJump.
 --// No independent cleanup: main GUI close owns cleanup.
 --// =========================================================
-function mainJump.bindBenchTrimp(char)
-    if mainJump.benchTrimpStateConnection then
+function __UI.__L.mainJump.bindBenchTrimp(char)
+    if __UI.__L.mainJump.benchTrimpStateConnection then
         pcall(function()
-            mainJump.benchTrimpStateConnection:Disconnect()
+            __UI.__L.mainJump.benchTrimpStateConnection:Disconnect()
         end)
-        mainJump.benchTrimpStateConnection = nil
+        __UI.__L.mainJump.benchTrimpStateConnection = nil
     end
 
     if not char
@@ -15670,13 +15671,13 @@ function mainJump.bindBenchTrimp(char)
 
     local forcing = false
 
-    mainJump.benchTrimpStateConnection =
+    __UI.__L.mainJump.benchTrimpStateConnection =
         humanoid.StateChanged:Connect(
             function(_, newState)
                 if not genv.DEADEYE_MAIN_RUNNING
-                    or cleaned
-                    or not mainJump.benchTrimpEnabled
-                    or mainJump.character ~= char
+                    or __UI.__L.cleaned
+                    or not __UI.__L.mainJump.benchTrimpEnabled
+                    or __UI.__L.mainJump.character ~= char
                     or forcing
                 then
                     return
@@ -15688,7 +15689,7 @@ function mainJump.bindBenchTrimp(char)
                     return
                 end
 
-                if not mainJump.canJump(true) then
+                if not __UI.__L.mainJump.canJump(true) then
                     return
                 end
 
@@ -15696,9 +15697,9 @@ function mainJump.bindBenchTrimp(char)
 
                 task.defer(function()
                     if not genv.DEADEYE_MAIN_RUNNING
-                        or cleaned
-                        or not mainJump.benchTrimpEnabled
-                        or mainJump.character ~= char
+                        or __UI.__L.cleaned
+                        or not __UI.__L.mainJump.benchTrimpEnabled
+                        or __UI.__L.mainJump.character ~= char
                         or not humanoid.Parent
                     then
                         forcing = false
@@ -15712,7 +15713,7 @@ function mainJump.bindBenchTrimp(char)
                         return
                     end
 
-                    if not mainJump.canJump(true) then
+                    if not __UI.__L.mainJump.canJump(true) then
                         forcing = false
                         return
                     end
@@ -15729,37 +15730,37 @@ function mainJump.bindBenchTrimp(char)
         )
 end
 
-function mainJump.setBenchTrimpEnabled(state)
-    mainJump.benchTrimpEnabled =
+function __UI.__L.mainJump.setBenchTrimpEnabled(state)
+    __UI.__L.mainJump.benchTrimpEnabled =
         state and true or false
 
-    if mainJump.benchTrimpEnabled then
+    if __UI.__L.mainJump.benchTrimpEnabled then
         local char =
-            mainJump.character
+            __UI.__L.mainJump.character
             or LocalPlayer.Character
 
         if char then
             pcall(function()
-                mainJump.bindBenchTrimp(
+                __UI.__L.mainJump.bindBenchTrimp(
                     char
                 )
             end)
         end
     end
 
-    mainJump.saveConfig()
-    mainJump.saveEnabledStates()
-    mainJump.update()
+    __UI.__L.mainJump.saveConfig()
+    __UI.__L.mainJump.saveEnabledStates()
+    __UI.__L.mainJump.update()
 end
 
-function mainJump.lookScannerSeesSurface()
+function __UI.__L.mainJump.lookScannerSeesSurface()
     --// Only accept an actual collidable landing surface directly below.
     --// The old overlap-box scanner could see arbitrary map geometry and
     --// re-trigger LOOK repeatedly on some maps.
-    if not mainJump.lookEnabled
-        or not mainJump.enabled
-        or not mainJump.root
-        or not mainJump.character
+    if not __UI.__L.mainJump.lookEnabled
+        or not __UI.__L.mainJump.enabled
+        or not __UI.__L.mainJump.root
+        or not __UI.__L.mainJump.character
     then
         return false
     end
@@ -15771,7 +15772,7 @@ function mainJump.lookScannerSeesSurface()
         Enum.RaycastFilterType.Exclude
 
     params.FilterDescendantsInstances = {
-        mainJump.character
+        __UI.__L.mainJump.character
     }
 
     params.IgnoreWater = true
@@ -15780,7 +15781,7 @@ function mainJump.lookScannerSeesSurface()
         7.5
 
     local origins = {
-        mainJump.root.Position
+        __UI.__L.mainJump.root.Position
             + Vector3.new(
                 0,
                 -0.75,
@@ -15788,12 +15789,12 @@ function mainJump.lookScannerSeesSurface()
             )
     }
 
-    if mainJump.lookForwardSensorPart
-        and mainJump.lookForwardSensorPart.Parent
+    if __UI.__L.mainJump.lookForwardSensorPart
+        and __UI.__L.mainJump.lookForwardSensorPart.Parent
     then
         table.insert(
             origins,
-            mainJump.lookForwardSensorPart.Position
+            __UI.__L.mainJump.lookForwardSensorPart.Position
         )
     end
 
@@ -15845,51 +15846,51 @@ function mainJump.lookScannerSeesSurface()
     return false
 end
 
-function mainJump.jump(hit)
-    if not mainJump.canJump() then
+function __UI.__L.mainJump.jump(hit)
+    if not __UI.__L.mainJump.canJump() then
         return
     end
 
-    mainJump.lastJump =
+    __UI.__L.mainJump.lastJump =
         tick()
 
     --// Starting an automatic jump begins a NEW airborne phase.
     --// LOOK is allowed to trigger once near the landing of this jump.
 
-    if mainJump.lookEnabled
-        and mainJump.enabled
-        and mainJump.lookActive
+    if __UI.__L.mainJump.lookEnabled
+        and __UI.__L.mainJump.enabled
+        and __UI.__L.mainJump.lookActive
     then
-        mainJump.lookAutoJumpCycle = true
-        mainJump.lookRestoreDeadline =
+        __UI.__L.mainJump.lookAutoJumpCycle = true
+        __UI.__L.mainJump.lookRestoreDeadline =
             tick()
-            + LOOK_MAX_AFTER_JUMP
-        mainJump.lookMinActiveDeadline =
+            + __UI.__L.LOOK_MAX_AFTER_JUMP
+        __UI.__L.mainJump.lookMinActiveDeadline =
             tick()
-            + LOOK_MIN_ACTIVE
+            + __UI.__L.LOOK_MIN_ACTIVE
     end
 
-    mainJump.humanoid.Jump = true
+    __UI.__L.mainJump.humanoid.Jump = true
 
-    if mainJump.lookActive then
-        mainJump.lookRestoreDeadline =
+    if __UI.__L.mainJump.lookActive then
+        __UI.__L.mainJump.lookRestoreDeadline =
             tick()
-            + LOOK_MAX_AFTER_JUMP
+            + __UI.__L.LOOK_MAX_AFTER_JUMP
     end
 
     pcall(function()
-        mainJump.humanoid:ChangeState(
+        __UI.__L.mainJump.humanoid:ChangeState(
             Enum.HumanoidStateType.Jumping
         )
     end)
 end
 
-function mainJump.isCameraLookingBackward()
+function __UI.__L.mainJump.isCameraLookingBackward()
     local camera =
         workspace.CurrentCamera
 
     local root =
-        mainJump.root
+        __UI.__L.mainJump.root
 
     if not camera
         or not root
@@ -15934,71 +15935,71 @@ function mainJump.isCameraLookingBackward()
     return cameraFlat:Dot(rootFlat) <= -0.35
 end
 
-function mainJump.contact(hit, requireCameraBackward)
+function __UI.__L.mainJump.contact(hit, requireCameraBackward)
     if not genv.DEADEYE_MAIN_RUNNING
-        or not mainJump.enabled
-        or mainJump.autoJumpMode ~= "rage"
+        or not __UI.__L.mainJump.enabled
+        or __UI.__L.mainJump.autoJumpMode ~= "rage"
         or not hit
     then
         return
     end
 
     if requireCameraBackward
-        and not mainJump.isCameraLookingBackward()
+        and not __UI.__L.mainJump.isCameraLookingBackward()
     then
         return
     end
 
-    if mainJump.character
+    if __UI.__L.mainJump.character
         and hit:IsDescendantOf(
-            mainJump.character
+            __UI.__L.mainJump.character
         )
     then
         return
     end
 
     task.wait(
-        mainJump.jumpDelay
+        __UI.__L.mainJump.jumpDelay
     )
 
     if not genv.DEADEYE_MAIN_RUNNING
-        or not mainJump.enabled
+        or not __UI.__L.mainJump.enabled
     then
         return
     end
 
     if requireCameraBackward
-        and not mainJump.isCameraLookingBackward()
+        and not __UI.__L.mainJump.isCameraLookingBackward()
     then
         return
     end
 
-    mainJump.jump(hit)
+    __UI.__L.mainJump.jump(hit)
 end
 
-function mainJump.createSensors(char)
+function __UI.__L.mainJump.createSensors(char)
     if not char
         or not char:IsA("Model")
     then
         return
     end
 
-    mainJump.destroySensors()
+    __UI.__L.mainJump.destroySensors()
 
-    mainJump.character =
+    __UI.__L.mainJump.character =
         char
 
-    mainJump.humanoid =
+    __UI.__L.mainJump.humanoid =
         char:WaitForChild(
             "Humanoid"
         )
 
-    mainJump.root =
+    __UI.__L.mainJump.root =
         char:WaitForChild(
             "HumanoidRootPart"
         )
 
-    mainJump.lookTriggeredThisAir = false
+    __UI.__L.mainJump.lookTriggeredThisAir = false
 
     --// =====================================================
     --// AUTOJUMP SENSORS
@@ -16022,7 +16023,7 @@ function mainJump.createSensors(char)
     sensor.Massless = true
     sensor.CastShadow = false
     sensor.CFrame =
-        mainJump.root.CFrame
+        __UI.__L.mainJump.root.CFrame
         * CFrame.new(
             0,
             -3,
@@ -16035,19 +16036,19 @@ function mainJump.createSensors(char)
             "WeldConstraint"
         )
     weld.Part0 =
-        mainJump.root
+        __UI.__L.mainJump.root
     weld.Part1 =
         sensor
     weld.Parent =
         sensor
 
-    mainJump.sensorPart =
+    __UI.__L.mainJump.sensorPart =
         sensor
 
-    mainJump.sensorTouchConnection =
+    __UI.__L.mainJump.sensorTouchConnection =
         sensor.Touched:Connect(
             function(hit)
-                mainJump.contact(hit)
+                __UI.__L.mainJump.contact(hit)
             end
         )
 
@@ -16069,7 +16070,7 @@ function mainJump.createSensors(char)
     front.Massless = true
     front.CastShadow = false
     front.CFrame =
-        mainJump.root.CFrame
+        __UI.__L.mainJump.root.CFrame
         * CFrame.new(
             0,
             -1,
@@ -16082,19 +16083,19 @@ function mainJump.createSensors(char)
             "WeldConstraint"
         )
     frontWeld.Part0 =
-        mainJump.root
+        __UI.__L.mainJump.root
     frontWeld.Part1 =
         front
     frontWeld.Parent =
         front
 
-    mainJump.frontSensorPart =
+    __UI.__L.mainJump.frontSensorPart =
         front
 
-    mainJump.frontSensorTouchConnection =
+    __UI.__L.mainJump.frontSensorTouchConnection =
         front.Touched:Connect(
             function(hit)
-                mainJump.contact(hit)
+                __UI.__L.mainJump.contact(hit)
             end
         )
 
@@ -16125,7 +16126,7 @@ function mainJump.createSensors(char)
     rear.CastShadow = false
 
     rear.CFrame =
-        mainJump.root.CFrame
+        __UI.__L.mainJump.root.CFrame
         * CFrame.new(
             0,
             -1,
@@ -16141,7 +16142,7 @@ function mainJump.createSensors(char)
         )
 
     rearWeld.Part0 =
-        mainJump.root
+        __UI.__L.mainJump.root
 
     rearWeld.Part1 =
         rear
@@ -16149,13 +16150,13 @@ function mainJump.createSensors(char)
     rearWeld.Parent =
         rear
 
-    mainJump.rearSensorPart =
+    __UI.__L.mainJump.rearSensorPart =
         rear
 
-    mainJump.rearSensorTouchConnection =
+    __UI.__L.mainJump.rearSensorTouchConnection =
         rear.Touched:Connect(
             function(hit)
-                mainJump.contact(
+                __UI.__L.mainJump.contact(
                     hit,
                     true
                 )
@@ -16190,7 +16191,7 @@ function mainJump.createSensors(char)
     jumpForwardExtra.CastShadow = false
 
     jumpForwardExtra.CFrame =
-        mainJump.root.CFrame
+        __UI.__L.mainJump.root.CFrame
         * CFrame.new(
             0,
             -1,
@@ -16206,7 +16207,7 @@ function mainJump.createSensors(char)
         )
 
     jumpForwardExtraWeld.Part0 =
-        mainJump.root
+        __UI.__L.mainJump.root
 
     jumpForwardExtraWeld.Part1 =
         jumpForwardExtra
@@ -16214,13 +16215,13 @@ function mainJump.createSensors(char)
     jumpForwardExtraWeld.Parent =
         jumpForwardExtra
 
-    mainJump.jumpForwardSensorPart =
+    __UI.__L.mainJump.jumpForwardSensorPart =
         jumpForwardExtra
 
-    mainJump.jumpForwardSensorTouchConnection =
+    __UI.__L.mainJump.jumpForwardSensorTouchConnection =
         jumpForwardExtra.Touched:Connect(
             function(hit)
-                mainJump.contact(hit)
+                __UI.__L.mainJump.contact(hit)
             end
         )
 
@@ -16251,7 +16252,7 @@ function mainJump.createSensors(char)
     lookForwardExtra.CastShadow = false
 
     lookForwardExtra.CFrame =
-        mainJump.root.CFrame
+        __UI.__L.mainJump.root.CFrame
         * CFrame.new(
             0,
             -1,
@@ -16267,7 +16268,7 @@ function mainJump.createSensors(char)
         )
 
     lookForwardExtraWeld.Part0 =
-        mainJump.root
+        __UI.__L.mainJump.root
 
     lookForwardExtraWeld.Part1 =
         lookForwardExtra
@@ -16275,7 +16276,7 @@ function mainJump.createSensors(char)
     lookForwardExtraWeld.Parent =
         lookForwardExtra
 
-    mainJump.lookForwardSensorPart =
+    __UI.__L.mainJump.lookForwardSensorPart =
         lookForwardExtra
 
     --// =====================================================
@@ -16301,7 +16302,7 @@ function mainJump.createSensors(char)
     lookSensor.Massless = true
     lookSensor.CastShadow = false
     lookSensor.CFrame =
-        mainJump.root.CFrame
+        __UI.__L.mainJump.root.CFrame
         * CFrame.new(
             0,
             -4.8,
@@ -16314,13 +16315,13 @@ function mainJump.createSensors(char)
             "WeldConstraint"
         )
     lookWeld.Part0 =
-        mainJump.root
+        __UI.__L.mainJump.root
     lookWeld.Part1 =
         lookSensor
     lookWeld.Parent =
         lookSensor
 
-    mainJump.lookSensorPart =
+    __UI.__L.mainJump.lookSensorPart =
         lookSensor
 
     local lookFront =
@@ -16341,7 +16342,7 @@ function mainJump.createSensors(char)
     lookFront.Massless = true
     lookFront.CastShadow = false
     lookFront.CFrame =
-        mainJump.root.CFrame
+        __UI.__L.mainJump.root.CFrame
         * CFrame.new(
             0,
             -4.8,
@@ -16354,13 +16355,13 @@ function mainJump.createSensors(char)
             "WeldConstraint"
         )
     lookFrontWeld.Part0 =
-        mainJump.root
+        __UI.__L.mainJump.root
     lookFrontWeld.Part1 =
         lookFront
     lookFrontWeld.Parent =
         lookFront
 
-    mainJump.lookFrontSensorPart =
+    __UI.__L.mainJump.lookFrontSensorPart =
         lookFront
 
     --// =====================================================
@@ -16370,25 +16371,25 @@ function mainJump.createSensors(char)
     --// character to be descending and for the separate LOOK
     --// sensor to see the landing surface. This is deliberately
     --// earlier than the normal AutoJump Touched event.
-    mainJump.lookWatcherConnection =
+    __UI.__L.mainJump.lookWatcherConnection =
         RunService.Heartbeat:Connect(
             function()
                 if not genv.DEADEYE_MAIN_RUNNING
-                    or cleaned
-                    or not mainJump.enabled
-                    or not mainJump.lookEnabled
-                    or mainJump.rageLookEnabled
-                    or not mainJump.humanoid
-                    or not mainJump.root
+                    or __UI.__L.cleaned
+                    or not __UI.__L.mainJump.enabled
+                    or not __UI.__L.mainJump.lookEnabled
+                    or __UI.__L.mainJump.rageLookEnabled
+                    or not __UI.__L.mainJump.humanoid
+                    or not __UI.__L.mainJump.root
                 then
                     return
                 end
 
-                if mainJump.manualJumpActive then
-                    if mainJump.humanoid.FloorMaterial
+                if __UI.__L.mainJump.manualJumpActive then
+                    if __UI.__L.mainJump.humanoid.FloorMaterial
                         ~= Enum.Material.Air
                     then
-                        mainJump.manualJumpActive = false
+                        __UI.__L.mainJump.manualJumpActive = false
                     else
                         return
                     end
@@ -16399,13 +16400,13 @@ function mainJump.createSensors(char)
 
                 pcall(function()
                     state =
-                        mainJump.humanoid:GetState()
+                        __UI.__L.mainJump.humanoid:GetState()
                     verticalVelocity =
-                        mainJump.root.AssemblyLinearVelocity.Y
+                        __UI.__L.mainJump.root.AssemblyLinearVelocity.Y
                 end)
 
                 local grounded =
-                    mainJump.humanoid.FloorMaterial
+                    __UI.__L.mainJump.humanoid.FloorMaterial
                         ~= Enum.Material.Air
                     or state
                         == Enum.HumanoidStateType.Landed
@@ -16415,8 +16416,8 @@ function mainJump.createSensors(char)
                         == Enum.HumanoidStateType.RunningNoPhysics
 
                 if grounded then
-                    mainJump.lookTriggeredThisAir = false
-                    mainJump.lookAutoJumpCycle = false
+                    __UI.__L.mainJump.lookTriggeredThisAir = false
+                    __UI.__L.mainJump.lookAutoJumpCycle = false
                     return
                 end
 
@@ -16433,51 +16434,51 @@ function mainJump.createSensors(char)
                 end
 
                 --// One LOOK activation per airborne phase.
-                if not mainJump.lookTriggeredThisAir
-                    and not mainJump.lookActive
-                    and mainJump.lookScannerSeesSurface()
+                if not __UI.__L.mainJump.lookTriggeredThisAir
+                    and not __UI.__L.mainJump.lookActive
+                    and __UI.__L.mainJump.lookScannerSeesSurface()
                 then
-                    mainJump.lookTriggeredThisAir = true
-                    mainJump.lookAutoJumpCycle = true
-                    mainJump.beginLook()
+                    __UI.__L.mainJump.lookTriggeredThisAir = true
+                    __UI.__L.mainJump.lookAutoJumpCycle = true
+                    __UI.__L.mainJump.beginLook()
                 end
             end
         )
 
 end
 genv.DEADEYE_MAIN_RUNNING = true
-mainPage =
+__UI.__L.mainPage =
     Instance.new("ScrollingFrame")
-mainPage.Name =
+__UI.__L.mainPage.Name =
     "MainPage"
-mainPage.Size =
+__UI.__L.mainPage.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-mainPage.Position =
+__UI.__L.mainPage.Position =
     UDim2.new(
         0,
         82,
         0,
         48
     )
-mainPage.BackgroundColor3 =
+__UI.__L.mainPage.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainPage.BorderSizePixel = 0
-mainPage.ScrollBarThickness = 6
-mainPage.AutomaticCanvasSize =
+__UI.__L.mainPage.BorderSizePixel = 0
+__UI.__L.mainPage.ScrollBarThickness = 6
+__UI.__L.mainPage.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-mainPage.ScrollingDirection =
+__UI.__L.mainPage.ScrollingDirection =
     Enum.ScrollingDirection.Y
-mainPage.Visible = false
-mainPage.Parent = Main
+__UI.__L.mainPage.Visible = false
+__UI.__L.mainPage.Parent = __UI.__L.Main
 __UI.mainCorner =
     Instance.new("UICorner")
 __UI.mainCorner.CornerRadius =
@@ -16486,31 +16487,31 @@ __UI.mainCorner.CornerRadius =
         9
     )
 __UI.mainCorner.Parent =
-    mainPage
-local mainPadding =
+    __UI.__L.mainPage
+__UI.__L.mainPadding =
     Instance.new("UIPadding")
-mainPadding.PaddingTop =
+__UI.__L.mainPadding.PaddingTop =
     UDim.new(
         0,
         8
     )
-mainPadding.PaddingBottom =
+__UI.__L.mainPadding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-mainPadding.PaddingLeft =
+__UI.__L.mainPadding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-mainPadding.PaddingRight =
+__UI.__L.mainPadding.PaddingRight =
     UDim.new(
         0,
         8
     )
-mainPadding.Parent =
-    mainPage
+__UI.__L.mainPadding.Parent =
+    __UI.__L.mainPage
 __UI.mainLayout =
     Instance.new("UIListLayout")
 __UI.mainLayout.Padding =
@@ -16521,8 +16522,8 @@ __UI.mainLayout.Padding =
 __UI.mainLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
 __UI.mainLayout.Parent =
-    mainPage
-local function mainRow(labelText, order)
+    __UI.__L.mainPage
+__UI.__L.mainRow = function(labelText, order)
     local row =
         Instance.new("Frame")
     row.Size =
@@ -16540,7 +16541,7 @@ local function mainRow(labelText, order)
         )
     row.BorderSizePixel = 0
     row.LayoutOrder = order
-    row.Parent = mainPage
+    row.Parent = __UI.__L.mainPage
 
     local rowStroke =
         Instance.new("UIStroke")
@@ -16563,75 +16564,75 @@ local function mainRow(labelText, order)
     return row
 end
 __UI.autoRow =
-    mainRow(
+    __UI.__L.mainRow(
         "AUTOJUMP",
         1
     )
-local autoLabel =
+__UI.__L.autoLabel =
     Instance.new("TextLabel")
-autoLabel.Size =
+__UI.__L.autoLabel.Size =
     UDim2.new(
         0.7,
         0,
         1,
         0
     )
-autoLabel.Position =
+__UI.__L.autoLabel.Position =
     UDim2.new(
         0,
         10,
         0,
         0
     )
-autoLabel.BackgroundTransparency = 1
-autoLabel.Text = "AUTOJUMP"
-autoLabel.TextSize = 11
-autoLabel.Font = Enum.Font.GothamBold
-autoLabel.TextColor3 =
+__UI.__L.autoLabel.BackgroundTransparency = 1
+__UI.__L.autoLabel.Text = "AUTOJUMP"
+__UI.__L.autoLabel.TextSize = 11
+__UI.__L.autoLabel.Font = Enum.Font.GothamBold
+__UI.__L.autoLabel.TextColor3 =
     Color3.fromRGB(
         215,
         215,
         215
     )
-autoLabel.TextXAlignment =
+__UI.__L.autoLabel.TextXAlignment =
     Enum.TextXAlignment.Left
-autoLabel.Parent = __UI.autoRow
+__UI.__L.autoLabel.Parent = __UI.autoRow
 
-mainJump.hotkeyBox =
+__UI.__L.mainJump.hotkeyBox =
     Instance.new("TextButton")
-mainJump.hotkeyBox.Size =
+__UI.__L.mainJump.hotkeyBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.hotkeyBox.Position =
+__UI.__L.mainJump.hotkeyBox.Position =
     UDim2.new(
         1,
         -235,
         0.5,
         -14
     )
-mainJump.hotkeyBox.BackgroundColor3 =
+__UI.__L.mainJump.hotkeyBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.hotkeyBox.BorderSizePixel = 0
-mainJump.hotkeyBox.Text =
-    mainJump.hotkeyName
-mainJump.hotkeyBox.TextSize = 10
-mainJump.hotkeyBox.Font =
+__UI.__L.mainJump.hotkeyBox.BorderSizePixel = 0
+__UI.__L.mainJump.hotkeyBox.Text =
+    __UI.__L.mainJump.hotkeyName
+__UI.__L.mainJump.hotkeyBox.TextSize = 10
+__UI.__L.mainJump.hotkeyBox.Font =
     Enum.Font.GothamBold
-mainJump.hotkeyBox.TextColor3 =
+__UI.__L.mainJump.hotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.hotkeyBox.Parent =
+__UI.__L.mainJump.hotkeyBox.Parent =
     __UI.autoRow
 
 __UI.autoHotkeyCorner =
@@ -16642,56 +16643,56 @@ __UI.autoHotkeyCorner.CornerRadius =
         5
     )
 __UI.autoHotkeyCorner.Parent =
-    mainJump.hotkeyBox
+    __UI.__L.mainJump.hotkeyBox
 
-mainConnect(
-    mainJump.hotkeyBox.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.hotkeyBox.MouseButton1Click:Connect(
         function()
-            mainJump.startCapture(
+            __UI.__L.mainJump.startCapture(
                 "jump"
             )
         end
     )
 )
 
-mainJump.delayBox =
+__UI.__L.mainJump.delayBox =
     Instance.new("TextBox")
-mainJump.delayBox.Size =
+__UI.__L.mainJump.delayBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.delayBox.Position =
+__UI.__L.mainJump.delayBox.Position =
     UDim2.new(
         1,
         -155,
         0.5,
         -14
     )
-mainJump.delayBox.BackgroundColor3 =
+__UI.__L.mainJump.delayBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.delayBox.BorderSizePixel = 0
-mainJump.delayBox.ClearTextOnFocus = false
-mainJump.delayBox.Text =
+__UI.__L.mainJump.delayBox.BorderSizePixel = 0
+__UI.__L.mainJump.delayBox.ClearTextOnFocus = false
+__UI.__L.mainJump.delayBox.Text =
     tostring(
-        mainJump.jumpDelay
+        __UI.__L.mainJump.jumpDelay
     )
-mainJump.delayBox.TextSize = 10
-mainJump.delayBox.Font =
+__UI.__L.mainJump.delayBox.TextSize = 10
+__UI.__L.mainJump.delayBox.Font =
     Enum.Font.GothamBold
-mainJump.delayBox.TextColor3 =
+__UI.__L.mainJump.delayBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.delayBox.Parent =
+__UI.__L.mainJump.delayBox.Parent =
     __UI.autoRow
 
 __UI.autoDelayCorner =
@@ -16702,51 +16703,51 @@ __UI.autoDelayCorner.CornerRadius =
         5
     )
 __UI.autoDelayCorner.Parent =
-    mainJump.delayBox
+    __UI.__L.mainJump.delayBox
 
-mainConnect(
-    mainJump.delayBox.FocusLost:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.delayBox.FocusLost:Connect(
         function(enterPressed)
             if enterPressed then
-                mainJump.setDelay(
-                    mainJump.delayBox.Text
+                __UI.__L.mainJump.setDelay(
+                    __UI.__L.mainJump.delayBox.Text
                 )
             else
-                mainJump.delayBox.Text =
+                __UI.__L.mainJump.delayBox.Text =
                     tostring(
-                        mainJump.jumpDelay
+                        __UI.__L.mainJump.jumpDelay
                     )
             end
         end
     )
 )
 
-mainJump.toggle =
+__UI.__L.mainJump.toggle =
     Instance.new("TextButton")
-mainJump.toggle.Size =
+__UI.__L.mainJump.toggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.toggle.Position =
+__UI.__L.mainJump.toggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.toggle.BorderSizePixel = 0
-mainJump.toggle.TextSize = 10
-mainJump.toggle.Font = Enum.Font.GothamBold
-mainJump.toggle.TextColor3 =
+__UI.__L.mainJump.toggle.BorderSizePixel = 0
+__UI.__L.mainJump.toggle.TextSize = 10
+__UI.__L.mainJump.toggle.Font = Enum.Font.GothamBold
+__UI.__L.mainJump.toggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.toggle.Parent =
+__UI.__L.mainJump.toggle.Parent =
     __UI.autoRow
 __UI.toggleCorner =
     Instance.new("UICorner")
@@ -16756,12 +16757,12 @@ __UI.toggleCorner.CornerRadius =
         5
     )
 __UI.toggleCorner.Parent =
-    mainJump.toggle
-mainConnect(
-    mainJump.toggle.MouseButton1Click:Connect(
+    __UI.__L.mainJump.toggle
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.toggle.MouseButton1Click:Connect(
         function()
-            mainJump.setEnabled(
-                not mainJump.enabled
+            __UI.__L.mainJump.setEnabled(
+                not __UI.__L.mainJump.enabled
             )
         end
     )
@@ -16775,24 +16776,24 @@ mainConnect(
 --// RAGE = existing sensor-based DeadEye AutoJump.
 --// =========================================================
 __UI.autoJumpModeRow =
-    mainRow(
+    __UI.__L.mainRow(
         "AUTO JUMP MODE",
         2
     )
 
-local autoJumpModeLabel =
-    autoLabel:Clone()
+__UI.__L.autoJumpModeLabel =
+    __UI.__L.autoLabel:Clone()
 
-autoJumpModeLabel.Text =
+__UI.__L.autoJumpModeLabel.Text =
     "AUTO JUMP MODE"
 
-autoJumpModeLabel.Parent =
+__UI.__L.autoJumpModeLabel.Parent =
     __UI.autoJumpModeRow
 
-mainJump.autoJumpModeButton =
+__UI.__L.mainJump.autoJumpModeButton =
     Instance.new("TextButton")
 
-mainJump.autoJumpModeButton.Size =
+__UI.__L.mainJump.autoJumpModeButton.Size =
     UDim2.new(
         0,
         65,
@@ -16800,7 +16801,7 @@ mainJump.autoJumpModeButton.Size =
         28
     )
 
-mainJump.autoJumpModeButton.Position =
+__UI.__L.mainJump.autoJumpModeButton.Position =
     UDim2.new(
         1,
         -75,
@@ -16808,44 +16809,44 @@ mainJump.autoJumpModeButton.Position =
         -14
     )
 
-mainJump.autoJumpModeButton.BorderSizePixel =
+__UI.__L.mainJump.autoJumpModeButton.BorderSizePixel =
     0
 
-mainJump.autoJumpModeButton.TextSize =
+__UI.__L.mainJump.autoJumpModeButton.TextSize =
     10
 
-mainJump.autoJumpModeButton.Font =
+__UI.__L.mainJump.autoJumpModeButton.Font =
     Enum.Font.GothamBold
 
-mainJump.autoJumpModeButton.TextColor3 =
+__UI.__L.mainJump.autoJumpModeButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
 
-mainJump.autoJumpModeButton.Parent =
+__UI.__L.mainJump.autoJumpModeButton.Parent =
     __UI.autoJumpModeRow
 
-local autoJumpModeCorner =
+__UI.__L.autoJumpModeCorner =
     Instance.new("UICorner")
 
-autoJumpModeCorner.CornerRadius =
+__UI.__L.autoJumpModeCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
 
-autoJumpModeCorner.Parent =
-    mainJump.autoJumpModeButton
+__UI.__L.autoJumpModeCorner.Parent =
+    __UI.__L.mainJump.autoJumpModeButton
 
-mainJump.autoJumpModePicker =
+__UI.__L.mainJump.autoJumpModePicker =
     Instance.new("Frame")
 
-mainJump.autoJumpModePicker.Name =
+__UI.__L.mainJump.autoJumpModePicker.Name =
     "AutoJumpModePicker"
 
-mainJump.autoJumpModePicker.Size =
+__UI.__L.mainJump.autoJumpModePicker.Size =
     UDim2.new(
         0,
         88,
@@ -16853,7 +16854,7 @@ mainJump.autoJumpModePicker.Size =
         94
     )
 
-mainJump.autoJumpModePicker.Position =
+__UI.__L.mainJump.autoJumpModePicker.Position =
     UDim2.new(
         1,
         -102,
@@ -16861,76 +16862,76 @@ mainJump.autoJumpModePicker.Position =
         5
     )
 
-mainJump.autoJumpModePicker.BackgroundColor3 =
+__UI.__L.mainJump.autoJumpModePicker.BackgroundColor3 =
     Color3.fromRGB(
         31,
         35,
         42
     )
 
-mainJump.autoJumpModePicker.BackgroundTransparency =
+__UI.__L.mainJump.autoJumpModePicker.BackgroundTransparency =
     0
 
-mainJump.autoJumpModePicker.BackgroundTransparency =
+__UI.__L.mainJump.autoJumpModePicker.BackgroundTransparency =
     0
 
-mainJump.autoJumpModePicker.ClipsDescendants =
+__UI.__L.mainJump.autoJumpModePicker.ClipsDescendants =
     false
 
-mainJump.autoJumpModePicker.Active =
+__UI.__L.mainJump.autoJumpModePicker.Active =
     true
 
-mainJump.autoJumpModePicker.BorderSizePixel =
+__UI.__L.mainJump.autoJumpModePicker.BorderSizePixel =
     0
 
-mainJump.autoJumpModePicker.ZIndex =
+__UI.__L.mainJump.autoJumpModePicker.ZIndex =
     80
 
-mainJump.autoJumpModePicker.Visible =
+__UI.__L.mainJump.autoJumpModePicker.Visible =
     false
 
-mainJump.autoJumpModePicker.Parent =
-    Main
+__UI.__L.mainJump.autoJumpModePicker.Parent =
+    __UI.__L.Main
 
-local autoJumpModePickerCorner =
+__UI.__L.autoJumpModePickerCorner =
     Instance.new("UICorner")
 
-autoJumpModePickerCorner.CornerRadius =
+__UI.__L.autoJumpModePickerCorner.CornerRadius =
     UDim.new(
         0,
         7
     )
 
-autoJumpModePickerCorner.Parent =
-    mainJump.autoJumpModePicker
+__UI.__L.autoJumpModePickerCorner.Parent =
+    __UI.__L.mainJump.autoJumpModePicker
 
 --// Reuse the existing local register for the picker outline.
-autoJumpModePickerCorner =
+__UI.__L.autoJumpModePickerCorner =
     Instance.new("UIStroke")
 
-autoJumpModePickerCorner.Color =
+__UI.__L.autoJumpModePickerCorner.Color =
     Color3.fromRGB(
         20,
         22,
         26
     )
 
-autoJumpModePickerCorner.Thickness =
+__UI.__L.autoJumpModePickerCorner.Thickness =
     1
 
-autoJumpModePickerCorner.Transparency =
+__UI.__L.autoJumpModePickerCorner.Transparency =
     0
 
-autoJumpModePickerCorner.ApplyStrokeMode =
+__UI.__L.autoJumpModePickerCorner.ApplyStrokeMode =
     Enum.ApplyStrokeMode.Border
 
-autoJumpModePickerCorner.Parent =
-    mainJump.autoJumpModePicker
+__UI.__L.autoJumpModePickerCorner.Parent =
+    __UI.__L.mainJump.autoJumpModePicker
 
-local autoJumpModeScroll =
+__UI.__L.autoJumpModeScroll =
     Instance.new("ScrollingFrame")
 
-autoJumpModeScroll.Size =
+__UI.__L.autoJumpModeScroll.Size =
     UDim2.new(
         1,
         -12,
@@ -16938,7 +16939,7 @@ autoJumpModeScroll.Size =
         -12
     )
 
-autoJumpModeScroll.Position =
+__UI.__L.autoJumpModeScroll.Position =
     UDim2.new(
         0,
         6,
@@ -16946,25 +16947,25 @@ autoJumpModeScroll.Position =
         6
     )
 
-autoJumpModeScroll.BackgroundTransparency =
+__UI.__L.autoJumpModeScroll.BackgroundTransparency =
     1
 
-autoJumpModeScroll.BorderSizePixel =
+__UI.__L.autoJumpModeScroll.BorderSizePixel =
     0
 
-autoJumpModeScroll.ScrollBarThickness =
+__UI.__L.autoJumpModeScroll.ScrollBarThickness =
     4
 
-autoJumpModeScroll.Active =
+__UI.__L.autoJumpModeScroll.Active =
     true
 
-autoJumpModeScroll.ScrollingDirection =
+__UI.__L.autoJumpModeScroll.ScrollingDirection =
     Enum.ScrollingDirection.Y
 
-autoJumpModeScroll.AutomaticCanvasSize =
+__UI.__L.autoJumpModeScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
 
-autoJumpModeScroll.CanvasSize =
+__UI.__L.autoJumpModeScroll.CanvasSize =
     UDim2.new(
         0,
         0,
@@ -16972,49 +16973,49 @@ autoJumpModeScroll.CanvasSize =
         0
     )
 
-autoJumpModeScroll.ZIndex =
+__UI.__L.autoJumpModeScroll.ZIndex =
     81
 
-autoJumpModeScroll.Parent =
-    mainJump.autoJumpModePicker
+__UI.__L.autoJumpModeScroll.Parent =
+    __UI.__L.mainJump.autoJumpModePicker
 
-local autoJumpModeLayout =
+__UI.__L.autoJumpModeLayout =
     Instance.new("UIListLayout")
 
-autoJumpModeLayout.Padding =
+__UI.__L.autoJumpModeLayout.Padding =
     UDim.new(
         0,
         12
     )
 
-autoJumpModeLayout.HorizontalAlignment =
+__UI.__L.autoJumpModeLayout.HorizontalAlignment =
     Enum.HorizontalAlignment.Center
 
-autoJumpModeLayout.SortOrder =
+__UI.__L.autoJumpModeLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
 
-autoJumpModeLayout.Parent =
-    autoJumpModeScroll
+__UI.__L.autoJumpModeLayout.Parent =
+    __UI.__L.autoJumpModeScroll
 
-local autoJumpModePadding =
+__UI.__L.autoJumpModePadding =
     Instance.new("UIPadding")
 
-autoJumpModePadding.PaddingTop =
+__UI.__L.autoJumpModePadding.PaddingTop =
     UDim.new(
         0,
         6
     )
 
-autoJumpModePadding.PaddingBottom =
+__UI.__L.autoJumpModePadding.PaddingBottom =
     UDim.new(
         0,
         6
     )
 
-autoJumpModePadding.Parent =
-    autoJumpModeScroll
+__UI.__L.autoJumpModePadding.Parent =
+    __UI.__L.autoJumpModeScroll
 
-local function createAutoJumpModeOption(
+__UI.__L.createAutoJumpModeOption = function(
     mode,
     text
 )
@@ -17022,7 +17023,7 @@ local function createAutoJumpModeOption(
     --// buttons use the EXACT same visual base: size, background,
     --// transparency, font, text sizing and corner radius.
     local button =
-        mainJump.autoJumpModeButton:Clone()
+        __UI.__L.mainJump.autoJumpModeButton:Clone()
 
     button.Name =
         "AutoJumpMode_" .. mode
@@ -17034,10 +17035,10 @@ local function createAutoJumpModeOption(
         )
 
     button.Size =
-        mainJump.autoJumpModeButton.Size
+        __UI.__L.mainJump.autoJumpModeButton.Size
 
     button.AnchorPoint =
-        mainJump.autoJumpModeButton.AnchorPoint
+        __UI.__L.mainJump.autoJumpModeButton.AnchorPoint
 
     button.Text =
         text
@@ -17066,7 +17067,7 @@ local function createAutoJumpModeOption(
         82
 
     buttonHolder.Parent =
-        autoJumpModeScroll
+        __UI.__L.autoJumpModeScroll
 
     button.ZIndex =
         83
@@ -17074,14 +17075,14 @@ local function createAutoJumpModeOption(
     button.Parent =
         buttonHolder
 
-    mainConnect(
+    __UI.__L.mainConnect(
         button.MouseButton1Click:Connect(
             function()
-                mainJump.setAutoJumpMode(
+                __UI.__L.mainJump.setAutoJumpMode(
                     mode
                 )
 
-                mainJump.autoJumpModePicker.Visible =
+                __UI.__L.mainJump.autoJumpModePicker.Visible =
                     false
 
                 pcall(function()
@@ -17096,33 +17097,33 @@ local function createAutoJumpModeOption(
     return button
 end
 
-createAutoJumpModeOption(
+__UI.__L.createAutoJumpModeOption(
     "legit",
     "LEGIT"
 )
 
-createAutoJumpModeOption(
+__UI.__L.createAutoJumpModeOption(
     "rage",
     "RAGE"
 )
 
-local function positionAutoJumpModePicker()
+__UI.__L.positionAutoJumpModePicker = function()
     local picker =
-        mainJump.autoJumpModePicker
+        __UI.__L.mainJump.autoJumpModePicker
 
     local button =
-        mainJump.autoJumpModeButton
+        __UI.__L.mainJump.autoJumpModeButton
 
     if not picker
         or not button
         or not button.Parent
-        or not Main
+        or not __UI.__L.Main
     then
         return
     end
 
     local mainPosition =
-        Main.AbsolutePosition
+        __UI.__L.Main.AbsolutePosition
 
     local buttonPosition =
         button.AbsolutePosition
@@ -17149,11 +17150,11 @@ local function positionAutoJumpModePicker()
         )
 end
 
-mainConnect(
-    mainJump.autoJumpModeButton.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.autoJumpModeButton.MouseButton1Click:Connect(
         function()
             local picker =
-                mainJump.autoJumpModePicker
+                __UI.__L.mainJump.autoJumpModePicker
 
             if not picker then
                 return
@@ -17169,13 +17170,13 @@ mainConnect(
             end)
 
             if picker.Visible then
-                positionAutoJumpModePicker()
+                __UI.__L.positionAutoJumpModePicker()
             end
         end
     )
 )
 
-mainConnect(
+__UI.__L.mainConnect(
     UserInputService.InputBegan:Connect(
         function(input, gameProcessed)
             if gameProcessed then
@@ -17191,10 +17192,10 @@ mainConnect(
             end
 
             local picker =
-                mainJump.autoJumpModePicker
+                __UI.__L.mainJump.autoJumpModePicker
 
             local button =
-                mainJump.autoJumpModeButton
+                __UI.__L.mainJump.autoJumpModeButton
 
             if not picker
                 or not picker.Visible
@@ -17245,43 +17246,43 @@ mainConnect(
 )
 
 __UI.lookRow =
-    mainRow(
+    __UI.__L.mainRow(
         "LOOK",
         3
     )
-local lookLabel =
-    autoLabel:Clone()
-lookLabel.Text =
+__UI.__L.lookLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.lookLabel.Text =
     "LOOK"
-lookLabel.Parent =
+__UI.__L.lookLabel.Parent =
     __UI.lookRow
-mainJump.lookToggle =
+__UI.__L.mainJump.lookToggle =
     Instance.new("TextButton")
-mainJump.lookToggle.Size =
+__UI.__L.mainJump.lookToggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.lookToggle.Position =
+__UI.__L.mainJump.lookToggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.lookToggle.BorderSizePixel = 0
-mainJump.lookToggle.TextSize = 10
-mainJump.lookToggle.Font =
+__UI.__L.mainJump.lookToggle.BorderSizePixel = 0
+__UI.__L.mainJump.lookToggle.TextSize = 10
+__UI.__L.mainJump.lookToggle.Font =
     Enum.Font.GothamBold
-mainJump.lookToggle.TextColor3 =
+__UI.__L.mainJump.lookToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.lookToggle.Parent =
+__UI.__L.mainJump.lookToggle.Parent =
     __UI.lookRow
 __UI.lookToggleCorner =
     Instance.new("UICorner")
@@ -17291,56 +17292,56 @@ __UI.lookToggleCorner.CornerRadius =
         5
     )
 __UI.lookToggleCorner.Parent =
-    mainJump.lookToggle
-mainConnect(
-    mainJump.lookToggle.MouseButton1Click:Connect(
+    __UI.__L.mainJump.lookToggle
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.lookToggle.MouseButton1Click:Connect(
         function()
-            mainJump.setLookEnabled(
-                not mainJump.lookEnabled
+            __UI.__L.mainJump.setLookEnabled(
+                not __UI.__L.mainJump.lookEnabled
             )
         end
     )
 )
 
 __UI.rageLookRow =
-    mainRow(
+    __UI.__L.mainRow(
         "RAGE LOOK",
         4
     )
-local rageLookLabel =
-    autoLabel:Clone()
-rageLookLabel.Text =
+__UI.__L.rageLookLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.rageLookLabel.Text =
     "RAGE LOOK"
-rageLookLabel.Parent =
+__UI.__L.rageLookLabel.Parent =
     __UI.rageLookRow
 
-mainJump.rageLookToggle =
+__UI.__L.mainJump.rageLookToggle =
     Instance.new("TextButton")
-mainJump.rageLookToggle.Size =
+__UI.__L.mainJump.rageLookToggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.rageLookToggle.Position =
+__UI.__L.mainJump.rageLookToggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.rageLookToggle.BorderSizePixel = 0
-mainJump.rageLookToggle.TextSize = 10
-mainJump.rageLookToggle.Font =
+__UI.__L.mainJump.rageLookToggle.BorderSizePixel = 0
+__UI.__L.mainJump.rageLookToggle.TextSize = 10
+__UI.__L.mainJump.rageLookToggle.Font =
     Enum.Font.GothamBold
-mainJump.rageLookToggle.TextColor3 =
+__UI.__L.mainJump.rageLookToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.rageLookToggle.Parent =
+__UI.__L.mainJump.rageLookToggle.Parent =
     __UI.rageLookRow
 
 __UI.rageLookToggleCorner =
@@ -17351,116 +17352,116 @@ __UI.rageLookToggleCorner.CornerRadius =
         5
     )
 __UI.rageLookToggleCorner.Parent =
-    mainJump.rageLookToggle
+    __UI.__L.mainJump.rageLookToggle
 
-mainConnect(
-    mainJump.rageLookToggle.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.rageLookToggle.MouseButton1Click:Connect(
         function()
-            mainJump.setRageLookEnabled(
-                not mainJump.rageLookEnabled
+            __UI.__L.mainJump.setRageLookEnabled(
+                not __UI.__L.mainJump.rageLookEnabled
             )
         end
     )
 )
 
 __UI.airTurnRow =
-    mainRow(
+    __UI.__L.mainRow(
         "AIR TURN",
         5
     )
-local airTurnLabel =
-    autoLabel:Clone()
-airTurnLabel.Text =
+__UI.__L.airTurnLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.airTurnLabel.Text =
     "AIR TURN"
-airTurnLabel.Parent =
+__UI.__L.airTurnLabel.Parent =
     __UI.airTurnRow
 
-mainJump.airTurnHotkeyBox =
+__UI.__L.mainJump.airTurnHotkeyBox =
     Instance.new("TextButton")
-mainJump.airTurnHotkeyBox.Size =
+__UI.__L.mainJump.airTurnHotkeyBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.airTurnHotkeyBox.Position =
+__UI.__L.mainJump.airTurnHotkeyBox.Position =
     UDim2.new(
         1,
         -155,
         0.5,
         -14
     )
-mainJump.airTurnHotkeyBox.BackgroundColor3 =
+__UI.__L.mainJump.airTurnHotkeyBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.airTurnHotkeyBox.BorderSizePixel = 0
-mainJump.airTurnHotkeyBox.Text =
-    mainJump.airTurnHotkeyName
-mainJump.airTurnHotkeyBox.TextSize = 10
-mainJump.airTurnHotkeyBox.Font =
+__UI.__L.mainJump.airTurnHotkeyBox.BorderSizePixel = 0
+__UI.__L.mainJump.airTurnHotkeyBox.Text =
+    __UI.__L.mainJump.airTurnHotkeyName
+__UI.__L.mainJump.airTurnHotkeyBox.TextSize = 10
+__UI.__L.mainJump.airTurnHotkeyBox.Font =
     Enum.Font.GothamBold
-mainJump.airTurnHotkeyBox.TextColor3 =
+__UI.__L.mainJump.airTurnHotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.airTurnHotkeyBox.Parent =
+__UI.__L.mainJump.airTurnHotkeyBox.Parent =
     __UI.airTurnRow
 
-local airTurnHotkeyCorner =
+__UI.__L.airTurnHotkeyCorner =
     Instance.new("UICorner")
-airTurnHotkeyCorner.CornerRadius =
+__UI.__L.airTurnHotkeyCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-airTurnHotkeyCorner.Parent =
-    mainJump.airTurnHotkeyBox
+__UI.__L.airTurnHotkeyCorner.Parent =
+    __UI.__L.mainJump.airTurnHotkeyBox
 
-mainConnect(
-    mainJump.airTurnHotkeyBox.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.airTurnHotkeyBox.MouseButton1Click:Connect(
         function()
-            mainJump.startCapture(
+            __UI.__L.mainJump.startCapture(
                 "airTurn"
             )
         end
     )
 )
 
-mainJump.airTurnToggle =
+__UI.__L.mainJump.airTurnToggle =
     Instance.new("TextButton")
-mainJump.airTurnToggle.Size =
+__UI.__L.mainJump.airTurnToggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.airTurnToggle.Position =
+__UI.__L.mainJump.airTurnToggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.airTurnToggle.BorderSizePixel =
+__UI.__L.mainJump.airTurnToggle.BorderSizePixel =
     0
-mainJump.airTurnToggle.TextSize =
+__UI.__L.mainJump.airTurnToggle.TextSize =
     10
-mainJump.airTurnToggle.Font =
+__UI.__L.mainJump.airTurnToggle.Font =
     Enum.Font.GothamBold
-mainJump.airTurnToggle.TextColor3 =
+__UI.__L.mainJump.airTurnToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.airTurnToggle.Parent =
+__UI.__L.mainJump.airTurnToggle.Parent =
     __UI.airTurnRow
 __UI.airTurnToggleCorner =
     Instance.new("UICorner")
@@ -17470,118 +17471,118 @@ __UI.airTurnToggleCorner.CornerRadius =
         5
     )
 __UI.airTurnToggleCorner.Parent =
-    mainJump.airTurnToggle
-mainConnect(
-    mainJump.airTurnToggle.MouseButton1Click:Connect(
+    __UI.__L.mainJump.airTurnToggle
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.airTurnToggle.MouseButton1Click:Connect(
         function()
-            mainJump.setAirTurnEnabled(
-                not mainJump.airTurnEnabled
+            __UI.__L.mainJump.setAirTurnEnabled(
+                not __UI.__L.mainJump.airTurnEnabled
             )
         end
     )
 )
 
 __UI.smartAirTurnRow =
-    mainRow(
+    __UI.__L.mainRow(
         "SMART AIR TURN",
         6
     )
 
-local smartAirTurnLabel =
-    autoLabel:Clone()
-smartAirTurnLabel.Text =
+__UI.__L.smartAirTurnLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.smartAirTurnLabel.Text =
     "SMART AIR TURN"
-smartAirTurnLabel.Parent =
+__UI.__L.smartAirTurnLabel.Parent =
     __UI.smartAirTurnRow
 
-mainJump.smartAirTurnToggle =
+__UI.__L.mainJump.smartAirTurnToggle =
     Instance.new("TextButton")
-mainJump.smartAirTurnToggle.Size =
+__UI.__L.mainJump.smartAirTurnToggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.smartAirTurnToggle.Position =
+__UI.__L.mainJump.smartAirTurnToggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.smartAirTurnToggle.BorderSizePixel = 0
-mainJump.smartAirTurnToggle.TextSize = 10
-mainJump.smartAirTurnToggle.Font =
+__UI.__L.mainJump.smartAirTurnToggle.BorderSizePixel = 0
+__UI.__L.mainJump.smartAirTurnToggle.TextSize = 10
+__UI.__L.mainJump.smartAirTurnToggle.Font =
     Enum.Font.GothamBold
-mainJump.smartAirTurnToggle.TextColor3 =
+__UI.__L.mainJump.smartAirTurnToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.smartAirTurnToggle.Parent =
+__UI.__L.mainJump.smartAirTurnToggle.Parent =
     __UI.smartAirTurnRow
 
-local smartAirTurnToggleCorner =
+__UI.__L.smartAirTurnToggleCorner =
     Instance.new("UICorner")
-smartAirTurnToggleCorner.CornerRadius =
+__UI.__L.smartAirTurnToggleCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-smartAirTurnToggleCorner.Parent =
-    mainJump.smartAirTurnToggle
+__UI.__L.smartAirTurnToggleCorner.Parent =
+    __UI.__L.mainJump.smartAirTurnToggle
 
-mainConnect(
-    mainJump.smartAirTurnToggle.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.smartAirTurnToggle.MouseButton1Click:Connect(
         function()
-            mainJump.setSmartAirTurnEnabled(
-                not mainJump.smartAirTurnEnabled
+            __UI.__L.mainJump.setSmartAirTurnEnabled(
+                not __UI.__L.mainJump.smartAirTurnEnabled
             )
         end
     )
 )
 
 __UI.airTurnSpeedRow =
-    mainRow(
+    __UI.__L.mainRow(
         "TURN SPEED",
         7
     )
-local airTurnSpeedLabel =
-    autoLabel:Clone()
-airTurnSpeedLabel.Text =
+__UI.__L.airTurnSpeedLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.airTurnSpeedLabel.Text =
     "TURN SPEED"
-airTurnSpeedLabel.Parent =
+__UI.__L.airTurnSpeedLabel.Parent =
     __UI.airTurnSpeedRow
 
-mainJump.airTurnSliderTrack =
+__UI.__L.mainJump.airTurnSliderTrack =
     Instance.new("Frame")
-mainJump.airTurnSliderTrack.Size =
+__UI.__L.mainJump.airTurnSliderTrack.Size =
     UDim2.new(
         1,
         -190,
         0,
         6
     )
-mainJump.airTurnSliderTrack.Position =
+__UI.__L.mainJump.airTurnSliderTrack.Position =
     UDim2.new(
         0,
         105,
         0.5,
         -3
     )
-mainJump.airTurnSliderTrack.BackgroundColor3 =
+__UI.__L.mainJump.airTurnSliderTrack.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.airTurnSliderTrack.BorderSizePixel =
+__UI.__L.mainJump.airTurnSliderTrack.BorderSizePixel =
     0
-mainJump.airTurnSliderTrack.Active =
+__UI.__L.mainJump.airTurnSliderTrack.Active =
     true
-mainJump.airTurnSliderTrack.Parent =
+__UI.__L.mainJump.airTurnSliderTrack.Parent =
     __UI.airTurnSpeedRow
 
 __UI.airTurnSliderTrackCorner =
@@ -17592,27 +17593,27 @@ __UI.airTurnSliderTrackCorner.CornerRadius =
         0
     )
 __UI.airTurnSliderTrackCorner.Parent =
-    mainJump.airTurnSliderTrack
+    __UI.__L.mainJump.airTurnSliderTrack
 
-mainJump.airTurnSliderFill =
+__UI.__L.mainJump.airTurnSliderFill =
     Instance.new("Frame")
-mainJump.airTurnSliderFill.Size =
+__UI.__L.mainJump.airTurnSliderFill.Size =
     UDim2.new(
         0,
         0,
         1,
         0
     )
-mainJump.airTurnSliderFill.BackgroundColor3 =
+__UI.__L.mainJump.airTurnSliderFill.BackgroundColor3 =
     Color3.fromRGB(
         82,
         88,
         100
     )
-mainJump.airTurnSliderFill.BorderSizePixel =
+__UI.__L.mainJump.airTurnSliderFill.BorderSizePixel =
     0
-mainJump.airTurnSliderFill.Parent =
-    mainJump.airTurnSliderTrack
+__UI.__L.mainJump.airTurnSliderFill.Parent =
+    __UI.__L.mainJump.airTurnSliderTrack
 
 __UI.airTurnSliderFillCorner =
     Instance.new("UICorner")
@@ -17622,32 +17623,32 @@ __UI.airTurnSliderFillCorner.CornerRadius =
         0
     )
 __UI.airTurnSliderFillCorner.Parent =
-    mainJump.airTurnSliderFill
+    __UI.__L.mainJump.airTurnSliderFill
 
-mainJump.airTurnSliderKnob =
+__UI.__L.mainJump.airTurnSliderKnob =
     Instance.new("Frame")
-mainJump.airTurnSliderKnob.Size =
+__UI.__L.mainJump.airTurnSliderKnob.Size =
     UDim2.new(
         0,
         10,
         0,
         10
     )
-mainJump.airTurnSliderKnob.AnchorPoint =
+__UI.__L.mainJump.airTurnSliderKnob.AnchorPoint =
     Vector2.new(
         0,
         0.5
     )
-mainJump.airTurnSliderKnob.BackgroundColor3 =
+__UI.__L.mainJump.airTurnSliderKnob.BackgroundColor3 =
     Color3.fromRGB(
         205,
         205,
         205
     )
-mainJump.airTurnSliderKnob.BorderSizePixel =
+__UI.__L.mainJump.airTurnSliderKnob.BorderSizePixel =
     0
-mainJump.airTurnSliderKnob.Parent =
-    mainJump.airTurnSliderTrack
+__UI.__L.mainJump.airTurnSliderKnob.Parent =
+    __UI.__L.mainJump.airTurnSliderTrack
 
 __UI.airTurnSliderKnobCorner =
     Instance.new("UICorner")
@@ -17657,53 +17658,53 @@ __UI.airTurnSliderKnobCorner.CornerRadius =
         0
     )
 __UI.airTurnSliderKnobCorner.Parent =
-    mainJump.airTurnSliderKnob
+    __UI.__L.mainJump.airTurnSliderKnob
 
-mainJump.airTurnSpeedValue =
+__UI.__L.mainJump.airTurnSpeedValue =
     Instance.new("TextLabel")
-mainJump.airTurnSpeedValue.Size =
+__UI.__L.mainJump.airTurnSpeedValue.Size =
     UDim2.new(
         0,
         62,
         0,
         28
     )
-mainJump.airTurnSpeedValue.Position =
+__UI.__L.mainJump.airTurnSpeedValue.Position =
     UDim2.new(
         1,
         -74,
         0.5,
         -14
     )
-mainJump.airTurnSpeedValue.BackgroundTransparency =
+__UI.__L.mainJump.airTurnSpeedValue.BackgroundTransparency =
     1
-mainJump.airTurnSpeedValue.TextSize =
+__UI.__L.mainJump.airTurnSpeedValue.TextSize =
     10
-mainJump.airTurnSpeedValue.Font =
+__UI.__L.mainJump.airTurnSpeedValue.Font =
     Enum.Font.GothamBold
-mainJump.airTurnSpeedValue.TextColor3 =
+__UI.__L.mainJump.airTurnSpeedValue.TextColor3 =
     Color3.fromRGB(
         215,
         215,
         215
     )
-mainJump.airTurnSpeedValue.TextXAlignment =
+__UI.__L.mainJump.airTurnSpeedValue.TextXAlignment =
     Enum.TextXAlignment.Right
-mainJump.airTurnSpeedValue.Parent =
+__UI.__L.mainJump.airTurnSpeedValue.Parent =
     __UI.airTurnSpeedRow
 
-local airTurnSliderDragging =
+__UI.__L.airTurnSliderDragging =
     false
 
-local function updateAirTurnSliderFromX(x)
-    if not mainJump.airTurnSliderTrack then
+__UI.__L.updateAirTurnSliderFromX = function(x)
+    if not __UI.__L.mainJump.airTurnSliderTrack then
         return
     end
 
     local position =
-        mainJump.airTurnSliderTrack.AbsolutePosition.X
+        __UI.__L.mainJump.airTurnSliderTrack.AbsolutePosition.X
     local size =
-        mainJump.airTurnSliderTrack.AbsoluteSize.X
+        __UI.__L.mainJump.airTurnSliderTrack.AbsoluteSize.X
 
     if size <= 0 then
         return
@@ -17718,29 +17719,29 @@ local function updateAirTurnSliderFromX(x)
         )
 
     local value =
-        AIR_TURN_MIN_SPEED
+        __UI.__L.AIR_TURN_MIN_SPEED
         + (
-            AIR_TURN_MAX_SPEED
-            - AIR_TURN_MIN_SPEED
+            __UI.__L.AIR_TURN_MAX_SPEED
+            - __UI.__L.AIR_TURN_MIN_SPEED
         )
         * alpha
 
-    mainJump.setAirTurnSpeed(
+    __UI.__L.mainJump.setAirTurnSpeed(
         value,
         false
     )
 end
 
-mainConnect(
-    mainJump.airTurnSliderTrack.InputBegan:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.airTurnSliderTrack.InputBegan:Connect(
         function(input)
             if input.UserInputType
                 == Enum.UserInputType.MouseButton1
             then
-                airTurnSliderDragging =
+                __UI.__L.airTurnSliderDragging =
                     true
 
-                updateAirTurnSliderFromX(
+                __UI.__L.updateAirTurnSliderFromX(
                     input.Position.X
                 )
             end
@@ -17748,17 +17749,17 @@ mainConnect(
     )
 )
 
-mainConnect(
+__UI.__L.mainConnect(
     UserInputService.InputChanged:Connect(
         function(input)
-            if not airTurnSliderDragging then
+            if not __UI.__L.airTurnSliderDragging then
                 return
             end
 
             if input.UserInputType
                 == Enum.UserInputType.MouseMovement
             then
-                updateAirTurnSliderFromX(
+                __UI.__L.updateAirTurnSliderFromX(
                     input.Position.X
                 )
             end
@@ -17766,191 +17767,191 @@ mainConnect(
     )
 )
 
-mainConnect(
+__UI.__L.mainConnect(
     UserInputService.InputEnded:Connect(
         function(input)
             if input.UserInputType
                 == Enum.UserInputType.MouseButton1
-                and airTurnSliderDragging
+                and __UI.__L.airTurnSliderDragging
             then
-                airTurnSliderDragging =
+                __UI.__L.airTurnSliderDragging =
                     false
-                mainJump.saveConfig()
+                __UI.__L.mainJump.saveConfig()
             end
         end
     )
 )
 
 __UI.crouchSpamRow =
-    mainRow(
+    __UI.__L.mainRow(
         "CROUCH SPAM",
         8
     )
 
-local crouchSpamLabel =
-    autoLabel:Clone()
-crouchSpamLabel.Text =
+__UI.__L.crouchSpamLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.crouchSpamLabel.Text =
     "CROUCH SPAM"
-crouchSpamLabel.Parent =
+__UI.__L.crouchSpamLabel.Parent =
     __UI.crouchSpamRow
 
-mainJump.crouchSpamHotkeyBox =
+__UI.__L.mainJump.crouchSpamHotkeyBox =
     Instance.new("TextButton")
-mainJump.crouchSpamHotkeyBox.Size =
+__UI.__L.mainJump.crouchSpamHotkeyBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.crouchSpamHotkeyBox.Position =
+__UI.__L.mainJump.crouchSpamHotkeyBox.Position =
     UDim2.new(
         1,
         -235,
         0.5,
         -14
     )
-mainJump.crouchSpamHotkeyBox.BackgroundColor3 =
+__UI.__L.mainJump.crouchSpamHotkeyBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.crouchSpamHotkeyBox.BorderSizePixel = 0
-mainJump.crouchSpamHotkeyBox.Text =
-    mainJump.crouchSpamHotkeyName
-mainJump.crouchSpamHotkeyBox.TextSize = 10
-mainJump.crouchSpamHotkeyBox.Font =
+__UI.__L.mainJump.crouchSpamHotkeyBox.BorderSizePixel = 0
+__UI.__L.mainJump.crouchSpamHotkeyBox.Text =
+    __UI.__L.mainJump.crouchSpamHotkeyName
+__UI.__L.mainJump.crouchSpamHotkeyBox.TextSize = 10
+__UI.__L.mainJump.crouchSpamHotkeyBox.Font =
     Enum.Font.GothamBold
-mainJump.crouchSpamHotkeyBox.TextColor3 =
+__UI.__L.mainJump.crouchSpamHotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.crouchSpamHotkeyBox.Parent =
+__UI.__L.mainJump.crouchSpamHotkeyBox.Parent =
     __UI.crouchSpamRow
 
-local crouchSpamHotkeyCorner =
+__UI.__L.crouchSpamHotkeyCorner =
     Instance.new("UICorner")
-crouchSpamHotkeyCorner.CornerRadius =
+__UI.__L.crouchSpamHotkeyCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-crouchSpamHotkeyCorner.Parent =
-    mainJump.crouchSpamHotkeyBox
+__UI.__L.crouchSpamHotkeyCorner.Parent =
+    __UI.__L.mainJump.crouchSpamHotkeyBox
 
-mainConnect(
-    mainJump.crouchSpamHotkeyBox.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.crouchSpamHotkeyBox.MouseButton1Click:Connect(
         function()
-            mainJump.startCapture(
+            __UI.__L.mainJump.startCapture(
                 "crouchSpam"
             )
         end
     )
 )
 
-mainJump.crouchSpamDelayBox =
+__UI.__L.mainJump.crouchSpamDelayBox =
     Instance.new("TextBox")
-mainJump.crouchSpamDelayBox.Size =
+__UI.__L.mainJump.crouchSpamDelayBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.crouchSpamDelayBox.Position =
+__UI.__L.mainJump.crouchSpamDelayBox.Position =
     UDim2.new(
         1,
         -155,
         0.5,
         -14
     )
-mainJump.crouchSpamDelayBox.BackgroundColor3 =
+__UI.__L.mainJump.crouchSpamDelayBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.crouchSpamDelayBox.BorderSizePixel = 0
-mainJump.crouchSpamDelayBox.ClearTextOnFocus = false
-mainJump.crouchSpamDelayBox.Text =
+__UI.__L.mainJump.crouchSpamDelayBox.BorderSizePixel = 0
+__UI.__L.mainJump.crouchSpamDelayBox.ClearTextOnFocus = false
+__UI.__L.mainJump.crouchSpamDelayBox.Text =
     tostring(
-        mainJump.crouchSpamDelay
+        __UI.__L.mainJump.crouchSpamDelay
     )
-mainJump.crouchSpamDelayBox.TextSize = 10
-mainJump.crouchSpamDelayBox.Font =
+__UI.__L.mainJump.crouchSpamDelayBox.TextSize = 10
+__UI.__L.mainJump.crouchSpamDelayBox.Font =
     Enum.Font.GothamBold
-mainJump.crouchSpamDelayBox.TextColor3 =
+__UI.__L.mainJump.crouchSpamDelayBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.crouchSpamDelayBox.Parent =
+__UI.__L.mainJump.crouchSpamDelayBox.Parent =
     __UI.crouchSpamRow
 
-local crouchSpamDelayCorner =
+__UI.__L.crouchSpamDelayCorner =
     Instance.new("UICorner")
-crouchSpamDelayCorner.CornerRadius =
+__UI.__L.crouchSpamDelayCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-crouchSpamDelayCorner.Parent =
-    mainJump.crouchSpamDelayBox
+__UI.__L.crouchSpamDelayCorner.Parent =
+    __UI.__L.mainJump.crouchSpamDelayBox
 
-mainConnect(
-    mainJump.crouchSpamDelayBox.FocusLost:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.crouchSpamDelayBox.FocusLost:Connect(
         function(enterPressed)
             if enterPressed then
-                mainJump.setCrouchSpamDelay(
-                    mainJump.crouchSpamDelayBox.Text
+                __UI.__L.mainJump.setCrouchSpamDelay(
+                    __UI.__L.mainJump.crouchSpamDelayBox.Text
                 )
             else
-                mainJump.crouchSpamDelayBox.Text =
+                __UI.__L.mainJump.crouchSpamDelayBox.Text =
                     tostring(
-                        mainJump.crouchSpamDelay
+                        __UI.__L.mainJump.crouchSpamDelay
                     )
             end
         end
     )
 )
 
-mainJump.crouchSpamToggle =
+__UI.__L.mainJump.crouchSpamToggle =
     Instance.new("TextButton")
-mainJump.crouchSpamToggle.Size =
+__UI.__L.mainJump.crouchSpamToggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.crouchSpamToggle.Position =
+__UI.__L.mainJump.crouchSpamToggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.crouchSpamToggle.BackgroundColor3 =
+__UI.__L.mainJump.crouchSpamToggle.BackgroundColor3 =
     Color3.fromRGB(
         47,
         52,
         61
     )
-mainJump.crouchSpamToggle.BorderSizePixel = 0
-mainJump.crouchSpamToggle.TextSize = 10
-mainJump.crouchSpamToggle.Font =
+__UI.__L.mainJump.crouchSpamToggle.BorderSizePixel = 0
+__UI.__L.mainJump.crouchSpamToggle.TextSize = 10
+__UI.__L.mainJump.crouchSpamToggle.Font =
     Enum.Font.GothamBold
-mainJump.crouchSpamToggle.TextColor3 =
+__UI.__L.mainJump.crouchSpamToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.crouchSpamToggle.Parent =
+__UI.__L.mainJump.crouchSpamToggle.Parent =
     __UI.crouchSpamRow
 
 __UI.crouchSpamToggleCorner =
@@ -17961,13 +17962,13 @@ __UI.crouchSpamToggleCorner.CornerRadius =
         5
     )
 __UI.crouchSpamToggleCorner.Parent =
-    mainJump.crouchSpamToggle
+    __UI.__L.mainJump.crouchSpamToggle
 
-mainConnect(
-    mainJump.crouchSpamToggle.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.crouchSpamToggle.MouseButton1Click:Connect(
         function()
-            mainJump.setCrouchSpamEnabled(
-                not mainJump.crouchSpamEnabled
+            __UI.__L.mainJump.setCrouchSpamEnabled(
+                not __UI.__L.mainJump.crouchSpamEnabled
             )
         end
     )
@@ -17980,22 +17981,22 @@ mainConnect(
 --// SOLO = Reverse Look has its own ON/OFF toggle.
 --// =========================================================
 __UI.reverseLookRow =
-    mainRow(
+    __UI.__L.mainRow(
         "REVERSE LOOK",
         9
     )
 
-local reverseLookLabel =
-    autoLabel:Clone()
-reverseLookLabel.Text =
+__UI.__L.reverseLookLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.reverseLookLabel.Text =
     "REVERSE LOOK"
-reverseLookLabel.Parent =
+__UI.__L.reverseLookLabel.Parent =
     __UI.reverseLookRow
 
-mainJump.reverseLookModeButton =
+__UI.__L.mainJump.reverseLookModeButton =
     Instance.new("TextButton")
 
-mainJump.reverseLookModeButton.Size =
+__UI.__L.mainJump.reverseLookModeButton.Size =
     UDim2.new(
         0,
         72,
@@ -18003,7 +18004,7 @@ mainJump.reverseLookModeButton.Size =
         28
     )
 
-mainJump.reverseLookModeButton.Position =
+__UI.__L.mainJump.reverseLookModeButton.Position =
     UDim2.new(
         1,
         -155,
@@ -18011,41 +18012,41 @@ mainJump.reverseLookModeButton.Position =
         -14
     )
 
-mainJump.reverseLookModeButton.BackgroundColor3 =
+__UI.__L.mainJump.reverseLookModeButton.BackgroundColor3 =
     Color3.fromRGB(
         34,
         34,
         34
     )
 
-mainJump.reverseLookModeButton.BorderSizePixel =
+__UI.__L.mainJump.reverseLookModeButton.BorderSizePixel =
     0
 
-mainJump.reverseLookModeButton.AutoButtonColor =
+__UI.__L.mainJump.reverseLookModeButton.AutoButtonColor =
     false
 
-mainJump.reverseLookModeButton.Text =
+__UI.__L.mainJump.reverseLookModeButton.Text =
     ""
 
-mainJump.reverseLookModeButton.Parent =
+__UI.__L.mainJump.reverseLookModeButton.Parent =
     __UI.reverseLookRow
 
-local reverseLookModeCorner =
+__UI.__L.reverseLookModeCorner =
     Instance.new("UICorner")
 
-reverseLookModeCorner.CornerRadius =
+__UI.__L.reverseLookModeCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
 
-reverseLookModeCorner.Parent =
-    mainJump.reverseLookModeButton
+__UI.__L.reverseLookModeCorner.Parent =
+    __UI.__L.mainJump.reverseLookModeButton
 
-mainJump.reverseLookModeKnob =
+__UI.__L.mainJump.reverseLookModeKnob =
     Instance.new("Frame")
 
-mainJump.reverseLookModeKnob.Size =
+__UI.__L.mainJump.reverseLookModeKnob.Size =
     UDim2.new(
         0,
         34,
@@ -18053,7 +18054,7 @@ mainJump.reverseLookModeKnob.Size =
         24
     )
 
-mainJump.reverseLookModeKnob.Position =
+__UI.__L.mainJump.reverseLookModeKnob.Position =
     UDim2.new(
         0,
         36,
@@ -18061,38 +18062,38 @@ mainJump.reverseLookModeKnob.Position =
         -12
     )
 
-mainJump.reverseLookModeKnob.BackgroundColor3 =
+__UI.__L.mainJump.reverseLookModeKnob.BackgroundColor3 =
     Color3.fromRGB(
         68,
         74,
         84
     )
 
-mainJump.reverseLookModeKnob.BorderSizePixel =
+__UI.__L.mainJump.reverseLookModeKnob.BorderSizePixel =
     0
 
-mainJump.reverseLookModeKnob.Active =
+__UI.__L.mainJump.reverseLookModeKnob.Active =
     false
 
-mainJump.reverseLookModeKnob.Parent =
-    mainJump.reverseLookModeButton
+__UI.__L.mainJump.reverseLookModeKnob.Parent =
+    __UI.__L.mainJump.reverseLookModeButton
 
-local reverseLookModeKnobCorner =
+__UI.__L.reverseLookModeKnobCorner =
     Instance.new("UICorner")
 
-reverseLookModeKnobCorner.CornerRadius =
+__UI.__L.reverseLookModeKnobCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
 
-reverseLookModeKnobCorner.Parent =
-    mainJump.reverseLookModeKnob
+__UI.__L.reverseLookModeKnobCorner.Parent =
+    __UI.__L.mainJump.reverseLookModeKnob
 
-mainJump.reverseLookModeWithLabel =
+__UI.__L.mainJump.reverseLookModeWithLabel =
     Instance.new("TextLabel")
 
-mainJump.reverseLookModeWithLabel.Size =
+__UI.__L.mainJump.reverseLookModeWithLabel.Size =
     UDim2.new(
         0,
         34,
@@ -18100,7 +18101,7 @@ mainJump.reverseLookModeWithLabel.Size =
         28
     )
 
-mainJump.reverseLookModeWithLabel.Position =
+__UI.__L.mainJump.reverseLookModeWithLabel.Position =
     UDim2.new(
         0,
         2,
@@ -18108,35 +18109,35 @@ mainJump.reverseLookModeWithLabel.Position =
         0
     )
 
-mainJump.reverseLookModeWithLabel.BackgroundTransparency =
+__UI.__L.mainJump.reverseLookModeWithLabel.BackgroundTransparency =
     1
 
-mainJump.reverseLookModeWithLabel.Text =
+__UI.__L.mainJump.reverseLookModeWithLabel.Text =
     "WITH"
 
-mainJump.reverseLookModeWithLabel.TextSize =
+__UI.__L.mainJump.reverseLookModeWithLabel.TextSize =
     8
 
-mainJump.reverseLookModeWithLabel.Font =
+__UI.__L.mainJump.reverseLookModeWithLabel.Font =
     Enum.Font.GothamBold
 
-mainJump.reverseLookModeWithLabel.TextColor3 =
+__UI.__L.mainJump.reverseLookModeWithLabel.TextColor3 =
     Color3.fromRGB(
         145,
         145,
         145
     )
 
-mainJump.reverseLookModeWithLabel.TextXAlignment =
+__UI.__L.mainJump.reverseLookModeWithLabel.TextXAlignment =
     Enum.TextXAlignment.Center
 
-mainJump.reverseLookModeWithLabel.Parent =
-    mainJump.reverseLookModeButton
+__UI.__L.mainJump.reverseLookModeWithLabel.Parent =
+    __UI.__L.mainJump.reverseLookModeButton
 
-mainJump.reverseLookModeSoloLabel =
+__UI.__L.mainJump.reverseLookModeSoloLabel =
     Instance.new("TextLabel")
 
-mainJump.reverseLookModeSoloLabel.Size =
+__UI.__L.mainJump.reverseLookModeSoloLabel.Size =
     UDim2.new(
         0,
         34,
@@ -18144,7 +18145,7 @@ mainJump.reverseLookModeSoloLabel.Size =
         28
     )
 
-mainJump.reverseLookModeSoloLabel.Position =
+__UI.__L.mainJump.reverseLookModeSoloLabel.Position =
     UDim2.new(
         0,
         37,
@@ -18152,37 +18153,37 @@ mainJump.reverseLookModeSoloLabel.Position =
         0
     )
 
-mainJump.reverseLookModeSoloLabel.BackgroundTransparency =
+__UI.__L.mainJump.reverseLookModeSoloLabel.BackgroundTransparency =
     1
 
-mainJump.reverseLookModeSoloLabel.Text =
+__UI.__L.mainJump.reverseLookModeSoloLabel.Text =
     "SOLO"
 
-mainJump.reverseLookModeSoloLabel.TextSize =
+__UI.__L.mainJump.reverseLookModeSoloLabel.TextSize =
     8
 
-mainJump.reverseLookModeSoloLabel.Font =
+__UI.__L.mainJump.reverseLookModeSoloLabel.Font =
     Enum.Font.GothamBold
 
-mainJump.reverseLookModeSoloLabel.TextColor3 =
+__UI.__L.mainJump.reverseLookModeSoloLabel.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
 
-mainJump.reverseLookModeSoloLabel.TextXAlignment =
+__UI.__L.mainJump.reverseLookModeSoloLabel.TextXAlignment =
     Enum.TextXAlignment.Center
 
-mainJump.reverseLookModeSoloLabel.Parent =
-    mainJump.reverseLookModeButton
+__UI.__L.mainJump.reverseLookModeSoloLabel.Parent =
+    __UI.__L.mainJump.reverseLookModeButton
 
-mainConnect(
-    mainJump.reverseLookModeButton.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.reverseLookModeButton.MouseButton1Click:Connect(
         function()
             local newMode
 
-            if mainJump.reverseLookMode
+            if __UI.__L.mainJump.reverseLookMode
                 == "with"
             then
                 newMode =
@@ -18192,7 +18193,7 @@ mainConnect(
                     "with"
             end
 
-            mainJump.setReverseLookMode(
+            __UI.__L.mainJump.setReverseLookMode(
                 newMode
             )
         end
@@ -18200,10 +18201,10 @@ mainConnect(
 )
 
 --// Reverse Look standalone toggle.
-mainJump.reverseLookToggle =
+__UI.__L.mainJump.reverseLookToggle =
     Instance.new("TextButton")
 
-mainJump.reverseLookToggle.Size =
+__UI.__L.mainJump.reverseLookToggle.Size =
     UDim2.new(
         0,
         65,
@@ -18211,7 +18212,7 @@ mainJump.reverseLookToggle.Size =
         28
     )
 
-mainJump.reverseLookToggle.Position =
+__UI.__L.mainJump.reverseLookToggle.Position =
     UDim2.new(
         1,
         -75,
@@ -18219,187 +18220,187 @@ mainJump.reverseLookToggle.Position =
         -14
     )
 
-mainJump.reverseLookToggle.BackgroundColor3 =
+__UI.__L.mainJump.reverseLookToggle.BackgroundColor3 =
     Color3.fromRGB(
         47,
         52,
         61
     )
 
-mainJump.reverseLookToggle.BorderSizePixel =
+__UI.__L.mainJump.reverseLookToggle.BorderSizePixel =
     0
 
-mainJump.reverseLookToggle.TextSize =
+__UI.__L.mainJump.reverseLookToggle.TextSize =
     10
 
-mainJump.reverseLookToggle.Font =
+__UI.__L.mainJump.reverseLookToggle.Font =
     Enum.Font.GothamBold
 
-mainJump.reverseLookToggle.TextColor3 =
+__UI.__L.mainJump.reverseLookToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
 
-mainJump.reverseLookToggle.AutoButtonColor =
+__UI.__L.mainJump.reverseLookToggle.AutoButtonColor =
     false
 
-mainJump.reverseLookToggle.Parent =
+__UI.__L.mainJump.reverseLookToggle.Parent =
     __UI.reverseLookRow
 
-local reverseLookToggleCorner =
+__UI.__L.reverseLookToggleCorner =
     Instance.new("UICorner")
 
-reverseLookToggleCorner.CornerRadius =
+__UI.__L.reverseLookToggleCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
 
-reverseLookToggleCorner.Parent =
-    mainJump.reverseLookToggle
+__UI.__L.reverseLookToggleCorner.Parent =
+    __UI.__L.mainJump.reverseLookToggle
 
-mainConnect(
-    mainJump.reverseLookToggle.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.reverseLookToggle.MouseButton1Click:Connect(
         function()
-            if mainJump.reverseLookMode
+            if __UI.__L.mainJump.reverseLookMode
                 ~= "without"
             then
                 return
             end
 
-            mainJump.setReverseLookEnabled(
-                not mainJump.reverseLookEnabled
+            __UI.__L.mainJump.setReverseLookEnabled(
+                not __UI.__L.mainJump.reverseLookEnabled
             )
         end
     )
 )
 
-mainJump.updateReverseLookUI(
+__UI.__L.mainJump.updateReverseLookUI(
     false
 )
 
 __UI.benchTrimpRow =
-    mainRow(
+    __UI.__L.mainRow(
         "BENCH TRIMP",
         10
     )
 
-local benchTrimpLabel =
-    autoLabel:Clone()
-benchTrimpLabel.Text =
+__UI.__L.benchTrimpLabel =
+    __UI.__L.autoLabel:Clone()
+__UI.__L.benchTrimpLabel.Text =
     "BENCH TRIMP"
-benchTrimpLabel.Parent =
+__UI.__L.benchTrimpLabel.Parent =
     __UI.benchTrimpRow
 
-mainJump.benchTrimpHotkeyBox =
+__UI.__L.mainJump.benchTrimpHotkeyBox =
     Instance.new("TextButton")
-mainJump.benchTrimpHotkeyBox.Size =
+__UI.__L.mainJump.benchTrimpHotkeyBox.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-mainJump.benchTrimpHotkeyBox.Position =
+__UI.__L.mainJump.benchTrimpHotkeyBox.Position =
     UDim2.new(
         1,
         -155,
         0.5,
         -14
     )
-mainJump.benchTrimpHotkeyBox.BackgroundColor3 =
+__UI.__L.mainJump.benchTrimpHotkeyBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.benchTrimpHotkeyBox.BorderSizePixel = 0
-mainJump.benchTrimpHotkeyBox.Text =
-    mainJump.benchTrimpHotkeyName
-mainJump.benchTrimpHotkeyBox.TextSize = 10
-mainJump.benchTrimpHotkeyBox.Font =
+__UI.__L.mainJump.benchTrimpHotkeyBox.BorderSizePixel = 0
+__UI.__L.mainJump.benchTrimpHotkeyBox.Text =
+    __UI.__L.mainJump.benchTrimpHotkeyName
+__UI.__L.mainJump.benchTrimpHotkeyBox.TextSize = 10
+__UI.__L.mainJump.benchTrimpHotkeyBox.Font =
     Enum.Font.GothamBold
-mainJump.benchTrimpHotkeyBox.TextColor3 =
+__UI.__L.mainJump.benchTrimpHotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.benchTrimpHotkeyBox.Parent =
+__UI.__L.mainJump.benchTrimpHotkeyBox.Parent =
     __UI.benchTrimpRow
 
-local benchTrimpHotkeyCorner =
+__UI.__L.benchTrimpHotkeyCorner =
     Instance.new("UICorner")
-benchTrimpHotkeyCorner.CornerRadius =
+__UI.__L.benchTrimpHotkeyCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-benchTrimpHotkeyCorner.Parent =
-    mainJump.benchTrimpHotkeyBox
+__UI.__L.benchTrimpHotkeyCorner.Parent =
+    __UI.__L.mainJump.benchTrimpHotkeyBox
 
-mainConnect(
-    mainJump.benchTrimpHotkeyBox.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.benchTrimpHotkeyBox.MouseButton1Click:Connect(
         function()
-            mainJump.startCapture(
+            __UI.__L.mainJump.startCapture(
                 "benchTrimp"
             )
         end
     )
 )
 
-mainJump.benchTrimpToggle =
+__UI.__L.mainJump.benchTrimpToggle =
     Instance.new("TextButton")
-mainJump.benchTrimpToggle.Size =
+__UI.__L.mainJump.benchTrimpToggle.Size =
     UDim2.new(
         0,
         65,
         0,
         28
     )
-mainJump.benchTrimpToggle.Position =
+__UI.__L.mainJump.benchTrimpToggle.Position =
     UDim2.new(
         1,
         -75,
         0.5,
         -14
     )
-mainJump.benchTrimpToggle.BackgroundColor3 =
+__UI.__L.mainJump.benchTrimpToggle.BackgroundColor3 =
     Color3.fromRGB(
         47,
         52,
         61
     )
-mainJump.benchTrimpToggle.BorderSizePixel = 0
-mainJump.benchTrimpToggle.TextSize = 10
-mainJump.benchTrimpToggle.Font =
+__UI.__L.mainJump.benchTrimpToggle.BorderSizePixel = 0
+__UI.__L.mainJump.benchTrimpToggle.TextSize = 10
+__UI.__L.mainJump.benchTrimpToggle.Font =
     Enum.Font.GothamBold
-mainJump.benchTrimpToggle.TextColor3 =
+__UI.__L.mainJump.benchTrimpToggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.benchTrimpToggle.Parent =
+__UI.__L.mainJump.benchTrimpToggle.Parent =
     __UI.benchTrimpRow
 
-local benchTrimpToggleCorner =
+__UI.__L.benchTrimpToggleCorner =
     Instance.new("UICorner")
-benchTrimpToggleCorner.CornerRadius =
+__UI.__L.benchTrimpToggleCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-benchTrimpToggleCorner.Parent =
-    mainJump.benchTrimpToggle
+__UI.__L.benchTrimpToggleCorner.Parent =
+    __UI.__L.mainJump.benchTrimpToggle
 
-mainConnect(
-    mainJump.benchTrimpToggle.MouseButton1Click:Connect(
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.benchTrimpToggle.MouseButton1Click:Connect(
         function()
-            mainJump.setBenchTrimpEnabled(
-                not mainJump.benchTrimpEnabled
+            __UI.__L.mainJump.setBenchTrimpEnabled(
+                not __UI.__L.mainJump.benchTrimpEnabled
             )
         end
     )
@@ -18408,51 +18409,51 @@ mainConnect(
 
 --// HIDE UI MUST ALWAYS BE THE LOWEST / LAST ROW IN MAIN.
 __UI.hideRow =
-    mainRow(
+    __UI.__L.mainRow(
         "HIDE UI",
         11
     )
 __UI.hideLabel =
-    autoLabel:Clone()
+    __UI.__L.autoLabel:Clone()
 __UI.hideLabel.Text =
     "HIDE UI"
 __UI.hideLabel.Parent =
     __UI.hideRow
-mainJump.hideUIHotkeyBox =
+__UI.__L.mainJump.hideUIHotkeyBox =
     Instance.new("TextButton")
-mainJump.hideUIHotkeyBox.Size =
+__UI.__L.mainJump.hideUIHotkeyBox.Size =
     UDim2.new(
         1,
         -120,
         0,
         28
     )
-mainJump.hideUIHotkeyBox.Position =
+__UI.__L.mainJump.hideUIHotkeyBox.Position =
     UDim2.new(
         0,
         105,
         0.5,
         -14
     )
-mainJump.hideUIHotkeyBox.BackgroundColor3 =
+__UI.__L.mainJump.hideUIHotkeyBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-mainJump.hideUIHotkeyBox.BorderSizePixel = 0
-mainJump.hideUIHotkeyBox.Text =
-    mainJump.hideUIHotkeyName
-mainJump.hideUIHotkeyBox.TextSize = 11
-mainJump.hideUIHotkeyBox.Font =
+__UI.__L.mainJump.hideUIHotkeyBox.BorderSizePixel = 0
+__UI.__L.mainJump.hideUIHotkeyBox.Text =
+    __UI.__L.mainJump.hideUIHotkeyName
+__UI.__L.mainJump.hideUIHotkeyBox.TextSize = 11
+__UI.__L.mainJump.hideUIHotkeyBox.Font =
             Enum.Font.GothamBold
-mainJump.hideUIHotkeyBox.TextColor3 =
+__UI.__L.mainJump.hideUIHotkeyBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-mainJump.hideUIHotkeyBox.Parent =
+__UI.__L.mainJump.hideUIHotkeyBox.Parent =
     __UI.hideRow
 __UI.hideCorner =
     Instance.new("UICorner")
@@ -18462,21 +18463,21 @@ __UI.hideCorner.CornerRadius =
         5
     )
 __UI.hideCorner.Parent =
-    mainJump.hideUIHotkeyBox
-mainConnect(
-    mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
+    __UI.__L.mainJump.hideUIHotkeyBox
+__UI.__L.mainConnect(
+    __UI.__L.mainJump.hideUIHotkeyBox.MouseButton1Click:Connect(
         function()
-            mainJump.startCapture(
+            __UI.__L.mainJump.startCapture(
                 "hide"
             )
         end
     )
 )
 
-mainConnect(
+__UI.__L.mainConnect(
     UserInputService.InputBegan:Connect(
         function(input)
-            if mainJump.capturing then
+            if __UI.__L.mainJump.capturing then
                 local keyCode =
                     input.KeyCode
                 if not keyCode
@@ -18485,34 +18486,34 @@ mainConnect(
                 then
                     return
                 end
-                if mainJump.capturing
+                if __UI.__L.mainJump.capturing
                     == "jump"
                 then
-                    mainJump.setHotkey(
+                    __UI.__L.mainJump.setHotkey(
                         keyCode.Name
                     )
-                elseif mainJump.capturing
+                elseif __UI.__L.mainJump.capturing
                     == "hide"
                 then
-                    mainJump.setHideUIHotkey(
+                    __UI.__L.mainJump.setHideUIHotkey(
                         keyCode.Name
                     )
-                elseif mainJump.capturing
+                elseif __UI.__L.mainJump.capturing
                     == "airTurn"
                 then
-                    mainJump.setAirTurnHotkey(
+                    __UI.__L.mainJump.setAirTurnHotkey(
                         keyCode.Name
                     )
-                elseif mainJump.capturing
+                elseif __UI.__L.mainJump.capturing
                     == "crouchSpam"
                 then
-                    mainJump.setCrouchSpamHotkey(
+                    __UI.__L.mainJump.setCrouchSpamHotkey(
                         keyCode.Name
                     )
-                elseif mainJump.capturing
+                elseif __UI.__L.mainJump.capturing
                     == "benchTrimp"
                 then
-                    mainJump.setBenchTrimpHotkey(
+                    __UI.__L.mainJump.setBenchTrimpHotkey(
                         keyCode.Name
                     )
                 end
@@ -18520,87 +18521,87 @@ mainConnect(
             end
 
             if input.KeyCode
-                == mainFindKeyCode(
-                    mainJump.hotkeyName
+                == __UI.__L.mainFindKeyCode(
+                    __UI.__L.mainJump.hotkeyName
                 )
             then
-                mainJump.setEnabled(
-                    not mainJump.enabled
+                __UI.__L.mainJump.setEnabled(
+                    not __UI.__L.mainJump.enabled
                 )
             end
             if input.KeyCode
-                == mainFindKeyCode(
-                    mainJump.hideUIHotkeyName
+                == __UI.__L.mainFindKeyCode(
+                    __UI.__L.mainJump.hideUIHotkeyName
                 )
             then
-                ScreenGui.Enabled =
-                    not ScreenGui.Enabled
-            end
-
-            if input.KeyCode
-                == mainFindKeyCode(
-                    mainJump.airTurnHotkeyName
-                )
-            then
-                mainJump.setAirTurnEnabled(
-                    not mainJump.airTurnEnabled
-                )
+                __UI.__L.ScreenGui.Enabled =
+                    not __UI.__L.ScreenGui.Enabled
             end
 
             if input.KeyCode
-                == mainFindKeyCode(
-                    mainJump.crouchSpamHotkeyName
+                == __UI.__L.mainFindKeyCode(
+                    __UI.__L.mainJump.airTurnHotkeyName
                 )
             then
-                mainJump.setCrouchSpamEnabled(
-                    not mainJump.crouchSpamEnabled
+                __UI.__L.mainJump.setAirTurnEnabled(
+                    not __UI.__L.mainJump.airTurnEnabled
                 )
             end
 
             if input.KeyCode
-                == mainFindKeyCode(
-                    mainJump.benchTrimpHotkeyName
+                == __UI.__L.mainFindKeyCode(
+                    __UI.__L.mainJump.crouchSpamHotkeyName
                 )
             then
-                mainJump.setBenchTrimpEnabled(
-                    not mainJump.benchTrimpEnabled
+                __UI.__L.mainJump.setCrouchSpamEnabled(
+                    not __UI.__L.mainJump.crouchSpamEnabled
+                )
+            end
+
+            if input.KeyCode
+                == __UI.__L.mainFindKeyCode(
+                    __UI.__L.mainJump.benchTrimpHotkeyName
+                )
+            then
+                __UI.__L.mainJump.setBenchTrimpEnabled(
+                    not __UI.__L.mainJump.benchTrimpEnabled
                 )
             end
         end
     )
 )
-mainConnect(
+__UI.__L.mainConnect(
     UserInputService.JumpRequest:Connect(
         function()
-            if mainJump.enabled
-                and mainJump.humanoid
-                and mainJump.humanoid.Parent
+            if __UI.__L.mainJump.enabled
+                and __UI.__L.mainJump.humanoid
+                and __UI.__L.mainJump.humanoid.Parent
             then
-                mainJump.manualJumpActive = true
-                mainJump.lookAutoJumpCycle = false
-                mainJump.lookTriggeredThisAir = true
+                __UI.__L.mainJump.manualJumpActive = true
+                __UI.__L.mainJump.lookAutoJumpCycle = false
+                __UI.__L.mainJump.lookTriggeredThisAir = true
 
-                if mainJump.lookActive then
-                    mainJump.endLook()
+                if __UI.__L.mainJump.lookActive then
+                    __UI.__L.mainJump.endLook()
                 end
             end
         end
     )
 )
-mainConnect(
+__UI.__L.mainConnect(
     UserInputService.JumpRequest:Connect(
         function()
-            if mainJump.enabled
+            if __UI.__L.mainJump.enabled
                 or not genv.DEADEYE_MAIN_RUNNING
-                or not mainJump.needsInputRearm
-                or not mainJump.humanoid
-                or not mainJump.humanoid.Parent
+                or not __UI.__L.mainJump.needsInputRearm
+                or not __UI.__L.mainJump.humanoid
+                or not __UI.__L.mainJump.humanoid.Parent
             then
                 return
             end
 
             local humanoid =
-                mainJump.humanoid
+                __UI.__L.mainJump.humanoid
 
             if humanoid.Health <= 0
                 or humanoid.FloorMaterial
@@ -18626,7 +18627,7 @@ mainConnect(
             --// Re-arm it using the same mechanism that fixed the
             --// original first-jump loss. Game restrictions are
             --// checked above through the humanoid state.
-            mainJump.needsInputRearm = false
+            __UI.__L.mainJump.needsInputRearm = false
 
             pcall(function()
                 humanoid:SetStateEnabled(
@@ -18641,7 +18642,7 @@ mainConnect(
 
             task.defer(function()
                 if not genv.DEADEYE_MAIN_RUNNING
-                    or mainJump.enabled
+                    or __UI.__L.mainJump.enabled
                     or not humanoid.Parent
                 then
                     return
@@ -18686,35 +18687,35 @@ mainConnect(
         end
     )
 )
-mainConnect(
+__UI.__L.mainConnect(
     UserInputService.InputEnded:Connect(
         function(input)
             if input.KeyCode
                 == Enum.KeyCode.Space
-                and not mainJump.enabled
-                and mainJump.humanoid
-                and mainJump.humanoid.Parent
+                and not __UI.__L.mainJump.enabled
+                and __UI.__L.mainJump.humanoid
+                and __UI.__L.mainJump.humanoid.Parent
             then
                 pcall(function()
-                    mainJump.humanoid.Jump = false
+                    __UI.__L.mainJump.humanoid.Jump = false
                 end)
             end
         end
     )
 )
-mainConnect(
+__UI.__L.mainConnect(
     LocalPlayer.CharacterAdded:Connect(
         function(char)
             task.wait(0.2)
 
-            mainJump.crouchSpamMovement =
+            __UI.__L.mainJump.crouchSpamMovement =
                 nil
 
             if genv.DEADEYE_MAIN_RUNNING then
-                mainJump.setupAutoJumpCharacter(
+                __UI.__L.mainJump.setupAutoJumpCharacter(
                     char
                 )
-                mainJump.bindBenchTrimp(
+                __UI.__L.mainJump.bindBenchTrimp(
                     char
                 )
             end
@@ -18731,66 +18732,66 @@ then
                 return
             end
 
-            mainJump.setupAutoJumpCharacter(
+            __UI.__L.mainJump.setupAutoJumpCharacter(
                 LocalPlayer.Character
             )
 
-            mainJump.bindBenchTrimp(
+            __UI.__L.mainJump.bindBenchTrimp(
                 LocalPlayer.Character
             )
         end
     )
 end
 pcall(function()
-    mainJump.installReverseLookHooks()
+    __UI.__L.mainJump.installReverseLookHooks()
 end)
 
-mainJump.setAirTurnSpeed(
-    mainJump.airTurnSpeed,
+__UI.__L.mainJump.setAirTurnSpeed(
+    __UI.__L.mainJump.airTurnSpeed,
     false
 )
-mainJump.setCrouchSpamDelay(
-    mainJump.crouchSpamDelay
+__UI.__L.mainJump.setCrouchSpamDelay(
+    __UI.__L.mainJump.crouchSpamDelay
 )
 
-if mainJump.benchTrimpEnabled then
+if __UI.__L.mainJump.benchTrimpEnabled then
     pcall(function()
-        mainJump.bindBenchTrimp(
-            mainJump.character
+        __UI.__L.mainJump.bindBenchTrimp(
+            __UI.__L.mainJump.character
             or LocalPlayer.Character
         )
     end)
 end
 
-mainJump.update()
+__UI.__L.mainJump.update()
 
-if mainJump.rageLookEnabled then
-    mainJump.rageLookEnabled =
+if __UI.__L.mainJump.rageLookEnabled then
+    __UI.__L.mainJump.rageLookEnabled =
         false
 
-    mainJump.setRageLookEnabled(
+    __UI.__L.mainJump.setRageLookEnabled(
         true,
         true
     )
 end
 
-if mainJump.airTurnEnabled
-    and mainJump.enabled
+if __UI.__L.mainJump.airTurnEnabled
+    and __UI.__L.mainJump.enabled
 then
-    mainJump.findLookMovementState()
-    mainJump.bindAirTurnRender()
+    __UI.__L.mainJump.findLookMovementState()
+    __UI.__L.mainJump.bindAirTurnRender()
 end
 
 genv.DEADEYE_MAIN_AIR_TURN_CLEANUP =
     function()
         pcall(function()
-            mainJump.unbindAirTurnRender()
+            __UI.__L.mainJump.unbindAirTurnRender()
         end)
     end
 
 genv.DEADEYE_REVERSE_LOOK =
     function(state)
-        mainJump.setReverseLookEnabled(
+        __UI.__L.mainJump.setReverseLookEnabled(
             state
         )
     end
@@ -18798,20 +18799,20 @@ genv.DEADEYE_REVERSE_LOOK =
 genv.DEADEYE_REVERSE_LOOK_CLEANUP =
     function()
         pcall(function()
-            mainJump.setReverseLookEnabled(
+            __UI.__L.mainJump.setReverseLookEnabled(
                 false,
                 false
             )
         end)
 
         pcall(function()
-            mainJump.uninstallReverseLookHooks()
+            __UI.__L.mainJump.uninstallReverseLookHooks()
         end)
     end
 
 genv.DEADEYE_RAGE_LOOK =
     function(state)
-        mainJump.setRageLookEnabled(
+        __UI.__L.mainJump.setRageLookEnabled(
             state
         )
     end
@@ -18819,7 +18820,7 @@ genv.DEADEYE_RAGE_LOOK =
 genv.DEADEYE_RAGE_LOOK_CLEANUP =
     function()
         pcall(function()
-            mainJump.setRageLookEnabled(
+            __UI.__L.mainJump.setRageLookEnabled(
                 false,
                 false
             )
@@ -18829,102 +18830,102 @@ genv.DEADEYE_RAGE_LOOK_CLEANUP =
 genv.DEADEYE_MAIN_SENSORS_CLEANUP =
     function()
         pcall(function()
-            mainJump.destroySensors()
+            __UI.__L.mainJump.destroySensors()
         end)
 
-        purgeStaleMainJumpSensors()
+        __UI.__L.purgeStaleMainJumpSensors()
     end
 --// =========================================================
 --// OTHERS PAGE
 --// =========================================================
-others.page =
+__UI.__L.others.page =
     Instance.new("ScrollingFrame")
-others.page.Name =
+__UI.__L.others.page.Name =
     "OthersPage"
-others.page.Size =
+__UI.__L.others.page.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-others.page.Position =
+__UI.__L.others.page.Position =
     UDim2.new(
         0,
         82,
         0,
         48
     )
-others.page.BackgroundColor3 =
+__UI.__L.others.page.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-others.page.BorderSizePixel =
+__UI.__L.others.page.BorderSizePixel =
     0
-others.page.ScrollBarThickness =
+__UI.__L.others.page.ScrollBarThickness =
     6
-others.page.CanvasSize =
+__UI.__L.others.page.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-others.page.AutomaticCanvasSize =
+__UI.__L.others.page.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-others.page.ScrollingDirection =
+__UI.__L.others.page.ScrollingDirection =
     Enum.ScrollingDirection.Y
-others.page.Visible =
+__UI.__L.others.page.Visible =
     false
-others.page.Parent =
-    Main
-others.pageCorner =
+__UI.__L.others.page.Parent =
+    __UI.__L.Main
+__UI.__L.others.pageCorner =
     Instance.new("UICorner")
-others.pageCorner.CornerRadius =
+__UI.__L.others.pageCorner.CornerRadius =
     UDim.new(
         0,
         9
     )
-others.pageCorner.Parent =
-    others.page
-others.padding =
+__UI.__L.others.pageCorner.Parent =
+    __UI.__L.others.page
+__UI.__L.others.padding =
     Instance.new("UIPadding")
-others.padding.PaddingTop =
+__UI.__L.others.padding.PaddingTop =
     UDim.new(
         0,
         8
     )
-others.padding.PaddingBottom =
+__UI.__L.others.padding.PaddingBottom =
     UDim.new(
         0,
         8
     )
-others.padding.PaddingLeft =
+__UI.__L.others.padding.PaddingLeft =
     UDim.new(
         0,
         8
     )
-others.padding.PaddingRight =
+__UI.__L.others.padding.PaddingRight =
     UDim.new(
         0,
         8
     )
-others.padding.Parent =
-    others.page
-others.layout =
+__UI.__L.others.padding.Parent =
+    __UI.__L.others.page
+__UI.__L.others.layout =
     Instance.new("UIListLayout")
-others.layout.Padding =
+__UI.__L.others.layout.Padding =
     UDim.new(
         0,
         6
     )
-others.layout.SortOrder =
+__UI.__L.others.layout.SortOrder =
     Enum.SortOrder.LayoutOrder
-others.layout.Parent =
-    others.page
-function others.header(
+__UI.__L.others.layout.Parent =
+    __UI.__L.others.page
+function __UI.__L.others.header(
     textValue,
     orderValue
 )
@@ -18956,9 +18957,9 @@ function others.header(
     header.LayoutOrder =
         orderValue
     header.Parent =
-        others.page
+        __UI.__L.others.page
 end
-function others.row(
+function __UI.__L.others.row(
     slot,
     orderValue
 )
@@ -18985,7 +18986,7 @@ function others.row(
     row.LayoutOrder =
         orderValue
     row.Parent =
-        others.page
+        __UI.__L.others.page
     local corner =
         Instance.new("UICorner")
     corner.CornerRadius =
@@ -19135,18 +19136,18 @@ function others.row(
         )
     applyCorner.Parent =
         apply
-    others.fieldBoxes[
+    __UI.__L.others.fieldBoxes[
         slot.property
     ] =
         box
-    UnusualFns.addUnusualConnection(
+    __UI.__L.UnusualFns.addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
-                if others.applyField(
+                if __UI.__L.others.applyField(
                     slot,
                     box.Text
                 ) then
-                    others.saveConfig()
+                    __UI.__L.others.saveConfig()
                     apply.Text =
                         "OK"
                     task.delay(
@@ -19164,23 +19165,23 @@ function others.row(
             end
         )
     )
-    UnusualFns.addUnusualConnection(
+    __UI.__L.UnusualFns.addUnusualConnection(
         box.FocusLost:Connect(
             function(enterPressed)
                 if enterPressed then
-                    others.applyField(
+                    __UI.__L.others.applyField(
                         slot,
                         box.Text
                     )
                 end
                 --// Persist the current Others field even when the
                 --// user only edits it and closes/unfocuses the GUI.
-                others.saveConfig()
+                __UI.__L.others.saveConfig()
             end
         )
     )
 end
-function others.quickRow(
+function __UI.__L.others.quickRow(
     labelText,
     property,
     assetId,
@@ -19206,7 +19207,7 @@ function others.quickRow(
     row.LayoutOrder =
         orderValue
     row.Parent =
-        others.page
+        __UI.__L.others.page
     local corner =
         Instance.new("UICorner")
     corner.CornerRadius =
@@ -19296,20 +19297,20 @@ function others.quickRow(
         )
     applyCorner.Parent =
         apply
-    UnusualFns.addUnusualConnection(
+    __UI.__L.UnusualFns.addUnusualConnection(
         apply.MouseButton1Click:Connect(
             function()
-                if others.applyBodyPart(
+                if __UI.__L.others.applyBodyPart(
                     property,
                     assetId
                 ) then
                     if property == "Head" then
-                        savedConfig.others._Headless =
+                        __UI.__L.savedConfig.others._Headless =
                             tostring(
                                 assetId
                             )
                     elseif property == "RightLeg" then
-                        savedConfig.others._Korblox =
+                        __UI.__L.savedConfig.others._Korblox =
                             tostring(
                                 assetId
                             )
@@ -19333,12 +19334,12 @@ function others.quickRow(
         )
     )
 end
-function others.applyBodyPart(
+function __UI.__L.others.applyBodyPart(
     property,
     assetId
 )
     local description =
-        others.getDescription()
+        __UI.__L.others.getDescription()
     if not description then
         return false
     end
@@ -19346,7 +19347,7 @@ function others.applyBodyPart(
         description[property] =
             assetId
     end)
-    return others.applyDescription(
+    return __UI.__L.others.applyDescription(
         description
     )
 end
@@ -19361,7 +19362,7 @@ end
 --// adjustment data through the existing HumanoidDescription
 --// pipeline used by the Others tab.
 --// =========================================================
-function others.avatarImportVector3(value)
+function __UI.__L.others.avatarImportVector3(value)
     if type(value) ~= "table" then
         return nil
     end
@@ -19377,7 +19378,7 @@ function others.avatarImportVector3(value)
     return Vector3.new(x, y, z)
 end
 
-function others.avatarImportColor3(value)
+function __UI.__L.others.avatarImportColor3(value)
     if type(value) ~= "table" then
         return nil
     end
@@ -19397,7 +19398,7 @@ function others.avatarImportColor3(value)
     )
 end
 
-function others.avatarImportAccessoryType(name)
+function __UI.__L.others.avatarImportAccessoryType(name)
     if type(name) ~= "string" or name == "" then
         return nil
     end
@@ -19416,7 +19417,7 @@ function others.avatarImportAccessoryType(name)
     return result
 end
 
-function others.parseAvatarDump(raw)
+function __UI.__L.others.parseAvatarDump(raw)
     if type(raw) ~= "string" then
         return nil, "EMPTY"
     end
@@ -19441,7 +19442,7 @@ function others.parseAvatarDump(raw)
 
     local decodeOK, data =
         pcall(function()
-            return HttpService:JSONDecode(raw)
+            return __UI.__L.HttpService:JSONDecode(raw)
         end)
 
     if not decodeOK
@@ -19455,7 +19456,7 @@ function others.parseAvatarDump(raw)
     end
 
     local current =
-        others.getDescription()
+        __UI.__L.others.getDescription()
 
     if not current then
         return nil, "NO HUMANOID"
@@ -19594,7 +19595,7 @@ function others.parseAvatarDump(raw)
         ) do
             if colorProperties[property] then
                 local color =
-                    others.avatarImportColor3(
+                    __UI.__L.others.avatarImportColor3(
                         value
                     )
 
@@ -19658,7 +19659,7 @@ function others.parseAvatarDump(raw)
                     )
 
                 local accessoryType =
-                    others.avatarImportAccessoryType(
+                    __UI.__L.others.avatarImportAccessoryType(
                         source.AccessoryType
                     )
 
@@ -19703,17 +19704,17 @@ function others.parseAvatarDump(raw)
                     end
 
                     local position =
-                        others.avatarImportVector3(
+                        __UI.__L.others.avatarImportVector3(
                             source.Position
                         )
 
                     local rotation =
-                        others.avatarImportVector3(
+                        __UI.__L.others.avatarImportVector3(
                             source.Rotation
                         )
 
                     local scale =
-                        others.avatarImportVector3(
+                        __UI.__L.others.avatarImportVector3(
                             source.Scale
                         )
 
@@ -19767,20 +19768,20 @@ function others.parseAvatarDump(raw)
     return description, data
 end
 
-function others.applyAvatarDump(raw)
+function __UI.__L.others.applyAvatarDump(raw)
     local description, data =
-        others.parseAvatarDump(raw)
+        __UI.__L.others.parseAvatarDump(raw)
 
     if not description then
-        if others.status then
-            others.status.Text =
+        if __UI.__L.others.status then
+            __UI.__L.others.status.Text =
                 "Import failed"
         end
         return false
     end
 
     local ok =
-        others.applyDescription(
+        __UI.__L.others.applyDescription(
             description
         )
 
@@ -19788,16 +19789,16 @@ function others.applyAvatarDump(raw)
         return false
     end
 
-    others.importedDescription =
+    __UI.__L.others.importedDescription =
         description:Clone()
 
-    if others.status then
+    if __UI.__L.others.status then
         local version =
             tostring(
                 data.version or "?"
             )
 
-        others.status.Text =
+        __UI.__L.others.status.Text =
             "Avatar imported • v"
             .. version
     end
@@ -19805,16 +19806,16 @@ function others.applyAvatarDump(raw)
     return true
 end
 
-function others.applyAll()
+function __UI.__L.others.applyAll()
     local description =
-        others.getDescription()
+        __UI.__L.others.getDescription()
     if not description then
         return false
     end
     local groups = {
-        others.ACCESSORY_SLOTS,
-        others.CLOTHING_SLOTS,
-        others.BODY_SLOTS
+        __UI.__L.others.ACCESSORY_SLOTS,
+        __UI.__L.others.CLOTHING_SLOTS,
+        __UI.__L.others.BODY_SLOTS
     }
     local changed = 0
     for _, group in ipairs(
@@ -19824,7 +19825,7 @@ function others.applyAll()
             group
         ) do
             local box =
-                others.fieldBoxes[
+                __UI.__L.others.fieldBoxes[
                     slot.property
                 ]
             if box then
@@ -19894,100 +19895,100 @@ function others.applyAll()
     if changed == 0 then
         return false
     end
-    return others.applyDescription(
+    return __UI.__L.others.applyDescription(
         description
     )
 end
-others.applyAllRow =
+__UI.__L.others.applyAllRow =
     Instance.new("Frame")
-others.applyAllRow.Size =
+__UI.__L.others.applyAllRow.Size =
     UDim2.new(
         1,
         -4,
         0,
         42
     )
-others.applyAllRow.BackgroundColor3 =
+__UI.__L.others.applyAllRow.BackgroundColor3 =
     Color3.fromRGB(
         40,
         40,
         40
     )
-others.applyAllRow.BorderSizePixel =
+__UI.__L.others.applyAllRow.BorderSizePixel =
     0
-others.applyAllRow.LayoutOrder =
+__UI.__L.others.applyAllRow.LayoutOrder =
     0
-others.applyAllRow.Parent =
-    others.page
-others.applyAllCorner =
+__UI.__L.others.applyAllRow.Parent =
+    __UI.__L.others.page
+__UI.__L.others.applyAllCorner =
     Instance.new("UICorner")
-others.applyAllCorner.CornerRadius =
+__UI.__L.others.applyAllCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-others.applyAllCorner.Parent =
-    others.applyAllRow
-others.applyAllButton =
+__UI.__L.others.applyAllCorner.Parent =
+    __UI.__L.others.applyAllRow
+__UI.__L.others.applyAllButton =
     Instance.new("TextButton")
-others.applyAllButton.Size =
+__UI.__L.others.applyAllButton.Size =
     UDim2.new(
         1,
         -12,
         0,
         30
     )
-others.applyAllButton.Position =
+__UI.__L.others.applyAllButton.Position =
     UDim2.new(
         0,
         6,
         0.5,
         -15
     )
-others.applyAllButton.BackgroundColor3 =
+__UI.__L.others.applyAllButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-others.applyAllButton.BorderSizePixel =
+__UI.__L.others.applyAllButton.BorderSizePixel =
     0
-others.applyAllButton.Text =
+__UI.__L.others.applyAllButton.Text =
     "APPLY ALL"
-others.applyAllButton.TextSize =
+__UI.__L.others.applyAllButton.TextSize =
     10
-others.applyAllButton.Font =
+__UI.__L.others.applyAllButton.Font =
     Enum.Font.GothamBold
-others.applyAllButton.TextColor3 =
+__UI.__L.others.applyAllButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-others.applyAllButton.Parent =
-    others.applyAllRow
-others.applyAllButtonCorner =
+__UI.__L.others.applyAllButton.Parent =
+    __UI.__L.others.applyAllRow
+__UI.__L.others.applyAllButtonCorner =
     Instance.new("UICorner")
-others.applyAllButtonCorner.CornerRadius =
+__UI.__L.others.applyAllButtonCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-others.applyAllButtonCorner.Parent =
-    others.applyAllButton
-UnusualFns.addUnusualConnection(
-    others.applyAllButton.MouseButton1Click:Connect(
+__UI.__L.others.applyAllButtonCorner.Parent =
+    __UI.__L.others.applyAllButton
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.others.applyAllButton.MouseButton1Click:Connect(
         function()
-            if others.applyAll() then
-                others.saveConfig()
-                others.applyAllButton.Text =
+            if __UI.__L.others.applyAll() then
+                __UI.__L.others.saveConfig()
+                __UI.__L.others.applyAllButton.Text =
                     "APPLIED"
                 task.delay(
                     0.8,
                     function()
                         pcall(function()
-                            if others.applyAllButton.Parent then
-                                others.applyAllButton.Text =
+                            if __UI.__L.others.applyAllButton.Parent then
+                                __UI.__L.others.applyAllButton.Text =
                                     "APPLY ALL"
                             end
                         end)
@@ -19997,515 +19998,515 @@ UnusualFns.addUnusualConnection(
         end
     )
 )
-others.header(
+__UI.__L.others.header(
     "QUICK BODY",
     1
 )
-others.quickRow(
+__UI.__L.others.quickRow(
     "HEADLESS",
     "Head",
-    others.HEADLESS_ID,
+    __UI.__L.others.HEADLESS_ID,
     2
 )
-others.quickRow(
+__UI.__L.others.quickRow(
     "KORBLOX",
     "RightLeg",
-    others.KORBLOX_ID,
+    __UI.__L.others.KORBLOX_ID,
     3
 )
-others.header(
+__UI.__L.others.header(
     "ACCESSORIES",
     4
 )
-local nextOrder =
+__UI.__L.nextOrder =
     5
 for _, slot in ipairs(
-    others.ACCESSORY_SLOTS
+    __UI.__L.others.ACCESSORY_SLOTS
 ) do
-    others.row(
+    __UI.__L.others.row(
         slot,
-        nextOrder
+        __UI.__L.nextOrder
     )
-    nextOrder += 1
+    __UI.__L.nextOrder += 1
 end
-others.header(
+__UI.__L.others.header(
     "2D CLOTHING",
-    nextOrder
+    __UI.__L.nextOrder
 )
-nextOrder += 1
+__UI.__L.nextOrder += 1
 for _, slot in ipairs(
-    others.CLOTHING_SLOTS
+    __UI.__L.others.CLOTHING_SLOTS
 ) do
-    others.row(
+    __UI.__L.others.row(
         slot,
-        nextOrder
+        __UI.__L.nextOrder
     )
-    nextOrder += 1
+    __UI.__L.nextOrder += 1
 end
-others.header(
+__UI.__L.others.header(
     "BODY BUNDLES",
-    nextOrder
+    __UI.__L.nextOrder
 )
-nextOrder += 1
+__UI.__L.nextOrder += 1
 for _, slot in ipairs(
-    others.BODY_SLOTS
+    __UI.__L.others.BODY_SLOTS
 ) do
-    others.row(
+    __UI.__L.others.row(
         slot,
-        nextOrder
+        __UI.__L.nextOrder
     )
-    nextOrder += 1
+    __UI.__L.nextOrder += 1
 end
 --// =========================================================
 --// FULL SCAN / CLEAR / RESET
 --// =========================================================
-others.scanRow =
+__UI.__L.others.scanRow =
     Instance.new("Frame")
-others.scanRow.Size =
+__UI.__L.others.scanRow.Size =
     UDim2.new(
         1,
         -4,
         0,
         40
     )
-others.scanRow.BackgroundColor3 =
+__UI.__L.others.scanRow.BackgroundColor3 =
     Color3.fromRGB(
         40,
         40,
         40
     )
-others.scanRow.BorderSizePixel =
+__UI.__L.others.scanRow.BorderSizePixel =
     0
-others.scanRow.LayoutOrder =
-    nextOrder + 1
-others.scanRow.Parent =
-    others.page
-others.scanButton =
+__UI.__L.others.scanRow.LayoutOrder =
+    __UI.__L.nextOrder + 1
+__UI.__L.others.scanRow.Parent =
+    __UI.__L.others.page
+__UI.__L.others.scanButton =
     Instance.new("TextButton")
-others.scanButton.Size =
+__UI.__L.others.scanButton.Size =
     UDim2.new(
         0,
         100,
         0,
         28
     )
-others.scanButton.Position =
+__UI.__L.others.scanButton.Position =
     UDim2.new(
         0,
         8,
         0.5,
         -14
     )
-others.scanButton.BackgroundColor3 =
+__UI.__L.others.scanButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-others.scanButton.BorderSizePixel =
+__UI.__L.others.scanButton.BorderSizePixel =
     0
-others.scanButton.Text =
+__UI.__L.others.scanButton.Text =
     "FULL SCAN"
-others.scanButton.TextSize =
+__UI.__L.others.scanButton.TextSize =
     9
-others.scanButton.Font =
+__UI.__L.others.scanButton.Font =
     Enum.Font.GothamBold
-others.scanButton.TextColor3 =
+__UI.__L.others.scanButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-others.scanButton.Parent =
-    others.scanRow
-others.scanButtonCorner =
+__UI.__L.others.scanButton.Parent =
+    __UI.__L.others.scanRow
+__UI.__L.others.scanButtonCorner =
     Instance.new("UICorner")
-others.scanButtonCorner.CornerRadius =
+__UI.__L.others.scanButtonCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-others.scanButtonCorner.Parent =
-    others.scanButton
-others.status =
+__UI.__L.others.scanButtonCorner.Parent =
+    __UI.__L.others.scanButton
+__UI.__L.others.status =
     Instance.new("TextLabel")
-others.status.Size =
+__UI.__L.others.status.Size =
     UDim2.new(
         1,
         -122,
         1,
         0
     )
-others.status.Position =
+__UI.__L.others.status.Position =
     UDim2.new(
         0,
         118,
         0,
         0
     )
-others.status.BackgroundTransparency =
+__UI.__L.others.status.BackgroundTransparency =
     1
-others.status.Text =
+__UI.__L.others.status.Text =
     "Click FULL SCAN"
-others.status.TextSize =
+__UI.__L.others.status.TextSize =
     10
-others.status.Font =
+__UI.__L.others.status.Font =
     Enum.Font.Gotham
-others.status.TextColor3 =
+__UI.__L.others.status.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
-others.status.TextXAlignment =
+__UI.__L.others.status.TextXAlignment =
     Enum.TextXAlignment.Left
-others.status.Parent =
-    others.scanRow
-others.header(
+__UI.__L.others.status.Parent =
+    __UI.__L.others.scanRow
+__UI.__L.others.header(
     "TOOLS",
-    nextOrder + 2
+    __UI.__L.nextOrder + 2
 )
-others.toolsFrame =
+__UI.__L.others.toolsFrame =
     Instance.new("Frame")
-others.toolsFrame.Size =
+__UI.__L.others.toolsFrame.Size =
     UDim2.new(
         1,
         -4,
         0,
         80
     )
-others.toolsFrame.BackgroundTransparency =
+__UI.__L.others.toolsFrame.BackgroundTransparency =
     1
-others.toolsFrame.LayoutOrder =
-    nextOrder + 3
-others.toolsFrame.Parent =
-    others.page
-others.clearButton =
+__UI.__L.others.toolsFrame.LayoutOrder =
+    __UI.__L.nextOrder + 3
+__UI.__L.others.toolsFrame.Parent =
+    __UI.__L.others.page
+__UI.__L.others.clearButton =
     Instance.new("TextButton")
-others.clearButton.Size =
+__UI.__L.others.clearButton.Size =
     UDim2.new(
         1,
         0,
         0,
         34
     )
-others.clearButton.Position =
+__UI.__L.others.clearButton.Position =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-others.clearButton.BackgroundColor3 =
+__UI.__L.others.clearButton.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-others.clearButton.BorderSizePixel =
+__UI.__L.others.clearButton.BorderSizePixel =
     0
-others.clearButton.Text =
+__UI.__L.others.clearButton.Text =
     "REMOVE EVERYTHING EXCEPT 2D CLOTHES + BODY"
-others.clearButton.TextSize =
+__UI.__L.others.clearButton.TextSize =
     9
-others.clearButton.Font =
+__UI.__L.others.clearButton.Font =
     Enum.Font.GothamBold
-others.clearButton.TextColor3 =
+__UI.__L.others.clearButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-others.clearButton.Parent =
-    others.toolsFrame
-others.clearCorner =
+__UI.__L.others.clearButton.Parent =
+    __UI.__L.others.toolsFrame
+__UI.__L.others.clearCorner =
     Instance.new("UICorner")
-others.clearCorner.CornerRadius =
+__UI.__L.others.clearCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-others.clearCorner.Parent =
-    others.clearButton
-others.resetButton =
+__UI.__L.others.clearCorner.Parent =
+    __UI.__L.others.clearButton
+__UI.__L.others.resetButton =
     Instance.new("TextButton")
-others.resetButton.Size =
+__UI.__L.others.resetButton.Size =
     UDim2.new(
         1,
         0,
         0,
         34
     )
-others.resetButton.Position =
+__UI.__L.others.resetButton.Position =
     UDim2.new(
         0,
         0,
         0,
         40
     )
-others.resetButton.BackgroundColor3 =
+__UI.__L.others.resetButton.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-others.resetButton.BorderSizePixel =
+__UI.__L.others.resetButton.BorderSizePixel =
     0
-others.resetButton.Text =
+__UI.__L.others.resetButton.Text =
     "RESET TO INITIAL AVATAR"
-others.resetButton.TextSize =
+__UI.__L.others.resetButton.TextSize =
     9
-others.resetButton.Font =
+__UI.__L.others.resetButton.Font =
     Enum.Font.GothamBold
-others.resetButton.TextColor3 =
+__UI.__L.others.resetButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-others.resetButton.Parent =
-    others.toolsFrame
+__UI.__L.others.resetButton.Parent =
+    __UI.__L.others.toolsFrame
 --// =========================================================
 --// AVATAR IMPORT UI
 --// =========================================================
-others.avatarImportHeader =
+__UI.__L.others.avatarImportHeader =
     Instance.new("TextLabel")
-others.avatarImportHeader.Size =
+__UI.__L.others.avatarImportHeader.Size =
     UDim2.new(
         1,
         -4,
         0,
         24
     )
-others.avatarImportHeader.BackgroundTransparency =
+__UI.__L.others.avatarImportHeader.BackgroundTransparency =
     1
-others.avatarImportHeader.Text =
+__UI.__L.others.avatarImportHeader.Text =
     "AVATAR IMPORT"
-others.avatarImportHeader.TextSize =
+__UI.__L.others.avatarImportHeader.TextSize =
     10
-others.avatarImportHeader.Font =
+__UI.__L.others.avatarImportHeader.Font =
     Enum.Font.GothamBold
-others.avatarImportHeader.TextColor3 =
+__UI.__L.others.avatarImportHeader.TextColor3 =
     Color3.fromRGB(
         150,
         150,
         150
     )
-others.avatarImportHeader.TextXAlignment =
+__UI.__L.others.avatarImportHeader.TextXAlignment =
     Enum.TextXAlignment.Left
-others.avatarImportHeader.LayoutOrder =
-    nextOrder + 4
-others.avatarImportHeader.Parent =
-    others.page
+__UI.__L.others.avatarImportHeader.LayoutOrder =
+    __UI.__L.nextOrder + 4
+__UI.__L.others.avatarImportHeader.Parent =
+    __UI.__L.others.page
 
-others.avatarImportFrame =
+__UI.__L.others.avatarImportFrame =
     Instance.new("Frame")
-others.avatarImportFrame.Size =
+__UI.__L.others.avatarImportFrame.Size =
     UDim2.new(
         1,
         -4,
         0,
         118
     )
-others.avatarImportFrame.BackgroundColor3 =
+__UI.__L.others.avatarImportFrame.BackgroundColor3 =
     Color3.fromRGB(
         40,
         40,
         40
     )
-others.avatarImportFrame.BorderSizePixel =
+__UI.__L.others.avatarImportFrame.BorderSizePixel =
     0
-others.avatarImportFrame.LayoutOrder =
-    nextOrder + 5
-others.avatarImportFrame.Parent =
-    others.page
+__UI.__L.others.avatarImportFrame.LayoutOrder =
+    __UI.__L.nextOrder + 5
+__UI.__L.others.avatarImportFrame.Parent =
+    __UI.__L.others.page
 
-local avatarImportCorner =
+__UI.__L.avatarImportCorner =
     Instance.new("UICorner")
-avatarImportCorner.CornerRadius =
+__UI.__L.avatarImportCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-avatarImportCorner.Parent =
-    others.avatarImportFrame
+__UI.__L.avatarImportCorner.Parent =
+    __UI.__L.others.avatarImportFrame
 
-others.avatarImportBox =
+__UI.__L.others.avatarImportBox =
     Instance.new("TextBox")
-others.avatarImportBox.Size =
+__UI.__L.others.avatarImportBox.Size =
     UDim2.new(
         1,
         -92,
         0,
         72
     )
-others.avatarImportBox.Position =
+__UI.__L.others.avatarImportBox.Position =
     UDim2.new(
         0,
         8,
         0,
         8
     )
-others.avatarImportBox.BackgroundColor3 =
+__UI.__L.others.avatarImportBox.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-others.avatarImportBox.BorderSizePixel =
+__UI.__L.others.avatarImportBox.BorderSizePixel =
     0
-others.avatarImportBox.ClearTextOnFocus =
+__UI.__L.others.avatarImportBox.ClearTextOnFocus =
     false
-others.avatarImportBox.MultiLine =
+__UI.__L.others.avatarImportBox.MultiLine =
     true
-others.avatarImportBox.TextWrapped =
+__UI.__L.others.avatarImportBox.TextWrapped =
     false
-others.avatarImportBox.PlaceholderText =
+__UI.__L.others.avatarImportBox.PlaceholderText =
     "Paste avatar JSON here"
-others.avatarImportBox.TextSize =
+__UI.__L.others.avatarImportBox.TextSize =
     10
-others.avatarImportBox.Font =
+__UI.__L.others.avatarImportBox.Font =
     Enum.Font.Code
-others.avatarImportBox.TextColor3 =
+__UI.__L.others.avatarImportBox.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-others.avatarImportBox.PlaceholderColor3 =
+__UI.__L.others.avatarImportBox.PlaceholderColor3 =
     Color3.fromRGB(
         105,
         105,
         105
     )
-others.avatarImportBox.TextXAlignment =
+__UI.__L.others.avatarImportBox.TextXAlignment =
     Enum.TextXAlignment.Left
-others.avatarImportBox.TextYAlignment =
+__UI.__L.others.avatarImportBox.TextYAlignment =
     Enum.TextYAlignment.Top
-others.avatarImportBox.Parent =
-    others.avatarImportFrame
+__UI.__L.others.avatarImportBox.Parent =
+    __UI.__L.others.avatarImportFrame
 
-local avatarImportBoxCorner =
+__UI.__L.avatarImportBoxCorner =
     Instance.new("UICorner")
-avatarImportBoxCorner.CornerRadius =
+__UI.__L.avatarImportBoxCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-avatarImportBoxCorner.Parent =
-    others.avatarImportBox
+__UI.__L.avatarImportBoxCorner.Parent =
+    __UI.__L.others.avatarImportBox
 
-others.avatarImportButton =
+__UI.__L.others.avatarImportButton =
     Instance.new("TextButton")
-others.avatarImportButton.Size =
+__UI.__L.others.avatarImportButton.Size =
     UDim2.new(
         0,
         72,
         0,
         28
     )
-others.avatarImportButton.Position =
+__UI.__L.others.avatarImportButton.Position =
     UDim2.new(
         1,
         -80,
         0,
         30
     )
-others.avatarImportButton.BackgroundColor3 =
+__UI.__L.others.avatarImportButton.BackgroundColor3 =
     Color3.fromRGB(
         52,
         52,
         52
     )
-others.avatarImportButton.BorderSizePixel =
+__UI.__L.others.avatarImportButton.BorderSizePixel =
     0
-others.avatarImportButton.Text =
+__UI.__L.others.avatarImportButton.Text =
     "IMPORT"
-others.avatarImportButton.TextSize =
+__UI.__L.others.avatarImportButton.TextSize =
     9
-others.avatarImportButton.Font =
+__UI.__L.others.avatarImportButton.Font =
     Enum.Font.GothamBold
-others.avatarImportButton.TextColor3 =
+__UI.__L.others.avatarImportButton.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-others.avatarImportButton.Parent =
-    others.avatarImportFrame
+__UI.__L.others.avatarImportButton.Parent =
+    __UI.__L.others.avatarImportFrame
 
-local avatarImportButtonCorner =
+__UI.__L.avatarImportButtonCorner =
     Instance.new("UICorner")
-avatarImportButtonCorner.CornerRadius =
+__UI.__L.avatarImportButtonCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-avatarImportButtonCorner.Parent =
-    others.avatarImportButton
+__UI.__L.avatarImportButtonCorner.Parent =
+    __UI.__L.others.avatarImportButton
 
-others.avatarImportClear =
+__UI.__L.others.avatarImportClear =
     Instance.new("TextButton")
-others.avatarImportClear.Size =
+__UI.__L.others.avatarImportClear.Size =
     UDim2.new(
         0,
         72,
         0,
         24
     )
-others.avatarImportClear.Position =
+__UI.__L.others.avatarImportClear.Position =
     UDim2.new(
         1,
         -80,
         0,
         62
     )
-others.avatarImportClear.BackgroundColor3 =
+__UI.__L.others.avatarImportClear.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-others.avatarImportClear.BorderSizePixel =
+__UI.__L.others.avatarImportClear.BorderSizePixel =
     0
-others.avatarImportClear.Text =
+__UI.__L.others.avatarImportClear.Text =
     "CLEAR"
-others.avatarImportClear.TextSize =
+__UI.__L.others.avatarImportClear.TextSize =
     8
-others.avatarImportClear.Font =
+__UI.__L.others.avatarImportClear.Font =
     Enum.Font.GothamBold
-others.avatarImportClear.TextColor3 =
+__UI.__L.others.avatarImportClear.TextColor3 =
     Color3.fromRGB(
         215,
         215,
         215
     )
-others.avatarImportClear.Parent =
-    others.avatarImportFrame
+__UI.__L.others.avatarImportClear.Parent =
+    __UI.__L.others.avatarImportFrame
 
-local avatarImportClearCorner =
+__UI.__L.avatarImportClearCorner =
     Instance.new("UICorner")
-avatarImportClearCorner.CornerRadius =
+__UI.__L.avatarImportClearCorner.CornerRadius =
     UDim.new(
         0,
         5
     )
-avatarImportClearCorner.Parent =
-    others.avatarImportClear
+__UI.__L.avatarImportClearCorner.Parent =
+    __UI.__L.others.avatarImportClear
 
-UnusualFns.addUnusualConnection(
-    others.avatarImportButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.others.avatarImportButton.MouseButton1Click:Connect(
         function()
             local imported =
-                others.applyAvatarDump(
-                    others.avatarImportBox.Text
+                __UI.__L.others.applyAvatarDump(
+                    __UI.__L.others.avatarImportBox.Text
                 )
 
             if imported then
-                others.avatarImportButton.Text =
+                __UI.__L.others.avatarImportButton.Text =
                     "APPLIED"
             else
-                others.avatarImportButton.Text =
+                __UI.__L.others.avatarImportButton.Text =
                     "ERROR"
             end
 
@@ -20513,8 +20514,8 @@ UnusualFns.addUnusualConnection(
                 0.8,
                 function()
                     pcall(function()
-                        if others.avatarImportButton.Parent then
-                            others.avatarImportButton.Text =
+                        if __UI.__L.others.avatarImportButton.Parent then
+                            __UI.__L.others.avatarImportButton.Text =
                                 "IMPORT"
                         end
                     end)
@@ -20524,50 +20525,50 @@ UnusualFns.addUnusualConnection(
     )
 )
 
-UnusualFns.addUnusualConnection(
-    others.avatarImportClear.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.others.avatarImportClear.MouseButton1Click:Connect(
         function()
-            others.avatarImportBox.Text =
+            __UI.__L.others.avatarImportBox.Text =
                 ""
         end
     )
 )
-others.resetCorner =
+__UI.__L.others.resetCorner =
     Instance.new("UICorner")
-others.resetCorner.CornerRadius =
+__UI.__L.others.resetCorner.CornerRadius =
     UDim.new(
         0,
         6
     )
-others.resetCorner.Parent =
-    others.resetButton
-UnusualFns.addUnusualConnection(
-    others.scanButton.MouseButton1Click:Connect(
+__UI.__L.others.resetCorner.Parent =
+    __UI.__L.others.resetButton
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.others.scanButton.MouseButton1Click:Connect(
         function()
-            others.scan()
+            __UI.__L.others.scan()
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    others.clearButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.others.clearButton.MouseButton1Click:Connect(
         function()
-            if others.clearAccessories() then
+            if __UI.__L.others.clearAccessories() then
                 task.delay(
                     0.3,
                     function()
-                        others.saveConfig()
+                        __UI.__L.others.saveConfig()
                     end
                 )
             end
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    others.resetButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.others.resetButton.MouseButton1Click:Connect(
         function()
-            others.ensureSnapshot()
-            if others.restore(true) then
-                others.scan()
+            __UI.__L.others.ensureSnapshot()
+            if __UI.__L.others.restore(true) then
+                __UI.__L.others.scan()
             end
         end
     )
@@ -20575,11 +20576,11 @@ UnusualFns.addUnusualConnection(
 task.defer(
     function()
         pcall(function()
-            others.loadConfig()
-            if others.avatarImportBox then
-                others.avatarImportBox.Text =
+            __UI.__L.others.loadConfig()
+            if __UI.__L.others.avatarImportBox then
+                __UI.__L.others.avatarImportBox.Text =
                     tostring(
-                        savedConfig.others._AvatarImport
+                        __UI.__L.savedConfig.others._AvatarImport
                         or ""
                     )
             end
@@ -20588,34 +20589,34 @@ task.defer(
 )
 --// CATEGORY BAR
 -- =========================================================
-categoryBar =
+__UI.__L.categoryBar =
     Instance.new("Frame")
-categoryBar.Name =
+__UI.__L.categoryBar.Name =
     "CategoryBar"
-categoryBar.Size =
+__UI.__L.categoryBar.Size =
     UDim2.new(
         0,
         66,
         1,
         -56
     )
-categoryBar.Position =
+__UI.__L.categoryBar.Position =
     UDim2.new(
         0,
         8,
         0,
         48
     )
-categoryBar.BackgroundColor3 =
+__UI.__L.categoryBar.BackgroundColor3 =
     Color3.fromRGB(
         26,
         30,
         36
     )
-categoryBar.BorderSizePixel =
+__UI.__L.categoryBar.BorderSizePixel =
     0
-categoryBar.Parent =
-    Main
+__UI.__L.categoryBar.Parent =
+    __UI.__L.Main
 
 __UI.categoryGradient =
     Instance.new("UIGradient")
@@ -20633,7 +20634,7 @@ __UI.categoryGradient.Transparency =
         )
     })
 __UI.categoryGradient.Parent =
-    categoryBar
+    __UI.__L.categoryBar
 
 __UI.categoryStroke =
     Instance.new("UIStroke")
@@ -20642,7 +20643,7 @@ __UI.categoryStroke.Thickness =
 __UI.categoryStroke.Transparency =
     0.55
 __UI.categoryStroke.Parent =
-    categoryBar
+    __UI.__L.categoryBar
 
 __UI.categoryCorner =
     Instance.new("UICorner")
@@ -20652,8 +20653,8 @@ __UI.categoryCorner.CornerRadius =
         9
     )
 __UI.categoryCorner.Parent =
-    categoryBar
-local function makeCategoryButton(
+    __UI.__L.categoryBar
+__UI.__L.makeCategoryButton = function(
     text,
     y
 )
@@ -20698,7 +20699,7 @@ local function makeCategoryButton(
     button.TextWrapped =
         true
     button.Parent =
-        categoryBar
+        __UI.__L.categoryBar
     local corner =
         Instance.new("UICorner")
     corner.CornerRadius =
@@ -20720,217 +20721,217 @@ local function makeCategoryButton(
 
     return button
 end
-mainCategoryButton =
-    makeCategoryButton(
+__UI.__L.mainCategoryButton =
+    __UI.__L.makeCategoryButton(
         "MAIN",
         6
     )
-emoteCategoryButton =
-    makeCategoryButton(
+__UI.__L.emoteCategoryButton =
+    __UI.__L.makeCategoryButton(
         "EMOTES",
         41
     )
-unusualCategoryButton =
-    makeCategoryButton(
+__UI.__L.unusualCategoryButton =
+    __UI.__L.makeCategoryButton(
         "UNUSUAL",
         76
     )
-othersCategoryButton =
-    makeCategoryButton(
+__UI.__L.othersCategoryButton =
+    __UI.__L.makeCategoryButton(
         "OTHERS",
         111
     )
-cosmetic.categoryButton =
-    makeCategoryButton(
+__UI.__L.cosmetic.categoryButton =
+    __UI.__L.makeCategoryButton(
         "COSMETIC",
         146
     )
 --// =========================================================
 --// CATEGORY SWITCH
 --// =========================================================
-local function setCategory(
+__UI.__L.setCategory = function(
     category
 )
-    currentCategory =
+    __UI.__L.currentCategory =
         category
 
     pcall(function()
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
-            Toggle.Visible = false
-            SlotsScroll.Visible = false
-            mainPage.Visible = true
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
+            __UI.__L.MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
+            __UI.__L.Status.Visible = false
+            __UI.__L.Toggle.Visible = false
+            __UI.__L.SlotsScroll.Visible = false
+            __UI.__L.mainPage.Visible = true
+            __UI.__L.unusualPage.Visible = false
+            __UI.__L.unusualStatus.Visible = false
+            __UI.__L.unusualPicker.Visible = false
+            __UI.__L.others.page.Visible = false
+            __UI.__L.cosmetic.page.Visible = false
+            __UI.__L.mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(65, 65, 65)
-            emoteCategoryButton.BackgroundColor3 =
+            __UI.__L.emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
+            __UI.__L.unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
+            __UI.__L.othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
+            __UI.__L.cosmetic.categoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
-            Toggle.Visible = true
-            Toggle.Parent = unusualPage
-            Toggle.LayoutOrder = 0
-            SlotsScroll.Visible = false
-            mainPage.Visible = false
-            unusualPage.Visible = true
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
+            __UI.__L.MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
+            __UI.__L.Status.Visible = false
+            __UI.__L.Toggle.Visible = true
+            __UI.__L.Toggle.Parent = __UI.__L.unusualPage
+            __UI.__L.Toggle.LayoutOrder = 0
+            __UI.__L.SlotsScroll.Visible = false
+            __UI.__L.mainPage.Visible = false
+            __UI.__L.unusualPage.Visible = true
+            __UI.__L.unusualStatus.Visible = false
+            __UI.__L.unusualPicker.Visible = false
+            __UI.__L.others.page.Visible = false
+            __UI.__L.cosmetic.page.Visible = false
+            __UI.__L.mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
+            __UI.__L.emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
+            __UI.__L.unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(65, 65, 65)
-            othersCategoryButton.BackgroundColor3 =
+            __UI.__L.othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
+            __UI.__L.cosmetic.categoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            updateUnusualToggle()
+            __UI.__L.updateUnusualToggle()
 
         elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
-            Toggle.Visible = false
-            SlotsScroll.Visible = false
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            mainPage.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = true
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
+            __UI.__L.MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
+            __UI.__L.Status.Visible = false
+            __UI.__L.Toggle.Visible = false
+            __UI.__L.SlotsScroll.Visible = false
+            __UI.__L.unusualPage.Visible = false
+            __UI.__L.unusualStatus.Visible = false
+            __UI.__L.mainPage.Visible = false
+            __UI.__L.unusualPicker.Visible = false
+            __UI.__L.others.page.Visible = true
+            __UI.__L.cosmetic.page.Visible = false
+            __UI.__L.mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
+            __UI.__L.emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
+            __UI.__L.unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
+            __UI.__L.othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(65, 65, 65)
-            cosmetic.categoryButton.BackgroundColor3 =
+            __UI.__L.cosmetic.categoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
 
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
-            Toggle.Visible = true
-            Toggle.Parent = cosmetic.page
-            Toggle.LayoutOrder = 0
-            SlotsScroll.Visible = false
-            mainPage.Visible = false
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
-            cosmetic.page.Visible = true
-            mainCategoryButton.BackgroundColor3 =
+            __UI.__L.MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
+            __UI.__L.Status.Visible = false
+            __UI.__L.Toggle.Visible = true
+            __UI.__L.Toggle.Parent = __UI.__L.cosmetic.page
+            __UI.__L.Toggle.LayoutOrder = 0
+            __UI.__L.SlotsScroll.Visible = false
+            __UI.__L.mainPage.Visible = false
+            __UI.__L.unusualPage.Visible = false
+            __UI.__L.unusualStatus.Visible = false
+            __UI.__L.unusualPicker.Visible = false
+            __UI.__L.others.page.Visible = false
+            __UI.__L.cosmetic.page.Visible = true
+            __UI.__L.mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
+            __UI.__L.emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
+            __UI.__L.unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
+            __UI.__L.othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
+            __UI.__L.cosmetic.categoryButton.BackgroundColor3 =
                 Color3.fromRGB(65, 65, 65)
-            cosmetic.updateToggle()
+            __UI.__L.cosmetic.updateToggle()
 
         else
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
-            Toggle.Visible = true
-            Toggle.Parent = SlotsScroll
-            Toggle.LayoutOrder = 0
-            SlotsScroll.Visible = true
-            mainPage.Visible = false
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
+            __UI.__L.MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
+            __UI.__L.Status.Visible = false
+            __UI.__L.Toggle.Visible = true
+            __UI.__L.Toggle.Parent = __UI.__L.SlotsScroll
+            __UI.__L.Toggle.LayoutOrder = 0
+            __UI.__L.SlotsScroll.Visible = true
+            __UI.__L.mainPage.Visible = false
+            __UI.__L.unusualPage.Visible = false
+            __UI.__L.unusualStatus.Visible = false
+            __UI.__L.unusualPicker.Visible = false
+            __UI.__L.others.page.Visible = false
+            __UI.__L.cosmetic.page.Visible = false
+            __UI.__L.mainCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
+            __UI.__L.unusualCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
+            __UI.__L.othersCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
+            __UI.__L.cosmetic.categoryButton.BackgroundColor3 =
                 Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
+            __UI.__L.emoteCategoryButton.BackgroundColor3 =
                 Color3.fromRGB(65, 65, 65)
             updateGUI()
         end
     end)
 end
 
-UnusualFns.addUnusualConnection(
-    mainCategoryButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.mainCategoryButton.MouseButton1Click:Connect(
         function()
-            if mainMinimized then
-                setMainMinimized(false)
+            if __UI.__L.mainMinimized then
+                __UI.__L.setMainMinimized(false)
             end
-            setCategory(
+            __UI.__L.setCategory(
                 "Main"
             )
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    emoteCategoryButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.emoteCategoryButton.MouseButton1Click:Connect(
         function()
-            if mainMinimized then
-                setMainMinimized(false)
+            if __UI.__L.mainMinimized then
+                __UI.__L.setMainMinimized(false)
             end
-            setCategory(
+            __UI.__L.setCategory(
                 "Emotes"
             )
         end
     )
 )
-UnusualFns.addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(    __UI.__L.unusualCategoryButton.MouseButton1Click:Connect(
         function()
-            if mainMinimized then
-                setMainMinimized(false)
+            if __UI.__L.mainMinimized then
+                __UI.__L.setMainMinimized(false)
             end
-            setCategory(
+            __UI.__L.setCategory(
                 "Unusual"
             )
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    othersCategoryButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.othersCategoryButton.MouseButton1Click:Connect(
         function()
-            if mainMinimized then
-                setMainMinimized(false)
+            if __UI.__L.mainMinimized then
+                __UI.__L.setMainMinimized(false)
             end
-            setCategory(
+            __UI.__L.setCategory(
                 "Others"
             )
         end
     )
 )
-UnusualFns.addUnusualConnection(
-    cosmetic.categoryButton.MouseButton1Click:Connect(
+__UI.__L.UnusualFns.addUnusualConnection(
+    __UI.__L.cosmetic.categoryButton.MouseButton1Click:Connect(
         function()
-            if mainMinimized then
-                setMainMinimized(false)
+            if __UI.__L.mainMinimized then
+                __UI.__L.setMainMinimized(false)
             end
-            setCategory(
+            __UI.__L.setCategory(
                 "Cosmetic"
             )
         end
@@ -20939,26 +20940,26 @@ UnusualFns.addUnusualConnection(
 --// =========================================================
 --// EXTERNAL CLEANUP
 --// =========================================================
-local function cleanupUnusual()
-    if unusualDestroyed then
+__UI.__L.cleanupUnusual = function()
+    if __UI.__L.unusualDestroyed then
         return
     end
-    unusualDestroyed =
+    __UI.__L.unusualDestroyed =
         true
 
     --// originalId is the configured swap source, not necessarily
     --// the effect the player currently has equipped.
     local runtimeCurrentEquippedId =
         tonumber(
-            UnusualFns.getEquippedUnusualId()
+            __UI.__L.UnusualFns.getEquippedUnusualId()
         )
 
-    unusualRuntime.currentEquippedId =
+    __UI.__L.unusualRuntime.currentEquippedId =
         runtimeCurrentEquippedId
 
     local runtimeOriginalId =
         tonumber(
-            unusualRuntime.originalId
+            __UI.__L.unusualRuntime.originalId
         )
 
     --// Prefer the real current loadout. This is what must remain
@@ -20975,11 +20976,11 @@ local function cleanupUnusual()
     end
 
     local restoreNativeUnusual =
-        unusualActive
+        __UI.__L.unusualActive
         or runtimeOriginalId
 
     local runtimeSnapshot =
-        unusualRuntime.nativeSnapshot
+        __UI.__L.unusualRuntime.nativeSnapshot
 
     --// A snapshot captured for the old mapped Unusual cannot be
     --// used after the player has manually equipped another one.
@@ -20992,31 +20993,31 @@ local function cleanupUnusual()
     end
 
     local runtimeSnapshotRig =
-        unusualRuntime.appliedRig
+        __UI.__L.unusualRuntime.appliedRig
 
     --// Invalidate reapply work BEFORE restoring the live effect.
-    unusualEnabled =
+    __UI.__L.unusualEnabled =
         false
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
-    unusualRuntime.reapplyGeneration += 1
+    __UI.__L.unusualRuntime.reapplyGeneration += 1
 
     --// Wait for a reapply already inside activation so it cannot write
     --// the replacement after cleanup has restored the native effect.
     local reapplyDeadline =
         tick() + 1
 
-    while unusualReapplyBusy
+    while __UI.__L.unusualReapplyBusy
         and tick() < reapplyDeadline
     do
         task.wait()
     end
 
     local currentVisualRig =
-        UnusualFns.getUnusualVisualRig()
+        __UI.__L.UnusualFns.getUnusualVisualRig()
 
     local currentPlayerCharacter =
-        UnusualFns.getUnusualPlayerCharacter()
+        __UI.__L.UnusualFns.getUnusualPlayerCharacter()
 
     --// Snapshot is only valid for the rig it was captured from.
     --// Prefer the snapshot from a completed reapply on this rig.
@@ -21029,18 +21030,18 @@ local function cleanupUnusual()
         and tonumber(runtimeCurrentEquippedId)
             == tonumber(runtimeOriginalId)
     then
-        if unusualRuntime.appliedRig == currentVisualRig
-            and unusualRuntime.nativeSnapshot
+        if __UI.__L.unusualRuntime.appliedRig == currentVisualRig
+            and __UI.__L.unusualRuntime.nativeSnapshot
         then
             runtimeSnapshot =
-                unusualRuntime.nativeSnapshot
+                __UI.__L.unusualRuntime.nativeSnapshot
             runtimeSnapshotRig =
                 currentVisualRig
         elseif runtimeSnapshotRig
             ~= currentVisualRig
         then
             local freshSnapshot =
-                UnusualFns.captureNativeUnusualSnapshot(
+                __UI.__L.UnusualFns.captureNativeUnusualSnapshot(
                     runtimeOriginalId,
                     currentVisualRig,
                     currentPlayerCharacter
@@ -21061,12 +21062,12 @@ local function cleanupUnusual()
     then
         pcall(function()
             local visualRig =
-                UnusualFns.getUnusualVisualRig()
+                __UI.__L.UnusualFns.getUnusualVisualRig()
             local playerCharacter =
-                UnusualFns.getUnusualPlayerCharacter()
+                __UI.__L.UnusualFns.getUnusualPlayerCharacter()
 
             if visualRig then
-                UnusualFns.removeOurUnusualFX()
+                __UI.__L.UnusualFns.removeOurUnusualFX()
                 task.wait()
 
                 if runtimeCurrentEquippedId
@@ -21077,9 +21078,9 @@ local function cleanupUnusual()
                     --// Player changed the equipped Unusual.
                     --// Keep the game's current native effect; remove only
                     --// the FX owned by DeadEye.
-                    UnusualFns.removeOurUnusualFX()
+                    __UI.__L.UnusualFns.removeOurUnusualFX()
                     pcall(function()
-                        UnusualFns.removeOriginalUnusualFX(
+                        __UI.__L.UnusualFns.removeOriginalUnusualFX(
                             runtimeOriginalId,
                             visualRig,
                             playerCharacter
@@ -21088,13 +21089,13 @@ local function cleanupUnusual()
                 elseif runtimeSnapshot
                     and runtimeSnapshotRig == visualRig
                 then
-                    UnusualFns.restoreNativeUnusualSnapshot(
+                    __UI.__L.UnusualFns.restoreNativeUnusualSnapshot(
                         runtimeSnapshot,
                         visualRig,
                         playerCharacter
                     )
                 else
-                    UnusualFns.removeOriginalUnusualFX(
+                    __UI.__L.UnusualFns.removeOriginalUnusualFX(
                         runtimeRestoreId,
                         visualRig,
                         playerCharacter
@@ -21111,15 +21112,15 @@ local function cleanupUnusual()
         end)
     end
 
-    unusualActive =
+    __UI.__L.unusualActive =
         false
 
     pcall(function()
-        others.restore(false)
+        __UI.__L.others.restore(false)
     end)
 
     pcall(function()
-        cosmetic.cleanup()
+        __UI.__L.cosmetic.cleanup()
     end)
 
     --// Do not rebuild the native Unusual here.
@@ -21129,104 +21130,104 @@ local function cleanupUnusual()
     --// The active/native snapshot is already handled above. Cleanup
     --// must not call AddCosmetics again.
 
-    unusualRuntime.originalId =
+    __UI.__L.unusualRuntime.originalId =
         nil
-    unusualRuntime.currentEquippedId =
+    __UI.__L.unusualRuntime.currentEquippedId =
         runtimeRestoreId
-    unusualRuntime.replacementId =
+    __UI.__L.unusualRuntime.replacementId =
         nil
-    unusualRuntime.nativeSnapshot =
+    __UI.__L.unusualRuntime.nativeSnapshot =
         nil
 
     genv.DEADEYE_COSMETIC_CLEANUP =
         nil
-    unusualEnabled =
+    __UI.__L.unusualEnabled =
         false
-    unusualActive =
+    __UI.__L.unusualActive =
         false
-    unusualRuntime.reapplyGeneration += 1
-    unusualRuntime.appliedRig = nil
+    __UI.__L.unusualRuntime.reapplyGeneration += 1
+    __UI.__L.unusualRuntime.appliedRig = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
-    UnusualFns.disconnectUnusualConnections()
+    __UI.__L.UnusualFns.disconnectUnusualConnections()
     if not preserveFinalRestoredUnusualFX then
         pcall(function()
-            UnusualFns.removeOurUnusualFX()
+            __UI.__L.UnusualFns.removeOurUnusualFX()
         end)
     end
     genv.DEADEYE_MAIN_RUNNING = false
     pcall(function()
-        if mainPage then
-            mainPage.Visible = false
+        if __UI.__L.mainPage then
+            __UI.__L.mainPage.Visible = false
         end
-        mainDisconnect()
-        if unusualPicker then
-            unusualPicker:Destroy()
+        __UI.__L.mainDisconnect()
+        if __UI.__L.unusualPicker then
+            __UI.__L.unusualPicker:Destroy()
         end
-        if unusualPage then
-            unusualPage:Destroy()
+        if __UI.__L.unusualPage then
+            __UI.__L.unusualPage:Destroy()
         end
-        if others.page then
-            others.page:Destroy()
+        if __UI.__L.others.page then
+            __UI.__L.others.page:Destroy()
         end
-        if unusualStatus then
-            unusualStatus:Destroy()
+        if __UI.__L.unusualStatus then
+            __UI.__L.unusualStatus:Destroy()
         end
-        if categoryBar then
-            categoryBar:Destroy()
+        if __UI.__L.categoryBar then
+            __UI.__L.categoryBar:Destroy()
         end
     end)
     genv.UNUSUAL_SWAPPER_CLEANUP =
         nil
     end
 genv.UNUSUAL_SWAPPER_CLEANUP =
-    cleanupUnusual
+    __UI.__L.cleanupUnusual
 --// =========================================================
 --// REPLACE EXISTING TOGGLE BEHAVIOUR
 --// =========================================================
 --// =========================================================
 --// TOGGLE
 --// =========================================================
-Toggle =
+__UI.__L.Toggle =
     Instance.new("TextButton")
-Toggle.Size =
+__UI.__L.Toggle.Size =
     UDim2.new(
         1,
         -12,
         0,
         36
     )
-Toggle.Position =
+__UI.__L.Toggle.Position =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-Toggle.LayoutOrder =
+__UI.__L.Toggle.LayoutOrder =
     0
-Toggle.BackgroundColor3 =
+__UI.__L.Toggle.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         45
     )
-Toggle.BorderSizePixel =
+__UI.__L.Toggle.BorderSizePixel =
     0
-Toggle.Text =
+__UI.__L.Toggle.Text =
     "SWAP: OFF"
-Toggle.TextSize =
+__UI.__L.Toggle.TextSize =
     11
-Toggle.Font =
+__UI.__L.Toggle.Font =
     Enum.Font.GothamBold
-Toggle.TextColor3 =
+__UI.__L.Toggle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-Toggle.Parent =
-    SlotsScroll
+__UI.__L.Toggle.Parent =
+    __UI.__L.SlotsScroll
 __UI.ToggleCorner =
     Instance.new("UICorner")
 __UI.ToggleCorner.CornerRadius =
@@ -21235,58 +21236,58 @@ __UI.ToggleCorner.CornerRadius =
         8
     )
 __UI.ToggleCorner.Parent =
-    Toggle
+    __UI.__L.Toggle
 --// =========================================================
 --// SLOTS SCROLL
 --// =========================================================
-SlotsScroll =
+__UI.__L.SlotsScroll =
     Instance.new("ScrollingFrame")
-SlotsScroll.Name =
+__UI.__L.SlotsScroll.Name =
     "Slots"
-SlotsScroll.Size =
+__UI.__L.SlotsScroll.Size =
     UDim2.new(
         1,
         -16,
         1,
         -76
     )
-SlotsScroll.Position =
+__UI.__L.SlotsScroll.Position =
     UDim2.new(
         0,
         8,
         0,
         68
     )
-SlotsScroll.BackgroundColor3 =
+__UI.__L.SlotsScroll.BackgroundColor3 =
     Color3.fromRGB(
         32,
         32,
         32
     )
-SlotsScroll.BorderSizePixel =
+__UI.__L.SlotsScroll.BorderSizePixel =
     0
-SlotsScroll.ScrollBarThickness =
+__UI.__L.SlotsScroll.ScrollBarThickness =
     6
-SlotsScroll.CanvasSize =
+__UI.__L.SlotsScroll.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-SlotsScroll.AutomaticCanvasSize =
+__UI.__L.SlotsScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-SlotsScroll.Parent =
-    Main
+__UI.__L.SlotsScroll.Parent =
+    __UI.__L.Main
 --// Existing Emote content moves right of the category rail.
-SlotsScroll.Size =
+__UI.__L.SlotsScroll.Size =
     UDim2.new(
         1,
         -92,
         1,
         -56
     )
-SlotsScroll.Position =
+__UI.__L.SlotsScroll.Position =
     UDim2.new(
         0,
         82,
@@ -21301,7 +21302,7 @@ __UI.SlotsCorner.CornerRadius =
         9
     )
 __UI.SlotsCorner.Parent =
-    SlotsScroll
+    __UI.__L.SlotsScroll
 __UI.SlotsPadding =
     Instance.new("UIPadding")
 __UI.SlotsPadding.PaddingTop =
@@ -21325,7 +21326,7 @@ __UI.SlotsPadding.PaddingRight =
         8
     )
 __UI.SlotsPadding.Parent =
-    SlotsScroll
+    __UI.__L.SlotsScroll
 __UI.SlotsLayout =
     Instance.new("UIListLayout")
 __UI.SlotsLayout.Padding =
@@ -21336,11 +21337,11 @@ __UI.SlotsLayout.Padding =
 __UI.SlotsLayout.SortOrder =
     Enum.SortOrder.LayoutOrder
 __UI.SlotsLayout.Parent =
-    SlotsScroll
+    __UI.__L.SlotsScroll
 --// =========================================================
 --// CREATE SLOT ROWS
 --// =========================================================
-for slotIndex = 1, SLOT_COUNT do
+for slotIndex = 1, __UI.__L.SLOT_COUNT do
     local row =
         Instance.new("Frame")
     row.Name =
@@ -21363,7 +21364,7 @@ for slotIndex = 1, SLOT_COUNT do
     row.LayoutOrder =
         slotIndex
     row.Parent =
-        SlotsScroll
+        __UI.__L.SlotsScroll
     local rowCorner =
         Instance.new("UICorner")
     rowCorner.CornerRadius =
@@ -21435,7 +21436,7 @@ for slotIndex = 1, SLOT_COUNT do
     originalButton.BorderSizePixel =
         0
     originalButton.Text =
-        slots[slotIndex].originalName
+        __UI.__L.slots[slotIndex].originalName
         or "Select"
     originalButton.TextSize =
         11
@@ -21460,7 +21461,7 @@ for slotIndex = 1, SLOT_COUNT do
         )
     originalCorner.Parent =
         originalButton
-    slotOriginalButtons[
+    __UI.__L.slotOriginalButtons[
         slotIndex
     ] =
         originalButton
@@ -21523,7 +21524,7 @@ for slotIndex = 1, SLOT_COUNT do
     replaceButton.BorderSizePixel =
         0
     replaceButton.Text =
-        slots[slotIndex].replaceName
+        __UI.__L.slots[slotIndex].replaceName
         or "Select"
     replaceButton.TextSize =
         11
@@ -21548,42 +21549,42 @@ for slotIndex = 1, SLOT_COUNT do
         )
     replaceCorner.Parent =
         replaceButton
-    slotReplaceButtons[
+    __UI.__L.slotReplaceButtons[
         slotIndex
     ] =
         replaceButton
 end
-cosmetic.loadState()
-cosmetic.buildList()
-cosmetic.installHook()
-cosmetic.buildUI()
+__UI.__L.cosmetic.loadState()
+__UI.__L.cosmetic.buildList()
+__UI.__L.cosmetic.installHook()
+__UI.__L.cosmetic.buildUI()
 
 pcall(function()
     local loadoutChannel =
         ReplicatedStorage.Shared.UserData.Events.Remotes.Channels.Loadout
 
-    UnusualFns.addUnusualConnection(
+    __UI.__L.UnusualFns.addUnusualConnection(
         loadoutChannel.OnClientEvent:Connect(
             function(kind, data)
                 if kind == "sync"
                     and type(data) == "table"
                 then
-                    cosmetic.setInitialOriginal(
+                    __UI.__L.cosmetic.setInitialOriginal(
                         1,
                         data.CosmeticSlot_1
                     )
-                    cosmetic.setInitialOriginal(
+                    __UI.__L.cosmetic.setInitialOriginal(
                         2,
                         data.CosmeticSlot_2
                     )
                 elseif kind == "patch"
                     and type(data) == "table"
                 then
-                    cosmetic.setInitialOriginal(
+                    __UI.__L.cosmetic.setInitialOriginal(
                         1,
                         data.CosmeticSlot_1
                     )
-                    cosmetic.setInitialOriginal(
+                    __UI.__L.cosmetic.setInitialOriginal(
                         2,
                         data.CosmeticSlot_2
                     )
@@ -21594,45 +21595,45 @@ pcall(function()
 end)
 
 genv.DEADEYE_COSMETIC_CLEANUP =
-    cosmetic.cleanup
+    __UI.__L.cosmetic.cleanup
 
 --// =========================================================
 --// PICKER
 --// =========================================================
-Picker =
+__UI.__L.Picker =
     Instance.new("Frame")
-Picker.Size =
+__UI.__L.Picker.Size =
     UDim2.new(
         0,
         560,
         0,
         450
     )
-Picker.Position =
+__UI.__L.Picker.Position =
     UDim2.new(
         0.5,
         -280,
         0.5,
         -225
     )
-Picker.BackgroundColor3 =
+__UI.__L.Picker.BackgroundColor3 =
     Color3.fromRGB(
         31,
         35,
         42
     )
-Picker.BackgroundTransparency =
+__UI.__L.Picker.BackgroundTransparency =
     0.10
-Picker.BorderSizePixel =
+__UI.__L.Picker.BorderSizePixel =
     0
-Picker.ClipsDescendants =
+__UI.__L.Picker.ClipsDescendants =
     true
-Picker.Visible =
+__UI.__L.Picker.Visible =
     false
-Picker.ZIndex =
+__UI.__L.Picker.ZIndex =
     30
-Picker.Parent =
-    ScreenGui
+__UI.__L.Picker.Parent =
+    __UI.__L.ScreenGui
 __UI.PickerCorner =
     Instance.new("UICorner")
 __UI.PickerCorner.CornerRadius =
@@ -21641,7 +21642,7 @@ __UI.PickerCorner.CornerRadius =
         8
     )
 __UI.PickerCorner.Parent =
-    Picker
+    __UI.__L.Picker
 __UI.PickerStroke =
     Instance.new("UIStroke")
 __UI.PickerStroke.Thickness =
@@ -21649,7 +21650,7 @@ __UI.PickerStroke.Thickness =
 __UI.PickerStroke.Transparency =
     0.66
 __UI.PickerStroke.Parent =
-    Picker
+    __UI.__L.Picker
 __UI.PickerGlass =
     Instance.new("UIGradient")
 __UI.PickerGlass.Rotation =
@@ -21684,95 +21685,95 @@ __UI.PickerGlass.Color =
 __UI.PickerGlass.Transparency =
     NumberSequence.new(0.20)
 __UI.PickerGlass.Parent =
-    Picker
+    __UI.__L.Picker
 --// PICKER TITLE
-PickerTitle =
+__UI.__L.PickerTitle =
     Instance.new("TextLabel")
-PickerTitle.Size =
+__UI.__L.PickerTitle.Size =
     UDim2.new(
         1,
         -45,
         0,
         32
     )
-PickerTitle.Position =
+__UI.__L.PickerTitle.Position =
     UDim2.new(
         0,
         12,
         0,
         2
     )
-PickerTitle.BackgroundTransparency =
+__UI.__L.PickerTitle.BackgroundTransparency =
     1
-PickerTitle.Text =
+__UI.__L.PickerTitle.Text =
     "Select Emote"
-PickerTitle.TextSize =
+__UI.__L.PickerTitle.TextSize =
     16
-PickerTitle.Font =
+__UI.__L.PickerTitle.Font =
     Enum.Font.GothamBold
-PickerTitle.TextColor3 =
+__UI.__L.PickerTitle.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-PickerTitle.TextXAlignment =
+__UI.__L.PickerTitle.TextXAlignment =
     Enum.TextXAlignment.Left
-PickerTitle.ZIndex =
+__UI.__L.PickerTitle.ZIndex =
     31
-PickerTitle.Parent =
-    Picker
+__UI.__L.PickerTitle.Parent =
+    __UI.__L.Picker
 --// =========================================================
 --// PICKER CLOSE
 --// =========================================================
-PickerClose =
+__UI.__L.PickerClose =
     Instance.new("TextButton")
-PickerClose.Size =
+__UI.__L.PickerClose.Size =
     UDim2.new(
         0,
         27,
         0,
         27
     )
-PickerClose.Position =
+__UI.__L.PickerClose.Position =
     UDim2.new(
         1,
         -32,
         0,
         6
     )
-PickerClose.BackgroundColor3 =
+__UI.__L.PickerClose.BackgroundColor3 =
     Color3.fromRGB(
         45,
         45,
         50
     )
-PickerClose.BackgroundTransparency =
+__UI.__L.PickerClose.BackgroundTransparency =
     0.05
-PickerClose.BorderSizePixel =
+__UI.__L.PickerClose.BorderSizePixel =
     0
-PickerClose.ZIndex =
+__UI.__L.PickerClose.ZIndex =
     31
-PickerClose.Text =
+__UI.__L.PickerClose.Text =
     "×"
-PickerClose.TextSize =
+__UI.__L.PickerClose.TextSize =
     27
-PickerClose.Font =
+__UI.__L.PickerClose.Font =
     Enum.Font.GothamBold
-PickerClose.TextColor3 =
+__UI.__L.PickerClose.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-PickerClose.AutoButtonColor =
+__UI.__L.PickerClose.AutoButtonColor =
     false
-PickerClose.Active =
+__UI.__L.PickerClose.Active =
     true
-PickerClose.Selectable =
+__UI.__L.PickerClose.Selectable =
     false
-PickerClose.Parent =
-    Picker
+__UI.__L.PickerClose.Parent =
+    __UI.__L.Picker
 
 __UI.PickerCloseCorner =
     Instance.new("UICorner")
@@ -21782,7 +21783,7 @@ __UI.PickerCloseCorner.CornerRadius =
         7
     )
 __UI.PickerCloseCorner.Parent =
-    PickerClose
+    __UI.__L.PickerClose
 
 __UI.PickerCloseStroke =
     Instance.new("UIStroke")
@@ -21791,62 +21792,62 @@ __UI.PickerCloseStroke.Thickness =
 __UI.PickerCloseStroke.Transparency =
     0.65
 __UI.PickerCloseStroke.Parent =
-    PickerClose
+    __UI.__L.PickerClose
 --// =========================================================
 --// PICKER SEARCH
 --// =========================================================
-PickerSearch =
+__UI.__L.PickerSearch =
     Instance.new("TextBox")
-PickerSearch.Size =
+__UI.__L.PickerSearch.Size =
     UDim2.new(
         1,
         -20,
         0,
         30
     )
-PickerSearch.Position =
+__UI.__L.PickerSearch.Position =
     UDim2.new(
         0,
         10,
         0,
         36
     )
-PickerSearch.BackgroundColor3 =
+__UI.__L.PickerSearch.BackgroundColor3 =
     Color3.fromRGB(
         40,
         45,
         53
     )
-PickerSearch.BackgroundTransparency =
+__UI.__L.PickerSearch.BackgroundTransparency =
     0.20
-PickerSearch.BorderSizePixel =
+__UI.__L.PickerSearch.BorderSizePixel =
     0
-PickerSearch.ClearTextOnFocus =
+__UI.__L.PickerSearch.ClearTextOnFocus =
     false
-PickerSearch.PlaceholderText =
+__UI.__L.PickerSearch.PlaceholderText =
     "Search by name..."
-PickerSearch.PlaceholderColor3 =
+__UI.__L.PickerSearch.PlaceholderColor3 =
     Color3.fromRGB(
         120,
         120,
         120
     )
-PickerSearch.Text =
+__UI.__L.PickerSearch.Text =
     ""
-PickerSearch.TextSize =
+__UI.__L.PickerSearch.TextSize =
     12
-PickerSearch.Font =
+__UI.__L.PickerSearch.Font =
             Enum.Font.GothamBold
-PickerSearch.TextColor3 =
+__UI.__L.PickerSearch.TextColor3 =
     Color3.fromRGB(
         255,
         255,
         255
     )
-PickerSearch.ZIndex =
+__UI.__L.PickerSearch.ZIndex =
     32
-PickerSearch.Parent =
-    Picker
+__UI.__L.PickerSearch.Parent =
+    __UI.__L.Picker
 __UI.SearchCorner =
     Instance.new("UICorner")
 __UI.SearchCorner.CornerRadius =
@@ -21855,51 +21856,51 @@ __UI.SearchCorner.CornerRadius =
         6
     )
 __UI.SearchCorner.Parent =
-    PickerSearch
+    __UI.__L.PickerSearch
 --// =========================================================
 --// PICKER SCROLL
 --// =========================================================
-PickerScroll =
+__UI.__L.PickerScroll =
     Instance.new("ScrollingFrame")
-PickerScroll.Size =
+__UI.__L.PickerScroll.Size =
     UDim2.new(
         1,
         -16,
         1,
         -74
     )
-PickerScroll.Position =
+__UI.__L.PickerScroll.Position =
     UDim2.new(
         0,
         8,
         0,
         70
     )
-PickerScroll.BackgroundColor3 =
+__UI.__L.PickerScroll.BackgroundColor3 =
     Color3.fromRGB(
         32,
         35,
         42
     )
-PickerScroll.BackgroundTransparency =
+__UI.__L.PickerScroll.BackgroundTransparency =
     0.20
-PickerScroll.BorderSizePixel =
+__UI.__L.PickerScroll.BorderSizePixel =
     0
-PickerScroll.ScrollBarThickness =
+__UI.__L.PickerScroll.ScrollBarThickness =
     6
-PickerScroll.CanvasSize =
+__UI.__L.PickerScroll.CanvasSize =
     UDim2.new(
         0,
         0,
         0,
         0
     )
-PickerScroll.AutomaticCanvasSize =
+__UI.__L.PickerScroll.AutomaticCanvasSize =
     Enum.AutomaticSize.Y
-PickerScroll.ZIndex =
+__UI.__L.PickerScroll.ZIndex =
     31
-PickerScroll.Parent =
-    Picker
+__UI.__L.PickerScroll.Parent =
+    __UI.__L.Picker
 __UI.PickerScrollCorner =
     Instance.new("UICorner")
 __UI.PickerScrollCorner.CornerRadius =
@@ -21908,7 +21909,7 @@ __UI.PickerScrollCorner.CornerRadius =
         7
     )
 __UI.PickerScrollCorner.Parent =
-    PickerScroll
+    __UI.__L.PickerScroll
 __UI.PickerPadding =
     Instance.new("UIPadding")
 __UI.PickerPadding.PaddingTop =
@@ -21932,7 +21933,7 @@ __UI.PickerPadding.PaddingRight =
         8
     )
 __UI.PickerPadding.Parent =
-    PickerScroll
+    __UI.__L.PickerScroll
 __UI.PickerGrid =
     Instance.new("UIGridLayout")
 __UI.PickerGrid.CellSize =
@@ -21952,12 +21953,12 @@ __UI.PickerGrid.CellPadding =
 __UI.PickerGrid.SortOrder =
     Enum.SortOrder.LayoutOrder
 __UI.PickerGrid.Parent =
-    PickerScroll
+    __UI.__L.PickerScroll
 --// =========================================================
 --// EMOTE VIEWPORT PREVIEW
 --// Локальная копия native preview без CreateViewport()
 --// =========================================================
-local function createEmotePreview(
+__UI.__L.createEmotePreview = function(
     itemModule,
     viewport
 )
@@ -22550,18 +22551,18 @@ end
 getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT = {
     LocalPlayer = LocalPlayer,
     genv = genv,
-    SLOT_COUNT = SLOT_COUNT,
-    slots = slots,
+    SLOT_COUNT = __UI.__L.SLOT_COUNT,
+    slots = __UI.__L.slots,
     prepareOriginalModule = prepareOriginalModule,
     prepareReplaceModule = prepareReplaceModule,
     getEmoteName = getEmoteName,
-    createEmotePreview = createEmotePreview,
+    createEmotePreview = __UI.__L.createEmotePreview,
     isEnabled = function()
         return enabled
     end
 }
 
-local NativeWheel =
+__UI.__L.NativeWheel =
     loadstring(
         game:HttpGet(
             "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/8d0f6ff3659781c4beedbf2d2b33f6c6c0731fe3/DeadEye_NativeWheel.lua"
@@ -22569,15 +22570,15 @@ local NativeWheel =
     )()
 
 --// Backward-compatible guard for a cached old factory-style module.
-if type(NativeWheel) == "function" then
-    NativeWheel = NativeWheel(
+if type(__UI.__L.NativeWheel) == "function" then
+    __UI.__L.NativeWheel = __UI.__L.NativeWheel(
         getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT
     )
 end
 
 getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT = nil
 
-if type(NativeWheel) ~= "table" then
+if type(__UI.__L.NativeWheel) ~= "table" then
     error(
         "[DeadEye] NativeWheel module did not return an API table"
     )
@@ -22585,17 +22586,17 @@ end
 --// =========================================================
 --// REBUILD PICKER
 --// =========================================================
-local function rebuildPicker()
+__UI.__L.rebuildPicker = function()
     for _, button in ipairs(
-        pickerButtons
+        __UI.__L.pickerButtons
     ) do
         pcall(function()
             local preview = button:FindFirstChild("EmotePreview")
             if preview then
                 local id = tonumber(string.match(button.Name, "^Emote_(%d+)$"))
                 if id then
-                    emotePreviewCache[id] = preview
-                    preview.Parent = emotePreviewCacheHolder
+                    __UI.__L.emotePreviewCache[id] = preview
+                    preview.Parent = __UI.__L.emotePreviewCacheHolder
                 end
             end
         end)
@@ -22604,11 +22605,11 @@ local function rebuildPicker()
         end)
     end
     table.clear(
-        pickerButtons
+        __UI.__L.pickerButtons
     )
     local query =
         string.lower(
-            PickerSearch.Text
+            __UI.__L.PickerSearch.Text
                 or ""
         )
     local shown = 0
@@ -22629,7 +22630,7 @@ local function rebuildPicker()
         button.TextTruncate = Enum.TextTruncate.AtEnd
         button.LayoutOrder = 0
         button.ZIndex = 22
-        button.Parent = PickerScroll
+        button.Parent = __UI.__L.PickerScroll
 
         local corner =
             Instance.new("UICorner")
@@ -22639,36 +22640,36 @@ local function rebuildPicker()
         corner.Parent = button
 
         table.insert(
-            pickerButtons,
+            __UI.__L.pickerButtons,
             button
         )
 
         button.MouseButton1Click:Connect(
             function()
-                if not activePickerSlot
-                    or not activePickerSide then
+                if not __UI.__L.activePickerSlot
+                    or not __UI.__L.activePickerSide then
                     return
                 end
 
                 local slot =
-                    slots[activePickerSlot]
+                    __UI.__L.slots[__UI.__L.activePickerSlot]
 
-                if activePickerSide == "Original" then
+                if __UI.__L.activePickerSide == "Original" then
                     slot.originalId = nil
                     slot.originalName = nil
-                    slotOriginalButtons[
-                        activePickerSlot
+                    __UI.__L.slotOriginalButtons[
+                        __UI.__L.activePickerSlot
                     ].Text = "Select"
                 else
                     slot.replaceId = nil
                     slot.replaceName = nil
-                    slotReplaceButtons[
-                        activePickerSlot
+                    __UI.__L.slotReplaceButtons[
+                        __UI.__L.activePickerSlot
                     ].Text = "Select"
                 end
 
-                savedConfig.emotes[
-                    activePickerSlot
+                __UI.__L.savedConfig.emotes[
+                    __UI.__L.activePickerSlot
                 ] = {
                     originalId = slot.originalId,
                     replaceId = slot.replaceId
@@ -22676,23 +22677,23 @@ local function rebuildPicker()
 
                 saveSavedConfig()
 
-                if EmoteRuntime.getCurrentOriginalId() == slot.originalId
+                if __UI.__L.EmoteRuntime.getCurrentOriginalId() == slot.originalId
                     or (
-                        EmoteRuntime.getCurrentOriginalId()
+                        __UI.__L.EmoteRuntime.getCurrentOriginalId()
                         and not slot.originalId
                     )
                 then
-                    EmoteRuntime.stopCustomEmote()
+                    __UI.__L.EmoteRuntime.stopCustomEmote()
                 end
 
-                Status.Text =
+                __UI.__L.Status.Text =
                     "Slot "
-                    .. tostring(activePickerSlot)
+                    .. tostring(__UI.__L.activePickerSlot)
                     .. " cleared"
 
-                Picker.Visible = false
-                activePickerSlot = nil
-                activePickerSide = nil
+                __UI.__L.Picker.Visible = false
+                __UI.__L.activePickerSlot = nil
+                __UI.__L.activePickerSide = nil
             end
         )
 
@@ -22700,7 +22701,7 @@ local function rebuildPicker()
     end
 
     for index, data in ipairs(
-        emoteList
+        __UI.__L.emoteList
     ) do
         local nameLower =
             string.lower(
@@ -22759,7 +22760,7 @@ local function rebuildPicker()
             button.ZIndex =
                 32
             button.Parent =
-                PickerScroll
+                __UI.__L.PickerScroll
 
 
             --// NATIVE EMOTE PREVIEW
@@ -22815,7 +22816,7 @@ local function rebuildPicker()
                 viewport
 
             local cachedPreview =
-                emotePreviewCache[data.id]
+                __UI.__L.emotePreviewCache[data.id]
 
             if cachedPreview then
                 pcall(function()
@@ -22824,11 +22825,11 @@ local function rebuildPicker()
                 cachedPreview.Parent = button
                 viewport = cachedPreview
             else
-                createEmotePreview(
+                __UI.__L.createEmotePreview(
                     data.module,
                     viewport
                 )
-                emotePreviewCache[data.id] = viewport
+                __UI.__L.emotePreviewCache[data.id] = viewport
             end
 
             --// GLASS OVERLAY
@@ -22977,20 +22978,20 @@ local function rebuildPicker()
             buttonCorner.Parent =
                 button
             table.insert(
-                pickerButtons,
+                __UI.__L.pickerButtons,
                 button
             )
             button.MouseButton1Click:Connect(
                 function()
-                    if not activePickerSlot
-                        or not activePickerSide then
+                    if not __UI.__L.activePickerSlot
+                        or not __UI.__L.activePickerSide then
                         return
                     end
                     local slot =
-                        slots[
-                            activePickerSlot
+                        __UI.__L.slots[
+                            __UI.__L.activePickerSlot
                         ]
-                    if activePickerSide ==
+                    if __UI.__L.activePickerSide ==
                         "Original" then
                         slot.originalId =
                             data.id
@@ -22999,8 +23000,8 @@ local function rebuildPicker()
                         prepareOriginalModule(
                             data.id
                         )
-                        slotOriginalButtons[
-                            activePickerSlot
+                        __UI.__L.slotOriginalButtons[
+                            __UI.__L.activePickerSlot
                         ].Text =
                             data.name
                     else
@@ -23011,13 +23012,13 @@ local function rebuildPicker()
                         prepareReplaceModule(
                             data.id
                         )
-                        slotReplaceButtons[
-                            activePickerSlot
+                        __UI.__L.slotReplaceButtons[
+                            __UI.__L.activePickerSlot
                         ].Text =
                             data.name
                     end
-                    savedConfig.emotes[
-                        activePickerSlot
+                    __UI.__L.savedConfig.emotes[
+                        __UI.__L.activePickerSlot
                     ] = {
                         originalId =
                             slot.originalId,
@@ -23029,35 +23030,35 @@ local function rebuildPicker()
                     --// относится к изменённому слоту,
                     --// заставляем его пересоздаться
                     --// со следующего heartbeat.
-                    if EmoteRuntime.getCurrentOriginalId()
+                    if __UI.__L.EmoteRuntime.getCurrentOriginalId()
                         == slot.originalId then
-                        EmoteRuntime.stopCustomEmote()
+                        __UI.__L.EmoteRuntime.stopCustomEmote()
                     end
-                    Status.Text =
+                    __UI.__L.Status.Text =
                         "Slot "
                         .. tostring(
-                            activePickerSlot
+                            __UI.__L.activePickerSlot
                         )
                         .. " configured"
-                    Picker.Visible =
+                    __UI.__L.Picker.Visible =
                         false
-                    activePickerSlot =
+                    __UI.__L.activePickerSlot =
                         nil
-                    activePickerSide =
+                    __UI.__L.activePickerSide =
                         nil
                 end
             )
         end
     end
-    Status.Text =
+    __UI.__L.Status.Text =
         "Found: "
         .. tostring(shown)
-    PickerScroll.CanvasPosition =
+    __UI.__L.PickerScroll.CanvasPosition =
         Vector2.new(
             0,
             0
         )
-    emotePickerPreloaded = true
+    __UI.__L.emotePickerPreloaded = true
 end
 --// =========================================================
 --// =========================================================
@@ -23347,70 +23348,70 @@ end
 
 
 --// =========================================================
-local function openPicker(
+__UI.__L.openPicker = function(
     slotIndex,
     side
 )
-    activePickerSlot =
+    __UI.__L.activePickerSlot =
         slotIndex
-    activePickerSide =
+    __UI.__L.activePickerSide =
         side
     if side == "Original" then
-        PickerTitle.Text =
+        __UI.__L.PickerTitle.Text =
             "Slot "
             .. tostring(
                 slotIndex
             )
             .. " • Original"
     else
-        PickerTitle.Text =
+        __UI.__L.PickerTitle.Text =
             "Slot "
             .. tostring(
                 slotIndex
             )
             .. " • Replace"
     end
-    PickerSearch.Text =
+    __UI.__L.PickerSearch.Text =
         ""
 
-    if not emotePickerPreloaded then
-        rebuildPicker()
+    if not __UI.__L.emotePickerPreloaded then
+        __UI.__L.rebuildPicker()
     end
 
     __UI.animatePickerAppear(
-        Picker
+        __UI.__L.Picker
     )
 end
 --// =========================================================
 --// CLOSE PICKER
 --// =========================================================
-local function closePicker()
-    Picker.Visible =
+__UI.__L.closePicker = function()
+    __UI.__L.Picker.Visible =
         false
-    activePickerSlot =
+    __UI.__L.activePickerSlot =
         nil
-    activePickerSide =
+    __UI.__L.activePickerSide =
         nil
 end
 --// =========================================================
 --// CONNECT SLOT BUTTONS
 --// =========================================================
-for slotIndex = 1, SLOT_COUNT do
-    slotOriginalButtons[
+for slotIndex = 1, __UI.__L.SLOT_COUNT do
+    __UI.__L.slotOriginalButtons[
         slotIndex
     ].MouseButton1Click:Connect(
         function()
-            openPicker(
+            __UI.__L.openPicker(
                 slotIndex,
                 "Original"
             )
         end
     )
-    slotReplaceButtons[
+    __UI.__L.slotReplaceButtons[
         slotIndex
     ].MouseButton1Click:Connect(
         function()
-            openPicker(
+            __UI.__L.openPicker(
                 slotIndex,
                 "Replace"
             )
@@ -23420,34 +23421,34 @@ end
 --// =========================================================
 --// SEARCH
 --// =========================================================
-addConnection(
-    PickerSearch:GetPropertyChangedSignal(
+__UI.__L.addConnection(
+    __UI.__L.PickerSearch:GetPropertyChangedSignal(
         "Text"
     ):Connect(
         function()
-            if Picker.Visible then
-                rebuildPicker()
+            if __UI.__L.Picker.Visible then
+                __UI.__L.rebuildPicker()
             end
         end
     )
 )
-PickerClose.MouseButton1Click:Connect(
+__UI.__L.PickerClose.MouseButton1Click:Connect(
     function()
-        closePicker()
+        __UI.__L.closePicker()
     end
 )
 --// =========================================================
 --// TOGGLE
 --// =========================================================
-addConnection(
-    Toggle.MouseButton1Click:Connect(
+__UI.__L.addConnection(
+    __UI.__L.Toggle.MouseButton1Click:Connect(
         function()
-            if currentCategory == "Cosmetic" then
+            if __UI.__L.currentCategory == "Cosmetic" then
                 local valid = false
 
                 for index = 1, 2 do
                     local state =
-                        cosmetic.slots[index]
+                        __UI.__L.cosmetic.slots[index]
 
                     if state.originalId
                         and state.replaceId
@@ -23460,72 +23461,72 @@ addConnection(
                 end
 
                 if valid then
-                    cosmetic.enabled =
-                        not cosmetic.enabled
+                    __UI.__L.cosmetic.enabled =
+                        not __UI.__L.cosmetic.enabled
 
                     pcall(
-                        cosmetic.updateToggle
+                        __UI.__L.cosmetic.updateToggle
                     )
 
                     -- Apply directly to the existing live rig.
                     -- Future respawns are still handled by SetRig.
                     task.spawn(function()
                         pcall(
-                            cosmetic.refreshRig
+                            __UI.__L.cosmetic.refreshRig
                         )
                     end)
                 else
-                    cosmetic.enabled = false
+                    __UI.__L.cosmetic.enabled = false
 
                     pcall(
-                        cosmetic.updateToggle
+                        __UI.__L.cosmetic.updateToggle
                     )
                 end
 
                 return
             end
 
-            if currentCategory == "Unusual" then
-                if unusualEnabled then
-                    unusualEnabled =
+            if __UI.__L.currentCategory == "Unusual" then
+                if __UI.__L.unusualEnabled then
+                    __UI.__L.unusualEnabled =
                         false
                     genv.UNUSUAL_SWAPPER_ENABLED =
                         false
-                    UnusualFns.restoreUnusual()
+                    __UI.__L.UnusualFns.restoreUnusual()
                 else
-                    if not unusualSlot.originalId
-                        or not unusualSlot.replaceId
+                    if not __UI.__L.unusualSlot.originalId
+                        or not __UI.__L.unusualSlot.replaceId
                     then
-                        unusualStatus.Text =
+                        __UI.__L.unusualStatus.Text =
                             "Select both Unusuals first"
                         return
                     end
-                    if UnusualFns.activateUnusual() then
-                        unusualEnabled =
+                    if __UI.__L.UnusualFns.activateUnusual() then
+                        __UI.__L.unusualEnabled =
                             true
-                        unusualRuntime.appliedRig =
-                            UnusualFns.getUnusualVisualRig()
+                        __UI.__L.unusualRuntime.appliedRig =
+                            __UI.__L.UnusualFns.getUnusualVisualRig()
                         genv.UNUSUAL_SWAPPER_ENABLED =
                             true
                     end
                 end
-                updateUnusualToggle()
+                __UI.__L.updateUnusualToggle()
                 return
             end
             --// EXISTING EMOTE TOGGLE
             if enabled then
                 enabled = false
-                EmoteRuntime.stopCustomEmote()
-                NativeWheel.restore()
+                __UI.__L.EmoteRuntime.stopCustomEmote()
+                __UI.__L.NativeWheel.restore()
                 updateGUI()
-                Status.Text =
+                __UI.__L.Status.Text =
                     "Swap disabled"
                                 return
             end
             local validSlots = 0
-            for i = 1, SLOT_COUNT do
+            for i = 1, __UI.__L.SLOT_COUNT do
                 local slot =
-                    slots[i]
+                    __UI.__L.slots[i]
                 if slot.originalId
                     and slot.replaceId
                 then
@@ -23544,17 +23545,17 @@ addConnection(
                 end
             end
             if validSlots == 0 then
-                Status.Text =
+                __UI.__L.Status.Text =
                     "No configured slots"
                 return
             end
             enabled =
                 true
-            NativeWheel.reset()
-            EmoteRuntime.reset()
-            NativeWheel.sync()
+            __UI.__L.NativeWheel.reset()
+            __UI.__L.EmoteRuntime.reset()
+            __UI.__L.NativeWheel.sync()
             updateGUI()
-            Status.Text =
+            __UI.__L.Status.Text =
                 "Active • "
                 .. tostring(
                     validSlots
@@ -23567,36 +23568,36 @@ addConnection(
 --// =========================================================
 --// MINIMIZE STATE
 --// =========================================================
-setMainMinimized = function(state)
-    mainMinimized = state
-    if mainMinimized then
-        Main.Size =
+__UI.__L.setMainMinimized = function(state)
+    __UI.__L.mainMinimized = state
+    if __UI.__L.mainMinimized then
+        __UI.__L.Main.Size =
             UDim2.new(
                 0,                245,
                 0,
                 40
             )
-        MainTitle.Size =
+        __UI.__L.MainTitle.Size =
             UDim2.new(
                 0,
                 155,
                 0,
                 36
             )
-        Status.Visible = false
-        Toggle.Visible = false
-        SlotsScroll.Visible = false
-        if Picker then
-            Picker.Visible = false
+        __UI.__L.Status.Visible = false
+        __UI.__L.Toggle.Visible = false
+        __UI.__L.SlotsScroll.Visible = false
+        if __UI.__L.Picker then
+            __UI.__L.Picker.Visible = false
         end
         pcall(function()
-            categoryBar.Visible = false
-            mainPage.Visible = false
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            others.page.Visible = false
+            __UI.__L.categoryBar.Visible = false
+            __UI.__L.mainPage.Visible = false
+            __UI.__L.unusualPage.Visible = false
+            __UI.__L.unusualStatus.Visible = false
+            __UI.__L.others.page.Visible = false
         end)
-        Minimize.Text = "+"
+        __UI.__L.Minimize.Text = "+"
 
         for _, name in ipairs({
             "ResizeRight",
@@ -23604,87 +23605,87 @@ setMainMinimized = function(state)
             "ResizeCorner"
         }) do
             local handle =
-                Main:FindFirstChild(name)
+                __UI.__L.Main:FindFirstChild(name)
             if handle then
                 handle.Visible = false
             end
         end
     else
-        Main.Size =
+        __UI.__L.Main.Size =
             UDim2.new(
                 0,
                 math.max(
-                    MIN_WINDOW_WIDTH,
-                    savedConfig.gui.width
+                    __UI.__L.MIN_WINDOW_WIDTH,
+                    __UI.__L.savedConfig.gui.width
                 ),
                 0,
                 math.max(
-                    MIN_WINDOW_HEIGHT,
-                    savedConfig.gui.height
+                    __UI.__L.MIN_WINDOW_HEIGHT,
+                    __UI.__L.savedConfig.gui.height
                 )
             )
-        MainTitle.Size =
+        __UI.__L.MainTitle.Size =
             UDim2.new(
                 1,
                 -105,
                 0,
                 36
             )
-        Status.Visible = true
-        Toggle.Visible = true
-        SlotsScroll.Visible = true
+        __UI.__L.Status.Visible = true
+        __UI.__L.Toggle.Visible = true
+        __UI.__L.SlotsScroll.Visible = true
         pcall(function()
-            categoryBar.Visible = true
-            if currentCategory == "Main" then
-                Status.Visible = false
-                Toggle.Visible = false
-                SlotsScroll.Visible = false
-                mainPage.Visible = true
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = false
-            elseif currentCategory == "Unusual" then
-                Status.Visible = false
-                Toggle.Visible = true
-                Toggle.Parent =
-                    unusualPage
-                Toggle.LayoutOrder =
+            __UI.__L.categoryBar.Visible = true
+            if __UI.__L.currentCategory == "Main" then
+                __UI.__L.Status.Visible = false
+                __UI.__L.Toggle.Visible = false
+                __UI.__L.SlotsScroll.Visible = false
+                __UI.__L.mainPage.Visible = true
+                __UI.__L.unusualPage.Visible = false
+                __UI.__L.unusualStatus.Visible = false
+                __UI.__L.others.page.Visible = false
+            elseif __UI.__L.currentCategory == "Unusual" then
+                __UI.__L.Status.Visible = false
+                __UI.__L.Toggle.Visible = true
+                __UI.__L.Toggle.Parent =
+                    __UI.__L.unusualPage
+                __UI.__L.Toggle.LayoutOrder =
                     0
-                SlotsScroll.Visible = false
-                mainPage.Visible = false
-                unusualPage.Visible = true
-                unusualStatus.Visible = false
-                others.page.Visible = false
-            elseif currentCategory == "Others" then
-                Status.Visible = false
-                Toggle.Visible = false
-                SlotsScroll.Visible = false
-                mainPage.Visible = false
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = true
-                cosmetic.page.Visible = false
-            elseif currentCategory == "Cosmetic" then
-                Status.Visible = false
-                Toggle.Visible = true
-                Toggle.Parent = cosmetic.page
-                Toggle.LayoutOrder = 0
-                SlotsScroll.Visible = false
-                mainPage.Visible = false
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = false
-                cosmetic.page.Visible = true
-                unusualPicker.Visible = false
-                cosmetic.updateToggle()
+                __UI.__L.SlotsScroll.Visible = false
+                __UI.__L.mainPage.Visible = false
+                __UI.__L.unusualPage.Visible = true
+                __UI.__L.unusualStatus.Visible = false
+                __UI.__L.others.page.Visible = false
+            elseif __UI.__L.currentCategory == "Others" then
+                __UI.__L.Status.Visible = false
+                __UI.__L.Toggle.Visible = false
+                __UI.__L.SlotsScroll.Visible = false
+                __UI.__L.mainPage.Visible = false
+                __UI.__L.unusualPage.Visible = false
+                __UI.__L.unusualStatus.Visible = false
+                __UI.__L.others.page.Visible = true
+                __UI.__L.cosmetic.page.Visible = false
+            elseif __UI.__L.currentCategory == "Cosmetic" then
+                __UI.__L.Status.Visible = false
+                __UI.__L.Toggle.Visible = true
+                __UI.__L.Toggle.Parent = __UI.__L.cosmetic.page
+                __UI.__L.Toggle.LayoutOrder = 0
+                __UI.__L.SlotsScroll.Visible = false
+                __UI.__L.mainPage.Visible = false
+                __UI.__L.unusualPage.Visible = false
+                __UI.__L.unusualStatus.Visible = false
+                __UI.__L.others.page.Visible = false
+                __UI.__L.cosmetic.page.Visible = true
+                __UI.__L.unusualPicker.Visible = false
+                __UI.__L.cosmetic.updateToggle()
             else
-                mainPage.Visible = false
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = false
+                __UI.__L.mainPage.Visible = false
+                __UI.__L.unusualPage.Visible = false
+                __UI.__L.unusualStatus.Visible = false
+                __UI.__L.others.page.Visible = false
             end
         end)
-        Minimize.Text = "−"
+        __UI.__L.Minimize.Text = "−"
 
         for _, name in ipairs({
             "ResizeRight",
@@ -23692,7 +23693,7 @@ setMainMinimized = function(state)
             "ResizeCorner"
         }) do
             local handle =
-                Main:FindFirstChild(name)
+                __UI.__L.Main:FindFirstChild(name)
             if handle then
                 handle.Visible = true
             end
@@ -23702,11 +23703,11 @@ end
 --// =========================================================
 --// MINIMIZE BUTTON CONNECTION
 --// =========================================================
-addConnection(
-    Minimize.MouseButton1Click:Connect(
+__UI.__L.addConnection(
+    __UI.__L.Minimize.MouseButton1Click:Connect(
         function()
-            setMainMinimized(
-                not mainMinimized
+            __UI.__L.setMainMinimized(
+                not __UI.__L.mainMinimized
             )
         end
     )
@@ -23716,18 +23717,18 @@ addConnection(
 --// =========================================================
 function updateGUI()
     if enabled then
-        Toggle.Text =
+        __UI.__L.Toggle.Text =
             "SWAP: ON"
-        Toggle.BackgroundColor3 =
+        __UI.__L.Toggle.BackgroundColor3 =
             Color3.fromRGB(
                 68,
                 74,
                 84
             )
     else
-        Toggle.Text =
+        __UI.__L.Toggle.Text =
             "SWAP: OFF"
-        Toggle.BackgroundColor3 =
+        __UI.__L.Toggle.BackgroundColor3 =
             Color3.fromRGB(
                 47,
                 52,
@@ -23738,85 +23739,85 @@ end
 --// =========================================================
 --// WATCHER
 --// =========================================================
-addConnection(
+__UI.__L.addConnection(
     RunService.Heartbeat:Connect(
         function()
             if not genv.EMOTE_SWAPPER_RUNNING then
                 return
             end
-            NativeWheel.sync()
-            EmoteRuntime.checkState()
+            __UI.__L.NativeWheel.sync()
+            __UI.__L.EmoteRuntime.checkState()
         end
     )
 )
-local DragHandle =
+__UI.__L.DragHandle =
     Instance.new("Frame")
-DragHandle.Name =
+__UI.__L.DragHandle.Name =
     "DragHandle"
-DragHandle.Size =
+__UI.__L.DragHandle.Size =
     UDim2.new(
         1,
         -105,
         0,
         39
     )
-DragHandle.Position =
+__UI.__L.DragHandle.Position =
     UDim2.new(
         0,
         1,
         0,
         1
     )
-DragHandle.BackgroundTransparency =
+__UI.__L.DragHandle.BackgroundTransparency =
     1
-DragHandle.BorderSizePixel =
+__UI.__L.DragHandle.BorderSizePixel =
     0
-DragHandle.Active =
+__UI.__L.DragHandle.Active =
     true
-DragHandle.ZIndex =
+__UI.__L.DragHandle.ZIndex =
     4
-DragHandle.Parent =
-    Main
+__UI.__L.DragHandle.Parent =
+    __UI.__L.Main
 
 --// =========================================================
 --// WINDOW GEOMETRY / DRAG / RESIZE
 -- =========================================================
-local dragging = false
-local dragStart
-local startPosition
+__UI.__L.dragging = false
+__UI.__L.dragStart
+__UI.__L.startPosition
 
-local resizing = false
-local resizeMode = nil
-local resizeStart
-local resizeStartSize
+__UI.__L.resizing = false
+__UI.__L.resizeMode = nil
+__UI.__L.resizeStart
+__UI.__L.resizeStartSize
 
-local function saveWindowState()
-    savedConfig.gui =
-        savedConfig.gui
+__UI.__L.saveWindowState = function()
+    __UI.__L.savedConfig.gui =
+        __UI.__L.savedConfig.gui
         or {}
 
-    savedConfig.gui.x =
+    __UI.__L.savedConfig.gui.x =
         math.floor(
-            Main.Position.X.Offset
+            __UI.__L.Main.Position.X.Offset
             + 0.5
         )
 
-    savedConfig.gui.y =
+    __UI.__L.savedConfig.gui.y =
         math.floor(
-            Main.Position.Y.Offset
+            __UI.__L.Main.Position.Y.Offset
             + 0.5
         )
 
-    if not mainMinimized then
-        savedConfig.gui.width =
+    if not __UI.__L.mainMinimized then
+        __UI.__L.savedConfig.gui.width =
             math.floor(
-                Main.AbsoluteSize.X
+                __UI.__L.Main.AbsoluteSize.X
                 + 0.5
             )
 
-        savedConfig.gui.height =
+        __UI.__L.savedConfig.gui.height =
             math.floor(
-                Main.AbsoluteSize.Y
+                __UI.__L.Main.AbsoluteSize.Y
                 + 0.5
             )
     end
@@ -23826,7 +23827,7 @@ local function saveWindowState()
     end)
 end
 
-local function clampWindowPosition()
+__UI.__L.clampWindowPosition = function()
     local camera =
         workspace.CurrentCamera
 
@@ -23838,16 +23839,16 @@ local function clampWindowPosition()
         camera.ViewportSize
 
     local width =
-        Main.AbsoluteSize.X
+        __UI.__L.Main.AbsoluteSize.X
 
     local height =
-        Main.AbsoluteSize.Y
+        __UI.__L.Main.AbsoluteSize.Y
 
     local x =
-        Main.Position.X.Offset
+        __UI.__L.Main.Position.X.Offset
 
     local y =
-        Main.Position.Y.Offset
+        __UI.__L.Main.Position.Y.Offset
 
     local maxX =
         math.max(
@@ -23861,7 +23862,7 @@ local function clampWindowPosition()
             viewport.Y - height - 8
         )
 
-    Main.Position =
+    __UI.__L.Main.Position =
         UDim2.new(
             0,
             math.clamp(
@@ -23878,66 +23879,66 @@ local function clampWindowPosition()
         )
 end
 
-local function setMainSize(
+__UI.__L.setMainSize = function(
     width,
     height
 )
-    Main.Size =
+    __UI.__L.Main.Size =
         UDim2.new(
             0,
             math.max(
-                MIN_WINDOW_WIDTH,
+                __UI.__L.MIN_WINDOW_WIDTH,
                 math.floor(
                     width + 0.5
                 )
             ),
             0,
             math.max(
-                MIN_WINDOW_HEIGHT,
+                __UI.__L.MIN_WINDOW_HEIGHT,
                 math.floor(
                     height + 0.5
                 )
             )
         )
 
-    clampWindowPosition()
+    __UI.__L.clampWindowPosition()
 end
 
 --// Drag the title bar.
-local function beginWindowDrag(input)
+__UI.__L.beginWindowDrag = function(input)
     if input.UserInputType ==
             Enum.UserInputType.MouseButton1
         or input.UserInputType ==
             Enum.UserInputType.Touch
     then
-        dragging = true
-        dragStart =
+        __UI.__L.dragging = true
+        __UI.__L.dragStart =
             input.Position
-        startPosition =
-            Main.Position
+        __UI.__L.startPosition =
+            __UI.__L.Main.Position
     end
 end
 
-addConnection(
-    DragHandle.InputBegan:Connect(
+__UI.__L.addConnection(
+    __UI.__L.DragHandle.InputBegan:Connect(
         function(input)
-            beginWindowDrag(input)
+            __UI.__L.beginWindowDrag(input)
         end
     )
 )
 
-addConnection(
-    MainTitle.InputBegan:Connect(
+__UI.__L.addConnection(
+    __UI.__L.MainTitle.InputBegan:Connect(
         function(input)
-            beginWindowDrag(input)
+            __UI.__L.beginWindowDrag(input)
         end
     )
 )
 
-addConnection(
+__UI.__L.addConnection(
     UserInputService.InputChanged:Connect(
         function(input)
-            if not dragging then
+            if not __UI.__L.dragging then
                 return
             end
 
@@ -23951,78 +23952,78 @@ addConnection(
 
             local delta =
                 input.Position -
-                dragStart
+                __UI.__L.dragStart
 
-            Main.Position =
+            __UI.__L.Main.Position =
                 UDim2.new(
-                    startPosition.X.Scale,
-                    startPosition.X.Offset
+                    __UI.__L.startPosition.X.Scale,
+                    __UI.__L.startPosition.X.Offset
                         + delta.X,
-                    startPosition.Y.Scale,
-                    startPosition.Y.Offset
+                    __UI.__L.startPosition.Y.Scale,
+                    __UI.__L.startPosition.Y.Offset
                         + delta.Y
                 )
 
-            clampWindowPosition()
+            __UI.__L.clampWindowPosition()
         end
     )
 )
 
-local function beginResize(
+__UI.__L.beginResize = function(
     position,
     mode
 )
-    if mainMinimized then
+    if __UI.__L.mainMinimized then
         return
     end
 
-    resizing = true
-    resizeMode = mode
-    resizeStart =
+    __UI.__L.resizing = true
+    __UI.__L.resizeMode = mode
+    __UI.__L.resizeStart =
         position
-    resizeStartSize =
-        Main.AbsoluteSize
+    __UI.__L.resizeStartSize =
+        __UI.__L.Main.AbsoluteSize
 end
 
 --// Invisible right-edge resize target.
-local ResizeRight =
+__UI.__L.ResizeRight =
     Instance.new("Frame")
-ResizeRight.Name =
+__UI.__L.ResizeRight.Name =
     "ResizeRight"
-ResizeRight.Size =
+__UI.__L.ResizeRight.Size =
     UDim2.new(
         0,
-        RESIZE_EDGE,
+        __UI.__L.RESIZE_EDGE,
         1,
         -54
     )
-ResizeRight.Position =
+__UI.__L.ResizeRight.Position =
     UDim2.new(
         1,
-        -RESIZE_EDGE,
+        -__UI.__L.RESIZE_EDGE,
         0,
         48
     )
-ResizeRight.BackgroundTransparency =
+__UI.__L.ResizeRight.BackgroundTransparency =
     1
-ResizeRight.BorderSizePixel =
+__UI.__L.ResizeRight.BorderSizePixel =
     0
-ResizeRight.ZIndex =
+__UI.__L.ResizeRight.ZIndex =
     20
-ResizeRight.Active =
+__UI.__L.ResizeRight.Active =
     true
-ResizeRight.Parent =
-    Main
+__UI.__L.ResizeRight.Parent =
+    __UI.__L.Main
 
-addConnection(
-    ResizeRight.InputBegan:Connect(
+__UI.__L.addConnection(
+    __UI.__L.ResizeRight.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
                 or input.UserInputType ==
                     Enum.UserInputType.Touch
             then
-                beginResize(
+                __UI.__L.beginResize(
                     input.Position,
                     "right"
                 )
@@ -24032,44 +24033,44 @@ addConnection(
 )
 
 --// Bottom-edge resize target.
-local ResizeBottom =
+__UI.__L.ResizeBottom =
     Instance.new("Frame")
-ResizeBottom.Name =
+__UI.__L.ResizeBottom.Name =
     "ResizeBottom"
-ResizeBottom.Size =
+__UI.__L.ResizeBottom.Size =
     UDim2.new(
         1,
         -54,
         0,
-        RESIZE_EDGE
+        __UI.__L.RESIZE_EDGE
     )
-ResizeBottom.Position =
+__UI.__L.ResizeBottom.Position =
     UDim2.new(
         0,
         8,
         1,
-        -RESIZE_EDGE
+        -__UI.__L.RESIZE_EDGE
     )
-ResizeBottom.BackgroundTransparency =
+__UI.__L.ResizeBottom.BackgroundTransparency =
     1
-ResizeBottom.BorderSizePixel =
+__UI.__L.ResizeBottom.BorderSizePixel =
     0
-ResizeBottom.ZIndex =
+__UI.__L.ResizeBottom.ZIndex =
     20
-ResizeBottom.Active =
+__UI.__L.ResizeBottom.Active =
     true
-ResizeBottom.Parent =
-    Main
+__UI.__L.ResizeBottom.Parent =
+    __UI.__L.Main
 
-addConnection(
-    ResizeBottom.InputBegan:Connect(
+__UI.__L.addConnection(
+    __UI.__L.ResizeBottom.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
                 or input.UserInputType ==
                     Enum.UserInputType.Touch
             then
-                beginResize(
+                __UI.__L.beginResize(
                     input.Position,
                     "bottom"
                 )
@@ -24079,33 +24080,33 @@ addConnection(
 )
 
 --// Bottom-right corner: width + height together.
-local ResizeCorner =
+__UI.__L.ResizeCorner =
     Instance.new("TextButton")
-ResizeCorner.Name =
+__UI.__L.ResizeCorner.Name =
     "ResizeCorner"
-ResizeCorner.Size =
+__UI.__L.ResizeCorner.Size =
     UDim2.new(
         0,
         24,
         0,
         24
     )
-ResizeCorner.Position =
+__UI.__L.ResizeCorner.Position =
     UDim2.new(
         1,
         -24,
         1,
         -24
     )
-ResizeCorner.BackgroundTransparency =
+__UI.__L.ResizeCorner.BackgroundTransparency =
     1
-ResizeCorner.BorderSizePixel =
+__UI.__L.ResizeCorner.BorderSizePixel =
     0
-ResizeCorner.Text =
+__UI.__L.ResizeCorner.Text =
     ""
-ResizeCorner.TextSize =
+__UI.__L.ResizeCorner.TextSize =
     1
-ResizeCorner.ZIndex =
+__UI.__L.ResizeCorner.ZIndex =
     21
 
 for i = 1, 3 do
@@ -24145,22 +24146,22 @@ for i = 1, 3 do
         22
 
     grip.Parent =
-        ResizeCorner
+        __UI.__L.ResizeCorner
 end
-ResizeCorner.AutoButtonColor =
+__UI.__L.ResizeCorner.AutoButtonColor =
     false
-ResizeCorner.Parent =
-    Main
+__UI.__L.ResizeCorner.Parent =
+    __UI.__L.Main
 
-addConnection(
-    ResizeCorner.InputBegan:Connect(
+__UI.__L.addConnection(
+    __UI.__L.ResizeCorner.InputBegan:Connect(
         function(input)
             if input.UserInputType ==
                     Enum.UserInputType.MouseButton1
                 or input.UserInputType ==
                     Enum.UserInputType.Touch
             then
-                beginResize(
+                __UI.__L.beginResize(
                     input.Position,
                     "corner"
                 )
@@ -24169,10 +24170,10 @@ addConnection(
     )
 )
 
-addConnection(
+__UI.__L.addConnection(
     UserInputService.InputChanged:Connect(
         function(input)
-            if not resizing then
+            if not __UI.__L.resizing then
                 return
             end
 
@@ -24186,31 +24187,31 @@ addConnection(
 
             local delta =
                 input.Position -
-                resizeStart
+                __UI.__L.resizeStart
 
             local width =
-                resizeStartSize.X
+                __UI.__L.resizeStartSize.X
 
             local height =
-                resizeStartSize.Y
+                __UI.__L.resizeStartSize.Y
 
-            if resizeMode == "right"
-                or resizeMode == "corner"
+            if __UI.__L.resizeMode == "right"
+                or __UI.__L.resizeMode == "corner"
             then
                 width =
-                    resizeStartSize.X +
+                    __UI.__L.resizeStartSize.X +
                     delta.X
             end
 
-            if resizeMode == "bottom"
-                or resizeMode == "corner"
+            if __UI.__L.resizeMode == "bottom"
+                or __UI.__L.resizeMode == "corner"
             then
                 height =
-                    resizeStartSize.Y +
+                    __UI.__L.resizeStartSize.Y +
                     delta.Y
             end
 
-            setMainSize(
+            __UI.__L.setMainSize(
                 width,
                 height
             )
@@ -24218,7 +24219,7 @@ addConnection(
     )
 )
 
-addConnection(
+__UI.__L.addConnection(
     UserInputService.InputEnded:Connect(
         function(input)
             if input.UserInputType ==
@@ -24226,15 +24227,15 @@ addConnection(
                 or input.UserInputType ==
                     Enum.UserInputType.Touch
             then
-                if dragging then
-                    dragging = false
-                    saveWindowState()
+                if __UI.__L.dragging then
+                    __UI.__L.dragging = false
+                    __UI.__L.saveWindowState()
                 end
 
-                if resizing then
-                    resizing = false
-                    resizeMode = nil
-                    saveWindowState()
+                if __UI.__L.resizing then
+                    __UI.__L.resizing = false
+                    __UI.__L.resizeMode = nil
+                    __UI.__L.saveWindowState()
                 end
             end
         end
@@ -24243,8 +24244,8 @@ addConnection(
 
 --// CLEANUP
 --// =========================================================
-local function cleanup()
-    if cleaned then
+__UI.__L.cleanup = function()
+    if __UI.__L.cleaned then
         return
     end
 
@@ -24252,80 +24253,80 @@ local function cleanup()
     --// This also persists Avatar Import text and values changed without
     --// pressing APPLY / ENTER.
     pcall(function()
-        others.saveConfig()
+        __UI.__L.others.saveConfig()
     end)
 
     --// Persist Main / Reverse Look state on close as well.
     pcall(function()
-        mainJump.saveConfig()
+        __UI.__L.mainJump.saveConfig()
     end)
 
     pcall(function()
-        ScreenGui.Enabled = false
+        __UI.__L.ScreenGui.Enabled = false
     end)
 
-    NativeWheel.restore(true)
+    __UI.__L.NativeWheel.restore(true)
 
     pcall(function()
-        mainJump.setRageLookEnabled(
+        __UI.__L.mainJump.setRageLookEnabled(
             false,
             false
         )
     end)
 
     pcall(function()
-        mainJump.uninstallReverseLookHooks()
+        __UI.__L.mainJump.uninstallReverseLookHooks()
     end)
 
     pcall(function()
-        mainJump.destroySensors()
-        mainJump.manualJumpActive = false
-        mainJump.lookAutoJumpCycle = false
-        mainJump.lookTriggeredThisAir = false
+        __UI.__L.mainJump.destroySensors()
+        __UI.__L.mainJump.manualJumpActive = false
+        __UI.__L.mainJump.lookAutoJumpCycle = false
+        __UI.__L.mainJump.lookTriggeredThisAir = false
     end)
 
     pcall(function()
-        if mainJump.benchTrimpStateConnection then
-            mainJump.benchTrimpStateConnection:Disconnect()
-            mainJump.benchTrimpStateConnection = nil
+        if __UI.__L.mainJump.benchTrimpStateConnection then
+            __UI.__L.mainJump.benchTrimpStateConnection:Disconnect()
+            __UI.__L.mainJump.benchTrimpStateConnection = nil
         end
-        mainJump.benchTrimpEnabled = false
+        __UI.__L.mainJump.benchTrimpEnabled = false
     end)
 
     pcall(function()
-        if mainJump.lookActive
-            or mainJump.lookRestoring
+        if __UI.__L.mainJump.lookActive
+            or __UI.__L.mainJump.lookRestoring
         then
-            mainJump.restoreLookNow()
+            __UI.__L.mainJump.restoreLookNow()
         else
-            mainJump.unbindLookRender()
+            __UI.__L.mainJump.unbindLookRender()
         end
 
-        if mainJump.lookStateConnection then
-            mainJump.lookStateConnection:Disconnect()
-            mainJump.lookStateConnection = nil
+        if __UI.__L.mainJump.lookStateConnection then
+            __UI.__L.mainJump.lookStateConnection:Disconnect()
+            __UI.__L.mainJump.lookStateConnection = nil
         end
     end)
 
     --// Stop every active loop before doing any cleanup that may yield.
-    cleaned = true
+    __UI.__L.cleaned = true
     genv.EMOTE_SWAPPER_RUNNING = false
     genv.DEADEYE_MAIN_RUNNING = false
     genv.DEADEYE_UNUSUAL_POV_RUNNING = false
     genv.DEADEYE_PORTRAIT_RUNNING = false
 
     pcall(function()
-        mainJump.stopCrouchSpam()
+        __UI.__L.mainJump.stopCrouchSpam()
     end)
 
     enabled = false
 
     pcall(function()
-        EmoteRuntime.stopForCleanup()
+        __UI.__L.EmoteRuntime.stopForCleanup()
     end)
 
     pcall(function()
-        disconnectAll()
+        __UI.__L.disconnectAll()
     end)
 
     pcall(function()
@@ -24341,18 +24342,18 @@ local function cleanup()
     end)
 
     pcall(function()
-        saveWindowState()
+        __UI.__L.saveWindowState()
     end)
 
     pcall(function()
-        if Picker then
-            Picker.Visible = false
+        if __UI.__L.Picker then
+            __UI.__L.Picker.Visible = false
         end
     end)
 
     pcall(function()
-        if ScreenGui then
-            ScreenGui:Destroy()
+        if __UI.__L.ScreenGui then
+            __UI.__L.ScreenGui:Destroy()
         end
     end)
 
@@ -24366,14 +24367,14 @@ local function cleanup()
         nil
 end
 genv.EMOTE_SWAPPER_CLEANUP =
-    cleanup
+    __UI.__L.cleanup
 --// =========================================================
 --// CLOSE
 --// =========================================================
-addConnection(
-    Close.MouseButton1Click:Connect(
+__UI.__L.addConnection(
+    __UI.__L.Close.MouseButton1Click:Connect(
         function()
-            cleanup()
+            __UI.__L.cleanup()
         end
     )
 )
@@ -24382,7 +24383,7 @@ addConnection(
 --// GLASS SURFACE FINISH
 --// =========================================================
 for _, object in ipairs(
-    Main:GetDescendants()
+    __UI.__L.Main:GetDescendants()
 ) do
     if object:IsA("TextButton") then
         pcall(function()
@@ -24409,9 +24410,9 @@ for _, object in ipairs(
                 )
         end)
     elseif object:IsA("Frame")
-        and object ~= MainSurface
-        and object ~= MainHeader
-        and object ~= mainJump.autoJumpModePicker
+        and object ~= __UI.__L.MainSurface
+        and object ~= __UI.__L.MainHeader
+        and object ~= __UI.__L.mainJump.autoJumpModePicker
     then
         pcall(function()
             object.BackgroundTransparency =
@@ -24432,7 +24433,7 @@ end
 --// them from the finished selector button before hover styling.
 --// =========================================================
 pcall(function()
-    mainJump.syncAutoJumpModePickerVisual()
+    __UI.__L.mainJump.syncAutoJumpModePickerVisual()
 end)
 
 --// =========================================================
@@ -24617,12 +24618,12 @@ function __UI.styleButtonMotion(button)
     end
 
     local pickerClose =
-        button == PickerClose
-        or button == unusualPickerClose
+        button == __UI.__L.PickerClose
+        or button == __UI.__L.unusualPickerClose
 
     local compact =
-        button == Minimize
-        or button == Close
+        button == __UI.__L.Minimize
+        or button == __UI.__L.Close
         or pickerClose
 
     --// Hover glow belongs to the outer clickable card.
@@ -24806,7 +24807,7 @@ function __UI.styleButtonMotion(button)
         end)
     end
 
-    addConnection(
+    __UI.__L.addConnection(
         button.MouseEnter:Connect(
             function()
                 if not button.Parent
@@ -24834,7 +24835,7 @@ function __UI.styleButtonMotion(button)
         )
     )
 
-    addConnection(
+    __UI.__L.addConnection(
         button.MouseLeave:Connect(
             function()
                 if not button.Parent then
@@ -24872,7 +24873,7 @@ function __UI.styleButtonMotion(button)
         )
     )
 
-    addConnection(
+    __UI.__L.addConnection(
         button.MouseButton1Down:Connect(
             function()
                 if not button.Parent
@@ -24896,7 +24897,7 @@ function __UI.styleButtonMotion(button)
         )
     )
 
-    addConnection(
+    __UI.__L.addConnection(
         button.MouseButton1Up:Connect(
             function()
                 if not button.Parent then
@@ -24948,7 +24949,7 @@ function __UI.styleButtonMotion(button)
         )
     )
 
-    addConnection(
+    __UI.__L.addConnection(
         button.Destroying:Connect(
             function()
                 cancelShadowTween()
@@ -24964,15 +24965,15 @@ function __UI.styleButtonMotion(button)
 end
 
 for _, object in ipairs(
-    ScreenGui:GetDescendants()
+    __UI.__L.ScreenGui:GetDescendants()
 ) do
     if object:IsA("TextButton") then
         __UI.styleButtonMotion(object)
     end
 end
 
-addConnection(
-    ScreenGui.DescendantAdded:Connect(
+__UI.__L.addConnection(
+    __UI.__L.ScreenGui.DescendantAdded:Connect(
         function(object)
             if object:IsA("TextButton") then
                 task.defer(function()
@@ -24988,42 +24989,42 @@ addConnection(
 --// INIT
 --// =========================================================
 pcall(function()
-    clampWindowPosition()
+    __UI.__L.clampWindowPosition()
 end)
 prepareSlots()
-savedConfig.emotes =
-    savedConfig.emotes
+__UI.__L.savedConfig.emotes =
+    __UI.__L.savedConfig.emotes
     or {}
-for i = 1, SLOT_COUNT do
-    savedConfig.emotes[i] = {
+for i = 1, __UI.__L.SLOT_COUNT do
+    __UI.__L.savedConfig.emotes[i] = {
         originalId =
-            slots[i].originalId,
+            __UI.__L.slots[i].originalId,
         replaceId =
-            slots[i].replaceId
+            __UI.__L.slots[i].replaceId
     }
 end
-savedConfig.unusual = {
+__UI.__L.savedConfig.unusual = {
     originalId =
-        unusualSlot.originalId,
+        __UI.__L.unusualSlot.originalId,
     replaceId =
-        unusualSlot.replaceId
+        __UI.__L.unusualSlot.replaceId
 }
-cosmetic.saveState()
+__UI.__L.cosmetic.saveState()
 saveSavedConfig()
 
 --// PRELOAD PICKER 3D PREVIEWS ON SCRIPT START.
 --// Opening the picker later only reuses these ready ViewportFrames.
 pcall(function()
-    rebuildPicker()
+    __UI.__L.rebuildPicker()
 end)
 
 pcall(function()
-    cosmetic.rebuildPicker()
+    __UI.__L.cosmetic.rebuildPicker()
 end)
 
-setMainMinimized(false)
+__UI.__L.setMainMinimized(false)
 updateGUI()
 pcall(function()
-    setCategory("Emotes")
+    __UI.__L.setCategory("Emotes")
 end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_Portrait.lua"))()
