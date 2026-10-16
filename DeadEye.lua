@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.230
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.231
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.230"
+local SCRIPT_VERSION = "1.231"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -8134,6 +8134,50 @@ function UnusualFns.restoreNativeWeldedTreeStates()
     table.clear(states)
 end
 
+--// Keep the original Unusual hidden while a replacement is active.
+--// The game's cosmetic controller may periodically re-enable emitters or
+--// rewrite part visibility after the one-time swap. Reassert only the objects
+--// recorded by hideNativeWeldedTree, so replacement-owned visuals stay intact.
+function UnusualFns.enforceNativeWeldedTreeHidden()
+    if not unusualActive
+        or not unusualRuntime.originalId
+    then
+        return
+    end
+
+    for object, state in pairs(unusualRuntime.nativeWeldedStates) do
+        if object and object.Parent then
+            pcall(function()
+                if state.kind == "BasePart" then
+                    object.LocalTransparencyModifier = 1
+                    object.Transparency = 1
+
+                elseif state.kind == "LocalTransparencyModifier" then
+                    --// Backward compatibility with an in-memory state
+                    --// created by an older script revision.
+                    object.LocalTransparencyModifier = 1
+
+                elseif state.kind == "Transparency" then
+                    object.Transparency = 1
+
+                elseif state.kind == "Enabled" then
+                    local wasEnabled = object.Enabled
+                    object.Enabled = false
+
+                    if wasEnabled
+                        and (
+                            object:IsA("ParticleEmitter")
+                            or object:IsA("Trail")
+                        )
+                    then
+                        object:Clear()
+                    end
+                end
+            end)
+        end
+    end
+end
+
 --// REMOVE ORIGINAL FX
 -- =========================================================
 function UnusualFns.removeOriginalUnusualFX(
@@ -9824,6 +9868,10 @@ function UnusualFns.setUnusualFXForPOV(
 
     --// The animation-only runtime clone must remain invisible.
     __UI.__L.hideUnusualAnimationSourceVisuals()
+
+    --// Run after the native cosmetic/visibility updates every frame.
+    --// This prevents the original effect from reappearing during a round.
+    UnusualFns.enforceNativeWeldedTreeHidden()
 end
 
 function UnusualFns.updateUnusualPOV()
