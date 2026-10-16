@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.222
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.223
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.222"
+local SCRIPT_VERSION = "1.223"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -798,7 +798,7 @@ if type(__UI.__L.EmoteRuntime) == "function" then
                 return enabled
             end,
             EmoteService = __UI.EmoteService,
-            __UI.__L.originalAnimationIds = __UI.__L.originalAnimationIds
+            originalAnimationIds = __UI.__L.originalAnimationIds
         }
     )
 end
@@ -11604,7 +11604,7 @@ __UI.__L.mainJump = {
     crouchSpamPreJumpStartedAt = 0,
     autoJumpModeButton = nil,
     autoJumpModePicker = nil,
-    __UI.__L.connections = {}
+    connections = {}
 }
 __UI.__L.mainJump.jumpDelay =
     math.clamp(
