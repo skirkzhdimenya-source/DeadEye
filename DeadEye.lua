@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.229
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.230
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.229"
+local SCRIPT_VERSION = "1.230"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -8030,18 +8030,27 @@ function UnusualFns.hideNativeWeldedTree(rootJoint)
         if object:IsA("BasePart") then
             if states[object] == nil then
                 local oldModifier = 0
+                local oldTransparency = 0
+
                 pcall(function()
                     oldModifier = object.LocalTransparencyModifier
+                    oldTransparency = object.Transparency
                 end)
+
                 states[object] = {
-                    kind = "LocalTransparencyModifier",
-                    value = oldModifier
+                    kind = "BasePart",
+                    localTransparencyModifier = oldModifier,
+                    transparency = oldTransparency
                 }
             end
 
+            --// Hide geometry through both channels. Some live-round visuals
+            --// have their LocalTransparencyModifier refreshed by native rig code.
             pcall(function()
                 object.LocalTransparencyModifier = 1
+                object.Transparency = 1
             end)
+
         elseif object:IsA("Decal")
             or object:IsA("Texture")
         then
@@ -8059,6 +8068,7 @@ function UnusualFns.hideNativeWeldedTree(rootJoint)
             pcall(function()
                 object.Transparency = 1
             end)
+
         elseif object:IsA("ParticleEmitter")
             or object:IsA("Trail")
             or object:IsA("Beam")
@@ -8086,6 +8096,16 @@ function UnusualFns.hideNativeWeldedTree(rootJoint)
             pcall(function()
                 object.Enabled = false
             end)
+
+            --// Disabling stops future emission; clear already-rendered trails
+            --// and particles too, so the old effect vanishes on this switch.
+            if object:IsA("ParticleEmitter")
+                or object:IsA("Trail")
+            then
+                pcall(function()
+                    object:Clear()
+                end)
+            end
         end
     end
 end
@@ -8095,7 +8115,13 @@ function UnusualFns.restoreNativeWeldedTreeStates()
 
     for object, state in pairs(states) do
         pcall(function()
-            if state.kind == "LocalTransparencyModifier" then
+            if state.kind == "BasePart" then
+                object.LocalTransparencyModifier =
+                    state.localTransparencyModifier
+                object.Transparency =
+                    state.transparency
+            elseif state.kind == "LocalTransparencyModifier" then
+                --// Backward compatibility with states saved by older versions.
                 object.LocalTransparencyModifier = state.value
             elseif state.kind == "Enabled" then
                 object.Enabled = state.value
@@ -8156,7 +8182,7 @@ function UnusualFns.removeOriginalUnusualFX(
         then
 
             for _, existing in ipairs(
-                targetPart:GetChildren()
+                targetPart:GetDescendants()
             ) do
 
                 for _, info in ipairs(
@@ -8209,7 +8235,7 @@ function UnusualFns.removeOriginalUnusualFX(
             --// Remove matching original joints such as
             --// CatRadiance Head.Ears / Head.Bigotes.
             for _, joint in ipairs(
-                targetPart:GetChildren()
+                targetPart:GetDescendants()
             ) do
 
                 if joint:IsA("Weld")
