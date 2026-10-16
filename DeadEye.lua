@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.225
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.226
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.225"
+local SCRIPT_VERSION = "1.226"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -1918,6 +1918,9 @@ local unusualRuntime = {
     --// currentEquippedId describes what the player actually has equipped.
     currentEquippedId = nil,
     nativeSnapshot = nil,
+    --// Local-only visibility states for native welded cosmetic trees.
+    --// Keep original Weld trees intact; recreate neither their joints nor their meshes.
+    nativeWeldedStates = {},
     --// Native P1 particle state for the LIVE visual rig.
     --// The clean-game test showed active Unusual ParticleEmitters
     --// switching true -> false in P1. Preserve each emitter's
@@ -6799,10 +6802,20 @@ __UI.__L.rebindUnusualCloneTree = function(
 
                         --// Resolve references to sibling body parts on the live rig.
                         if not reboundPart and targetPart and targetPart.Parent then
+                            local rig = targetPart.Parent
                             local candidate =
-                                targetPart.Parent:FindFirstChild(originalPart.Name)
+                                rig:FindFirstChild(originalPart.Name)
 
-                            if candidate and candidate:IsA("BasePart") then
+                            if not candidate then
+                                candidate = rig:FindFirstChild(
+                                    originalPart.Name,
+                                    true
+                                )
+                            end
+
+                            if candidate
+                                and candidate:IsA("BasePart")
+                            then
                                 reboundPart = candidate
                             end
                         end
@@ -6892,6 +6905,7 @@ __UI.__L.installUnusualWeldedTree = function(
                 object.CanCollide = false
                 object.CanTouch = false
                 object.CanQuery = false
+                object.LocalTransparencyModifier = 0
             end)
         elseif object:IsA("Script") then
             --// Match the native AddCosmetics behavior for scripts in cosmetics.
@@ -7583,6 +7597,83 @@ function UnusualFns.buildOriginalUnusualSignature(
 end
 
 --// =========================================================
+--// =========================================================
+--// PRESERVE NATIVE WELDED COSMETIC TREES
+--// =========================================================
+function UnusualFns.hideNativeWeldedTree(rootJoint)
+    if not rootJoint then
+        return
+    end
+
+    local objects = { rootJoint }
+    for _, descendant in ipairs(rootJoint:GetDescendants()) do
+        table.insert(objects, descendant)
+    end
+
+    local states = unusualRuntime.nativeWeldedStates
+
+    for _, object in ipairs(objects) do
+        if object:IsA("BasePart") then
+            if states[object] == nil then
+                local oldModifier = 0
+                pcall(function()
+                    oldModifier = object.LocalTransparencyModifier
+                end)
+                states[object] = {
+                    kind = "LocalTransparencyModifier",
+                    value = oldModifier
+                }
+            end
+
+            pcall(function()
+                object.LocalTransparencyModifier = 1
+            end)
+        elseif object:IsA("ParticleEmitter")
+            or object:IsA("Trail")
+            or object:IsA("Beam")
+            or object:IsA("Fire")
+            or object:IsA("Smoke")
+            or object:IsA("Sparkles")
+            or object:IsA("Highlight")
+            or object:IsA("BillboardGui")
+            or object:IsA("PointLight")
+            or object:IsA("SpotLight")
+            or object:IsA("SurfaceLight")
+        then
+            if states[object] == nil then
+                local oldEnabled = true
+                pcall(function()
+                    oldEnabled = object.Enabled
+                end)
+                states[object] = {
+                    kind = "Enabled",
+                    value = oldEnabled
+                }
+            end
+
+            pcall(function()
+                object.Enabled = false
+            end)
+        end
+    end
+end
+
+function UnusualFns.restoreNativeWeldedTreeStates()
+    local states = unusualRuntime.nativeWeldedStates
+
+    for object, state in pairs(states) do
+        pcall(function()
+            if state.kind == "LocalTransparencyModifier" then
+                object.LocalTransparencyModifier = state.value
+            elseif state.kind == "Enabled" then
+                object.Enabled = state.value
+            end
+        end)
+    end
+
+    table.clear(states)
+end
+
 --// REMOVE ORIGINAL FX
 -- =========================================================
 function UnusualFns.removeOriginalUnusualFX(
@@ -7668,30 +7759,37 @@ function UnusualFns.removeOriginalUnusualFX(
 
                     if match then
 
-                        pcall(function()
-                            existing:Destroy()
-                        end)
+                        if info.WholeTree
+                            and __UI.__L.isUnusualJointObject(existing)
+                        then
+                            --// Preserve the original native tree and only hide it locally.
+                            UnusualFns.hideNativeWeldedTree(existing)
+                        else
+                            pcall(function()
+                                existing:Destroy()
+                            end)
 
-                        for _, joint in ipairs(
-                            targetPart:GetChildren()
-                        ) do
+                            for _, joint in ipairs(
+                                targetPart:GetChildren()
+                            ) do
 
-                            if (
-                                joint:IsA("Weld")
-                                or joint:IsA("WeldConstraint")
-                                or joint:IsA("Motor6D")
-                                or joint:IsA("Motor")
-                            )
-                            and joint.Name ==
-                                info.Name
-                            then
+                                if (
+                                    joint:IsA("Weld")
+                                    or joint:IsA("WeldConstraint")
+                                    or joint:IsA("Motor6D")
+                                    or joint:IsA("Motor")
+                                )
+                                and joint.Name == info.Name
+                                and not info.WholeTree
+                                then
 
-                                pcall(function()
-                                    joint:Destroy()
-                                end)
+                                    pcall(function()
+                                        joint:Destroy()
+                                    end)
+
+                                end
 
                             end
-
                         end
 
                         break
@@ -7718,8 +7816,8 @@ function UnusualFns.removeOriginalUnusualFX(
                         objects
                     ) do
 
-                        if joint.Name ==
-                            info.Name
+                        if joint.Name == info.Name
+                            and not info.WholeTree
                         then
 
                             pcall(function()
@@ -8004,6 +8102,8 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                             targetPart
                         restored = true
                     end
+                else
+                    restored = true
                 end
             end
 
@@ -8038,6 +8138,8 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                             targetPart
                         restored = true
                     end
+                else
+                    restored = true
                 end
             end
         end
@@ -8092,19 +8194,15 @@ function UnusualFns.restoreUnusual()
 
         if visualRig then
             UnusualFns.removeOurUnusualFX()
+            UnusualFns.restoreNativeWeldedTreeStates()
 
-            pcall(function()
-                UnusualFns.removeOriginalUnusualFX(
-                    originalId,
-                    visualRig,
-                    playerCharacter
-                )
-            end)
-
-            --// Keep P1 handling on the currently native Unusual.
+            --// The game owns the currently equipped effect.
+            --// Do not delete native geometry by matching old effect names.
             UnusualFns.bindNativeParticlePOV(
                 visualRig
             )
+        else
+            UnusualFns.restoreNativeWeldedTreeStates()
         end
 
         unusualActive =
@@ -8170,6 +8268,9 @@ function UnusualFns.restoreUnusual()
                 playerCharacter
             )
         end
+
+        --// Restore exact visibility/emission states of the untouched native Weld trees.
+        UnusualFns.restoreNativeWeldedTreeStates()
 
         --// The original effect is now the live effect again.
         --// Keep the same instant P1/P3 behavior on it.
@@ -8260,11 +8361,17 @@ function UnusualFns.activateUnusual()
         visualRig,
         playerCharacter
     ) then
+        --// Native Weld trees were kept in place; restore their exact states and any direct FX.
+        UnusualFns.removeOurUnusualFX()
         task.wait()
-        __UI.__L.applyUnusualFX(
-            unusualSlot.originalId,
+        UnusualFns.restoreNativeUnusualSnapshot(
+            unusualRuntime.nativeSnapshot,
             visualRig,
             playerCharacter
+        )
+        UnusualFns.restoreNativeWeldedTreeStates()
+        UnusualFns.bindNativeParticlePOV(
+            visualRig
         )
         return false
     end
@@ -8369,14 +8476,7 @@ function UnusualFns.reapplyUnusual()
                     UnusualFns.removeOurUnusualFX()
                     task.wait()
 
-                    pcall(function()
-                        UnusualFns.removeOriginalUnusualFX(
-                            unusualRuntime.originalId
-                                or unusualSlot.originalId,
-                            visualRig,
-                            playerCharacter
-                        )
-                    end)
+                    UnusualFns.restoreNativeWeldedTreeStates()
 
                     unusualActive = false
                     unusualEnabled = false
@@ -21079,13 +21179,7 @@ __UI.__L.cleanupUnusual = function()
                     --// Keep the game's current native effect; remove only
                     --// the FX owned by DeadEye.
                     UnusualFns.removeOurUnusualFX()
-                    pcall(function()
-                        UnusualFns.removeOriginalUnusualFX(
-                            runtimeOriginalId,
-                            visualRig,
-                            playerCharacter
-                        )
-                    end)
+                    UnusualFns.restoreNativeWeldedTreeStates()
                 elseif runtimeSnapshot
                     and runtimeSnapshotRig == visualRig
                 then
@@ -21111,6 +21205,8 @@ __UI.__L.cleanupUnusual = function()
             end
         end)
     end
+
+    UnusualFns.restoreNativeWeldedTreeStates()
 
     unusualActive =
         false
