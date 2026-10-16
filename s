@@ -3,6 +3,7 @@ DEADEYE UNUSUAL RUNTIME SOURCE SEARCH
 Client-visible scripts scanned: 35629
 Relevant scripts found: 1065
 Decompile failures: 0
+Output truncation: NONE
 
 
 ========================================
@@ -24569,4 +24570,10897 @@ DECOMPILED SOURCE LENGTH: 402
    19 | }
 
 
-[OUTPUT CAPPED: лимит буфера достигнут; часть совпадений не включена.]
+========================================
+MATCH #694
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.Lantern.ChristmasBellsLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 427
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Christmas Bells Lantern",
+    6 | 		Desc = "ding dong the witch is dead",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #695
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.Lantern.GingerbreadBoboLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 440
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Gingerbread Bobo Lantern",
+    6 | 		Desc = "halp mehhh... don\'t eat me :( - bobo",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #696
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.Lantern.GingerbreadLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 411
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Gingerbread Lantern",
+    6 | 		Desc = "Freshly baked",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #697
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.Lantern.HandheldCandle
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 406
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Handheld Candle",
+    6 | 		Desc = "Old fashioned, but it works.",
+    7 | 		Creator = "phiphu123",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #698
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.Lantern.OrnateLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 428
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ornate Lantern",
+    6 | 		Desc = "bobo and jard wish you a happy holidays",
+    7 | 		Creator = "LeeW011",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #699
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.Lantern.SnowglobeLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 412
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowglobe Lantern",
+    6 | 		Desc = "May the power of snow light your way.",
+    7 | 		Creator = "omuq",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #700
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.NightVisionGoggles.SkiVision
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 444
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ski Vision",
+    6 | 		Desc = "Can\'t wait to get my $40 burgers at the Ski Lodge",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #701
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Lights.NightVisionGoggles.WinterSeer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 410
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Winter Seer",
+    6 | 		Desc = "See through the eyes of a mage",
+    7 | 		Creator = "ShinonArtZ",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #702
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Power.GrappleHook.CandleGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Candle Grapple",
+    6 | 		Desc = "Used by Santa\'s workers to grapple up chimneys",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #703
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Power.GrappleHook.PeppermintGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 447
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Peppermint Grapple",
+    7 | 		Desc = "Pepperridge farm remembers.",
+    8 | 		Creator = "Snowyclown0",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #704
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Compass.OrnamentalCompass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 450
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ornamental Compass",
+    6 | 		Desc = "Once an ornament apart of a tree, now reformed into a guiding compass.",
+    7 | 		Creator = "pokchoy",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #705
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Decoy.JollyDecoyCamera
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 444
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Jolly Decoy Camera",
+    6 | 		Desc = "Used to punish naughty Nextbots this winter",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #706
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Decoy.SantasList
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 440
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Santa\'s List",
+    6 | 		Desc = "Send out a disguise of yourself using Santa\'s magical list.",
+    7 | 		Creator = "phiphu123",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #707
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Radar.PopcatRadar
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 400
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Popcat Radar",
+    6 | 		Desc = "pop pop pop",
+    7 | 		Creator = "Sirdui",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #708
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Radio.PenguinRadio
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 408
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Penguin Radio",
+    6 | 		Desc = "Buzz... Woody...",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #709
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Radio.ToyNutcracker
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 430
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Radio Nutcracker",
+    6 | 		Desc = "Contact other players wtih this toy Nutcracker.",
+    7 | 		Creator = "phiphu123",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #710
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Timer.HannukahTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 427
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Hannukah Timer",
+    6 | 		Desc = "Keep track of the time during the Winter Holidays.",
+    7 | 		Creator = "Kapurikon",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #711
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Timer.OrnamentTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 425
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ornament Timer",
+    6 | 		Desc = "A fragile, decorative ornament",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #712
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Skins.Utilities.Timer.TastyTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 395
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tasty Timer",
+    6 | 		Desc = "Tastes like rubber.",
+    7 | 		Creator = "LeeW011",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #713
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.CatchTheRainbow
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 462
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Catch The Rainbow",
+    7 | 		Desc = "Taste the rainbow.",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #714
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.CloverEssence
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 491
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Clover Essence",
+    7 | 		Desc = "It\'s got a bunch of clovers, that\'s all.",
+    8 | 		Creator = "MontiCats",
+    9 | 		Icon = 16773279427
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 9999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Unusual" },
+   20 | 	CosmeticInfo = { Unusual = true }
+   21 | }
+
+
+========================================
+MATCH #715
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.LeprechaunsRune
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 479
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Leprechauns Rune",
+    7 | 		Desc = "Greed? Never heard of it.",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 16773280045
+   10 | 	},
+   11 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Unusual" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Points",
+   16 | 		Price = 200,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Unusual" },
+   20 | 	CosmeticInfo = { Unusual = true }
+   21 | }
+
+
+========================================
+MATCH #716
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.LuckySuspenders
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 491
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Lucky Suspenders",
+    7 | 		Desc = "A cool aura at the cost of looking like a clown.",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #717
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.LuckyValkyrie
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 468
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Lucky Valkyrie",
+    7 | 		Desc = "For when you\'re feeling heroic.",
+    8 | 		Creator = "MontiCats",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 99999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #718
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.PotOfGoldPin
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 479
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Pot of Gold Pin",
+    7 | 		Desc = "Yep. That\'s my pin. I made that.",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 99999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #719
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.StPixels
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 478
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "St. Pixels",
+    7 | 		Desc = "Insert one gold coin to start.",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 16773280324
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Unusual" },
+   20 | 	CosmeticInfo = { Unusual = true }
+   21 | }
+
+
+========================================
+MATCH #720
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Cosmetics.LuckyStrike
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 484
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Lucky Strike",
+    7 | 		Desc = "Win big at the casino or go home.",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 16773279772
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 9999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Unusual" },
+   20 | 	CosmeticInfo = { Unusual = true }
+   21 | }
+
+
+========================================
+MATCH #721
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Consumables.Cola.CerealDrink
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 407
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cereal Drink",
+    6 | 		Desc = "They\'re magically delicious!",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #722
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Consumables.Cola.IrishBeverage
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Irish Beverage",
+    6 | 		Desc = "It\'s got a little kick to it. The spirit of the Irishman.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Event" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #723
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Consumables.Cola.LuckyCup
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 401
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lucky Cup",
+    6 | 		Desc = "May hitreg be on your side!",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Event" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #724
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Consumables.Cola.LushPotion
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 448
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Lush Potion",
+    7 | 		Desc = "You can feel the green grass growing beneath your feet",
+    8 | 		Creator = "Snowyclown0",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "None",
+   15 | 		Currency = "Points",
+   16 | 		Price = 40,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #725
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Barrier.FantasticalBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 405
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Fantastical Barrier",
+    6 | 		Desc = "Over the rainbow.",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Gamepasses", Overview = nil, Rarity = "Event" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 1e22,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #726
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Barrier.HorseshoeGate
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 425
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Horseshoe Gate",
+    7 | 		Desc = "Only fortune lies ahead...",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "None",
+   15 | 		Currency = "Points",
+   16 | 		Price = 50,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #727
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Barrier.RainbowBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 407
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rainbow Barrier",
+    6 | 		Desc = "Somewhere, over the rainbow.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #728
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Barrier.SageBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 443
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sage Barrier",
+    6 | 		Desc = "A two-fold name, green in color, and the wisdom it grants to the user",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #729
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Barrier.CastleGate
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Castle Gate",
+    6 | 		Desc = "From keeping enemy humans outside of your walls, to now nextbots",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #730
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Floodlight.DruidStaffLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 505
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Druid Staff Light",
+    7 | 		Desc = "An ancient staff from a long-gone Druid, yet the gem continues to eminate a shining light centuries after",
+    8 | 		Creator = "Snowyclown0",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "None",
+   15 | 		Currency = "Points",
+   16 | 		Price = 50,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #731
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Floodlight.EmeraldLightPost
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 414
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Emerald Light Post",
+    6 | 		Desc = "On our way to the Emerald City",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #732
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Floodlight.WingedVerdantLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 451
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Winged Verdant Light",
+    6 | 		Desc = "A part of the spirit of St. Patricks is encased in this floodlight",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #733
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.JumpPad.CloverJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 426
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Clover Jump Pad",
+    6 | 		Desc = "You feel an irresistable urge to step on it...",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #734
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Landmine.CloverMine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 428
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Clover Mine",
+    6 | 		Desc = "Great for blowing off the legs of those pesky leprechauns.",
+    7 | 		Creator = "",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #735
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Landmine.MoleMine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 385
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Mole Mine",
+    6 | 		Desc = "kabewm",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #736
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Sensor.CauldronOfGreed
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 450
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cauldron of Greed",
+    6 | 		Desc = "Feeds off the greedy hearts of those who eat Lucky Charms TM.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #737
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Sensor.SheepSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 433
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sheep Sensor",
+    6 | 		Desc = "One sheep, two sheep, three sheep.., fou..... sh....eep...",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #738
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.SpeedPad.ShamrockSpill
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 431
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Shamrock Spill",
+    7 | 		Desc = "Oh no, my shamrock shake.",
+    8 | 		Creator = "Snowyclown0",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 9999999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #739
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.SpeedPad.SpilledGold
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 394
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Spilled Gold",
+    6 | 		Desc = "Free money!",
+    7 | 		Creator = "Kapurikon",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Gamepasses", Overview = nil, Rarity = "Event" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #740
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.SpeedPad.VerdantSurge
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 442
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Verdant Surge",
+    6 | 		Desc = "Allows you to frolic in the fields without a care for the world",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #741
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Teleporter.HorseshoeTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 424
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Horseshoe Teleporter",
+    6 | 		Desc = "Grants temporary luck for 0.01 seconds.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #742
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Deployables.Teleporter.WishingWellTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 485
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Wishing Well Teleporter",
+    6 | 		Desc = "Flip a coin into the well for good luck, because you don\'t know what\'s on the other side",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #743
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Lights.Flashlight.DruidFlashlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 488
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Druid Flashlight",
+    6 | 		Desc = "It seems strange that the overall shape of modern-day flash lights mimic those used by druids centuries ago",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #744
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Lights.Lantern.FourLeafLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 417
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Four Leaf Lantern",
+    6 | 		Desc = "For when three leaves aren\'t enough.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #745
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Lights.Lantern.GildedLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 413
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Gilded Lantern",
+    6 | 		Desc = "A relic of the Gilded Age.",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Gamepasses", Overview = nil, Rarity = "Event" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #746
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Lights.Lantern.ViridianLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 402
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Viridian Lantern",
+    6 | 		Desc = "Found somewhere along Route 2",
+    7 | 		Creator = "0MF00",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #747
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Power.GrappleHook.CloverGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 410
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Clover Grapple",
+    6 | 		Desc = "Empowered by the Druid\'s blessing",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #748
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Power.GrappleHook.MintyGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 428
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Minty Grapple",
+    7 | 		Desc = "Only comes in one flavor.",
+    8 | 		Creator = "abrahamabugri",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #749
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Utilities.Compass.CloverCompass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 416
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Clover Compass",
+    6 | 		Desc = "Directs you to the nearest leprechaun.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #750
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Utilities.Radar.HarpRadar
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 410
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Harp Radar",
+    6 | 		Desc = "Mr Krabs.... I have an idea.....",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 99999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #751
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Utilities.Radar.MissFortune
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 409
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Miss Fortune",
+    6 | 		Desc = "Detecting short people. Beep Boop.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #752
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.StPatricks2024.Skins.Utilities.Radio.CloverCommunicator
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 434
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Clover Communicator",
+    6 | 		Desc = "For when those pesky leprechauns refuse to talk.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #753
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.214Vision
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 459
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "2-14 Vision",
+    6 | 		Desc = "Pretty bad score.",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Head"
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #754
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.Adoration
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 480
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Adoration",
+    6 | 		Desc = "See from the very eyes of Saint Valentine himself.",
+    7 | 		Creator = "SnailCirculation",
+    8 | 		Icon = 12483356412
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #755
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.BionicRejuvination
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 493
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Bionic Rejuvination",
+    7 | 		Desc = "The power of love compels you!",
+    8 | 		Creator = "YourDeadlyDesire",
+    9 | 		Icon = 12492024832
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Unusual" },
+   20 | 	CosmeticInfo = { Unusual = true }
+   21 | }
+
+
+========================================
+MATCH #756
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.CupidWand
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 436
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cupid\'s Wand",
+    6 | 		Desc = "Does something.",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #757
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.Euphoria
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 456
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Euphoria",
+    6 | 		Desc = "That rare, indescribable feeling.",
+    7 | 		Creator = "ShinonArtZ",
+    8 | 		Icon = 12483355967
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #758
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.HeartAttack
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 438
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heart Attack",
+    6 | 		Desc = "*tongue rolls out*",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #759
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.HeartBelt
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 453
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heart Belt",
+    6 | 		Desc = "Shows your heart beat in full time!",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #760
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.HermesPack
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 436
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Hermes Pack",
+    6 | 		Desc = "Messaging anonymously.",
+    7 | 		Creator = "sc6uth",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #761
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.Lollipop
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 451
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lollipop",
+    6 | 		Desc = "Straight from the doctor\'s office.",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #762
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.LoveChaser
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Love Chaser",
+    6 | 		Desc = "Extra useful on a pig.",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #763
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.LupercaliaTommy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 478
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lupercalia Tommy",
+    6 | 		Desc = "Bows aren\'t exactly a suitable choice in modern warfare.",
+    7 | 		Creator = "ShinonArtZ",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #764
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.NaturesTrident
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 472
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Natures Trident",
+    6 | 		Desc = "Show your appreciation with a dangerous lethal weapon!",
+    7 | 		Creator = "sc6uth",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #765
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.Rose
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 418
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rose",
+    6 | 		Desc = "W rizz.",
+    7 | 		Creator = "ShinonArtZ",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #766
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.ValentineBrawler
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 449
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Valentine Brawler",
+    6 | 		Desc = "If I can\'t be happy....",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #767
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.ValentinianBeast
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 479
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Valentinian Beast",
+    6 | 		Desc = "Say goodbye to mr nice guy.. Yes drake they all said",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #768
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.ValentinesHeadband
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 475
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Valentine Headband",
+    6 | 		Desc = "The most powerful wave of force is love, not sound.",
+    7 | 		Creator = "Clonemace",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #769
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.SakuraTree
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 449
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sakura Tree",
+    6 | 		Desc = "Place vs Place, Japan.",
+    7 | 		Creator = "Kapurikon",
+    8 | 		Icon = 12492024558
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Exotic" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #770
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Valentines2023.Cosmetics.RomanSword
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 454
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Roman Sword",
+    6 | 		Desc = "May be necessary to slay the beast.",
+    7 | 		Creator = "SoulConvict",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #771
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Christmas2023.Cosmetics.WintertideEssence
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 469
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Wintertide Essence",
+    6 | 		Desc = "Frostbitten with the purest essence of winter",
+    7 | 		Creator = "",
+    8 | 		Icon = 15750973623
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #772
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2023.Christmas2023.Cosmetics.SealBuds
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 429
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Seal Buds",
+    6 | 		Desc = "Friendly seal pals :)",
+    7 | 		Creator = "",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #773
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Cosmetics.ValentineRoses
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 477
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Valentine Roses",
+    6 | 		Desc = "Congratulations on reaching 2200 Roses!",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "None",
+   15 | 		Currency = "Points",
+   16 | 		Price = 100,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #774
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Cosmetics.HeartKugelblitz
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 493
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heart Kugelblitz",
+    6 | 		Desc = "Perhaps Tower Blitz can get some love this year? Just wait and see...",
+    7 | 		Creator = "ElectroMeltdown",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Cosmetic" },
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #775
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Cosmetics.HeartSkaters
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 448
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heart Skaters",
+    6 | 		Desc = "Look at my lovely new kicks!",
+    7 | 		Creator = "",
+    8 | 		Icon = 87822649590460
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #776
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Cosmetics.CelestialStars
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 472
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Celestial Stars",
+    7 | 		Desc = "Once upon a time...",
+    8 | 		Creator = "MontiCats",
+    9 | 		Icon = 96348957254204
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 9999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Unusual" },
+   20 | 	CosmeticInfo = { Unusual = true }
+   21 | }
+
+
+========================================
+MATCH #777
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Consumables.Cola.CelestialEssence
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 425
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Celestial Essence",
+    6 | 		Desc = "Contains 400% of your daily dose of melatonin",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #778
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Consumables.Cola.HealthyPotion
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 429
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Healthy Potion",
+    7 | 		Desc = "Fills you with determination.",
+    8 | 		Creator = "phiphu123",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #779
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Consumables.Cola.HeartwarmingCoffee
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 427
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heartwarming Coffee",
+    6 | 		Desc = "A piping hot cup, with a heartwarming note.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #780
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Consumables.Cola.StrawberryJuice
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 432
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Strawberry Juice",
+    6 | 		Desc = "Made from 100% concentrate and strawberry flavoring",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #781
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Barrier.HarpBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 400
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Harp Barrier",
+    6 | 		Desc = "ultiamte rizz barrier.",
+    7 | 		Creator = "pokchoy",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #782
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Barrier.RosepetalGate
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 431
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rosepetal Gate",
+    6 | 		Desc = "Only those who have an actual date can enter.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #783
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Barrier.TressleGate
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 414
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tressle Gate",
+    6 | 		Desc = "It\'s just like the first day we met",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #784
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Barrier.WeddingGate
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 422
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Wedding Gate",
+    6 | 		Desc = "Here comes the bride!! Nevermind, Nextbot!!!",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #785
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Barrier.CelestialBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 471
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Celestial Barrier",
+    6 | 		Desc = "Though made up of fragmented dreams, its resilience to stop Nextbots is far from imaginary",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #786
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Beacon.FlowerBeacon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 433
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Flower Beacon",
+    6 | 		Desc = "The flower basket brings all the boys to the yard.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #787
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Floodlight.CelestialLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 432
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Celestial Light",
+    6 | 		Desc = "Ensures you never ever have a nightmare again",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Normal", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #788
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Floodlight.DoricLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 435
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Doric Light",
+    6 | 		Desc = "An old Roman column, retrofitted as a light source",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Normal", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #789
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Floodlight.FlowerOfLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 424
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Flower of Light",
+    6 | 		Desc = "damn i just realized i will be alone forever.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #790
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Floodlight.HeartfeltLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 431
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heartfelt Light",
+    6 | 		Desc = "The essence of pure love eminates a blinding light",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Normal", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 30,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #791
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.JumpPad.CelestialJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 445
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Celestial Jump Pad",
+    6 | 		Desc = "No need to imagine being a superhero, let\'s make it reality",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #792
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.JumpPad.OakJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 434
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Oak Jump Pad",
+    6 | 		Desc = "The heart of an oak tree, its core pulsates with love",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #793
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Landmine.CapybaraMine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 427
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Capybara Mine",
+    6 | 		Desc = "capybara capybara capybara capybara capybara",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #794
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Landmine.ChocolateBomb
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 434
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Chocolate Bomb",
+    6 | 		Desc = "Life is like a box of chocolates ates ates ates.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #795
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Landmine.ExplosiveKitten
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 422
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Explosive Kitten",
+    7 | 		Desc = "Nyaaaa =3.",
+    8 | 		Creator = "Snowyclown0",
+    9 | 		Icon = 0
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 9999999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	CosmeticInfo = { Unusual = false }
+   20 | }
+
+
+========================================
+MATCH #796
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Landmine.ThornyRoseMine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 409
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Thorny Rose Mine",
+    6 | 		Desc = "Pricks Nextbots as well",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #797
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Sensor.CagedHeartSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 422
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Caged Heart Sensor",
+    6 | 		Desc = "Can sense the heartbeat of nextbots.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #798
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.SpeedPad.CelestialSpeedPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 452
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Celestial Speed Pad",
+    6 | 		Desc = "Grants the opposite effect of when you run so slow in your dreams",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #799
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.SpeedPad.RapidPicnic
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 462
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rapid Picnic",
+    6 | 		Desc = "Sorry, we have to make this one quick. I have 30 other dates later this evening.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #800
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Teleporter.HeartfeltTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 423
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heartfelt Teleporter",
+    6 | 		Desc = "For those who you care about the most.",
+    7 | 		Creator = "ShinonArtZ",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #801
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Teleporter.PulsatingHeartTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 445
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pulsating Heart Teleporter",
+    6 | 		Desc = "I\'m only gonna break break ya break break your heart",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #802
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Teleporter.RoseTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 422
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rose Teleporter",
+    6 | 		Desc = "You might prick yourself while using this",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #803
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Deployables.Teleporter.EternalAffection
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 412
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Eternal Affection",
+    6 | 		Desc = "Our love will transcend space time.",
+    7 | 		Creator = nil,
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Mythical" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #804
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Lights.Lantern.AffectionateLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 412
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Affectionate Lantern",
+    6 | 		Desc = "Let my heart shine the way.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #805
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Lights.Lantern.CelestialLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 435
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Celestial Lantern",
+    6 | 		Desc = "Wards off bad nightmares and spirits in the dream world",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #806
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Lights.Lantern.HeartLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 382
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heart Lantern",
+    6 | 		Desc = "Pink!",
+    7 | 		Creator = "ShinonArtZ",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #807
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Lights.Lantern.LovelyLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 396
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lovely Lantern",
+    6 | 		Desc = "True love waits",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #808
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Lights.NightVisionGoggles.LoveseekerVision
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 399
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Loveseeker Vision",
+    6 | 		Desc = "Locate the love of your life.",
+    7 | 		Creator = "",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 9999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #809
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Power.GrappleHook.CupidBow
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 416
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cupid\'s Bow",
+    6 | 		Desc = "Shortens long-distance relationships!",
+    7 | 		Creator = "ShinonArtZ",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Common" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #810
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Power.GrappleHook.MailboxGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 412
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Mailbox Grapple",
+    6 | 		Desc = "Left on \'opened\' 1 week ago",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #811
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Power.GrappleHook.RoseGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 392
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rose Grapple",
+    6 | 		Desc = "So romantic...",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #812
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Utilities.Compass.LoveFinder
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 407
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Love Finder",
+    6 | 		Desc = "Directs you to your soul mate.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #813
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Utilities.Decoy.GalfDecoy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 435
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Galf Decoy",
+    6 | 		Desc = "Galf knows that not even a decoy would be your valentine",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #814
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Utilities.Decoy.TeddyDecoy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 424
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Teddy Decoy",
+    6 | 		Desc = "He sacrifices your heart for your own safety",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #815
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Utilities.Radio.GalfRadio
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 440
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Galf Radio",
+    6 | 		Desc = "Galf knows the other person on this radio despises your existence",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #816
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Utilities.Timer.CelestialTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 407
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Celestial Timer",
+    6 | 		Desc = "Keep dreaming, don\'t wake up",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #817
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Valentines2025.Skins.Utilities.Timer.HeartbeatTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 419
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heartbeat Timer",
+    6 | 		Desc = "My heart rate increases when I see you.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 99999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #818
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.BoboPopsicle
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 467
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bobo Popsicle",
+    6 | 		Desc = "HALP IM MELTING D=",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #819
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.ColaCooler
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 485
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cola Cooler",
+    6 | 		Desc = "crackin\' open a cold cola with the boys",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #820
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.CoolEvadeSurfboard
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 501
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cool Evade Surfboard",
+    6 | 		Desc = "look at my sick evade-branded surfboard brooo",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #821
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.CoolHawaiianFlowers
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 481
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cool Hawaiian Flowers",
+    6 | 		Desc = "Aloha, let me put your mind at ease",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 93895877992072
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #822
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.DeepseaAngler
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 488
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Deepsea Angler",
+    6 | 		Desc = "Underneath the water lurks a dangerous creature.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 118206010282228
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #823
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.EyeOfHorus
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 531
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Eye Of Horus",
+    6 | 		Desc = "A once powerful deity, ruler of the morning star and moon, now reduced to a 2D particle effect.",
+    7 | 		Creator = "Allnewl0ws",
+    8 | 		Icon = 71574332757057
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #824
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.HotEvadeSurfboard
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 500
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Hot Evade Surfboard",
+    6 | 		Desc = "look at my sick evade-branded surfboard brooo",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #825
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.HotHawaiianFlowers
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 481
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Hot Hawaiian Flowers",
+    6 | 		Desc = "Aloha, let me put your mind at ease",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 118552090951990
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #826
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.ShiningSun
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 643
+========================================
+
+--- SOURCE LINES 1-22 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Shining Sun",
+    6 | 		Desc = "A gleaming star that bathes the land in eternal sunlight and warmth, a memento of the summer season. Congratulations on collecting 5500 suns and completing the Summer Event!",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		AccumulatedPrice = 5500,
+   18 | 		OwnershipType = "Single"
+   19 | 	},
+   20 | 	EquipInfo = { SlotType = "Cosmetic" },
+   21 | 	CosmeticInfo = { Unusual = false }
+   22 | }
+
+
+========================================
+MATCH #827
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.SolarFlareStreak
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 511
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Solar Flare Streak",
+    6 | 		Desc = "A vibrant red streak crosses the sky, a once in a lifetime event.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 126332844713619
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #828
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.SunnySkies
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 487
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sunny Skies",
+    6 | 		Desc = "What a beautiful day to stay inside and play Evade.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 72073869329310
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #829
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.TropicalHawaiianFlowers
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 486
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tropical Hawaiian Flowers",
+    6 | 		Desc = "Aloha, let me put your mind at ease",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 109810629720224
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #830
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.VaporwaveRays
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 478
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Vaporwave Rays",
+    6 | 		Desc = "Vibing to 80\'s synth music in Miami.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 82399966962456
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #831
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.RadiantSun
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 527
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Radiant Sun",
+    6 | 		Desc = "The sun never shines without you. Thanks for contributing to Evade for the Spring and Summer Event!",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 114771344927184
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = nil,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #832
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Cosmetics.JellyfishSwarm
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 460
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Jellyfish Swarm",
+    6 | 		Desc = "lets go get some jellyfish jam",
+    7 | 		Creator = "",
+    8 | 		Icon = 117622941872168
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #833
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Barrier.CoralBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 526
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Coral Barrier",
+    6 | 		Desc = "Composed of millions of polyps, these colonies form a shimmering barrier that stops immediate threats while maintaining a flourishing ecosystem.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #834
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Barrier.TikiBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 409
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tiki Barrier",
+    6 | 		Desc = "Hoh, haah, hooh, tiki tiki",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #835
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Barrier.BeachHutBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 416
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Beach Hut Barrier",
+    6 | 		Desc = "Finally, some peace of mind.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #836
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Barrier.SandcastleBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 434
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sandcastle Barrier",
+    6 | 		Desc = "The tides shall never breach our defenses.",
+    7 | 		Creator = "shinonWasTaken",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #837
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Beacon.ShiningPearlBeacon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 422
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Shining Pearl Beacon",
+    6 | 		Desc = "A gleaming pearl worth millions",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #838
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Beacon.TreasureChestBeacon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 450
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Treasure Chest Beacon",
+    6 | 		Desc = "A singular jewel from this chest is worth 10 million points.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #839
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Floodlight.EruptingVolcano
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 402
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Erupting Volcano",
+    6 | 		Desc = "KRAKATOAA!!!!!!!!",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #840
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Floodlight.LighthouseFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 447
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lighthouse Floodlight",
+    6 | 		Desc = "A shining beacon of light that illuminates the coast.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #841
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Floodlight.TikiFlame
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 415
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tiki Flame",
+    6 | 		Desc = "It\'s okay to say you\'re welcome.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #842
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.JumpPad.StarfishJunpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 466
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Starfish Junp Pad",
+    6 | 		Desc = " it seems like you would care a lot about stupid stars considering you are one",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #843
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.JumpPad.JellyfishJunpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 543
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Jellyfish Junp Pad",
+    6 | 		Desc = " JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM JELLYFISH JAM",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #844
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Landmine.CrabLandmine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 400
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Crab Landmine",
+    6 | 		Desc = "ARGH... me money..",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #845
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Landmine.BeachballBomb
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 434
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Beachball Bomb",
+    6 | 		Desc = "Kid-friendly replacement for traditional bombs.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #846
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Landmine.PufferfishMine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 419
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pufferfish Mine",
+    6 | 		Desc = "SPONGEBOB~!!!!!!!!!!!!!!!!!!",
+    7 | 		Creator = "umbrithepizzaman",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #847
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Sensor.AnchorSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 423
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Anchor Sensor",
+    6 | 		Desc = "AHOY! I SPOT A NEXTBOT OVER THE HORIZON!!",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #848
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Sensor.MoaiSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 391
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Moai Sensor",
+    6 | 		Desc = "vine boom",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #849
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Sensor.BoboLifeguardSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 424
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bobo Lifeguard Sensor",
+    6 | 		Desc = "HALP MEH BOBO!!!! I CANT SWIM :(",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #850
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.SpeedPad.BeachTowelSpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 407
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Beach Towel Speedpad",
+    6 | 		Desc = "mouth full of sand",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #851
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.SpeedPad.SlipnSlideSpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 441
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Slip\'n\'Slide Speedpad",
+    6 | 		Desc = "Hydroplaning has never been more fun.",
+    7 | 		Creator = "ShinonartZ & nick200x",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #852
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Teleporter.LifesaverTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 457
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lifesaver Teleporter",
+    6 | 		Desc = "Ironically the teleporter is a whirlpool. Don\'t ask why.",
+    7 | 		Creator = "ShinonartZ & SnoLoFi",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #853
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Teleporter.TreasureChestTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 424
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Treasure Chest Teleporter",
+    6 | 		Desc = "YARRRR THERE BE TREASURE!!",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #854
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Deployables.Teleporter.SandcastleTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 408
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sandcastle Teleporter",
+    6 | 		Desc = "enter the sand man",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #855
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Consumables.ReviveGrenade.HealingWaterBalloon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 414
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Healing Water Balloon",
+    6 | 		Desc = "The opposite of jarate",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #856
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Consumables.SmokeGrenade.SPFSmokescreen
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 454
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "SPF Smokescreen",
+    6 | 		Desc = "SPF sunscreens beyond 500 can now block gamma rays and your vision",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #857
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Consumables.Cola.ConchShellDrink
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 558
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Conch Shell Drink",
+    6 | 		Desc = "Consuming raw or undercooked meats, poultry, seafood, shellfish, or eggs may increase your risk of foodborne illness, especially if you have certain medical conditions.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #858
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Consumables.Cola.LemonadeJug
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 417
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lemonade Jug",
+    6 | 		Desc = "50% PUNCH. 50% PURE CONCENTRATE.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #859
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Consumables.Cola.CoconutDrink
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 406
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Coconut Drink",
+    6 | 		Desc = "Delicious and natural!",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #860
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Power.GrappleHook.FishingHookGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 422
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Fishing Hook Grapple",
+    6 | 		Desc = "Requires live bait for usage.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #861
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Power.GrappleHook.SailfishGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 430
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sailfish Grapple",
+    6 | 		Desc = "Half sailfish, half grapple. Peak innovation.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #862
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Power.GrappleHook.WaterGunGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 497
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Water Gun Grapple",
+    6 | 		Desc = "An overengineered water gun capable of shooting water at 5000 PSI, why? Well, because why not.",
+    7 | 		Creator = "ShinonArtZ & WarpGamer2017",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #863
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Lights.Flashlight.SunnyFlashlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 444
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sunny Flashlight",
+    6 | 		Desc = "Sun is shining in the sky, there ain\'t a cloud in sight.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #864
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Lights.Flashlight.DeepseaFlashlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 447
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Deepsea Flashlight",
+    6 | 		Desc = "Just keep swimming, just keep swimming, just keep swimming",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #865
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Lights.Lantern.JellyfishLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 471
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Jellyfish Lantern",
+    6 | 		Desc = "May induce paralysis, numbness of limbs, or heart arrythmia. But it looks cool doe.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #866
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Lights.Lantern.JarredFishLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 421
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Jarred Fish Lantern",
+    6 | 		Desc = "Yes, I was the one who took Nemo.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #867
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Lights.Lantern.DiverHelmLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 436
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Diver Helm Lantern",
+    6 | 		Desc = "Built to withstand the pressure of the abyss.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #868
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Lights.NightVisionGoggles.ScubaGoggles
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 460
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Scuba Goggles",
+    6 | 		Desc = "Grants you the ability to see in the dark, but not underwater, don\'t ask why.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #869
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Utilities.Decoy.TreasureMapDecoy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 418
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Treasure Map Decoy",
+    6 | 		Desc = "X marks the spot.... I think...",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #870
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Utilities.Radar.PineappleRadar
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 427
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pineapple Radar",
+    6 | 		Desc = "Who lives in a pineapple under the sea?",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #871
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Utilities.Radio.MoaiRadio
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 392
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Moai Radio",
+    6 | 		Desc = "vine boom",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #872
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Utilities.Radio.MagicConchRadio
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 454
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Magic Conch Radio",
+    6 | 		Desc = "Oh Magic Conch Shell, may I please have a million points?      No.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Normal", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #873
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Utilities.Timer.CoralTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 451
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Coral Timer",
+    6 | 		Desc = "Fragments from the Coral Barrier, it has been retrofitted into a timer.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #874
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Summer2025.Skins.Utilities.Compass.RockCompass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 416
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rock Compass",
+    6 | 		Desc = "East? I thought you said Weast.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #875
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.WebTraps
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 454
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Web Traps",
+    6 | 		Desc = "AHHHHH SPOODERS D:",
+    7 | 		Creator = "KazaFameZ",
+    8 | 		Icon = 129262852826025
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #876
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.MariachiSetYellow
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 476
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Mariachi Set Yellow",
+    6 | 		Desc = "Care for a lively tune?",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #877
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.CacklingMoon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 520
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cackling Moon",
+    6 | 		Desc = "hes laughing at you because you wasted a thousand hours of your life on evade",
+    7 | 		Creator = "NickerManett",
+    8 | 		Icon = 122583731423211
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #878
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.MonochromeEclipse
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 498
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Monochrome Eclipse",
+    6 | 		Desc = "Your world shall be cast in eternal darkness. Perish.",
+    7 | 		Creator = "arsonistmz",
+    8 | 		Icon = 93673084841179
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #879
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.PalpitatingHeart
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 525
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Palpitating Heart",
+    6 | 		Desc = "Doctors trying to restart my heart after I played Evade for 30 hours straight",
+    7 | 		Creator = "AverageDigital",
+    8 | 		Icon = 89086775000887
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #880
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.MarigoldRitual
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 478
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Marigold Ritual",
+    6 | 		Desc = "I shall ascend to the spirit realm",
+    7 | 		Creator = "NickerManett",
+    8 | 		Icon = 84544451175492
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #881
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.RunicWinds
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 498
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Runic Winds",
+    6 | 		Desc = "Unfortunately, no spell cast can protect you from Nextbots",
+    7 | 		Creator = "NickerManett",
+    8 | 		Icon = 71560253038680
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #882
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.SpectralSummoning
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 511
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Runic Summoning",
+    6 | 		Desc = "Just a tad bit of witchcraft, and a teaspoon of unspeakable horrors",
+    7 | 		Creator = "NickerManett",
+    8 | 		Icon = 90695383226564
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #883
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.DemonicAcidicWings
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 490
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Demonic Acidic Wings",
+    6 | 		Desc = "Heh... maybe I am just a little bit evil >;3",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 85498696267411
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #884
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.CataclysmicPortal
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 541
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cataclysmic Portal",
+    6 | 		Desc = "You fool... you opened a portal to the calamity dimension.. Supreme Calamitas spares no one!!",
+    7 | 		Creator = "NickerManett",
+    8 | 		Icon = 116414110442039
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #885
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.DemonicInfernalWings
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 493
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Demonic Infernal Wings",
+    6 | 		Desc = "Heh... maybe I am just a little bit evil >;3",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 114320126086861
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #886
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.MariachiSetBlack
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 475
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Mariachi Set Black",
+    6 | 		Desc = "Care for a lively tune?",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #887
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Cosmetics.DemonicEclipseWings
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 491
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Demonic Eclipse Wings",
+    6 | 		Desc = "Heh... maybe I am just a little bit evil >;3",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 88827446585128
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #888
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Barrier.TowerBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 452
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tower Barrier",
+    6 | 		Desc = "The bells shall toll for the Nextbots that pass through the veil.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #889
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Barrier.CherishingBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 548
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cherishing Barrier",
+    6 | 		Desc = "For those we cherish, beyond the veil, their presence felt, an endless tale. In laughter and stories, they live anew. On this special day, of remembering you.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #890
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Barrier.AbyssalBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 470
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Abyssal Barrier",
+    6 | 		Desc = "The tales of giant krakens and haunted ghost ships are far from being fictitious...",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #891
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Beacon.PumpkinDollBeacon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 434
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pumpkin Doll Beacon",
+    6 | 		Desc = "my pumpkin brings all the crows to the yard",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #892
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Floodlight.CandelierLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 402
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Candelier Light",
+    6 | 		Desc = "Be our guest...",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #893
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Floodlight.SkullFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 433
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Skull Floodlight",
+    6 | 		Desc = "Turn your opps into a fashionable light source",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #894
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Floodlight.IronMaidenLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Iron Maiden Light",
+    6 | 		Desc = "You\'ll take my life, but I\'ll take yours too",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #895
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.JumpPad.MarigoldJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 438
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Marigold Jump Pad",
+    6 | 		Desc = "Helping you ascend to a higher plane of existence",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #896
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Landmine.SkullLandmine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 442
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Skull Landmine",
+    6 | 		Desc = "We offer our prayers so that Nextbots may die in anguish",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #897
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Landmine.PlantLandmine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 400
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Plant Landmine",
+    6 | 		Desc = "Brainss.....",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #898
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Sensor.BreadSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 442
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bread Sensor",
+    6 | 		Desc = "I have done nothing but teleport bread for three days.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #899
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.SpeedPad.MarigoldSpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 425
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Marigold Speedpad",
+    6 | 		Desc = "The entrance to the Land of the Dead",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #900
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.SpeedPad.NuclearSpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 404
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Nuclear Speedpad",
+    6 | 		Desc = "Uranium Fever!",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #901
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Teleporter.HungryTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 430
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Hungry Teleporter",
+    6 | 		Desc = "DAMN BRUHHH!!!! BRUSH YO TEETH!!!!!!!!",
+    7 | 		Creator = "NickerManett",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #902
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Deployables.Teleporter.CauldronStewTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 481
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cauldron Stew Teleporter",
+    6 | 		Desc = "Just a spoonful of this \'delicious\' stew will burn a hole through your stomach.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #903
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Consumables.ReviveGrenade.CrimsonMender
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 437
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Crimson Mender",
+    6 | 		Desc = "Rejuvinate your allies with a fresh vial of blood",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #904
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Consumables.SmokeGrenade.PhantomSmokescreen
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 445
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Phantom Smokescreen",
+    6 | 		Desc = "Release dozens of trapped souls and blind your enemies",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #905
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Consumables.Cola.BloodyGlass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 417
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bloody Glass",
+    6 | 		Desc = "Enjoy the blood of your enemies",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #906
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Consumables.Cola.SkullCup
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 431
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Skull Cup",
+    6 | 		Desc = "Fancy a warm skull full of neon orange liquid?",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #907
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Power.GrappleHook.BatGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 464
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bat Grapple",
+    6 | 		Desc = "A long-forgotten device used by Count Dracula to traverse over long distances",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #908
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Power.GrappleHook.SkeletalGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 446
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Skeletal Grapple",
+    6 | 		Desc = "All-organic and naturally sourced from your local graveyard",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #909
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Power.GrappleHook.FloralGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 481
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Floral Grapple",
+    6 | 		Desc = "The flowers that shoot from this grapple shall sprout anew, giving life to the barest of lands.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #910
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Power.Breacher.DraconicBreacher
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 521
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Draconic Breacher",
+    6 | 		Desc = "A mythical dragon from the lands of phantoms, it\'s acidic, but scorching breath can tear a dimensional portal through any object.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #911
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Lights.Flashlight.WyvernFlashlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 447
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Wyvern Flashlight",
+    6 | 		Desc = "A decorated wyvern to help guide lost souls onwards...",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #912
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Lights.Lantern.ImprisonedSoulsLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 465
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Imprisoned Souls Lantern",
+    6 | 		Desc = "For those that live sinful lives, they shall perish in eternal anguish.",
+    7 | 		Creator = "wlfguy3",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #913
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Lights.Lantern.TrickOrTreatLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 417
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Trick Or Treat Lantern",
+    6 | 		Desc = "PUMPKIN!!!!! BLEHHH",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #914
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Lights.Lantern.SkullLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 430
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Skull Lantern",
+    6 | 		Desc = "His last wish was to be turned into a lantern",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #915
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Lights.Lantern.BrainLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 449
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Brain Lantern",
+    6 | 		Desc = "Your brain = folded, wrinkled, ugly, my brain = smooth, cute",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #916
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Lights.NightVisionGoggles.PlagueDoctorGoggles
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 442
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Plague Doctor Goggles",
+    6 | 		Desc = "Sickness, misery, death. It surrounds us all.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #917
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Utilities.Compass.AncientCompass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 517
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ancient Compass",
+    6 | 		Desc = "A new and revolutionary way for you to direct yourself in the Land of the Dead. Only for $99.99, charger and shipping not included.",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #918
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Utilities.Decoy.DevilsContractDecoy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 437
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Devil\'s Contract Decoy",
+    6 | 		Desc = "A small price to pay for a quick getaway",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #919
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Utilities.Radar.VampiricRadar
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 424
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Vampiric Radar",
+    6 | 		Desc = "You shall rule under the moonlight",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #920
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Skins.Utilities.Timer.MarigoldTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 447
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Marigold Timer",
+    6 | 		Desc = "A countdown towards the inevitable... or when the round ends.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Halloween", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #921
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.SealGift
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 492
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Seal Gift",
+    6 | 		Desc = "A little seal buddy to keep you company.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #922
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.HeavenlyCrown
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 515
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Crown",
+    6 | 		Desc = "An ethereal crown that only adorns the heads of the purest of souls.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 116000112880052
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #923
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.SnowflakeAegis
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 553
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowflake Aegis",
+    6 | 		Desc = "A frosty barrier on your back, despite being made of ice, it is resistant against melting and fracturing.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 109810589747414
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #924
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.BorealisAurora
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 508
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Borealis Aurora",
+    6 | 		Desc = "A whimsical band of light that pierces through the night sky.",
+    7 | 		Creator = "KazaFameZ",
+    8 | 		Icon = 99107525229701
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #925
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.AmethystAurora
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 508
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Amethyst Aurora",
+    6 | 		Desc = "A whimsical band of light that pierces through the night sky.",
+    7 | 		Creator = "KazaFameZ",
+    8 | 		Icon = 82060568190116
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #926
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.PepperimentAurora
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 512
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pepperiment Aurora",
+    6 | 		Desc = "A whimsical band of light that pierces through the night sky.",
+    7 | 		Creator = "KazaFameZ",
+    8 | 		Icon = 112836828364897
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #927
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.RelentlessBlizzard
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 551
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Relentless Blizzard",
+    6 | 		Desc = "A ferocious storm that blocks your view, you can feel your extremities succumbing to frostbite.",
+    7 | 		Creator = "AverageDigital",
+    8 | 		Icon = 83448291598965
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #928
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.GlacialEntrails
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 525
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Glacial Entrails",
+    6 | 		Desc = "A wisp of glacial dust, it shimmers in the light with its magical aura.",
+    7 | 		Creator = "AverageDigital",
+    8 | 		Icon = 115361358434627
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #929
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.MysticalTree
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 485
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Mystical Tree",
+    6 | 		Desc = "The spirit of Christmas is in everyone.",
+    7 | 		Creator = "KazaFameZ",
+    8 | 		Icon = 136230366882665
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #930
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.NorthernStarRadiance
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 563
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Northern Star Radiance",
+    6 | 		Desc = "Bask in the beauty of the Northern Star, the guiding sun that humans used for navigation for centuries.",
+    7 | 		Creator = "AverageDigital",
+    8 | 		Icon = 111231871430271
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #931
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Cosmetics.DiscoMania
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 456
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Disco Mania",
+    6 | 		Desc = "Boogie down like it\'s 2025!",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 114291195700248
+    9 | 	},
+   10 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = nil,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #932
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Barrier.HeavenlyBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 475
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Barrier",
+    6 | 		Desc = "Only the purest and most benevolent of souls may pass the golden gates of Heaven.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #933
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Barrier.SnowmanBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 456
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowman Barrier",
+    6 | 		Desc = "A magical snowman that possesses the ability to prevent harm.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #934
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Barrier.GingerbreadBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 461
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Gingerbread Barrier",
+    6 | 		Desc = "From a land filled with sweets and coated in powdered sugar.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #935
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Floodlight.HeavenlyFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 465
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Floodlight",
+    6 | 		Desc = "A relic from the heavens when the land below had not yet been named.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #936
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Floodlight.NordicFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 469
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Nordic Floodlight",
+    6 | 		Desc = "An essence of winter, guarded by the most stoic warriors of the North Sea.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #937
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Floodlight.SnowGlobeLight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snow Globe Light",
+    6 | 		Desc = "A shimmering light from a winter wonderland",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #938
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Floodlight.SnowmanLight2
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 433
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowman Light",
+    6 | 		Desc = "The gift of light is for all to enjoy!",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #939
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.JumpPad.HeavenlyJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 468
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Jump Pad",
+    6 | 		Desc = "Ascend towards the sky, and free yourself from the shackles of mortality.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #940
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.JumpPad.SnowmanJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 456
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowman Jump Pad",
+    6 | 		Desc = "He\'s all melted, but he still remains loyal to his creator.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #941
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Landmine.SnowmanBomb
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 429
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowman Bomb",
+    6 | 		Desc = "The neighbors will never expect this.",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #942
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Sensor.FestiveKittySensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 425
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Festive Kitty Sensor",
+    6 | 		Desc = "come here kitty kitty :-3",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #943
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.SpeedPad.HeavenlySpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 472
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Speedpad",
+    6 | 		Desc = "A taste of the heavens, let ambrosia flow through your veins and empower you.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #944
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.SpeedPad.IcySpeedPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 419
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Icy SpeedPad",
+    6 | 		Desc = "Beware of the slippery ice!",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #945
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.SpeedPad.SleighSpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 449
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sleigh Speedpad",
+    6 | 		Desc = "A little nitro from Santa\'s sleigh doesn\'t hurt...",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #946
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Deployables.Teleporter.IcyTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 424
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Icy Teleporter",
+    6 | 		Desc = "A cold plunge into the lake...",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #947
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Consumables.ReviveGrenade.HeavenlyReviveOrb
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 487
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Revive Orb",
+    6 | 		Desc = "A blessing from the heavens encapsulated in this orb, bringing life to those who touch it.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #948
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Consumables.ReviveGrenade.SantasRevivalSack
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 571
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Santa\'s Revival Sack",
+    6 | 		Desc = "Santa is aware that he cannot easily pull an all nighter delivering gifts to all of the children around the world! One drop of this elixir will rejuvinate you completely.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #949
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Consumables.ReviveGrenade.DiscoReviveGrenade
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 414
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Disco Revive Grenade",
+    6 | 		Desc = "2026 will definitely be my year.",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = nil,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #950
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Consumables.SmokeGrenade.HeavenlySmokeGrenade
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 431
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Smoke Grenade",
+    6 | 		Desc = "A vial of the clouds of Heaven.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #951
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Consumables.SmokeGrenade.SmokeOrnabomb
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 467
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Smoke Ornabomb",
+    6 | 		Desc = "A vital tool for defending the sleigh against a horde of angry children",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #952
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Consumables.Cola.NordicBeverage
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 460
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Nordic Beverage",
+    6 | 		Desc = "A quenching drink that only the strongest of warriors can tolerate.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #953
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Consumables.Cola.HotChocolateDrink
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 517
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Hot Chocolate Drink",
+    6 | 		Desc = "A warm cup of hot chocolate, a relaxing break from the crazy colas and conconctions you\'ve been drinking for years.",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #954
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Power.GrappleHook.SnowlauncherGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 436
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowlauncher Grapple",
+    6 | 		Desc = "Retrofitted to shoot icy grapples!",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #955
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Power.Breacher.NordicBreacher
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 464
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Nordic Breacher",
+    6 | 		Desc = "A hidden technology that feeds off the power of mythical ice creatures.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #956
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Power.Breacher.SantasBreacher
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 491
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Santa\'s Breacher",
+    6 | 		Desc = "A last-resort tool used by Santa if he\'s behind schedule. Or if a chimney is too skinny for him.",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #957
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Lights.Lantern.HeavenlyLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 481
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Lantern",
+    6 | 		Desc = "A blinding force that pierces through the heavens and bathes the land in eternal light.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #958
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Lights.Lantern.NordicLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 466
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Nordic Lantern",
+    6 | 		Desc = "A gleaming crystal only found in the deepest caves of an arctic wasteland.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #959
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Lights.Lantern.BoboBuddyLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 463
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bobo Buddy Lantern",
+    6 | 		Desc = "he just wants to help you see in the dark! thank you bobo buddy!!",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #960
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Lights.NightVisionGoggles.AviatorGoggles
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 466
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Aviator Goggles",
+    6 | 		Desc = "Vital for the health of your eyes when traveling at cruising altitude",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #961
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Utilities.Decoy.NordicDecoy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 447
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Nordic Decoy",
+    6 | 		Desc = "A scroll that possesses the power to conjure icy figures.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #962
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Utilities.Radar.SantasRadar
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 566
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Santa\'s Radar",
+    6 | 		Desc = "A radio that can pinpoint the houses of every good little boy and girl. But also the meanest and naughtiest of children and nextbots who will NOT receive gifts this Christmas.",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #963
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Utilities.Radio.SnowmanRadio
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 432
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowman Radio",
+    6 | 		Desc = "haiii!!! it\'s me frosty the snowman!!!",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #964
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Utilities.Radio.SantasRadio
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 487
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Santa\'s Radio",
+    6 | 		Desc = "A seemingly antique but decorated rotary phone, yet it can connect to anywhere across the world.",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #965
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Utilities.Timer.HeavenlyTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 465
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Heavenly Timer",
+    6 | 		Desc = "For when the clock strikes 0, the world shall revert to what it once was.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #966
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.XMAS25.Skins.Utilities.Compass.SnowmanCompass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 455
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snowman Compass",
+    6 | 		Desc = "haii!!! let me guide you through this horrible snow storm!!!",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Winter Holidays", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #967
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.StPatricks2025.Cosmetics.GleamingTreasureChest
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 556
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Gleaming Treasure Chest",
+    6 | 		Desc = "Congratulations on collecting 2500 gold coins, may you be eternally blessed with good fortune and wealth",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "None",
+   15 | 		Currency = "Points",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #968
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.StPatricks2025.Cosmetics.IrishShield
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 533
+========================================
+
+--- SOURCE LINES 1-22 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Irish Shield",
+    7 | 		Desc = "Top of the morning to ya laddies my name is Jack Septiceye. (i am 2% irish)",
+    8 | 		Creator = "Snowyclown0",
+    9 | 		Icon = 0,
+   10 | 		CameraType = "Back"
+   11 | 	},
+   12 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Rare" },
+   13 | 	PurchaseInfo = {
+   14 | 		LevelRequirement = 0,
+   15 | 		AppearsIn = "None",
+   16 | 		Currency = "Points",
+   17 | 		Price = 40,
+   18 | 		OwnershipType = "Single"
+   19 | 	},
+   20 | 	EquipInfo = { SlotType = "Cosmetic" },
+   21 | 	CosmeticInfo = { Unusual = false }
+   22 | }
+
+
+========================================
+MATCH #969
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.StPatricks2025.Cosmetics.MidasTouch
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 525
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	Reintroduced = true,
+    5 | 	AppearanceInfo = {
+    6 | 		Name = "Midas Touch",
+    7 | 		Desc = "Anything you touch shall turn to gold, will you let greed tempt your morals?",
+    8 | 		Creator = "Snowyclown0",
+    9 | 		Icon = 82418794303065
+   10 | 	},
+   11 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Unusual" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "None",
+   15 | 		Currency = "Points",
+   16 | 		Price = 350,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Unusual" },
+   20 | 	CosmeticInfo = { Unusual = true }
+   21 | }
+
+
+========================================
+MATCH #970
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.StPatricks2025.Cosmetics.RetroCloverExplosion
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 463
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Clover Explosion",
+    6 | 		Desc = "Can it get any greener?",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 93065731055504
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 9999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #971
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.StPatricks2025.Cosmetics.RunicCloverLegs
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 506
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Runic Clover Legs",
+    6 | 		Desc = "A part of nature lives within you, it feels like you could jump 10x higher",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 117679637866001
+    9 | 	},
+   10 | 	UIInfo = { Header = nil, Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Points",
+   15 | 		Price = 9999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #972
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Valentines2026.Cosmetics.CircleOfRoses
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 460
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Circle of Roses",
+    6 | 		Desc = "A thorned sacrifice",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 101614340696980
+    9 | 	},
+   10 | 	UIInfo = { Header = "Valentines", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tokens",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #973
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Valentines2026.Cosmetics.SakuraFlowers
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 473
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sakura Flowers",
+    6 | 		Desc = "A beautiful hurricane of pink petals",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 80966505301911
+    9 | 	},
+   10 | 	UIInfo = { Header = "Valentines", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tokens",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #974
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Valentines2026.Cosmetics.HealingHalo
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 469
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Healing Halo",
+    6 | 		Desc = "ACTIVATE CHARGE NOW DOKTOR!!!!",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 89450817409507
+    9 | 	},
+   10 | 	UIInfo = { Header = "Valentines", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tokens",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #975
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.StPatricks2026.Cosmetics.ShamrockShimmer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 491
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Shamrock Shimmer",
+    6 | 		Desc = "A portal to the world of Leprechauns and the fabled irish people.",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 108552949290601
+    9 | 	},
+   10 | 	UIInfo = { Header = "Event", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "None",
+   14 | 		Currency = "Tokens",
+   15 | 		Price = 0,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #976
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.LuminousBlossom
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 441
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Luminous Blossom",
+    6 | 		Desc = "",
+    7 | 		Creator = "arsonistmz",
+    8 | 		Icon = 122029044572026
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #977
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.CrimsonBlossom
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Crimson Blossom",
+    6 | 		Desc = "",
+    7 | 		Creator = "arsonistmz",
+    8 | 		Icon = 78552078599584
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #978
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.AquamarineBlossom
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 443
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Aquamarine Blossom",
+    6 | 		Desc = "",
+    7 | 		Creator = "arsonistmz",
+    8 | 		Icon = 103571589865681
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #979
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.VerdantLaurel
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 440
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Verdant Laurel",
+    6 | 		Desc = "",
+    7 | 		Creator = "ltsJust_Zee",
+    8 | 		Icon = 132790033099748
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #980
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.OakBlessing
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 455
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Oak Blessing",
+    6 | 		Desc = "",
+    7 | 		Creator = "ltsJust_Zee & AverageDigital",
+    8 | 		Icon = 110236140125732
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #981
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.EasterEggHunter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 443
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Easter Egg Hunter",
+    6 | 		Desc = "",
+    7 | 		Creator = "ltsJust_Zee",
+    8 | 		Icon = 103784839343919
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #982
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.LotusRift
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 434
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lotus Rift",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 123940738438234
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #983
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Cosmetics.MonarchWings
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 436
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Monarch Wings",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 73715962984251
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #984
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Barrier.ButterflyBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Butterfly Barrier",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #985
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Barrier.AppleBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 384
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Apple Barrier",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #986
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Barrier.LotusBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 382
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lotus Barrier",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #987
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Beacon.RafflesiaBeacon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rafflesia Beacon",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #988
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Floodlight.SunflowerFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 393
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sunflower Floodlight",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #989
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Floodlight.AppleFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Apple Floodlight",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #990
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Floodlight.LotusFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 385
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lotus Floodlight",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #991
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.JumpPad.ButterflyJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Butterfly Jump Pad",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #992
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.JumpPad.PancakeJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pancake Jump Pad",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #993
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.JumpPad.AppleJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 385
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Apple Jump Pad",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #994
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Landmine.CakeLandmine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 384
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Cake Landmine",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #995
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Sensor.PuddingSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 385
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pudding Sensor",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #996
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.SpeedPad.ButterflySpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Butterfly Speedpad",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #997
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.SpeedPad.LotusSpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 383
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lotus Speedpad",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #998
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Deployables.Teleporter.LotusTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 385
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lotus Teleporter",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #999
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Consumables.ReviveGrenade.HealingApple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Healing Apple",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1000
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Consumables.SmokeGrenade.RottenAppleSmokeGrenade
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 397
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Rotten Apple Smoke Grenade",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1001
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Consumables.Cola.StrawberryShake
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Strawberry Shake",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1002
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Consumables.Cola.AppleJuiceBox
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 388
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Apple Juice Box",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1003
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Consumables.Defibrillator.LadyBugDefibrillator
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 369
+========================================
+
+--- SOURCE LINES 1-14 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = { Name = "Lady Bug Defibs", Desc = "", Creator = "abrahamabugri" },
+    5 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+    6 | 	PurchaseInfo = {
+    7 | 		LevelRequirement = 0,
+    8 | 		AppearsIn = "Event",
+    9 | 		Currency = "Tickets",
+   10 | 		Price = 999999999,
+   11 | 		OwnershipType = "Single"
+   12 | 	},
+   13 | 	CosmeticInfo = { Unusual = false }
+   14 | }
+
+
+========================================
+MATCH #1004
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Power.GrappleHook.SpringButterflyGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 383
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Spring Grapple",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1005
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Power.GrappleHook.BeeStingerGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bee Stinger Grapple",
+    6 | 		Desc = "",
+    7 | 		Creator = "Pokchoy",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1006
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Power.StunBaton.ButterflyBaton
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 367
+========================================
+
+--- SOURCE LINES 1-14 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = { Name = "Butterfly Baton", Desc = "", Creator = "SnowyClown0" },
+    5 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+    6 | 	PurchaseInfo = {
+    7 | 		LevelRequirement = 0,
+    8 | 		AppearsIn = "Event",
+    9 | 		Currency = "Tickets",
+   10 | 		Price = 999999999,
+   11 | 		OwnershipType = "Single"
+   12 | 	},
+   13 | 	CosmeticInfo = { Unusual = false }
+   14 | }
+
+
+========================================
+MATCH #1007
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Power.Breacher.ButterflyBreacher
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Butterfly Breacher",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1008
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Lights.Lantern.ScarabLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Scarab Lantern",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1009
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Lights.Lantern.LotusLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 382
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Lotus Lantern",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1010
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Lights.NightVisionGoggles.ShamanVision
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Shaman Vision",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1011
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Utilities.Decoy.BearTabletDecoy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 388
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bear Tablet Decoy",
+    6 | 		Desc = "",
+    7 | 		Creator = "Snowyclown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1012
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Utilities.Radar.BunnyRadar
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 382
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Bunny Radar",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1013
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.Spring2026.Skins.Utilities.Compass.HoneycombCompass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 384
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Honeycomb Compass",
+    6 | 		Desc = "",
+    7 | 		Creator = "Pokchoy",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Spring", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1014
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Barrier.BrowserBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Browser Barrier",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1015
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Barrier.RetroSunsetBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Sunset Barrier",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1016
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Barrier.TropicalWaterBarrier
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 391
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tropical Water Barrier",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1017
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Beacon.OctoCatBeacon
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Octo Cat Beacon",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1018
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Floodlight.DreamAeroFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 392
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Dream Aero Floodlight",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1019
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Floodlight.TropicalWaterFloodlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 394
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tropical Water Floodlight",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1020
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Landmine.LuminousAnglerMine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 393
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Luminous Angler Mine",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1021
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Landmine.JellyBomb
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 381
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Jelly Bomb",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1022
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Landmine.TropicalWaterLandmine
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 392
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tropical Water Landmine",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1023
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Sensor.SnailSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 381
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Snail Sensor",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1024
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Sensor.PufferfishSensor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 385
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Pufferfish Sensor",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1025
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.SpeedPad.SoapySpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 385
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Soapy Speedpad",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1026
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.SpeedPad.RetroSunsetSpeedpad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 391
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Sunset Speed Pad",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1027
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Teleporter.BrowserTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Browser Teleporter",
+    6 | 		Desc = "",
+    7 | 		Creator = "dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1028
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Teleporter.SharkTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 384
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Shark Teleporter",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1029
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.Teleporter.TropicalWaterTeleporter
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 394
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tropical Water Teleporter",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1030
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.JumpPad.DiscJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 384
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Disc Jump Pad",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1031
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Deployables.JumpPad.RetroSunsetJumpPad
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Sunset JumpPad",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1032
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Consumables.ReviveGrenade.HealingTaiyakiShark
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 394
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Healing Taiyaki Shark",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1033
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Consumables.ReviveGrenade.RevivingBubbleCat
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 390
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Reviving Bubble Cat",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1034
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Consumables.SmokeGrenade.FrutigerlingSmokeGrenade
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 397
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Frutigerling Smoke Grenade",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1035
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Consumables.SmokeGrenade.OctopusInkGrenade
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Octopus Ink Grenade",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1036
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Consumables.Cola.ChilledCola
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 383
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Chilled Cola",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1037
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Consumables.Cola.VanillaFloatSoda
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Vanilla Float Soda",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1038
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Consumables.Defibrillator.TropicalWaterDefibs
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 371
+========================================
+
+--- SOURCE LINES 1-14 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = { Name = "Tropical Water Defibs", Desc = "", Creator = "MontiCats" },
+    5 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+    6 | 	PurchaseInfo = {
+    7 | 		LevelRequirement = 0,
+    8 | 		AppearsIn = "Event",
+    9 | 		Currency = "Tickets",
+   10 | 		Price = 999999999,
+   11 | 		OwnershipType = "Single"
+   12 | 	},
+   13 | 	CosmeticInfo = { Unusual = false }
+   14 | }
+
+
+========================================
+MATCH #1039
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Power.GrappleHook.SharkHookGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 386
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Shark Hook Grapple",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1040
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Power.GrappleHook.RetroSunsetGrapple
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Sunset Grapple",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1041
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Power.StunBaton.SharkBlade
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 360
+========================================
+
+--- SOURCE LINES 1-14 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = { Name = "Shark Blade", Desc = "", Creator = "Dardemai" },
+    5 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+    6 | 	PurchaseInfo = {
+    7 | 		LevelRequirement = 0,
+    8 | 		AppearsIn = "Event",
+    9 | 		Currency = "Tickets",
+   10 | 		Price = 999999999,
+   11 | 		OwnershipType = "Single"
+   12 | 	},
+   13 | 	CosmeticInfo = { Unusual = false }
+   14 | }
+
+
+========================================
+MATCH #1042
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Power.StunBaton.RetroSunsetBaton
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 368
+========================================
+
+--- SOURCE LINES 1-14 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = { Name = "Retro Sunset Baton", Desc = "", Creator = "MontiCats" },
+    5 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+    6 | 	PurchaseInfo = {
+    7 | 		LevelRequirement = 0,
+    8 | 		AppearsIn = "Event",
+    9 | 		Currency = "Tickets",
+   10 | 		Price = 999999999,
+   11 | 		OwnershipType = "Single"
+   12 | 	},
+   13 | 	CosmeticInfo = { Unusual = false }
+   14 | }
+
+
+========================================
+MATCH #1043
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Power.Breacher.FrutigerWaterGunBreacher
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 390
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Frutiger WaterGun",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1044
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Power.Breacher.TropicalWaterBreacher
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 392
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tropical Water Breacher",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1045
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Lights.Flashlight.BabySharkFlashlight
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Baby Shark Flashlight",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1046
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Lights.Lantern.ComputerLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Computer Lantern",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1047
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Lights.Lantern.FrutigerLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 383
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Frutiger Lantern",
+    6 | 		Desc = "",
+    7 | 		Creator = "Pokchoy",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1048
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Lights.Lantern.RetroSunsetLantern
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 389
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Sunset Lantern",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1049
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Lights.NightVisionGoggles.InfraredTikiMask
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 391
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Infrared Tiki Mask",
+    6 | 		Desc = "",
+    7 | 		Creator = "abrahamabugri",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1050
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Utilities.Decoy.FrutigerDecoy
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 382
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Frutiger Decoy",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1051
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Utilities.Radar.FrutigerRadar
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 382
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Frutiger Radar",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1052
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Utilities.Radio.WaterAeroPhone
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Water Aero Phone",
+    6 | 		Desc = "",
+    7 | 		Creator = "SnowyClown0",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1053
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Utilities.Timer.FrutigerTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 382
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Frutiger Timer",
+    6 | 		Desc = "",
+    7 | 		Creator = "Dardemai",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1054
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Utilities.Timer.RetroSunsetTimer
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 387
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Sunset Timer",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1055
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Skins.Utilities.Compass.GrillCompass
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 380
+========================================
+
+--- SOURCE LINES 1-19 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Grill Compass",
+    6 | 		Desc = "",
+    7 | 		Creator = "Pokchoy",
+    8 | 		Icon = 0
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	CosmeticInfo = { Unusual = false }
+   19 | }
+
+
+========================================
+MATCH #1056
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.LeviathanAnchor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 462
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Leviathan Anchor",
+    6 | 		Desc = "",
+    7 | 		Creator = "starfall_wav & TYINULTY",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
+
+
+========================================
+MATCH #1057
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.RetroSunset
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 436
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Retro Sunset",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 106466437282098
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1058
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.TropicalNatureCrown
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 445
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Tropical Nature Crown",
+    6 | 		Desc = "",
+    7 | 		Creator = "MontiCats",
+    8 | 		Icon = 136815544544764
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1059
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.SunnyDay
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 448
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Sunny Day",
+    6 | 		Desc = "",
+    7 | 		Creator = "LordOftheWraths & rift346",
+    8 | 		Icon = 75344077957401
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1060
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.DuckyWaterFall
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 455
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ducky WaterFall",
+    6 | 		Desc = "",
+    7 | 		Creator = "LordOftheWraths & rift346",
+    8 | 		Icon = 126390064469383
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1061
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.BlazingSun
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 436
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Blazing Sun",
+    6 | 		Desc = "",
+    7 | 		Creator = "Arsonistmz",
+    8 | 		Icon = 125398027841020
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1062
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.SkylineVinyl
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 439
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Skyline Vinyl",
+    6 | 		Desc = "",
+    7 | 		Creator = "ItsJust_Zee",
+    8 | 		Icon = 109696031257894
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1063
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.OceanSymphony
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 440
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ocean Symphony",
+    6 | 		Desc = "",
+    7 | 		Creator = "ItsJust_Zee",
+    8 | 		Icon = 124244987665503
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1064
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.LuminescentJellyfish
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 458
+========================================
+
+--- SOURCE LINES 1-20 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Luminescent Jellyfish",
+    6 | 		Desc = "",
+    7 | 		Creator = "starfall_wav & TYINULTY",
+    8 | 		Icon = 85112817012734
+    9 | 	},
+   10 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Unusual" },
+   11 | 	PurchaseInfo = {
+   12 | 		LevelRequirement = 0,
+   13 | 		AppearsIn = "Event",
+   14 | 		Currency = "Tickets",
+   15 | 		Price = 999999999,
+   16 | 		OwnershipType = "Single"
+   17 | 	},
+   18 | 	EquipInfo = { SlotType = "Unusual" },
+   19 | 	CosmeticInfo = { Unusual = true }
+   20 | }
+
+
+========================================
+MATCH #1065
+PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Cosmetics.GhostlyAnchor
+CLASS: ModuleScript
+DECOMPILED SOURCE LENGTH: 460
+========================================
+
+--- SOURCE LINES 1-21 ---
+    1 | -- decompiled with Opiumware
+    2 | 
+    3 | return {
+    4 | 	AppearanceInfo = {
+    5 | 		Name = "Ghostly Anchor",
+    6 | 		Desc = "",
+    7 | 		Creator = "starfall_wav & TYINULTY",
+    8 | 		Icon = 0,
+    9 | 		CameraType = "Back"
+   10 | 	},
+   11 | 	UIInfo = { Header = "Summer", Overview = nil, Rarity = "Rare" },
+   12 | 	PurchaseInfo = {
+   13 | 		LevelRequirement = 0,
+   14 | 		AppearsIn = "Event",
+   15 | 		Currency = "Tickets",
+   16 | 		Price = 999999999,
+   17 | 		OwnershipType = "Single"
+   18 | 	},
+   19 | 	EquipInfo = { SlotType = "Cosmetic" },
+   20 | 	CosmeticInfo = { Unusual = false }
+   21 | }
