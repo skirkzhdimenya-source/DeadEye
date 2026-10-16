@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.233
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.234
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.233"
+local SCRIPT_VERSION = "1.234"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -1912,7 +1912,8 @@ local categoryBar
 local mainCategoryButton
 local emoteCategoryButton
 local unusualCategoryButton
-local othersCategoryButton
+local avatarCategoryButton
+local otherCategoryButton
 local currentCategory = "Emotes"
 local mainPage
 local others = {}
@@ -19839,12 +19840,12 @@ genv.DEADEYE_MAIN_SENSORS_CLEANUP =
         __UI.__L.purgeStaleMainJumpSensors()
     end
 --// =========================================================
---// OTHERS PAGE
+--// AVATAR PAGE
 --// =========================================================
 others.page =
     Instance.new("ScrollingFrame")
 others.page.Name =
-    "OthersPage"
+    "AvatarPage"
 others.page.Size =
     UDim2.new(
         1,
@@ -21590,6 +21591,670 @@ task.defer(
         end)
     end
 )
+--// =========================================================
+--// OTHERS PAGE: MULTI-PLAYER HIGHLIGHT
+--// Uses CharacterService's custom visual rig first, not only Player.Character.
+--// =========================================================
+local otherFeatures = {
+    enabled = savedConfig.others
+        and savedConfig.others._PlayerHighlightEnabled == true
+        or false,
+    hotkey = "None",
+    hotkeyCapture = false,
+    selectedUserIds = {},
+    highlights = {},
+    playerButtonConnections = {},
+    page = nil,
+    toggleButton = nil,
+    hotkeyButton = nil,
+    status = nil,
+    playerScroll = nil,
+    playerLayout = nil
+}
+
+local savedPlayerHighlight = savedConfig.others or {}
+local savedHighlightTargets = savedPlayerHighlight._PlayerHighlightTargets
+
+if type(savedHighlightTargets) == "table" then
+    for _, value in ipairs(savedHighlightTargets) do
+        local userId = tonumber(value)
+        if userId and userId > 0 then
+            otherFeatures.selectedUserIds[userId] = true
+        end
+    end
+end
+
+local configuredHighlightHotkey =
+    tostring(savedPlayerHighlight._PlayerHighlightHotkey or "None")
+
+if configuredHighlightHotkey ~= "None" then
+    local validHotkey = pcall(function()
+        return Enum.KeyCode[configuredHighlightHotkey]
+    end)
+
+    if validHotkey then
+        local keyCode = Enum.KeyCode[configuredHighlightHotkey]
+        if keyCode and keyCode ~= Enum.KeyCode.Unknown then
+            otherFeatures.hotkey = configuredHighlightHotkey
+        end
+    end
+end
+
+function otherFeatures.getSelectedCount()
+    local count = 0
+    for userId, selected in pairs(otherFeatures.selectedUserIds) do
+        if selected and tonumber(userId) then
+            count += 1
+        end
+    end
+    return count
+end
+
+function otherFeatures.saveConfig()
+    savedConfig.others = savedConfig.others or {}
+    savedConfig.others._PlayerHighlightEnabled =
+        otherFeatures.enabled == true
+    savedConfig.others._PlayerHighlightHotkey =
+        otherFeatures.hotkey or "None"
+
+    local targets = {}
+    for userId, selected in pairs(otherFeatures.selectedUserIds) do
+        local numericUserId = tonumber(userId)
+        if selected and numericUserId then
+            table.insert(targets, numericUserId)
+        end
+    end
+
+    table.sort(targets)
+    savedConfig.others._PlayerHighlightTargets = targets
+
+    pcall(saveSavedConfig)
+end
+
+function otherFeatures.updateToggle()
+    if not otherFeatures.toggleButton then
+        return
+    end
+
+    if otherFeatures.enabled then
+        otherFeatures.toggleButton.Text = "HIGHLIGHT: ON"
+        otherFeatures.toggleButton.BackgroundColor3 =
+            Color3.fromRGB(43, 79, 120)
+    else
+        otherFeatures.toggleButton.Text = "HIGHLIGHT: OFF"
+        otherFeatures.toggleButton.BackgroundColor3 =
+            Color3.fromRGB(47, 52, 61)
+    end
+end
+
+function otherFeatures.updateHotkeyButton()
+    if not otherFeatures.hotkeyButton then
+        return
+    end
+
+    if otherFeatures.hotkeyCapture then
+        otherFeatures.hotkeyButton.Text = "PRESS A KEY..."
+    else
+        otherFeatures.hotkeyButton.Text =
+            otherFeatures.hotkey or "None"
+    end
+end
+
+function otherFeatures.updateStatus()
+    if not otherFeatures.status then
+        return
+    end
+
+    local selectedCount = otherFeatures.getSelectedCount()
+    local onlineCount = 0
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            onlineCount += 1
+        end
+    end
+
+    otherFeatures.status.Text =
+        (otherFeatures.enabled and "ON" or "OFF")
+        .. "  |  Selected: " .. tostring(selectedCount)
+        .. "  |  Players: " .. tostring(onlineCount)
+end
+
+function otherFeatures.destroyTargetHighlight(userId)
+    local record = otherFeatures.highlights[userId]
+    if not record then
+        return
+    end
+
+    otherFeatures.highlights[userId] = nil
+    pcall(function()
+        record.highlight:Destroy()
+    end)
+end
+
+function otherFeatures.destroyAllHighlights()
+    local ids = {}
+    for userId in pairs(otherFeatures.highlights) do
+        table.insert(ids, userId)
+    end
+
+    for _, userId in ipairs(ids) do
+        otherFeatures.destroyTargetHighlight(userId)
+    end
+end
+
+function otherFeatures.getVisualRig(player)
+    if not player then
+        return nil
+    end
+
+    -- Primary path used by DeadEye for this game's separate visual character.
+    local ok, characterObject = pcall(function()
+        return __UI.CharacterService:GetCharacterFromPlayer(player)
+    end)
+
+    if ok and characterObject then
+        local rigComponent
+        local nativeRig
+        local visualModel
+
+        pcall(function()
+            rigComponent = characterObject.Rig
+            nativeRig = rigComponent and rigComponent.Rig
+            visualModel = nativeRig and nativeRig.Model
+        end)
+
+        if typeof(visualModel) == "Instance"
+            and visualModel:IsA("Model")
+            and visualModel.Parent
+        then
+            return visualModel
+        end
+
+        local objectModel
+        pcall(function()
+            objectModel = characterObject.Model
+        end)
+
+        if typeof(objectModel) == "Instance"
+            and objectModel:IsA("Model")
+            and objectModel.Parent
+        then
+            return objectModel
+        end
+    end
+
+    -- Explicit fallback to the game's visual rig container.
+    local rigsFolder = Workspace:FindFirstChild("Rigs")
+    if rigsFolder then
+        local rigModel = rigsFolder:FindFirstChild(player.Name)
+        if rigModel and rigModel:IsA("Model") and rigModel.Parent then
+            return rigModel
+        end
+
+        for _, candidate in ipairs(rigsFolder:GetChildren()) do
+            if candidate:IsA("Model")
+                and string.lower(candidate.Name) == string.lower(player.Name)
+                and candidate.Parent
+            then
+                return candidate
+            end
+        end
+    end
+
+    -- Final fallback only; custom game rig above is preferred.
+    local character = player.Character
+    if character and character:IsA("Model") and character.Parent then
+        return character
+    end
+
+    return nil
+end
+
+function otherFeatures.refreshHighlights()
+    if not otherFeatures.enabled then
+        otherFeatures.destroyAllHighlights()
+        otherFeatures.updateStatus()
+        return
+    end
+
+    -- Remove highlights for deselected or departed players.
+    local staleIds = {}
+    for userId in pairs(otherFeatures.highlights) do
+        local player = Players:GetPlayerByUserId(tonumber(userId) or -1)
+        if not otherFeatures.selectedUserIds[tonumber(userId) or -1]
+            or not player
+            or player == LocalPlayer
+        then
+            table.insert(staleIds, userId)
+        end
+    end
+
+    for _, userId in ipairs(staleIds) do
+        otherFeatures.destroyTargetHighlight(userId)
+    end
+
+    -- Re-resolve each selected player's custom visual rig regularly.
+    for userId, selected in pairs(otherFeatures.selectedUserIds) do
+        local numericUserId = tonumber(userId)
+        local player = numericUserId
+            and Players:GetPlayerByUserId(numericUserId)
+            or nil
+
+        if selected and player and player ~= LocalPlayer then
+            local model = otherFeatures.getVisualRig(player)
+            local existing = otherFeatures.highlights[numericUserId]
+
+            if existing
+                and (
+                    existing.model ~= model
+                    or not existing.highlight
+                    or not existing.highlight.Parent
+                )
+            then
+                otherFeatures.destroyTargetHighlight(numericUserId)
+                existing = nil
+            end
+
+            if model and not existing then
+                local createOK, highlight = pcall(function()
+                    local item = Instance.new("Highlight")
+                    item.Name = "DeadEye_PlayerHighlight_" .. tostring(numericUserId)
+                    item.Adornee = model
+                    item.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    item.FillColor = Color3.fromRGB(40, 90, 165)
+                    item.OutlineColor = Color3.fromRGB(65, 120, 200)
+                    item.FillTransparency = 0.78
+                    item.OutlineTransparency = 0
+                    item.Enabled = true
+                    item.Parent = Workspace
+                    return item
+                end)
+
+                if createOK and highlight then
+                    otherFeatures.highlights[numericUserId] = {
+                        highlight = highlight,
+                        model = model
+                    }
+                end
+            end
+        end
+    end
+
+    otherFeatures.updateStatus()
+end
+
+function otherFeatures.setEnabled(value, persist)
+    otherFeatures.enabled = value == true
+
+    if not otherFeatures.enabled then
+        otherFeatures.destroyAllHighlights()
+    else
+        pcall(otherFeatures.refreshHighlights)
+    end
+
+    otherFeatures.updateToggle()
+    otherFeatures.updateStatus()
+
+    if persist ~= false then
+        otherFeatures.saveConfig()
+    end
+end
+
+function otherFeatures.rebuildPlayerList()
+    if not otherFeatures.playerScroll then
+        return
+    end
+
+    for _, connection in ipairs(otherFeatures.playerButtonConnections) do
+        pcall(function()
+            connection:Disconnect()
+        end)
+    end
+    table.clear(otherFeatures.playerButtonConnections)
+
+    for _, child in ipairs(otherFeatures.playerScroll:GetChildren()) do
+        if child ~= otherFeatures.playerLayout then
+            pcall(function()
+                child:Destroy()
+            end)
+        end
+    end
+
+    local playerList = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(playerList, player)
+        end
+    end
+
+    table.sort(playerList, function(a, b)
+        local aName = string.lower(a.Name)
+        local bName = string.lower(b.Name)
+        if aName == bName then
+            return a.UserId < b.UserId
+        end
+        return aName < bName
+    end)
+
+    if #playerList == 0 then
+        local empty = Instance.new("TextLabel")
+        empty.Name = "NoPlayersLabel"
+        empty.Size = UDim2.new(1, -6, 0, 28)
+        empty.BackgroundTransparency = 1
+        empty.Text = "No other players currently in this server"
+        empty.TextSize = 10
+        empty.Font = Enum.Font.Gotham
+        empty.TextColor3 = Color3.fromRGB(140, 145, 155)
+        empty.TextXAlignment = Enum.TextXAlignment.Left
+        empty.LayoutOrder = 1
+        empty.Parent = otherFeatures.playerScroll
+    end
+
+    for index, player in ipairs(playerList) do
+        local userId = player.UserId
+        local selected = otherFeatures.selectedUserIds[userId] == true
+
+        local button = Instance.new("TextButton")
+        button.Name = "Player_" .. tostring(userId)
+        button.Size = UDim2.new(1, -6, 0, 29)
+        button.BackgroundColor3 = selected
+            and Color3.fromRGB(40, 76, 116)
+            or Color3.fromRGB(43, 47, 54)
+        button.BorderSizePixel = 0
+        button.AutoButtonColor = true
+        button.Text = (selected and "✓  " or "+  ")
+            .. tostring(player.DisplayName)
+            .. "  (@" .. tostring(player.Name) .. ")"
+        button.TextSize = 10
+        button.Font = Enum.Font.GothamMedium
+        button.TextColor3 = Color3.fromRGB(240, 242, 247)
+        button.TextXAlignment = Enum.TextXAlignment.Left
+        button.TextTruncate = Enum.TextTruncate.AtEnd
+        button.LayoutOrder = index
+        button.Parent = otherFeatures.playerScroll
+
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 5)
+        corner.Parent = button
+
+        local padding = Instance.new("UIPadding")
+        padding.PaddingLeft = UDim.new(0, 8)
+        padding.PaddingRight = UDim.new(0, 6)
+        padding.Parent = button
+
+        local connection = button.MouseButton1Click:Connect(function()
+            if otherFeatures.selectedUserIds[userId] then
+                otherFeatures.selectedUserIds[userId] = nil
+            else
+                otherFeatures.selectedUserIds[userId] = true
+            end
+
+            otherFeatures.rebuildPlayerList()
+            otherFeatures.updateStatus()
+            otherFeatures.saveConfig()
+
+            if otherFeatures.enabled then
+                pcall(otherFeatures.refreshHighlights)
+            end
+        end)
+
+        table.insert(otherFeatures.playerButtonConnections, connection)
+    end
+
+    otherFeatures.updateStatus()
+end
+
+otherFeatures.page = Instance.new("ScrollingFrame")
+otherFeatures.page.Name = "OthersPage"
+otherFeatures.page.Size = UDim2.new(1, -92, 1, -56)
+otherFeatures.page.Position = UDim2.new(0, 82, 0, 48)
+otherFeatures.page.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+otherFeatures.page.BorderSizePixel = 0
+otherFeatures.page.ScrollBarThickness = 6
+otherFeatures.page.CanvasSize = UDim2.new(0, 0, 0, 0)
+otherFeatures.page.AutomaticCanvasSize = Enum.AutomaticSize.Y
+otherFeatures.page.ScrollingDirection = Enum.ScrollingDirection.Y
+otherFeatures.page.Visible = false
+otherFeatures.page.Parent = Main
+
+local otherPageCorner = Instance.new("UICorner")
+otherPageCorner.CornerRadius = UDim.new(0, 9)
+otherPageCorner.Parent = otherFeatures.page
+
+local otherPagePadding = Instance.new("UIPadding")
+otherPagePadding.PaddingTop = UDim.new(0, 8)
+otherPagePadding.PaddingBottom = UDim.new(0, 8)
+otherPagePadding.PaddingLeft = UDim.new(0, 8)
+otherPagePadding.PaddingRight = UDim.new(0, 8)
+otherPagePadding.Parent = otherFeatures.page
+
+local otherPageLayout = Instance.new("UIListLayout")
+otherPageLayout.Padding = UDim.new(0, 6)
+otherPageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+otherPageLayout.Parent = otherFeatures.page
+
+local otherTitle = Instance.new("TextLabel")
+otherTitle.Name = "PlayerHighlightHeader"
+otherTitle.Size = UDim2.new(1, -4, 0, 22)
+otherTitle.BackgroundTransparency = 1
+otherTitle.Text = "PLAYER HIGHLIGHT"
+otherTitle.TextSize = 11
+otherTitle.Font = Enum.Font.GothamBold
+otherTitle.TextColor3 = Color3.fromRGB(172, 181, 196)
+otherTitle.TextXAlignment = Enum.TextXAlignment.Left
+otherTitle.LayoutOrder = 1
+otherTitle.Parent = otherFeatures.page
+
+local otherDescription = Instance.new("TextLabel")
+otherDescription.Name = "PlayerHighlightDescription"
+otherDescription.Size = UDim2.new(1, -4, 0, 30)
+otherDescription.BackgroundTransparency = 1
+otherDescription.Text = "Select one or more players below. Click a selected player again to remove them."
+otherDescription.TextWrapped = true
+otherDescription.TextSize = 9
+otherDescription.Font = Enum.Font.Gotham
+otherDescription.TextColor3 = Color3.fromRGB(145, 151, 163)
+otherDescription.TextXAlignment = Enum.TextXAlignment.Left
+otherDescription.TextYAlignment = Enum.TextYAlignment.Center
+otherDescription.LayoutOrder = 2
+otherDescription.Parent = otherFeatures.page
+
+local otherControls = Instance.new("Frame")
+otherControls.Name = "PlayerHighlightControls"
+otherControls.Size = UDim2.new(1, -4, 0, 38)
+otherControls.BackgroundTransparency = 1
+otherControls.LayoutOrder = 3
+otherControls.Parent = otherFeatures.page
+
+otherFeatures.toggleButton = Instance.new("TextButton")
+otherFeatures.toggleButton.Name = "HighlightToggle"
+otherFeatures.toggleButton.Size = UDim2.new(0, 105, 0, 31)
+otherFeatures.toggleButton.Position = UDim2.new(0, 0, 0, 3)
+otherFeatures.toggleButton.BackgroundColor3 = Color3.fromRGB(47, 52, 61)
+otherFeatures.toggleButton.BorderSizePixel = 0
+otherFeatures.toggleButton.Text = "HIGHLIGHT: OFF"
+otherFeatures.toggleButton.TextSize = 9
+otherFeatures.toggleButton.Font = Enum.Font.GothamBold
+otherFeatures.toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+otherFeatures.toggleButton.Parent = otherControls
+
+local otherToggleCorner = Instance.new("UICorner")
+otherToggleCorner.CornerRadius = UDim.new(0, 6)
+otherToggleCorner.Parent = otherFeatures.toggleButton
+
+local otherHotkeyLabel = Instance.new("TextLabel")
+otherHotkeyLabel.Name = "HotkeyLabel"
+otherHotkeyLabel.Size = UDim2.new(0, 45, 1, 0)
+otherHotkeyLabel.Position = UDim2.new(0, 113, 0, 0)
+otherHotkeyLabel.BackgroundTransparency = 1
+otherHotkeyLabel.Text = "HOTKEY"
+otherHotkeyLabel.TextSize = 9
+otherHotkeyLabel.Font = Enum.Font.GothamBold
+otherHotkeyLabel.TextColor3 = Color3.fromRGB(178, 184, 194)
+otherHotkeyLabel.TextXAlignment = Enum.TextXAlignment.Left
+otherHotkeyLabel.Parent = otherControls
+
+otherFeatures.hotkeyButton = Instance.new("TextButton")
+otherFeatures.hotkeyButton.Name = "HotkeyButton"
+otherFeatures.hotkeyButton.Size = UDim2.new(0, 102, 0, 31)
+otherFeatures.hotkeyButton.Position = UDim2.new(0, 160, 0, 3)
+otherFeatures.hotkeyButton.BackgroundColor3 = Color3.fromRGB(43, 47, 54)
+otherFeatures.hotkeyButton.BorderSizePixel = 0
+otherFeatures.hotkeyButton.Text = "None"
+otherFeatures.hotkeyButton.TextSize = 10
+otherFeatures.hotkeyButton.Font = Enum.Font.GothamBold
+otherFeatures.hotkeyButton.TextColor3 = Color3.fromRGB(236, 239, 245)
+otherFeatures.hotkeyButton.Parent = otherControls
+
+local otherHotkeyCorner = Instance.new("UICorner")
+otherHotkeyCorner.CornerRadius = UDim.new(0, 6)
+otherHotkeyCorner.Parent = otherFeatures.hotkeyButton
+
+otherFeatures.status = Instance.new("TextLabel")
+otherFeatures.status.Name = "HighlightStatus"
+otherFeatures.status.Size = UDim2.new(1, -4, 0, 18)
+otherFeatures.status.BackgroundTransparency = 1
+otherFeatures.status.TextSize = 9
+otherFeatures.status.Font = Enum.Font.Gotham
+otherFeatures.status.TextColor3 = Color3.fromRGB(150, 158, 171)
+otherFeatures.status.TextXAlignment = Enum.TextXAlignment.Left
+otherFeatures.status.LayoutOrder = 4
+otherFeatures.status.Parent = otherFeatures.page
+
+local otherPlayersHeader = Instance.new("TextLabel")
+otherPlayersHeader.Name = "ServerPlayersHeader"
+otherPlayersHeader.Size = UDim2.new(1, -4, 0, 20)
+otherPlayersHeader.BackgroundTransparency = 1
+otherPlayersHeader.Text = "SERVER PLAYERS  •  CLICK TO SELECT"
+otherPlayersHeader.TextSize = 9
+otherPlayersHeader.Font = Enum.Font.GothamBold
+otherPlayersHeader.TextColor3 = Color3.fromRGB(172, 181, 196)
+otherPlayersHeader.TextXAlignment = Enum.TextXAlignment.Left
+otherPlayersHeader.LayoutOrder = 5
+otherPlayersHeader.Parent = otherFeatures.page
+
+otherFeatures.playerScroll = Instance.new("ScrollingFrame")
+otherFeatures.playerScroll.Name = "ServerPlayerList"
+otherFeatures.playerScroll.Size = UDim2.new(1, -4, 0, 150)
+otherFeatures.playerScroll.BackgroundColor3 = Color3.fromRGB(27, 30, 36)
+otherFeatures.playerScroll.BackgroundTransparency = 0.12
+otherFeatures.playerScroll.BorderSizePixel = 0
+otherFeatures.playerScroll.ScrollBarThickness = 4
+otherFeatures.playerScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+otherFeatures.playerScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+otherFeatures.playerScroll.ScrollingDirection = Enum.ScrollingDirection.Y
+otherFeatures.playerScroll.LayoutOrder = 6
+otherFeatures.playerScroll.Parent = otherFeatures.page
+
+local otherPlayerScrollCorner = Instance.new("UICorner")
+otherPlayerScrollCorner.CornerRadius = UDim.new(0, 6)
+otherPlayerScrollCorner.Parent = otherFeatures.playerScroll
+
+local otherPlayerPadding = Instance.new("UIPadding")
+otherPlayerPadding.PaddingTop = UDim.new(0, 5)
+otherPlayerPadding.PaddingBottom = UDim.new(0, 5)
+otherPlayerPadding.PaddingLeft = UDim.new(0, 4)
+otherPlayerPadding.PaddingRight = UDim.new(0, 4)
+otherPlayerPadding.Parent = otherFeatures.playerScroll
+
+otherFeatures.playerLayout = Instance.new("UIListLayout")
+otherFeatures.playerLayout.Padding = UDim.new(0, 4)
+otherFeatures.playerLayout.SortOrder = Enum.SortOrder.LayoutOrder
+otherFeatures.playerLayout.Parent = otherFeatures.playerScroll
+
+otherFeatures.toggleButton.MouseButton1Click:Connect(function()
+    otherFeatures.setEnabled(not otherFeatures.enabled, true)
+end)
+
+otherFeatures.hotkeyButton.MouseButton1Click:Connect(function()
+    otherFeatures.hotkeyCapture = true
+    otherFeatures.updateHotkeyButton()
+end)
+
+__UI.__L.addConnection(
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if otherFeatures.hotkeyCapture then
+            if input.UserInputType ~= Enum.UserInputType.Keyboard
+                or input.KeyCode == Enum.KeyCode.Unknown
+            then
+                return
+            end
+
+            if input.KeyCode == Enum.KeyCode.Escape
+                or input.KeyCode == Enum.KeyCode.Backspace
+                or input.KeyCode == Enum.KeyCode.Delete
+            then
+                otherFeatures.hotkey = "None"
+            else
+                otherFeatures.hotkey = input.KeyCode.Name
+            end
+
+            otherFeatures.hotkeyCapture = false
+            otherFeatures.updateHotkeyButton()
+            otherFeatures.saveConfig()
+            return
+        end
+
+        if gameProcessed
+            or otherFeatures.hotkey == "None"
+            or input.UserInputType ~= Enum.UserInputType.Keyboard
+            or input.KeyCode.Name ~= otherFeatures.hotkey
+        then
+            return
+        end
+
+        local focusedTextBox
+        pcall(function()
+            focusedTextBox = UserInputService:GetFocusedTextBox()
+        end)
+
+        if focusedTextBox then
+            return
+        end
+
+        otherFeatures.setEnabled(not otherFeatures.enabled, true)
+    end)
+)
+
+__UI.__L.addConnection(
+    Players.PlayerAdded:Connect(function()
+        task.defer(function()
+            if not cleaned then
+                otherFeatures.rebuildPlayerList()
+            end
+        end)
+    end)
+)
+
+__UI.__L.addConnection(
+    Players.PlayerRemoving:Connect(function(player)
+        otherFeatures.destroyTargetHighlight(player.UserId)
+        task.defer(function()
+            if not cleaned then
+                otherFeatures.rebuildPlayerList()
+                otherFeatures.updateStatus()
+            end
+        end)
+    end)
+)
+
+otherFeatures.updateToggle()
+otherFeatures.updateHotkeyButton()
+otherFeatures.rebuildPlayerList()
+
+task.spawn(function()
+    while not cleaned do
+        if otherFeatures.enabled then
+            pcall(otherFeatures.refreshHighlights)
+        end
+        task.wait(0.35)
+    end
+
+    otherFeatures.destroyAllHighlights()
+end)
+
+--// =========================================================
 --// CATEGORY BAR
 -- =========================================================
 categoryBar =
@@ -21739,208 +22404,142 @@ unusualCategoryButton =
         "UNUSUAL",
         76
     )
-othersCategoryButton =
-    __UI.__L.makeCategoryButton(
-        "OTHERS",
-        111
-    )
 cosmetic.categoryButton =
     __UI.__L.makeCategoryButton(
         "COSMETIC",
+        111
+    )
+otherCategoryButton =
+    __UI.__L.makeCategoryButton(
+        "OTHERS",
         146
+    )
+avatarCategoryButton =
+    __UI.__L.makeCategoryButton(
+        "AVATAR",
+        181
     )
 --// =========================================================
 --// CATEGORY SWITCH
 --// =========================================================
-__UI.__L.setCategory = function(
-    category
-)
-    currentCategory =
-        category
+__UI.__L.setCategory = function(category)
+    currentCategory = category
 
     pcall(function()
+        Status.Visible = false
+        unusualStatus.Visible = false
+        unusualPicker.Visible = false
+        mainPage.Visible = false
+        unusualPage.Visible = false
+        others.page.Visible = false
+        cosmetic.page.Visible = false
+        otherFeatures.page.Visible = false
+        SlotsScroll.Visible = false
+
+        mainCategoryButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        emoteCategoryButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        unusualCategoryButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        cosmetic.categoryButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        otherCategoryButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        avatarCategoryButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+
+        MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
+
         if category == "Main" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
-            Toggle.Visible = false
-            SlotsScroll.Visible = false
             mainPage.Visible = true
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(65, 65, 65)
-            emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
+            mainCategoryButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
 
         elseif category == "Unusual" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = unusualPage
             Toggle.LayoutOrder = 0
-            SlotsScroll.Visible = false
-            mainPage.Visible = false
             unusualPage.Visible = true
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(65, 65, 65)
-            othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
+            unusualCategoryButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
             updateUnusualToggle()
 
-        elseif category == "Others" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
-            Toggle.Visible = false
-            SlotsScroll.Visible = false
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            mainPage.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = true
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(65, 65, 65)
-            cosmetic.categoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-
         elseif category == "Cosmetic" then
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = cosmetic.page
             Toggle.LayoutOrder = 0
-            SlotsScroll.Visible = false
-            mainPage.Visible = false
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
             cosmetic.page.Visible = true
-            mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
-                Color3.fromRGB(65, 65, 65)
+            cosmetic.categoryButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
             cosmetic.updateToggle()
 
+        elseif category == "Others" then
+            otherFeatures.page.Visible = true
+            otherCategoryButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+            otherFeatures.updateToggle()
+            otherFeatures.updateHotkeyButton()
+            otherFeatures.updateStatus()
+
+        elseif category == "Avatar" then
+            others.page.Visible = true
+            avatarCategoryButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+
         else
-            MainTitle.Text = "DeadEyes v" .. SCRIPT_VERSION
-            Status.Visible = false
             Toggle.Visible = true
             Toggle.Parent = SlotsScroll
             Toggle.LayoutOrder = 0
             SlotsScroll.Visible = true
-            mainPage.Visible = false
-            unusualPage.Visible = false
-            unusualStatus.Visible = false
-            unusualPicker.Visible = false
-            others.page.Visible = false
-            cosmetic.page.Visible = false
-            mainCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            unusualCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            othersCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            cosmetic.categoryButton.BackgroundColor3 =
-                Color3.fromRGB(45, 45, 45)
-            emoteCategoryButton.BackgroundColor3 =
-                Color3.fromRGB(65, 65, 65)
+            emoteCategoryButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
             updateGUI()
         end
     end)
 end
 
 UnusualFns.addUnusualConnection(
-    mainCategoryButton.MouseButton1Click:Connect(
-        function()
-            if mainMinimized then
-                setMainMinimized(false)
-            end
-            __UI.__L.setCategory(
-                "Main"
-            )
+    mainCategoryButton.MouseButton1Click:Connect(function()
+        if mainMinimized then
+            setMainMinimized(false)
         end
-    )
+        __UI.__L.setCategory("Main")
+    end)
 )
+
 UnusualFns.addUnusualConnection(
-    emoteCategoryButton.MouseButton1Click:Connect(
-        function()
-            if mainMinimized then
-                setMainMinimized(false)
-            end
-            __UI.__L.setCategory(
-                "Emotes"
-            )
+    emoteCategoryButton.MouseButton1Click:Connect(function()
+        if mainMinimized then
+            setMainMinimized(false)
         end
-    )
+        __UI.__L.setCategory("Emotes")
+    end)
 )
-UnusualFns.addUnusualConnection(    unusualCategoryButton.MouseButton1Click:Connect(
-        function()
-            if mainMinimized then
-                setMainMinimized(false)
-            end
-            __UI.__L.setCategory(
-                "Unusual"
-            )
-        end
-    )
-)
+
 UnusualFns.addUnusualConnection(
-    othersCategoryButton.MouseButton1Click:Connect(
-        function()
-            if mainMinimized then
-                setMainMinimized(false)
-            end
-            __UI.__L.setCategory(
-                "Others"
-            )
+    unusualCategoryButton.MouseButton1Click:Connect(function()
+        if mainMinimized then
+            setMainMinimized(false)
         end
-    )
+        __UI.__L.setCategory("Unusual")
+    end)
 )
+
 UnusualFns.addUnusualConnection(
-    cosmetic.categoryButton.MouseButton1Click:Connect(
-        function()
-            if mainMinimized then
-                setMainMinimized(false)
-            end
-            __UI.__L.setCategory(
-                "Cosmetic"
-            )
+    cosmetic.categoryButton.MouseButton1Click:Connect(function()
+        if mainMinimized then
+            setMainMinimized(false)
         end
-    )
+        __UI.__L.setCategory("Cosmetic")
+    end)
 )
---// =========================================================
+
+UnusualFns.addUnusualConnection(
+    otherCategoryButton.MouseButton1Click:Connect(function()
+        if mainMinimized then
+            setMainMinimized(false)
+        end
+        __UI.__L.setCategory("Others")
+    end)
+)
+
+UnusualFns.addUnusualConnection(
+    avatarCategoryButton.MouseButton1Click:Connect(function()
+        if mainMinimized then
+            setMainMinimized(false)
+        end
+        __UI.__L.setCategory("Avatar")
+    end)
+)
 --// EXTERNAL CLEANUP
 --// =========================================================
 __UI.__L.cleanupUnusual = function()
@@ -24635,53 +25234,61 @@ setMainMinimized = function(state)
         SlotsScroll.Visible = true
         pcall(function()
             categoryBar.Visible = true
+
+            mainPage.Visible = false
+            unusualPage.Visible = false
+            unusualStatus.Visible = false
+            others.page.Visible = false
+            cosmetic.page.Visible = false
+            otherFeatures.page.Visible = false
+            unusualPicker.Visible = false
+
             if currentCategory == "Main" then
                 Status.Visible = false
                 Toggle.Visible = false
                 SlotsScroll.Visible = false
                 mainPage.Visible = true
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = false
+
             elseif currentCategory == "Unusual" then
                 Status.Visible = false
                 Toggle.Visible = true
-                Toggle.Parent =
-                    unusualPage
-                Toggle.LayoutOrder =
-                    0
+                Toggle.Parent = unusualPage
+                Toggle.LayoutOrder = 0
                 SlotsScroll.Visible = false
-                mainPage.Visible = false
                 unusualPage.Visible = true
-                unusualStatus.Visible = false
-                others.page.Visible = false
-            elseif currentCategory == "Others" then
-                Status.Visible = false
-                Toggle.Visible = false
-                SlotsScroll.Visible = false
-                mainPage.Visible = false
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = true
-                cosmetic.page.Visible = false
+                updateUnusualToggle()
+
             elseif currentCategory == "Cosmetic" then
                 Status.Visible = false
                 Toggle.Visible = true
                 Toggle.Parent = cosmetic.page
                 Toggle.LayoutOrder = 0
                 SlotsScroll.Visible = false
-                mainPage.Visible = false
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = false
                 cosmetic.page.Visible = true
-                unusualPicker.Visible = false
                 cosmetic.updateToggle()
+
+            elseif currentCategory == "Others" then
+                Status.Visible = false
+                Toggle.Visible = false
+                SlotsScroll.Visible = false
+                otherFeatures.page.Visible = true
+                otherFeatures.updateToggle()
+                otherFeatures.updateHotkeyButton()
+                otherFeatures.updateStatus()
+
+            elseif currentCategory == "Avatar" then
+                Status.Visible = false
+                Toggle.Visible = false
+                SlotsScroll.Visible = false
+                others.page.Visible = true
+
             else
-                mainPage.Visible = false
-                unusualPage.Visible = false
-                unusualStatus.Visible = false
-                others.page.Visible = false
+                Status.Visible = false
+                Toggle.Visible = true
+                Toggle.Parent = SlotsScroll
+                Toggle.LayoutOrder = 0
+                SlotsScroll.Visible = true
+                updateGUI()
             end
         end)
         Minimize.Text = "−"
@@ -25248,11 +25855,19 @@ __UI.__L.cleanup = function()
         return
     end
 
-    --// Save the complete Others state before destroying its TextBoxes.
-    --// This also persists Avatar Import text and values changed without
-    --// pressing APPLY / ENTER.
+    --// Save the Avatar editor state first.
     pcall(function()
         others.saveConfig()
+    end)
+
+    --// The highlight is tied to the lifetime of this DeadEye instance.
+    --// Stop it fully on close, remove every Highlight, and persist OFF.
+    pcall(function()
+        otherFeatures.enabled = false
+        otherFeatures.hotkeyCapture = false
+        otherFeatures.updateToggle()
+        otherFeatures.destroyAllHighlights()
+        otherFeatures.saveConfig()
     end)
 
     --// Persist Main / Reverse Look state on close as well.
