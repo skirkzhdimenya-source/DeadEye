@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.231
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.232
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.231"
+local SCRIPT_VERSION = "1.232"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -8014,6 +8014,92 @@ end
 --// =========================================================
 --// PRESERVE NATIVE WELDED COSMETIC TREES
 --// =========================================================
+
+--// Property-change guards close the one-frame visibility race observed in the trace:
+--// the native cosmetic controller restores the old effect about 5ms after the swap
+--// hides it. Re-hide the same native instances synchronously when their properties
+--// are rewritten, rather than waiting for the next RenderStep.
+function UnusualFns.installNativeWeldedVisibilityGuard(object, state)
+    if not object
+        or not state
+        or state.guardConnections
+    then
+        return
+    end
+
+    local properties = {}
+
+    if state.kind == "BasePart" then
+        properties = { "Transparency", "LocalTransparencyModifier" }
+    elseif state.kind == "LocalTransparencyModifier" then
+        properties = { "LocalTransparencyModifier" }
+    elseif state.kind == "Transparency" then
+        properties = { "Transparency" }
+    elseif state.kind == "Enabled" then
+        properties = { "Enabled" }
+    else
+        return
+    end
+
+    state.guardConnections = {}
+    state.guardBusy = false
+
+    local function enforceHidden()
+        if state.guardBusy
+            or not object.Parent
+            or unusualRuntime.nativeWeldedStates[object] ~= state
+        then
+            return
+        end
+
+        state.guardBusy = true
+
+        pcall(function()
+            if state.kind == "BasePart" then
+                if object.Transparency ~= 1 then
+                    object.Transparency = 1
+                end
+                if object.LocalTransparencyModifier ~= 1 then
+                    object.LocalTransparencyModifier = 1
+                end
+
+            elseif state.kind == "LocalTransparencyModifier" then
+                if object.LocalTransparencyModifier ~= 1 then
+                    object.LocalTransparencyModifier = 1
+                end
+
+            elseif state.kind == "Transparency" then
+                if object.Transparency ~= 1 then
+                    object.Transparency = 1
+                end
+
+            elseif state.kind == "Enabled" then
+                if object.Enabled ~= false then
+                    object.Enabled = false
+
+                    if object:IsA("ParticleEmitter")
+                        or object:IsA("Trail")
+                    then
+                        object:Clear()
+                    end
+                end
+            end
+        end)
+
+        state.guardBusy = false
+    end
+
+    for _, property in ipairs(properties) do
+        local ok, connection = pcall(function()
+            return object:GetPropertyChangedSignal(property):Connect(enforceHidden)
+        end)
+
+        if ok and connection then
+            table.insert(state.guardConnections, connection)
+        end
+    end
+end
+
 function UnusualFns.hideNativeWeldedTree(rootJoint)
     if not rootJoint then
         return
@@ -8107,11 +8193,31 @@ function UnusualFns.hideNativeWeldedTree(rootJoint)
                 end)
             end
         end
+
+        local trackedState = states[object]
+        if trackedState then
+            UnusualFns.installNativeWeldedVisibilityGuard(
+                object,
+                trackedState
+            )
+        end
     end
 end
 
 function UnusualFns.restoreNativeWeldedTreeStates()
     local states = unusualRuntime.nativeWeldedStates
+
+    --// Disconnect the immediate-hide guards before restoring saved values.
+    for _, state in pairs(states) do
+        if state.guardConnections then
+            for _, connection in ipairs(state.guardConnections) do
+                pcall(function()
+                    connection:Disconnect()
+                end)
+            end
+            state.guardConnections = nil
+        end
+    end
 
     for object, state in pairs(states) do
         pcall(function()
