@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.226
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.227
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -6800,23 +6800,66 @@ __UI.__L.rebindUnusualCloneTree = function(
                             reboundPart = map[originalPart]
                         end
 
-                        --// Resolve references to sibling body parts on the live rig.
-                        if not reboundPart and targetPart and targetPart.Parent then
-                            local rig = targetPart.Parent
-                            local candidate =
-                                rig:FindFirstChild(originalPart.Name)
+                        --// Resolve references outside the cloned subtree against live BaseParts.
+                        --// FindFirstChild(name, true) is unsafe here: when a Weld and
+                        --// its MeshPart share a name, Roblox may return the Weld first.
+                        --// The old code then skipped the real BasePart and kept a stale
+                        --// Part0/Part1 reference to an object detached by RigService.
+                        if not reboundPart and targetPart then
+                            local function matchesReferencePart(candidate)
+                                if not candidate
+                                    or not candidate:IsA("BasePart")
+                                    or candidate.Name ~= originalPart.Name
+                                then
+                                    return false
+                                end
 
-                            if not candidate then
-                                candidate = rig:FindFirstChild(
-                                    originalPart.Name,
-                                    true
-                                )
+                                --// For geometry, match the actual mesh rather than a
+                                --// different same-named part elsewhere in the rig.
+                                if originalPart:IsA("MeshPart") then
+                                    if not candidate:IsA("MeshPart")
+                                        or tostring(candidate.MeshId) ~= tostring(originalPart.MeshId)
+                                        or tostring(candidate.TextureID) ~= tostring(originalPart.TextureID)
+                                    then
+                                        return false
+                                    end
+                                elseif candidate.ClassName ~= originalPart.ClassName
+                                    and not (
+                                        candidate == targetPart
+                                        and candidate.Name == originalPart.Name
+                                    )
+                                then
+                                    return false
+                                end
+
+                                return true
                             end
 
-                            if candidate
-                                and candidate:IsA("BasePart")
-                            then
-                                reboundPart = candidate
+                            local function findReferencePart(root)
+                                if not root then
+                                    return nil
+                                end
+
+                                if root:IsA("BasePart")
+                                    and matchesReferencePart(root)
+                                then
+                                    return root
+                                end
+
+                                for _, candidate in ipairs(root:GetDescendants()) do
+                                    if matchesReferencePart(candidate) then
+                                        return candidate
+                                    end
+                                end
+
+                                return nil
+                            end
+
+                            --// Search the host limb first, then its live rig.
+                            reboundPart = findReferencePart(targetPart)
+
+                            if not reboundPart and targetPart.Parent then
+                                reboundPart = findReferencePart(targetPart.Parent)
                             end
                         end
 
@@ -6824,11 +6867,14 @@ __UI.__L.rebindUnusualCloneTree = function(
                             pcall(function()
                                 cloneObject[property] = reboundPart
                             end)
-                        elseif sourcePart
-                            and sourcePart.Parent
-                            and originalPart:IsDescendantOf(sourcePart.Parent)
+                        elseif not originalPart.Parent
+                            or (
+                                sourcePart
+                                and sourcePart.Parent
+                                and originalPart:IsDescendantOf(sourcePart.Parent)
+                            )
                         then
-                            --// Do not leave the clone connected to a template limb.
+                            --// Never preserve a reference to a detached old/template part.
                             pcall(function()
                                 cloneObject[property] = nil
                             end)
