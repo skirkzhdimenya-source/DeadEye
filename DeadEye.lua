@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.232
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.233
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.232"
+local SCRIPT_VERSION = "1.233"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -93,6 +93,11 @@ end)
 if genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP then
     pcall(function()
         genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP()
+    end)
+end
+if genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP then
+    pcall(function()
+        genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP()
     end)
 end
 if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP then
@@ -191,7 +196,8 @@ local savedConfig = {
         reverseLookMode = "without",
         reverseLookEnabled = false,
         benchTrimpHotkey = "P",
-        benchTrimpEnabled = false
+        benchTrimpEnabled = false,
+        fovBodyVisibilityEnabled = false
     },
     gui = {
         x = 35,
@@ -275,6 +281,9 @@ function loadSavedConfig()
     else
         savedConfig.main.benchTrimpEnabled = true
     end
+
+    savedConfig.main.fovBodyVisibilityEnabled =
+        savedConfig.main.fovBodyVisibilityEnabled == true
 
     if savedConfig.main.reverseLookMode ~= "with"
         and savedConfig.main.reverseLookMode ~= "without"
@@ -12236,6 +12245,12 @@ local mainJump = {
     benchTrimpEnabled = false,
     benchTrimpHotkeyName = "P",
     benchTrimpStateConnection = nil,
+    fovBodyVisibilityEnabled = false,
+    fovBodyVisibilityModule = nil,
+    fovBodyVisibilityOriginalGetType = nil,
+    fovBodyVisibilityHook = nil,
+    fovBodyVisibilityToggle = nil,
+    fovBodyVisibilityCleanup = nil,
     smartAirTurnEnabled = false,
     airTurnHotkeyName = "O",
     crouchSpamConnection = nil,
@@ -12367,6 +12382,10 @@ mainJump.benchTrimpEnabled =
     savedConfig.main
     and savedConfig.main.benchTrimpEnabled == true
     or false
+mainJump.fovBodyVisibilityEnabled =
+    savedConfig.main
+    and savedConfig.main.fovBodyVisibilityEnabled == true
+    or false
 mainJump.smartAirTurnEnabled =
     savedConfig.main
     and savedConfig.main.smartAirTurn == true
@@ -12447,7 +12466,8 @@ function mainJump.saveConfig()
         reverseLookMode = mainJump.reverseLookMode,
         reverseLookEnabled = mainJump.reverseLookEnabled,
         benchTrimpHotkey = mainJump.benchTrimpHotkeyName,
-        benchTrimpEnabled = mainJump.benchTrimpEnabled
+        benchTrimpEnabled = mainJump.benchTrimpEnabled,
+        fovBodyVisibilityEnabled = mainJump.fovBodyVisibilityEnabled
     }
     pcall(function()
         saveSavedConfig()
@@ -12468,9 +12488,177 @@ function mainJump.saveEnabledStates()
     savedConfig.main.benchTrimpEnabled =
         mainJump.benchTrimpEnabled == true
 
+    savedConfig.main.fovBodyVisibilityEnabled =
+        mainJump.fovBodyVisibilityEnabled == true
+
     pcall(function()
         saveSavedConfig()
     end)
+end
+
+--// =========================================================
+--// FOV BODY VISIBILITY
+--// Bypass only the native "FOV > 90 => None" check.
+--// No hotkeys, render loops, or transparency writes.
+--// =========================================================
+function mainJump.restoreFOVBodyVisibility()
+    local module =
+        mainJump.fovBodyVisibilityModule
+
+    local hook =
+        mainJump.fovBodyVisibilityHook
+
+    local original =
+        mainJump.fovBodyVisibilityOriginalGetType
+
+    if module
+        and hook
+        and original
+        and module.GetType == hook
+    then
+        module.GetType = original
+    end
+
+    mainJump.fovBodyVisibilityEnabled = false
+end
+
+mainJump.fovBodyVisibilityCleanup = function()
+    mainJump.restoreFOVBodyVisibility()
+
+    if genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP
+        == mainJump.fovBodyVisibilityCleanup
+    then
+        genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP = nil
+    end
+end
+
+genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP =
+    mainJump.fovBodyVisibilityCleanup
+
+function mainJump.setFOVBodyVisibilityEnabled(state, persist)
+    state = state == true
+
+    if state then
+        if not mainJump.fovBodyVisibilityModule then
+            local ok, module =
+                pcall(function()
+                    return require(
+                        ReplicatedStorage
+                            :WaitForChild("Objects")
+                            :WaitForChild("Game")
+                            :WaitForChild("Character")
+                            :WaitForChild("Client")
+                            :WaitForChild("Visibility")
+                    )
+                end)
+
+            if ok
+                and type(module) == "table"
+                and type(module.GetType) == "function"
+            then
+                mainJump.fovBodyVisibilityModule = module
+            else
+                warn(
+                    "[DeadEye] FOV Body Fix: failed to load Visibility module",
+                    module
+                )
+                state = false
+            end
+        end
+
+        local module =
+            mainJump.fovBodyVisibilityModule
+
+        if state and module then
+            if not mainJump.fovBodyVisibilityHook then
+                local original =
+                    module.GetType
+
+                if type(original) ~= "function" then
+                    warn(
+                        "[DeadEye] FOV Body Fix: Visibility.GetType is unavailable"
+                    )
+                    state = false
+                else
+                    mainJump.fovBodyVisibilityOriginalGetType =
+                        original
+
+                    mainJump.fovBodyVisibilityHook =
+                        function(self)
+                            if self.DataRegistry:Get("Scoped")
+                                or self.DataRegistry:Get("Hidden")
+                            then
+                                return "None"
+                            end
+
+                            if self.Player.CameraMaxZoomDistance > 1 then
+                                return "All"
+                            end
+
+                            if Players.LocalPlayer:GetAttribute("VR") then
+                                return "VR"
+                            end
+
+                            -- Deliberately omit the native FOV > 90 check.
+                            if self.DataRegistry:Get("DontShowFPCharacter") then
+                                return "None"
+                            end
+
+                            local tool =
+                                self.Parent.ToolProfile:GetCurrentTool()
+
+                            if not tool then
+                                return "None"
+                            end
+
+                            if self.DataRegistry:Get("LookBack") == true then
+                                self.LastLookedBack = tick()
+                                return "None"
+                            end
+
+                            if tick() - (self.LastLookedBack or 0) <= 0.4 then
+                                return "None"
+                            end
+
+                            local speed =
+                                self.DataRegistry:Get("Speed") or 1000
+
+                            local adjustments =
+                                tool.Info.Adjustments
+
+                            return adjustments.BothArmsVisible == true
+                                and speed <= 20
+                                and "BothArms"
+                                or (
+                                    adjustments.LeftArmVisible == true
+                                    and speed <= 20
+                                    and "LeftArm"
+                                    or "NoArms"
+                                )
+                        end
+                end
+            end
+
+            if state then
+                module.GetType =
+                    mainJump.fovBodyVisibilityHook
+
+                mainJump.fovBodyVisibilityEnabled = true
+            end
+        end
+    end
+
+    if not state then
+        mainJump.fovBodyVisibilityEnabled = false
+        mainJump.restoreFOVBodyVisibility()
+    end
+
+    if persist ~= false then
+        mainJump.saveConfig()
+        mainJump.saveEnabledStates()
+    end
+
+    mainJump.update()
 end
 
 --// =========================================================
@@ -14669,6 +14857,28 @@ function mainJump.update()
             mainJump.benchTrimpToggle.Text =
                 "OFF"
             mainJump.benchTrimpToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    47,
+                    52,
+                    61
+                )
+        end
+    end
+
+    if mainJump.fovBodyVisibilityToggle then
+        if mainJump.fovBodyVisibilityEnabled then
+            mainJump.fovBodyVisibilityToggle.Text =
+                "ON"
+            mainJump.fovBodyVisibilityToggle.BackgroundColor3 =
+                Color3.fromRGB(
+                    68,
+                    74,
+                    84
+                )
+        else
+            mainJump.fovBodyVisibilityToggle.Text =
+                "OFF"
+            mainJump.fovBodyVisibilityToggle.BackgroundColor3 =
                 Color3.fromRGB(
                     47,
                     52,
@@ -19109,11 +19319,81 @@ __UI.__L.mainConnect(
 )
 
 
+__UI.fovBodyVisibilityRow =
+    __UI.__L.mainRow(
+        "FOV BODY FIX",
+        11
+    )
+
+local fovBodyVisibilityLabel =
+    autoLabel:Clone()
+fovBodyVisibilityLabel.Text =
+    "FOV BODY FIX"
+fovBodyVisibilityLabel.Parent =
+    __UI.fovBodyVisibilityRow
+
+mainJump.fovBodyVisibilityToggle =
+    Instance.new("TextButton")
+mainJump.fovBodyVisibilityToggle.Size =
+    UDim2.new(
+        0,
+        65,
+        0,
+        28
+    )
+mainJump.fovBodyVisibilityToggle.Position =
+    UDim2.new(
+        1,
+        -75,
+        0.5,
+        -14
+    )
+mainJump.fovBodyVisibilityToggle.BackgroundColor3 =
+    Color3.fromRGB(
+        47,
+        52,
+        61
+    )
+mainJump.fovBodyVisibilityToggle.BorderSizePixel = 0
+mainJump.fovBodyVisibilityToggle.Text =
+    "OFF"
+mainJump.fovBodyVisibilityToggle.TextSize = 10
+mainJump.fovBodyVisibilityToggle.Font =
+    Enum.Font.GothamBold
+mainJump.fovBodyVisibilityToggle.TextColor3 =
+    Color3.fromRGB(
+        255,
+        255,
+        255
+    )
+mainJump.fovBodyVisibilityToggle.Parent =
+    __UI.fovBodyVisibilityRow
+
+local fovBodyVisibilityToggleCorner =
+    Instance.new("UICorner")
+fovBodyVisibilityToggleCorner.CornerRadius =
+    UDim.new(
+        0,
+        5
+    )
+fovBodyVisibilityToggleCorner.Parent =
+    mainJump.fovBodyVisibilityToggle
+
+__UI.__L.mainConnect(
+    mainJump.fovBodyVisibilityToggle.MouseButton1Click:Connect(
+        function()
+            mainJump.setFOVBodyVisibilityEnabled(
+                not mainJump.fovBodyVisibilityEnabled
+            )
+        end
+    )
+)
+
 --// HIDE UI MUST ALWAYS BE THE LOWEST / LAST ROW IN MAIN.
 __UI.hideRow =
     __UI.__L.mainRow(
         "HIDE UI",
-        11
+        12
     )
 __UI.hideLabel =
     autoLabel:Clone()
@@ -19461,6 +19741,15 @@ if mainJump.benchTrimpEnabled then
         mainJump.bindBenchTrimp(
             mainJump.character
             or LocalPlayer.Character
+        )
+    end)
+end
+
+if mainJump.fovBodyVisibilityEnabled then
+    pcall(function()
+        mainJump.setFOVBodyVisibilityEnabled(
+            true,
+            false
         )
     end)
 end
@@ -24989,6 +25278,16 @@ __UI.__L.cleanup = function()
             mainJump.benchTrimpStateConnection = nil
         end
         mainJump.benchTrimpEnabled = false
+    end)
+
+    pcall(function()
+        mainJump.restoreFOVBodyVisibility()
+
+        if genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP
+            == mainJump.fovBodyVisibilityCleanup
+        then
+            genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP = nil
+        end
     end)
 
     pcall(function()
