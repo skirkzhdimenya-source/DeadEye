@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.224
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.225
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.224"
+local SCRIPT_VERSION = "1.225"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -2899,7 +2899,7 @@ function cosmetic.refreshRig()
                     end)
                 else
                     pcall(function()
-                        applyUnusualFX(
+                        __UI.__L.applyUnusualFX(
                             restoreNativeUnusualId,
                             UnusualFns.getUnusualVisualRig(),
                             UnusualFns.getUnusualPlayerCharacter()
