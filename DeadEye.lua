@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.228
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.229
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.226"
+local SCRIPT_VERSION = "1.229"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -6617,26 +6617,67 @@ __UI.__L.createUnusualAnchor = function(
             "_" ..
             tostring(index)
 
-        for _, joint in ipairs(
+        --// Keep the cloned geometry as a connected subtree.
+        --// Native Unusuals commonly store joints beside the MeshPart they
+        --// connect, and other effects keep joints inside the geometry tree.
+        --// Destroying every joint here breaks both layouts.
+        for _, object in ipairs(
             anchor:GetDescendants()
         ) do
 
-            if joint:IsA("Weld")
-                or joint:IsA("WeldConstraint")
-                or joint:IsA("Motor6D")
-                or joint:IsA("Motor")
-                or joint:IsA("Script")
-                or joint:IsA("LocalScript")
-                or joint:IsA("ModuleScript")
+            if object:IsA("Script")
+                or object:IsA("LocalScript")
+                or object:IsA("ModuleScript")
+                or object:IsA("AnimationController")
+                or object:IsA("Animator")
             then
 
                 pcall(function()
-                    joint:Destroy()
+                    object:Destroy()
                 end)
 
             end
 
         end
+
+        --// Build a full instance map before the clone enters Workspace.
+        --// This preserves nested BasePart transforms and rebinds internal
+        --// Weld/Motor6D/Beam/Trail references to the cloned tree.
+        local cloneMap = {}
+
+        __UI.__L.mapUnusualCloneTree(
+            sourcePart,
+            anchor,
+            cloneMap
+        )
+
+        for sourceObject, cloneObject in pairs(
+            cloneMap
+        ) do
+
+            if sourceObject:IsA("BasePart")
+                and cloneObject:IsA("BasePart")
+            then
+
+                pcall(function()
+                    cloneObject.CFrame =
+                        targetPart.CFrame
+                        * sourceRoot.CFrame:ToObjectSpace(
+                            sourceObject.CFrame
+                        )
+                end)
+
+            end
+
+        end
+
+        __UI.__L.rebindUnusualCloneTree(
+            sourcePart,
+            anchor,
+            cloneMap,
+            sourceRoot,
+            targetPart
+        )
 
         pcall(function()
             anchor.Anchored = false
@@ -7089,6 +7130,23 @@ __UI.__L.installUnusualPartFX = function(
                 targetMap[nested] =
                     anchor
 
+                --// Map every descendant, not only the top-level MeshPart.
+                --// Sibling joints on the source limb may reference a nested
+                --// Neon/mesh/part several levels inside this geometry tree.
+                local geometryMap = {}
+
+                __UI.__L.mapUnusualCloneTree(
+                    nested,
+                    anchor,
+                    geometryMap
+                )
+
+                for sourceObject, cloneObject in pairs(
+                    geometryMap
+                ) do
+                    targetMap[sourceObject] = cloneObject
+                end
+
                 local animated =
                     unusualRuntime.addAnimationLink(
                         sourcePart,
@@ -7129,6 +7187,121 @@ __UI.__L.installUnusualPartFX = function(
                     sourceNodes,
                     nested
                 )
+
+            end
+
+        end
+
+    end
+
+    --// Recreate sibling joints that connect the body limb to geometry
+    --// cloned above. In many cosmetic models, a Weld/Motor6D is a sibling
+    --// of its Part rather than a descendant of that Part. Treat the whole
+    --// relationship as a graph edge and resolve both endpoints by identity.
+    for _, sourceJoint in ipairs(
+        sourcePart:GetChildren()
+    ) do
+
+        if __UI.__L.isUnusualJointObject(sourceJoint)
+            and not __UI.__L.unusualJointHasNestedBasePart(sourceJoint)
+        then
+
+            local sourcePart0
+            local sourcePart1
+
+            pcall(function()
+                sourcePart0 = sourceJoint.Part0
+                sourcePart1 = sourceJoint.Part1
+            end)
+
+            local clonedPart0 =
+                sourcePart0 and targetMap[sourcePart0]
+
+            local clonedPart1 =
+                sourcePart1 and targetMap[sourcePart1]
+
+            if clonedPart0
+                and clonedPart1
+                and clonedPart0:IsA("BasePart")
+                and clonedPart1:IsA("BasePart")
+                and (
+                    clonedPart0 ~= sourcePart0
+                    or clonedPart1 ~= sourcePart1
+                )
+            then
+
+                local clone
+                local clonedOK = pcall(function()
+                    clone = sourceJoint:Clone()
+                    clone.Part0 = clonedPart0
+                    clone.Part1 = clonedPart1
+                    clone.Parent = targetPart
+                end)
+
+                if clonedOK and clone then
+
+                    UnusualFns.tagUnusualFX(
+                        clone,
+                        id
+                    )
+
+                    --// If the native sibling joint already attaches the
+                    --// top-level geometry root to this limb, use that joint's
+                    --// real C0/C1 instead of keeping a second synthetic weld.
+                    local mappedRoot
+
+                    if sourcePart0 == sourcePart then
+                        mappedRoot = clonedPart1
+                    elseif sourcePart1 == sourcePart then
+                        mappedRoot = clonedPart0
+                    end
+
+                    local isDirectGeometryRoot = false
+
+                    if mappedRoot then
+                        for _, child in ipairs(
+                            sourcePart:GetChildren()
+                        ) do
+                            if child:IsA("BasePart")
+                                and targetMap[child] == mappedRoot
+                            then
+                                isDirectGeometryRoot = true
+                                break
+                            end
+                        end
+                    end
+
+                    if isDirectGeometryRoot then
+                        for _, child in ipairs(
+                            mappedRoot:GetChildren()
+                        ) do
+                            if child:IsA("WeldConstraint")
+                                and child.Name == "DeadEyeUnusualWeld"
+                            then
+                                local weldPart0
+                                local weldPart1
+
+                                pcall(function()
+                                    weldPart0 = child.Part0
+                                    weldPart1 = child.Part1
+                                end)
+
+                                if (
+                                    weldPart0 == targetPart
+                                    and weldPart1 == mappedRoot
+                                ) or (
+                                    weldPart1 == targetPart
+                                    and weldPart0 == mappedRoot
+                                ) then
+                                    pcall(function()
+                                        child:Destroy()
+                                    end)
+                                end
+                            end
+                        end
+                    end
+
+                end
 
             end
 
