@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.227
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.228
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -7533,6 +7533,191 @@ end
 --// =========================================================
 --// ORIGINAL SIGNATURE
 -- =========================================================
+
+--// Native Unusual geometry can use a Weld and its MeshPart as siblings
+--// under the body limb. Preserve and repair links by instance identity,
+--// not only by descendant-tree shape or name.
+function UnusualFns.unusualJointReferencesPart(joint, sourcePart)
+    if not joint or not sourcePart
+        or not __UI.__L.isUnusualJointObject(joint)
+    then
+        return false
+    end
+
+    for _, property in ipairs({"Part0", "Part1"}) do
+        local referencedPart
+        pcall(function()
+            referencedPart = joint[property]
+        end)
+
+        if referencedPart
+            and referencedPart:IsA("BasePart")
+            and referencedPart ~= sourcePart
+        then
+            local ok, isDescendant = pcall(function()
+                return referencedPart:IsDescendantOf(sourcePart)
+            end)
+            if ok and isDescendant then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+function UnusualFns.unusualBasePartReferencedByJoint(sourcePart, basePart)
+    if not sourcePart or not basePart then
+        return false
+    end
+
+    for _, sibling in ipairs(sourcePart:GetChildren()) do
+        if __UI.__L.isUnusualJointObject(sibling) then
+            for _, property in ipairs({"Part0", "Part1"}) do
+                local referencedPart
+                pcall(function()
+                    referencedPart = sibling[property]
+                end)
+
+                if referencedPart == basePart then
+                    return true
+                end
+            end
+        end
+    end
+
+    return false
+end
+
+function UnusualFns.repairNativeJointLinks(visualRig)
+    if not visualRig then
+        return 0
+    end
+
+    local repaired = 0
+
+    local function isInsideRoot(instance)
+        if not instance then
+            return false
+        end
+        if instance == visualRig then
+            return true
+        end
+        local ok, result = pcall(function()
+            return instance:IsDescendantOf(visualRig)
+        end)
+        return ok and result
+    end
+
+    local function matchesPart(stalePart, candidate)
+        if not stalePart or not candidate
+            or not stalePart:IsA("BasePart")
+            or not candidate:IsA("BasePart")
+            or stalePart.Name ~= candidate.Name
+            or stalePart.ClassName ~= candidate.ClassName
+        then
+            return false
+        end
+
+        if stalePart:IsA("MeshPart") then
+            return tostring(stalePart.MeshId) == tostring(candidate.MeshId)
+                and tostring(stalePart.TextureID) == tostring(candidate.TextureID)
+        end
+
+        return true
+    end
+
+    for _, joint in ipairs(visualRig:GetDescendants()) do
+        if __UI.__L.isUnusualJointObject(joint)
+            and joint.Parent
+            and joint.Parent:IsA("BasePart")
+        then
+            local part0, part1
+            pcall(function()
+                part0 = joint.Part0
+                part1 = joint.Part1
+            end)
+
+            -- Only repair a joint hosted by one of its endpoints. This avoids
+            -- touching intentional cross-model joints such as the game's torso rig.
+            local hostPart = joint.Parent
+            local propertyToRepair
+            local stalePart
+
+            if part0 == hostPart then
+                propertyToRepair = "Part1"
+                stalePart = part1
+            elseif part1 == hostPart then
+                propertyToRepair = "Part0"
+                stalePart = part0
+            end
+
+            if propertyToRepair
+                and (not stalePart or not isInsideRoot(stalePart))
+            then
+                local searchRoot = hostPart.Parent or visualRig
+                local bestCandidate
+
+                if searchRoot then
+                    for _, candidate in ipairs(searchRoot:GetDescendants()) do
+                        local match = matchesPart(stalePart, candidate)
+
+                        -- If the endpoint was cleared during restore, the joint
+                        -- name is a fallback; candidates are still BaseParts only.
+                        if not stalePart
+                            and candidate ~= hostPart
+                            and candidate:IsA("BasePart")
+                            and candidate.Name == joint.Name
+                        then
+                            match = true
+                        end
+
+                        if match then
+                            if candidate.Parent == hostPart
+                                or candidate:IsDescendantOf(hostPart)
+                            then
+                                bestCandidate = candidate
+                                break
+                            end
+                            if not bestCandidate then
+                                bestCandidate = candidate
+                            end
+                        end
+                    end
+                end
+
+                if bestCandidate then
+                    local ok = pcall(function()
+                        joint[propertyToRepair] = bestCandidate
+                    end)
+                    if ok then
+                        repaired += 1
+                    end
+                end
+            end
+        end
+    end
+
+    return repaired
+end
+
+local unusualJointRepairQueued = setmetatable({}, {__mode = "k"})
+function UnusualFns.queueNativeJointRepair(visualRig)
+    if not visualRig or unusualJointRepairQueued[visualRig] then
+        return
+    end
+
+    unusualJointRepairQueued[visualRig] = true
+    task.defer(function()
+        unusualJointRepairQueued[visualRig] = nil
+        if visualRig and visualRig.Parent then
+            pcall(function()
+                UnusualFns.repairNativeJointLinks(visualRig)
+            end)
+        end
+    end)
+end
+
 function UnusualFns.buildOriginalUnusualSignature(
     id,
     visualRig
@@ -7591,7 +7776,10 @@ function UnusualFns.buildOriginalUnusualSignature(
 
                     --// Record joint roots that contain actual nested geometry.
                     if __UI.__L.isUnusualJointObject(object)
-                        and __UI.__L.unusualJointHasNestedBasePart(object)
+                        and (
+                            __UI.__L.unusualJointHasNestedBasePart(object)
+                            or UnusualFns.unusualJointReferencesPart(object, sourcePart)
+                        )
                     then
                         table.insert(
                             objects,
@@ -7620,6 +7808,13 @@ function UnusualFns.buildOriginalUnusualSignature(
                             tostring(object.MeshId)
                         info.TextureId =
                             tostring(object.TextureID)
+                    end
+
+                    --// The sibling joint and this part form one native unit.
+                    if object:IsA("BasePart")
+                        and UnusualFns.unusualBasePartReferencedByJoint(sourcePart, object)
+                    then
+                        info.WholeTree = true
                     end
 
                     table.insert(
@@ -7674,6 +7869,23 @@ function UnusualFns.hideNativeWeldedTree(rootJoint)
             pcall(function()
                 object.LocalTransparencyModifier = 1
             end)
+        elseif object:IsA("Decal")
+            or object:IsA("Texture")
+        then
+            if states[object] == nil then
+                local oldTransparency = 0
+                pcall(function()
+                    oldTransparency = object.Transparency
+                end)
+                states[object] = {
+                    kind = "Transparency",
+                    value = oldTransparency
+                }
+            end
+
+            pcall(function()
+                object.Transparency = 1
+            end)
         elseif object:IsA("ParticleEmitter")
             or object:IsA("Trail")
             or object:IsA("Beam")
@@ -7682,6 +7894,7 @@ function UnusualFns.hideNativeWeldedTree(rootJoint)
             or object:IsA("Sparkles")
             or object:IsA("Highlight")
             or object:IsA("BillboardGui")
+            or object:IsA("SurfaceGui")
             or object:IsA("PointLight")
             or object:IsA("SpotLight")
             or object:IsA("SurfaceLight")
@@ -7713,6 +7926,8 @@ function UnusualFns.restoreNativeWeldedTreeStates()
                 object.LocalTransparencyModifier = state.value
             elseif state.kind == "Enabled" then
                 object.Enabled = state.value
+            elseif state.kind == "Transparency" then
+                object.Transparency = state.value
             end
         end)
     end
@@ -7805,38 +8020,10 @@ function UnusualFns.removeOriginalUnusualFX(
 
                     if match then
 
-                        if info.WholeTree
-                            and __UI.__L.isUnusualJointObject(existing)
-                        then
-                            --// Preserve the original native tree and only hide it locally.
-                            UnusualFns.hideNativeWeldedTree(existing)
-                        else
-                            pcall(function()
-                                existing:Destroy()
-                            end)
-
-                            for _, joint in ipairs(
-                                targetPart:GetChildren()
-                            ) do
-
-                                if (
-                                    joint:IsA("Weld")
-                                    or joint:IsA("WeldConstraint")
-                                    or joint:IsA("Motor6D")
-                                    or joint:IsA("Motor")
-                                )
-                                and joint.Name == info.Name
-                                and not info.WholeTree
-                                then
-
-                                    pcall(function()
-                                        joint:Destroy()
-                                    end)
-
-                                end
-
-                            end
-                        end
+                        --// Never destroy native Unusual instances to hide them.
+                        --// The game may cache these exact Weld/Part references;
+                        --// deleting a MeshPart alone can leave Part0/Part1 dangling.
+                        UnusualFns.hideNativeWeldedTree(existing)
 
                         break
 
@@ -7866,9 +8053,9 @@ function UnusualFns.removeOriginalUnusualFX(
                             and not info.WholeTree
                         then
 
-                            pcall(function()
-                                joint:Destroy()
-                            end)
+                            --// Keep native joints intact; restore their visual
+                            --// state instead of severing cached links.
+                            UnusualFns.hideNativeWeldedTree(joint)
 
                             break
 
@@ -8191,6 +8378,10 @@ function UnusualFns.restoreNativeUnusualSnapshot(
         end
     end
 
+    if visualRig then
+        UnusualFns.repairNativeJointLinks(visualRig)
+    end
+
     return restored
 end
 
@@ -8241,6 +8432,7 @@ function UnusualFns.restoreUnusual()
         if visualRig then
             UnusualFns.removeOurUnusualFX()
             UnusualFns.restoreNativeWeldedTreeStates()
+            UnusualFns.repairNativeJointLinks(visualRig)
 
             --// The game owns the currently equipped effect.
             --// Do not delete native geometry by matching old effect names.
@@ -8317,6 +8509,7 @@ function UnusualFns.restoreUnusual()
 
         --// Restore exact visibility/emission states of the untouched native Weld trees.
         UnusualFns.restoreNativeWeldedTreeStates()
+        UnusualFns.repairNativeJointLinks(visualRig)
 
         --// The original effect is now the live effect again.
         --// Keep the same instant P1/P3 behavior on it.
@@ -8432,6 +8625,9 @@ function UnusualFns.activateUnusual()
     unusualRuntime.replacementId =
         tonumber(unusualSlot.replaceId)
 
+    --// Repair stale native links left by a preceding rig rebuild.
+    UnusualFns.repairNativeJointLinks(visualRig)
+
     --// The replacement is now live in Rigs.<player>.
     --// Track all of its current ParticleEmitters and any that
     --// its client driver creates later.
@@ -8523,6 +8719,7 @@ function UnusualFns.reapplyUnusual()
                     task.wait()
 
                     UnusualFns.restoreNativeWeldedTreeStates()
+                    UnusualFns.repairNativeJointLinks(visualRig)
 
                     unusualActive = false
                     unusualEnabled = false
@@ -8990,6 +9187,12 @@ function UnusualFns.bindNativeParticlePOV(
                     ~= visualRig
                 then
                     return
+                end
+
+                if object:IsA("BasePart")
+                    or __UI.__L.isUnusualJointObject(object)
+                then
+                    UnusualFns.queueNativeJointRepair(visualRig)
                 end
 
                 local firstPerson = false
