@@ -64,9 +64,10 @@ local function getRigModel(object)
     return nil
 end
 --// =========================================================
---// LOCK NATIVE SELECTION VARIANT
 --// =========================================================
-local function resolveReplacementSelectionIndex(object, originalModule, replaceModule)
+--// CHOOSE AND LOCK A RANDOM REPLACEMENT VARIANT
+--// =========================================================
+local function resolveReplacementSelectionIndex(replaceModule)
     -- Custom EmoteModule scripts may implement their own selection rules.
     if replaceModule:FindFirstChild("EmoteModule") then
         return nil
@@ -82,58 +83,10 @@ local function resolveReplacementSelectionIndex(object, originalModule, replaceM
         return nil
     end
 
-    -- EmoteNum is shared character data, not proof that the original emote
-    -- has variants. When the source has no Selection (or only one child), any
-    -- existing EmoteNum may be left over from an earlier emote. Do not let
-    -- that stale index pick a random-looking variant of this replacement.
-    local originalSelection = originalModule
-        and originalModule:FindFirstChild("Selection")
-    local originalCount = originalSelection
-        and #originalSelection:GetChildren()
-        or 0
-
-    if originalCount <= 1 then
-        return 1
-    end
-
-    local dataRegistry = object and object.DataRegistry
-    if not dataRegistry then
-        return 1
-    end
-
-    -- Match the index chosen for a genuinely variant-based source emote.
-    -- If the index doesn't exist on the replacement, fall back to its first
-    -- child. Wait only when the source itself actually has multiple variants.
-    local startedAt = tick()
-
-    repeat
-        local readOK, value = pcall(function()
-            return dataRegistry:Get("EmoteNum")
-        end)
-        local emoteNum = readOK and (tonumber(value) or 0) or 0
-
-        if emoteNum ~= 0 then
-            -- Native GetSelection falls back to child 1 after its 3s deadline.
-            if tick() - startedAt >= 3 then
-                return 1
-            end
-
-            if emoteNum >= 1
-                and emoteNum <= originalCount
-                and emoteNum <= replacementCount
-                and emoteNum % 1 == 0 then
-                return emoteNum
-            end
-
-            return 1
-        end
-
-        if tick() - startedAt >= 3 then
-            return 1
-        end
-
-        task.wait()
-    until false
+    -- Roll exactly once when this replacement starts. The chosen index is
+    -- later locked in a DataRegistry proxy so GetAnimations() and SetModel()
+    -- resolve the same Selection child.
+    return math.random(1, replacementCount)
 end
 
 local function getEmoteInitController(object, replaceModule, controller, selectedIndex)
@@ -546,16 +499,9 @@ local function startReplacement(
             return
         end
 
-        local originalModule = prepareOriginalModule(originalId)
-
-        -- Only carry an EmoteNum over when the source emote really has
-        -- multiple variants. Otherwise it may be stale, and the replacement
-        -- should start at its first variant.
-        local selectedIndex = resolveReplacementSelectionIndex(
-            object,
-            originalModule,
-            replaceModule
-        )
+        -- Pick one random child from the replacement's own Selection.
+        -- The selected index is locked for both animation and model creation.
+        local selectedIndex = resolveReplacementSelectionIndex(replaceModule)
 
         local liveSlotAfterResolve = getSlotByOriginalId(originalId)
         if myGeneration ~= replacementGeneration
