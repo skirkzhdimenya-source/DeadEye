@@ -661,6 +661,8 @@ end
         end,
         reset = function()
             lastRegistryEmote = 0
+            failedOriginalId = nil
+            failedReplaceId = nil
         end
     }
 end
