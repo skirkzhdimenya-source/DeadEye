@@ -11036,4 +11036,765 @@ NOTES FOR CURRENT RIG / COSMETIC ANALYSIS
   because it exists; check the corresponding cached rig's Bound and
   BoundCharacter fields when diagnosing selection.
 
+==================================================
+SOURCE #66
+==================================================
+PATH:
+ReplicatedStorage.Services.Items.EmoteService
 
+STATUS:
+ПОЛУЧЕНО ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-17: декомпиляция Opiumware.
+
+PURPOSE:
+Фасад штатного сервиса запуска эмоций. SetEmote выбирает EmoteModule из самого предмета
+или использует ReplicatedStorage.Objects.Items.Emote, затем создаёт объект через new()
+и вызывает Activate() асинхронно. Сам выбор случайного варианта в этом модуле не обнаружен;
+следующая точка анализа — ReplicatedStorage.Objects.Items.Emote и его дочерние ModuleScript.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+ReplicatedStorage:WaitForChild("Items")
+local Emote = ReplicatedStorage:WaitForChild("Objects"):WaitForChild("Items"):WaitForChild("Emote")
+return {
+    SetEmote = function(_, p1, p2, p3, p4, p5, p6)
+        --[[ line: 13 | upvalues: (copy) Emote]]
+        local v7
+        if p2:FindFirstChild("EmoteModule") then
+            v7 = p2.EmoteModule
+        else
+            v7 = Emote
+        end
+        local v8 = require(v7).new(p1, p2, p6)
+        if p4 then
+            v8:Init(p4)
+        end
+        task.spawn(function()
+            --[[ line: 24 | upvalues: (ref) v8, (copy) p3, (copy) p5]]
+            v8:Activate(p3, p5)
+        end)
+        return v8
+    end
+}
+
+
+==================================================
+SOURCE #67
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Animations
+
+STATUS:
+ПОЛУЧЕНО ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-17: актуальная декомпиляция Opiumware.
+
+PURPOSE:
+Компонент анимаций персонажа. RegistryTermUpdated("Emote") деактивирует прежнюю эмоцию,
+затем вызывает EmoteService:SetEmote() с модулем предмета и моделью рига. Также вызывает
+Emote:Update() каждый кадр. Сам выбор варианта эмоции в этом компоненте не обнаружен;
+он передаёт управление EmoteService и объекту Emote.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local Types = script:WaitForChild("Types")
+local Shared = script.Parent:WaitForChild("Shared")
+local StateInfo = require(Shared:WaitForChild("StateInfo"))
+local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
+local EmoteService = require(Services:WaitForChild("Items"):WaitForChild("EmoteService"))
+local CarryService = require(Services:WaitForChild("Items"):WaitForChild("CarryService"))
+local ClientItemService = require(Services:WaitForChild("Items"):WaitForChild("ClientItemService"))
+local GameUIService = require(Services:WaitForChild("UI"):WaitForChild("GameUIService"))
+local VehicleService = require(Services.Asset.VehicleService)
+local t = {}
+t.__index = t
+
+function t.new(p6)
+    local t2 = {
+        Speed = 0,
+        GlobalFootstepsEnabled = true,
+        Parent = p6,
+        Character = p6.Model,
+        DataRegistry = p6.DataRegistry,
+        Weights = {},
+        MoveDirection = Vector3.new()
+    }
+    local v7 = t
+    local v8 = setmetatable(t2, v7)
+    local v9 = t
+    return setmetatable(v8, v9)
+end
+
+function t.Init(p_u_10)
+    p_u_10.Animations = {}
+    p_u_10.Transitions = {}
+    p_u_10.Footsteps = require(script:WaitForChild("Footsteps")).new(p_u_10)
+    p_u_10.Footsteps:Init()
+    if p_u_10.Parent.ModuleInfo then
+        p_u_10.GlobalFootstepsEnabled = p_u_10.Parent.ModuleInfo.Footsteps
+    end
+    if p_u_10.Parent.Module and p_u_10.Parent.Module:FindFirstChild("AnimationModule") then
+        task.spawn(function()
+            repeat
+                task.wait()
+            until p_u_10.Humanoid or (p_u_10.Character == nil or p_u_10.Character.Parent == nil)
+            p_u_10:SetModule(p_u_10.Parent.Module.AnimationModule)
+        end)
+    end
+end
+
+function t.SetRig(p11, p12)
+    p11.Humanoid = p12.Model:FindFirstChildOfClass("Humanoid")
+end
+
+function t.RegistryTermUpdated(p_u_13, p14)
+    if p14 == "AnimationType" and not (p_u_13.Parent.Module and p_u_13.Parent.Module:FindFirstChild("AnimationModule")) then
+        p_u_13:SetAnimationType(p_u_13.DataRegistry:Get(p14))
+        return
+    end
+    if p14 == "Emote" then
+        if p_u_13.Emote then
+            p_u_13.Emote:Deactivate()
+            p_u_13.Emote = nil
+        end
+        local v15 = p_u_13.DataRegistry:Get(p14)
+        if v15 == 0 then
+            return
+        elseif v15 and v15 ~= 0 then
+            p_u_13.Emote = EmoteService:SetEmote(
+                p_u_13.Character,
+                ClientItemService:GetItemFromID(v15),
+                false,
+                p_u_13,
+                nil,
+                p_u_13.Parent.Rig:GetRigModel()
+            )
+            if p_u_13.Parent and p_u_13.Parent.Local then
+                p_u_13.Parent.ToolProfile:Equip(
+                    p_u_13.Parent.ToolProfile:EquipKeyToIndex("Weaponless")
+                )
+            end
+        else
+            return
+        end
+    end
+    if p14 == "State" then
+        local v16 = p_u_13.DataRegistry:Get("State") or "Inert"
+        p_u_13:SetState(p_u_13.Emote and "Inert" or v16)
+        return
+    end
+    if p14 == "Carrying" then
+        if p_u_13.Carry then
+            p_u_13.Carry:Deactivate()
+            p_u_13.Carry = nil
+        end
+        local Carrying = p_u_13.DataRegistry:Get("Carrying")
+        if Carrying == 0 then
+            if p_u_13.Parent.Local then
+                GameUIService:SetType("Interact", "Carrying", false)
+            end
+            return
+        else
+            if p_u_13.Parent.Local then
+                GameUIService:SetType("Interact", "Carrying", true)
+            end
+            local CarryItem = p_u_13.DataRegistry:Get("CarryItem")
+            if CarryItem and CarryItem ~= 0 then
+                p_u_13.Carry = CarryService:SetCarry(
+                    p_u_13.Character,
+                    ClientItemService:GetItemFromID(CarryItem),
+                    false,
+                    p_u_13,
+                    Carrying,
+                    p_u_13.Parent.Rig:GetRigModel()
+                )
+            else
+                p_u_13.Carry = CarryService:SetCarry(
+                    p_u_13.Character,
+                    script.DefaultCarry,
+                    false,
+                    p_u_13,
+                    Carrying,
+                    p_u_13.Parent.Rig:GetRigModel()
+                )
+            end
+            if p_u_13.Parent and p_u_13.Parent.Local then
+                p_u_13.Parent.ToolProfile:Equip(
+                    p_u_13.Parent.ToolProfile:EquipKeyToIndex("Weaponless")
+                )
+            end
+        end
+    end
+    if p14 == "Carried" then
+        if p_u_13.Carry then
+            p_u_13.Carry:Deactivate()
+            local CarryCharacterPrimaryPart = p_u_13.Carry.CarryCharacterPrimaryPart
+            p_u_13.Carry = nil
+            for _, v17 in workspace.Players:GetChildren() do
+                local CarryWeld = v17:FindFirstChild("CarryWeld")
+                if CarryWeld and CarryWeld.Part1 == p_u_13.Character.PrimaryPart then
+                    CarryWeld.Enabled = false
+                end
+            end
+            task.spawn(function()
+                if CarryCharacterPrimaryPart and p_u_13.Parent.Local then
+                    local CFrame2 = CarryCharacterPrimaryPart.CFrame
+                    local v18 = 0
+                    repeat
+                        p_u_13.Character.PrimaryPart.CFrame =
+                            CFrame.new(
+                                CFrame2.X,
+                                p_u_13.Character.PrimaryPart.CFrame.Y,
+                                CFrame2.Z
+                            ) * (CFrame2 - CFrame2.p)
+                        task.wait()
+                        v18 = v18 + 1
+                    until not p_u_13.Character.PrimaryPart or (v18 >= 6 or p_u_13.Carry)
+                end
+            end)
+        end
+        local Carried = p_u_13.DataRegistry:Get("Carried")
+        if Carried == 0 then
+            return
+        else
+            local v19 = string.split(Carried, ":")[2]
+            local v20 = tonumber(v19)
+            if v20 and v20 ~= 0 then
+                p_u_13.Carry = CarryService:SetCarry(
+                    p_u_13.Character,
+                    ClientItemService:GetItemFromID(v20),
+                    false,
+                    p_u_13,
+                    nil,
+                    p_u_13.Parent.Rig:GetRigModel()
+                )
+            else
+                p_u_13.Carry = CarryService:SetCarry(
+                    p_u_13.Character,
+                    script.DefaultCarry,
+                    false,
+                    p_u_13,
+                    nil,
+                    p_u_13.Parent.Rig:GetRigModel()
+                )
+            end
+            if p_u_13.Carry then
+                local v21 = string.split(Carried, ":")[1]
+                local v22 = tonumber(v21)
+                for _, v23 in workspace.Players:GetChildren() do
+                    if v23:GetAttribute("Tag") == v22 then
+                        p_u_13.Carry.CarryCharacterPrimaryPart = v23.PrimaryPart
+                    end
+                end
+            end
+        end
+    end
+    if p14 == "Seated" then
+        if p_u_13.Vehicle then
+            p_u_13.Vehicle:Exit(p_u_13.Character)
+            p_u_13.Vehicle = nil
+        end
+        local Seated = p_u_13.DataRegistry:Get("Seated")
+        if Seated and Seated ~= 0 then
+            local v24 = string.split(Seated, ":")
+            local v25 = VehicleService
+            local v26 = v24[1]
+            p_u_13.Vehicle = v25:Get(tonumber(v26))
+            p_u_13.Vehicle:Enter(
+                p_u_13.Character,
+                p_u_13.Parent.Rig:GetRigModel(),
+                v24[2],
+                p_u_13.DataRegistry
+            )
+            if p_u_13.Parent.Local then
+                GameUIService:SetType("Interact", "Vehicle", true)
+            end
+        end
+        if p_u_13.Parent.Local then
+            GameUIService:SetType("Interact", "Vehicle", nil)
+        end
+    end
+end
+
+function t.KeyUsed(p27, p28)
+    if p27.Vehicle then
+        p27.Vehicle:KeyUsed(p28)
+    end
+end
+
+function t.SetAnimationType(p_u_29, p_u_30)
+    task.spawn(function()
+        repeat
+            task.wait()
+        until p_u_29.Humanoid or (p_u_29.Character == nil or p_u_29.Character.Parent == nil)
+        local v31 = p_u_29.Humanoid and p_u_29.Humanoid.RigType == Enum.HumanoidRigType.R15 and "R15" or "Classic"
+        if not Types:FindFirstChild(v31):FindFirstChild(p_u_30) then
+            p_u_30 = "Default"
+        end
+        p_u_29:SetModule(Types:FindFirstChild(v31):FindFirstChild(p_u_30))
+    end)
+end
+
+function t.SetModule(p32, p33)
+    if p32.Humanoid then
+        for _, v34 in p32.Humanoid:GetPlayingAnimationTracks() do
+            v34:Stop(0)
+        end
+        p32.AnimationModule = p33
+        p32.AnimationInfo = require(p32.AnimationModule)
+        p32.Animations = {}
+        for _, v35 in ipairs(p32.AnimationModule.Animations:GetChildren()) do
+            local t3 = {}
+            for _, v36 in ipairs(v35:GetChildren()) do
+                local t4 = {
+                    Animation = p32.Humanoid:LoadAnimation(v36),
+                    AnimationInstance = v36,
+                    Name = v36.Name
+                }
+                table.insert(t3, t4)
+            end
+            p32.Animations[v35.Name] = t3
+        end
+        p32.Transitions = {}
+        for _, v37 in ipairs(p32.AnimationModule.Transitions:GetChildren()) do
+            local t5 = {}
+            for _, v38 in ipairs(v37:GetChildren()) do
+                local t6 = {
+                    Animation = p32.Humanoid:LoadAnimation(v38),
+                    AnimationInstance = v38,
+                    Name = v38.Name,
+                    ParentName = v38.Parent.Name
+                }
+                table.insert(t5, t6)
+            end
+            p32.Transitions[v37.Name] = t5
+        end
+        p32.Parent.Joints.AnimationsEnabled = true
+    end
+end
+
+function t.Destroy(p39)
+    if p39.Humanoid then
+        for _, v40 in p39.Humanoid:GetPlayingAnimationTracks() do
+            v40:Stop(0)
+        end
+    end
+    if p39.Emote then
+        p39.Emote:Deactivate()
+        p39.Emote = nil
+    end
+    if p39.Carry then
+        p39.Carry:Deactivate()
+        p39.Carry = nil
+    end
+    if p39.Vehicle then
+        p39.Vehicle:Exit(p39.Character)
+        p39.Vehicle = nil
+    end
+end
+
+function t.Create(_) end
+
+function t.SetState(p41, p42)
+    p41.CurrentStateInfo = StateInfo:GetState(p42)
+    p41.CurrentStateAnimation = p41.CurrentStateInfo.Animation
+end
+
+function t.Update(p43, p44)
+    if p43.Carry and p43.Carry.CarryCharacterPrimaryPart then
+        p43.Character.PrimaryPart.CFrame = p43.Carry.CarryCharacterPrimaryPart.CFrame
+    end
+    if p43.Emote then
+        p43.Emote:Update(p44)
+    end
+    if p43.AnimationModule then
+        local CurrentStateAnimation = p43.CurrentStateAnimation
+        p43:SetCurrentAnimation(CurrentStateAnimation)
+        p43:UpdateAnimations(CurrentStateAnimation)
+        local Footsteps = p43.Footsteps
+        local FootstepsEnabled = p43.FootstepsEnabled
+        if FootstepsEnabled then
+            FootstepsEnabled = p43.GlobalFootstepsEnabled
+        end
+        Footsteps:Update(p44, FootstepsEnabled, p43.AnimationSpeed, p43.State)
+    end
+end
+
+function t.SetCurrentAnimation(p45, p46)
+    if p45.State == p46 then
+        return
+    end
+    local v47 = nil
+    for v48, v49 in pairs(p45.Transitions) do
+        if v48 == p45.State then
+            v47 = v49
+            break
+        end
+    end
+    if p45.State and v47 then
+        for _, v50 in pairs(v47) do
+            if v50.Name == "End" then
+                p45:PlayTransitionAnimation(v50, p46)
+            end
+        end
+    end
+    if p45:GetInfo(p45.State).PlayWander == true then
+        p45.Footsteps:Wander()
+    end
+    if p45:GetInfo(p45.State).PlayLanded then
+        for _, v51 in pairs(p45:GetInfo(p45.State).PlayLanded) do
+            if p46 == v51 then
+                p45.Footsteps:Land()
+            end
+        end
+    end
+    p45.State = p46
+    local v52 = nil
+    for v53, v54 in pairs(p45.Transitions) do
+        if v53 == p45.State then
+            v52 = v54
+            break
+        end
+    end
+    if p45.State and v52 then
+        for _, v55 in pairs(v52) do
+            if v55.Name == "Start" then
+                p45:PlayTransitionAnimation(v55, p45.State)
+            elseif v55.Name == "End" then
+                v55.Animation:Stop(0.25)
+            end
+        end
+    end
+    local State = p45:GetInfo(p45.State)
+    p45.FootstepsEnabled = State.FootstepsEnabled or false
+    for v56, v57 in pairs(p45.Animations) do
+        if v56 == p46 then
+            for _, v58 in pairs(v57) do
+                v58.Animation:Play(State.PlayTransitionTime)
+            end
+        else
+            local v59 = p45:GetInfo(v56)
+            for _, v60 in pairs(v57) do
+                v60.Animation:Stop(v59.StopTransitionTime)
+            end
+        end
+    end
+end
+
+function t.GetInfo(p61, p62)
+    for _, v63 in pairs(p61.AnimationInfo) do
+        for _, v64 in pairs(v63.Names) do
+            if v64 == p62 then
+                return v63
+            end
+        end
+    end
+    for _, v65 in pairs(p61.AnimationInfo) do
+        for _, v66 in pairs(v65.Names) do
+            if v66 == "Default" then
+                return v65
+            end
+        end
+    end
+end
+
+function t.PlayTransitionAnimation(p67, p_u_68, p69)
+    local Animation = p_u_68.Animation
+    local ParentName = p_u_68.ParentName
+    local AnimationInstance = p_u_68.AnimationInstance
+    local v70 = p67:GetInfo(p69)
+    if p_u_68.Name == "End" then
+        if v70.Transitions == nil or v70.Transitions[ParentName] == nil then
+            return
+        else
+            local v71 = false
+            for _, v72 in pairs(v70.Transitions[ParentName]) do
+                if v72 == "End" then
+                    v71 = true
+                end
+            end
+            if v71 ~= false then
+                task.spawn(function()
+                    Animation:Play(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
+                    Animation:AdjustSpeed(AnimationInstance:GetAttribute("Speed") or 1)
+                    if AnimationInstance:GetAttribute("PlayWeightLength") == 0 then
+                        task.wait()
+                    else
+                        task.wait(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
+                    end
+                    if p_u_68 then
+                        Animation:Stop(AnimationInstance:GetAttribute("StopWeightLength") or 0.2)
+                    end
+                end)
+            end
+        end
+    else
+        task.spawn(function()
+            Animation:Play(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
+            Animation:AdjustSpeed(AnimationInstance:GetAttribute("Speed") or 1)
+            if AnimationInstance:GetAttribute("PlayWeightLength") == 0 then
+                task.wait()
+            else
+                task.wait(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
+            end
+            if p_u_68 then
+                Animation:Stop(AnimationInstance:GetAttribute("StopWeightLength") or 0.2)
+            end
+        end)
+        return
+    end
+end
+
+function t.UpdateAnimations(p73, p74)
+    local v75 = nil
+    for v76, v77 in pairs(p73.Animations) do
+        if v76 == p74 then
+            v75 = v77
+            break
+        end
+    end
+    if v75 == nil then
+        return
+    else
+        local v78 = p73:GetInfo(p74)
+        local Speed = p73.DataRegistry:Get("Speed")
+        local RelativeMoveDirection = p73.DataRegistry:Get("RelativeMoveDirection")
+        if v78 == nil or v78.IgnoreSpeedCheck ~= true and (p73.Speed == Speed and p73.MoveDirection == RelativeMoveDirection) then
+            return
+        elseif RelativeMoveDirection then
+            p73.Speed = Speed
+            local Z = RelativeMoveDirection.Z
+            if math.abs(Z) < 0.1 then
+                local X = RelativeMoveDirection.X
+                local Y = RelativeMoveDirection.Y
+                RelativeMoveDirection = Vector3.new(X, Y, -0.01)
+            end
+            if RelativeMoveDirection ~= p73.MoveDirection then
+                p73:SetDirectionWeights(RelativeMoveDirection)
+            end
+            p73.MoveDirection = RelativeMoveDirection
+            for _, v79 in pairs(v78.PlaybackInfo) do
+                for _, v80 in pairs(v75) do
+                    local v81 = false
+                    for _, v82 in pairs(v79.Animations) do
+                        if v82 == v80.Name then
+                            v81 = true
+                        end
+                    end
+                    if v81 == true then
+                        local SpeedInfo = v79.SpeedInfo
+                        local WeightInfo = v79.WeightInfo
+                        local v83 = v79.Directions == nil and nil or v79.Directions[v80.Name]
+                        p73:SetValues(v80, SpeedInfo, WeightInfo, v83)
+                    end
+                end
+                if v79.CopyTimePosition ~= nil then
+                    local v84 = nil
+                    for _, v85 in pairs(v75) do
+                        if v85.Name == v79.CopyTimePosition then
+                            v84 = v85
+                        end
+                    end
+                    if v84 ~= nil then
+                        for _, v86 in pairs(v75) do
+                            local Animation2 = v86.Animation
+                            if v86 ~= v84 then
+                                for _, v87 in pairs(v79.Animations) do
+                                    if v87 == v86.Name then
+                                        if Animation2.Speed < 0 then
+                                            if Animation2.Length then
+                                                Animation2.TimePosition = Animation2.Length - v84.Animation.TimePosition
+                                            end
+                                        else
+                                            Animation2.TimePosition = v84.Animation.TimePosition
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function t.SetDirectionWeights(p88, p89)
+    p88.Weights = {}
+    for _, v90 in pairs({
+        "Forward",
+        "Backward",
+        "Left",
+        "Right",
+        "ForwardLeft",
+        "ForwardRight",
+        "ForwardForward"
+    }) do
+        local v91 = nil
+        if v90 == "Forward" then
+            local Z2 = p89.Z
+            local v92 = math.clamp(Z2, -1, 0)
+            v91 = math.abs(v92) ^ 2
+        elseif v90 == "Backward" then
+            local Z3 = p89.Z
+            local v93 = math.clamp(Z3, 0, 1)
+            v91 = math.abs(v93) ^ 2
+        elseif v90 == "Left" then
+            local X2 = p89.X
+            local v94 = math.clamp(X2, -1, -0)
+            v91 = math.abs(v94) ^ 2
+        elseif v90 == "Right" then
+            local X3 = p89.X
+            local v95 = math.clamp(X3, 0, 1)
+            v91 = math.abs(v95) ^ 2
+        elseif v90 == "ForwardLeft" then
+            local X4 = p89.X
+            local v96 = math.clamp(X4, -1, 0)
+            v91 = math.abs(v96) / 0.7071067811865476
+        elseif v90 == "ForwardRight" then
+            local X5 = p89.X
+            local v97 = math.clamp(X5, 0, 1)
+            v91 = math.abs(v97) / 0.7071067811865476
+        elseif v90 == "ForwardForward" then
+            local Z4 = p89.Z
+            local v98 = math.clamp(Z4, -1, -0.7071067811865476) + 0.7071067811865476
+            local v99 = math.abs(v98) / 0.2928932188134524
+            v91 = math.max(v99, 0)
+        end
+        p88.Weights[v90] = v91
+    end
+end
+
+function t.SetValues(p100, p101, p102, p103, p104)
+    local v105 = 1
+    if p102 ~= nil then
+        if p102.YVelocitySpeed == true then
+            local v106
+            if p100.Character:GetAttribute("LadderUp") == true then
+                v106 = 15
+            else
+                v106 = p100.Character:GetAttribute("LadderUp") == false and -15 or (p100.DataRegistry:Get("ActualVelocity") or Vector3.new()).Y
+            end
+            local v107 = (math.abs(v106) <= 0.4 and 0 or v106) / 6
+            v105 = math.clamp(v107, -2.5, 2.5)
+            p100.AnimationSpeed = math.abs(v105)
+        elseif p102.UseMovementSpeed == true then
+            if p100.Speed then
+                if p102.SpeedDivisionPastSpeed == nil or p100.Speed < p102.SpeedDivisionPastSpeed[1] then
+                    v105 = p100.Speed / (p102.SpeedDivision or 1)
+                else
+                    p101.Animation:AdjustSpeed(p100.Speed / (p102.SpeedDivisionPastSpeed[2] or 1))
+                    v105 = p100.Speed / (p102.SpeedDivisionPastSpeed[2] or 1)
+                end
+            end
+        else
+            p101.Animation:AdjustSpeed(1 / (p102.SpeedDivision or 1))
+            v105 = v105 / (p102.SpeedDivision or 1)
+        end
+    end
+    local v108 = 1
+    if p103 and p100.Speed then
+        if (p103.ZeroBeforeSpeed == nil or p100.Speed >= p103.ZeroBeforeSpeed) and (p103.ZeroAfterSpeed == nil or p100.Speed < p103.ZeroAfterSpeed) then
+            if p103.SpeedChanges ~= nil then
+                local v109 = (p100.Speed - (p103.SpeedChanges.Subtract or 0)) / p103.SpeedChanges.Division
+                local v110 = math.clamp(v109, 0, 1)
+                if p103.SpeedChanges.Reversed == true then
+                    v110 = 1 - v110
+                end
+                v108 = v108 * v110
+            end
+        else
+            v108 = 0
+        end
+    end
+    if p104 ~= nil then
+        local v111 = false
+        if p103.ReverseLeftRightIfBackwards == true and p100.MoveDirection.Z > 0 then
+            if p104 == "Left" then
+                p104 = "Right"
+                v111 = true
+            elseif p104 == "Right" then
+                p104 = "Left"
+                v111 = true
+            end
+        end
+        local v112 = p100.Weights[p104]
+        if v112 ~= nil then
+            v108 = v108 * v112
+        end
+        if v111 == true then
+            v105 = v105 * -1
+        end
+    end
+    if p102 ~= nil and (p102.Return == true and p102.YVelocitySpeed ~= true) then
+        p100.AnimationSpeed = math.abs(v105)
+    end
+    p101.Animation:AdjustSpeed(v105)
+    local Animation3 = p101.Animation
+    local v113 = v108 < 0.01 and 0.01 or v108
+    local v114 = p103 == nil and nil or p103.TransitionTime
+    Animation3:AdjustWeight(v113, v114)
+end
+
+return t
+
+
+==================================================
+SOURCE #68
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.ActionVisuals
+
+STATUS:
+ПОЛУЧЕНО ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-17: декомпиляция Opiumware.
+
+PURPOSE:
+Обработчик визуальных действий персонажа. Загружает дочерние модули из script.Actions
+и вызывает соответствующий Activate() по ID действия, найденному в
+ReplicatedStorage.Objects.Game.Actions.ActionTypes. Этот источник нужен для проверки,
+не запускаются ли некоторые дополнительные эффекты или варианты эмоций как отдельные Actions.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local t = {}
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+t.__index = t
+local t2 = {}
+for _, v1 in pairs(script.Actions:GetChildren()) do
+    t2[v1.Name] = require(v1)
+end
+
+function t.new(p2)
+    local t3 = {
+        Parent = p2,
+        Local = p2.Local,
+        Character = p2.Model,
+        DataRegistry = p2.DataRegistry
+    }
+    local v3 = t
+    local v4 = setmetatable(t3, v3)
+    local v5 = t
+    return setmetatable(v4, v5)
+end
+
+function t.Init(_) end
+function t.Destroy(_) end
+function t.Create(_) end
+
+function t.Action(p6, p7, ...)
+    for _, v8 in ipairs(ReplicatedStorage.Objects.Game.Actions.ActionTypes:GetChildren()) do
+        if v8:GetAttribute("ID") == p7 then
+            p7 = v8.Name
+            break
+        end
+    end
+    if t2[p7] then
+        t2[p7]:Activate(p6.Character, p6.DataRegistry, ...)
+    end
+end
+
+return t
