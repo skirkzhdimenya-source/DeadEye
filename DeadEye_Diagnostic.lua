@@ -26,6 +26,11 @@ pcall(function()
                 end)
             end
         end
+        if type(__DDCore.PreviousState.loadoutObserverCancels) == "table" then
+            for _, cancel in pairs(__DDCore.PreviousState.loadoutObserverCancels) do
+                pcall(cancel)
+            end
+        end
     end
 end)
 
@@ -37,6 +42,7 @@ __DDCore.State = {
     errorCounts = {},
     watchedButtons = setmetatable({}, { __mode = "k" }),
     buttonConnections = {},
+    loadoutObserverCancels = {},
     repeatMessage = nil,
     repeatCount = 0
 }
@@ -137,6 +143,16 @@ __DDCore.StopAndCopy = function()
         __DDCore.Env.DEADEYE_PORTRAIT_RUNNING = false
         __DDCore.Env.DEADEYE_UNUSUAL_POV_RUNNING = false
     end)
+
+    if type(__DDCore.State.loadoutObserverCancels) == "table" then
+        for slotName, cancel in pairs(__DDCore.State.loadoutObserverCancels) do
+            local ok, err = pcall(cancel)
+            __DDCore.Log("F6: loadout observer cleanup slot=" .. tostring(slotName)
+                .. ", ok=" .. tostring(ok)
+                .. (not ok and (", error=" .. tostring(err)) or ""))
+        end
+        table.clear(__DDCore.State.loadoutObserverCancels)
+    end
 
     __DDCore.Log("F6: cleanup stage finished; preparing clipboard log")
 
@@ -403,7 +419,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.238
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.241
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -435,7 +451,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.240"
+local SCRIPT_VERSION = "1.241"
 __DDCore.Log("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -2491,23 +2507,35 @@ function cosmetic.getName(id)
     return name
 end
 
---// Loadout compatibility resolver for the current UserData hierarchy.
---// Prefer the game's ModuleScript API; fall back to captured Loadout sync/patch data.
+--// Current loadout API:
+--// ReplicatedStorage.Client.Services.UserData.Inventory.Loadout
+--// GetEquipped(slotKey) reads the authoritative client Inventory Store.
+--// The old Shared.UserData.ClientHooks.useLoadout API is retained as fallback.
 __DDCore.LoadoutCache = __DDCore.LoadoutCache or {}
 __DDCore.LoadoutResolver = function(slotName)
     if not __DDCore.LoadoutSearchDone then
         __DDCore.LoadoutSearchDone = true
 
         local module = nil
-        local candidatePaths = {}
+        local moduleKind = nil
+        local candidates = {}
         local userDataChildren = {}
 
         pcall(function()
+            local client = ReplicatedStorage:FindFirstChild("Client")
+            local services = client and client:FindFirstChild("Services")
+            local servicesUserData = services and services:FindFirstChild("UserData")
+            local inventory = servicesUserData and servicesUserData:FindFirstChild("Inventory")
+            local currentLoadout = inventory and inventory:FindFirstChild("Loadout")
+
+            if currentLoadout and currentLoadout:IsA("ModuleScript") then
+                module = currentLoadout
+                moduleKind = "Inventory.Loadout"
+                candidates[#candidates + 1] = currentLoadout:GetFullName()
+            end
+
             local shared = ReplicatedStorage:FindFirstChild("Shared")
             local userData = shared and shared:FindFirstChild("UserData")
-            local hooks = userData and userData:FindFirstChild("ClientHooks")
-            module = hooks and hooks:FindFirstChild("useLoadout")
-
             if userData then
                 for _, child in ipairs(userData:GetChildren()) do
                     userDataChildren[#userDataChildren + 1] =
@@ -2515,58 +2543,109 @@ __DDCore.LoadoutResolver = function(slotName)
                 end
             end
 
-            if module then
-                candidatePaths[#candidatePaths + 1] = module:GetFullName()
-            else
-                for _, candidate in ipairs(ReplicatedStorage:GetDescendants()) do
-                    if candidate:IsA("ModuleScript")
-                        and string.lower(candidate.Name) == "useloadout"
-                    then
-                        if #candidatePaths < 20 then
-                            candidatePaths[#candidatePaths + 1] = candidate:GetFullName()
-                        end
-                        if not module then
-                            module = candidate
-                        end
-                    end
+            if not module then
+                local hooks = userData and userData:FindFirstChild("ClientHooks")
+                local legacy = hooks and hooks:FindFirstChild("useLoadout")
+                if legacy and legacy:IsA("ModuleScript") then
+                    module = legacy
+                    moduleKind = "legacy useLoadout"
+                    candidates[#candidates + 1] = legacy:GetFullName()
                 end
             end
         end)
 
         __DDCore.LoadoutModule = module
-        __DDCore.Log("LOADOUT RESOLVER DISCOVERY: module="
-            .. tostring(module)
-            .. ", candidates=" .. (#candidatePaths > 0 and table.concat(candidatePaths, ";") or "<none>")
+        __DDCore.LoadoutModuleKind = moduleKind
+        __DDCore.LoadoutAPI = nil
+
+        if module then
+            local ok, apiOrError = pcall(require, module)
+            if ok and type(apiOrError) == "table" then
+                __DDCore.LoadoutAPI = apiOrError
+            else
+                __DDCore.Log("LOADOUT API REQUIRE FAILED: path=" .. tostring(module)
+                    .. ", error=" .. tostring(apiOrError))
+            end
+        end
+
+        local api = __DDCore.LoadoutAPI
+        if api and type(api.Observe) == "function" then
+            for _, observedSlot in ipairs({
+                "UnusualSlot",
+                "CosmeticSlot_1",
+                "CosmeticSlot_2"
+            }) do
+                if not __DDCore.State.loadoutObserverCancels[observedSlot] then
+                    local ok, cancelOrError = pcall(function()
+                        return api.Observe(observedSlot, function(value)
+                            if not __DDCore.State.active then
+                                return
+                            end
+
+                            local numeric = tonumber(value) or 0
+                            __DDCore.LoadoutCache[observedSlot] = numeric
+                            __DDCore.Log("LOADOUT OBSERVE: source="
+                                .. tostring(__DDCore.LoadoutModuleKind)
+                                .. ", slot=" .. tostring(observedSlot)
+                                .. ", id=" .. tostring(numeric))
+
+                            if string.sub(observedSlot, 1, 13) == "CosmeticSlot_" then
+                                local cosmeticIndex = tonumber(string.sub(observedSlot, 14))
+                                if cosmeticIndex and type(cosmetic.setInitialOriginal) == "function" then
+                                    pcall(cosmetic.setInitialOriginal, cosmeticIndex, numeric)
+                                end
+                            end
+                        end)
+                    end)
+
+                    if ok and type(cancelOrError) == "function" then
+                        __DDCore.State.loadoutObserverCancels[observedSlot] = cancelOrError
+                    elseif not ok then
+                        __DDCore.Log("LOADOUT OBSERVE FAILED: slot=" .. tostring(observedSlot)
+                            .. ", error=" .. tostring(cancelOrError))
+                    end
+                end
+            end
+        end
+
+        __DDCore.Log("LOADOUT RESOLVER DISCOVERY: module=" .. tostring(module)
+            .. ", api=" .. tostring(moduleKind or "<none>")
+            .. ", candidates=" .. (#candidates > 0 and table.concat(candidates, ";") or "<none>")
+            .. ", API=" .. tostring(api ~= nil)
+            .. ", GetEquipped=" .. tostring(api and type(api.GetEquipped) == "function" or false)
+            .. ", GetEquippedFromSlot=" .. tostring(api and type(api.GetEquippedFromSlot) == "function" or false)
+            .. ", Observe=" .. tostring(api and type(api.Observe) == "function" or false)
             .. ", UserData children=" .. (#userDataChildren > 0 and table.concat(userDataChildren, ";") or "<none>"))
     end
 
-    local cached = tonumber(__DDCore.LoadoutCache[slotName])
-    local module = __DDCore.LoadoutModule
-
-    if module then
+    local api = __DDCore.LoadoutAPI
+    if api then
         local ok, value = pcall(function()
-            local api = require(module)
-            if type(api) ~= "table" or type(api.GetEquippedFromSlot) ~= "function" then
-                error("useLoadout module has no GetEquippedFromSlot function")
+            if type(api.GetEquipped) == "function" then
+                return api.GetEquipped(slotName)
+            elseif type(api.GetEquippedFromSlot) == "function" then
+                return api.GetEquippedFromSlot(slotName)
             end
-            return api.GetEquippedFromSlot(slotName)
+            error("loadout API has neither GetEquipped nor GetEquippedFromSlot")
         end)
 
-        if ok and tonumber(value) ~= nil then
-            local numeric = tonumber(value)
-            if numeric ~= 0 or cached == nil or cached == 0 then
-                return numeric
-            end
-            return cached
+        if ok then
+            -- The current API returns nil for an empty slot; treat that as ID 0.
+            -- Do not resurrect a stale positive cache value after a genuine unequip.
+            local numeric = tonumber(value) or 0
+            __DDCore.LoadoutCache[slotName] = numeric
+            return numeric
         end
 
         if not __DDCore.LoadoutCallFailureLogged then
             __DDCore.LoadoutCallFailureLogged = true
-            __DDCore.Log("LOADOUT RESOLVER MODULE FAILED: path=" .. tostring(module)
+            __DDCore.Log("LOADOUT RESOLVER API FAILED: path=" .. tostring(__DDCore.LoadoutModule)
+                .. ", api=" .. tostring(__DDCore.LoadoutModuleKind)
                 .. ", error=" .. tostring(value))
         end
     end
 
+    local cached = tonumber(__DDCore.LoadoutCache[slotName])
     if cached ~= nil then
         return cached
     end
@@ -23703,52 +23782,41 @@ cosmetic.buildList()
 cosmetic.installHook()
 cosmetic.buildUI()
 
-pcall(function()
-    local loadoutChannel =
-        ReplicatedStorage.Shared.UserData.Events.Remotes.Channels.Loadout
+--// Current versions are observed through Inventory.Loadout:Observe above.
+--// Keep the old channel listener only if the legacy API was selected.
+if __DDCore.LoadoutModuleKind == "legacy useLoadout" then
+    pcall(function()
+        local shared = ReplicatedStorage:FindFirstChild("Shared")
+        local userData = shared and shared:FindFirstChild("UserData")
+        local events = userData and userData:FindFirstChild("Events")
+        local remotes = events and events:FindFirstChild("Remotes")
+        local channels = remotes and remotes:FindFirstChild("Channels")
+        local loadoutChannel = channels and channels:FindFirstChild("Loadout")
 
-    UnusualFns.addUnusualConnection(
-        loadoutChannel.OnClientEvent:Connect(
-            function(kind, data)
-                if (kind == "sync" or kind == "patch")
-                    and type(data) == "table"
-                then
-                    for slotName, slotValue in pairs(data) do
-                        __DDCore.LoadoutCache[slotName] = slotValue
+        if loadoutChannel and loadoutChannel:IsA("RemoteEvent") then
+            UnusualFns.addUnusualConnection(
+                loadoutChannel.OnClientEvent:Connect(function(kind, data)
+                    if (kind == "sync" or kind == "patch") and type(data) == "table" then
+                        for slotName, slotValue in pairs(data) do
+                            __DDCore.LoadoutCache[slotName] = tonumber(slotValue) or 0
+                        end
+                        __DDCore.Log("LOADOUT EVENT (legacy): kind=" .. tostring(kind)
+                            .. ", UnusualSlot=" .. tostring(data.UnusualSlot)
+                            .. ", CosmeticSlot_1=" .. tostring(data.CosmeticSlot_1)
+                            .. ", CosmeticSlot_2=" .. tostring(data.CosmeticSlot_2))
+
+                        cosmetic.setInitialOriginal(1, data.CosmeticSlot_1)
+                        cosmetic.setInitialOriginal(2, data.CosmeticSlot_2)
                     end
-                    __DDCore.Log("LOADOUT EVENT: kind=" .. tostring(kind)
-                        .. ", UnusualSlot=" .. tostring(data.UnusualSlot)
-                        .. ", CosmeticSlot_1=" .. tostring(data.CosmeticSlot_1)
-                        .. ", CosmeticSlot_2=" .. tostring(data.CosmeticSlot_2))
-                end
-
-                if kind == "sync"
-                    and type(data) == "table"
-                then
-                    cosmetic.setInitialOriginal(
-                        1,
-                        data.CosmeticSlot_1
-                    )
-                    cosmetic.setInitialOriginal(
-                        2,
-                        data.CosmeticSlot_2
-                    )
-                elseif kind == "patch"
-                    and type(data) == "table"
-                then
-                    cosmetic.setInitialOriginal(
-                        1,
-                        data.CosmeticSlot_1
-                    )
-                    cosmetic.setInitialOriginal(
-                        2,
-                        data.CosmeticSlot_2
-                    )
-                end
-            end
-        )
-    )
-end)
+                end)
+            )
+        else
+            __DDCore.Log("LOADOUT LEGACY CHANNEL MISSING")
+        end
+    end)
+else
+    __DDCore.Log("LOADOUT: using current Inventory.Loadout API observers")
+end
 
 genv.DEADEYE_COSMETIC_CLEANUP =
     cosmetic.cleanup
