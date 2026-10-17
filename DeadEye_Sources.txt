@@ -9151,7 +9151,7 @@ PATH:
 ReplicatedStorage.Client.Services.UserData.Inventory.Loadout
 
 PURPOSE:
-Текущий клиентский API инвентаря и экипировки. GetEquipped(slotKey) читает Equipped через Store:Get("Equipped") и codec Equipped; GetAll() возвращает слоты по ключам, IsEquipped(id) ищет предмет. Equip/Unequip отправляют запрос через Shared.UserData.Remotes.Equip. Это новый путь вместо старого Shared.UserData.ClientHooks.useLoadout; для Unusual используется ключ UnusualSlot.
+Текущий клиентский API инвентаря и экипировки. GetEquipped(slotKey) читает Equipped через Store:Get("Equipped") и codec Equipped; GetAll() возвращает слоты по ключам, IsEquipped(id) ищет предмет. Equip/Unequip отправляют запрос через Shared.UserData.Remotes.Equip. Это новый путь вместо старого Shared.UserData.ClientHooks.useLoadout; для Unusual используется ключ UnusualSlot. DeadEye_Diagnostic v1.241 читает фактическое состояние через GetEquipped и подписывается на Observe для UnusualSlot, CosmeticSlot_1 и CosmeticSlot_2; пустой слот (nil) трактуется как ID 0, без использования устаревшего положительного кэша.
 
 
 SOURCE CONTENT:
