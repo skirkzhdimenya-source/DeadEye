@@ -985,7 +985,7 @@ end
 __DDCore.Log("INIT: loading external EmoteRuntime module")
 local EmoteRuntime = loadstring(
         game:HttpGet(
-            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/f72d47f8e0e94c51ef23bc53fd540363abff5e9a/DeadEye_EmoteRuntime.lua"
+            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/c2374b3c128ecef1453d1475d11989321979bcc2/DeadEye_EmoteRuntime.lua"
         )
     )()
 
