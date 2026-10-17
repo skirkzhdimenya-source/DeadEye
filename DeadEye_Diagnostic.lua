@@ -1,12 +1,12 @@
 --// DEADEYE DIAGNOSTIC BOOTSTRAP (starts before DeadEye initialization)
-local __DDEnv = _G
+__DDEnv = _G
 pcall(function()
     if type(getgenv) == "function" then
         __DDEnv = getgenv()
     end
 end)
 
-local __DDPreviousState = __DDEnv.DEADEYE_DIAG_STATE
+__DDPreviousState = __DDEnv.DEADEYE_DIAG_STATE
 pcall(function()
     if type(__DDPreviousState) == "table" then
         if __DDPreviousState.messageConnection then
@@ -28,7 +28,7 @@ pcall(function()
     end
 end)
 
-local __DDState = {
+__DDState = {
     active = true,
     stopRequested = false,
     log = {},
@@ -43,7 +43,7 @@ local __DDState = {
 __DDEnv.DEADEYE_DIAG_STATE = __DDState
 __DDEnv.DEADEYE_DIAG_LOG = __DDState.log
 
-local function __DDLog(message)
+function __DDLog(message)
     if not __DDState.active then
         return
     end
@@ -68,7 +68,7 @@ local function __DDLog(message)
     end)
 end
 
-local function __DDCallCleanup(label, callback)
+function __DDCallCleanup(label, callback)
     __DDLog("BOOT CLEANUP BEGIN: " .. tostring(label))
     local ok, err = pcall(function()
         callback()
@@ -83,7 +83,7 @@ local function __DDCallCleanup(label, callback)
     return ok, err
 end
 
-local __DDStopAndCopy
+__DDStopAndCopy = nil
 __DDStopAndCopy = function()
     if __DDState.stopRequested then
         return
@@ -201,8 +201,8 @@ __DDEnv.DEADEYE_DIAG_STOP = __DDStopAndCopy
 __DDLog("BOOT: first executable statement reached; diagnostic capture is active")
 
 -- Capture engine/runtime errors and warnings from the very beginning.
-local __DDLogListenerInstalled = false
-local __DDLogListenerOK, __DDLogListenerError = pcall(function()
+__DDLogListenerInstalled = false
+__DDLogListenerOK, __DDLogListenerError = pcall(function()
     local logService = game:GetService("LogService")
     __DDState.messageConnection = logService.MessageOut:Connect(function(message, messageType)
         if not __DDState.active then
@@ -244,8 +244,8 @@ if not __DDLogListenerOK then
 end
 
 -- F6 is reserved for diagnostic stop + copy-log in this build.
-local __DDF6ListenerInstalled = false
-local __DDF6ListenerOK, __DDF6ListenerError = pcall(function()
+__DDF6ListenerInstalled = false
+__DDF6ListenerOK, __DDF6ListenerError = pcall(function()
     local inputService = game:GetService("UserInputService")
     __DDState.inputConnection = inputService.InputBegan:Connect(function(input)
         if tostring(input.KeyCode) == "Enum.KeyCode.F6" then
@@ -261,7 +261,7 @@ end
 __DDLog("BOOT listeners: LogService=" .. tostring(__DDLogListenerInstalled)
     .. ", F6=" .. tostring(__DDF6ListenerInstalled))
 
-local function __DDTraceback(err)
+function __DDTraceback(err)
     local message = tostring(err)
     pcall(function()
         if debug and type(debug.traceback) == "function" then
@@ -271,12 +271,12 @@ local function __DDTraceback(err)
     return message
 end
 
-local __DDPack = table.pack or function(...)
+__DDPack = table.pack or function(...)
     return { n = select("#", ...), ... }
 end
-local __DDUnpack = table.unpack or unpack
+__DDUnpack = table.unpack or unpack
 
-local function __DDValue(value)
+function __DDValue(value)
     if value == nil then
         return "nil"
     end
@@ -320,7 +320,7 @@ local function __DDValue(value)
     return result
 end
 
-local function __DDArgs(args)
+function __DDArgs(args)
     local values = {}
     local limit = math.min(args.n or #args, 6)
     for i = 1, limit do
@@ -332,7 +332,7 @@ local function __DDArgs(args)
     return table.concat(values, ", ")
 end
 
-local function __DDWrapFunction(original, label, mode)
+function __DDWrapFunction(original, label, mode)
     if type(original) ~= "function" then
         __DDLog("WRAP SKIPPED: " .. tostring(label) .. " is " .. type(original))
         return original
@@ -391,7 +391,7 @@ local function __DDWrapFunction(original, label, mode)
     return wrapped
 end
 
-local function __DDWrapTable(target, key, label, mode)
+function __DDWrapTable(target, key, label, mode)
     if type(target) ~= "table" then
         __DDLog("WRAP SKIPPED: " .. tostring(label) .. " owner is " .. type(target))
         return
@@ -451,11 +451,11 @@ __DDLog("BOOT checkpoint: LocalPlayer=" .. tostring(LocalPlayer) .. ", core serv
 
 -- Stop stale runtime components and log each cleanup attempt.
 __DDLog("BOOT: checking previous-instance cleanup hooks")
-local previousFOVFix = genv.DeadEyeFOVBodyVisibilityFix
-if type(previousFOVFix) == "table"
-    and type(previousFOVFix.Stop) == "function"
+__DDPreviousFOVFix = genv.DeadEyeFOVBodyVisibilityFix
+if type(__DDPreviousFOVFix) == "table"
+    and type(__DDPreviousFOVFix.Stop) == "function"
 then
-    __DDCallCleanup("DeadEyeFOVBodyVisibilityFix.Stop", previousFOVFix.Stop)
+    __DDCallCleanup("DeadEyeFOVBodyVisibilityFix.Stop", __DDPreviousFOVFix.Stop)
 else
     __DDLog("BOOT CLEANUP SKIPPED: standalone FOV fix not present")
 end
@@ -501,7 +501,7 @@ __DDLog("BOOT: purging stale jump sensors")
 __UI.__L.purgeStaleMainJumpSensors()
 __DDLog("BOOT: stale jump sensor purge returned")
 
-local __ddCleanupHooks = {
+__DDCleanupHooks = {
     "DEADEYE_MAIN_SENSORS_CLEANUP",
     "DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP",
     "DEADEYE_FOV_BODY_VISIBILITY_CLEANUP",
@@ -515,7 +515,7 @@ local __ddCleanupHooks = {
     "EMOTE_SWAPPER_CLEANUP"
 }
 
-for _, cleanupName in ipairs(__ddCleanupHooks) do
+for _, cleanupName in ipairs(__DDCleanupHooks) do
     local cleanupCallback = genv[cleanupName]
     if cleanupCallback then
         __DDCallCleanup(cleanupName, cleanupCallback)
@@ -27114,12 +27114,12 @@ __DDLog("INIT checkpoint: UI created; installing targeted diagnostics")
 __DDWrapTable(__UI.EmoteService, "SetEmote", "EMOTE.EmoteService.SetEmote", "result")
 __DDWrapTable(EmoteRuntime, "checkState", "EMOTE.checkState", "sample")
 
-local __DDNativeEmoteCounter = 0
-local __DDLastNativeEmoteId = "__DD_UNSET"
-local __DDLastNativeEmoteReadOK = "__DD_UNSET"
-local __DDLastSwapEnabled = "__DD_UNSET"
-local __DDLastRuntimeOriginalId = "__DD_UNSET"
-local __DDWrappedCheckState = EmoteRuntime.checkState
+__DDNativeEmoteCounter = 0
+__DDLastNativeEmoteId = "__DD_UNSET"
+__DDLastNativeEmoteReadOK = "__DD_UNSET"
+__DDLastSwapEnabled = "__DD_UNSET"
+__DDLastRuntimeOriginalId = "__DD_UNSET"
+__DDWrappedCheckState = EmoteRuntime.checkState
 
 EmoteRuntime.checkState = function(...)
     local args = __DDPack(...)
@@ -27248,7 +27248,7 @@ __DDWrapTable(__UI.__L, "applyUnusualFX", "UNUSUAL.applyUnusualFX")
 -- Avatar actions: log their results and verify applied fields on every Humanoid.
 __DDWrapTable(others, "applyDescription", "AVATAR.applyDescription")
 
-local __DDAvatarVerifyProperties = {
+__DDAvatarVerifyProperties = {
     "Head", "Torso", "LeftArm", "RightArm", "LeftLeg", "RightLeg",
     "Face", "Shirt", "Pants", "GraphicTShirt",
     "BodyTypeScale", "HeightScale", "WidthScale", "DepthScale",
@@ -27257,7 +27257,7 @@ local __DDAvatarVerifyProperties = {
     "ShouldersAccessory", "FrontAccessory", "BackAccessory", "WaistAccessory"
 }
 
-local __DDApplyDescriptionLogged = others.applyDescription
+__DDApplyDescriptionLogged = others.applyDescription
 others.applyDescription = function(description)
     local expected = {}
     for _, property in ipairs(__DDAvatarVerifyProperties) do
@@ -27334,7 +27334,7 @@ __DDWrapTable(others, "applyAvatarDump", "AVATAR.applyAvatarDump")
 __DDWrapTable(others, "applyAll", "AVATAR.applyAll")
 
 -- Track actual button activations, including dynamically-created picker cards.
-local function __DDWatchButton(object)
+function __DDWatchButton(object)
     local ok, isButton = pcall(function()
         return object:IsA("GuiButton")
     end)
