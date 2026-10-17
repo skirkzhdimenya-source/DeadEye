@@ -2355,7 +2355,9 @@ local unusualRuntime = {
     --// exact 3P Enabled value so P3 restores only what was there.
     nativeParticleStates = {},
     nativeParticleRig = nil,
+    nativeParticleRigs = {},
     nativeParticleConnection = nil,
+    nativeParticleConnections = {},
     nativeParticleLastFirstPerson = nil,
     reapplyGeneration = 0,
     animationSource = nil,
@@ -6764,7 +6766,8 @@ unusualRuntime.installAnimatedNestedModels = function(
                     unusualRuntime.animatedNestedVisuals,
                     {
                         model = clone,
-                        root = root
+                        root = root,
+                        targetRig = targetRig
                     }
                 )
 
@@ -9497,7 +9500,12 @@ function UnusualFns.restoreNativeUnusualSnapshot(
 
     for _, partSnapshot in ipairs(snapshot.parts) do
         local targetModel = partSnapshot.targetModel
-        if not (targetModel and targetModel.Parent) then
+        if targetModel then
+            if not targetModel.Parent then
+                targetModel = nil
+            end
+        else
+            --// Legacy snapshots did not store the exact Instance.
             targetModel =
                 UnusualFns.resolveUnusualTargetModel(
                     partSnapshot.targetRole,
@@ -9962,26 +9970,25 @@ function UnusualFns.reapplyUnusual()
             local playerCharacter =
                 UnusualFns.getUnusualPlayerCharacter()
 
-            local root =
-                visualRig
-                and visualRig:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-
-            --// v1.242: Workspace.Rigs may be a visual-only model without
-            --// HumanoidRootPart. Fall back to the live character model.
-            if not root and playerCharacter then
-                root = playerCharacter:FindFirstChild("HumanoidRootPart")
-            end
-
             local humanoid =
                 visualRig
-                and visualRig:FindFirstChildOfClass(
-                    "Humanoid"
-                )
+                and visualRig:FindFirstChildOfClass("Humanoid")
 
+            if not humanoid then
+                for _, target in ipairs(
+                    UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+                ) do
+                    humanoid = target.model:FindFirstChildOfClass("Humanoid")
+                    if humanoid then
+                        break
+                    end
+                end
+            end
+
+            --// Static Unusual FX can be applied to a visual-only rig even
+            --// when it has no HumanoidRootPart. The root is only needed by
+            --// optional animated sources, not by the whole swap operation.
             if visualRig
-                and root
                 and humanoid
             then
 
@@ -10441,12 +10448,19 @@ function UnusualFns.clearNativeParticlePOV(
         end)
     end
 
+    if type(unusualRuntime.nativeParticleConnections) == "table" then
+        for _, connection in ipairs(unusualRuntime.nativeParticleConnections) do
+            pcall(function()
+                connection:Disconnect()
+            end)
+        end
+        table.clear(unusualRuntime.nativeParticleConnections)
+    end
+
     unusualRuntime.nativeParticleConnection = nil
 
     if restore then
-        for object, enabled in pairs(
-            unusualRuntime.nativeParticleStates
-        ) do
+        for object, enabled in pairs(unusualRuntime.nativeParticleStates) do
             if object and object.Parent then
                 pcall(function()
                     object.Enabled = enabled
@@ -10455,9 +10469,8 @@ function UnusualFns.clearNativeParticlePOV(
         end
     end
 
-    table.clear(
-        unusualRuntime.nativeParticleStates
-    )
+    table.clear(unusualRuntime.nativeParticleStates)
+    table.clear(unusualRuntime.nativeParticleRigs)
 
     unusualRuntime.nativeParticleRig = nil
     unusualRuntime.nativeParticleLastFirstPerson = nil
@@ -10466,57 +10479,59 @@ end
 function UnusualFns.bindNativeParticlePOV(
     visualRig
 )
-    UnusualFns.clearNativeParticlePOV(
-        true
-    )
+    UnusualFns.clearNativeParticlePOV(true)
 
     if not visualRig then
         return
     end
 
-    unusualRuntime.nativeParticleRig =
-        visualRig
+    local targets = UnusualFns.getUnusualTargetModels(
+        visualRig,
+        UnusualFns.getUnusualPlayerCharacter()
+    )
 
-    for _, object in ipairs(
-        visualRig:GetDescendants()
-    ) do
-        if object:IsA("ParticleEmitter") then
-            unusualRuntime.nativeParticleStates[
-                object
-            ] = object.Enabled
-        end
+    if #targets == 0 and visualRig.Parent then
+        targets = {
+            {model = visualRig, role = "visual"}
+        }
     end
 
-    unusualRuntime.nativeParticleConnection =
-        visualRig.DescendantAdded:Connect(
-            function(object)
-                if unusualRuntime.nativeParticleRig
-                    ~= visualRig
+    unusualRuntime.nativeParticleRig = visualRig
+    unusualRuntime.nativeParticleRigs = {}
+    unusualRuntime.nativeParticleConnections = {}
+
+    for _, target in ipairs(targets) do
+        local root = target.model
+        if root and root.Parent then
+            unusualRuntime.nativeParticleRigs[root] = true
+
+            for _, object in ipairs(root:GetDescendants()) do
+                if object:IsA("ParticleEmitter")
+                    and unusualRuntime.nativeParticleStates[object] == nil
                 then
+                    unusualRuntime.nativeParticleStates[object] = object.Enabled
+                end
+            end
+
+            local connection = root.DescendantAdded:Connect(function(object)
+                if not unusualRuntime.nativeParticleRigs[root] then
                     return
                 end
 
                 if object:IsA("BasePart")
                     or __UI.__L.isUnusualJointObject(object)
                 then
-                    UnusualFns.queueNativeJointRepair(visualRig)
+                    UnusualFns.queueNativeJointRepair(root)
                 end
 
                 local firstPerson = false
-
                 pcall(function()
-                    firstPerson =
-                        UnusualFns.isUnusualFirstPerson()
+                    firstPerson = UnusualFns.isUnusualFirstPerson()
                 end)
 
                 if object:IsA("ParticleEmitter") then
-                    if unusualRuntime.nativeParticleStates[
-                        object
-                    ] == nil
-                    then
-                        unusualRuntime.nativeParticleStates[
-                            object
-                        ] = object.Enabled
+                    if unusualRuntime.nativeParticleStates[object] == nil then
+                        unusualRuntime.nativeParticleStates[object] = object.Enabled
                     end
 
                     if firstPerson then
@@ -10525,17 +10540,36 @@ function UnusualFns.bindNativeParticlePOV(
                             object:Clear()
                         end)
                     end
-
-                elseif object:IsA("Trail") then
-                    if firstPerson then
-                        pcall(function()
-                            object.Enabled = false
-                            object:Clear()
-                        end)
-                    end
+                elseif object:IsA("Trail") and firstPerson then
+                    pcall(function()
+                        object.Enabled = false
+                        object:Clear()
+                    end)
                 end
+            end)
+
+            table.insert(unusualRuntime.nativeParticleConnections, connection)
+            if root == visualRig then
+                unusualRuntime.nativeParticleConnection = connection
             end
-        )
+        end
+    end
+end
+
+function UnusualFns.nativeParticleTargetsChanged(visualRig)
+    local current = UnusualFns.getUnusualTargetModelSet(
+        visualRig,
+        UnusualFns.getUnusualPlayerCharacter()
+    )
+
+    if not UnusualFns.sameUnusualTargetModelSet(
+        current,
+        unusualRuntime.nativeParticleRigs
+    ) then
+        return true
+    end
+
+    return false
 end
 
 function UnusualFns.syncNativeParticlePOV(
@@ -10543,68 +10577,51 @@ function UnusualFns.syncNativeParticlePOV(
     firstPerson
 )
     if not visualRig
-        or unusualRuntime.nativeParticleRig
-            ~= visualRig
+        or not unusualRuntime.nativeParticleRigs[visualRig]
     then
         return
     end
 
-    --// Register newly-created ParticleEmitters.
-    for _, object in ipairs(
-        visualRig:GetDescendants()
-    ) do
-        if object:IsA("ParticleEmitter")
-            and unusualRuntime.nativeParticleStates[
-                object
-            ] == nil
-        then
-            unusualRuntime.nativeParticleStates[
-                object
-            ] = object.Enabled
+    --// Register emitters created after binding on every duplicate rig.
+    for root in pairs(unusualRuntime.nativeParticleRigs) do
+        if root and root.Parent then
+            for _, object in ipairs(root:GetDescendants()) do
+                if object:IsA("ParticleEmitter")
+                    and unusualRuntime.nativeParticleStates[object] == nil
+                then
+                    unusualRuntime.nativeParticleStates[object] = object.Enabled
+                end
+            end
         end
     end
 
     local enteredFirstPerson =
         firstPerson
-        and unusualRuntime.nativeParticleLastFirstPerson
-            ~= true
+        and unusualRuntime.nativeParticleLastFirstPerson ~= true
 
     local leftFirstPerson =
         not firstPerson
-        and unusualRuntime.nativeParticleLastFirstPerson
-            == true
+        and unusualRuntime.nativeParticleLastFirstPerson == true
 
-    --// Returning to 3P restores the exact saved enabled state.
     if leftFirstPerson then
-        for object, enabled in pairs(
-            unusualRuntime.nativeParticleStates
-        ) do
+        for object, enabled in pairs(unusualRuntime.nativeParticleStates) do
             if object and object.Parent then
                 pcall(function()
                     object.Enabled = enabled
                 end)
             else
-                unusualRuntime.nativeParticleStates[
-                    object
-                ] = nil
+                unusualRuntime.nativeParticleStates[object] = nil
             end
         end
     end
 
-    for object, enabled in pairs(
-        unusualRuntime.nativeParticleStates
-    ) do
+    for object, enabled in pairs(unusualRuntime.nativeParticleStates) do
         if object and object.Parent then
             pcall(function()
                 if firstPerson then
-                    local wasEnabled =
-                        object.Enabled
-
+                    local wasEnabled = object.Enabled
                     object.Enabled = false
-
-                    if enteredFirstPerson
-                        or wasEnabled == true
-                    then
+                    if enteredFirstPerson or wasEnabled == true then
                         object:Clear()
                     end
                 else
@@ -10612,38 +10629,31 @@ function UnusualFns.syncNativeParticlePOV(
                 end
             end)
         else
-            unusualRuntime.nativeParticleStates[
-                object
-            ] = nil
+            unusualRuntime.nativeParticleStates[object] = nil
         end
     end
 
     if firstPerson then
-        for _, object in ipairs(
-            visualRig:GetDescendants()
-        ) do
-            if object:IsA("Trail") then
-                pcall(function()
-                    local wasEnabled =
-                        object.Enabled
-
-                    object.Enabled = false
-
-                    if enteredFirstPerson
-                        or wasEnabled == true
-                    then
-                        object:Clear()
+        for root in pairs(unusualRuntime.nativeParticleRigs) do
+            if root and root.Parent then
+                for _, object in ipairs(root:GetDescendants()) do
+                    if object:IsA("Trail") then
+                        pcall(function()
+                            local wasEnabled = object.Enabled
+                            object.Enabled = false
+                            if enteredFirstPerson or wasEnabled == true then
+                                object:Clear()
+                            end
+                        end)
                     end
-                end)
+                end
             end
         end
     end
 
-    unusualRuntime.nativeParticleLastFirstPerson =
-        firstPerson
+    unusualRuntime.nativeParticleLastFirstPerson = firstPerson
 end
 
---// =========================================================
 --// =========================================================
 --// DEADEYE COSMETICS -> NATIVE VISIBILITY
 --//
@@ -11031,8 +11041,10 @@ RunService:BindToRenderStep(
             UnusualFns.getUnusualVisualRig()
 
         if gameplayRig
-            and unusualRuntime.nativeParticleRig
-                ~= gameplayRig
+            and (
+                unusualRuntime.nativeParticleRig ~= gameplayRig
+                or UnusualFns.nativeParticleTargetsChanged(gameplayRig)
+            )
         then
             UnusualFns.bindNativeParticlePOV(
                 gameplayRig
@@ -11081,20 +11093,62 @@ UnusualFns.addUnusualConnection(
 
                 if rig then
 
-                    local expected =
-                        (
-                            #unusualRuntime.animatedNestedVisuals > 0
-                        )
-                        or UnusualFns.hasOurUnusualFX(
-                            rig,
-                            unusualSlot.replaceId
-                        )
-                        or UnusualFns.hasOurUnusualFX(
-                            UnusualFns.getUnusualPlayerCharacter(),
-                            unusualSlot.replaceId
+                    local playerCharacter =
+                        UnusualFns.getUnusualPlayerCharacter()
+
+                    local currentTargetSet =
+                        UnusualFns.getUnusualTargetModelSet(rig, playerCharacter)
+
+                    local targetSetChanged =
+                        not UnusualFns.sameUnusualTargetModelSet(
+                            currentTargetSet,
+                            unusualRuntime.appliedTargets
                         )
 
+                    local expected = true
+                    local checkedRigTargets = 0
+
+                    for _, target in ipairs(
+                        UnusualFns.getUnusualTargetModels(rig, playerCharacter)
+                    ) do
+                        if string.match(target.role or "", "^Rigs#") then
+                            checkedRigTargets += 1
+
+                            local hasReplacement =
+                                UnusualFns.hasOurUnusualFX(
+                                    target.model,
+                                    unusualSlot.replaceId
+                                )
+
+                            local hasAnimatedNested = false
+                            for _, animated in ipairs(unusualRuntime.animatedNestedVisuals) do
+                                if animated.targetRig == target.model
+                                    and animated.model
+                                    and animated.model.Parent
+                                then
+                                    hasAnimatedNested = true
+                                    break
+                                end
+                            end
+
+                            if not hasReplacement and not hasAnimatedNested then
+                                expected = false
+                            end
+                        end
+                    end
+
+                    if checkedRigTargets == 0 then
+                        expected =
+                            (#unusualRuntime.animatedNestedVisuals > 0)
+                            or UnusualFns.hasOurUnusualFX(
+                                rig,
+                                unusualSlot.replaceId
+                            )
+                    end
+
                     if unusualRuntime.appliedRig ~= rig
+                        or unusualRuntime.appliedCharacter ~= playerCharacter
+                        or targetSetChanged
                         or not expected
                     then
                         UnusualFns.reapplyUnusual()
