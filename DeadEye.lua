@@ -13336,7 +13336,7 @@ end
 --// Bypass only the native "FOV > 90 => None" check.
 --// No hotkeys, render loops, or transparency writes.
 --// =========================================================
-----// Native Visibility's GetLimbs() can omit Accessories. Feed their
+--// Native Visibility's GetLimbs() can omit Accessories. Feed their
 --// descendants to the original SetVisibility() using Head as the root,
 --// so the game's own Types/CachedData logic controls cosmetics too.
 function mainJump.applyFOVBodyAccessoryVisibility(visibility)
