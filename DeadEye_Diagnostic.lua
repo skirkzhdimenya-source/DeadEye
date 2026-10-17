@@ -1,4 +1,5 @@
 --// VERSION RULE: increment only digits after the dot; keep major version v1.
+--// Unusual/cosmetic targeting follows RigService's bound model, never all same-name cached rigs.
 --// DEADEYE DIAGNOSTIC BOOTSTRAP (starts before DeadEye initialization)
 local __DDCore = {}
 __DDCore.Env = _G
@@ -463,7 +464,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.250"
+local SCRIPT_VERSION = "1.251"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -1091,6 +1092,51 @@ function getCharacterObject()
         return nil
     end
     return object
+end
+
+--// Resolve the single visual rig actually bound to the local Character.
+--// RigService can keep multiple cached models with the same player name in
+--// Workspace.Rigs; only this bound model is the live rendered rig.
+function getBoundVisualRigModel()
+    local characterObject = getCharacterObject()
+    if not characterObject then
+        return nil
+    end
+
+    local rigComponent = characterObject.Rig
+    local nativeRig = rigComponent and rigComponent.Rig
+    local model = nativeRig and nativeRig.Model
+    if model
+        and model:IsA("Model")
+        and model.Parent
+    then
+        return model
+    end
+
+    local rigService
+    pcall(function()
+        rigService = require(
+            ReplicatedStorage.Services.Asset.RigService
+        )
+    end)
+
+    if rigService
+        and type(rigService.GetRigFromCharacter) == "function"
+    then
+        local ok, boundModel = pcall(function()
+            return rigService:GetRigFromCharacter(characterObject.Model)
+        end)
+
+        if ok
+            and boundModel
+            and boundModel:IsA("Model")
+            and boundModel.Parent
+        then
+            return boundModel
+        end
+    end
+
+    return nil
 end
 
 --// =========================================================
@@ -3590,26 +3636,30 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
 end
 
 function cosmetic.getLiveRigModels()
-    local result = {}
-    local seen = {}
+    -- Only refresh the model RigService has bound to the local character.
+    -- Other same-name children are cached/old rigs; rebuilding them without
+    -- the native Unusual snapshot was removing their FX and polluting the cache.
+    local boundModel = getBoundVisualRigModel()
+    if boundModel
+        and boundModel:IsA("Model")
+        and boundModel.Name == LocalPlayer.Name
+        and boundModel.Parent
+    then
+        return { boundModel }
+    end
+
+    -- Menu / before CharacterService binds a live rig: use the same single
+    -- FindFirstChild fallback as the stable pre-diagnostic implementation.
     local rigs = workspace:FindFirstChild("Rigs")
-    if not rigs then
-        return result
+    local rig = rigs and rigs:FindFirstChild(LocalPlayer.Name)
+    if rig
+        and rig:IsA("Model")
+        and rig.Parent
+    then
+        return { rig }
     end
 
-    --// There can be multiple same-name Model children. Refresh each distinct
-    --// instance because the game's active visual may not be FindFirstChild().
-    for _, model in ipairs(rigs:GetChildren()) do
-        if model:IsA("Model")
-            and model.Name == LocalPlayer.Name
-            and not seen[model]
-        then
-            seen[model] = true
-            table.insert(result, model)
-        end
-    end
-
-    return result
+    return {}
 end
 
 function cosmetic.refreshRig()
@@ -5522,87 +5572,63 @@ end
 --// GET VISUAL RIG
 --// =========================================================
 function UnusualFns.getUnusualVisualRig()
-    local folder =
-        workspace:FindFirstChild(
-            "Rigs"
-        )
+    -- In a live round, trust the model attached to Character.Rig.Rig.
+    -- Do not pick an arbitrary same-name entry from RigService's cache.
+    local boundRig = getBoundVisualRigModel()
+    if boundRig then
+        return boundRig
+    end
 
+    -- Menu / pre-round fallback: keep the original single-rig behavior.
+    local folder = workspace:FindFirstChild("Rigs")
     if folder then
-        local rig =
-            folder:FindFirstChild(
-                LocalPlayer.Name
-            )
-
-        if rig then
+        local rig = folder:FindFirstChild(LocalPlayer.Name)
+        if rig and rig:IsA("Model") and rig.Parent then
             return rig
         end
     end
 
-    local playersFolder =
-        workspace:FindFirstChild(
-            "Players"
-        )
-
+    local playersFolder = workspace:FindFirstChild("Players")
     if playersFolder then
-        local character =
-            playersFolder:FindFirstChild(
-                LocalPlayer.Name
-            )
-
-        if character then
+        local character = playersFolder:FindFirstChild(LocalPlayer.Name)
+        if character and character:IsA("Model") and character.Parent then
             return character
         end
     end
 
-    local menuView =
-        workspace:FindFirstChild(
-            "MenuView"
-        )
-
-    if menuView then
-        local visualModel =
-            menuView:FindFirstChild(
-                "VisualModel"
-            )
-
-        if visualModel
-            and visualModel:IsA("Model")
-            and visualModel:FindFirstChildOfClass(
-                "Humanoid"
-            )
-        then
-            return visualModel
-        end
+    local menuView = workspace:FindFirstChild("MenuView")
+    local visualModel = menuView and menuView:FindFirstChild("VisualModel")
+    if visualModel
+        and visualModel:IsA("Model")
+        and visualModel:FindFirstChildOfClass("Humanoid")
+    then
+        return visualModel
     end
 
-    local character =
-        LocalPlayer.Character
-
-    if character
-        and character:IsA("Model")
-    then
+    local character = LocalPlayer.Character
+    if character and character:IsA("Model") and character.Parent then
         return character
     end
 
     return nil
 end
+
 --// Resolve both live client-side representations of the local rig.
 --// Most visuals live under Workspace.Rigs; the character/physics model can
 --// live separately under Workspace.Players. Apply changes independently to
 --// every distinct model that is currently available.
+--// Preserve the old target model layout: one active visual rig plus the
+--// real character only for HumanoidRootPart assets. Never fan out FX to
+--// unrelated cached Rigs with the same name.
 function UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
     local targets = {}
     local seen = {}
-    local roleCounters = {
-        Rigs = 0,
-        Players = 0
-    }
 
     local function add(model, role)
         if not model
             or not model:IsA("Model")
-            or seen[model]
             or not model.Parent
+            or seen[model]
         then
             return
         end
@@ -5614,37 +5640,8 @@ function UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
         })
     end
 
-    --// RigLife observed multiple distinct Models with the same name under
-    --// Workspace.Rigs. Never resolve the local target using FindFirstChild.
-    local rigsFolder = workspace:FindFirstChild("Rigs")
-    if rigsFolder then
-        for _, model in ipairs(rigsFolder:GetChildren()) do
-            if model:IsA("Model") and model.Name == LocalPlayer.Name then
-                roleCounters.Rigs += 1
-                add(model, "Rigs#" .. tostring(roleCounters.Rigs))
-            end
-        end
-    end
-
-    local playersFolder = workspace:FindFirstChild("Players")
-    if playersFolder then
-        for _, model in ipairs(playersFolder:GetChildren()) do
-            if model:IsA("Model") and model.Name == LocalPlayer.Name then
-                roleCounters.Players += 1
-                add(model, "Players#" .. tostring(roleCounters.Players))
-            end
-        end
-    end
-
-    --// Keep uncommon active targets such as MenuScene.VisualModel, but only
-    --// when they are real, parented Instances rather than menu placeholders.
-    add(visualRig, "visual")
-    add(playerCharacter, "character")
-
-    local character = LocalPlayer.Character
-    if character and character.Parent then
-        add(character, "local-character")
-    end
+    add(visualRig or UnusualFns.getUnusualVisualRig(), "visual")
+    add(playerCharacter or UnusualFns.getUnusualPlayerCharacter(), "character")
 
     return targets
 end
@@ -8605,24 +8602,20 @@ __UI.__L.applyUnusualFX = function(
         return false
     end
 
-    local targets = UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
-    if #targets == 0 then
-        UnusualFns.traceSwap(
-            "APPLY_ABORT_NO_TARGET_MODELS",
-            "id=" .. tostring(id),
-            visualRig,
-            playerCharacter
-        )
-        return false
-    end
-
     local targetSummary = {}
-    for _, target in ipairs(targets) do
-        local path = tostring(target.model)
+    if visualRig then
+        local path = tostring(visualRig)
         pcall(function()
-            path = target.model:GetFullName()
+            path = visualRig:GetFullName()
         end)
-        table.insert(targetSummary, tostring(target.role) .. ":" .. path)
+        table.insert(targetSummary, "visual:" .. path)
+    end
+    if playerCharacter then
+        local path = tostring(playerCharacter)
+        pcall(function()
+            path = playerCharacter:GetFullName()
+        end)
+        table.insert(targetSummary, "character-HRP:" .. path)
     end
 
     UnusualFns.traceSwap(
@@ -8636,9 +8629,9 @@ __UI.__L.applyUnusualFX = function(
         playerCharacter
     )
 
-    --// Build one hidden animation source, then bind visible copies to each
-    --// target model. This avoids resetting the shared animation source for
-    --// every target while allowing both models to receive the same effect.
+    -- Keep the proven single-visual-rig application path. The game binds the
+    -- cached Rigs model to Workspace.Players through RigService; its character
+    -- model is only a target for effect assets parented to HumanoidRootPart.
     local animatedSource =
         unusualRuntime.createAnimationSource(
             cosmeticRig,
@@ -8647,49 +8640,58 @@ __UI.__L.applyUnusualFX = function(
         )
 
     local animatedNestedInstalled = 0
-    for _, target in ipairs(targets) do
+    if visualRig then
         local ok, count = pcall(function()
             return unusualRuntime.installAnimatedNestedModels(
                 cosmeticRig,
                 id,
-                target.model,
+                visualRig,
                 playerCharacter
             )
         end)
-
         if ok and type(count) == "number" then
-            animatedNestedInstalled += count
+            animatedNestedInstalled = count
         elseif not ok then
-            __DDCore.Log("UNUSUAL APPLY NESTED ERROR: role="
-                .. tostring(target.role) .. ", error=" .. tostring(count))
+            __DDCore.Log("UNUSUAL APPLY NESTED ERROR: " .. tostring(count))
         end
     end
 
     local installedParts = 0
     for _, sourcePart in ipairs(cosmeticRig:GetChildren()) do
         if sourcePart:IsA("BasePart") then
-            for _, target in ipairs(targets) do
-                local targetPart =
-                    target.model:FindFirstChild(sourcePart.Name)
+            local targetPart
 
-                if targetPart and targetPart:IsA("BasePart") then
-                    local ok, err = pcall(function()
-                        __UI.__L.installUnusualPartFX(
-                            sourcePart,
-                            targetPart,
-                            id,
-                            animatedSource
-                        )
-                    end)
+            if sourcePart.Name == "HumanoidRootPart" then
+                targetPart =
+                    playerCharacter
+                    and playerCharacter:FindFirstChild("HumanoidRootPart")
+                if not targetPart then
+                    targetPart =
+                        visualRig
+                        and visualRig:FindFirstChild("HumanoidRootPart")
+                end
+            else
+                targetPart =
+                    visualRig
+                    and visualRig:FindFirstChild(sourcePart.Name)
+            end
 
-                    if ok then
-                        installedParts += 1
-                    else
-                        __DDCore.Log("UNUSUAL APPLY PART ERROR: role="
-                            .. tostring(target.role)
-                            .. "|part=" .. tostring(sourcePart.Name)
-                            .. "|error=" .. tostring(err))
-                    end
+            if targetPart and targetPart:IsA("BasePart") then
+                local ok, err = pcall(function()
+                    __UI.__L.installUnusualPartFX(
+                        sourcePart,
+                        targetPart,
+                        id,
+                        animatedSource
+                    )
+                end)
+
+                if ok then
+                    installedParts += 1
+                else
+                    __DDCore.Log("UNUSUAL APPLY PART ERROR: part="
+                        .. tostring(sourcePart.Name)
+                        .. "|error=" .. tostring(err))
                 end
             end
         end
@@ -8704,7 +8706,7 @@ __UI.__L.applyUnusualFX = function(
         "id=" .. tostring(id)
             .. "|installedTargetParts=" .. tostring(installedParts)
             .. "|animatedNestedModels=" .. tostring(animatedNestedInstalled)
-            .. "|targetModels=" .. tostring(#targets)
+            .. "|targetModels=1"
             .. "|result=" .. tostring(applyResult),
         visualRig,
         playerCharacter
@@ -9412,7 +9414,11 @@ function UnusualFns.removeOriginalUnusualFX(
     --// Rigs plus the special-case HumanoidRootPart under Players.
     for partName, objects in pairs(signature) do
         for _, target in ipairs(targets) do
-            local targetPart = target.model:FindFirstChild(partName)
+            local roleMatchesPart =
+                (partName == "HumanoidRootPart" and target.role == "character")
+                or (partName ~= "HumanoidRootPart" and target.role == "visual")
+            local targetPart =
+                roleMatchesPart and target.model:FindFirstChild(partName) or nil
 
             if targetPart and targetPart:IsA("BasePart") then
                 for _, existing in ipairs(targetPart:GetDescendants()) do
@@ -9632,7 +9638,11 @@ function UnusualFns.captureNativeUnusualSnapshot(
     -- baseline instead of cloning already-hidden/replacement objects from it.
     for partName, objects in pairs(signature) do
         for _, target in ipairs(targets) do
-            local targetPart = target.model:FindFirstChild(partName)
+            local roleMatchesPart =
+                (partName == "HumanoidRootPart" and target.role == "character")
+                or (partName ~= "HumanoidRootPart" and target.role == "visual")
+            local targetPart =
+                roleMatchesPart and target.model:FindFirstChild(partName) or nil
             local capturedForModel = alreadyCaptured[target.model]
 
             if targetPart
@@ -9928,11 +9938,15 @@ function UnusualFns.restoreNativeUnusualSnapshot(
     for partName, partSnapshot in pairs(baselineByPartName) do
         for _, target in ipairs(targets) do
             local targetModel = target.model
+            local roleMatchesPart =
+                (partName == "HumanoidRootPart" and target.role == "character")
+                or (partName ~= "HumanoidRootPart" and target.role == "visual")
             local targetPart =
-                targetModel and targetModel:FindFirstChild(partName)
+                roleMatchesPart and targetModel:FindFirstChild(partName) or nil
 
             if targetPart and targetPart:IsA("BasePart") then
-                restoredTargets[tostring(targetModel) .. "|" .. tostring(partName)] = true
+                restoredTargets[targetModel] = restoredTargets[targetModel] or {}
+                restoredTargets[targetModel][partName] = true
 
                 for _, savedObject in ipairs(partSnapshot.objects or {}) do
                     local current = findMatchingChild(targetPart, savedObject)
@@ -9991,8 +10005,10 @@ function UnusualFns.restoreNativeUnusualSnapshot(
             .. "|clonedJoints=" .. tostring(clonedJoints)
             .. "|targetParts=" .. tostring((function()
                 local count = 0
-                for _ in pairs(restoredTargets) do
-                    count += 1
+                for _, parts in pairs(restoredTargets) do
+                    for _ in pairs(parts) do
+                        count += 1
+                    end
                 end
                 return count
             end)()),
