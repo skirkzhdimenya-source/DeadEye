@@ -61,11 +61,7 @@ local function __DDLog(message)
 
     table.insert(__DDState.log, line)
 
-    -- Keep a bounded ring-like buffer so repeated engine errors do not
-    -- grow memory indefinitely during a long test.
-    if #__DDState.log > 1800 then
-        table.remove(__DDState.log, 1)
-    end
+    -- Keep all entries from launch until F6 copies the complete session log.
 
     pcall(function()
         print(line)
@@ -205,7 +201,8 @@ __DDEnv.DEADEYE_DIAG_STOP = __DDStopAndCopy
 __DDLog("BOOT: first executable statement reached; diagnostic capture is active")
 
 -- Capture engine/runtime errors and warnings from the very beginning.
-pcall(function()
+local __DDLogListenerInstalled = false
+local __DDLogListenerOK, __DDLogListenerError = pcall(function()
     local logService = game:GetService("LogService")
     __DDState.messageConnection = logService.MessageOut:Connect(function(message, messageType)
         if not __DDState.active then
@@ -240,17 +237,29 @@ pcall(function()
         __DDState.repeatCount = 0
         __DDLog("ENGINE " .. typeName .. ": " .. text)
     end)
+    __DDLogListenerInstalled = true
 end)
+if not __DDLogListenerOK then
+    __DDLog("BOOT ERROR: failed to install LogService listener: " .. tostring(__DDLogListenerError))
+end
 
 -- F6 is reserved for diagnostic stop + copy-log in this build.
-pcall(function()
+local __DDF6ListenerInstalled = false
+local __DDF6ListenerOK, __DDF6ListenerError = pcall(function()
     local inputService = game:GetService("UserInputService")
     __DDState.inputConnection = inputService.InputBegan:Connect(function(input)
         if tostring(input.KeyCode) == "Enum.KeyCode.F6" then
             __DDStopAndCopy()
         end
     end)
+    __DDF6ListenerInstalled = true
 end)
+if not __DDF6ListenerOK then
+    __DDLog("BOOT ERROR: failed to install F6 listener: " .. tostring(__DDF6ListenerError))
+end
+
+__DDLog("BOOT listeners: LogService=" .. tostring(__DDLogListenerInstalled)
+    .. ", F6=" .. tostring(__DDF6ListenerInstalled))
 
 local function __DDTraceback(err)
     local message = tostring(err)
@@ -441,17 +450,16 @@ local LocalPlayer = Players.LocalPlayer
 local genv = getgenv and getgenv() or _G
 __DDLog("BOOT checkpoint: LocalPlayer=" .. tostring(LocalPlayer) .. ", core services acquired")
 
--- Stop the standalone test version if it is still loaded.
-pcall(function()
-    local previousFOVFix =
-        genv.DeadEyeFOVBodyVisibilityFix
-
-    if type(previousFOVFix) == "table"
-        and type(previousFOVFix.Stop) == "function"
-    then
-        previousFOVFix.Stop()
-    end
-end)
+-- Stop stale runtime components and log each cleanup attempt.
+__DDLog("BOOT: checking previous-instance cleanup hooks")
+local previousFOVFix = genv.DeadEyeFOVBodyVisibilityFix
+if type(previousFOVFix) == "table"
+    and type(previousFOVFix.Stop) == "function"
+then
+    __DDCallCleanup("DeadEyeFOVBodyVisibilityFix.Stop", previousFOVFix.Stop)
+else
+    __DDLog("BOOT CLEANUP SKIPPED: standalone FOV fix not present")
+end
 
 --// =========================================================
 --// PURGE STALE AUTOJUMP / LOOK SENSORS
@@ -490,71 +498,34 @@ __UI.__L.purgeStaleMainJumpSensors = function()
     end
 end
 
+__DDLog("BOOT: purging stale jump sensors")
 __UI.__L.purgeStaleMainJumpSensors()
+__DDLog("BOOT: stale jump sensor purge returned")
 
-pcall(function()
-    if genv.DEADEYE_MAIN_SENSORS_CLEANUP then
-        genv.DEADEYE_MAIN_SENSORS_CLEANUP()
+local __ddCleanupHooks = {
+    "DEADEYE_MAIN_SENSORS_CLEANUP",
+    "DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP",
+    "DEADEYE_FOV_BODY_VISIBILITY_CLEANUP",
+    "DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP",
+    "DEADEYE_MAIN_AIR_TURN_CLEANUP",
+    "DEADEYE_REVERSE_LOOK_CLEANUP",
+    "DEADEYE_RAGE_LOOK_CLEANUP",
+    "UNUSUAL_SWAPPER_CLEANUP",
+    "DEADEYE_PORTRAIT_CLEANUP",
+    "DEADEYE_COSMETIC_CLEANUP",
+    "EMOTE_SWAPPER_CLEANUP"
+}
+
+for _, cleanupName in ipairs(__ddCleanupHooks) do
+    local cleanupCallback = genv[cleanupName]
+    if cleanupCallback then
+        __DDCallCleanup(cleanupName, cleanupCallback)
+    else
+        __DDLog("BOOT CLEANUP SKIPPED: " .. cleanupName .. " not present")
     end
-end)
+end
 
-if genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP()
-    end)
-end
-if genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP()
-    end)
-end
-if genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_FIRSTPERSON_HEAD_FIX_CLEANUP()
-    end)
-end
-if genv.DEADEYE_MAIN_AIR_TURN_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_MAIN_AIR_TURN_CLEANUP()
-    end)
-end
-if genv.DEADEYE_REVERSE_LOOK_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_REVERSE_LOOK_CLEANUP()
-    end)
-end
-if genv.DEADEYE_RAGE_LOOK_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_RAGE_LOOK_CLEANUP()
-    end)
-end
---// =========================================================
---// CROUCH SPAM uses its own PreSimulation landing signal.
---// It is completely independent from AutoJump mode and JumpReact.
---// When Humanoid reaches Landed while DataRegistry.Grounded is still false,
---// Crouch Spam turns ON before the normal Grounded -> Jump transition.
---// PREVIOUS INSTANCE CLEANUP
---// =========================================================
-if genv.UNUSUAL_SWAPPER_CLEANUP then
-    pcall(function()
-        genv.UNUSUAL_SWAPPER_CLEANUP()
-    end)
-end
-if genv.DEADEYE_PORTRAIT_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_PORTRAIT_CLEANUP()
-    end)
-end
-if genv.DEADEYE_COSMETIC_CLEANUP then
-    pcall(function()
-        genv.DEADEYE_COSMETIC_CLEANUP()
-    end)
-end
-if genv.EMOTE_SWAPPER_CLEANUP then
-    pcall(function()
-        genv.EMOTE_SWAPPER_CLEANUP()
-    end)
-end
+__DDLog("BOOT: previous-instance cleanup sequence complete")
 genv.DEADEYE_MAIN_RUNNING = true
 genv.EMOTE_SWAPPER_RUNNING = true
 genv.DEADEYE_PORTRAIT_RUNNING = true
@@ -1018,6 +989,9 @@ function prepareReplaceModule(id)
         module
     return module
 end
+prepareOriginalModule = __DDWrapFunction(prepareOriginalModule, "EMOTE.prepareOriginalModule")
+prepareReplaceModule = __DDWrapFunction(prepareReplaceModule, "EMOTE.prepareReplaceModule")
+__DDLog("INIT: wrapped emote resolver functions before module construction")
 --// =========================================================
 --// FIND EMOTE NAME
 --// =========================================================
@@ -1249,6 +1223,7 @@ local RESIZE_EDGE = 8
 --// =========================================================
 --// SCREEN GUI
 --// =========================================================
+__DDLog("INIT: constructing ScreenGui")
 ScreenGui =
     Instance.new("ScreenGui")
 ScreenGui.Name =
@@ -1259,6 +1234,7 @@ ScreenGui.ZIndexBehavior =
     Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent =
     guiParent
+__DDLog("INIT checkpoint: ScreenGui parented; continuing UI construction")
 
 emotePreviewCacheHolder =
     Instance.new("Frame")
@@ -27060,8 +27036,6 @@ __UI.__L.addConnection(
 __DDLog("INIT checkpoint: UI created; installing targeted diagnostics")
 
 -- Emote swap: preparation failures + runtime loop errors, without per-frame spam.
-prepareOriginalModule = __DDWrapFunction(prepareOriginalModule, "EMOTE.prepareOriginalModule")
-prepareReplaceModule = __DDWrapFunction(prepareReplaceModule, "EMOTE.prepareReplaceModule")
 __DDWrapTable(EmoteRuntime, "checkState", "EMOTE.checkState", "sample")
 __DDWrapTable(EmoteRuntime, "stopCustomEmote", "EMOTE.stopCustomEmote")
 __DDWrapTable(EmoteRuntime, "stopForCleanup", "EMOTE.stopForCleanup")
