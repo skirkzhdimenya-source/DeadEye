@@ -249,7 +249,13 @@ __DDCore.F6ListenerInstalled = false
 __DDCore.F6ListenerOK, __DDCore.F6ListenerError = pcall(function()
     local inputService = game:GetService("UserInputService")
     __DDCore.State.inputConnection = inputService.InputBegan:Connect(function(input)
-        if tostring(input.KeyCode) == "Enum.KeyCode.F6" then
+        if tostring(input.KeyCode) == "Enum.KeyCode.F5" then
+            if type(__DDCore.ScanRuntimeTree) == "function" then
+                __DDCore.ScanRuntimeTree()
+            else
+                __DDCore.Log("MANUAL SCAN ERROR: scanner is not initialized yet")
+            end
+        elseif tostring(input.KeyCode) == "Enum.KeyCode.F6" then
             __DDCore.StopAndCopy()
         end
     end)
@@ -435,7 +441,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.240"
+local SCRIPT_VERSION = "1.241"
 __DDCore.Log("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -2571,6 +2577,172 @@ __DDCore.LoadoutResolver = function(slotName)
         return cached
     end
     return 0
+end
+
+--// Manual, read-only hierarchy scan. Press F5 to run; F6 stops and copies the log.
+__DDCore.ScanRuntimeTree = function()
+    if __DDCore.State.scanRunning then
+        __DDCore.Log("MANUAL SCAN SKIPPED: scan already running")
+        return
+    end
+    __DDCore.State.scanRunning = true
+    __DDCore.Log("MANUAL SCAN BEGIN: read-only; no modules will be required by this scan")
+
+    local keywords = {
+        "loadout", "equip", "unusual", "inventory", "slot", "userdata",
+        "profile", "sync", "codec", "hook", "item", "appearance",
+        "cosmetic", "gear", "registry", "playerdata", "character",
+        "owned", "state", "selection"
+    }
+    local roots = {}
+    local userData
+    local userDataRemotes
+    local localPlayer = Players.LocalPlayer
+
+    pcall(function()
+        table.insert(roots, ReplicatedStorage)
+        local shared = ReplicatedStorage:FindFirstChild("Shared")
+        userData = shared and shared:FindFirstChild("UserData")
+        userDataRemotes = userData and userData:FindFirstChild("Remotes")
+    end)
+    pcall(function()
+        local playerScripts = localPlayer and localPlayer:FindFirstChild("PlayerScripts")
+        if playerScripts then
+            table.insert(roots, playerScripts)
+        end
+    end)
+    pcall(function()
+        local playerGui = localPlayer and localPlayer:FindFirstChild("PlayerGui")
+        if playerGui then
+            table.insert(roots, playerGui)
+        end
+    end)
+
+    local seen = {}
+    local matches = {}
+    local objectsScanned = 0
+    local moduleCount = 0
+    local remoteCount = 0
+    local userDataModuleCount = 0
+    local userDataRemoteCount = 0
+
+    local function isRemote(object)
+        return object:IsA("RemoteEvent")
+            or object:IsA("RemoteFunction")
+            or object:IsA("BindableEvent")
+            or object:IsA("BindableFunction")
+    end
+
+    local function relatedName(name)
+        local lowered = string.lower(tostring(name or ""))
+        for _, keyword in ipairs(keywords) do
+            if string.find(lowered, keyword, 1, true) then
+                return true
+            end
+        end
+        return false
+    end
+
+    local function record(object, reason)
+        local ok, description = pcall(function()
+            return object.ClassName .. " | " .. object:GetFullName()
+        end)
+        if ok then
+            matches[#matches + 1] = description .. " | " .. reason
+        end
+    end
+
+    if userData then
+        local children = {}
+        pcall(function()
+            for _, child in ipairs(userData:GetChildren()) do
+                children[#children + 1] = child.Name .. "[" .. child.ClassName .. "]"
+            end
+        end)
+        __DDCore.Log("MANUAL SCAN USERDATA ROOT: " .. userData:GetFullName()
+            .. " | direct children=" .. (#children > 0 and table.concat(children, ";") or "<none>"))
+    else
+        __DDCore.Log("MANUAL SCAN USERDATA ROOT: ReplicatedStorage.Shared.UserData NOT FOUND")
+    end
+
+    for _, root in ipairs(roots) do
+        local objects = { root }
+        pcall(function()
+            for _, object in ipairs(root:GetDescendants()) do
+                objects[#objects + 1] = object
+            end
+        end)
+
+        for _, object in ipairs(objects) do
+            if not seen[object] then
+                seen[object] = true
+                objectsScanned += 1
+
+                local isModule = false
+                local isRemoteObject = false
+                local isFolder = false
+                pcall(function()
+                    isModule = object:IsA("ModuleScript")
+                    isRemoteObject = isRemote(object)
+                    isFolder = object:IsA("Folder")
+                end)
+
+                local inUserData = false
+                local inUserDataRemotes = false
+                pcall(function()
+                    inUserData = userData and object:IsDescendantOf(userData) or false
+                    inUserDataRemotes = userDataRemotes
+                        and object:IsDescendantOf(userDataRemotes) or false
+                end)
+
+                if isModule then
+                    moduleCount += 1
+                    if inUserData then
+                        userDataModuleCount += 1
+                    end
+                end
+                if isRemoteObject then
+                    remoteCount += 1
+                    if inUserData then
+                        userDataRemoteCount += 1
+                    end
+                end
+
+                local related = false
+                pcall(function()
+                    related = relatedName(object.Name)
+                end)
+
+                if inUserData and (isModule or isRemoteObject) then
+                    record(object, "under Shared.UserData")
+                elseif inUserDataRemotes and isFolder then
+                    record(object, "folder under Shared.UserData.Remotes")
+                elseif related and (isModule or isRemoteObject or isFolder) then
+                    record(object, "name matched search keywords")
+                end
+            end
+        end
+    end
+
+    table.sort(matches)
+    __DDCore.Log("MANUAL SCAN SUMMARY: objects=" .. tostring(objectsScanned)
+        .. ", ModuleScripts=" .. tostring(moduleCount)
+        .. ", remotes/bindables=" .. tostring(remoteCount)
+        .. ", UserData ModuleScripts=" .. tostring(userDataModuleCount)
+        .. ", UserData remotes/bindables=" .. tostring(userDataRemoteCount)
+        .. ", matched paths=" .. tostring(#matches))
+
+    local limit = math.min(#matches, 350)
+    for index = 1, limit do
+        __DDCore.Log("MANUAL SCAN [" .. tostring(index) .. "/" .. tostring(#matches) .. "]: " .. matches[index])
+    end
+    if #matches > limit then
+        __DDCore.Log("MANUAL SCAN TRUNCATED: logged first " .. tostring(limit)
+            .. " of " .. tostring(#matches) .. " matched paths")
+    end
+
+    __DDCore.State.scanRunning = false
+    __DDCore.Log("MANUAL SCAN END: press F6 to stop and copy this scan log")
 end
 
 function cosmetic.getEquippedId(slot)
