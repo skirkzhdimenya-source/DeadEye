@@ -430,7 +430,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.244
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.245
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -462,7 +462,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.244"
+local SCRIPT_VERSION = "1.245"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -2338,6 +2338,7 @@ local unusualReapplyBusy = false
 local unusualRuntime = {
     appliedRig = nil,
     appliedCharacter = nil,
+    appliedTargets = nil,
     originalId = nil,
     replacementId = nil,
     --// Rule state:
@@ -5357,20 +5358,27 @@ end
 --// GET REAL PLAYER CHARACTER
 --// =========================================================
 function UnusualFns.getUnusualPlayerCharacter()
-    local folder =
-        workspace:FindFirstChild(
-            "Players"
-        )
+    local folder = workspace:FindFirstChild("Players")
     if folder then
-        local character =
-            folder:FindFirstChild(
-                LocalPlayer.Name
-            )
-        if character then
-            return character
+        for _, character in ipairs(folder:GetChildren()) do
+            if character:IsA("Model")
+                and character.Name == LocalPlayer.Name
+                and character.Parent
+            then
+                return character
+            end
         end
     end
-    return LocalPlayer.Character
+
+    local character = LocalPlayer.Character
+    if character
+        and character:IsA("Model")
+        and character.Parent
+    then
+        return character
+    end
+
+    return nil
 end
 --// =========================================================
 --// GET VISUAL RIG
@@ -5447,43 +5455,137 @@ end
 function UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
     local targets = {}
     local seen = {}
+    local roleCounters = {
+        Rigs = 0,
+        Players = 0
+    }
 
     local function add(model, role)
-        if model and model:IsA("Model") and not seen[model] then
-            seen[model] = true
-            table.insert(targets, {
-                model = model,
-                role = role
-            })
+        if not model
+            or not model:IsA("Model")
+            or seen[model]
+            or not model.Parent
+        then
+            return
+        end
+
+        seen[model] = true
+        table.insert(targets, {
+            model = model,
+            role = role
+        })
+    end
+
+    --// RigLife observed multiple distinct Models with the same name under
+    --// Workspace.Rigs. Never resolve the local target using FindFirstChild.
+    local rigsFolder = workspace:FindFirstChild("Rigs")
+    if rigsFolder then
+        for _, model in ipairs(rigsFolder:GetChildren()) do
+            if model:IsA("Model") and model.Name == LocalPlayer.Name then
+                roleCounters.Rigs += 1
+                add(model, "Rigs#" .. tostring(roleCounters.Rigs))
+            end
         end
     end
 
+    local playersFolder = workspace:FindFirstChild("Players")
+    if playersFolder then
+        for _, model in ipairs(playersFolder:GetChildren()) do
+            if model:IsA("Model") and model.Name == LocalPlayer.Name then
+                roleCounters.Players += 1
+                add(model, "Players#" .. tostring(roleCounters.Players))
+            end
+        end
+    end
+
+    --// Keep uncommon active targets such as MenuScene.VisualModel, but only
+    --// when they are real, parented Instances rather than menu placeholders.
     add(visualRig, "visual")
     add(playerCharacter, "character")
 
-    local rigsFolder = workspace:FindFirstChild("Rigs")
-    add(rigsFolder and rigsFolder:FindFirstChild(LocalPlayer.Name), "rigs")
-
-    local playersFolder = workspace:FindFirstChild("Players")
-    add(playersFolder and playersFolder:FindFirstChild(LocalPlayer.Name), "players")
+    local character = LocalPlayer.Character
+    if character and character.Parent then
+        add(character, "local-character")
+    end
 
     return targets
 end
 
 function UnusualFns.resolveUnusualTargetModel(role, visualRig, playerCharacter)
+    if type(role) == "string" then
+        local folderName, requestedIndex = string.match(role, "^(Rigs)#(%d+)$")
+        if folderName and requestedIndex then
+            local folder = workspace:FindFirstChild(folderName)
+            local index = 0
+            if folder then
+                for _, model in ipairs(folder:GetChildren()) do
+                    if model:IsA("Model") and model.Name == LocalPlayer.Name then
+                        index += 1
+                        if index == tonumber(requestedIndex) then
+                            return model
+                        end
+                    end
+                end
+            end
+        end
+
+        folderName, requestedIndex = string.match(role, "^(Players)#(%d+)$")
+        if folderName and requestedIndex then
+            local folder = workspace:FindFirstChild(folderName)
+            local index = 0
+            if folder then
+                for _, model in ipairs(folder:GetChildren()) do
+                    if model:IsA("Model") and model.Name == LocalPlayer.Name then
+                        index += 1
+                        if index == tonumber(requestedIndex) then
+                            return model
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     if role == "visual" then
         return visualRig
     elseif role == "character" then
         return playerCharacter
-    elseif role == "rigs" then
-        local folder = workspace:FindFirstChild("Rigs")
-        return folder and folder:FindFirstChild(LocalPlayer.Name)
-    elseif role == "players" then
-        local folder = workspace:FindFirstChild("Players")
-        return folder and folder:FindFirstChild(LocalPlayer.Name)
+    elseif role == "local-character" then
+        local character = LocalPlayer.Character
+        return character and character.Parent and character or nil
     end
 
     return nil
+end
+
+function UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
+    local result = {}
+    for _, target in ipairs(
+        UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+    ) do
+        result[target.model] = true
+    end
+    return result
+end
+
+function UnusualFns.sameUnusualTargetModelSet(first, second)
+    if type(first) ~= "table" or type(second) ~= "table" then
+        return false
+    end
+
+    for model in pairs(first) do
+        if not second[model] then
+            return false
+        end
+    end
+
+    for model in pairs(second) do
+        if not first[model] then
+            return false
+        end
+    end
+
+    return true
 end
 
 --// =========================================================
@@ -9207,6 +9309,7 @@ function UnusualFns.captureNativeUnusualSnapshot(
                 local partSnapshot = {
                     partName = partName,
                     targetRole = target.role,
+                    targetModel = target.model,
                     objects = {},
                     joints = {}
                 }
@@ -9321,12 +9424,15 @@ function UnusualFns.restoreNativeUnusualSnapshot(
     local restored = false
 
     for _, partSnapshot in ipairs(snapshot.parts) do
-        local targetModel =
-            UnusualFns.resolveUnusualTargetModel(
-                partSnapshot.targetRole,
-                visualRig,
-                playerCharacter
-            )
+        local targetModel = partSnapshot.targetModel
+        if not (targetModel and targetModel.Parent) then
+            targetModel =
+                UnusualFns.resolveUnusualTargetModel(
+                    partSnapshot.targetRole,
+                    visualRig,
+                    playerCharacter
+                )
+        end
 
         --// Compatibility with snapshots produced before targetRole existed.
         if not targetModel then
@@ -9562,6 +9668,8 @@ function UnusualFns.restoreUnusual()
     unusualRuntime.appliedRig =
         nil
     unusualRuntime.appliedCharacter =
+        nil
+    unusualRuntime.appliedTargets =
         nil
     unusualRuntime.originalId =
         nil
@@ -12319,37 +12427,35 @@ others.page = nil
 others.status = nil
 others.originalDescription = nil
 others.targetHumanoid = nil
+others.lastAppliedDescription = nil
+others.appliedHumanoids = setmetatable({}, { __mode = "k" })
+others.pendingHumanoids = setmetatable({}, { __mode = "k" })
+others.avatarSyncConnections = {}
 others.fieldBoxes = {}
 function others.getHumanoids()
     local result = {}
     local seen = {}
-    local function add(h)
-        if h
-            and h:IsA("Humanoid")
-            and not seen[h]
+
+    local function add(humanoid)
+        if humanoid
+            and humanoid:IsA("Humanoid")
+            and not seen[humanoid]
+            and humanoid.Parent
         then
-            seen[h] = true
-            table.insert(result, h)
+            seen[humanoid] = true
+            table.insert(result, humanoid)
         end
     end
-    local rig =
-        UnusualFns.getUnusualVisualRig()
-    if rig then
-        add(
-            rig:FindFirstChildOfClass(
-                "Humanoid"
-            )
-        )
+
+    local visualRig = UnusualFns.getUnusualVisualRig()
+    local playerCharacter = UnusualFns.getUnusualPlayerCharacter()
+
+    for _, target in ipairs(
+        UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+    ) do
+        add(target.model:FindFirstChildOfClass("Humanoid"))
     end
-    local character =
-        UnusualFns.getUnusualPlayerCharacter()
-    if character then
-        add(
-            character:FindFirstChildOfClass(
-                "Humanoid"
-            )
-        )
-    end
+
     return result
 end
 function others.getHumanoid()
@@ -12804,6 +12910,7 @@ function others.applyDescription(
         end
         if ok then
             applied += 1
+            others.appliedHumanoids[humanoid] = true
         end
     end
     if applied == 0 then
@@ -12819,6 +12926,7 @@ function others.applyDescription(
                 end)
             if ok then
                 applied += 1
+                others.appliedHumanoids[humanoid] = true
             end
         end
     end
@@ -12834,6 +12942,18 @@ function others.applyDescription(
         return false
     end
 
+    local savedDescription
+    pcall(function()
+        savedDescription = description:Clone()
+    end)
+    if savedDescription then
+        others.lastAppliedDescription = savedDescription
+    end
+
+    __DDCore.Log("AVATAR APPLY COMPLETE|humanoids=" .. tostring(#others.getHumanoids())
+        .. "|applied=" .. tostring(applied)
+        .. "|savedDescription=" .. tostring(savedDescription ~= nil))
+
     pcall(function()
         if others.status then
             others.status.Text =
@@ -12842,6 +12962,103 @@ function others.applyDescription(
     end)
     return true
 end
+--// Keep later-created copies of the local rig in sync after an Avatar edit.
+function others.findLocalRigModel(instance)
+    local current = instance
+    while current and current ~= workspace do
+        if current:IsA("Model")
+            and current.Name == LocalPlayer.Name
+            and current.Parent
+            and (current.Parent.Name == "Rigs" or current.Parent.Name == "Players")
+        then
+            return current
+        end
+        current = current.Parent
+    end
+    return nil
+end
+
+function others.applyDescriptionToNewHumanoid(humanoid)
+    if not humanoid
+        or not humanoid:IsA("Humanoid")
+        or not humanoid.Parent
+        or others.appliedHumanoids[humanoid]
+        or others.pendingHumanoids[humanoid]
+        or not others.lastAppliedDescription
+    then
+        return
+    end
+
+    local model = others.findLocalRigModel(humanoid)
+    if not model or humanoid.Parent ~= model then
+        return
+    end
+
+    others.pendingHumanoids[humanoid] = true
+    task.spawn(function()
+        task.wait(0.15)
+        if not humanoid.Parent or not model.Parent or not others.lastAppliedDescription then
+            others.pendingHumanoids[humanoid] = nil
+            return
+        end
+
+        local description
+        pcall(function()
+            description = others.lastAppliedDescription:Clone()
+        end)
+
+        local succeeded = false
+        if description then
+            local ok = pcall(function()
+                humanoid:ApplyDescriptionResetAsync(description)
+            end)
+            if not ok then
+                ok = pcall(function()
+                    humanoid:ApplyDescriptionReset(description)
+                end)
+            end
+            if not ok then
+                ok = pcall(function()
+                    humanoid:ApplyDescriptionAsync(description)
+                end)
+            end
+            succeeded = ok
+        end
+
+        if succeeded then
+            others.appliedHumanoids[humanoid] = true
+            __DDCore.Log("AVATAR AUTO-APPLIED|model=" .. tostring(model)
+                .. "|humanoid=" .. tostring(humanoid))
+        else
+            __DDCore.Log("AVATAR AUTO-APPLY FAILED|model=" .. tostring(model))
+        end
+
+        others.pendingHumanoids[humanoid] = nil
+    end)
+end
+
+local avatarRigAddedConnection = workspace.DescendantAdded:Connect(function(object)
+    if object:IsA("Humanoid") then
+        others.applyDescriptionToNewHumanoid(object)
+    elseif object:IsA("Model")
+        and object.Name == LocalPlayer.Name
+        and object.Parent
+        and (object.Parent.Name == "Rigs" or object.Parent.Name == "Players")
+    then
+        task.defer(function()
+            if not object.Parent then
+                return
+            end
+            local humanoid = object:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                others.applyDescriptionToNewHumanoid(humanoid)
+            end
+        end)
+    end
+end)
+table.insert(others.avatarSyncConnections, avatarRigAddedConnection)
+UnusualFns.addUnusualConnection(avatarRigAddedConnection)
+
 function others.applyField(
     slot,
     textValue
@@ -23530,6 +23747,7 @@ __UI.__L.cleanupUnusual = function()
     unusualRuntime.reapplyGeneration += 1
     unusualRuntime.appliedRig = nil
     unusualRuntime.appliedCharacter = nil
+    unusualRuntime.appliedTargets = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
     UnusualFns.disconnectUnusualConnections()
