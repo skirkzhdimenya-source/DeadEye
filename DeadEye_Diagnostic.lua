@@ -463,7 +463,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.247"
+local SCRIPT_VERSION = "1.248"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -3159,15 +3159,10 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
     elseif equippedUnusualId
         and equippedUnusualId ~= 0
     then
+        --// AddCosmetics(live, equipped) below rebuilds the native effect
+        --// itself. Never snapshot/copy it back over the top while SWAP is OFF.
         restoreNativeUnusualId =
             tonumber(equippedUnusualId)
-
-        cosmeticUnusualSnapshot =
-            UnusualFns.captureNativeUnusualSnapshot(
-                equippedUnusualId,
-                UnusualFns.getUnusualVisualRig(),
-                UnusualFns.getUnusualPlayerCharacter()
-            )
     end
 
     if restoreUnusualSwap then
@@ -3480,24 +3475,23 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
                     end
                 end)
             elseif restoreNativeUnusualId then
-                if cosmeticUnusualSnapshot then
-                    pcall(function()
-                        UnusualFns.restoreNativeUnusualSnapshot(
-                            cosmeticUnusualSnapshot,
-                            UnusualFns.getUnusualVisualRig(),
-                            UnusualFns.getUnusualPlayerCharacter()
-                        )
-                    end)
-                else
-                    pcall(function()
-                        UnusualFns.applyNativeUnusualFallback(
-                            restoreNativeUnusualId,
-                            UnusualFns.getUnusualVisualRig(),
-                            UnusualFns.getUnusualPlayerCharacter(),
-                            "cosmetic refresh had no reusable native snapshot"
-                        )
-                    end)
-                end
+                --// AddCosmetics has just rebuilt the real currently equipped
+                --// Unusual on this live model. Do not clone a second copy:
+                --// repeated fallback copies made effects pile up and disappear
+                --// when the game's rig/visibility code refreshed.
+                local visibilityRefreshed = false
+                pcall(function()
+                    UnusualFns.removeNativeFallbackFX()
+                    visibilityRefreshed =
+                        __UI.__L.refreshNativeVisibilityAfterUnusualRestore() == true
+                end)
+                UnusualFns.traceSwap(
+                    "NATIVE_UNUSUAL_KEEP_ADDCOSMETICS",
+                    "id=" .. tostring(restoreNativeUnusualId)
+                        .. "|visibilityRefreshed=" .. tostring(visibilityRefreshed),
+                    UnusualFns.getUnusualVisualRig(),
+                    UnusualFns.getUnusualPlayerCharacter()
+                )
             end
         end)
 
@@ -5839,7 +5833,9 @@ function UnusualFns.tagUnusualFX(
             if suppressOwnership then
                 target:SetAttribute("DeadEyeUnusualFX", nil)
                 target:SetAttribute("DeadEyeUnusualFXID", nil)
+                target:SetAttribute("DeadEyeNativeFallback", true)
             else
+                target:SetAttribute("DeadEyeNativeFallback", nil)
                 target:SetAttribute("DeadEyeUnusualFX", true)
                 target:SetAttribute("DeadEyeUnusualFXID", id)
             end
@@ -5852,9 +5848,67 @@ function UnusualFns.tagUnusualFX(
     end
 end
 
+-- Remove only explicit backup copies built by DeadEye after native snapshot
+-- recovery failed. Unlike the old untagged fallback, this cannot be confused
+-- with the game's own native effect.
+function UnusualFns.removeNativeFallbackFX()
+    local roots = {}
+    local seenRoots = {}
+
+    local function addRoot(root)
+        if root and not seenRoots[root] then
+            seenRoots[root] = true
+            table.insert(roots, root)
+        end
+    end
+
+    for _, name in ipairs({"Rigs", "Players", "MenuView", "DeadEyeUnusualVisuals"}) do
+        addRoot(workspace:FindFirstChild(name))
+    end
+
+    local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
+    if playerGui then
+        addRoot(playerGui:FindFirstChild("DeadEyeUnusualRuntime"))
+    end
+
+    local destroyed = 0
+    for _, root in ipairs(roots) do
+        local objects = {}
+        pcall(function()
+            for _, object in ipairs(root:GetDescendants()) do
+                table.insert(objects, object)
+            end
+        end)
+
+        for _, object in ipairs(objects) do
+            local isFallback = false
+            pcall(function()
+                isFallback = object:GetAttribute("DeadEyeNativeFallback") == true
+            end)
+
+            if isFallback then
+                local parentFallback = false
+                pcall(function()
+                    parentFallback = object.Parent
+                        and object.Parent:GetAttribute("DeadEyeNativeFallback") == true
+                end)
+
+                if not parentFallback then
+                    pcall(function()
+                        object:Destroy()
+                        destroyed += 1
+                    end)
+                end
+            end
+        end
+    end
+
+    return destroyed
+end
+
 -- Used only when the game has already removed the native original and there
--- is no usable snapshot. Recreate a visible fallback without marking it as a
--- DeadEye replacement, so removeOurUnusualFX() cannot delete it later.
+-- is no usable snapshot. Recreate a visible backup that is explicitly marked
+-- as DeadEye-owned fallback, never as the actual game-native instance.
 function UnusualFns.applyNativeUnusualFallback(
     id,
     visualRig,
@@ -8584,6 +8638,9 @@ end
 -- =========================================================
 function UnusualFns.removeOurUnusualFX()
     unusualRuntime.destroyAnimationSource()
+    pcall(function()
+        UnusualFns.removeNativeFallbackFX()
+    end)
 
     local removed = 0
     local roots = {}
@@ -9281,8 +9338,15 @@ function UnusualFns.removeOriginalUnusualFX(
                 for _, existing in ipairs(targetPart:GetDescendants()) do
                     for _, info in ipairs(objects) do
                         local match = false
+                        local deadEyeOwned = false
+                        pcall(function()
+                            deadEyeOwned =
+                                existing:GetAttribute("DeadEyeUnusualFX") == true
+                                or existing:GetAttribute("DeadEyeNativeFallback") == true
+                        end)
 
-                        if existing.ClassName == info.Class then
+                        if not deadEyeOwned
+                            and existing.ClassName == info.Class then
                             if existing:IsA("MeshPart") and info.MeshId then
                                 match =
                                     existing.Name == info.Name
@@ -9634,6 +9698,7 @@ function UnusualFns.restoreNativeUnusualSnapshot(
             pcall(function()
                 object:SetAttribute("DeadEyeUnusualFX", nil)
                 object:SetAttribute("DeadEyeUnusualFXID", nil)
+                object:SetAttribute("DeadEyeNativeFallback", nil)
             end)
         end
     end
@@ -9687,7 +9752,16 @@ function UnusualFns.restoreNativeUnusualSnapshot(
             return nil
         end
         for _, current in ipairs(parent:GetChildren()) do
-            if current.Name == saved.Name
+            local deadEyeOwned = false
+            local fallbackOwned = false
+            pcall(function()
+                deadEyeOwned = current:GetAttribute("DeadEyeUnusualFX") == true
+                fallbackOwned = current:GetAttribute("DeadEyeNativeFallback") == true
+            end)
+
+            if not deadEyeOwned
+                and not fallbackOwned
+                and current.Name == saved.Name
                 and current.ClassName == saved.ClassName
             then
                 if saved:IsA("MeshPart") then
@@ -9747,71 +9821,70 @@ function UnusualFns.restoreNativeUnusualSnapshot(
         return true
     end
 
-    for _, partSnapshot in ipairs(snapshot.parts) do
-        local targetModel = partSnapshot.targetModel
-        if targetModel and not targetModel.Parent then
-            targetModel = nil
+    -- Build a clean baseline per body-part name. Snapshot targetModel references
+    -- can point at a menu/old rig that is still parented but is no longer the
+    -- model rendered by the game. Restore the saved baseline to EVERY current
+    -- matching live target so whichever duplicate Rigs model is active has FX.
+    local baselineByPartName = {}
+    for _, partSnapshot in ipairs(snapshot.parts or {}) do
+        if partSnapshot.partName
+            and (
+                #(partSnapshot.objects or {}) > 0
+                or #(partSnapshot.joints or {}) > 0
+            )
+            and not baselineByPartName[partSnapshot.partName]
+        then
+            baselineByPartName[partSnapshot.partName] = partSnapshot
         end
+    end
 
-        if not targetModel then
-            targetModel =
-                UnusualFns.resolveUnusualTargetModel(
-                    partSnapshot.targetRole,
-                    visualRig,
-                    playerCharacter
-                )
-        end
+    local targets =
+        UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
 
-        if not targetModel then
-            if partSnapshot.partName == "HumanoidRootPart" then
-                targetModel = playerCharacter
-            else
-                targetModel = visualRig
-            end
-        end
+    for partName, partSnapshot in pairs(baselineByPartName) do
+        for _, target in ipairs(targets) do
+            local targetModel = target.model
+            local targetPart =
+                targetModel and targetModel:FindFirstChild(partName)
 
-        local targetPart =
-            targetModel
-            and targetModel:FindFirstChild(partSnapshot.partName)
+            if targetPart and targetPart:IsA("BasePart") then
+                restoredTargets[tostring(targetModel) .. "|" .. tostring(partName)] = true
 
-        if targetPart and targetPart:IsA("BasePart") then
-            local targetKey = tostring(targetModel) .. "|" .. tostring(partSnapshot.partName)
-            restoredTargets[targetKey] = true
+                for _, savedObject in ipairs(partSnapshot.objects or {}) do
+                    local current = findMatchingChild(targetPart, savedObject)
 
-            for _, savedObject in ipairs(partSnapshot.objects or {}) do
-                local current = findMatchingChild(targetPart, savedObject)
-
-                if current then
-                    restoreMatchedTree(savedObject, current)
-                    matchedObjects += 1
-                    restored = true
-                elseif cloneIntoTarget(savedObject, targetPart) then
-                    clonedObjects += 1
-                    restored = true
+                    if current then
+                        restoreMatchedTree(savedObject, current)
+                        matchedObjects += 1
+                        restored = true
+                    elseif cloneIntoTarget(savedObject, targetPart) then
+                        clonedObjects += 1
+                        restored = true
+                    end
                 end
-            end
 
-            for _, savedJoint in ipairs(partSnapshot.joints or {}) do
-                local current = findMatchingChild(targetPart, savedJoint)
+                for _, savedJoint in ipairs(partSnapshot.joints or {}) do
+                    local current = findMatchingChild(targetPart, savedJoint)
 
-                if current then
-                    local map = {}
-                    pcall(function()
-                        __UI.__L.mapUnusualCloneTree(savedJoint, current, map)
-                        __UI.__L.rebindUnusualCloneTree(
-                            savedJoint,
-                            current,
-                            map,
-                            nil,
-                            targetPart
-                        )
-                    end)
-                    clearOwnershipTags(current)
-                    matchedJoints += 1
-                    restored = true
-                elseif cloneIntoTarget(savedJoint, targetPart) then
-                    clonedJoints += 1
-                    restored = true
+                    if current then
+                        local map = {}
+                        pcall(function()
+                            __UI.__L.mapUnusualCloneTree(savedJoint, current, map)
+                            __UI.__L.rebindUnusualCloneTree(
+                                savedJoint,
+                                current,
+                                map,
+                                nil,
+                                targetPart
+                            )
+                        end)
+                        clearOwnershipTags(current)
+                        matchedJoints += 1
+                        restored = true
+                    elseif cloneIntoTarget(savedJoint, targetPart) then
+                        clonedJoints += 1
+                        restored = true
+                    end
                 end
             end
         end
@@ -9979,6 +10052,16 @@ function UnusualFns.restoreUnusual()
 
         --// The original effect is now the live effect again.
         --// Keep the same instant P1/P3 behavior on it.
+        pcall(function()
+            local refreshed =
+                __UI.__L.refreshNativeVisibilityAfterUnusualRestore() == true
+            UnusualFns.traceSwap(
+                "NATIVE_VISIBILITY_REFRESH",
+                "result=" .. tostring(refreshed),
+                visualRig,
+                playerCharacter
+            )
+        end)
         UnusualFns.bindNativeParticlePOV(
             visualRig
         )
@@ -10142,6 +10225,9 @@ function UnusualFns.activateUnusual()
             playerCharacter
         )
         UnusualFns.restoreNativeWeldedTreeStates()
+        pcall(function()
+            __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
+        end)
         UnusualFns.bindNativeParticlePOV(
             visualRig
         )
