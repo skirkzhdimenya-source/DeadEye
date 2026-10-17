@@ -204,11 +204,21 @@ local function isTraceModel(model)
         return false
     end
     local domain = getDomain(model)
-    return domain == "Workspace.Rigs"
-        or domain == "Workspace.Players"
-        or domain == "Workspace.PlayerCache.LOCAL"
-        or domain == "Workspace.MenuScene"
-        or domain == "Workspace.LocalCharacter"
+    -- Register only the main representation models as roots. Nested models remain
+    -- observable through add/remove events but are not recursively indexed as roots.
+    if domain == "Workspace.Rigs" then
+        return model.Parent == getWorkspaceRoot("Rigs")
+    elseif domain == "Workspace.Players" then
+        return model.Parent == getWorkspaceRoot("Players")
+    elseif domain == "Workspace.PlayerCache.LOCAL" then
+        return model.Parent == localCacheFolder()
+    elseif domain == "Workspace.MenuScene" then
+        local menu = getWorkspaceRoot("MenuScene")
+        return model.Parent == menu and (model.Name == "VisualModel" or model.Name == LocalPlayer.Name)
+    elseif domain == "Workspace.LocalCharacter" then
+        return model == LocalPlayer.Character or (model.Name == LocalPlayer.Name and model.Parent == Workspace)
+    end
+    return false
 end
 
 local function isDetailedModel(model)
@@ -711,6 +721,17 @@ local function watchInstance(object, ownerModel)
     end
 
     BOUND_INSTANCES[object] = true
+    if not object:IsA("Model") then
+        local oldName = object.Name
+        connect(object:GetPropertyChangedSignal("Name"), function()
+            if ACTIVE then
+                log("INSTANCE_NAME_CHANGED", "owner=" .. idOf(ownerModel) .. ":" .. pathOf(ownerModel)
+                    .. "|object=" .. idOf(object) .. "|class=" .. object.ClassName
+                    .. "|oldName=" .. clean(oldName) .. "|newName=" .. clean(object.Name))
+            end
+            oldName = object.Name
+        end)
+    end
     if object:IsA("ObjectValue") then watchObjectValue(object) end
     if object:IsA("Animator") then watchAnimator(object) end
 
@@ -865,10 +886,12 @@ local function logInstanceAdded(object)
     watchInstance(object, detailOwner or owner)
     if object:IsA("Model") and isTraceModel(object) then
         bindModel(object, "DescendantAdded")
-        if detailOwner and detailOwner ~= object then
-            log("MODEL_NESTED_ADDED", "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
-                .. "|nested=" .. idOf(object) .. ":" .. pathOf(object) .. "|domain=" .. getDomain(object))
-        end
+        log("MODEL_CREATED_OR_ENTERED", "id=" .. idOf(object) .. "|name=" .. clean(object.Name)
+            .. "|domain=" .. getDomain(object) .. "|path=" .. pathOf(object) .. "|parent=" .. pathOf(object.Parent))
+    elseif object:IsA("Model") and detailOwner then
+        log("MODEL_NESTED_ADDED", "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
+            .. "|nested=" .. idOf(object) .. ":" .. pathOf(object) .. "|domain=" .. getDomain(object))
+        snapshotModel(object, "nested-model-added")
     elseif detailOwner then
         log("INSTANCE_ADDED",
             "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
@@ -891,6 +914,10 @@ local function logInstanceRemoving(object)
         snapshotModel(object, "before-remove")
         log("MODEL_REMOVING", "id=" .. idOf(object) .. "|name=" .. clean(object.Name)
             .. "|oldPath=" .. pathOf(object) .. "|oldDomain=" .. getDomain(object))
+    elseif object:IsA("Model") and detailOwner then
+        snapshotModel(object, "nested-before-remove")
+        log("MODEL_NESTED_REMOVING", "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
+            .. "|nested=" .. idOf(object) .. ":" .. pathOf(object) .. "|domain=" .. getDomain(object))
     elseif detailOwner then
         log("INSTANCE_REMOVING",
             "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
@@ -1245,7 +1272,7 @@ task.spawn(function()
             lastDescriptionPoll = now
             pollDescriptions()
         end
-        if now - lastWorldSnapshot >= 2.5 then
+        if now - lastWorldSnapshot >= 3.5 then
             lastWorldSnapshot = now
             worldSnapshot("periodic")
         end
