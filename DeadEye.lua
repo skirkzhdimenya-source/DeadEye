@@ -13350,6 +13350,25 @@ function mainJump.restoreFOVBodyVisibility()
     end
 
     mainJump.fovBodyVisibilityEnabled = false
+
+    -- Restore the live visual rig to the game's native visibility owner.
+    -- Restoring GetType alone is insufficient: Visibility.Type and the
+    -- parts' LocalTransparencyModifier may still contain the hooked result.
+    pcall(function()
+        local characterObject = getCharacterObject()
+        local visibility = characterObject and characterObject.Visibility
+
+        if not visibility then
+            return
+        end
+
+        local currentType = visibility:GetType()
+        if currentType ~= nil then
+            visibility.Type = currentType
+        end
+
+        visibility:UpdateVisibility()
+    end)
 end
 
 mainJump.fovBodyVisibilityCleanup = function()
