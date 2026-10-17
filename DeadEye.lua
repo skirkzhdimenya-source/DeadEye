@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.270
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.269
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.270"
+local SCRIPT_VERSION = "1.269"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -24998,107 +24998,6 @@ __UI.__L.addConnection(
     )
 )
 
---// TEMPORARY VISIBILITY DIAGNOSTIC: logs snapshots to the executor console.
---// It is intentionally attached to the existing script; no extra files are created.
-local function deadEyeVisibilityDiagnostic(stage)
-    local ok, diagnosticError = pcall(function()
-        local characterObject = getCharacterObject()
-        local visibility = characterObject and characterObject.Visibility
-        local module = mainJump.fovBodyVisibilityModule
-        local currentType = nil
-        if visibility then
-            pcall(function()
-                currentType = visibility:GetType()
-            end)
-        end
-
-        local models = {}
-        local seen = {}
-        local function addModel(label, model)
-            if model and model.Parent and not seen[model] then
-                seen[model] = true
-                table.insert(models, {label = label, model = model})
-            end
-        end
-
-        addModel("LocalCharacter", LocalPlayer and LocalPlayer.Character)
-        pcall(function()
-            local rig = visibility and visibility.Parent and visibility.Parent.Rig
-            if rig and type(rig.GetRigModel) == "function" then
-                addModel("VisibilityRig", rig:GetRigModel())
-            end
-        end)
-        pcall(function()
-            for _, humanoid in ipairs(others.getHumanoids()) do
-                addModel("AvatarHumanoid", humanoid.Parent)
-            end
-        end)
-
-        local modelSummaries = {}
-        for _, entry in ipairs(models) do
-            local total, ltmPositive, ltmSum, maxLtm = 0, 0, 0, 0
-            local accessoryParts, accessoryLtmPositive = 0, 0
-            local opaqueParts, samples = 0, {}
-            for _, object in ipairs(entry.model:GetDescendants()) do
-                if object:IsA("BasePart") then
-                    total += 1
-                    local ltm = object.LocalTransparencyModifier
-                    ltmSum += ltm
-                    if ltm > 0.01 then
-                        ltmPositive += 1
-                        maxLtm = math.max(maxLtm, ltm)
-                        if #samples < 6 then
-                            table.insert(samples, object.Name .. "=" .. string.format("%.2f", ltm))
-                        end
-                    end
-                    if object.Transparency >= 0.95 then
-                        opaqueParts += 1
-                    end
-                    local ancestor = object.Parent
-                    local isAccessoryPart = false
-                    while ancestor and ancestor ~= entry.model do
-                        if ancestor:IsA("Accessory") then
-                            isAccessoryPart = true
-                            break
-                        end
-                        ancestor = ancestor.Parent
-                    end
-                    if isAccessoryPart then
-                        accessoryParts += 1
-                        if ltm > 0.01 then
-                            accessoryLtmPositive += 1
-                        end
-                    end
-                end
-            end
-            table.insert(modelSummaries,
-                entry.label .. ":" .. entry.model.Name
-                .. "{parts=" .. total
-                .. ",ltm>0=" .. ltmPositive
-                .. ",accParts=" .. accessoryParts
-                .. ",accLtm>0=" .. accessoryLtmPositive
-                .. ",transparency>=.95=" .. opaqueParts
-                .. ",ltmSum=" .. string.format("%.2f", ltmSum)
-                .. ",ltmMax=" .. string.format("%.2f", maxLtm)
-                .. ",samples=" .. table.concat(samples, ",") .. "}"
-            )
-        end
-
-        warn("[DeadEye VISDIAG] " .. stage
-            .. " | visibility=" .. tostring(visibility ~= nil)
-            .. " | Type=" .. tostring(visibility and visibility.Type)
-            .. " | GetType=" .. tostring(currentType)
-            .. " | GetTypeHooked=" .. tostring(module ~= nil and mainJump.fovBodyVisibilityHook ~= nil and module.GetType == mainJump.fovBodyVisibilityHook)
-            .. " | UpdateHooked=" .. tostring(module ~= nil and mainJump.fovBodyVisibilityUpdateHook ~= nil and module.UpdateVisibility == mainJump.fovBodyVisibilityUpdateHook)
-            .. " | fovFixEnabled=" .. tostring(mainJump.fovBodyVisibilityEnabled)
-            .. " | models=" .. table.concat(modelSummaries, " || ")
-        )
-    end)
-    if not ok then
-        warn("[DeadEye VISDIAG] " .. stage .. " | DIAGNOSTIC_ERROR=" .. tostring(diagnosticError))
-    end
-end
-
 --// CLEANUP
 --// =========================================================
 __UI.__L.cleanup = function()
@@ -25106,7 +25005,6 @@ __UI.__L.cleanup = function()
         return
     end
 
-    deadEyeVisibilityDiagnostic("CLOSE_BEGIN")
     --// Save the Avatar editor state first.
     pcall(function()
         others.saveConfig()
@@ -25209,8 +25107,6 @@ __UI.__L.cleanup = function()
         end
     end)
 
-    deadEyeVisibilityDiagnostic("AFTER_AVATAR_RESTORE")
-
     pcall(function()
         mainJump.restoreFOVBodyVisibility()
 
@@ -25221,15 +25117,11 @@ __UI.__L.cleanup = function()
         end
     end)
 
-    deadEyeVisibilityDiagnostic("AFTER_FOV_VISIBILITY_RESTORE")
-
     pcall(function()
         if genv.DEADEYE_PORTRAIT_CLEANUP then
             genv.DEADEYE_PORTRAIT_CLEANUP()
         end
     end)
-
-    deadEyeVisibilityDiagnostic("AFTER_PORTRAIT_CLEANUP")
 
     pcall(function()
         __UI.__L.saveWindowState()
@@ -25252,17 +25144,6 @@ __UI.__L.cleanup = function()
     genv.DEADEYE_REVERSE_LOOK_CLEANUP = nil
 
     genv.DEADEYE_REVERSE_LOOK = nil
-
-    deadEyeVisibilityDiagnostic("CLOSE_END")
-    task.delay(0.25, function()
-        deadEyeVisibilityDiagnostic("CLOSE_PLUS_0.25S")
-    end)
-    task.delay(1, function()
-        deadEyeVisibilityDiagnostic("CLOSE_PLUS_1S")
-    end)
-    task.delay(2, function()
-        deadEyeVisibilityDiagnostic("CLOSE_PLUS_2S")
-    end)
 end
 genv.EMOTE_SWAPPER_CLEANUP = __UI.__L.cleanup
 --// =========================================================
