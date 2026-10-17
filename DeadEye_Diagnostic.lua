@@ -432,7 +432,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.246
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.256
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -464,7 +464,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.255"
+local SCRIPT_VERSION = "1.256"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -5545,69 +5545,202 @@ end
 --// =========================================================
 --// GET REAL PLAYER CHARACTER
 --// =========================================================
+--// Resolve the current menu preview model used by Viewmodel.Character.Build().
+--// The Viewmodel can attach it under MenuScene (as observed in this game build)
+--// or MenuView; PreviewRig is the canonical attribute set by RigService.
+local cachedMenuPreviewModel = nil
+local nextMenuPreviewScan = 0
+local cachedUnusualRigService = nil
+
+function UnusualFns.getUnusualMenuPreviewCharacter()
+    local function isPreview(model)
+        return model
+            and model:IsA("Model")
+            and model.Parent ~= nil
+            and model.Name == "VisualModel"
+            and model:GetAttribute("PreviewRig") == true
+            and model:FindFirstChildOfClass("Humanoid") ~= nil
+    end
+
+    -- Prefer the actual model used by the known menu containers.
+    for _, containerName in ipairs({ "MenuScene", "MenuView" }) do
+        local container = workspace:FindFirstChild(containerName)
+        local candidate = container and container:FindFirstChild("VisualModel")
+
+        if isPreview(candidate) then
+            cachedMenuPreviewModel = candidate
+            return candidate
+        end
+    end
+
+    -- Viewmodel.Attach supplies the parent, so support other scene containers too.
+    if isPreview(cachedMenuPreviewModel) then
+        return cachedMenuPreviewModel
+    end
+
+    cachedMenuPreviewModel = nil
+    if os.clock() < nextMenuPreviewScan then
+        return nil
+    end
+    nextMenuPreviewScan = os.clock() + 0.5
+
+    for _, instance in ipairs(workspace:GetDescendants()) do
+        if isPreview(instance) then
+            cachedMenuPreviewModel = instance
+            return instance
+        end
+    end
+
+    return nil
+end
+
+local function getUnusualRigService()
+    if cachedUnusualRigService then
+        return cachedUnusualRigService
+    end
+
+    local ok, service = pcall(function()
+        return require(ReplicatedStorage.Services.Asset.RigService)
+    end)
+
+    if ok then
+        cachedUnusualRigService = service
+    end
+
+    return cachedUnusualRigService
+end
+
+--// Resolve the exact cached visual rig bound to a particular character model.
+--// Never rely on FindFirstChild(name): the cache can contain several same-name rigs.
+local function getVisualRigBoundToCharacter(characterModel)
+    if not characterModel
+        or not characterModel:IsA("Model")
+        or not characterModel.Parent
+    then
+        return nil
+    end
+
+    local rigService = getUnusualRigService()
+    if not rigService then
+        return nil
+    end
+
+    local function isBoundToTarget(rig)
+        if not rig
+            or not rig:IsA("Model")
+            or not rig.Parent
+            or rig.Name ~= LocalPlayer.Name
+        then
+            return false
+        end
+
+        local ok, boundCharacter = pcall(function()
+            return rigService:GetCharacterFromRig(rig)
+        end)
+
+        return ok and boundCharacter == characterModel
+    end
+
+    -- Fast path through the service's character-to-rig lookup.
+    local ok, rig = pcall(function()
+        return rigService:GetRigFromCharacter(characterModel)
+    end)
+
+    if ok and isBoundToTarget(rig) then
+        return rig
+    end
+
+    -- Verify the reverse relationship while scanning same-name cached models.
+    local rigsFolder = workspace:FindFirstChild("Rigs")
+    if rigsFolder then
+        for _, candidate in ipairs(rigsFolder:GetChildren()) do
+            if isBoundToTarget(candidate) then
+                return candidate
+            end
+        end
+    end
+
+    return nil
+end
+
+--// =========================================================
+--// GET REAL PLAYER CHARACTER OR CURRENT MENU PREVIEW
+--// =========================================================
 function UnusualFns.getUnusualPlayerCharacter()
+    -- A live round character takes priority over the menu preview.
     local folder = workspace:FindFirstChild("Players")
     if folder then
         for _, character in ipairs(folder:GetChildren()) do
             if character:IsA("Model")
                 and character.Name == LocalPlayer.Name
                 and character.Parent
+                and character:GetAttribute("PreviewRig") ~= true
             then
                 return character
             end
         end
     end
 
+    -- Before a round starts, HRP-attached native assets belong to the preview,
+    -- not to the small/placeholder LocalPlayer.Character model.
+    local preview = UnusualFns.getUnusualMenuPreviewCharacter()
+    if preview then
+        return preview
+    end
+
     local character = LocalPlayer.Character
     if character
         and character:IsA("Model")
         and character.Parent
+        and character:GetAttribute("PreviewRig") ~= true
     then
         return character
     end
 
     return nil
 end
+
 --// =========================================================
 --// GET VISUAL RIG
 --// =========================================================
 function UnusualFns.getUnusualVisualRig()
-    -- In a live round, trust the model attached to Character.Rig.Rig.
-    -- Do not pick an arbitrary same-name entry from RigService's cache.
+    -- In a live round, use CharacterService's actual character-bound rig.
     local boundRig = getBoundVisualRigModel()
-    if boundRig then
+    if boundRig
+        and boundRig:IsA("Model")
+        and boundRig.Parent
+    then
         return boundRig
     end
 
-    -- Menu / pre-round fallback: keep the original single-rig behavior.
-    local folder = workspace:FindFirstChild("Rigs")
-    if folder then
-        local rig = folder:FindFirstChild(LocalPlayer.Name)
-        if rig and rig:IsA("Model") and rig.Parent then
-            return rig
-        end
+    -- In the menu, resolve the rig bound to the exact current VisualModel.
+    -- The visible preview may be destroyed/rebuilt during menu refreshes.
+    local preview = UnusualFns.getUnusualMenuPreviewCharacter()
+    if preview then
+        return getVisualRigBoundToCharacter(preview)
     end
 
+    -- If there is no preview, only fall back to an actual spawned gameplay
+    -- character. Do not select an arbitrary cached model from Workspace.Rigs.
     local playersFolder = workspace:FindFirstChild("Players")
-    if playersFolder then
-        local character = playersFolder:FindFirstChild(LocalPlayer.Name)
-        if character and character:IsA("Model") and character.Parent then
-            return character
-        end
-    end
+    local character = playersFolder
+        and playersFolder:FindFirstChild(LocalPlayer.Name)
 
-    local menuView = workspace:FindFirstChild("MenuView")
-    local visualModel = menuView and menuView:FindFirstChild("VisualModel")
-    if visualModel
-        and visualModel:IsA("Model")
-        and visualModel:FindFirstChildOfClass("Humanoid")
+    if character
+        and character:IsA("Model")
+        and character.Parent
+        and character:GetAttribute("PreviewRig") ~= true
     then
-        return visualModel
+        return character
     end
 
-    local character = LocalPlayer.Character
-    if character and character:IsA("Model") and character.Parent then
-        return character
+    local localCharacter = LocalPlayer.Character
+    if localCharacter
+        and localCharacter:IsA("Model")
+        and localCharacter.Parent
+        and localCharacter:GetAttribute("PreviewRig") ~= true
+    then
+        return localCharacter
     end
 
     return nil
