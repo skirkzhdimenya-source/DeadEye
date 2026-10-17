@@ -434,7 +434,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.238"
+local SCRIPT_VERSION = "1.239"
 __DDLog("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
