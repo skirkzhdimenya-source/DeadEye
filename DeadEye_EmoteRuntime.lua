@@ -66,20 +66,34 @@ end
 --// =========================================================
 --// LOCK NATIVE SELECTION VARIANT
 --// =========================================================
-local function resolveReplacementSelectionIndex(object, replaceModule)
+local function resolveReplacementSelectionIndex(object, originalModule, replaceModule)
     -- Custom EmoteModule scripts may implement their own selection rules.
     if replaceModule:FindFirstChild("EmoteModule") then
         return nil
     end
 
-    local selection = replaceModule:FindFirstChild("Selection")
-    if not selection then
+    local replacementSelection = replaceModule:FindFirstChild("Selection")
+    if not replacementSelection then
         return nil
     end
 
-    local selectionCount = #selection:GetChildren()
-    if selectionCount < 1 then
+    local replacementCount = #replacementSelection:GetChildren()
+    if replacementCount < 1 then
         return nil
+    end
+
+    -- EmoteNum is shared character data, not proof that the original emote
+    -- has variants. When the source has no Selection (or only one child), any
+    -- existing EmoteNum may be left over from an earlier emote. Do not let
+    -- that stale index pick a random-looking variant of this replacement.
+    local originalSelection = originalModule
+        and originalModule:FindFirstChild("Selection")
+    local originalCount = originalSelection
+        and #originalSelection:GetChildren()
+        or 0
+
+    if originalCount <= 1 then
+        return 1
     end
 
     local dataRegistry = object and object.DataRegistry
@@ -87,32 +101,30 @@ local function resolveReplacementSelectionIndex(object, replaceModule)
         return 1
     end
 
-    -- Native Emote.GetSelection waits up to three seconds for EmoteNum and
-    -- then falls back to Selection:GetChildren()[1]. Resolve that value once
-    -- before stopping the native emote so this wait cannot freeze playback.
+    -- Match the index chosen for a genuinely variant-based source emote.
+    -- If the index doesn't exist on the replacement, fall back to its first
+    -- child. Wait only when the source itself actually has multiple variants.
     local startedAt = tick()
-    local emoteNum = 0
 
     repeat
         local readOK, value = pcall(function()
             return dataRegistry:Get("EmoteNum")
         end)
-        emoteNum = readOK and (tonumber(value) or 0) or 0
+        local emoteNum = readOK and (tonumber(value) or 0) or 0
 
         if emoteNum ~= 0 then
-            -- The native method checks the timeout after observing a value,
-            -- so a value arriving at/after the deadline still falls back to 1.
+            -- Native GetSelection falls back to child 1 after its 3s deadline.
             if tick() - startedAt >= 3 then
                 return 1
             end
 
             if emoteNum >= 1
-                and emoteNum <= selectionCount
+                and emoteNum <= originalCount
+                and emoteNum <= replacementCount
                 and emoteNum % 1 == 0 then
                 return emoteNum
             end
 
-            -- The original index does not exist on the replacement.
             return 1
         end
 
@@ -534,9 +546,16 @@ local function startReplacement(
             return
         end
 
-        -- Resolve the replacement's variant while the native emote is still
-        -- alive. The value is then reused for both animation and visual model.
-        local selectedIndex = resolveReplacementSelectionIndex(object, replaceModule)
+        local originalModule = prepareOriginalModule(originalId)
+
+        -- Only carry an EmoteNum over when the source emote really has
+        -- multiple variants. Otherwise it may be stale, and the replacement
+        -- should start at its first variant.
+        local selectedIndex = resolveReplacementSelectionIndex(
+            object,
+            originalModule,
+            replaceModule
+        )
 
         local liveSlotAfterResolve = getSlotByOriginalId(originalId)
         if myGeneration ~= replacementGeneration
