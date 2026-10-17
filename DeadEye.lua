@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.235
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.236
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.235"
+local SCRIPT_VERSION = "1.236"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -1927,6 +1927,13 @@ others.status = nil
 others.fieldButtons = {}
 others.fieldBoxes = {}
 others.firstPersonTransparency = {}
+others.originalDescriptionsByHumanoid = {}
+others.appliedHumanoids = {}
+others.pendingHumanoids = {}
+others.avatarSyncEnabled = false
+others.avatarSyncConnections = {}
+others.avatarSyncConnection = nil
+others.lastAppliedDescription = nil
 
 local unusualConnections = {}
 local unusualDestroyed = false
@@ -2437,6 +2444,214 @@ function cosmetic.replaceArray(cosmetics)
     return result or cosmetics
 end
 
+--// Resolve the current visual rig by its RigService binding.
+--// Same-name models under Workspace.Rigs can represent different contexts.
+local cachedMenuPreviewModel = nil
+local nextMenuPreviewScan = 0
+local cachedUnusualRigService = nil
+
+local function getUnusualRigService()
+    if cachedUnusualRigService then
+        return cachedUnusualRigService
+    end
+
+    local ok, service = pcall(function()
+        return require(ReplicatedStorage.Services.Asset.RigService)
+    end)
+
+    if ok then
+        cachedUnusualRigService = service
+    end
+
+    return cachedUnusualRigService
+end
+
+local function getCurrentMenuPreviewModel()
+    local function isPreview(model)
+        return model
+            and model:IsA("Model")
+            and model.Parent ~= nil
+            and model.Name == "VisualModel"
+            and model:GetAttribute("PreviewRig") == true
+            and model:FindFirstChildOfClass("Humanoid") ~= nil
+    end
+
+    for _, containerName in ipairs({ "MenuScene", "MenuView" }) do
+        local container = workspace:FindFirstChild(containerName)
+        local candidate = container and container:FindFirstChild("VisualModel")
+        if isPreview(candidate) then
+            cachedMenuPreviewModel = candidate
+            return candidate
+        end
+    end
+
+    if isPreview(cachedMenuPreviewModel) then
+        return cachedMenuPreviewModel
+    end
+
+    cachedMenuPreviewModel = nil
+    if os.clock() < nextMenuPreviewScan then
+        return nil
+    end
+    nextMenuPreviewScan = os.clock() + 0.5
+
+    for _, instance in ipairs(workspace:GetDescendants()) do
+        if isPreview(instance) then
+            cachedMenuPreviewModel = instance
+            return instance
+        end
+    end
+
+    return nil
+end
+
+local function isRootJointBoundToCharacter(rig, characterModel)
+    if not rig
+        or not characterModel
+        or not rig:IsA("Model")
+        or not characterModel:IsA("Model")
+    then
+        return false
+    end
+
+    local characterRoot = characterModel:FindFirstChild("HumanoidRootPart")
+    if not characterRoot or not characterRoot:IsA("BasePart") then
+        return false
+    end
+
+    local joints = rig:FindFirstChild("Joints")
+    local torsoRot = joints and joints:FindFirstChild("TorsoRot", true)
+    if not torsoRot then
+        torsoRot = rig:FindFirstChild("TorsoRot", true)
+    end
+
+    if not torsoRot then
+        return false
+    end
+
+    if torsoRot:IsA("JointInstance") then
+        return torsoRot.Part0 == characterRoot
+    elseif torsoRot:IsA("AnimationConstraint") then
+        local attachment = torsoRot.Attachment0
+        return attachment ~= nil and attachment.Parent == characterRoot
+    end
+
+    return false
+end
+
+local function getVisualRigBoundToCharacter(characterModel)
+    if not characterModel
+        or not characterModel:IsA("Model")
+        or not characterModel.Parent
+    then
+        return nil
+    end
+
+    local rigService = getUnusualRigService()
+    if not rigService then
+        return nil
+    end
+
+    local function isBoundToTarget(rig)
+        if not rig
+            or not rig:IsA("Model")
+            or not rig.Parent
+            or rig.Name ~= LocalPlayer.Name
+        then
+            return false
+        end
+
+        local lookupOK, boundCharacter = pcall(function()
+            return rigService:GetCharacterFromRig(rig)
+        end)
+
+        if lookupOK and boundCharacter then
+            return boundCharacter == characterModel
+        end
+
+        return isRootJointBoundToCharacter(rig, characterModel)
+    end
+
+    local lookupOK, boundRig = pcall(function()
+        return rigService:GetRigFromCharacter(characterModel)
+    end)
+
+    if lookupOK and isBoundToTarget(boundRig) then
+        return boundRig
+    end
+
+    local rigsFolder = workspace:FindFirstChild("Rigs")
+    if rigsFolder then
+        for _, candidate in ipairs(rigsFolder:GetChildren()) do
+            if isBoundToTarget(candidate) then
+                return candidate
+            end
+        end
+    end
+
+    return nil
+end
+
+local function getBoundVisualRigModel()
+    local characterObject
+    pcall(function()
+        characterObject = __UI.CharacterService:GetLocalCharacter()
+    end)
+
+    if not characterObject then
+        return nil
+    end
+
+    local rigComponent = characterObject.Rig
+    local nativeRig = rigComponent and rigComponent.Rig
+    local model = nativeRig and nativeRig.Model
+    local rigsFolder = workspace:FindFirstChild("Rigs")
+
+    if model
+        and model:IsA("Model")
+        and model.Parent
+        and model.Name == LocalPlayer.Name
+        and rigsFolder
+        and model.Parent == rigsFolder
+    then
+        return model
+    end
+
+    return getVisualRigBoundToCharacter(characterObject.Model)
+end
+
+local function getCurrentCosmeticTargetRig()
+    local boundRig = getBoundVisualRigModel()
+    if boundRig and boundRig.Parent then
+        return boundRig
+    end
+
+    -- CharacterService may not expose a local character while the menu is
+    -- open. Resolve a live round model by its explicit RigService binding.
+    local playersFolder = workspace:FindFirstChild("Players")
+    if playersFolder then
+        for _, character in ipairs(playersFolder:GetChildren()) do
+            if character:IsA("Model")
+                and character.Name == LocalPlayer.Name
+                and character.Parent
+                and character:GetAttribute("PreviewRig") ~= true
+            then
+                local rig = getVisualRigBoundToCharacter(character)
+                if rig then
+                    return rig
+                end
+            end
+        end
+    end
+
+    local preview = getCurrentMenuPreviewModel()
+    if preview then
+        return getVisualRigBoundToCharacter(preview)
+    end
+
+    return nil
+end
+
 function cosmetic.getLiveRig()
     local characterObject
     local model
@@ -2478,11 +2693,7 @@ function cosmetic.refreshRig()
         return false
     end
 
-    local live =
-        workspace:FindFirstChild("Rigs")
-        and workspace.Rigs:FindFirstChild(
-            LocalPlayer.Name
-        )
+    local live = getCurrentCosmeticTargetRig()
 
     if not live
         or not live:IsA("Model")
@@ -2988,11 +3199,7 @@ function cosmetic.installHook()
                             boombox = boombox
                         }
 
-                        local liveBefore =
-                            workspace:FindFirstChild("Rigs")
-                            and workspace.Rigs:FindFirstChild(
-                                LocalPlayer.Name
-                            )
+                        local liveBefore = getCurrentCosmeticTargetRig()
 
                         if liveBefore
                             and liveBefore:IsA("Model")
@@ -4780,92 +4987,90 @@ do
         )
 end
 --// =========================================================
---// GET REAL PLAYER CHARACTER
+--// GET REAL PLAYER CHARACTER OR MENU PREVIEW
 --// =========================================================
-function UnusualFns.getUnusualPlayerCharacter()
-    local folder =
-        workspace:FindFirstChild(
-            "Players"
-        )
-    if folder then
-        local character =
-            folder:FindFirstChild(
-                LocalPlayer.Name
-            )
-        if character then
-            return character
-        end
-    end
-    return LocalPlayer.Character
+function UnusualFns.getUnusualMenuPreviewCharacter()
+    return getCurrentMenuPreviewModel()
 end
---// =========================================================
---// GET VISUAL RIG
---// =========================================================
-function UnusualFns.getUnusualVisualRig()
-    local folder =
-        workspace:FindFirstChild(
-            "Rigs"
-        )
 
-    if folder then
-        local rig =
-            folder:FindFirstChild(
-                LocalPlayer.Name
-            )
-
-        if rig then
-            return rig
-        end
-    end
-
-    local playersFolder =
-        workspace:FindFirstChild(
-            "Players"
-        )
-
+function UnusualFns.getUnusualPlayerCharacter()
+    -- Prefer the actual round character; never mistake the menu preview for it.
+    local playersFolder = workspace:FindFirstChild("Players")
     if playersFolder then
-        local character =
-            playersFolder:FindFirstChild(
-                LocalPlayer.Name
-            )
-
-        if character then
-            return character
+        for _, character in ipairs(playersFolder:GetChildren()) do
+            if character:IsA("Model")
+                and character.Name == LocalPlayer.Name
+                and character.Parent
+                and character:GetAttribute("PreviewRig") ~= true
+            then
+                return character
+            end
         end
     end
 
-    local menuView =
-        workspace:FindFirstChild(
-            "MenuView"
-        )
-
-    if menuView then
-        local visualModel =
-            menuView:FindFirstChild(
-                "VisualModel"
-            )
-
-        if visualModel
-            and visualModel:IsA("Model")
-            and visualModel:FindFirstChildOfClass(
-                "Humanoid"
-            )
-        then
-            return visualModel
-        end
+    local preview = UnusualFns.getUnusualMenuPreviewCharacter()
+    if preview then
+        return preview
     end
 
-    local character =
-        LocalPlayer.Character
-
+    local character = LocalPlayer.Character
     if character
         and character:IsA("Model")
+        and character.Parent
+        and character:GetAttribute("PreviewRig") ~= true
     then
         return character
     end
 
     return nil
 end
+
+--// =========================================================
+--// GET VISUAL RIG
+--// =========================================================
+function UnusualFns.getUnusualVisualRig()
+    -- In a round, CharacterService owns the exact visual rig binding.
+    local boundRig = getBoundVisualRigModel()
+    if boundRig
+        and boundRig:IsA("Model")
+        and boundRig.Parent
+    then
+        return boundRig
+    end
+
+    -- In the menu, ask RigService for the rig bound to this exact preview.
+    local preview = UnusualFns.getUnusualMenuPreviewCharacter()
+    if preview then
+        return getVisualRigBoundToCharacter(preview)
+    end
+
+    -- If the service binding is temporarily unavailable, prefer the live
+    -- player's own model over an arbitrary cached same-name model in Rigs.
+    local playersFolder = workspace:FindFirstChild("Players")
+    if playersFolder then
+        for _, character in ipairs(playersFolder:GetChildren()) do
+            if character:IsA("Model")
+                and character.Name == LocalPlayer.Name
+                and character.Parent
+                and character:GetAttribute("PreviewRig") ~= true
+            then
+                return getVisualRigBoundToCharacter(character) or character
+            end
+        end
+    end
+
+    local character = LocalPlayer.Character
+    if character
+        and character:IsA("Model")
+        and character.Parent
+        and character:GetAttribute("PreviewRig") ~= true
+    then
+        return character
+    end
+
+    return nil
+end
+
 --// =========================================================
 --// GET COSMETIC RIG
 --// =========================================================
@@ -8882,6 +9087,11 @@ function UnusualFns.restoreUnusual()
         UnusualFns.restoreNativeWeldedTreeStates()
         UnusualFns.repairNativeJointLinks(visualRig)
 
+        --// The game's native visibility cache must include restored FX.
+        pcall(function()
+            __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
+        end)
+
         --// The original effect is now the live effect again.
         --// Keep the same instant P1/P3 behavior on it.
         UnusualFns.bindNativeParticlePOV(
@@ -9911,6 +10121,44 @@ RunService:BindToRenderStep(
     end
 )
 
+local function releaseDeadEyeVisualLocalTransparency()
+    local roots = {}
+    local seenRoots = {}
+
+    local function addRoot(root)
+        if root and not seenRoots[root] then
+            seenRoots[root] = true
+            table.insert(roots, root)
+        end
+    end
+
+    addRoot(UnusualFns.getUnusualVisualRig())
+    addRoot(UnusualFns.getUnusualPlayerCharacter())
+    addRoot(workspace:FindFirstChild("DeadEyeUnusualAnimatedVisuals"))
+    addRoot(workspace:FindFirstChild("DeadEyeUnusualVisuals"))
+
+    for _, root in ipairs(roots) do
+        pcall(function()
+            for _, object in ipairs(root:GetDescendants()) do
+                local tagged = false
+
+                pcall(function()
+                    tagged = object:GetAttribute("DeadEyeUnusualFX") == true
+                    if not tagged and object:IsA("BasePart") then
+                        tagged = object:GetAttribute("DeadEyeFirstPersonCosmetic") == true
+                    end
+                end)
+
+                if tagged and object.Parent then
+                    pcall(function()
+                        object.LocalTransparencyModifier = 0
+                    end)
+                end
+            end
+        end)
+    end
+end
+
 function UnusualFns.setUnusualFXForPOV(
     firstPerson,
     _deltaTime
@@ -9994,6 +10242,10 @@ function UnusualFns.setUnusualFXForPOV(
         end
     )
 
+    if not firstPerson then
+        pcall(releaseDeadEyeVisualLocalTransparency)
+    end
+
     --// The animation-only runtime clone must remain invisible.
     __UI.__L.hideUnusualAnimationSourceVisuals()
 
@@ -10065,6 +10317,8 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
     pcall(function()
         __UI.__L.hideUnusualAnimationSourceVisuals()
     end)
+
+    pcall(releaseDeadEyeVisualLocalTransparency)
 end
 
 pcall(function()
@@ -11591,35 +11845,27 @@ others.fieldBoxes = {}
 function others.getHumanoids()
     local result = {}
     local seen = {}
-    local function add(h)
-        if h
-            and h:IsA("Humanoid")
-            and not seen[h]
+
+    local function add(model)
+        if not model or not model:IsA("Model") or not model.Parent then
+            return
+        end
+
+        local humanoid = model:FindFirstChildOfClass("Humanoid")
+        if humanoid
+            and humanoid.Parent
+            and not seen[humanoid]
         then
-            seen[h] = true
-            table.insert(result, h)
+            seen[humanoid] = true
+            table.insert(result, humanoid)
         end
     end
-    local rig =
-        UnusualFns.getUnusualVisualRig()
-    if rig then
-        add(
-            rig:FindFirstChildOfClass(
-                "Humanoid"
-            )
-        )
-    end
-    local character =
-        UnusualFns.getUnusualPlayerCharacter()
-    if character then
-        add(
-            character:FindFirstChildOfClass(
-                "Humanoid"
-            )
-        )
-    end
+
+    add(UnusualFns.getUnusualVisualRig())
+    add(UnusualFns.getUnusualPlayerCharacter())
     return result
 end
+
 function others.getHumanoid()
     return others.getHumanoids()[1]
 end
@@ -11949,6 +12195,9 @@ function others.ensureSnapshot()
         humanoid
     others.originalDescription =
         clone
+    if type(others.captureOriginalDescriptionForHumanoid) == "function" then
+        pcall(others.captureOriginalDescriptionForHumanoid, humanoid)
+    end
     return true
 end
 function others.isR6()
@@ -12038,78 +12287,241 @@ function others.applyDescription(
 )
     if not others.isR6() then
         if others.status then
-            others.status.Text =
-                "R6 only"
+            others.status.Text = "R6 only"
         end
         return false
     end
+
+    local targetHumanoids = others.getHumanoids()
+    for _, humanoid in ipairs(targetHumanoids) do
+        others.captureOriginalDescriptionForHumanoid(humanoid)
+    end
+
     local applied = 0
     local lastError
 
-    for _, humanoid in ipairs(
-        others.getHumanoids()
-    ) do
-        local ok, err =
-            pcall(function()
-                humanoid:ApplyDescriptionResetAsync(
-                    description
-                )
+    for _, humanoid in ipairs(targetHumanoids) do
+        if humanoid and humanoid.Parent then
+            local ok, err = pcall(function()
+                humanoid:ApplyDescriptionResetAsync(description)
             end)
-        if not ok then
-            lastError =
-                err
-            local legacyOk, legacyErr =
-                pcall(function()
-                    humanoid:ApplyDescriptionReset(
-                        description
-                    )
+
+            if not ok then
+                lastError = err
+                local legacyOK, legacyError = pcall(function()
+                    humanoid:ApplyDescriptionReset(description)
                 end)
-            if legacyOk then
-                ok = true
-            else
-                lastError = legacyErr
+                if legacyOK then
+                    ok = true
+                else
+                    lastError = legacyError
+                end
             end
-        end
-        if ok then
-            applied += 1
-        end
-    end
-    if applied == 0 then
-        --// Last compatibility fallback.
-        for _, humanoid in ipairs(
-            others.getHumanoids()
-        ) do
-            local ok =
-                pcall(function()
-                    humanoid:ApplyDescriptionAsync(
-                        description
-                    )
-                end)
+
             if ok then
                 applied += 1
+                others.appliedHumanoids[humanoid] = true
             end
         end
     end
+
     if applied == 0 then
-        warn(
-            "[Others] Apply failed:",
-            lastError
-        )
+        for _, humanoid in ipairs(targetHumanoids) do
+            if humanoid and humanoid.Parent then
+                local ok = pcall(function()
+                    humanoid:ApplyDescriptionAsync(description)
+                end)
+                if ok then
+                    applied += 1
+                    others.appliedHumanoids[humanoid] = true
+                end
+            end
+        end
+    end
+
+    if applied == 0 then
+        warn("[Others] Apply failed:", lastError)
         if others.status then
-            others.status.Text =
-                "Apply Error"
+            others.status.Text = "Apply Error"
         end
         return false
     end
 
+    local savedDescription
     pcall(function()
-        if others.status then
-            others.status.Text =
-                "Applied"
-        end
+        savedDescription = description:Clone()
     end)
+    if savedDescription then
+        others.lastAppliedDescription = savedDescription
+        others.avatarSyncEnabled = true
+    end
+
+    if others.status then
+        others.status.Text = "Applied"
+    end
     return true
 end
+
+function others.captureOriginalDescriptionForHumanoid(humanoid)
+    if not humanoid
+        or not humanoid:IsA("Humanoid")
+        or not humanoid.Parent
+    then
+        return false
+    end
+
+    if others.originalDescriptionsByHumanoid[humanoid] then
+        return true
+    end
+
+    local sourceDescription
+    if humanoid == others.targetHumanoid and others.originalDescription then
+        sourceDescription = others.originalDescription
+    else
+        local ok, description = pcall(function()
+            return humanoid:GetAppliedDescription()
+        end)
+        if ok then
+            sourceDescription = description
+        end
+    end
+
+    if not sourceDescription then
+        return false
+    end
+
+    local clone
+    local ok = pcall(function()
+        clone = sourceDescription:Clone()
+    end)
+    if not ok or not clone then
+        return false
+    end
+
+    others.originalDescriptionsByHumanoid[humanoid] = clone
+    return true
+end
+
+function others.applyDescriptionDirect(humanoid, description)
+    if not humanoid
+        or not humanoid.Parent
+        or not description
+    then
+        return false
+    end
+
+    local clone
+    pcall(function()
+        clone = description:Clone()
+    end)
+    if not clone then
+        return false
+    end
+
+    local ok = pcall(function()
+        humanoid:ApplyDescriptionResetAsync(clone)
+    end)
+    if not ok then
+        ok = pcall(function()
+            humanoid:ApplyDescriptionReset(clone)
+        end)
+    end
+    if not ok then
+        ok = pcall(function()
+            humanoid:ApplyDescriptionAsync(clone)
+        end)
+    end
+    return ok
+end
+
+function others.findLocalRigModel(instance)
+    local current = instance
+    while current and current ~= workspace do
+        if current:IsA("Model")
+            and current.Name == LocalPlayer.Name
+            and current.Parent
+            and (current.Parent.Name == "Rigs" or current.Parent.Name == "Players")
+        then
+            return current
+        end
+        current = current.Parent
+    end
+    return nil
+end
+
+function others.applyDescriptionToNewHumanoid(humanoid)
+    if not humanoid
+        or not humanoid:IsA("Humanoid")
+        or not humanoid.Parent
+        or others.appliedHumanoids[humanoid]
+        or others.pendingHumanoids[humanoid]
+        or not others.avatarSyncEnabled
+        or not others.lastAppliedDescription
+    then
+        return
+    end
+
+    local model = others.findLocalRigModel(humanoid)
+    if not model or humanoid.Parent ~= model then
+        return
+    end
+
+    others.pendingHumanoids[humanoid] = true
+    task.spawn(function()
+        task.wait(0.15)
+
+        if not others.avatarSyncEnabled
+            or not humanoid.Parent
+            or not model.Parent
+            or not others.lastAppliedDescription
+        then
+            others.pendingHumanoids[humanoid] = nil
+            return
+        end
+
+        others.captureOriginalDescriptionForHumanoid(humanoid)
+
+        local description
+        pcall(function()
+            description = others.lastAppliedDescription:Clone()
+        end)
+
+        local succeeded = false
+        if description then
+            succeeded = others.applyDescriptionDirect(humanoid, description)
+        end
+
+        if succeeded then
+            others.appliedHumanoids[humanoid] = true
+        end
+
+        others.pendingHumanoids[humanoid] = nil
+    end)
+end
+
+local avatarRigAddedConnection = workspace.DescendantAdded:Connect(function(object)
+    if object:IsA("Humanoid") then
+        others.applyDescriptionToNewHumanoid(object)
+    elseif object:IsA("Model")
+        and object.Name == LocalPlayer.Name
+        and object.Parent
+        and (object.Parent.Name == "Rigs" or object.Parent.Name == "Players")
+    then
+        task.defer(function()
+            if not object.Parent then
+                return
+            end
+            local humanoid = object:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                others.applyDescriptionToNewHumanoid(humanoid)
+            end
+        end)
+    end
+end)
+table.insert(others.avatarSyncConnections, avatarRigAddedConnection)
+others.avatarSyncConnection = avatarRigAddedConnection
+UnusualFns.addUnusualConnection(avatarRigAddedConnection)
+
 function others.applyField(
     slot,
     textValue
@@ -12214,20 +12626,112 @@ end
 function others.restore(
     keepSnapshot
 )
-    if not others.originalDescription then
-        return false
+    local restored = 0
+
+    if keepSnapshot then
+        if not others.originalDescription
+            and next(others.originalDescriptionsByHumanoid) == nil
+        then
+            return false
+        end
+
+        others.avatarSyncEnabled = false
+        local restoredHumanoids = {}
+
+        for humanoid, description in pairs(others.originalDescriptionsByHumanoid) do
+            if others.applyDescriptionDirect(humanoid, description) then
+                restored += 1
+                restoredHumanoids[humanoid] = true
+                others.appliedHumanoids[humanoid] = true
+            end
+        end
+
+        local currentHumanoids = {}
+        pcall(function()
+            currentHumanoids = others.getHumanoids()
+        end)
+
+        for _, humanoid in ipairs(currentHumanoids) do
+            if not restoredHumanoids[humanoid] then
+                local description = others.originalDescriptionsByHumanoid[humanoid]
+                    or others.originalDescription
+                if description and others.applyDescriptionDirect(humanoid, description) then
+                    restored += 1
+                    restoredHumanoids[humanoid] = true
+                    others.appliedHumanoids[humanoid] = true
+                end
+            end
+        end
+
+        if restored == 0 and others.originalDescription then
+            if others.applyDescription(others.originalDescription) then
+                restored = 1
+            end
+        end
+
+        if others.originalDescription then
+            pcall(function()
+                others.lastAppliedDescription = others.originalDescription:Clone()
+            end)
+            others.avatarSyncEnabled = others.lastAppliedDescription ~= nil
+        else
+            others.lastAppliedDescription = nil
+            others.avatarSyncEnabled = false
+        end
+
+        return restored > 0
     end
-    local result =
-        others.applyDescription(
-            others.originalDescription
-        )
-    if not keepSnapshot then
-        others.originalDescription =
-            nil
-        others.targetHumanoid =
-            nil
+
+    -- Shutdown: stop applying edited appearances before restoring originals.
+    others.avatarSyncEnabled = false
+    others.lastAppliedDescription = nil
+
+    for _, connection in ipairs(others.avatarSyncConnections) do
+        pcall(function()
+            connection:Disconnect()
+        end)
     end
-    return result
+    table.clear(others.avatarSyncConnections)
+    others.avatarSyncConnection = nil
+
+    pcall(function()
+        RunService:UnbindFromRenderStep("DeadEyeOthersNativeVisibility")
+        RunService:UnbindFromRenderStep("DeadEyeOthersFirstPersonVisibility")
+    end)
+
+    local restoredHumanoids = {}
+    for humanoid, description in pairs(others.originalDescriptionsByHumanoid) do
+        if others.applyDescriptionDirect(humanoid, description) then
+            restored += 1
+            restoredHumanoids[humanoid] = true
+        end
+    end
+
+    local currentHumanoids = {}
+    local listOK = pcall(function()
+        currentHumanoids = others.getHumanoids()
+    end)
+
+    if listOK then
+        for _, humanoid in ipairs(currentHumanoids) do
+            if not restoredHumanoids[humanoid] then
+                local description = others.originalDescriptionsByHumanoid[humanoid]
+                    or others.originalDescription
+                if description and others.applyDescriptionDirect(humanoid, description) then
+                    restored += 1
+                    restoredHumanoids[humanoid] = true
+                end
+            end
+        end
+    end
+
+    table.clear(others.originalDescriptionsByHumanoid)
+    table.clear(others.appliedHumanoids)
+    table.clear(others.pendingHumanoids)
+    others.originalDescription = nil
+    others.targetHumanoid = nil
+
+    return restored > 0
 end
 
 --// =========================================================
@@ -22727,6 +23231,10 @@ __UI.__L.cleanupUnusual = function()
 
     UnusualFns.restoreNativeWeldedTreeStates()
 
+    pcall(function()
+        __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
+    end)
+
     unusualActive =
         false
 
@@ -22736,6 +23244,10 @@ __UI.__L.cleanupUnusual = function()
 
     pcall(function()
         cosmetic.cleanup()
+    end)
+
+    pcall(function()
+        __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
     end)
 
     --// Do not rebuild the native Unusual here.
@@ -25990,6 +26502,23 @@ __UI.__L.cleanup = function()
         if genv.DEADEYE_PORTRAIT_CLEANUP then
             genv.DEADEYE_PORTRAIT_CLEANUP()
         end
+    end)
+
+    pcall(function()
+        if type(genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP) == "function" then
+            genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP()
+        end
+    end)
+    genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = nil
+
+    pcall(function()
+        RunService:UnbindFromRenderStep("DeadEyeFirstPersonCosmeticVisibility")
+        RunService:UnbindFromRenderStep("DeadEyeOthersNativeVisibility")
+        RunService:UnbindFromRenderStep("DeadEyeOthersFirstPersonVisibility")
+    end)
+
+    pcall(function()
+        __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
     end)
 
     pcall(function()
