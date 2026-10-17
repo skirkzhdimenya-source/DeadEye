@@ -463,7 +463,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.249"
+local SCRIPT_VERSION = "1.250"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -9603,9 +9603,10 @@ function UnusualFns.captureNativeUnusualSnapshot(
     local function isDeadEyeOwned(object)
         local owned = false
         pcall(function()
-            owned =
-                object:GetAttribute("DeadEyeUnusualFX") == true
-                or object:GetAttribute("DeadEyeNativeFallback") == true
+            --// A marked native fallback can be the only surviving visual
+            --// baseline after AddCosmetics. It must remain snapshot-able so
+            --// the next toggle can preserve it before removing the fallback.
+            owned = object:GetAttribute("DeadEyeUnusualFX") == true
         end)
         return owned
     end
