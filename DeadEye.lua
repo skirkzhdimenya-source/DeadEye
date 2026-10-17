@@ -13437,6 +13437,11 @@ function mainJump.restoreFOVBodyVisibility()
         end
 
         visibility:UpdateVisibility()
+
+        -- Native UpdateVisibility() omits Accessory descendants. Reapply the
+        -- restored native visibility type once so cosmetics do not retain the
+        -- last first-person state after the hook is removed.
+        pcall(mainJump.applyFOVBodyAccessoryVisibility, visibility)
     end)
 end
 
