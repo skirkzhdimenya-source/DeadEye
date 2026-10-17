@@ -3017,8 +3017,8 @@ function cosmetic.getLiveRig()
     return characterObject.Rig
 end
 
-function cosmetic.refreshRig()
-    __DDCore.Log("COSMETIC.refreshRig START: enabled=" .. tostring(cosmetic.enabled)
+function cosmetic.refreshRigSingle(live, isAdditionalTarget)
+    __DDCore.Log("COSMETIC.refreshRigSingle START: enabled=" .. tostring(cosmetic.enabled)
         .. ", refreshBusy=" .. tostring(cosmetic.refreshBusy)
         .. ", skinDescription=" .. tostring(cosmetic.skinDescription ~= nil)
         .. ", directAction1=" .. tostring(cosmetic.directAction[1])
@@ -3028,18 +3028,13 @@ function cosmetic.refreshRig()
         return false
     end
 
-    local live =
-        workspace:FindFirstChild("Rigs")
-        and workspace.Rigs:FindFirstChild(
-            LocalPlayer.Name
-        )
-
     if not live
         or not live:IsA("Model")
+        or live.Name ~= LocalPlayer.Name
+        or not live.Parent
     then
-        __DDCore.Log("COSMETIC.refreshRig FAIL: live rig missing/not Model; live="
-            .. tostring(live) .. ", RigsFolder=" .. tostring(workspace:FindFirstChild("Rigs"))
-            .. ", playerName=" .. tostring(LocalPlayer.Name))
+        __DDCore.Log("COSMETIC.refreshRigSingle FAIL: target rig missing/invalid; live="
+            .. tostring(live) .. ", playerName=" .. tostring(LocalPlayer.Name))
         return false
     end
 
@@ -3132,11 +3127,14 @@ function cosmetic.refreshRig()
         return false
     end
 
-    local equippedUnusualId =
-        UnusualFns.getEquippedUnusualId()
+    local equippedUnusualId
+    if not isAdditionalTarget then
+        equippedUnusualId = UnusualFns.getEquippedUnusualId()
+    end
 
     local restoreUnusualSwap =
-        unusualEnabled
+        not isAdditionalTarget
+        and unusualEnabled
         and unusualActive
         and unusualRuntime.originalId
         and tonumber(
@@ -3512,6 +3510,70 @@ function cosmetic.refreshRig()
     return success
 end
 
+function cosmetic.getLiveRigModels()
+    local result = {}
+    local seen = {}
+    local rigs = workspace:FindFirstChild("Rigs")
+    if not rigs then
+        return result
+    end
+
+    --// There can be multiple same-name Model children. Refresh each distinct
+    --// instance because the game's active visual may not be FindFirstChild().
+    for _, model in ipairs(rigs:GetChildren()) do
+        if model:IsA("Model")
+            and model.Name == LocalPlayer.Name
+            and not seen[model]
+        then
+            seen[model] = true
+            table.insert(result, model)
+        end
+    end
+
+    return result
+end
+
+function cosmetic.refreshRig()
+    if cosmetic.refreshBusy then
+        __DDCore.Log("COSMETIC.refreshRig SKIP: refreshBusy was already true")
+        return false
+    end
+
+    local targets = cosmetic.getLiveRigModels()
+    if #targets == 0 then
+        __DDCore.Log("COSMETIC.refreshRig FAIL: no matching Models under Workspace.Rigs")
+        return false
+    end
+
+    local targetNames = {}
+    for index, target in ipairs(targets) do
+        local path = tostring(target)
+        pcall(function()
+            path = target:GetFullName()
+        end)
+        table.insert(targetNames, tostring(index) .. ":" .. path)
+    end
+    __DDCore.Log("COSMETIC.refreshRig TARGETS|count=" .. tostring(#targets)
+        .. "|models=" .. table.concat(targetNames, ";"))
+
+    local successCount = 0
+    for index, target in ipairs(targets) do
+        local ok, result = pcall(function()
+            return cosmetic.refreshRigSingle(target, index > 1)
+        end)
+
+        if ok and result == true then
+            successCount += 1
+        elseif not ok then
+            __DDCore.Log("COSMETIC.refreshRig TARGET FAILED|index="
+                .. tostring(index) .. "|model=" .. tostring(target)
+                .. "|error=" .. tostring(result))
+        end
+    end
+
+    return successCount > 0
+end
+
 function cosmetic.installHook()
     if cosmetic.hooked
         or type(hookfunction) ~= "function"
@@ -3559,10 +3621,7 @@ function cosmetic.installHook()
                         }
 
                         local liveBefore =
-                            workspace:FindFirstChild("Rigs")
-                            and workspace.Rigs:FindFirstChild(
-                                LocalPlayer.Name
-                            )
+                            cosmetic.getLiveRigModels()[1]
 
                         if liveBefore
                             and liveBefore:IsA("Model")
