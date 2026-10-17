@@ -64,41 +64,97 @@ local function getRigModel(object)
     return nil
 end
 --// =========================================================
---// MATCH NATIVE SELECTION LOOKUP
+--// LOCK NATIVE SELECTION VARIANT
 --// =========================================================
-local function getEmoteInitController(object, replaceModule, controller)
-    -- Custom EmoteModule implementations may rely on the full controller API;
-    -- pass those the native controller unchanged.
-    local hasCustomEmoteModule = replaceModule:FindFirstChild("EmoteModule") ~= nil
-    local selection = not hasCustomEmoteModule and replaceModule:FindFirstChild("Selection")
+local function resolveReplacementSelectionIndex(object, replaceModule)
+    -- Custom EmoteModule scripts may implement their own selection rules.
+    if replaceModule:FindFirstChild("EmoteModule") then
+        return nil
+    end
+
+    local selection = replaceModule:FindFirstChild("Selection")
+    if not selection then
+        return nil
+    end
+
+    local selectionCount = #selection:GetChildren()
+    if selectionCount < 1 then
+        return nil
+    end
+
+    local dataRegistry = object and object.DataRegistry
+    if not dataRegistry then
+        return 1
+    end
+
+    -- Native Emote.GetSelection waits up to three seconds for EmoteNum and
+    -- then falls back to Selection:GetChildren()[1]. Resolve that value once
+    -- before stopping the native emote so this wait cannot freeze playback.
+    local startedAt = tick()
+    local emoteNum = 0
+
+    repeat
+        local readOK, value = pcall(function()
+            return dataRegistry:Get("EmoteNum")
+        end)
+        emoteNum = readOK and (tonumber(value) or 0) or 0
+
+        if emoteNum ~= 0 then
+            -- The native method checks the timeout after observing a value,
+            -- so a value arriving at/after the deadline still falls back to 1.
+            if tick() - startedAt >= 3 then
+                return 1
+            end
+
+            if emoteNum >= 1
+                and emoteNum <= selectionCount
+                and emoteNum % 1 == 0 then
+                return emoteNum
+            end
+
+            -- The original index does not exist on the replacement.
+            return 1
+        end
+
+        if tick() - startedAt >= 3 then
+            return 1
+        end
+
+        task.wait()
+    until false
+end
+
+local function getEmoteInitController(object, replaceModule, controller, selectedIndex)
+    -- Custom EmoteModule implementations and non-Selection emotes receive
+    -- the original controller, exactly as before.
+    if replaceModule:FindFirstChild("EmoteModule") then
+        return controller
+    end
+
+    local selection = replaceModule:FindFirstChild("Selection")
     if not selection then
         return controller
     end
 
     local selectionCount = #selection:GetChildren()
     local dataRegistry = object and object.DataRegistry
-    if not dataRegistry or selectionCount < 1 then
+    if not dataRegistry or selectionCount < 1 or not selectedIndex then
         return controller
     end
 
-    -- Native Emote.GetSelection indexes Selection:GetChildren() by EmoteNum.
-    -- The replacement can have fewer variants than the original wheel entry.
-    -- Keep a valid index unchanged; when it is out of range, use the first
-    -- replacement variant rather than letting GetAnimations/SetModel index nil.
+    -- GetAnimations() and SetModel() each call GetSelection(). Give both
+    -- calls one immutable EmoteNum snapshot, rather than rereading a mutable
+    -- character registry and potentially selecting different children.
+    local lockedIndex = selectedIndex
     local registryProxy = {}
     setmetatable(registryProxy, {
         __index = function(_, key)
             if key == "Get" then
                 return function(_, term)
-                    local value = dataRegistry:Get(term)
                     if term == "EmoteNum" then
-                        local index = tonumber(value)
-                        if index and index ~= 0
-                            and (index < 1 or index > selectionCount or index % 1 ~= 0) then
-                            return 1
-                        end
+                        return lockedIndex
                     end
-                    return value
+                    return dataRegistry:Get(term)
                 end
             end
 
@@ -112,8 +168,6 @@ local function getEmoteInitController(object, replaceModule, controller)
         end
     })
 
-    -- The stock Emote.Init only needs p4.DataRegistry. The proxy delegates
-    -- every other registry read/method to the real registry.
     return setmetatable({
         DataRegistry = registryProxy
     }, {
@@ -377,9 +431,11 @@ end
 --// =========================================================
 local function createReplacement(
     object,
-    replaceId
+    replaceId,
+    selectedIndex,
+    preparedModule
 )
-    local replaceModule =
+    local replaceModule = preparedModule or
         prepareReplaceModule(
             replaceId
         )
@@ -399,7 +455,8 @@ local function createReplacement(
     local emoteInitController = getEmoteInitController(
         object,
         replaceModule,
-        animationsController
+        animationsController,
+        selectedIndex
     )
     local success, result =
         pcall(function()
@@ -469,6 +526,29 @@ local function startReplacement(
             return
         end
 
+        local replaceModule = prepareReplaceModule(replaceId)
+        if not replaceModule then
+            failedOriginalId = originalId
+            failedReplaceId = replaceId
+            replacementRunning = false
+            return
+        end
+
+        -- Resolve the replacement's variant while the native emote is still
+        -- alive. The value is then reused for both animation and visual model.
+        local selectedIndex = resolveReplacementSelectionIndex(object, replaceModule)
+
+        local liveSlotAfterResolve = getSlotByOriginalId(originalId)
+        if myGeneration ~= replacementGeneration
+            or not isEnabled()
+            or tonumber(getCurrentEmoteId(object)) ~= tonumber(originalId)
+            or getCharacterObject() ~= object
+            or not liveSlotAfterResolve
+            or tonumber(liveSlotAfterResolve.replaceId) ~= tonumber(replaceId) then
+            replacementRunning = false
+            return
+        end
+
         local animationsController = getAnimationsController(object)
         if not animationsController then
             replacementRunning = false
@@ -499,7 +579,9 @@ local function startReplacement(
         local replacement =
             createReplacement(
                 object,
-                replaceId
+                replaceId,
+                selectedIndex,
+                replaceModule
             )
         if not replacement then
             failedOriginalId = originalId
