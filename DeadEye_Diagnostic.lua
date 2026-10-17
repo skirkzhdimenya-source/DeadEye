@@ -63,7 +63,7 @@ function __DDCore.Log(message)
         or string.find(messageText, "THROW ", 1, true) ~= nil
         or string.find(messageText, "UNUSUAL FAIL:", 1, true) ~= nil
         or string.find(messageText, "UNUSUAL ACTIVATE OK:", 1, true) ~= nil
-        or string.find(messageText, "AVATAR ", 1, true) ~= nil
+        or string.find(messageText, "AVATAR RESET", 1, true) ~= nil
 
     if not keep then
         return
@@ -442,11 +442,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.267
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.268
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
---// Например: 1.266 -> 1.267. Основная версия остаётся 1.
+--// Например: 1.267 -> 1.268. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -473,7 +473,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.267"
+local SCRIPT_VERSION = "1.268"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -9769,19 +9769,8 @@ end
 --// =========================================================
 --// ACTIVATE UNUSUAL
 -- =========================================================
-local avatarMutationActivationPermit = false
 function UnusualFns.activateUnusual()
     UnusualFns.traceSwap("ACTIVATE_ENTER", "button/reapply path")
-    if genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS then
-        if avatarMutationActivationPermit then
-            -- Consume the one-shot permit before any yielding operation so other
-            -- UI activations remain blocked until the avatar transaction finishes.
-            avatarMutationActivationPermit = false
-        else
-            __DDCore.Log("UNUSUAL ACTIVATE DEFERRED|avatar mutation in progress")
-            return false
-        end
-    end
     if not unusualSlot.originalId
         or not unusualSlot.replaceId
     then
@@ -12400,19 +12389,6 @@ function others.getAllAvatarHumanoids()
         addModel(preview)
     end
 
-    -- The displayed menu model can exist even when the native preview resolver
-    -- returns nil (for example, after returning from a round). Include it directly.
-    local menuScene = workspace:FindFirstChild("MenuScene")
-    local menuVisualModel = menuScene and menuScene:FindFirstChild("VisualModel")
-    if menuVisualModel and menuVisualModel:IsA("Model") then
-        addModel(menuVisualModel)
-    end
-
-    -- PlayerCache models are persistent templates consumed by RigService, not
-    -- live avatar targets. They are rebuilt from HumanoidDescription separately
-    -- so we never ApplyDescriptionReset to a template whose joints RigService moved
-    -- into its private Joints folder.
-
     -- Retain the existing resolver's fallback targets without making the
     -- current UI state decide which of the two representations gets reset.
     local currentOK, currentTargets = pcall(function()
@@ -12428,157 +12404,6 @@ function others.getAllAvatarHumanoids()
     end
 
     return result
-end
-
--- Applying a HumanoidDescription can rebuild body parts and invalidate the native
--- Unusual tree captured by the swapper. Suspend the swap for the whole mutation,
--- then capture a fresh native baseline before re-enabling it.
-others.avatarMutationDepth = 0
-others.avatarMutationState = nil
-
-function others.beginAvatarMutation(operation)
-    -- ApplyDescriptionResetAsync can yield. Serialize mutations so an older
-    -- auto-apply cannot overwrite a newer Reset after the newer one completes.
-    while (others.avatarMutationDepth or 0) > 0 do
-        task.wait(0.05)
-    end
-
-    local state = {
-        operation = tostring(operation or "unknown"),
-        wasActive = unusualActive == true,
-        wasEnabled = unusualEnabled == true,
-        slotOriginalId = tonumber(unusualSlot.originalId),
-        slotReplacementId = tonumber(unusualSlot.replaceId),
-        safe = true,
-        initializing = false
-    }
-    if state.wasActive then
-        state.safe = false
-        state.initializing = true
-    end
-
-    others.avatarMutationState = state
-    others.avatarMutationDepth = 1
-    genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = true
-
-    if state.wasActive then
-        local restoreOK, restoreResult = pcall(function()
-            return UnusualFns.restoreUnusual()
-        end)
-        state.safe = restoreOK and not unusualActive
-        state.initializing = false
-        __DDCore.Log("AVATAR UNUSUAL SUSPEND|operation=" .. tostring(operation)
-            .. "|callOK=" .. tostring(restoreOK)
-            .. "|result=" .. tostring(restoreResult)
-            .. "|safeToMutate=" .. tostring(state.safe)
-            .. (restoreOK and "" or "|error=" .. tostring(restoreResult)))
-    end
-
-    local safe = state.safe == true and state.initializing ~= true
-    __DDCore.Log("AVATAR MUTATION BEGIN|operation=" .. tostring(operation)
-        .. "|depth=" .. tostring(others.avatarMutationDepth)
-        .. "|safe=" .. tostring(safe))
-    return {
-        state = state,
-        operation = tostring(operation or "unknown"),
-        safe = safe,
-        finished = false
-    }
-end
-
-function others.endAvatarMutation(token, operation)
-    if type(token) ~= "table" or token.finished then
-        return true
-    end
-    token.finished = true
-
-    if token.state ~= others.avatarMutationState then
-        return false
-    end
-
-    others.avatarMutationDepth = math.max(0, (others.avatarMutationDepth or 1) - 1)
-    if others.avatarMutationDepth > 0 then
-        return true
-    end
-
-    local state = others.avatarMutationState
-    -- Keep the mutation lock held while reactivating/restoring the native effect.
-    -- That operation yields; releasing the lock first would let a second Reset race it.
-    others.avatarMutationDepth = 1
-    genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = true
-
-    if state and state.wasActive then
-        if not state.safe then
-            others.avatarMutationDepth = 0
-            others.avatarMutationState = nil
-            genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = false
-            __DDCore.Log("AVATAR UNUSUAL RESUME SKIPPED|reason=suspend failed; no avatar mutation should have run")
-            __DDCore.Log("AVATAR MUTATION END|operation=" .. tostring(operation)
-                .. "|safe=false")
-            return false
-        end
-
-        local shouldRemainActive = state.wasEnabled
-            and unusualEnabled
-            and genv.DEADEYE_UNUSUAL_POV_RUNNING ~= false
-
-        -- Re-activate once so the swap captures a fresh original-effect snapshot
-        -- after the avatar rig was rebuilt. If the user turned the swap off while
-        -- the mutation was running, immediately restore that freshly captured tree.
-        avatarMutationActivationPermit = true
-        local activateOK, activateResult = pcall(function()
-            return UnusualFns.activateUnusual()
-        end)
-        avatarMutationActivationPermit = false
-        __DDCore.Log("AVATAR UNUSUAL RESUME|operation=" .. tostring(operation)
-            .. "|activateCallOK=" .. tostring(activateOK)
-            .. "|activateResult=" .. tostring(activateResult)
-            .. "|leaveEnabled=" .. tostring(shouldRemainActive))
-
-        if activateOK and activateResult == true then
-            if not shouldRemainActive then
-                local restoreOK, restoreResult = pcall(function()
-                    return UnusualFns.restoreUnusual()
-                end)
-                __DDCore.Log("AVATAR UNUSUAL RESTORE_AFTER_MUTATION|callOK="
-                    .. tostring(restoreOK) .. "|result=" .. tostring(restoreResult))
-            end
-        elseif shouldRemainActive then
-            -- The menu/round rig may be between rebuild states; retry through the
-            -- existing bounded reapply path rather than losing the enabled toggle.
-            task.defer(function()
-                if unusualEnabled
-                    and not unusualActive
-                    and genv.DEADEYE_UNUSUAL_POV_RUNNING ~= false
-                then
-                    pcall(function()
-                        UnusualFns.reapplyUnusual()
-                    end)
-                end
-            end)
-        end
-    elseif unusualEnabled
-        and not unusualActive
-        and genv.DEADEYE_UNUSUAL_POV_RUNNING ~= false
-    then
-        -- A toggle can be clicked while a mutation is in progress; activateUnusual
-        -- defers it safely and this end hook gives the enabled toggle another try.
-        task.defer(function()
-            if unusualEnabled and not unusualActive then
-                pcall(function()
-                    UnusualFns.reapplyUnusual()
-                end)
-            end
-        end)
-    end
-
-    others.avatarMutationDepth = 0
-    others.avatarMutationState = nil
-    genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = false
-
-    __DDCore.Log("AVATAR MUTATION END|operation=" .. tostring(operation)
-        .. "|safe=" .. tostring(state and state.safe))
-    return true
 end
 
 function others.getHumanoid()
@@ -13044,124 +12869,57 @@ function others.applyDescription(
         end
         return false
     end
-
-    local candidates = {}
-    local listOK, listError = pcall(function()
-        candidates = others.getAllAvatarHumanoids()
-    end)
-    if not listOK then
-        candidates = others.getHumanoids()
-        __DDCore.Log("AVATAR APPLY TARGET LIST FALLBACK|error=" .. tostring(listError))
-    end
-
-    local targetHumanoids = {}
-    local seen = {}
-    for _, humanoid in ipairs(candidates) do
-        local isR6 = false
-        pcall(function()
-            isR6 = humanoid:IsA("Humanoid")
-                and humanoid.Parent ~= nil
-                and humanoid.RigType == Enum.HumanoidRigType.R6
-        end)
-        if isR6 and not seen[humanoid] then
-            seen[humanoid] = true
-            table.insert(targetHumanoids, humanoid)
-        end
-    end
-
-    if #targetHumanoids == 0 then
-        if others.status then
-            others.status.Text = "Apply failed • no R6 rigs"
-        end
-        __DDCore.Log("AVATAR APPLY FAILED|no R6 targets")
-        return false
-    end
-
-    for _, humanoid in ipairs(targetHumanoids) do
-        pcall(function()
-            others.captureOriginalDescriptionForHumanoid(humanoid)
-        end)
-    end
-
-    local mutation = others.beginAvatarMutation("apply-description")
-    if not mutation.safe then
-        others.endAvatarMutation(mutation, "apply-description-aborted")
-        __DDCore.Log("AVATAR APPLY ABORTED|Unusual could not be suspended safely")
-        if others.status then
-            others.status.Text = "Apply aborted • Unusual state"
-        end
-        return false
-    end
-
-    local failures = {}
-    local cacheOK, cacheDetail, cacheFound = others.replaceAvatarCacheSource(
-        description,
-        "R6"
-    )
-    if not cacheOK and cacheFound then
-        table.insert(failures, "PlayerCache.R6:" .. tostring(cacheDetail))
-        __DDCore.Log("AVATAR APPLY CACHE SOURCE FAILED|detail=" .. tostring(cacheDetail))
-    elseif cacheOK and cacheFound then
-        __DDCore.Log("AVATAR APPLY CACHE SOURCE OK|detail=" .. tostring(cacheDetail))
-    end
-
     local applied = 0
+    local lastError
+    local targetHumanoids = others.getHumanoids()
+
     for _, humanoid in ipairs(targetHumanoids) do
-        local modelPath = tostring(humanoid.Parent)
-        pcall(function()
-            modelPath = humanoid.Parent:GetFullName()
-        end)
+        others.captureOriginalDescriptionForHumanoid(humanoid)
+    end
 
+    for _, humanoid in ipairs(targetHumanoids) do
         local ok, err = pcall(function()
-            humanoid:ApplyDescriptionResetAsync(description)
-        end)
-        local resetAsyncError = not ok and tostring(err) or nil
-        if not ok then
-            ok, err = pcall(function()
-                humanoid:ApplyDescriptionReset(description)
+                humanoid:ApplyDescriptionResetAsync(
+                    description
+                )
             end)
+        if not ok then
+            lastError = err
+            local legacyOk, legacyErr = pcall(function()
+                    humanoid:ApplyDescriptionReset(
+                        description
+                    )
+                end)
+            if legacyOk then
+                ok = true
+            else
+                lastError = legacyErr
+            end
         end
-
         if ok then
             applied += 1
             others.appliedHumanoids[humanoid] = true
-            if resetAsyncError then
-                __DDCore.Log("AVATAR APPLY FALLBACK USED|path=" .. modelPath
-                    .. "|method=ApplyDescriptionReset|firstError=" .. resetAsyncError)
-            end
-        else
-            table.insert(failures, modelPath
-                .. "|ResetAsync=" .. tostring(resetAsyncError)
-                .. "|Reset=" .. tostring(err))
-            __DDCore.Log("AVATAR APPLY TARGET FAILED|path=" .. modelPath
-                .. "|error=" .. tostring(err))
         end
     end
-
     if applied == 0 then
-        table.clear(failures)
+        --// Last compatibility fallback.
         for _, humanoid in ipairs(targetHumanoids) do
-            local ok, err = pcall(function()
-                humanoid:ApplyDescriptionAsync(description)
-            end)
+            local ok = pcall(function()
+                    humanoid:ApplyDescriptionAsync(
+                        description
+                    )
+                end)
             if ok then
                 applied += 1
                 others.appliedHumanoids[humanoid] = true
-            else
-                local modelPath = tostring(humanoid.Parent)
-                pcall(function()
-                    modelPath = humanoid.Parent:GetFullName()
-                end)
-                table.insert(failures, modelPath .. "|ApplyAsync=" .. tostring(err))
             end
         end
     end
-
     if applied == 0 then
-        others.endAvatarMutation(mutation, "apply-description-failed")
-        __DDCore.Log("AVATAR APPLY FAILED|targets=" .. tostring(#targetHumanoids)
-            .. "|failed=" .. tostring(#failures)
-            .. "|errors=" .. table.concat(failures, " ; "))
+        warn(
+            "[Others] Apply failed:",
+            lastError
+        )
         if others.status then
             others.status.Text = "Apply Error"
         end
@@ -13177,24 +12935,16 @@ function others.applyDescription(
         others.avatarSyncEnabled = true
     end
 
-    __DDCore.Log("AVATAR APPLY COMPLETE|targets=" .. tostring(#targetHumanoids)
+    __DDCore.Log("AVATAR APPLY COMPLETE|humanoids=" .. tostring(#others.getHumanoids())
         .. "|applied=" .. tostring(applied)
-        .. "|failed=" .. tostring(#failures)
-        .. "|savedDescription=" .. tostring(savedDescription ~= nil)
-        .. (#failures > 0 and "|errors=" .. table.concat(failures, " ; ") or ""))
+        .. "|savedDescription=" .. tostring(savedDescription ~= nil))
 
-    others.endAvatarMutation(mutation, "apply-description")
-    local cachePersistenceOK = not cacheFound or cacheOK
     pcall(function()
         if others.status then
-            others.status.Text = applied == #targetHumanoids
-                and cachePersistenceOK
-                and #failures == 0
-                and "Applied • all rigs"
-                or ("Applied • " .. tostring(applied) .. "/" .. tostring(#targetHumanoids))
+            others.status.Text = "Applied"
         end
     end)
-    return applied > 0 and cachePersistenceOK
+    return true
 end
 --// Keep later-created copies of the local rig in sync after an Avatar edit.
 function others.findLocalRigModel(instance)
@@ -13207,17 +12957,6 @@ function others.findLocalRigModel(instance)
         then
             return current
         end
-
-        -- Menu preview is a separate avatar representation, not a player-named rig.
-        if current:IsA("Model")
-            and current.Name == "VisualModel"
-            and current.Parent
-            and current.Parent.Name == "MenuScene"
-            and current.Parent.Parent == workspace
-        then
-            return current
-        end
-
         current = current.Parent
     end
     return nil
@@ -13227,7 +12966,6 @@ function others.applyDescriptionToNewHumanoid(humanoid)
     if not humanoid
         or not humanoid:IsA("Humanoid")
         or not humanoid.Parent
-        or humanoid.RigType ~= Enum.HumanoidRigType.R6
         or others.appliedHumanoids[humanoid]
         or others.pendingHumanoids[humanoid]
         or not others.avatarSyncEnabled
@@ -13253,137 +12991,50 @@ function others.applyDescriptionToNewHumanoid(humanoid)
             return
         end
 
-        local mutation = others.beginAvatarMutation("auto-apply:" .. tostring(model))
-        if not mutation.safe then
-            __DDCore.Log("AVATAR AUTO-APPLY ABORTED|model=" .. tostring(model)
-                .. "|reason=Unusual could not be suspended safely")
-            others.endAvatarMutation(mutation, "auto-apply-aborted")
-            others.pendingHumanoids[humanoid] = nil
-            return
-        end
+        others.captureOriginalDescriptionForHumanoid(humanoid)
 
-        local workerOK, workerError = pcall(function()
-            others.captureOriginalDescriptionForHumanoid(humanoid)
+        local description
+        pcall(function()
+            description = others.lastAppliedDescription:Clone()
+        end)
 
-            local description
-            pcall(function()
-                description = others.lastAppliedDescription:Clone()
+        local succeeded = false
+        if description then
+            local ok = pcall(function()
+                humanoid:ApplyDescriptionResetAsync(description)
             end)
-
-            local succeeded = false
-            local applyErrors = {}
-            if description then
-                local ok, err = pcall(function()
-                    humanoid:ApplyDescriptionResetAsync(description)
+            if not ok then
+                ok = pcall(function()
+                    humanoid:ApplyDescriptionReset(description)
                 end)
-                if not ok then
-                    table.insert(applyErrors, "ApplyDescriptionResetAsync=" .. tostring(err))
-                    ok, err = pcall(function()
-                        humanoid:ApplyDescriptionReset(description)
-                    end)
-                end
-                if not ok then
-                    table.insert(applyErrors, "ApplyDescriptionReset=" .. tostring(err))
-                    ok, err = pcall(function()
-                        humanoid:ApplyDescriptionAsync(description)
-                    end)
-                end
-                if not ok then
-                    table.insert(applyErrors, "ApplyDescriptionAsync=" .. tostring(err))
-                end
-                succeeded = ok
-            else
-                table.insert(applyErrors, "description clone failed")
             end
-
-            if succeeded then
-                others.appliedHumanoids[humanoid] = true
-                local verifyOK, mismatchText, checked = others.verifyAvatarDescription(
-                    humanoid,
-                    others.lastAppliedDescription,
-                    "AUTO"
-                )
-                __DDCore.Log("AVATAR AUTO-APPLIED|model=" .. tostring(model)
-                    .. "|humanoid=" .. tostring(humanoid)
-                    .. "|verified=" .. tostring(verifyOK)
-                    .. "|checked=" .. tostring(checked)
-                    .. (verifyOK and "" or "|mismatches=" .. tostring(mismatchText)))
-            else
-                __DDCore.Log("AVATAR AUTO-APPLY FAILED|model=" .. tostring(model)
-                    .. "|humanoid=" .. tostring(humanoid)
-                    .. "|errors=" .. table.concat(applyErrors, " ; "))
+            if not ok then
+                ok = pcall(function()
+                    humanoid:ApplyDescriptionAsync(description)
+                end)
             end
-        end)
+            succeeded = ok
+        end
 
-        local finishOK, finishError = pcall(function()
-            others.endAvatarMutation(mutation, "auto-apply:" .. tostring(model))
-        end)
+        if succeeded then
+            others.appliedHumanoids[humanoid] = true
+            __DDCore.Log("AVATAR AUTO-APPLIED|model=" .. tostring(model)
+                .. "|humanoid=" .. tostring(humanoid))
+        else
+            __DDCore.Log("AVATAR AUTO-APPLY FAILED|model=" .. tostring(model))
+        end
+
         others.pendingHumanoids[humanoid] = nil
-
-        if not workerOK then
-            __DDCore.Log("AVATAR AUTO-APPLY WORKER ERROR|model=" .. tostring(model)
-                .. "|error=" .. tostring(workerError))
-        end
-        if not finishOK then
-            __DDCore.Log("AVATAR AUTO-APPLY FINISH ERROR|model=" .. tostring(model)
-                .. "|error=" .. tostring(finishError))
-        end
     end)
 end
 
 local avatarRigAddedConnection = workspace.DescendantAdded:Connect(function(object)
     if object:IsA("Humanoid") then
         others.applyDescriptionToNewHumanoid(object)
-    elseif object:IsA("Model") and object.Parent
-        and (object.Name == "R6" or object.Name == "Player")
-        and object.Parent.Name == LocalPlayer.Name
-        and object.Parent.Parent
-        and object.Parent.Parent.Name == "PlayerCache"
-        and object.Parent.Parent.Parent == workspace
-    then
-        -- The source model built by us is already the requested clean template.
-        local isDeadEyeSource = false
-        pcall(function()
-            isDeadEyeSource = object:GetAttribute("DeadEyeAvatarCacheSource") == true
-        end)
-        if not isDeadEyeSource then
-            task.defer(function()
-                if not object.Parent
-                    or not others.avatarSyncEnabled
-                    or not others.lastAppliedDescription
-                then
-                    return
-                end
-                local mutation = others.beginAvatarMutation("cache-refresh:" .. object.Name)
-                if not mutation.safe then
-                    others.endAvatarMutation(mutation, "cache-refresh-aborted")
-                    __DDCore.Log("AVATAR CACHE REFRESH ABORTED|source=" .. tostring(object))
-                    return
-                end
-                local refreshed, detail = others.replaceAvatarCacheSource(
-                    others.lastAppliedDescription,
-                    object.Name,
-                    object
-                )
-                __DDCore.Log("AVATAR CACHE REFRESH|source=" .. tostring(object)
-                    .. "|success=" .. tostring(refreshed)
-                    .. "|detail=" .. tostring(detail))
-                others.endAvatarMutation(mutation, "cache-refresh:" .. object.Name)
-            end)
-        end
     elseif object:IsA("Model")
+        and object.Name == LocalPlayer.Name
         and object.Parent
-        and (
-            (
-                object.Name == LocalPlayer.Name
-                and (object.Parent.Name == "Rigs" or object.Parent.Name == "Players")
-            )
-            or (
-                object.Name == "VisualModel"
-                and object.Parent.Name == "MenuScene"
-                and object.Parent.Parent == workspace
-            )
-        )
+        and (object.Parent.Name == "Rigs" or object.Parent.Name == "Players")
     then
         task.defer(function()
             if not object.Parent then
@@ -13679,40 +13330,9 @@ function others.resetToInitialAvatar()
         end)
     end
 
-    local mutation = others.beginAvatarMutation("reset-to-initial")
-    if not mutation.safe then
-        others.endAvatarMutation(mutation, "reset-to-initial-aborted")
-        __DDCore.Log("AVATAR RESET FAILED|Unusual could not be suspended safely")
-        if others.status then
-            others.status.Text = "Reset failed • Unusual state"
-        end
-        return false
-    end
-
     local applied = 0
-    local verified = 0
-    local requiredTargets = 0
-    local requiredVerified = 0
     local failures = {}
-    local secondaryErrors = {}
     local modelNames = {}
-
-    local cacheOK, cacheDetail, cacheFound = others.replaceAvatarCacheSource(
-        others.originalDescription,
-        "R6"
-    )
-    if cacheFound then
-        requiredTargets += 1
-        if cacheOK then
-            requiredVerified += 1
-            __DDCore.Log("AVATAR RESET CACHE SOURCE|success=true|detail=" .. tostring(cacheDetail))
-        else
-            table.insert(failures, "PlayerCache.R6:" .. tostring(cacheDetail))
-            __DDCore.Log("AVATAR RESET CACHE SOURCE|success=false|detail=" .. tostring(cacheDetail))
-        end
-    else
-        __DDCore.Log("AVATAR RESET CACHE SOURCE|present=false|detail=" .. tostring(cacheDetail))
-    end
 
     for _, humanoid in ipairs(r6Targets) do
         local modelName = tostring(humanoid.Parent)
@@ -13722,17 +13342,6 @@ function others.resetToInitialAvatar()
             end
         end)
         table.insert(modelNames, modelName)
-        -- Workspace.Players is the gameplay/physics representation; the visible
-        -- rig and PlayerCache template are the required appearance targets.
-        local secondaryTarget = string.find(
-            modelName,
-            "Workspace.Players." .. LocalPlayer.Name,
-            1,
-            true
-        ) == 1
-        if not secondaryTarget then
-            requiredTargets += 1
-        end
 
         local ok, result = pcall(function()
             return others.applyDescriptionDirect(
@@ -13744,41 +13353,8 @@ function others.resetToInitialAvatar()
         if ok and result then
             applied += 1
             others.appliedHumanoids[humanoid] = true
-            local verifyOK, mismatchText, checked = others.verifyAvatarDescription(
-                humanoid,
-                others.originalDescription,
-                "RESET"
-            )
-            if verifyOK then
-                verified += 1
-                if not secondaryTarget then
-                    requiredVerified += 1
-                end
-                __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
-                    .. "|methodApplied=true|verified=true|required=" .. tostring(not secondaryTarget)
-                    .. "|checked=" .. tostring(checked))
-            else
-                local detail = modelName .. ":VERIFY:" .. tostring(mismatchText)
-                if secondaryTarget then
-                    table.insert(secondaryErrors, detail)
-                else
-                    table.insert(failures, detail)
-                end
-                __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
-                    .. "|methodApplied=true|verified=false|required=" .. tostring(not secondaryTarget)
-                    .. "|checked=" .. tostring(checked)
-                    .. "|mismatches=" .. tostring(mismatchText))
-            end
         else
-            local detail = modelName .. ":" .. tostring(result)
-            if secondaryTarget then
-                table.insert(secondaryErrors, detail)
-            else
-                table.insert(failures, detail)
-            end
-            __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
-                .. "|methodApplied=false|required=" .. tostring(not secondaryTarget)
-                .. "|error=" .. tostring(result))
+            table.insert(failures, modelName .. ":" .. tostring(result))
         end
     end
 
@@ -13789,43 +13365,30 @@ function others.resetToInitialAvatar()
         others.avatarSyncEnabled = others.lastAppliedDescription ~= nil
     end
 
-    -- Even if a non-rendering/gameplay Humanoid rejects the description, always
-    -- finish the transaction so the Unusual swap is recaptured against the new rig.
-    others.endAvatarMutation(mutation, "reset-to-initial")
-
-    local requiredOK = requiredTargets > 0
-        and requiredVerified == requiredTargets
-        and #failures == 0
-
     __DDCore.Log(
-        (requiredOK and "AVATAR RESET|" or "AVATAR RESET FAILED|")
+        (applied > 0 and "AVATAR RESET|" or "AVATAR RESET FAILED|")
         .. "baseline=initial"
         .. "|targets=" .. tostring(#targets)
         .. "|r6Targets=" .. tostring(#r6Targets)
         .. "|applied=" .. tostring(applied)
-        .. "|verified=" .. tostring(verified)
-        .. "|requiredTargets=" .. tostring(requiredTargets)
-        .. "|requiredVerified=" .. tostring(requiredVerified)
-        .. "|failedRequired=" .. tostring(#failures)
-        .. "|failedSecondary=" .. tostring(#secondaryErrors)
+        .. "|failed=" .. tostring(#failures)
         .. "|nonR6Skipped=" .. tostring(nonR6)
         .. "|models=" .. table.concat(modelNames, ";")
         .. "|sync=" .. tostring(others.avatarSyncEnabled)
         .. (#failures > 0 and "|errors=" .. table.concat(failures, " ; ") or "")
-        .. (#secondaryErrors > 0 and "|secondaryErrors=" .. table.concat(secondaryErrors, " ; ") or "")
     )
 
     if others.status then
-        if requiredOK then
-            others.status.Text = "Initial avatar restored • " .. tostring(requiredVerified)
+        if #failures == 0 and applied == #r6Targets then
+            others.status.Text = "Initial avatar restored • " .. tostring(applied)
         elseif applied > 0 then
-            others.status.Text = "Partial reset • " .. tostring(requiredVerified) .. "/" .. tostring(requiredTargets)
+            others.status.Text = "Partial reset • " .. tostring(applied) .. "/" .. tostring(#r6Targets)
         else
             others.status.Text = "Reset failed • see log"
         end
     end
 
-    return requiredOK
+    return applied > 0 and #failures == 0
 end
 
 --// FIRST-PERSON HEAD/CAMERA VISIBILITY
@@ -26501,160 +26064,13 @@ __DDCore.WrapTable(__UI.__L, "applyUnusualFX", "UNUSUAL.applyUnusualFX")
 __DDCore.WrapTable(others, "applyDescription", "AVATAR.applyDescription")
 
 __DDCore.AvatarVerifyProperties = {
-    -- Classic body-part asset IDs and face/clothing.
-    "Head", "Torso", "LeftArm", "RightArm", "LeftLeg", "RightLeg", "Face",
-    "Shirt", "Pants", "GraphicTShirt",
-    -- Classic body colors.
-    "HeadColor", "TorsoColor", "LeftArmColor", "RightArmColor",
-    "LeftLegColor", "RightLegColor",
-    -- Body proportions/scales.
-    "BodyTypeScale", "ProportionScale", "HeightScale", "WidthScale",
-    "DepthScale", "HeadScale", "AvatarPartScaleType",
-    -- Classic and layered accessory categories.
+    "Head", "Torso", "LeftArm", "RightArm", "LeftLeg", "RightLeg",
+    "Face", "Shirt", "Pants", "GraphicTShirt",
+    "BodyTypeScale", "HeightScale", "WidthScale", "DepthScale",
+    "HeadScale", "ProportionScale",
     "HatAccessory", "HairAccessory", "FaceAccessory", "NeckAccessory",
-    "ShouldersAccessory", "FrontAccessory", "BackAccessory", "WaistAccessory",
-    "EyebrowAccessory", "EyelashAccessory", "ShirtAccessory", "PantsAccessory",
-    "JacketAccessory", "SweaterAccessory", "ShortsAccessory",
-    "LeftShoeAccessory", "RightShoeAccessory", "DressSkirtAccessory",
-    -- Animation asset IDs.
-    "ClimbAnimation", "FallAnimation", "IdleAnimation", "JumpAnimation",
-    "MoodAnimation", "RunAnimation", "SwimAnimation", "WalkAnimation"
+    "ShouldersAccessory", "FrontAccessory", "BackAccessory", "WaistAccessory"
 }
-
--- Read back the complete set of HumanoidDescription properties the avatar editor
--- can affect. A successful pcall alone is not evidence that the appearance took.
-function others.verifyAvatarDescription(humanoid, expectedDescription, context)
-    local path = tostring(humanoid)
-    pcall(function()
-        path = humanoid:GetFullName()
-    end)
-
-    if not humanoid or not humanoid.Parent or not expectedDescription then
-        local reason = "humanoid or expected description missing"
-        __DDCore.Log("AVATAR FIELD VERIFY FAILED|context=" .. tostring(context)
-            .. "|path=" .. path .. "|reason=" .. reason)
-        return false, reason, 0
-    end
-
-    local readOK, actualDescription = pcall(function()
-        return humanoid:GetAppliedDescription()
-    end)
-    if not readOK or not actualDescription then
-        local reason = tostring(actualDescription)
-        __DDCore.Log("AVATAR FIELD VERIFY FAILED|context=" .. tostring(context)
-            .. "|path=" .. path .. "|readbackError=" .. reason)
-        return false, reason, 0
-    end
-
-    local checked = 0
-    local mismatches = {}
-    for _, property in ipairs(__DDCore.AvatarVerifyProperties) do
-        local expectedOK, expectedValue = pcall(function()
-            return expectedDescription[property]
-        end)
-        local actualOK, actualValue = pcall(function()
-            return actualDescription[property]
-        end)
-
-        if expectedOK and actualOK then
-            checked += 1
-            if tostring(expectedValue) ~= tostring(actualValue) then
-                table.insert(mismatches, property
-                    .. ":expected=" .. tostring(expectedValue)
-                    .. ",actual=" .. tostring(actualValue))
-            end
-        end
-    end
-
-    local matches = #mismatches == 0
-    __DDCore.Log("AVATAR FIELD VERIFY|" .. tostring(context)
-        .. "|path=" .. path
-        .. "|matched=" .. tostring(matches)
-        .. "|checked=" .. tostring(checked)
-        .. (#mismatches > 0 and "|mismatches=" .. table.concat(mismatches, " ; ") or ""))
-    return matches, table.concat(mismatches, " ; "), checked
-end
-
--- Replace the normalized PlayerCache source with a clean model created directly
--- from HumanoidDescription. RigService moves Motor6Ds into a private Joints folder
--- inside PlayerCache; applying descriptions in-place to that already-normalized
--- model can leave stale joints in the template and poison later menu rebuilds.
-function others.replaceAvatarCacheSource(description, sourceName, expectedSource)
-    sourceName = sourceName or "R6"
-    local cacheFolder = workspace:FindFirstChild("PlayerCache")
-    local playerCache = cacheFolder and cacheFolder:FindFirstChild(LocalPlayer.Name)
-    local source = playerCache and playerCache:FindFirstChild(sourceName)
-    if not source or not source:IsA("Model") then
-        __DDCore.Log("AVATAR CACHE SOURCE SKIP|path=Workspace.PlayerCache."
-            .. LocalPlayer.Name .. "." .. tostring(sourceName) .. "|reason=missing")
-        return true, "cache source not present", false
-    end
-
-    if expectedSource and source ~= expectedSource then
-        return true, "stale source event ignored", false
-    end
-
-    local rigType = sourceName == "R6"
-        and Enum.HumanoidRigType.R6
-        or Enum.HumanoidRigType.R15
-    local buildOK, replacement = pcall(function()
-        return Players:CreateHumanoidModelFromDescriptionAsync(description, rigType)
-    end)
-    if not buildOK or not replacement or not replacement:IsA("Model") then
-        local err = tostring(replacement)
-        __DDCore.Log("AVATAR CACHE SOURCE BUILD FAILED|path=" .. tostring(source)
-            .. "|error=" .. err)
-        return false, err, true
-    end
-
-    replacement.Name = source.Name
-    pcall(function()
-        replacement.Archivable = source.Archivable
-    end)
-    pcall(function()
-        for name, value in pairs(source:GetAttributes()) do
-            if name ~= "DeadEyeAvatarCacheSource" then
-                replacement:SetAttribute(name, value)
-            end
-        end
-    end)
-    local root = replacement:FindFirstChild("HumanoidRootPart")
-    if root and root:IsA("BasePart") then
-        pcall(function()
-            replacement.PrimaryPart = root
-        end)
-    end
-
-    local replacementHumanoid = replacement:FindFirstChildOfClass("Humanoid")
-    local verifyOK, mismatchText, checked = others.verifyAvatarDescription(
-        replacementHumanoid,
-        description,
-        "CACHE-BUILD"
-    )
-    if not verifyOK then
-        pcall(function()
-            replacement:Destroy()
-        end)
-        local detail = "new template readback mismatch: " .. tostring(mismatchText)
-        __DDCore.Log("AVATAR CACHE SOURCE VERIFY FAILED|path=" .. tostring(source)
-            .. "|checked=" .. tostring(checked) .. "|detail=" .. detail)
-        return false, detail, true
-    end
-
-    replacement:SetAttribute("DeadEyeAvatarCacheSource", true)
-    local parent = source.Parent
-    replacement.Parent = parent
-    source:Destroy()
-
-    local newPath = tostring(replacement)
-    pcall(function()
-        newPath = replacement:GetFullName()
-    end)
-    local detail = "path=" .. newPath .. "|verified=true|checked=" .. tostring(checked)
-    __DDCore.Log("AVATAR CACHE SOURCE REPLACED|" .. detail)
-    return true, detail, true
-end
-
 
 __DDCore.ApplyDescriptionLogged = others.applyDescription
 others.applyDescription = function(description)
@@ -26670,16 +26086,7 @@ others.applyDescription = function(description)
     if __DDCore.State.active then
         local humanoids = {}
         local listOK, listError = pcall(function()
-            local candidates = others.getAllAvatarHumanoids()
-            for _, humanoid in ipairs(candidates) do
-                local isR6 = false
-                pcall(function()
-                    isR6 = humanoid.RigType == Enum.HumanoidRigType.R6
-                end)
-                if isR6 then
-                    table.insert(humanoids, humanoid)
-                end
-            end
+            humanoids = others.getHumanoids()
         end)
 
         __DDCore.Log("AVATAR READBACK BEGIN: applyResult=" .. __DDCore.Args(result)
