@@ -35,6 +35,7 @@ local CONNECTIONS = {}
 local INSTANCE_IDS = setmetatable({}, {__mode = "k"})
 local MODEL_STATE = setmetatable({}, {__mode = "k"})
 local DESCRIPTION_STATE = setmetatable({}, {__mode = "k"})
+local DESCRIPTION_ERROR_LOGGED = setmetatable({}, {__mode = "k"})
 local BOUND_MODELS = setmetatable({}, {__mode = "k"})
 local BOUND_INSTANCES = setmetatable({}, {__mode = "k"})
 local BOUND_OBJECT_VALUES = setmetatable({}, {__mode = "k"})
@@ -103,13 +104,23 @@ local function appendLine(line, force)
     Env.DEADEYE_RIG_LINK_TRACE_LOG = table.concat(LOG, "\n")
 end
 
+local function cleanLogDetail(value)
+    local s = tostring(value or "")
+    s = string.gsub(s, "[\\r\\n\\t]", " ")
+    s = string.gsub(s, "|", "/")
+    if #s > 12000 then
+        s = string.sub(s, 1, 11970) .. "...[DETAIL_TRUNCATED]"
+    end
+    return s
+end
+
 local function log(eventName, detail, force)
     local line = string.format(
         "[RigTrace %s +%.3fs] %s|%s",
         SCRIPT_VERSION,
         os.clock() - START_TIME,
         clean(eventName),
-        clean(detail or "")
+        cleanLogDetail(detail or "")
     )
     appendLine(line, force)
 end
@@ -214,6 +225,17 @@ local function isDetailedModel(model)
         return true
     end
     return false
+end
+
+local function detailedModelFor(instance)
+    local node = instance
+    while node and node ~= game do
+        if node:IsA("Model") and isDetailedModel(node) then
+            return node
+        end
+        node = node.Parent
+    end
+    return nil
 end
 
 local function modelFor(instance)
@@ -512,6 +534,7 @@ local function isEffectObject(object)
         or object:IsA("Highlight")
         or object:IsA("Decal")
         or object:IsA("Texture")
+        or object:IsA("SpecialMesh")
         or object:IsA("Motor6D")
         or object:IsA("Weld")
         or object:IsA("WeldConstraint")
@@ -537,7 +560,14 @@ end
 
 local function objectPayload(object)
     local extras = ""
-    if object:IsA("BasePart") then
+    if object:IsA("MeshPart") then
+        extras = "|meshId=" .. clean(object.MeshId)
+            .. "|textureId=" .. clean(object.TextureID)
+            .. "|size=" .. clean(object.Size)
+            .. "|transparency=" .. clean(object.Transparency)
+            .. "|localTransparency=" .. clean(object.LocalTransparencyModifier)
+            .. "|anchored=" .. tostring(object.Anchored)
+    elseif object:IsA("BasePart") then
         extras = "|size=" .. clean(object.Size)
             .. "|transparency=" .. clean(object.Transparency)
             .. "|localTransparency=" .. clean(object.LocalTransparencyModifier)
@@ -562,9 +592,6 @@ local function objectPayload(object)
             .. "|depthMode=" .. clean(object.DepthMode)
     elseif object:IsA("Animation") then
         extras = "|animationId=" .. clean(object.AnimationId)
-    elseif object:IsA("MeshPart") then
-        extras = "|meshId=" .. clean(object.MeshId)
-            .. "|textureId=" .. clean(object.TextureID)
     elseif object:IsA("SpecialMesh") then
         extras = "|meshId=" .. clean(object.MeshId)
             .. "|textureId=" .. clean(object.TextureId)
@@ -770,12 +797,12 @@ local function watchInstance(object, ownerModel)
 end
 
 local function bindModel(model, reason)
-    if not isTraceModel(model) then
+    if not isTraceModel(model) or BOUND_MODELS[model] then
         return
     end
 
-    if not BOUND_MODELS[model] then
-        BOUND_MODELS[model] = true
+    BOUND_MODELS[model] = true
+    do
         connect(model.AncestryChanged, function(_, newParent)
             if ACTIVE then
                 log("MODEL_ANCESTRY_CHANGED",
@@ -805,19 +832,13 @@ local function bindModel(model, reason)
     end
 
     local state = modelStateSignature(model)
-    if MODEL_STATE[model] == nil then
-        MODEL_STATE[model] = state
-        snapshotModel(model, reason or "first-seen")
-    elseif MODEL_STATE[model] ~= state then
-        log("MODEL_STRUCTURE_CHANGED", "id=" .. idOf(model) .. "|path=" .. pathOf(model) .. "|reason=" .. clean(reason) .. "|oldSignature=" .. MODEL_STATE[model] .. "|newSignature=" .. state)
-        MODEL_STATE[model] = state
-        snapshotModel(model, "structure-change")
-    end
+    MODEL_STATE[model] = state
+    snapshotModel(model, reason or "first-seen")
 
     local descendants = {}
     pcall(function() descendants = model:GetDescendants() end)
     for _, object in ipairs(descendants) do
-        watchInstance(object, modelFor(object) or model)
+        watchInstance(object, detailedModelFor(object) or modelFor(object) or model)
     end
 
     local humanoid = model:FindFirstChildOfClass("Humanoid")
@@ -835,40 +856,52 @@ end
 
 local function logInstanceAdded(object)
     local owner = modelFor(object)
-    if not owner then
+    local detailOwner = detailedModelFor(object)
+    if not owner and not detailOwner then
         if object:IsA("ObjectValue") then watchObjectValue(object) end
         return
     end
 
-    watchInstance(object, owner)
+    watchInstance(object, detailOwner or owner)
     if object:IsA("Model") and isTraceModel(object) then
         bindModel(object, "DescendantAdded")
-    elseif isDetailedModel(owner) and (isEffectObject(object) or isBodyPart(object, owner)) then
+        if detailOwner and detailOwner ~= object then
+            log("MODEL_NESTED_ADDED", "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
+                .. "|nested=" .. idOf(object) .. ":" .. pathOf(object) .. "|domain=" .. getDomain(object))
+        end
+    elseif detailOwner then
         log("INSTANCE_ADDED",
-            "owner=" .. idOf(owner) .. ":" .. pathOf(owner)
+            "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
             .. "|object=" .. idOf(object) .. ":" .. pathOf(object)
             .. "|class=" .. object.ClassName
             .. objectPayload(object)
         )
+    elseif owner and isEffectObject(object) then
+        log("INSTANCE_ADDED", "owner=" .. idOf(owner) .. ":" .. pathOf(owner)
+            .. "|object=" .. idOf(object) .. ":" .. pathOf(object)
+            .. "|class=" .. object.ClassName .. objectPayload(object))
     end
 end
 
 local function logInstanceRemoving(object)
     local owner = modelFor(object)
-    if not owner then
-        return
-    end
+    local detailOwner = detailedModelFor(object)
+    if not owner and not detailOwner then return end
     if object:IsA("Model") and isTraceModel(object) then
         snapshotModel(object, "before-remove")
         log("MODEL_REMOVING", "id=" .. idOf(object) .. "|name=" .. clean(object.Name)
             .. "|oldPath=" .. pathOf(object) .. "|oldDomain=" .. getDomain(object))
-    elseif isDetailedModel(owner) and (isEffectObject(object) or isBodyPart(object, owner)) then
+    elseif detailOwner then
         log("INSTANCE_REMOVING",
-            "owner=" .. idOf(owner) .. ":" .. pathOf(owner)
+            "owner=" .. idOf(detailOwner) .. ":" .. pathOf(detailOwner)
             .. "|object=" .. idOf(object) .. ":" .. pathOf(object)
             .. "|class=" .. object.ClassName
             .. objectPayload(object)
         )
+    elseif owner and isEffectObject(object) then
+        log("INSTANCE_REMOVING", "owner=" .. idOf(owner) .. ":" .. pathOf(owner)
+            .. "|object=" .. idOf(object) .. ":" .. pathOf(object)
+            .. "|class=" .. object.ClassName .. objectPayload(object))
     end
 end
 
@@ -1064,8 +1097,10 @@ local function pollDescriptions()
                     .. "|newFields={" .. descriptionSignature(values) .. "}"
                 )
                 DESCRIPTION_STATE[entry.humanoid] = values
+                DESCRIPTION_ERROR_LOGGED[entry.humanoid] = nil
             end
-        elseif not DESCRIPTION_STATE[entry.humanoid .. "_ERROR"] then
+        elseif not DESCRIPTION_ERROR_LOGGED[entry.humanoid] then
+            DESCRIPTION_ERROR_LOGGED[entry.humanoid] = true
             log("DESCRIPTION_READ_ERROR", "model=" .. pathOf(entry.model) .. "|error=" .. clean(err))
         end
     end
@@ -1202,7 +1237,7 @@ task.spawn(function()
         end
 
         local now = os.clock()
-        if now - lastWorkspaceScan >= 1.5 then
+        if now - lastWorkspaceScan >= 4.0 then
             lastWorkspaceScan = now
             scanWorkspace("periodic")
         end
