@@ -1,6 +1,6 @@
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.236
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.235
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -32,7 +32,7 @@
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.236"
+local SCRIPT_VERSION = "1.235"
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -3324,20 +3324,6 @@ function cosmetic.createPreview(
         or not visual
     then
         return false
-    end
-
-    -- Viewport previews are visual-only. Some cosmetics bundle Scripts
-    -- inside CharacterClassic (for example Head.Model.Script), which
-    -- Roblox blocks from running under CoreGui/restricted containers.
-    -- Remove them only from this preview clone, never from real cosmetics.
-    for _, descendant in ipairs(visual:GetDescendants()) do
-        if descendant:IsA("Script")
-            or descendant:IsA("LocalScript")
-        then
-            pcall(function()
-                descendant:Destroy()
-            end)
-        end
     end
 
     if appearance.CameraType == "Back" then
