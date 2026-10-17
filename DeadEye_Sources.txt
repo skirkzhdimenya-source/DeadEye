@@ -11798,3 +11798,633 @@ function t.Action(p6, p7, ...)
 end
 
 return t
+==================================================
+SOURCE #69
+==================================================
+PATH:
+ReplicatedStorage.Objects.Items.Emote
+
+STATUS:
+ПОЛУЧЕНО И ПРОВЕРЕНО ПО ДАМПУ s 2026-10-17: декомпиляция Opiumware.
+
+PURPOSE:
+Основной штатный класс эмоции. GetSelection() — центральная зацепка для случайных вариантов:
+если у объекта есть DataRegistry, он до 3 секунд ожидает ненулевой DataRegistry:Get("EmoteNum"),
+а затем выбирает EmoteModule.Selection:GetChildren()[EmoteNum]. Если значение не пришло за 3
+секунды, возвращает первый дочерний объект Selection. Если DataRegistry отсутствует, также
+сразу берёт первый Selection child. Сам этот класс не генерирует случайный EmoteNum.
+SetSound() отдельно выбирает случайный Sound ID через math.random(), когда EmoteInfo.Sound — таблица;
+это рандомизация звука, а не выбора варианта эмоции.
+Activate() сначала вызывает GetAnimations(), а SetModel() отдельно снова вызывает GetSelection().
+При штатном DeadEye-вызове EmoteService:SetEmote(..., object, nil, rigModel) объект получает тот же
+DataRegistry через Init(object), поэтому replacement читает текущее значение EmoteNum из реестра
+персонажа. Источник, который первоначально устанавливает EmoteNum, пока не обнаружен.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+ReplicatedStorage:WaitForChild("Services")
+ReplicatedStorage:WaitForChild("Shared")
+local v_u_1 = require((ReplicatedStorage.Client:WaitForChild("Services"):WaitForChild("UserData"):WaitForChild("Settings")))
+local function getRootOffset(p2: userdata)
+	--[[ line: 18 | upvalues: none]]
+	local HumanoidRootPart = p2:FindFirstChild("HumanoidRootPart")
+	if not (HumanoidRootPart and HumanoidRootPart:IsA("BasePart")) then
+		return 0
+	end
+	local v3 = 1 / 0
+	for _, v4 in {
+		"LeftFoot",
+		"RightFoot",
+		"Left Leg",
+		"Right Leg"
+	} do
+		local v5 = p2:FindFirstChild(v4)
+		if v5 and v5:IsA("BasePart") then
+			local CFrame2 = v5.CFrame
+			local v6 = v5.Size / 2
+			for _2, v7 in { -1, 1 } do
+				for _3, v8 in { -1, 1 } do
+					for _4, v9 in { -1, 1 } do
+						local v10 = v7 * v6.X
+						local v11 = v8 * v6.Y
+						local v12 = v9 * v6.Z
+						local Y = (CFrame2 * Vector3.new(v10, v11, v12)).Y
+						v3 = math.min(v3, Y)
+					end
+				end
+			end
+		end
+	end
+	return v3 == 1 / 0 and 0 or HumanoidRootPart.Position.Y - v3 - 2.75
+end
+local t = {}
+t.__index = t
+function t.new(p13, p14, p15)
+	--[[ line: 49 | upvalues: (copy) t]]
+	local v16 = require(p14)
+	return setmetatable({
+		Active = true,
+		Character = p13,
+		Rig = p15,
+		EmoteModule = p14,
+		Info = v16,
+		EmoteInfo = v16.EmoteInfo,
+		Animations = {}
+	}, t)
+end
+function t.Init(p17, p18)
+	--[[ line: 64 | upvalues: none]]
+	p17.DataRegistry = p18.DataRegistry
+end
+function t._speed(p19)
+	--[[ line: 70 | upvalues: none]]
+	local DataRegistry = p19.DataRegistry
+	return DataRegistry == nil and 0 or (DataRegistry:Get("Speed") or 0)
+end
+function t.IsR15(p20)
+	--[[ line: 75 | upvalues: none]]
+	local v21
+	if p20.Rig then
+		v21 = p20.Rig:FindFirstChildOfClass("Humanoid")
+	else
+		v21 = nil
+	end
+	return v21 and v21.RigType == Enum.HumanoidRigType.R15 and true or (p20.Character:FindFirstChild("R15Visual") and true or false)
+end
+function t.GetHumanoid(p22)
+	--[[ line: 85 | upvalues: none]]
+	if p22.Rig then
+		return p22.Rig:FindFirstChildOfClass("Humanoid") or p22.Rig:FindFirstChildOfClass("AnimationController")
+	end
+	if not p22:IsR15() then
+		return p22.Character:FindFirstChildOfClass("Humanoid") or p22.Character:FindFirstChildOfClass("AnimationController")
+	end
+	local v23 = p22.Character.R15Visual:FindFirstChildOfClass("Humanoid") or p22.Character.R15Visual:FindFirstChildOfClass("AnimationController")
+	if not v23 then
+		v23 = p22.Character:FindFirstChildOfClass("Humanoid") or p22.Character:FindFirstChildOfClass("AnimationController")
+	end
+	return v23
+end
+function t.SetSound(p24)
+	--[[ line: 112 | upvalues: (copy) v_u_1]]
+	local v25 = script.EmoteSound:Clone()
+	v25.Looped = (not p24.EmoteInfo or (not p24.EmoteInfo.Length or p24.EmoteInfo.Length > 0)) and true or false
+	if p24.EmoteInfo.SoundLoops == false then
+		v25.Looped = false
+	end
+	local Sound = p24.EmoteInfo.Sound
+	local v26
+	if typeof(Sound) == "table" then
+		v26 = "rbxassetid://" .. p24.EmoteInfo.Sound[math.random(1, #p24.EmoteInfo.Sound)]
+	else
+		v26 = "rbxassetid://" .. p24.EmoteInfo.Sound
+	end
+	v25.SoundId = v26
+	v25.Parent = p24.Character.PrimaryPart:WaitForChild("SoundPos")
+	v25:Play()
+	v25.Volume = v25.Volume * (v_u_1.Get("EmoteVolume") / 100)
+	p24.EmoteSound = v25
+end
+function t.GetSelection(p27)
+	--[[ line: 125 | upvalues: none]]
+	if not p27.DataRegistry then
+		return p27.EmoteModule.Selection:GetChildren()[1]
+	end
+	local v28 = tick()
+	repeat
+		task.wait()
+	until (p27.DataRegistry:Get("EmoteNum") or 0) ~= 0 or tick() - v28 >= 3
+	if tick() - v28 >= 3 then
+		return p27.EmoteModule.Selection:GetChildren()[1]
+	end
+	local EmoteNum = p27.DataRegistry:Get("EmoteNum")
+	return p27.EmoteModule.Selection:GetChildren()[EmoteNum]
+end
+function t.GetAnimations(p29)
+	--[[ line: 139 | upvalues: none]]
+	local v30 = nil
+	local v31 = nil
+	local v32 = nil
+	local v33 = nil
+	local v34 = nil
+	local v35 = nil
+	local v36 = nil
+	if not (p29.EmoteModule:FindFirstChild("Animations") or p29.EmoteModule:FindFirstChild("Selection")) then
+		if p29:IsR15() then
+			if p29.EmoteModule:FindFirstChild("Animation") then
+				return p29.EmoteModule.Animation, v31, v32, v33, v34, v35, v36
+			end
+			return v30, v31, v32, v33, v34, v35, v36
+		end
+		if p29.EmoteModule:FindFirstChild("AnimationClassic") then
+			v30 = p29.EmoteModule.AnimationClassic
+		end
+		return v30, v31, v32, v33, v34, v35, v36
+	end
+	local v37
+	if p29.EmoteModule:FindFirstChild("Selection") then
+		v37 = p29:GetSelection().Animations
+	else
+		v37 = p29.EmoteModule.Animations
+	end
+	local v38
+	if p29:IsR15() then
+		v38 = v37.R15
+	else
+		v38 = v37.R6
+	end
+	if v38:FindFirstChild("Intro") and v38.Intro.AnimationId ~= "" then
+		v31 = v38.Intro
+	end
+	if v38:FindFirstChild("Animation") and v38.Animation.AnimationId ~= "" then
+		v30 = v38.Animation
+	end
+	if v38:FindFirstChild("Outro") and v38.Outro.AnimationId ~= "" then
+		v32 = v38.Outro
+	end
+	if v38:FindFirstChild("Walk") and v38.Walk.AnimationId ~= "" then
+		v33 = v38.Walk
+	end
+	if v38:FindFirstChild("Idle") and v38.Idle.AnimationId ~= "" then
+		v34 = v38.Idle
+	end
+	if v38:FindFirstChild("Activate") then
+		v35 = v38.Activate
+	elseif v38.Parent:FindFirstChild("Activate") then
+		v35 = v38.Parent.Activate
+	end
+	if v38:FindFirstChild("Update") then
+		return v30, v31, v32, v33, v34, v35, v38.Update
+	end
+	if v38.Parent:FindFirstChild("Update") then
+		return v30, v31, v32, v33, v34, v35, v38.Parent.Update
+	end
+	return v30, v31, v32, v33, v34, v35, v36
+end
+function t._getAnimator(p39)
+	--[[ line: 192 | upvalues: none]]
+	local v40 = p39:GetHumanoid()
+	if v40 == nil or v40.Parent == nil then
+		return nil
+	end
+	local Animator = v40:FindFirstChildOfClass("Animator")
+	if Animator then
+		return Animator
+	end
+	local Animator2 = Instance.new("Animator")
+	Animator2.Parent = v40
+	return Animator2
+end
+function t._loadTrack(p41: {[any]: any}, p42: userdata, p43)
+	--[[ line: 206 | upvalues: none]]
+	local v44 = p41:_getAnimator()
+	if v44 == nil then
+		return nil
+	end
+	local v45 = v44:LoadAnimation(p42)
+	v45.Priority = p43
+	return v45
+end
+function t._awaitDataModel(p46)
+	--[[ line: 217 | upvalues: none]]
+	local v47 = p46:GetHumanoid()
+	if v47 == nil then
+		return false
+	end
+	while p46.Active and not v47:IsDescendantOf(game) do
+		v47.AncestryChanged:Wait()
+		if v47.Parent == nil then
+			return false
+		end
+	end
+	return p46.Active
+end
+function t.Activate(p_u_48: {[any]: any}, p49: boolean?, p50: boolean?)
+	--[[ line: 231 | upvalues: none]]
+	local v51, v52, _5, v53, v54, v_u_55, v56 = p_u_48:GetAnimations()
+	if p_u_48.Active then
+		if p49 then
+			p_u_48.Character.Destroying:Once(function()
+				--[[ line: 238 | upvalues: (copy) p_u_48]]
+				p_u_48:Deactivate()
+			end)
+		end
+		local v57, v58, v59, v60, v61, v62, v63, v64
+		if p49 or p50 == false then
+			p_u_48:SetModel()
+			if v_u_55 then
+				v57, v58 = pcall(function()
+					--[[ line: 259 | upvalues: (copy) v_u_55, (copy) p_u_48]]
+					require(v_u_55)(p_u_48.EmoteModel, p_u_48)
+				end)
+				if not v57 then
+					warn((("[Emote] Activate module %* failed: %*"):format(v_u_55:GetFullName(), v58)))
+				end
+			end
+			if v56 then
+				p_u_48.UpdateModule = require(v56)
+			end
+			if v52 and not p49 then
+				v59 = p_u_48:_loadTrack(v52, Enum.AnimationPriority.Action4)
+				if v59 then
+					p_u_48.Animations.Start = v59
+					v59:Play(0)
+					v60 = os.clock() + 5
+					while v59.Length <= 0 and (p_u_48.Active and os.clock() < v60) do
+						task.wait()
+					end
+					if p_u_48.Active and v59.Length > 0 then
+						task.wait(v59.Length)
+					end
+					v59:Stop(0)
+				end
+			end
+			if p_u_48.Active and v51 ~= nil then
+				if p49 and not p_u_48:_awaitDataModel() then
+					return
+				else
+					v61 = p_u_48:_loadTrack(v51, Enum.AnimationPriority.Action3)
+					if v61 == nil then
+						return
+					else
+						p_u_48.Animations.Animation = v61
+						v62 = p_u_48.EmoteInfo and p_u_48.EmoteInfo.Length
+						if v62 then
+							v62 = p_u_48.EmoteInfo.Length > 0
+						end
+						v61.Looped = not v62
+						if p49 then
+							v61:Play(0)
+							v61:AdjustSpeed(0)
+							v63 = os.clock() + 5
+							while v61.Length <= 0 and (p_u_48.Active and os.clock() < v63) do
+								task.wait()
+							end
+							v64 = v61.Length
+							v61.TimePosition = math.min(0.5, v64)
+						else
+							if v53 then
+								p_u_48.Animations.Move = p_u_48:_loadTrack(v53, Enum.AnimationPriority.Action3)
+								if p_u_48:_speed() > 0.5 and not p_u_48.Moving then
+									v61 = p_u_48.Animations.Move
+									p_u_48.Moving = true
+								end
+							end
+							if v54 then
+								p_u_48.Animations.Idle = p_u_48:_loadTrack(v54, Enum.AnimationPriority.Action3)
+								if p_u_48:_speed() <= 0.5 and not p_u_48.Idle then
+									v61 = p_u_48.Animations.Idle
+									p_u_48.Idle = true
+								end
+							end
+							v61:Play(0)
+						end
+					end
+				end
+			else
+				return
+			end
+		else
+			if p_u_48.Rig then
+				if p_u_48.Rig:FindFirstChild("EmoteModel") then
+					p_u_48.Rig.EmoteModel:Destroy()
+				end
+				if p_u_48.Rig.PrimaryPart and (p_u_48.Rig.PrimaryPart:FindFirstChild("SoundPos") and p_u_48.Rig.PrimaryPart.SoundPos:FindFirstChild("EmoteSound")) then
+					p_u_48.Rig.PrimaryPart.SoundPos.EmoteSound:Destroy()
+				end
+			end
+			p_u_48:SetSound()
+			if p_u_48.Active then
+				p_u_48:SetModel()
+				if v_u_55 then
+					v57, v58 = pcall(function()
+						--[[ line: 259 | upvalues: (copy) v_u_55, (copy) p_u_48]]
+						require(v_u_55)(p_u_48.EmoteModel, p_u_48)
+					end)
+					if not v57 then
+						warn((("[Emote] Activate module %* failed: %*"):format(v_u_55:GetFullName(), v58)))
+					end
+				end
+				if v56 then
+					p_u_48.UpdateModule = require(v56)
+				end
+				if v52 and not p49 then
+					v59 = p_u_48:_loadTrack(v52, Enum.AnimationPriority.Action4)
+					if v59 then
+						p_u_48.Animations.Start = v59
+						v59:Play(0)
+						v60 = os.clock() + 5
+						while v59.Length <= 0 and (p_u_48.Active and os.clock() < v60) do
+							task.wait()
+						end
+						if p_u_48.Active and v59.Length > 0 then
+							task.wait(v59.Length)
+						end
+						v59:Stop(0)
+					end
+				end
+				if p_u_48.Active and v51 ~= nil then
+					if p49 and not p_u_48:_awaitDataModel() then
+						return
+					else
+						v61 = p_u_48:_loadTrack(v51, Enum.AnimationPriority.Action3)
+						if v61 == nil then
+							return
+						else
+							p_u_48.Animations.Animation = v61
+							v62 = p_u_48.EmoteInfo and p_u_48.EmoteInfo.Length
+							if v62 then
+								v62 = p_u_48.EmoteInfo.Length > 0
+							end
+							v61.Looped = not v62
+							if p49 then
+								v61:Play(0)
+								v61:AdjustSpeed(0)
+								v63 = os.clock() + 5
+								while v61.Length <= 0 and (p_u_48.Active and os.clock() < v63) do
+									task.wait()
+								end
+								v64 = v61.Length
+								v61.TimePosition = math.min(0.5, v64)
+							else
+								if v53 then
+									p_u_48.Animations.Move = p_u_48:_loadTrack(v53, Enum.AnimationPriority.Action3)
+									if p_u_48:_speed() > 0.5 and not p_u_48.Moving then
+										v61 = p_u_48.Animations.Move
+										p_u_48.Moving = true
+									end
+								end
+								if v54 then
+									p_u_48.Animations.Idle = p_u_48:_loadTrack(v54, Enum.AnimationPriority.Action3)
+									if p_u_48:_speed() <= 0.5 and not p_u_48.Idle then
+										v61 = p_u_48.Animations.Idle
+										p_u_48.Idle = true
+									end
+								end
+								v61:Play(0)
+							end
+						end
+					end
+				else
+					return
+				end
+			else
+				p_u_48:Deactivate()
+				return
+			end
+		end
+	else
+		return
+	end
+end
+function t.UpdateIdle(p65)
+	--[[ line: 329 | upvalues: none]]
+	if p65:_speed() <= 0.5 and not p65.Idle then
+		p65.Idle = true
+		p65.Animations.Idle:Play(0.5)
+		p65.Animations.Animation:Stop(0.5)
+	elseif p65:_speed() > 0.5 and p65.Idle then
+		p65.Idle = false
+		p65.Animations.Idle:Stop(0.5)
+		p65.Animations.Animation:Play(0.5)
+	end
+end
+function t.Update(p66, _6)
+	--[[ line: 341 | upvalues: none]]
+	if p66.UpdateModule then
+		p66.UpdateModule(p66.EmoteModel, p66)
+	end
+	if p66.Animations.Idle then
+		p66:UpdateIdle()
+		return
+	elseif p66.Animations.Move then
+		if p66:_speed() > 0.5 and not p66.Moving then
+			p66.Moving = true
+			p66.Animations.Move:Play(0.5)
+			p66.Animations.Animation:Stop(0.5)
+		elseif p66:_speed() <= 0.5 and p66.Moving then
+			p66.Moving = false
+			p66.Animations.Move:Stop(0.5)
+			p66.Animations.Animation:Play(0.5)
+		end
+	else
+		return
+	end
+end
+function t.Deactivate(p67, _7)
+	--[[ line: 363 | upvalues: none]]
+	p67.Active = false
+	if p67.EmoteModel then
+		p67.EmoteModel:Destroy()
+		p67.EmoteModel = nil
+	end
+	if p67.EmoteSound then
+		p67.EmoteSound:Destroy()
+		p67.EmoteSound = nil
+	end
+	for _8, v68 in pairs(p67.Animations) do
+		v68:Stop(0)
+	end
+end
+function t.SetModel(p69)
+	--[[ line: 378 | upvalues: (copy) getRootOffset]]
+	local v70
+	if p69.EmoteModule:FindFirstChild("Selection") then
+		v70 = p69:GetSelection()
+	else
+		v70 = p69.EmoteModule
+	end
+	local v71
+	if p69:IsR15() then
+		v71 = v70:FindFirstChild("Character")
+	else
+		v71 = v70:FindFirstChild("CharacterClassic")
+	end
+	if v71 then
+		local PrimaryPart = p69.Character.PrimaryPart
+		local v72
+		if p69.Rig then
+			v72 = p69.Rig
+		elseif p69.Character:FindFirstChild("R15Visual") then
+			v72 = p69.Character.R15Visual
+		else
+			v72 = p69.Character
+		end
+		local EmoteModel = v71:FindFirstChild("EmoteModel")
+		if EmoteModel then
+			if not EmoteModel:GetAttribute("Optimized") then
+				EmoteModel:SetAttribute("Optimized", true)
+				for _9, v73 in EmoteModel:GetDescendants() do
+					if v73:IsA("BasePart") then
+						v73.CanCollide = false
+						v73.CanQuery = false
+						v73.CanTouch = false
+						v73.Massless = true
+						v73.CollisionGroup = "PlayerVis"
+						v73.RootPriority = -1
+					end
+				end
+			end
+			local v74 = CFrame.new(0, getRootOffset(v71), 0)
+			local v75 = EmoteModel:Clone()
+			v75.Parent = v72
+			for _10, v76 in pairs((v75:GetChildren())) do
+				if (v76:IsA("Motor6D") or v76:IsA("Weld")) and v76.Part0.Parent == v71 then
+					if v76.Part0.Name == "HumanoidRootPart" then
+						v76.Part0 = PrimaryPart
+						v76.C0 = v74 * v76.C0
+					else
+						v76.Part0 = v72:FindFirstChild(v76.Part0.Name)
+					end
+				end
+			end
+			p69.EmoteModel = v75
+		end
+	else
+		return
+	end
+end
+return t
+
+========================================================================
+
+
+==================================================
+SOURCE #70
+==================================================
+PATH:
+Selection variant inventory extracted from s
+SOURCE FILE:
+s
+
+STATUS:
+СОБРАНО АВТОМАТИЧЕСКИ И ПРОВЕРЕНО 2026-10-17: это дерево дочерних объектов и AnimationId, не полные исходники всех эмоций.
+
+PURPOSE:
+Каталог предметов с папкой Selection, найденных в дампе s. Индекс выбора EmoteNum соответствует позиции
+в массиве Selection:GetChildren(), а не гарантированно числу в имени папки. Порядок дочерних объектов
+следует сохранять ровно таким, как он показан в дампе; особенно заметно это у GargoyleStand.
+Использовать эти данные для проверки конкретного варианта, R6/R15-анимаций и дополнительных Activate-модулей.
+Не считать, что одинаковые AnimationId означают одинаковое содержимое Selection: варианты могут отличаться моделями
+или эффектами.
+
+- ID 59 — Marching
+  Path: ReplicatedStorage.Items.ItemPacks.Events.2022.Xmas2022.Emotes.Marching.Selection
+  Direct Selection children: 3 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://14159627158, rbxassetid://85884966053601
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://14159628335, rbxassetid://73164288826087
+  EmoteNum index 3 -> Selection:GetChildren()[3] is folder "3"; AnimationIds: rbxassetid://14159629397, rbxassetid://88446058277226
+- ID 89 — ZombieStride
+  Path: ReplicatedStorage.Items.ItemPacks.Events.2024.Halloween2024.Emotes.ZombieStride.Selection
+  Direct Selection children: 3 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://15221544236, rbxassetid://125497596837433
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://15221548816, rbxassetid://84248734120911
+  EmoteNum index 3 -> Selection:GetChildren()[3] is folder "3"; AnimationIds: rbxassetid://15221552726, rbxassetid://73383479205643
+- ID 908 — ToyTrainRide
+  Path: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Emotes.ToyTrainRide.Selection
+  Direct Selection children: 3 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://114262711617579, rbxassetid://83369297280765, rbxassetid://109727218763017, rbxassetid://105484146283074
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://114262711617579, rbxassetid://83369297280765, rbxassetid://109727218763017, rbxassetid://105484146283074
+  EmoteNum index 3 -> Selection:GetChildren()[3] is folder "3"; AnimationIds: rbxassetid://114262711617579, rbxassetid://83369297280765, rbxassetid://109727218763017, rbxassetid://105484146283074
+- ID 1096 — PotionMash
+  Path: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.PotionMash.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://85572976228843, rbxassetid://121101332210415
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://85572976228843, rbxassetid://73605307889672
+- ID 1097 — ClassicDance
+  Path: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.ClassicDance.Selection
+  Direct Selection children: 3 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://133018544853663, rbxassetid://81884406535584
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://110504140223190, rbxassetid://109509966070786
+  EmoteNum index 3 -> Selection:GetChildren()[3] is folder "3"; AnimationIds: rbxassetid://127425810024605, rbxassetid://82269823118210
+- ID 1098 — FastFoodDelight
+  Path: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.FastFoodDelight.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://134082467203121, rbxassetid://114562616576692, rbxassetid://126884445675614, rbxassetid://123151304810811
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://107482167731890, rbxassetid://127081728859083, rbxassetid://116133137574023, rbxassetid://104028540314777
+- ID 1359 — MariachiBand
+  Path: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Emotes.MariachiBand.Selection
+  Direct Selection children: 3 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://127128742000107, rbxassetid://136441435239355
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://92566505229782, rbxassetid://72618749926339
+  EmoteNum index 3 -> Selection:GetChildren()[3] is folder "3"; AnimationIds: rbxassetid://117066658601352, rbxassetid://137931887783324
+- ID 1381 — SolarBike
+  Path: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarBike.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://82848383531002, rbxassetid://114243812288330, rbxassetid://109356075339519, rbxassetid://79914736566137
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://82848383531002, rbxassetid://114243812288330, rbxassetid://109356075339519, rbxassetid://79914736566137
+- ID 1382 — SolarSlayer
+  Path: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarSlayer.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://125964710294895, rbxassetid://117293869950361
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://85078579653923, rbxassetid://111930618562488
+- ID 1383 — SolarConqueror
+  Path: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarConqueror.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://84397896569551, rbxassetid://113312671188400, rbxassetid://116371552546519, rbxassetid://73995639880691
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://129194680827496, rbxassetid://119942429483367, rbxassetid://138965481916927, rbxassetid://127433800721659
+- ID 1538 — AuspiciousWell
+  Path: ReplicatedStorage.Items.ItemPacks.Events.2026.StPatricks2026.Emotes.AuspiciousWell.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://140045201124074, rbxassetid://138562011720601
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://137400766742031, rbxassetid://82341767119047
+- ID 1702 — ShellHermit
+  Path: ReplicatedStorage.Items.ItemPacks.Gamepass.2026.PoseidonSet.Emotes.ShellHermit.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://117092138905476, rbxassetid://78170892643409, rbxassetid://138329947990285, rbxassetid://103982112521390
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://115331951599061, rbxassetid://73446019615377, rbxassetid://84784496511554, rbxassetid://93979597093501
+- ID 1710 — ClamClamor
+  Path: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Emotes.ClamClamor.Selection
+  Direct Selection children: 2 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "1"; AnimationIds: rbxassetid://117089127642138, rbxassetid://118656930717028, rbxassetid://83218914585685, rbxassetid://95010124241926
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "2"; AnimationIds: rbxassetid://95880656814410, rbxassetid://99625729632101, rbxassetid://113541009614439, rbxassetid://139018553455852
+- ID 1787 — GargoyleStand
+  Path: ReplicatedStorage.Items.ItemPacks.Events.2026.HLWN2026.Emotes.GargoyleStand.Selection
+  Direct Selection children: 3 (order shown is GetChildren() order from this dump)
+  EmoteNum index 1 -> Selection:GetChildren()[1] is folder "2"; AnimationIds: rbxassetid://85763179973123, rbxassetid://123241515256893
+  EmoteNum index 2 -> Selection:GetChildren()[2] is folder "1"; AnimationIds: rbxassetid://129173876719447, rbxassetid://73695720000610
+  EmoteNum index 3 -> Selection:GetChildren()[3] is folder "3"; AnimationIds: rbxassetid://126428073124566, rbxassetid://133070639177592
+
