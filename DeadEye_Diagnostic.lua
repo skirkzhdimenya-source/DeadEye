@@ -442,11 +442,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.264
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.265
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
---// Например: 1.263 -> 1.264. Основная версия остаётся 1.
+--// Например: 1.264 -> 1.265. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -473,7 +473,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.264"
+local SCRIPT_VERSION = "1.265"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -12436,39 +12436,41 @@ others.avatarMutationDepth = 0
 others.avatarMutationState = nil
 
 function others.beginAvatarMutation(operation)
-    local state = others.avatarMutationState
-    if others.avatarMutationDepth <= 0 or type(state) ~= "table" then
-        state = {
-            operation = tostring(operation or "unknown"),
-            wasActive = unusualActive == true,
-            wasEnabled = unusualEnabled == true,
-            slotOriginalId = tonumber(unusualSlot.originalId),
-            slotReplacementId = tonumber(unusualSlot.replaceId),
-            safe = true,
-            initializing = false
-        }
-        if state.wasActive then
-            state.safe = false
-            state.initializing = true
-        end
-        others.avatarMutationState = state
-        others.avatarMutationDepth = 1
-        genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = true
+    -- ApplyDescriptionResetAsync can yield. Serialize mutations so an older
+    -- auto-apply cannot overwrite a newer Reset after the newer one completes.
+    while (others.avatarMutationDepth or 0) > 0 do
+        task.wait(0.05)
+    end
 
-        if state.wasActive then
-            local restoreOK, restoreResult = pcall(function()
-                return UnusualFns.restoreUnusual()
-            end)
-            state.safe = restoreOK and not unusualActive
-            state.initializing = false
-            __DDCore.Log("AVATAR UNUSUAL SUSPEND|operation=" .. tostring(operation)
-                .. "|callOK=" .. tostring(restoreOK)
-                .. "|result=" .. tostring(restoreResult)
-                .. "|safeToMutate=" .. tostring(state.safe)
-                .. (restoreOK and "" or "|error=" .. tostring(restoreResult)))
-        end
-    else
-        others.avatarMutationDepth += 1
+    local state = {
+        operation = tostring(operation or "unknown"),
+        wasActive = unusualActive == true,
+        wasEnabled = unusualEnabled == true,
+        slotOriginalId = tonumber(unusualSlot.originalId),
+        slotReplacementId = tonumber(unusualSlot.replaceId),
+        safe = true,
+        initializing = false
+    }
+    if state.wasActive then
+        state.safe = false
+        state.initializing = true
+    end
+
+    others.avatarMutationState = state
+    others.avatarMutationDepth = 1
+    genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = true
+
+    if state.wasActive then
+        local restoreOK, restoreResult = pcall(function()
+            return UnusualFns.restoreUnusual()
+        end)
+        state.safe = restoreOK and not unusualActive
+        state.initializing = false
+        __DDCore.Log("AVATAR UNUSUAL SUSPEND|operation=" .. tostring(operation)
+            .. "|callOK=" .. tostring(restoreOK)
+            .. "|result=" .. tostring(restoreResult)
+            .. "|safeToMutate=" .. tostring(state.safe)
+            .. (restoreOK and "" or "|error=" .. tostring(restoreResult)))
     end
 
     local safe = state.safe == true and state.initializing ~= true
@@ -13646,7 +13648,10 @@ function others.resetToInitialAvatar()
 
     local applied = 0
     local verified = 0
+    local requiredTargets = 0
+    local requiredVerified = 0
     local failures = {}
+    local secondaryErrors = {}
     local modelNames = {}
 
     for _, humanoid in ipairs(r6Targets) do
@@ -13657,6 +13662,17 @@ function others.resetToInitialAvatar()
             end
         end)
         table.insert(modelNames, modelName)
+        -- Workspace.Players is the gameplay/physics representation; the visible
+        -- rig and PlayerCache template are the required appearance targets.
+        local secondaryTarget = string.find(
+            modelName,
+            "Workspace.Players." .. LocalPlayer.Name,
+            1,
+            true
+        ) == 1
+        if not secondaryTarget then
+            requiredTargets += 1
+        end
 
         local ok, result = pcall(function()
             return others.applyDescriptionDirect(
@@ -13675,18 +13691,34 @@ function others.resetToInitialAvatar()
             )
             if verifyOK then
                 verified += 1
+                if not secondaryTarget then
+                    requiredVerified += 1
+                end
                 __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
-                    .. "|methodApplied=true|verified=true|checked=" .. tostring(checked))
+                    .. "|methodApplied=true|verified=true|required=" .. tostring(not secondaryTarget)
+                    .. "|checked=" .. tostring(checked))
             else
-                table.insert(failures, modelName .. ":VERIFY:" .. tostring(mismatchText))
+                local detail = modelName .. ":VERIFY:" .. tostring(mismatchText)
+                if secondaryTarget then
+                    table.insert(secondaryErrors, detail)
+                else
+                    table.insert(failures, detail)
+                end
                 __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
-                    .. "|methodApplied=true|verified=false|checked=" .. tostring(checked)
+                    .. "|methodApplied=true|verified=false|required=" .. tostring(not secondaryTarget)
+                    .. "|checked=" .. tostring(checked)
                     .. "|mismatches=" .. tostring(mismatchText))
             end
         else
-            table.insert(failures, modelName .. ":" .. tostring(result))
+            local detail = modelName .. ":" .. tostring(result)
+            if secondaryTarget then
+                table.insert(secondaryErrors, detail)
+            else
+                table.insert(failures, detail)
+            end
             __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
-                .. "|methodApplied=false|error=" .. tostring(result))
+                .. "|methodApplied=false|required=" .. tostring(not secondaryTarget)
+                .. "|error=" .. tostring(result))
         end
     end
 
@@ -13701,31 +13733,39 @@ function others.resetToInitialAvatar()
     -- finish the transaction so the Unusual swap is recaptured against the new rig.
     others.endAvatarMutation(mutation, "reset-to-initial")
 
+    local requiredOK = requiredTargets > 0
+        and requiredVerified == requiredTargets
+        and #failures == 0
+
     __DDCore.Log(
-        (applied > 0 and "AVATAR RESET|" or "AVATAR RESET FAILED|")
+        (requiredOK and "AVATAR RESET|" or "AVATAR RESET FAILED|")
         .. "baseline=initial"
         .. "|targets=" .. tostring(#targets)
         .. "|r6Targets=" .. tostring(#r6Targets)
         .. "|applied=" .. tostring(applied)
         .. "|verified=" .. tostring(verified)
-        .. "|failed=" .. tostring(#failures)
+        .. "|requiredTargets=" .. tostring(requiredTargets)
+        .. "|requiredVerified=" .. tostring(requiredVerified)
+        .. "|failedRequired=" .. tostring(#failures)
+        .. "|failedSecondary=" .. tostring(#secondaryErrors)
         .. "|nonR6Skipped=" .. tostring(nonR6)
         .. "|models=" .. table.concat(modelNames, ";")
         .. "|sync=" .. tostring(others.avatarSyncEnabled)
         .. (#failures > 0 and "|errors=" .. table.concat(failures, " ; ") or "")
+        .. (#secondaryErrors > 0 and "|secondaryErrors=" .. table.concat(secondaryErrors, " ; ") or "")
     )
 
     if others.status then
-        if #failures == 0 and verified == #r6Targets then
-            others.status.Text = "Initial avatar restored • " .. tostring(verified)
+        if requiredOK then
+            others.status.Text = "Initial avatar restored • " .. tostring(requiredVerified)
         elseif applied > 0 then
-            others.status.Text = "Partial reset • " .. tostring(verified) .. "/" .. tostring(#r6Targets)
+            others.status.Text = "Partial reset • " .. tostring(requiredVerified) .. "/" .. tostring(requiredTargets)
         else
             others.status.Text = "Reset failed • see log"
         end
     end
 
-    return applied > 0 and verified == #r6Targets and #failures == 0
+    return requiredOK
 end
 
 --// FIRST-PERSON HEAD/CAMERA VISIBILITY
