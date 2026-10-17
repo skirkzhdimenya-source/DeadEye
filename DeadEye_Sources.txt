@@ -1,6 +1,6 @@
 ==================================================
 DeadEye — Recovered Game Sources
-Updated: 2026-10-16
+Updated: 2026-10-17
 ==================================================
 
 Этот файл хранит исходники/декомпиляции игровых модулей, которые были
@@ -19,6 +19,9 @@ SOURCE #1
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Movement
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 PURPOSE:
 Главный Movement-класс персонажа.
@@ -633,6 +636,9 @@ SOURCE #2
 PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 PURPOSE:
 Обёртка MoveFunction, которая по StateInfo получает Movement.MoveType
 и вызывает соответствующую функцию из Functions.
@@ -706,6 +712,9 @@ SOURCE #3
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 PURPOSE:
 Конкретные movement-типы:
@@ -1322,7 +1331,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Movement.StateInfo
 
 STATUS:
-NOT FOUND DIRECTLY.
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 IMPORTANT:
 The Movement module shown above actually requires:
@@ -2385,6 +2394,9 @@ SOURCE #8
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Movement.Constraints
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 PURPOSE:
 Создаёт и включает/выключает physics constraints персонажа:
@@ -5493,6 +5505,9 @@ SOURCE #48
 PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Visibility
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 PURPOSE:
 Клиентский обработчик видимости частей персонажа/косметики.
 Именно здесь SetVisibility управляет:
@@ -5726,6 +5741,9 @@ SOURCE #49
 PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Visibility.Types
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 PURPOSE:
 Набор имён частей персонажа, которые разрешено оставлять видимыми
 для каждого режима Visibility:
@@ -5876,6 +5894,9 @@ SOURCE #50
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.Character.Rig
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 PURPOSE:
 Класс рига персонажа.
@@ -6288,6 +6309,9 @@ SOURCE #51
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.Character.Shared.StateInfo
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 PURPOSE:
 Полный StateInfo для анализа состояний движения и физических constraints.
@@ -7062,6 +7086,9 @@ SOURCE #52
 PATH:
 ReplicatedStorage.Objects.Game.Character.Shared.StateInfo.RequirementFunctions
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 PURPOSE:
 Функции проверки Requirements для выбора текущего Movement state.
 
@@ -7151,6 +7178,9 @@ SOURCE #53
 PATH:
 ReplicatedStorage.Services.Asset.RigService
 
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+
 PURPOSE:
 Штатная клиентская система сборки, кеширования и привязки визуального рига.
 Ключевые методы: GetRig(), SetRig(), UnsetRig(), CreateCachedRig().
@@ -7176,28 +7206,27 @@ require((Services:WaitForChild("Data"):WaitForChild("ServerStateRegistryService"
 local Registry = require(ReplicatedStorage.Items.Registry)
 local v_u_1 = require((script:WaitForChild("WeldHat")))
 local v_u_2 = require((script:WaitForChild("AddCosmetics")))
+local AnimationConstraintJoint = require(ReplicatedStorage.Client.Services.Assets.AnimationConstraintJoint)
 local CollectionService = game:GetService("CollectionService")
 local RelicsXYZ = require(ReplicatedStorage.Shared.Partnerships.Relics.Content.RelicsXYZ)
-local Rigs = workspace:WaitForChild("Rigs")
+local Rigs = workspace:FindFirstChild("Rigs")
 local Folder = Instance.new("Folder")
 Folder.Parent = ReplicatedStorage
 Folder.Name = "RigCache"
 function AreTablesEqual(p3, p4)
-	--[[ line: 40 | upvalues: none]]
-	for v5, v6 in next, p3 do
-		if p4[v5] ~= v6 then
+	for _, v5 in p3 do
+		if p4[v5] == nil then
 			return false
 		end
 	end
-	for v7, v8 in next, p4 do
-		if p3[v7] ~= v8 then
+	for v6 in p4 do
+		if p3[v6] == nil then
 			return false
 		end
 	end
 	return true
 end
 function GetAppearance(p9, p10)
-	--[[ line: 46 | upvalues: none]]
 	local v11 = workspace.PlayerCache:WaitForChild(p9)
 	if v11 then
 		if p10 == Enum.HumanoidRigType.R6 then
@@ -7207,11 +7236,9 @@ function GetAppearance(p9, p10)
 	end
 end
 function AddCosmetics(p12, p13, p14)
-	--[[ line: 59 | upvalues: (copy) v_u_2]]
 	v_u_2(p12, p13, nil, p14)
 end
 function SetupBoombox(p15, p16)
-	--[[ line: 63 | upvalues: (copy) RelicsXYZ, (copy) CollectionService, (copy) v_u_1]]
 	local v17 = RelicsXYZ.Boombox.PromiseBoombox(RelicsXYZ.Boombox.GetBoomboxConfigs()[1])
 	v17:await()
 	local v18 = v17:expect()
@@ -7222,7 +7249,7 @@ function SetupBoombox(p15, p16)
 	local v20 = nil
 	if p16 and p16 ~= 239 then
 		local v21 = nil
-		for _3, v22 in ipairs((CollectionService:GetTagged("RelicsUGCSkin"))) do
+		for _, v22 in ipairs(CollectionService:GetTagged("RelicsUGCSkin")) do
 			if v22:GetAttribute("ID") == p16 then
 				v21 = v22
 				break
@@ -7249,14 +7276,13 @@ function SetupBoombox(p15, p16)
 	return v19
 end
 function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
-	--[[ line: 101 | upvalues: (copy) ReplicatedStorage, (copy) Players, (copy) Folder, (copy) Registry, (copy) t2, (copy) Rigs]]
 	if not p24:FindFirstChild("Joints") then
 		local Folder2 = Instance.new("Folder")
 		Folder2.Name = "Joints"
 		Folder2.Parent = p24
-		for _4, v32 in p24:GetChildren() do
-			for _5, v33 in v32:GetChildren() do
-				if v33:IsA("Motor6D") then
+		for _, v32 in p24:GetChildren() do
+			for _, v33 in v32:GetChildren() do
+				if v33:IsA("Motor6D") or v33:IsA("AnimationConstraint") then
 					if v33.Part0 and v33.Part1 then
 						v33.Parent = Folder2
 					else
@@ -7265,7 +7291,7 @@ function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
 				end
 			end
 		end
-		for _6, v34 in p24:GetDescendants() do
+		for _, v34 in p24:GetDescendants() do
 			if v34:IsA("BasePart") then
 				v34.CanTouch = false
 				v34.CanQuery = false
@@ -7279,9 +7305,9 @@ function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
 		else
 			v35 = ReplicatedStorage.Assets.Character.R6
 		end
-		for _7, v36 in v35:GetChildren() do
+		for _, v36 in v35:GetChildren() do
 			if v36:IsA("BasePart") then
-				for _8, v37 in v36:GetChildren() do
+				for _, v37 in v36:GetChildren() do
 					if v37:IsA("Attachment") and not p24[v36.Name]:FindFirstChild(v37.Name) then
 						v37:Clone().Parent = p24[v36.Name]
 					end
@@ -7298,7 +7324,6 @@ function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
 	v38.Name = p28
 	if p30 and p28 ~= Players.LocalPlayer.Name then
 		Humanoid.AnimationPlayed:Connect(function(p39)
-			--[[ line: 151 | upvalues: none]]
 			if p39.Animation and p39.Animation.Parent then
 				task.wait()
 				if not (p39.Animation and p39.Animation.Parent) then
@@ -7309,39 +7334,49 @@ function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
 			end
 		end)
 	end
-	for _9, v40 in v38:GetChildren() do
+	for _, v40 in v38:GetChildren() do
 		if v40:IsA("BasePart") then
 			v40.Anchored = false
 		end
 	end
 	local HumanoidRootPart = v38:FindFirstChild("HumanoidRootPart")
 	local t3 = {}
-	for _10, v41 in v38.Joints:GetChildren() do
-		if v41.Part0 == HumanoidRootPart then
+	local t4 = {}
+	local t5 = {}
+	for _, v41 in v38.Joints:GetChildren() do
+		if v41:IsA("Weld") and (HumanoidRootPart and v41.Part0 == HumanoidRootPart) then
 			v41.Part0 = nil
 			table.insert(t3, v41)
+		elseif v41:IsA("AnimationConstraint") and v41.Attachment0.Parent == HumanoidRootPart or v41:IsA("Motor6D") and v41.Part0 == HumanoidRootPart then
+			if v41:IsA("AnimationConstraint") then
+				t4[v41] = v41.Attachment0.CFrame
+				v41.Attachment0 = nil
+			else
+				v41.Part0 = nil
+			end
+			table.insert(t5, v41)
 		end
 	end
 	local Folder3 = Instance.new("Folder")
 	Folder3.Name = ("%*_HRPAssetsFolder"):format(p24.Name)
 	Folder3.Parent = Folder
-	local t4 = {}
+	local t6 = {}
 	if p26 then
-		local t5 = {}
-		for _11, v42 in p26 do
-			table.insert(t5, v42)
+		local t7 = {}
+		for _, v42 in ipairs(p26) do
+			table.insert(t7, v42)
 		end
-		AddCosmetics(v38, t5)
+		AddCosmetics(v38, t7)
 	end
 	if p27 then
-		for _12, v43 in p27 do
+		for _, v43 in p27 do
 			local v44 = Registry.GetById(v43)
 			if v44 then
 				local Module = v44.Module
 				if Module:FindFirstChild("Headgear") then
 					if not Module.Headgear:GetAttribute("Optimized") then
 						Module.Headgear:SetAttribute("Optimized", true)
-						for _13, v45 in Module.Headgear:GetDescendants() do
+						for _, v45 in Module.Headgear:GetDescendants() do
 							if v45:IsA("BasePart") then
 								v45.CanCollide = false
 								v45.CanTouch = false
@@ -7361,23 +7396,22 @@ function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
 			end
 		end
 	end
-	local t6 = {}
 	if v38:FindFirstChild("HumanoidRootPart") then
-		for _14, v47 in v38.HumanoidRootPart:GetDescendants() do
+		for _, v47 in v38.HumanoidRootPart:GetDescendants() do
 			if (v47:IsA("Weld") or v47:IsA("Motor6D")) and v47.Part0 == v38.HumanoidRootPart then
-				table.insert(t6, v47)
+				table.insert(t3, v47)
 				v47.Part0 = nil
 			end
 		end
-		for _15, v48 in v38.HumanoidRootPart:GetChildren() do
+		for _, v48 in v38.HumanoidRootPart:GetChildren() do
 			v48.Parent = Folder3
-			table.insert(t4, v48)
+			table.insert(t6, v48)
 		end
 		v38.HumanoidRootPart:Destroy()
 	end
-	local t7 = {}
 	local t8 = {}
-	for _16, v49 in v38:GetChildren() do
+	local t9 = {}
+	for _, v49 in v38:GetChildren() do
 		if v49:IsA("Accessory") or v49:IsA("Hat") then
 			local v50 = v49:FindFirstChildOfClass("Part") or v49:FindFirstChildOfClass("MeshPart")
 			local Weld3 = v50:FindFirstChildOfClass("Weld")
@@ -7391,49 +7425,63 @@ function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
 			else
 				v51 = nil
 			end
-			if RigidConstraint then
+			if RigidConstraint and not v51 then
 				v51 = RigidConstraint.Attachment0.Parent.Name
 				if v51 == v50.Name and (RigidConstraint.Attachment1 and RigidConstraint.Attachment1.Parent) then
 					v51 = RigidConstraint.Attachment1.Parent.Name
 				end
 			end
 			if v51 then
-				if not t7[v51] then
-					t7[v51] = {}
+				if not t8[v51] then
+					t8[v51] = {}
 				end
-				local v52 = t7[v51]
+				local v52 = t8[v51]
 				table.insert(v52, v50)
-			end
-		end
-	end
-	local t9 = {}
-	for _17, v53 in v38:GetChildren() do
-		if v53:IsA("BasePart") then
-			local t10 = {}
-			for _18, v54 in v53:GetDescendants() do
-				if not v54:IsA("Attachment") then
-					if v54:IsA("Beam") or (v54:IsA("Trail") or (v54:IsA("Sparkles") or v54:IsA("Fire"))) then
-						t9[v54] = { Enabled = v54.Enabled }
-					elseif v54:IsA("ParticleEmitter") then
-						t9[v54] = { Enabled = v54.Enabled, Acceleration = v54.Acceleration }
-					elseif v54:IsA("Decal") or v54:IsA("Texture") then
-						t9[v54] = { Transparency = v54.Transparency }
+				for _, v53 in v50:GetDescendants() do
+					if v53:IsA("ParticleEmitter") or (v53:IsA("Fire") or (v53:IsA("Sparkles") or v53:IsA("Smoke"))) then
+						local v54 = t8[v51]
+						table.insert(v54, v53)
 					end
-					table.insert(t10, v54)
 				end
 			end
-			for _19, v55 in t7[v53.Name] or {} do
-				table.insert(t10, v55)
-			end
-			table.insert(t8, { v53, t10 })
-			v53.CanQuery = true
 		end
 	end
-	local t11 = {}
-	for _20, v56 in v38.Joints:GetChildren() do
-		t11[v56] = { v56.C0, v56.C1 }
+	local t10 = {}
+	for _, v55 in v38:GetChildren() do
+		if v55:IsA("BasePart") then
+			local t11 = {}
+			for _, v56 in v55:GetDescendants() do
+				if not v56:IsA("Attachment") then
+					if v56:IsA("Beam") or (v56:IsA("Trail") or (v56:IsA("Sparkles") or v56:IsA("Fire"))) then
+						t10[v56] = { Enabled = v56.Enabled }
+					elseif v56:IsA("ParticleEmitter") then
+						t10[v56] = { Enabled = v56.Enabled, Acceleration = v56.Acceleration }
+					elseif v56:IsA("Decal") or v56:IsA("Texture") then
+						t10[v56] = { Transparency = v56.Transparency }
+					end
+					table.insert(t11, v56)
+				end
+			end
+			for _, v57 in t8[v55.Name] or {} do
+				table.insert(t11, v57)
+			end
+			table.insert(t9, { v55, t11 })
+			v55.CanQuery = true
+		end
 	end
-	local t12 = {
+	local t12 = {}
+	for _, v58 in v38.Joints:GetChildren() do
+		if v58:IsA("Motor6D") then
+			t12[v58] = { v58.C0, v58.C1 }
+		elseif v58:IsA("AnimationConstraint") then
+			local v59 = t4[v58] or CFrame.new()
+			if v58.Attachment0 then
+				v59 = v58.Attachment0.CFrame
+			end
+			t12[v58] = { v59, v58.Attachment1.CFrame }
+		end
+	end
+	local t13 = {
 		BoomboxAsset = nil,
 		Model = v38,
 		Class = p25,
@@ -7443,259 +7491,338 @@ function CreateCachedRig(p24, p25, p26, p27, p28, p29, p30, p31)
 		Gear = p27,
 		Name = p28,
 		Humanoid = Humanoid,
-		RootJoints = t3,
-		RootWelds = t6,
-		Limbs = t8,
-		DefaultJointInfo = t11,
-		HRPAssets = t4,
+		RootJoints = t5,
+		RootWelds = t3,
+		Limbs = t9,
+		DefaultJointInfo = t12,
+		HRPAssets = t6,
 		HRPAssetsFolder = Folder3,
-		DefaultInfo = t9
+		DefaultInfo = t10
 	}
 	if p29 then
-		local v57 = t2
-		table.insert(v57, t12)
+		local v60 = t2
+		table.insert(v60, t13)
+	end
+	if Rigs == nil or Rigs.Parent == nil then
+		Rigs = workspace:WaitForChild("Rigs")
 	end
 	v38.Parent = Rigs
-	return t12
+	return t13
 end
-function ClearCachedRig(p58)
-	--[[ line: 325 | upvalues: (copy) t2]]
-	if p58.Model then
-		p58.Model:Destroy()
+function ClearCachedRig(p61)
+	if p61.Model then
+		p61.Model:Destroy()
 	end
-	if p58.HRPAssetsFolder then
-		p58.HRPAssetsFolder:Destroy()
+	if p61.HRPAssetsFolder then
+		p61.HRPAssetsFolder:Destroy()
 	end
-	for v59, v60 in t2 do
-		if v60 == p58 then
-			table.remove(t2, v59)
+	for v62, v63 in t2 do
+		if v63 == p61 then
+			table.remove(t2, v62)
 			return
 		end
 	end
 end
-function RemovePlayer(p61)
-	--[[ line: 341 | upvalues: (copy) t2]]
-	for _21, v62 in t2 do
-		if v62.Name == p61.Name then
-			ClearCachedRig(v62)
+function ClearJointOverrides(p64)
+	for v65 in p64.DefaultJointInfo do
+		if v65:IsA("AnimationConstraint") then
+			local v66 = AnimationConstraintJoint.get(v65)
+			if v66 then
+				v66:Destroy()
+			end
+		end
+	end
+end
+t.PreviewAttribute = "PreviewRig"
+function t.PartOf(p67: userdata)
+	if p67:IsA("JointInstance") then
+		return p67.Part0
+	end
+	if not p67:IsA("AnimationConstraint") then
+		return nil
+	end
+	local Attachment0 = p67.Attachment0
+	local v68
+	if Attachment0 then
+		v68 = Attachment0.Parent
+	else
+		v68 = nil
+	end
+	return v68 and v68:IsA("BasePart") and v68 or nil
+end
+function t.BindRoot(p69: userdata, p70: userdata, p71: userdata?)
+	if p69:IsA("JointInstance") then
+		p69.Part0 = p70
+		return
+	elseif p69:IsA("AnimationConstraint") then
+		local RootRigAttachment = p70:FindFirstChild("RootRigAttachment")
+		if not (RootRigAttachment and RootRigAttachment:IsA("Attachment")) then
+			local v72 = p71 or p69.Attachment0
+			RootRigAttachment = Instance.new("Attachment")
+			RootRigAttachment.Name = "RootRigAttachment"
+			local v73
+			if v72 then
+				v73 = v72.CFrame
+			else
+				v73 = CFrame.identity
+			end
+			RootRigAttachment.CFrame = v73
+			RootRigAttachment.Parent = p70
+		end
+		p69.Attachment0 = RootRigAttachment
+	end
+end
+function RemovePlayer(p74)
+	for _, v75 in t2 do
+		if v75.Name == p74.Name then
+			ClearCachedRig(v75)
 			return
 		end
 	end
 end
-function t.GetRig(_22, p63, p64, p65, p66, p67)
-	--[[ line: 350 | upvalues: (copy) ReplicatedStorage, (copy) Players, (copy) Registry, (copy) t2]]
-	if p63:GetAttribute("AI") and p63.Name ~= "Mimic" then
-		return CreateCachedRig(ReplicatedStorage.NPCs:FindFirstChild(p63.Name).Variants.Default, nil, nil, nil, p63.Name)
+function t.GetRig(_, p76, p77, p78, p79, p80)
+	if p76:GetAttribute("AI") and p76.Name ~= "Mimic" then
+		return CreateCachedRig(ReplicatedStorage.NPCs:FindFirstChild(p76.Name).Variants.Default, nil, nil, nil, p76.Name)
 	end
-	if p63.Name == "Mimic" then
-		local v68 = Players:GetPlayers()[math.random(1, #Players:GetPlayers())]
+	if p76.Name == "Mimic" then
+		local v81 = Players:GetPlayers()[math.random(1, #Players:GetPlayers())]
 		local R6 = Enum.HumanoidRigType.R6
-		if v68:GetAttribute("RigType") == "R15" then
+		if v81:GetAttribute("RigType") == "R15" then
 			R6 = Enum.HumanoidRigType.R15
 		end
-		local v69 = GetAppearance(v68.Name, R6)
-		return CreateCachedRig(v69, R6, p65, p66, v68.Name, true, true)
+		local v82 = GetAppearance(v81.Name, R6)
+		return CreateCachedRig(v82, R6, p78, p79, v81.Name, true, true)
 	end
-	local Name = Players:FindFirstChild(p63.Name)
+	local Name = Players:FindFirstChild(p76.Name)
 	if not Name then
 		warn("No player found to obtain rig with!")
 		return
 	end
-	local v70 = GetAppearance(Name.Name, p64)
-	for _23, v71 in p65 do
-		local Module2 = Registry.GetById(v71).Module
+	local v83 = GetAppearance(Name.Name, p77)
+	for _, v84 in p78 do
+		local Module2 = Registry.GetById(v84).Module
 		if (require(Module2).CosmeticInfo or {}).Character then
-			if p64 == Enum.HumanoidRigType.R15 and Module2:FindFirstChild("Character") then
-				v70 = Module2.Character
-				p64 = Enum.HumanoidRigType.R15
+			if p77 == Enum.HumanoidRigType.R15 and Module2:FindFirstChild("Character") then
+				v83 = Module2.Character
+				p77 = Enum.HumanoidRigType.R15
 			elseif Module2:FindFirstChild("CharacterClassic") then
-				v70 = Module2.CharacterClassic
-				p64 = Enum.HumanoidRigType.R6
+				v83 = Module2.CharacterClassic
+				p77 = Enum.HumanoidRigType.R6
 			elseif Module2:FindFirstChild("Character") then
-				v70 = Module2.Character
-				p64 = Enum.HumanoidRigType.R15
+				v83 = Module2.Character
+				p77 = Enum.HumanoidRigType.R15
 			end
 			break
 		end
 	end
-	for _24, v72 in t2 do
-		if v72.Class == p64 and (v72.Base == v70 and (v72.Name == Name.Name and (v72.Boombox == p67 and AreTablesEqual(v72.Cosmetics, p65)))) and AreTablesEqual(v72.Gear or {}, p66 or {}) then
-			return v72
+	local v85
+	if p76:GetAttribute(t.PreviewAttribute) then
+		v85 = Name.Name .. "#Preview"
+	else
+		v85 = Name.Name
+	end
+	for _, v86 in t2 do
+		if v86.Class == p77 and v86.Base == v83 and ((v86.Key or v86.Name) == v85 and (v86.Boombox == p80 and AreTablesEqual(v86.Cosmetics, p78))) and AreTablesEqual(v86.Gear or {}, p79 or {}) then
+			return v86
 		end
 	end
-	for _25, v73 in t2 do
-		if v73.Name == Name.Name then
-			ClearCachedRig(v73)
+	for _, v87 in table.clone(t2) do
+		if (v87.Key or v87.Name) == v85 then
+			ClearCachedRig(v87)
 		end
 	end
-	return CreateCachedRig(v70, p64, p65, p66, Name.Name, true, true, p67), true
+	local v88 = CreateCachedRig(v83, p77, p78, p79, Name.Name, true, true, p80)
+	v88.Key = v85
+	return v88, true
 end
-function t.SetRig(_26, p74, p75, p76, p77, p78)
-	--[[ line: 402 | upvalues: (copy) t, (copy) Registry, (copy) v_u_2]]
-	local v79, _27 = t:GetRig(p74, p75, p76, p77, p78)
-	if v79 then
-		if p74.PrimaryPart then
-			v79.Model:SetAttribute("Tag", (p74:GetAttribute("Tag")))
-			v79.Model.PrimaryPart = nil
-			if v79.Model:FindFirstChild("Head") then
-				v79.Model.Head.Anchored = false
+function t.SetRig(_, p89, p90, p91, p92, p93)
+	local v94 = t:GetRig(p89, p90, p91, p92, p93)
+	if v94 then
+		if p89.PrimaryPart then
+			v94.Model:SetAttribute("Tag", p89:GetAttribute("Tag"))
+			v94.Model.PrimaryPart = nil
+			if v94.Model:FindFirstChild("Head") then
+				v94.Model.Head.Anchored = false
 			end
-			for _28, v80 in v79.RootJoints do
-				v80.Part0 = p74.PrimaryPart
+			for _, v95 in v94.RootJoints do
+				if v95:IsA("AnimationConstraint") then
+					v95.Attachment0 = p89.PrimaryPart.RootRigAttachment
+				else
+					v95.Part0 = p89.PrimaryPart
+				end
 			end
-			for _29, v81 in v79.RootWelds do
-				v81.Part0 = p74.PrimaryPart
+			for _, v96 in v94.RootWelds do
+				v96.Part0 = p89.PrimaryPart
 			end
-			if v79.Boombox and (v79.Boombox ~= 0 and not v79.BoomboxAsset) then
-				v79.BoomboxAsset = SetupBoombox(v79.Model, v79.Boombox)
-				local t13 = {}
-				for _30, v82 in p76 do
-					if not t13[v82] then
-						t13[v82] = true
-						local v83 = Registry.GetById(v82)
-						if v83 and table.find(v83.Categories, "RELICSAuras") then
-							v_u_2(v79.Model, { v82 }, v79.BoomboxAsset:FindFirstChildOfClass("MeshPart") or v79.BoomboxAsset:FindFirstChildOfClass("Part"))
+			if v94.Boombox and (v94.Boombox ~= 0 and not v94.BoomboxAsset) then
+				v94.BoomboxAsset = SetupBoombox(v94.Model, v94.Boombox)
+				local t14 = {}
+				for _, v97 in p91 do
+					if not t14[v97] then
+						t14[v97] = true
+						local v98 = Registry.GetById(v97)
+						if v98 and table.find(v98.Categories, "RELICSAuras") then
+							v_u_2(v94.Model, { v97 }, v94.BoomboxAsset:FindFirstChildOfClass("MeshPart") or v94.BoomboxAsset:FindFirstChildOfClass("Part"))
 						end
 					end
 				end
 			end
-			for v84, v85 in v79.DefaultJointInfo do
-				v84.C0 = v85[1]
-				v84.C1 = v85[2]
-				if v84:IsA("Motor6D") then
-					v84.Transform = CFrame.new()
+			ClearJointOverrides(v94)
+			for v99, v100 in v94.DefaultJointInfo do
+				if v99:IsA("AnimationConstraint") then
+					v99.Attachment0.CFrame = v100[1]
+					v99.Attachment1.CFrame = v100[2]
+				else
+					v99.C0 = v100[1]
+					v99.C1 = v100[2]
+				end
+				if v99:IsA("Motor6D") or v99:IsA("AnimationConstraint") then
+					v99.Transform = CFrame.new()
 				end
 			end
-			for _31, v86 in v79.Limbs do
-				if v86[1]:IsA("BasePart") then
-					v86[1].CanQuery = true
-					v86[1].CollisionGroup = "PlayerVis"
+			for _, v101 in v94.Limbs do
+				if v101[1]:IsA("BasePart") then
+					v101[1].CanQuery = true
+					v101[1].CollisionGroup = "PlayerVis"
 				end
 			end
-			for v87, v88 in v79.DefaultInfo do
-				for v89, v90 in v88 do
-					v87[v89] = v90
+			for v102, v103 in v94.DefaultInfo do
+				for v104, v105 in v103 do
+					v102[v104] = v105
 				end
 			end
-			local v91 = v79.HRPAssetsFolder:Clone()
-			local t14 = {}
-			for _32, v92 in v91:GetDescendants() do
-				if (v92:IsA("Weld") or v92:IsA("Motor6D")) and (not v92.Part0 or v92.Part0.Name == "HumanoidRootPart") then
-					v92.Part0 = p74.PrimaryPart
+			local v106 = v94.HRPAssetsFolder:Clone()
+			local t15 = {}
+			for _, v107 in v106:GetDescendants() do
+				if (v107:IsA("Weld") or v107:IsA("Motor6D")) and (not v107.Part0 or v107.Part0.Name == "HumanoidRootPart") then
+					v107.Part0 = p89.PrimaryPart
 				end
 			end
-			for _33, v93 in v91:GetChildren() do
-				if p74.PrimaryPart:FindFirstChild(v93.Name) then
-					if v93:IsA("Attachment") then
-						local Name2 = p74.PrimaryPart:FindFirstChild(v93.Name)
-						for _34, v94 in v93:GetChildren() do
-							v94.Parent = Name2
+			for _, v108 in v106:GetChildren() do
+				if p89.PrimaryPart:FindFirstChild(v108.Name) then
+					if v108:IsA("Attachment") then
+						local Name2 = p89.PrimaryPart:FindFirstChild(v108.Name)
+						for _, v109 in v108:GetChildren() do
+							v109.Parent = Name2
 						end
 					end
 				else
-					table.insert(t14, v93)
+					table.insert(t15, v108)
 				end
 			end
-			for _35, v95 in t14 do
-				v95.Parent = p74.PrimaryPart
+			for _, v110 in t15 do
+				v110.Parent = p89.PrimaryPart
 			end
-			v91:Destroy()
-			if v79.Model:FindFirstChild("Tool") then
-				v79.Model.Tool:Destroy()
+			v106:Destroy()
+			if v94.Model:FindFirstChild("Tool") then
+				v94.Model.Tool:Destroy()
 			end
-			if v79.Model:FindFirstChild("EmoteModel") then
-				v79.Model.EmoteModel:Destroy()
+			if v94.Model:FindFirstChild("EmoteModel") then
+				v94.Model.EmoteModel:Destroy()
 			end
-			if v79.Model:FindFirstChild("CarryModel") then
-				v79.Model.CarryModel:Destroy()
+			if v94.Model:FindFirstChild("CarryModel") then
+				v94.Model.CarryModel:Destroy()
 			end
-			v79.BoundCharacter = p74
-			v79.Tag = p74:GetAttribute("Tag")
-			v79.Bound = true
-			return v79
+			v94.BoundCharacter = p89
+			v94.Tag = p89:GetAttribute("Tag")
+			v94.Bound = true
+			return v94
 		end
 	else
 		warn("Cache return failed")
 	end
 end
-function t.UnsetRig(_36, p96)
-	--[[ line: 495 | upvalues: (copy) t2]]
-	for _37, v97 in t2 do
-		if v97.BoundCharacter == p96 or not (v97.BoundCharacter and v97.BoundCharacter.Parent) and v97.Bound then
-			if v97.Model and (v97.Model.Parent and v97.Model:FindFirstChild("Head")) then
-				if v97.BoomboxAsset then
-					v97.BoomboxAsset:Destroy()
-					v97.BoomboxAsset = nil
+function t.UnsetRig(_, p111)
+	for _, v112 in t2 do
+		if v112.BoundCharacter == p111 or not (v112.BoundCharacter and v112.BoundCharacter.Parent) and v112.Bound then
+			if v112.Model and (v112.Model.Parent and v112.Model:FindFirstChild("Head")) then
+				if v112.BoomboxAsset then
+					v112.BoomboxAsset:Destroy()
+					v112.BoomboxAsset = nil
 				end
-				v97.Bound = false
-				for _38, v98 in v97.RootJoints do
-					v98.Part0 = nil
-				end
-				for _39, v99 in v97.RootWelds do
-					v99.Part0 = nil
-				end
-				for v100, v101 in v97.DefaultJointInfo do
-					v100.C0 = v101[1]
-					v100.C1 = v101[2]
-					if v100:IsA("Motor6D") then
-						v100.Transform = CFrame.new()
+				v112.Bound = false
+				ClearJointOverrides(v112)
+				for v113, v114 in v112.DefaultJointInfo do
+					if v113:IsA("AnimationConstraint") then
+						local Attachment02 = v113.Attachment0
+						local Attachment1 = v113.Attachment1
+						if Attachment02 then
+							Attachment02.CFrame = v114[1]
+						end
+						if Attachment1 then
+							Attachment1.CFrame = v114[2]
+						end
+					else
+						v113.C0 = v114[1]
+						v113.C1 = v114[2]
+					end
+					if v113:IsA("Motor6D") or v113:IsA("AnimationConstraint") then
+						v113.Transform = CFrame.new()
 					end
 				end
-				if v97.Model:FindFirstChild("Tool") then
-					v97.Model.Tool:Destroy()
+				for _, v115 in v112.RootJoints do
+					if v115:IsA("Motor6D") then
+						v115.Part0 = nil
+					else
+						v115.Attachment0 = nil
+					end
 				end
-				if v97.Model:FindFirstChild("EmoteModel") then
-					v97.Model.EmoteModel:Destroy()
+				for _, v116 in v112.RootWelds do
+					v116.Part0 = nil
 				end
-				if v97.Model:FindFirstChild("CarryModel") then
-					v97.Model.CarryModel:Destroy()
+				if v112.Model:FindFirstChild("Tool") then
+					v112.Model.Tool:Destroy()
 				end
-				v97.Model.PrimaryPart = v97.Model.Head
-				v97.Model.PrimaryPart.Anchored = true
-				v97.Model.PrimaryPart.CFrame = CFrame.new(50000, 50000, 5000)
-				v97.Tag = nil
+				if v112.Model:FindFirstChild("EmoteModel") then
+					v112.Model.EmoteModel:Destroy()
+				end
+				if v112.Model:FindFirstChild("CarryModel") then
+					v112.Model.CarryModel:Destroy()
+				end
+				v112.Model.PrimaryPart = v112.Model.Head
+				v112.Model.PrimaryPart.Anchored = true
+				v112.Model.PrimaryPart.CFrame = CFrame.new(50000, 50000, 5000)
+				v112.Tag = nil
 			else
-				ClearCachedRig(v97)
+				ClearCachedRig(v112)
 			end
 		end
 	end
 end
-function t.GetRigFromTag(_40, p102)
-	--[[ line: 537 | upvalues: (copy) t2]]
-	for _41, v103 in t2 do
-		if v103.Tag == p102 then
-			return v103
+function t.GetRigFromTag(_, p117)
+	for _, v118 in t2 do
+		if v118.Tag == p117 then
+			return v118
 		end
 	end
 end
-function t.GetCharacterFromRig(_42, p104)
-	--[[ line: 545 | upvalues: (copy) t2]]
-	for _43, v105 in t2 do
-		if v105.Model == p104 and (v105.BoundCharacter and v105.BoundCharacter.Parent) then
-			return v105.BoundCharacter, v18
+function t.GetCharacterFromRig(_, p119)
+	for _, v120 in t2 do
+		if v120.Model == p119 and (v120.BoundCharacter and v120.BoundCharacter.Parent) then
+			return v120.BoundCharacter
 		end
 	end
 end
-function t.GetRigFromCharacter(_44, p106)
-	--[[ line: 553 | upvalues: (copy) t2]]
-	for _45, v107 in t2 do
-		if v107.BoundCharacter == p106 then
-			return v107.Model
+function t.GetRigFromCharacter(_, p121)
+	for _, v122 in t2 do
+		if v122.BoundCharacter == p121 then
+			return v122.Model
 		end
 	end
 end
-Players.PlayerRemoving:Connect(function(p108)
-	--[[ line: 561 | upvalues: none]]
-	RemovePlayer(p108)
+Players.PlayerRemoving:Connect(function(p123)
+	RemovePlayer(p123)
 end)
 return t
-
 
 ==================================================
 SOURCE #54
 ==================================================
 PATH:
 ReplicatedStorage.Services.Asset.RigService.AddCosmetics
+
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
 
 PURPOSE:
 Штатное применение косметики к частям визуального рига.
@@ -7761,8 +7888,8 @@ local t2 = {
 	"RightWrist",
 	"Waist"
 }
+local t3 = { "Attachment0", "Attachment1" }
 local function enableScripts(p1: userdata)
-	--[[ line: 76 | upvalues: none]]
 	for _, v2 in p1:GetDescendants() do
 		if v2:IsA("Script") then
 			v2.Enabled = true
@@ -7770,170 +7897,205 @@ local function enableScripts(p1: userdata)
 	end
 end
 local function collectParticleEmitters(p3: userdata, p4: {[any]: any})
-	--[[ line: 84 | upvalues: none]]
-	for _2, v5 in p3:GetDescendants() do
+	for _, v5 in p3:GetDescendants() do
 		if v5:IsA("ParticleEmitter") then
 			table.insert(p4, v5)
 		end
 	end
 end
-local function mergeAttachments(p6: userdata, p7: userdata)
-	--[[ line: 93 | upvalues: none]]
-	for _3, v8 in p6:GetChildren() do
-		if v8:IsA("Attachment") then
-			local Name2 = p7:FindFirstChild(v8.Name)
+local function indexAttachmentUsers(p6: userdata)
+	local t4 = {}
+	for _, v7 in p6:GetDescendants() do
+		local Constraint = v7:IsA("Constraint")
+		if not Constraint then
+			Constraint = v7:IsA("Beam") or v7:IsA("Trail")
+		end
+		if Constraint then
+			for _, v8 in t3 do
+				local v9 = v7[v8]
+				if v9 ~= nil then
+					local v10 = t4[v9]
+					if v10 == nil then
+						v10 = {}
+						t4[v9] = v10
+					end
+					table.insert(v10, { Instance = v7, Property = v8 })
+				end
+			end
+		end
+	end
+	return t4
+end
+local function mergeAttachments(p11: userdata, p12: userdata, p13: {[any]: any})
+	for _, v14 in p11:GetChildren() do
+		if v14:IsA("Attachment") then
+			local Name2 = p12:FindFirstChild(v14.Name)
 			if Name2 and Name2:IsA("Attachment") then
-				v8.CFrame = Name2.CFrame
+				v14.CFrame = Name2.CFrame
+				local v15 = p13[Name2]
+				if v15 ~= nil then
+					for _, v16 in v15 do
+						v16.Instance[v16.Property] = v14
+					end
+					p13[v14] = v15
+					p13[Name2] = nil
+				end
+				for _, v17 in Name2:GetChildren() do
+					if v17:IsA("Attachment") and p13[v17] ~= nil then
+						v17.Parent = v14
+					end
+				end
 				Name2:Destroy()
 			end
 		end
 	end
 end
-local function rebindJoints(p9: userdata, p10: userdata, p11: userdata)
-	--[[ line: 108 | upvalues: (copy) t]]
-	for _4, v12 in p9:GetDescendants() do
-		if (v12:IsA("Weld") or v12:IsA("Motor6D")) and not t[v12.Name] then
-			local Part0 = v12.Part0
-			if Part0 and Part0.Parent == p10 then
-				v12.Part0 = p11:FindFirstChild(Part0.Name)
+local function rebindJoints(p18: userdata, p19: userdata, p20: userdata)
+	for _, v21 in p18:GetDescendants() do
+		if (v21:IsA("Weld") or v21:IsA("Motor6D")) and not t[v21.Name] then
+			local Part0 = v21.Part0
+			if Part0 and Part0.Parent == p19 then
+				v21.Part0 = p20:FindFirstChild(Part0.Name)
 			end
-			local Part1 = v12.Part1
-			if Part1 and Part1.Parent == p10 then
-				v12.Part1 = p11:FindFirstChild(Part1.Name)
+			local Part1 = v21.Part1
+			if Part1 and Part1.Parent == p19 then
+				v21.Part1 = p20:FindFirstChild(Part1.Name)
 			end
 		end
 	end
 end
-local function applyCosmeticRig(p13: userdata, p14: userdata, p15: {[any]: any})
-	--[[ line: 141 | upvalues: (copy) enableScripts, (copy) Name, (copy) collectParticleEmitters, (copy) mergeAttachments, (copy) t2, (copy) rebindJoints]]
-	enableScripts(p14)
-	for _5, v16 in p14:GetChildren() do
-		if v16:IsA("BasePart") then
-			local Name3 = p13:FindFirstChild(v16.Name)
+local function applyCosmeticRig(p22: userdata, p23: userdata, p24: {[any]: any}, p25: {[any]: any})
+	enableScripts(p23)
+	for _, v26 in p23:GetChildren() do
+		if v26:IsA("BasePart") then
+			local Name3 = p22:FindFirstChild(v26.Name)
 			if Name3 and Name3:IsA("BasePart") then
-				if v16.Name == "Head" then
-					for _6, v17 in v16:GetChildren() do
-						local v18 = v17:IsA("DataModelMesh") or v17:IsA("Decal")
-						if not v18 then
-							v18 = v17:IsA("Texture") or v17:IsA("SurfaceAppearance")
+				if v26.Name == "Head" then
+					for _, v27 in v26:GetChildren() do
+						local v28 = v27:IsA("DataModelMesh") or v27:IsA("Decal")
+						if not v28 then
+							v28 = v27:IsA("Texture") or v27:IsA("SurfaceAppearance")
 						end
-						if v18 then
-							v17:Destroy()
+						if v28 then
+							v27:Destroy()
 						end
 					end
 				end
-				collectParticleEmitters(v16, p15)
-				mergeAttachments(v16, Name3)
-				for _7, v19 in v16:GetChildren() do
-					if not (v19:IsA("Motor6D") and table.find(t2, v19.Name)) then
-						v19.Parent = Name3
+				collectParticleEmitters(v26, p24)
+				mergeAttachments(v26, Name3, p25)
+				for _, v29 in v26:GetChildren() do
+					if not (v29:IsA("Motor6D") and table.find(t2, v29.Name)) then
+						v29.Parent = Name3
 					end
 				end
-				rebindJoints(Name3, p14, p13)
+				rebindJoints(Name3, p23, p22)
 			else
-				warn((("%* Rig has no limb named \"%*\" for cosmetic \"%*\""):format(Name, v16.Name, (p14:GetFullName()))))
+				warn(("%* Rig has no limb named \"%*\" for cosmetic \"%*\""):format(Name, v26.Name, p23:GetFullName()))
 			end
 		end
 	end
 end
-local function attachAura(p20: userdata, p21: userdata)
-	--[[ line: 181 | upvalues: none]]
-	local v22 = p20:Clone()
-	v22.Name = "Aura"
+local function attachAura(p30: userdata, p31: userdata)
+	local v32 = p30:Clone()
+	v32.Name = "Aura"
 	local Attachment = Instance.new("Attachment")
 	Attachment.Name = "AuraMount"
-	Attachment.Parent = v22
-	for _8, v23 in v22:GetChildren() do
-		if v23:IsA("Attachment") then
-			v23:AddTag("RelicsAuraAtt")
-			local Name4 = v23.Name
-			for _9, v24 in v23:GetDescendants() do
-				if v24:IsA("ParticleEmitter") or (v24:IsA("Trail") or (v24:IsA("Beam") or v24:IsA("Bone"))) then
-					v24:SetAttribute("Class", Name4)
-					v24:AddTag("RelicsAuraFx")
-				elseif v24:IsA("BasePart") then
-					v24.Massless = true
+	Attachment.Parent = v32
+	for _, v33 in v32:GetChildren() do
+		if v33:IsA("Attachment") then
+			v33:AddTag("RelicsAuraAtt")
+			local Name4 = v33.Name
+			for _, v34 in v33:GetDescendants() do
+				if v34:IsA("ParticleEmitter") or (v34:IsA("Trail") or (v34:IsA("Beam") or v34:IsA("Bone"))) then
+					v34:SetAttribute("Class", Name4)
+					v34:AddTag("RelicsAuraFx")
+				elseif v34:IsA("BasePart") then
+					v34.Massless = true
 				end
 			end
 		else
-			v23:Destroy()
+			v33:Destroy()
 		end
 	end
 	local Weld = Instance.new("Weld")
-	local Attachment2 = p21:FindFirstChildOfClass("Attachment")
+	local Attachment2 = p31:FindFirstChildOfClass("Attachment")
 	if Attachment2 then
 		Weld.C0 = Attachment2.CFrame
 	end
-	Weld.Part0 = p21
-	Weld.Part1 = v22
-	Weld.Parent = v22
-	v22.Transparency = 1
-	v22.Anchored = false
-	v22.Massless = true
-	v22.CanCollide = false
-	v22.CanQuery = false
-	v22.CanTouch = false
-	v22.Parent = p21
+	Weld.Part0 = p31
+	Weld.Part1 = v32
+	Weld.Parent = v32
+	v32.Transparency = 1
+	v32.Anchored = false
+	v32.Massless = true
+	v32.CanCollide = false
+	v32.CanQuery = false
+	v32.CanTouch = false
+	v32.Parent = p31
 end
-local function addCosmetic(p25: userdata, p26: userdata, p27: boolean, p28: userdata?)
-	--[[ line: 234 | upvalues: (copy) applyCosmeticRig, (copy) attachAura]]
-	local t3 = {}
-	local v29 = p26:FindFirstChild(p27 and "CharacterClassic" or "Character")
-	if v29 and not v29:GetAttribute("CheckedCollisions") then
-		for _10, v30 in v29:GetDescendants() do
-			if v30:IsA("BasePart") and v30.Name ~= "HumanoidRootPart" then
-				v30.Massless = true
-				v30.CanCollide = false
-				v30.CanTouch = false
-				v30.Anchored = false
+local function addCosmetic(p35: userdata, p36: userdata, p37: boolean, p38: userdata?, p39: {[any]: any})
+	local t5 = {}
+	local v40 = p36:FindFirstChild(p37 and "CharacterClassic" or "Character")
+	if v40 and not v40:GetAttribute("CheckedCollisions") then
+		for _, v41 in v40:GetDescendants() do
+			if v41:IsA("BasePart") and v41.Name ~= "HumanoidRootPart" then
+				v41.Massless = true
+				v41.CanCollide = false
+				v41.CanTouch = false
+				v41.Anchored = false
 			end
 		end
-		v29:SetAttribute("CheckedCollisions", true)
+		v40:SetAttribute("CheckedCollisions", true)
 	end
-	if v29 and not p26:FindFirstChild("Aura") then
-		local v31 = v29:Clone()
-		applyCosmeticRig(p25, v31, t3)
-		v31:Destroy()
+	if v40 and not p36:FindFirstChild("Aura") then
+		local v42 = v40:Clone()
+		applyCosmeticRig(p35, v42, t5, p39)
+		v42:Destroy()
 	end
-	local Aura = p26:FindFirstChild("Aura")
-	if p28 and (Aura and Aura:IsA("BasePart")) then
-		attachAura(Aura, p28)
+	local Aura = p36:FindFirstChild("Aura")
+	if p38 and (Aura and Aura:IsA("BasePart")) then
+		attachAura(Aura, p38)
 	end
-	return t3
+	return t5
 end
-return function(p32: userdata, p33: {[any]: any}, p34: userdata?)
-	--[[ line: 271 | upvalues: (copy) Registry, (copy) Name, (copy) t2, (copy) addCosmetic]]
-	for _11, v35 in p33 do
-		local v36 = Registry.GetById(v35)
-		if v36 == nil then
-			warn((("%* Unknown item id: %*"):format(Name, v35)))
+return function(p43: userdata, p44: {[any]: any}, p45: userdata?)
+	local v46 = nil
+	for _, v47 in p44 do
+		local v48 = Registry.GetById(v47)
+		if v48 == nil then
+			warn(("%* Unknown item id: %*"):format(Name, v47))
 		else
-			local Module = v36.Module
+			local Module = v48.Module
 			if not (require(Module).CosmeticInfo or {}).Character then
 				if not Module:GetAttribute("RemovedJoints") then
 					Module:SetAttribute("RemovedJoints", true)
-					for _12, v37 in { Module:FindFirstChild("Character"), (Module:FindFirstChild("CharacterClassic")) } do
-						for _13, v38 in v37:GetChildren() do
-							for _14, v39 in v38:GetChildren() do
-								if v39:IsA("Motor6D") and (table.find(t2, v39.Name) and not (v39.Part0 and v39.Part1)) then
-									v39:Destroy()
+					for _, v49 in { Module:FindFirstChild("Character"), Module:FindFirstChild("CharacterClassic") } do
+						for _, v50 in v49:GetChildren() do
+							for _, v51 in v50:GetChildren() do
+								if v51:IsA("Motor6D") and (table.find(t2, v51.Name) and not (v51.Part0 and v51.Part1)) then
+									v51:Destroy()
 								end
 							end
 						end
 					end
 				end
-				addCosmetic(p32, Module, p32.Humanoid.RigType == Enum.HumanoidRigType.R6, p34)
+				if v46 == nil then
+					v46 = indexAttachmentUsers(p43)
+				end
+				addCosmetic(p43, Module, p43.Humanoid.RigType == Enum.HumanoidRigType.R6, p45, v46)
 			end
 		end
 	end
 end
-
 
 ==================================================
 SOURCE #55
 ==================================================
 PATH:
 ReplicatedStorage.Services.Items.ClientItemService
+
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
 
 PURPOSE:
 Клиентский сервис получения предметов и визуальных моделей.
@@ -8362,6 +8524,9 @@ SOURCE #56
 PATH:
 ReplicatedStorage.Items.Registry
 
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+
 PURPOSE:
 Реестр предметов и их метаданных: GetById(), TryGetById(), GetConfig(),
 GetByCategory(), GetAll(). Используется для проверки категории и конфигурации
@@ -8611,6 +8776,9 @@ SOURCE #57
 ==================================================
 PATH:
 ReplicatedStorage.Services.Asset.CharacterService
+
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
 
 PURPOSE:
 Клиентский сервис игровых Character-объектов и связь с локальным визуальным ригом.
@@ -8888,6 +9056,9 @@ SOURCE #58
 PATH:
 ReplicatedStorage.Shared.UserData.ClientHooks.useLoadout
 
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+
 PURPOSE:
 Клиентское зеркало экипировки игрока.
 GetEquippedFromSlot() возвращает локальный кэш слотов; Loadout remote
@@ -8973,6 +9144,9 @@ SOURCE #59
 ==================================================
 PATH:
 ReplicatedStorage.Items.Registry.Query
+
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
 
 PURPOSE:
 Вспомогательный фильтр реестра предметов. Query.new() получает уже
@@ -9150,6 +9324,9 @@ SOURCE #60
 PATH:
 ReplicatedStorage.Client.Services.UserData.Inventory.Loadout
 
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+
 PURPOSE:
 Текущий клиентский API инвентаря и экипировки. GetEquipped(slotKey) читает Equipped через Store:Get("Equipped") и codec Equipped; GetAll() возвращает слоты по ключам, IsEquipped(id) ищет предмет. Equip/Unequip отправляют запрос через Shared.UserData.Remotes.Equip. Это новый путь вместо старого Shared.UserData.ClientHooks.useLoadout; для Unusual используется ключ UnusualSlot. DeadEye_Diagnostic v1.241 читает фактическое состояние через GetEquipped и подписывается на Observe для UnusualSlot, CosmeticSlot_1 и CosmeticSlot_2; пустой слот (nil) трактуется как ID 0, без использования устаревшего положительного кэша.
 
@@ -9250,6 +9427,9 @@ SOURCE #61
 PATH:
 ReplicatedStorage.Shared.UserData.Sync.Inventory
 
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+
 PURPOSE:
 Схема синхронизации данных инвентаря. Поле Equipped имеет Id=3 и использует Codec Equipped для Diff/Apply; остальные поля — OwnedBits, Consumables и Attributes. Подтверждает, что новое состояние экипировки приходит как часть Inventory sync, а не через старый useLoadout канал.
 
@@ -9281,6 +9461,9 @@ SOURCE #62
 ==================================================
 PATH:
 ReplicatedStorage.Shared.UserData.Codecs.Equipped
+
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
 
 PURPOSE:
 Бинарный codec текущего набора экипировки. Каждый record занимает 3 байта: ID слота (u8) и ID предмета (u16). Экспортирует Get, Find, Decode, With, Diff и Apply. Get читает предмет по numeric slot ID; Decode преобразует buffer в таблицу slotId -> itemId; With строит изменённый buffer. Код сохранён в виде предоставленной декомпиляции.
@@ -9508,6 +9691,9 @@ SOURCE #63
 PATH:
 ReplicatedStorage.Config.Player.Loadout
 
+STATUS:
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+
 PURPOSE:
 Конфигурация слотов экипировки: сопоставляет slotKey со строковым типом, slotKey с числовым ID и ID обратно с ключом. Подтверждает UnusualSlot = ID 4, CosmeticSlot_1 = 1, CosmeticSlot_2 = 2, CharacterSlot = 3; диапазон EmoteSlot_1..12 получает ID 13..24, ConsumableSlot_1..4 — ID 25..28. Используется Inventory.Loadout и codec Equipped.
 
@@ -9569,5 +9755,1160 @@ return table.freeze({
 	Keys = table.freeze(t4),
 	Locks = table.freeze(t3)
 })
+
+
+==================================================
+SOURCE #64
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character
+
+STATUS:
+ПРОВЕРЕНО: предоставлено пользователем 2026-10-17 из текущей версии игры.
+
+PURPOSE:
+Создаётся CharacterService для модели из Workspace.Players. Инициализирует Rig, Joints, Animations и ActionVisuals; только для локального персонажа создаёт Camera, Visibility, Movement и Actions. GetLocalCharacter() возвращает этот объект из CharacterService; объект хранит Model, Local, Rig и другие компоненты.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local NPCs = ReplicatedStorage:WaitForChild("NPCs")
+local Services = ReplicatedStorage:WaitForChild("Services")
+local v_u_1 = require((Services:WaitForChild("Asset"):WaitForChild("ToolService")))
+local v_u_2 = require((Services:WaitForChild("Client"):WaitForChild("CameraService")))
+local v_u_3 = require((Services:WaitForChild("UI"):WaitForChild("GameUIService")))
+local v_u_4 = require((Services:WaitForChild("Other"):WaitForChild("DebugService")))
+local GetInteractType = Services.Client:WaitForChild("InputService"):WaitForChild("GetInteractType")
+local Client = script:WaitForChild("Client")
+local Actions = script.Parent:WaitForChild("Actions")
+local t = { "Emote" }
+local t2 = {}
+t2.__index = t2
+function t2.new(p5: userdata, p6: boolean, p7: boolean)
+	local t3 = { Model = p5, Local = p6 or false }
+	local v8
+	if p7 then
+		v8 = nil
+	else
+		v8 = game.Players:FindFirstChild(p5.Name)
+	end
+	t3.PlayerReference = v8
+	t3.AI = p7
+	t3.Name = p5.Name
+	local v9 = t2
+	local v10 = setmetatable(t3, v9)
+	local v11 = t2
+	return setmetatable(v10, v11)
+end
+function t2.Init(p_u_12, p13)
+	if RunService:IsClient() then
+		v_u_4.RecordStart(p_u_12.Name .. " Build Time")
+	end
+	if not p_u_12.PlayerReference then
+		p_u_12.Module = NPCs:FindFirstChild(p_u_12.Model.Name)
+		if p_u_12.Module then
+			p_u_12.ModuleInfo = require(p_u_12.Module)
+		end
+	end
+	p_u_12.DataRegistry = require((script:WaitForChild("DataRegistry"))).new(p_u_12)
+	p_u_12.DataRegistry:Init()
+	p_u_12.State = require((script:WaitForChild("State"))).new(p_u_12)
+	p_u_12.State:Init()
+	p_u_12.ToolProfile = v_u_1:CreateProfile(p_u_12.PlayerReference)
+	p_u_12.ToolProfile:Init(p_u_12)
+	p_u_12.Tasks = require((ReplicatedStorage.Objects.Game:WaitForChild("Tasks"))).new(p_u_12.Model)
+	p_u_12.Tasks:Init(p_u_12)
+	p_u_12.Rig = require((script:WaitForChild("Rig"))).new(p_u_12)
+	p_u_12.Rig:Init()
+	p_u_12.Joints = require((script:WaitForChild("Joints"))).new(p_u_12)
+	p_u_12.Joints:Init()
+	p_u_12.Animations = require((script:WaitForChild("Animations"))).new(p_u_12)
+	p_u_12.Animations:Init()
+	p_u_12.ActionVisuals = require((script:WaitForChild("ActionVisuals"))).new(p_u_12)
+	p_u_12.ActionVisuals:Init()
+	if p_u_12.Local then
+		v_u_3:Insert(true)
+		p_u_12.Camera = require((Client:WaitForChild("Camera"))).new(p_u_12)
+		p_u_12.DataRegistry:Set("InteractType", (GetInteractType:Invoke()))
+		p_u_12.Camera:Init()
+		p_u_12.Visibility = require((Client:WaitForChild("Visibility"))).new(p_u_12)
+		p_u_12.Visibility:Init()
+		p_u_12.Movement = require((Client:WaitForChild("Movement"))).new(p_u_12)
+		p_u_12.Movement:Init()
+		p_u_12.Generics = require((Client:WaitForChild("Generics"))).new(p_u_12)
+		p_u_12.Generics:Init()
+		p_u_12.Actions = require(Actions).new()
+		p_u_12.Actions:Init(p_u_12)
+		p_u_12.ToolProfile:Finish()
+	end
+	p_u_12.Tag = p_u_12.Model:GetAttribute("Tag")
+	p_u_12.AI = p_u_12.Model:GetAttribute("AI")
+	p_u_12.DataRegistry:ServerToClient(p13)
+	p_u_12.Humanoid = p_u_12.Model:FindFirstChildOfClass("Humanoid")
+	if p_u_12.Humanoid then
+		p_u_12.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+		p_u_12.PrimaryPart = p_u_12.Model.PrimaryPart
+		p_u_12.Done = true
+		for _, v14 in p_u_12.Offloaded or {} do
+			p_u_12:RegistryTermUpdated(v14)
+		end
+		if RunService:IsClient() then
+			v_u_4.RecordEnd(p_u_12.Name .. " Build Time")
+		end
+		p_u_12.Model.ChildAdded:Connect(function(p15)
+			if p15.Name == "CarryWeld" then
+				p15.Enabled = false
+			end
+		end)
+		task.spawn(function()
+			task.wait(0.1)
+			if p_u_12.Model and p_u_12.Model.Parent then
+				for _, v16 in t do
+					if (p_u_12.DataRegistry:Get(v16) or 0) ~= 0 then
+						p_u_12:RegistryTermUpdated(v16)
+					end
+				end
+			end
+		end)
+	else
+		p_u_12.Model = nil
+	end
+end
+function t2.Destroy(p17)
+	p17.Rig:Destroy()
+	p17.Animations:Destroy()
+	if p17.Visibility then
+		p17.Visibility:Destroy()
+	end
+	if p17.Actions then
+		p17.Actions:Destroy()
+	end
+	v_u_1:DestroyProfile(p17.ToolProfile)
+end
+function t2.RegistryTermUpdated(p18: {[any]: any}, p19: string)
+	if p18.Done then
+		p18.Rig:RegistryTermUpdated(p19)
+		p18.ToolProfile:RegistryTermUpdated(p19)
+		p18.Animations:RegistryTermUpdated(p19)
+		p18.State:RegistryTermUpdated(p19)
+		p18.Joints:RegistryTermUpdated(p19)
+		if p18.Movement then
+			p18.Movement:RegistryTermUpdated(p19)
+		end
+		if p18.Actions then
+			p18.Actions:RegistryTermUpdated(p19)
+		end
+		if p18.Generics then
+			p18.Generics:RegistryTermUpdated(p19)
+		end
+		if p18.Camera then
+			p18.Camera:RegistryTermUpdated(p19)
+		end
+	else
+		if not p18.Offloaded then
+			p18.Offloaded = {}
+		end
+		if not table.find(p18.Offloaded, p19) then
+			local Offloaded = p18.Offloaded
+			table.insert(Offloaded, p19)
+		end
+	end
+end
+function t2.KeyUsed(p20, p21)
+	if p20.Local then
+		p20.ToolProfile:KeyPhraseUsed(p21)
+		p20.Camera:KeyUsed(p21)
+		p20.Movement:KeyUsed(p21)
+		p20.Actions:KeyUsed(p21)
+		p20.Animations:KeyUsed(p21)
+	end
+end
+function t2.Update(p22, p23)
+	if p22.Model and (p22.Model.Parent and not p22.Dead) then
+		p22:UpdateDistance()
+		p22.DataRegistry:Set("Health", p22.Humanoid.Health)
+		if p22.Local then
+			p22.DataRegistry:Set("LookCFrame", (v_u_2:GetCFrame()))
+			if p22.Model and p22.Model.PrimaryPart then
+				local AssemblyLinearVelocity = p22.Model.PrimaryPart.AssemblyLinearVelocity
+				p22.DataRegistry:Set("ActualVelocity", AssemblyLinearVelocity)
+				p22.DataRegistry:Set("ActualVelocityMagnitude", AssemblyLinearVelocity.magnitude)
+			end
+			v_u_3:SetType("Speedlines", (p22.DataRegistry:Get("Speed")))
+		end
+		if p22.Movement then
+			p22.Movement:UpdateTerms(p23)
+		end
+		p22.State:Update(p23)
+		p22.Tasks:Update(p23)
+		if p22.Movement then
+			p22.Movement:Update(p23)
+		end
+		if p22.Local then
+			p22.Camera:Update(p23)
+			p22.Visibility:Update(p23)
+		end
+		if p22.Actions then
+			p22.Actions:Update(p23)
+		end
+		if p22.Generics then
+			p22.Generics:Update(p23)
+		end
+		p22.Joints:Update(p23)
+		p22.Animations:Update(p23)
+		p22.Rig:Update(p23)
+		p22.DataRegistry:UpdateCycle(p23)
+		p22.ToolProfile:Update(p23)
+	end
+end
+function t2.UpdateDistance(p24)
+	if tick() - (p24.LastUpdatedDistance or 0) >= 0.2 then
+		p24.LastUpdatedDistance = tick()
+		if p24.PrimaryPart then
+			local CFrame = p24.PrimaryPart.CFrame
+			local Position = CFrame.Position
+			local Size = p24.PrimaryPart.Size
+			p24.DataRegistry:Set("DistanceFromLocalCamera", (v_u_2:GetCFrame().Position - Position).magnitude)
+			local DataRegistry = p24.DataRegistry
+			local v25 = "Visible"
+			local v26 = Position + CFrame.rightVector * Size.X * 0.6
+			local _, v27 = workspace.CurrentCamera:WorldToScreenPoint(v26)
+			if not v27 then
+				local v28 = Position - CFrame.rightVector * Size.X * 0.6
+				_, v27 = workspace.CurrentCamera:WorldToScreenPoint(v28)
+			end
+			DataRegistry:Set(v25, v27)
+		end
+	end
+end
+function t2.Kill(p29, p30)
+	if p30.Instakill then
+		p29.Dead = true
+		p29.ToolProfile:Destroy()
+		if p29.Camera then
+			p29.Camera:Change("Dead")
+		end
+		if p29.Humanoid then
+			p29.Humanoid.PlatformStand = true
+		end
+		if p29.PrimaryPart then
+			p29.PrimaryPart.Anchored = true
+			p29.PrimaryPart.CanCollide = false
+			p29.PrimaryPart.CanTouch = false
+			p29.PrimaryPart.Size = Vector3.new(0.009999999776482582, 0.009999999776482582, 0.009999999776482582)
+		end
+	end
+	p29.Rig:Kill(p30)
+end
+return t2
+
+
+==================================================
+SOURCE #65
+==================================================
+PATH:
+ReplicatedStorage.Client.UI.Menu.Scene.Viewmodel
+
+STATUS:
+ПРОВЕРЕНО: предоставлено пользователем 2026-10-17 из текущей версии игры.
+
+PURPOSE:
+Создаёт и отображает временную модель Viewmodel с именем VisualModel. Использует Items.Build / Character.Build, ShowItem, ShowCharacter, ShowListing, ShowModel и Attach/Detach. Подписывается на изменение PreviewTryOn, PreviewBody, PreviewHidden, экипировки и RigType; при обновлении может уничтожать старую VisualModel и строить новую. Это отдельная система предпросмотра меню, не модель персонажа из Workspace.Rigs.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local v1 = require("../../../../Shared/Generics/Cleaner")
+local v2 = require("../../../../Shared/Generics/Signal")
+local v_u_3 = require("../../../../Shared/Generics/SpeedySpring")
+local v_u_4 = require("../../../Utilities/Accessibility")
+local v_u_5 = require("../../../Services/UserData/Inventory")
+local v_u_6 = require("../../../Services/UserData/Settings")
+local v_u_7 = require("@self/Audio")
+local v_u_8 = require("@self/Items")
+local v_u_9 = require("@self/Character")
+local LocalPlayer = Players.LocalPlayer
+local CurrentCamera = workspace.CurrentCamera
+local v_u_10 = TweenInfo.new(0.12, Enum.EasingStyle.Linear)
+local t = { Enum.HumanoidRigType.R15, Enum.HumanoidRigType.R6 }
+local t2 = { [Enum.HumanoidRigType.R15] = 1, [Enum.HumanoidRigType.R6] = 2 }
+local t3 = { "Accessories", "Aura", "Character", "Boombox", "Headgear" }
+local t4 = {}
+local v_u_11 = v1.new()
+local v_u_12 = v2.new()
+local v_u_13 = nil
+local v_u_14 = nil
+local v_u_15 = nil
+local v_u_16 = nil
+local v_u_17 = 0
+local v_u_18 = false
+local v_u_19 = true
+local v_u_20 = nil
+local v_u_21 = nil
+local v_u_22 = nil
+local t5 = {}
+local v_u_23 = 0
+local v_u_24 = 0
+local v_u_25 = false
+local v_u_26 = 0
+local v_u_27 = nil
+local function hideSlots()
+	table.clear(t5)
+	local PreviewHidden = v_u_6.Get("PreviewHidden")
+	local v28 = type(PreviewHidden) ~= "number" and 0 or PreviewHidden
+	for _, v29 in t3 do
+		local v30 = table.find(t3, v29) - 1
+		local v31 = bit32.lshift(1, v30)
+		if bit32.btest(v28, v31) then
+			for _, v32 in v_u_9.WornSlots[v29] do
+				t5[v32] = true
+			end
+		end
+	end
+end
+local function run(p33: (...any) -> ...any)
+	if v_u_25 and os.clock() - v_u_26 < 10 then
+		v_u_23 = v_u_23 + 1
+		v_u_27 = p33
+	else
+		v_u_24 = v_u_24 + 1
+		local v34 = v_u_24
+		v_u_25 = true
+		while p33 ~= nil do
+			v_u_27 = nil
+			v_u_26 = os.clock()
+			local v35, v36 = pcall(p33)
+			if not v35 then
+				warn(("[Menu] viewmodel couldn't show it: %*"):format(v36))
+			end
+			if v34 ~= v_u_24 then
+				return
+			end
+			p33 = v_u_27
+		end
+		v_u_25 = false
+	end
+end
+local function place(p37: {[any]: any})
+	local Position = p37.Motion.Position
+	local Pivot = p37.Pivot
+	local v38 = CFrame.fromAxisAngle(Vector3.new(0, 1, 0), p37.Facing)
+	p37.Primary.CFrame = CFrame.new(Position.Position + Pivot) * Position.Rotation * v38 * CFrame.new(-Pivot) * p37.Rest
+end
+local function facingOf(p39: vector)
+	local CFrame2 = CurrentCamera.CFrame
+	local X = CFrame2.LookVector.X
+	local Z = CFrame2.LookVector.Z
+	local v40 = Vector3.new(X, 0, Z)
+	if v40.Magnitude < 0.001 then
+		return 0
+	end
+	local Unit = v40.Unit
+	local X2 = CFrame2.Position.X
+	local Z2 = CFrame2.Position.Z
+	local v41 = Vector3.new(X2, 0, Z2)
+	local X3 = p39.X
+	local Z3 = p39.Z
+	local v42 = Vector3.new(X3, 0, Z3)
+	local v43 = v41 + Unit * (v42 - v41):Dot(Unit) * 0.2 - v42
+	if v43.Magnitude < 0.001 then
+		return 0
+	end
+	local v44 = -Unit
+	local Unit2 = v43.Unit
+	local Y = v44:Cross(Unit2).Y
+	local v45 = v44:Dot(Unit2)
+	return math.atan2(Y, v45)
+end
+local function step(p46: number)
+	local v47 = v_u_15
+	if v47 == nil then
+		return
+	else
+		local Motion = v47.Motion
+		local v48
+		if v_u_16 == nil then
+			v48 = os.clock() - v_u_17 >= 1
+		else
+			v48 = false
+		end
+		if v48 and (not v_u_18 and Motion.Target ~= CFrame.identity) then
+			Motion.Target = CFrame.identity
+			Motion.Frequency = 10
+			Motion.DampingRatio = 1
+			v_u_18 = true
+			v_u_19 = false
+		end
+		local Pivot2 = facingOf(v47.Pivot)
+		local v49 = Pivot2 - v47.Facing
+		local v50
+		if math.abs(v49) <= 0.0008726646259971648 then
+			v50 = false
+		else
+			v47.Facing = Pivot2
+			v50 = true
+		end
+		if v_u_19 then
+			if v50 then
+				place(v47)
+			end
+		else
+			v_u_3.StepCFrame(Motion, p46)
+			if v_u_16 == nil and v_u_3.IsCFrameSettled(Motion) then
+				Motion.Position = Motion.Target
+				Motion.Velocity = Vector3.new(0, 0, 0)
+				Motion.AngularVelocity = Vector3.new(0, 0, 0)
+				v_u_19 = true
+			end
+			place(v47)
+		end
+	end
+end
+local function turn(p51: {[any]: any}, p52: Vector2)
+	local Motion2 = p51.Motion
+	local v53 = p51.Turning == "Upright"
+	local CFrame3 = CurrentCamera.CFrame
+	local v54 = p52.X * 0.4
+	local v55 = math.rad(v54)
+	local v56
+	if v53 then
+		v56 = 0
+	else
+		local v57 = p52.Y * 0.4
+		v56 = math.rad(v57)
+	end
+	local v58 = math.abs(v55)
+	local v59 = math.abs(v56)
+	local v60 = math.max(v58, v59) / 0.5235987755982988
+	local v61 = math.ceil(v60)
+	local v62 = math.max(v61, 1)
+	local v63 = v53 and Vector3.new(0, 1, 0) or CFrame3.UpVector
+	local v64 = CFrame.fromAxisAngle(v63, v55 / v62) * CFrame.fromAxisAngle(CFrame3.RightVector, v56 / v62)
+	for _ = 1, v62 do
+		Motion2.Target = v64 * Motion2.Target
+		local Position2 = Motion2.Position
+		local v65, v66 = (Motion2.Target.Rotation * Position2.Rotation:Inverse()):ToAxisAngle()
+		if v66 > 1.5707963267948966 then
+			Motion2.Position = CFrame.fromAxisAngle(v65, v66 - 1.5707963267948966) * Position2.Rotation + Position2.Position
+		end
+	end
+	Motion2.Frequency = 24
+	Motion2.DampingRatio = 0.9
+	v_u_18 = false
+	v_u_19 = false
+end
+local function listen(p_u_67: {[any]: any})
+	v_u_11:Throw({
+		RunService.PreRender:Connect(step),
+		UserInputService.InputBegan:Connect(function(p68: userdata, p69: boolean)
+			if not p69 and v_u_16 == nil then
+				local v70
+				if p68.UserInputType == Enum.UserInputType.MouseButton1 then
+					v70 = true
+				else
+					v70 = p68.UserInputType == Enum.UserInputType.Touch
+				end
+				if v70 then
+					v_u_16 = { Input = p68, Last = Vector2.new(p68.Position.X, p68.Position.Y) }
+				end
+			end
+		end),
+		UserInputService.InputChanged:Connect(function(p71: userdata)
+			local v72 = v_u_16
+			if v72 == nil then
+				return
+			else
+				local v73
+				if v72.Input.UserInputType == Enum.UserInputType.Touch then
+					v73 = p71 == v72.Input
+				else
+					v73 = p71.UserInputType == Enum.UserInputType.MouseMovement
+				end
+				if v73 then
+					local v74 = Vector2.new(p71.Position.X, p71.Position.Y)
+					local v75 = v74 - v72.Last
+					v72.Last = v74
+					if v75.Magnitude > 0 then
+						turn(p_u_67, v75)
+					end
+				end
+			end
+		end),
+		UserInputService.InputEnded:Connect(function(p76: userdata)
+			local v77 = v_u_16
+			if v77 ~= nil then
+				local v78
+				if v77.Input.UserInputType == Enum.UserInputType.Touch then
+					v78 = p76 == v77.Input
+				else
+					v78 = p76.UserInputType == Enum.UserInputType.MouseButton1
+				end
+				if v78 then
+					v_u_16 = nil
+					v_u_17 = os.clock()
+				end
+			end
+		end)
+	})
+end
+local function fadeIn(p79: userdata)
+	for _, v80 in p79:GetDescendants() do
+		if v80:IsA("BasePart") then
+			v80.LocalTransparencyModifier = 1
+			TweenService:Create(v80, v_u_10, { LocalTransparencyModifier = 0 }):Play()
+		end
+	end
+end
+local function present(p81: string, p82: userdata, p83: CFrame, p84: string, p85: (...any) -> ...any?)
+	local v86 = v_u_13
+	local PrimaryPart = p82.PrimaryPart
+	if v86 == nil or PrimaryPart == nil then
+		if p85 ~= nil then
+			local v87, v88 = pcall(p85)
+			if not v87 then
+				warn(("[Menu] viewmodel cleanup errored: %*"):format(v88))
+			end
+		end
+		p82:Destroy()
+	else
+		p82.Name = "VisualModel"
+		PrimaryPart.Anchored = true
+		local v89 = p84 ~= "Free" and Vector3.new(0, 0, 0) or PrimaryPart.CFrame:PointToObjectSpace(p82:GetBoundingBox().Position)
+		local v90 = v_u_4.IsReducedMotion()
+		local newCFrame = v_u_3.newCFrame
+		local v91
+		if v90 then
+			v91 = CFrame.identity
+		else
+			v91 = CFrame.new(0, 0.25, 0)
+		end
+		local v92 = newCFrame(v91, 24, 0.9)
+		v92.Target = CFrame.identity
+		local t6 = {
+			Facing = 0,
+			Key = p81,
+			Model = p82,
+			Primary = PrimaryPart,
+			Cleanup = p85,
+			Turning = p84,
+			Middle = v89,
+			Rest = p83,
+			Pivot = p83.Position,
+			Motion = v92
+		}
+		local v93
+		if t6.Turning == "Upright" then
+			v93 = t6.Rest.Position
+		else
+			v93 = t6.Rest * t6.Middle
+		end
+		t6.Pivot = v93
+		local Pivot3 = facingOf(t6.Pivot)
+		local v94 = Pivot3 - t6.Facing
+		if math.abs(v94) > 0.0008726646259971648 then
+			t6.Facing = Pivot3
+		end
+		v_u_15 = t6
+		v_u_16 = nil
+		v_u_17 = os.clock()
+		v_u_18 = false
+		v_u_19 = v90
+		place(t6)
+		if not v90 then
+			fadeIn(p82)
+		end
+		p82.Parent = v86
+		listen(t6)
+	end
+end
+local function showItem(p95: number, p96: {[any]: any}?)
+	local v97
+	if p96 == nil then
+		v97 = nil
+	else
+		v97 = p96.At
+	end
+	local v98
+	if p96 == nil or p96.Rig == nil then
+		if LocalPlayer:GetAttribute("RigType") == "R6" then
+			v98 = Enum.HumanoidRigType.R6
+		else
+			v98 = Enum.HumanoidRigType.R15
+		end
+	else
+		v98 = p96.Rig
+	end
+	local v99 = ("Item%*"):format(p95)
+	local v100 = ("%*|%*"):format(v99, v98.Name)
+	local v101 = v_u_15
+	if v101 == nil or v101.Key ~= v99 and v101.Key ~= v100 then
+		v_u_23 = v_u_23 + 1
+		v_u_21 = nil
+		local v102 = v_u_22
+		v_u_22 = nil
+		if v102 ~= nil then
+			v102()
+		end
+		v_u_16 = nil
+		v_u_18 = false
+		v_u_19 = true
+		v_u_11:Clean()
+		local v103 = v_u_15
+		v_u_15 = nil
+		if v103 ~= nil then
+			local Cleanup = v103.Cleanup
+			if Cleanup ~= nil then
+				local v104, v105 = pcall(Cleanup)
+				if not v104 then
+					warn(("[Menu] viewmodel cleanup errored: %*"):format(v105))
+				end
+			end
+			v103.Model:Destroy()
+		end
+		if v_u_13 == nil then
+			return
+		else
+			local v106 = v_u_23
+			local Build = v_u_8.Build
+			local v107 = v_u_14
+			local v108, v109 = pcall(Build, p95, v98, v107, v97)
+			if v108 then
+				if v109 == nil then
+					return
+				elseif v106 == v_u_23 then
+					if v109.IsRig then
+						present(v100, v109.Model, v109.Rest, "Upright", nil)
+					else
+						present(v99, v109.Model, v109.Rest, "Free", nil)
+					end
+					if v_u_15 ~= nil then
+						v_u_21 = p95
+						local v110 = v_u_22
+						v_u_22 = nil
+						if v110 ~= nil then
+							v110()
+						end
+						local v111 = v_u_21
+						if v111 ~= nil then
+							v_u_22 = v_u_7.Play(v111)
+						end
+					end
+				else
+					v109.Model:Destroy()
+				end
+			else
+				warn(("[Menu] item %* couldn't be shown: %*"):format(p95, v109))
+				return
+			end
+		end
+	else
+		if v97 ~= nil and v97 ~= v101.Rest then
+			v101.Rest = v97
+			local v112
+			if v101.Turning == "Upright" then
+				v112 = v101.Rest.Position
+			else
+				v112 = v101.Rest * v101.Middle
+			end
+			v101.Pivot = v112
+			place(v101)
+		end
+		return
+	end
+end
+local v_u_113
+v_u_113 = function(p_u_114)
+	local v115 = v_u_9.Signature(p_u_114)
+	local v116 = v_u_15
+	if v116 == nil or v116.Key ~= v115 then
+		v_u_23 = v_u_23 + 1
+		v_u_21 = nil
+		local v117 = v_u_22
+		v_u_22 = nil
+		if v117 ~= nil then
+			v117()
+		end
+		v_u_16 = nil
+		v_u_18 = false
+		v_u_19 = true
+		v_u_11:Clean()
+		local v118 = v_u_15
+		v_u_15 = nil
+		if v118 ~= nil then
+			local Cleanup2 = v118.Cleanup
+			if Cleanup2 ~= nil then
+				local v119, v120 = pcall(Cleanup2)
+				if not v119 then
+					warn(("[Menu] viewmodel cleanup errored: %*"):format(v120))
+				end
+			end
+			v118.Model:Destroy()
+		end
+		local v121 = v_u_14
+		local v122
+		if v121 == nil then
+			v122 = nil
+		else
+			v122 = v121:FindFirstChild("Character")
+		end
+		if v122 == nil or not v122:IsA("BasePart") then
+			v122 = nil
+		end
+		if v_u_13 == nil or v122 == nil then
+			return
+		else
+			local v123 = v_u_23
+			local Build2 = v_u_9.Build
+			local v124, v125 = pcall(Build2, p_u_114)
+			if v124 then
+				if v123 == v_u_23 then
+					local v126
+					if p_u_114 == nil then
+						v126 = nil
+					else
+						v126 = p_u_114.TryingOn
+					end
+					local v127
+					if v126 == nil then
+						v127 = CFrame.identity
+					else
+						v127 = v_u_8.FacingOf(v126)
+					end
+					present(v115, v125.Model, v122.CFrame * v127, "Upright", v125.Cleanup)
+					if v_u_15 ~= nil then
+						local v128
+						if p_u_114 == nil then
+							v128 = nil
+						else
+							v128 = p_u_114.TryingOn or p_u_114.Holding
+						end
+						v_u_21 = v128
+						local v129 = v_u_22
+						v_u_22 = nil
+						if v129 ~= nil then
+							v129()
+						end
+						local v130 = v_u_21
+						if v130 ~= nil then
+							v_u_22 = v_u_7.Play(v130)
+						end
+						local function refresh()
+							run(function()
+								v_u_113(p_u_114)
+							end)
+							v_u_12:Fire()
+						end
+						v_u_11:Throw({ v_u_5.ObserveLoadout(refresh), (LocalPlayer:GetAttributeChangedSignal("RigType"):Connect(refresh)) })
+					end
+				else
+					local Cleanup3 = v125.Cleanup
+					if Cleanup3 ~= nil then
+						local v131, v132 = pcall(Cleanup3)
+						if not v131 then
+							warn(("[Menu] viewmodel cleanup errored: %*"):format(v132))
+						end
+					end
+					v125.Model:Destroy()
+					return
+				end
+			else
+				warn(("[Menu] character couldn't be shown: %*"):format(v125))
+				return
+			end
+		end
+	else
+		return
+	end
+end
+local function shownRig(p133: number, p134)
+	local v135 = v_u_6.Get("PreviewTryOn") ~= false
+	if v135 then
+		v135 = v_u_9.CanTryOn(p133)
+	end
+	if not v135 then
+		return v_u_8.ShownRig(p133, p134)
+	end
+	local t7 = { TryingOn = p133, Hidden = t5 }
+	return v_u_9.ShownRig(t7, p134)
+end
+local function showListing(p136: number)
+	local v137 = shownRig
+	local PreviewBody = v_u_6.Get("PreviewBody")
+	local v138
+	if type(PreviewBody) == "number" then
+		v138 = t[PreviewBody]
+	else
+		v138 = nil
+	end
+	if not v138 then
+		if LocalPlayer:GetAttribute("RigType") == "R6" then
+			v138 = Enum.HumanoidRigType.R6
+		else
+			v138 = Enum.HumanoidRigType.R15
+		end
+	end
+	local v139 = v137(p136, v138)
+	local v140 = v_u_6.Get("PreviewTryOn") ~= false
+	if v140 then
+		v140 = v_u_9.CanTryOn(p136)
+	end
+	if v140 then
+		v_u_113({ TryingOn = p136, Rig = v139, Hidden = t5 })
+	else
+		showItem(p136, { Rig = v139 })
+	end
+end
+v_u_6.ObserveSetting("PreviewTryOn", function()
+	local v_u_141 = v_u_20
+	if v_u_141 ~= nil then
+		run(function()
+			showListing(v_u_141)
+		end)
+	end
+	v_u_12:Fire()
+end)
+v_u_6.ObserveSetting("PreviewBody", function()
+	local v_u_142 = v_u_20
+	if v_u_142 ~= nil then
+		run(function()
+			showListing(v_u_142)
+		end)
+	end
+	v_u_12:Fire()
+end)
+v_u_6.ObserveSetting("PreviewHidden", function()
+	hideSlots()
+	if v_u_6.Get("PreviewTryOn") ~= false then
+		local v_u_143 = v_u_20
+		if v_u_143 ~= nil then
+			run(function()
+				showListing(v_u_143)
+			end)
+		end
+		v_u_12:Fire()
+	end
+end)
+local function showModel(p144: userdata, p145: number?)
+	local v146 = ("Model%*|%*"):format(p144:GetFullName(), p145 or 1)
+	local v147 = v_u_15
+	if v147 == nil or v147.Key ~= v146 then
+		v_u_23 = v_u_23 + 1
+		v_u_21 = nil
+		local v148 = v_u_22
+		v_u_22 = nil
+		if v148 ~= nil then
+			v148()
+		end
+		v_u_16 = nil
+		v_u_18 = false
+		v_u_19 = true
+		v_u_11:Clean()
+		local v149 = v_u_15
+		v_u_15 = nil
+		if v149 ~= nil then
+			local Cleanup4 = v149.Cleanup
+			if Cleanup4 ~= nil then
+				local v150, v151 = pcall(Cleanup4)
+				if not v150 then
+					warn(("[Menu] viewmodel cleanup errored: %*"):format(v151))
+				end
+			end
+			v149.Model:Destroy()
+		end
+		local v152 = v_u_8.Spot(v_u_14)
+		if v_u_13 == nil or v152 == nil then
+			return
+		else
+			local v153 = p144:Clone()
+			local PrimaryPart2 = v153.PrimaryPart
+			if PrimaryPart2 == nil then
+				warn(("[Menu] %* has no PrimaryPart to show it by"):format(p144:GetFullName()))
+				v153:Destroy()
+			else
+				if p145 ~= nil then
+					v153:ScaleTo(v153:GetScale() * p145)
+				end
+				local Position3 = PrimaryPart2.CFrame:PointToObjectSpace(v153:GetBoundingBox().Position)
+				present(v146, v153, v152 * PrimaryPart2.CFrame.Rotation * CFrame.new(-Position3), "Free", nil)
+			end
+		end
+	else
+		return
+	end
+end
+function t4.ShowItem(p_u_154: number, p_u_155: {[any]: any}?)
+	if v_u_20 ~= nil then
+		v_u_20 = nil
+		v_u_12:Fire()
+	end
+	run(function()
+		showItem(p_u_154, p_u_155)
+	end)
+end
+function t4.ShowModel(p_u_156: userdata, p_u_157: number?)
+	if v_u_20 ~= nil then
+		v_u_20 = nil
+		v_u_12:Fire()
+	end
+	run(function()
+		showModel(p_u_156, p_u_157)
+	end)
+end
+function t4.ShowCharacter(p_u_158)
+	if v_u_20 ~= nil then
+		v_u_20 = nil
+		v_u_12:Fire()
+	end
+	run(function()
+		v_u_113(p_u_158)
+	end)
+end
+function t4.ShowListing(p159: number)
+	v_u_20 = p159
+	local v_u_160 = v_u_20
+	if v_u_160 ~= nil then
+		run(function()
+			showListing(v_u_160)
+		end)
+	end
+	v_u_12:Fire()
+end
+function t4.GetListing()
+	return v_u_20
+end
+function t4.CanTryOn(p161: number)
+	return v_u_9.CanTryOn(p161)
+end
+function t4.SetTryingOn(p162: boolean)
+	v_u_6.SetSetting("PreviewTryOn", p162)
+end
+function t4.IsTryingOn()
+	return v_u_6.Get("PreviewTryOn") ~= false
+end
+function t4.SetListingRig(p163)
+	local v164
+	if p163 == nil then
+		v164 = nil
+	else
+		v164 = t2[p163]
+	end
+	v_u_6.SetSetting("PreviewBody", v164 or 0)
+end
+function t4.GetListingRig()
+	local PreviewBody2 = v_u_6.Get("PreviewBody")
+	local v165
+	if type(PreviewBody2) == "number" then
+		v165 = t[PreviewBody2]
+	else
+		v165 = nil
+	end
+	if not v165 then
+		if LocalPlayer:GetAttribute("RigType") == "R6" then
+			return Enum.HumanoidRigType.R6
+		end
+		v165 = Enum.HumanoidRigType.R15
+	end
+	return v165
+end
+function t4.GetChosenRig()
+	local PreviewBody3 = v_u_6.Get("PreviewBody")
+	if type(PreviewBody3) == "number" then
+		return t[PreviewBody3]
+	end
+	return nil
+end
+function t4.GetAvatarRig()
+	if LocalPlayer:GetAttribute("RigType") == "R6" then
+		return Enum.HumanoidRigType.R6
+	end
+	return Enum.HumanoidRigType.R15
+end
+function t4.ShownRig(p166)
+	local v167 = v_u_20
+	if v167 == nil then
+		return p166
+	end
+	return shownRig(v167, p166)
+end
+function t4.OnChanged(p168: (...any) -> ...)
+	local v_u_169 = v_u_12:Connect(p168)
+	return function()
+		v_u_169:Disconnect()
+	end
+end
+function t4.SetWorn(p170, p171: boolean)
+	local v172 = table.find(t3, p170) - 1
+	local v173 = bit32.lshift(1, v172)
+	local PreviewHidden2 = v_u_6.Get("PreviewHidden")
+	local v174 = type(PreviewHidden2) ~= "number" and 0 or PreviewHidden2
+	local SetSetting = v_u_6.SetSetting
+	local v175 = "PreviewHidden"
+	local v176
+	if p171 then
+		local v177 = bit32.bnot(v173)
+		v176 = bit32.band(v174, v177)
+	else
+		v176 = bit32.bor(v174, v173)
+	end
+	SetSetting(v175, v176)
+end
+function t4.IsWorn(p178)
+	local PreviewHidden3 = v_u_6.Get("PreviewHidden")
+	local v179 = type(PreviewHidden3) ~= "number" and 0 or PreviewHidden3
+	local v180 = table.find(t3, p178) - 1
+	local v181 = bit32.lshift(1, v180)
+	return not bit32.btest(v179, v181)
+end
+function t4.Clear()
+	if v_u_20 ~= nil then
+		v_u_20 = nil
+		v_u_12:Fire()
+	end
+	v_u_27 = nil
+	v_u_23 = v_u_23 + 1
+	v_u_21 = nil
+	local v182 = v_u_22
+	v_u_22 = nil
+	if v182 ~= nil then
+		v182()
+	end
+	v_u_16 = nil
+	v_u_18 = false
+	v_u_19 = true
+	v_u_11:Clean()
+	local v183 = v_u_15
+	v_u_15 = nil
+	if v183 ~= nil then
+		local Cleanup5 = v183.Cleanup
+		if Cleanup5 ~= nil then
+			local v184, v185 = pcall(Cleanup5)
+			if not v184 then
+				warn(("[Menu] viewmodel cleanup errored: %*"):format(v185))
+			end
+		end
+		v183.Model:Destroy()
+	end
+end
+function t4.GetSpot()
+	local v186 = v_u_14
+	local v187
+	if v186 == nil then
+		v187 = nil
+	else
+		v187 = v186:FindFirstChild("Item")
+	end
+	if v187 == nil or not v187:IsA("BasePart") then
+		v187 = nil
+	end
+	if not v187 then
+		local v188 = v_u_14
+		if v188 == nil then
+			v187 = nil
+		else
+			v187 = v188:FindFirstChild("Character")
+		end
+		if v187 == nil or not v187:IsA("BasePart") then
+			v187 = nil
+		end
+	end
+	if v187 == nil then
+		return nil
+	end
+	return v187.Position
+end
+function t4.Attach(p189: userdata, p190: userdata?)
+	if v_u_20 ~= nil then
+		v_u_20 = nil
+		v_u_12:Fire()
+	end
+	v_u_27 = nil
+	v_u_23 = v_u_23 + 1
+	v_u_21 = nil
+	local v191 = v_u_22
+	v_u_22 = nil
+	if v191 ~= nil then
+		v191()
+	end
+	v_u_16 = nil
+	v_u_18 = false
+	v_u_19 = true
+	v_u_11:Clean()
+	local v192 = v_u_15
+	v_u_15 = nil
+	if v192 ~= nil then
+		local Cleanup6 = v192.Cleanup
+		if Cleanup6 ~= nil then
+			local v193, v194 = pcall(Cleanup6)
+			if not v193 then
+				warn(("[Menu] viewmodel cleanup errored: %*"):format(v194))
+			end
+		end
+		v192.Model:Destroy()
+	end
+	v_u_13 = p189
+	v_u_14 = p190
+end
+function t4.Detach()
+	if v_u_20 ~= nil then
+		v_u_20 = nil
+		v_u_12:Fire()
+	end
+	v_u_27 = nil
+	v_u_23 = v_u_23 + 1
+	v_u_21 = nil
+	local v195 = v_u_22
+	v_u_22 = nil
+	if v195 ~= nil then
+		v195()
+	end
+	v_u_16 = nil
+	v_u_18 = false
+	v_u_19 = true
+	v_u_11:Clean()
+	local v196 = v_u_15
+	v_u_15 = nil
+	if v196 ~= nil then
+		local Cleanup7 = v196.Cleanup
+		if Cleanup7 ~= nil then
+			local v197, v198 = pcall(Cleanup7)
+			if not v197 then
+				warn(("[Menu] viewmodel cleanup errored: %*"):format(v198))
+			end
+		end
+		v196.Model:Destroy()
+	end
+	v_u_13 = nil
+	v_u_14 = nil
+end
+return table.freeze(t4)
+
+
+==================================================
+NOTES FOR CURRENT RIG / COSMETIC ANALYSIS
+==================================================
+- ReplicatedStorage.Services.Asset.CharacterService
+  tracks client Character objects created from models in Workspace.Players.
+- ReplicatedStorage.Services.Asset.RigService
+  creates/caches visual models under Workspace.Rigs, binds a cached model
+  to a character via BoundCharacter and Bound, and can unbind it without
+  immediately destroying the cached model.
+- ReplicatedStorage.Services.Asset.RigService.AddCosmetics
+  applies cosmetics to target rig parts by matching part names, merging
+  attachments and rebinding joints. It does not synchronize arbitrary
+  additional models by itself.
+- ReplicatedStorage.Client.UI.Menu.Scene.Viewmodel creates a temporary
+  model named VisualModel for the menu's item/character preview and may
+  destroy/rebuild that model during listing, loadout or rig-setting changes.
+- Do not assume a model under Workspace.Rigs is currently bound merely
+  because it exists; check the corresponding cached rig's Bound and
+  BoundCharacter fields when diagnosing selection.
 
 
