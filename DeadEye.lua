@@ -10672,6 +10672,14 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
     pcall(function()
         __UI.__L.forEachDeadEyeUnusualVisualObject(
             function(object)
+                --// Never reset stock character parts here. Their
+                --// LocalTransparencyModifier belongs to the game's
+                --// Visibility / TransparencyController systems; forcing
+                --// it to 0 leaves the head visible after DeadEye closes.
+                if __UI.__L.isStockUnusualPOVTransparencyObject(object) then
+                    return
+                end
+
                 if object:IsA("ParticleEmitter")
                     or object:IsA("Trail")
                     or object:IsA("Beam")
@@ -10685,8 +10693,6 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
                 elseif object:IsA("BasePart")
                     or object:IsA("Decal")
                 then
-                    object.LocalTransparencyModifier = 0
-                elseif __UI.__L.isStockUnusualPOVTransparencyObject(object) then
                     object.LocalTransparencyModifier = 0
                 end
             end
