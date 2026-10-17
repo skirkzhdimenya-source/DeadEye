@@ -442,11 +442,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.266
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.267
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
---// Например: 1.265 -> 1.266. Основная версия остаётся 1.
+--// Например: 1.266 -> 1.267. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -473,7 +473,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.266"
+local SCRIPT_VERSION = "1.267"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -12408,16 +12408,10 @@ function others.getAllAvatarHumanoids()
         addModel(menuVisualModel)
     end
 
-    -- RigService builds the visible menu rig from these cached appearance models.
-    -- Updating only VisualModel/Rigs is not persistent: the next menu rebuild clones
-    -- PlayerCache.<player>.R6 (or Player for R15) and can bring old appearance back.
-    local playerCacheFolder = workspace:FindFirstChild("PlayerCache")
-    local cachedPlayer = playerCacheFolder
-        and playerCacheFolder:FindFirstChild(LocalPlayer.Name)
-    if cachedPlayer then
-        addModel(cachedPlayer:FindFirstChild("R6"))
-        addModel(cachedPlayer:FindFirstChild("Player"))
-    end
+    -- PlayerCache models are persistent templates consumed by RigService, not
+    -- live avatar targets. They are rebuilt from HumanoidDescription separately
+    -- so we never ApplyDescriptionReset to a template whose joints RigService moved
+    -- into its private Joints folder.
 
     -- Retain the existing resolver's fallback targets without making the
     -- current UI state decide which of the two representations gets reset.
@@ -13099,8 +13093,19 @@ function others.applyDescription(
         return false
     end
 
-    local applied = 0
     local failures = {}
+    local cacheOK, cacheDetail, cacheFound = others.replaceAvatarCacheSource(
+        description,
+        "R6"
+    )
+    if not cacheOK and cacheFound then
+        table.insert(failures, "PlayerCache.R6:" .. tostring(cacheDetail))
+        __DDCore.Log("AVATAR APPLY CACHE SOURCE FAILED|detail=" .. tostring(cacheDetail))
+    elseif cacheOK and cacheFound then
+        __DDCore.Log("AVATAR APPLY CACHE SOURCE OK|detail=" .. tostring(cacheDetail))
+    end
+
+    local applied = 0
     for _, humanoid in ipairs(targetHumanoids) do
         local modelPath = tostring(humanoid.Parent)
         pcall(function()
@@ -13179,14 +13184,17 @@ function others.applyDescription(
         .. (#failures > 0 and "|errors=" .. table.concat(failures, " ; ") or ""))
 
     others.endAvatarMutation(mutation, "apply-description")
+    local cachePersistenceOK = not cacheFound or cacheOK
     pcall(function()
         if others.status then
             others.status.Text = applied == #targetHumanoids
+                and cachePersistenceOK
+                and #failures == 0
                 and "Applied • all rigs"
                 or ("Applied • " .. tostring(applied) .. "/" .. tostring(#targetHumanoids))
         end
     end)
-    return true
+    return applied > 0 and cachePersistenceOK
 end
 --// Keep later-created copies of the local rig in sync after an Avatar edit.
 function others.findLocalRigModel(instance)
@@ -13206,19 +13214,6 @@ function others.findLocalRigModel(instance)
             and current.Parent
             and current.Parent.Name == "MenuScene"
             and current.Parent.Parent == workspace
-        then
-            return current
-        end
-
-        -- RigService's persistent avatar sources are the templates copied into
-        -- Workspace.Rigs after menu/round transitions.
-        if current:IsA("Model")
-            and (current.Name == "R6" or current.Name == "Player")
-            and current.Parent
-            and current.Parent.Name == LocalPlayer.Name
-            and current.Parent.Parent
-            and current.Parent.Parent.Name == "PlayerCache"
-            and current.Parent.Parent.Parent == workspace
         then
             return current
         end
@@ -13339,6 +13334,43 @@ end
 local avatarRigAddedConnection = workspace.DescendantAdded:Connect(function(object)
     if object:IsA("Humanoid") then
         others.applyDescriptionToNewHumanoid(object)
+    elseif object:IsA("Model") and object.Parent
+        and (object.Name == "R6" or object.Name == "Player")
+        and object.Parent.Name == LocalPlayer.Name
+        and object.Parent.Parent
+        and object.Parent.Parent.Name == "PlayerCache"
+        and object.Parent.Parent.Parent == workspace
+    then
+        -- The source model built by us is already the requested clean template.
+        local isDeadEyeSource = false
+        pcall(function()
+            isDeadEyeSource = object:GetAttribute("DeadEyeAvatarCacheSource") == true
+        end)
+        if not isDeadEyeSource then
+            task.defer(function()
+                if not object.Parent
+                    or not others.avatarSyncEnabled
+                    or not others.lastAppliedDescription
+                then
+                    return
+                end
+                local mutation = others.beginAvatarMutation("cache-refresh:" .. object.Name)
+                if not mutation.safe then
+                    others.endAvatarMutation(mutation, "cache-refresh-aborted")
+                    __DDCore.Log("AVATAR CACHE REFRESH ABORTED|source=" .. tostring(object))
+                    return
+                end
+                local refreshed, detail = others.replaceAvatarCacheSource(
+                    others.lastAppliedDescription,
+                    object.Name,
+                    object
+                )
+                __DDCore.Log("AVATAR CACHE REFRESH|source=" .. tostring(object)
+                    .. "|success=" .. tostring(refreshed)
+                    .. "|detail=" .. tostring(detail))
+                others.endAvatarMutation(mutation, "cache-refresh:" .. object.Name)
+            end)
+        end
     elseif object:IsA("Model")
         and object.Parent
         and (
@@ -13350,13 +13382,6 @@ local avatarRigAddedConnection = workspace.DescendantAdded:Connect(function(obje
                 object.Name == "VisualModel"
                 and object.Parent.Name == "MenuScene"
                 and object.Parent.Parent == workspace
-            )
-            or (
-                (object.Name == "R6" or object.Name == "Player")
-                and object.Parent.Name == LocalPlayer.Name
-                and object.Parent.Parent
-                and object.Parent.Parent.Name == "PlayerCache"
-                and object.Parent.Parent.Parent == workspace
             )
         )
     then
@@ -13671,6 +13696,23 @@ function others.resetToInitialAvatar()
     local failures = {}
     local secondaryErrors = {}
     local modelNames = {}
+
+    local cacheOK, cacheDetail, cacheFound = others.replaceAvatarCacheSource(
+        others.originalDescription,
+        "R6"
+    )
+    if cacheFound then
+        requiredTargets += 1
+        if cacheOK then
+            requiredVerified += 1
+            __DDCore.Log("AVATAR RESET CACHE SOURCE|success=true|detail=" .. tostring(cacheDetail))
+        else
+            table.insert(failures, "PlayerCache.R6:" .. tostring(cacheDetail))
+            __DDCore.Log("AVATAR RESET CACHE SOURCE|success=false|detail=" .. tostring(cacheDetail))
+        end
+    else
+        __DDCore.Log("AVATAR RESET CACHE SOURCE|present=false|detail=" .. tostring(cacheDetail))
+    end
 
     for _, humanoid in ipairs(r6Targets) do
         local modelName = tostring(humanoid.Parent)
@@ -26532,6 +26574,87 @@ function others.verifyAvatarDescription(humanoid, expectedDescription, context)
         .. (#mismatches > 0 and "|mismatches=" .. table.concat(mismatches, " ; ") or ""))
     return matches, table.concat(mismatches, " ; "), checked
 end
+
+-- Replace the normalized PlayerCache source with a clean model created directly
+-- from HumanoidDescription. RigService moves Motor6Ds into a private Joints folder
+-- inside PlayerCache; applying descriptions in-place to that already-normalized
+-- model can leave stale joints in the template and poison later menu rebuilds.
+function others.replaceAvatarCacheSource(description, sourceName, expectedSource)
+    sourceName = sourceName or "R6"
+    local cacheFolder = workspace:FindFirstChild("PlayerCache")
+    local playerCache = cacheFolder and cacheFolder:FindFirstChild(LocalPlayer.Name)
+    local source = playerCache and playerCache:FindFirstChild(sourceName)
+    if not source or not source:IsA("Model") then
+        __DDCore.Log("AVATAR CACHE SOURCE SKIP|path=Workspace.PlayerCache."
+            .. LocalPlayer.Name .. "." .. tostring(sourceName) .. "|reason=missing")
+        return true, "cache source not present", false
+    end
+
+    if expectedSource and source ~= expectedSource then
+        return true, "stale source event ignored", false
+    end
+
+    local rigType = sourceName == "R6"
+        and Enum.HumanoidRigType.R6
+        or Enum.HumanoidRigType.R15
+    local buildOK, replacement = pcall(function()
+        return Players:CreateHumanoidModelFromDescriptionAsync(description, rigType)
+    end)
+    if not buildOK or not replacement or not replacement:IsA("Model") then
+        local err = tostring(replacement)
+        __DDCore.Log("AVATAR CACHE SOURCE BUILD FAILED|path=" .. tostring(source)
+            .. "|error=" .. err)
+        return false, err, true
+    end
+
+    replacement.Name = source.Name
+    pcall(function()
+        replacement.Archivable = source.Archivable
+    end)
+    pcall(function()
+        for name, value in pairs(source:GetAttributes()) do
+            if name ~= "DeadEyeAvatarCacheSource" then
+                replacement:SetAttribute(name, value)
+            end
+        end
+    end)
+    local root = replacement:FindFirstChild("HumanoidRootPart")
+    if root and root:IsA("BasePart") then
+        pcall(function()
+            replacement.PrimaryPart = root
+        end)
+    end
+
+    local replacementHumanoid = replacement:FindFirstChildOfClass("Humanoid")
+    local verifyOK, mismatchText, checked = others.verifyAvatarDescription(
+        replacementHumanoid,
+        description,
+        "CACHE-BUILD"
+    )
+    if not verifyOK then
+        pcall(function()
+            replacement:Destroy()
+        end)
+        local detail = "new template readback mismatch: " .. tostring(mismatchText)
+        __DDCore.Log("AVATAR CACHE SOURCE VERIFY FAILED|path=" .. tostring(source)
+            .. "|checked=" .. tostring(checked) .. "|detail=" .. detail)
+        return false, detail, true
+    end
+
+    replacement:SetAttribute("DeadEyeAvatarCacheSource", true)
+    local parent = source.Parent
+    replacement.Parent = parent
+    source:Destroy()
+
+    local newPath = tostring(replacement)
+    pcall(function()
+        newPath = replacement:GetFullName()
+    end)
+    local detail = "path=" .. newPath .. "|verified=true|checked=" .. tostring(checked)
+    __DDCore.Log("AVATAR CACHE SOURCE REPLACED|" .. detail)
+    return true, detail, true
+end
+
 
 __DDCore.ApplyDescriptionLogged = others.applyDescription
 others.applyDescription = function(description)
