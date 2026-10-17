@@ -399,7 +399,6 @@ local function __DDWrapTable(target, key, label, mode)
     target[key] = __DDWrapFunction(target[key], label, mode)
 end
 
-__DDLog("BOOT: LogService listener and F6 stop handler installed")
 
 --// =========================================================
 --// DEADEYE VERSION
@@ -27111,8 +27110,111 @@ __UI.__L.addConnection(
 --// Installed before initial preview build and before the user can press controls.
 __DDLog("INIT checkpoint: UI created; installing targeted diagnostics")
 
--- Emote swap: preparation failures + runtime loop errors, without per-frame spam.
+-- Emote swap: log real native Emote ID transitions and replacement start/result.
+__DDWrapTable(__UI.EmoteService, "SetEmote", "EMOTE.EmoteService.SetEmote", "result")
 __DDWrapTable(EmoteRuntime, "checkState", "EMOTE.checkState", "sample")
+
+local __DDNativeEmoteCounter = 0
+local __DDLastNativeEmoteId = "__DD_UNSET"
+local __DDLastNativeEmoteReadOK = "__DD_UNSET"
+local __DDLastSwapEnabled = "__DD_UNSET"
+local __DDLastRuntimeOriginalId = "__DD_UNSET"
+local __DDWrappedCheckState = EmoteRuntime.checkState
+
+EmoteRuntime.checkState = function(...)
+    local args = __DDPack(...)
+
+    if __DDState.active then
+        __DDNativeEmoteCounter += 1
+
+        -- The runtime already polls every frame; sample native state periodically.
+        if __DDNativeEmoteCounter == 1
+            or __DDNativeEmoteCounter % 6 == 0
+        then
+            local characterObject
+            local objectOK, objectError = pcall(function()
+                characterObject = __UI.CharacterService:GetLocalCharacter()
+            end)
+
+            local registry = characterObject and characterObject.DataRegistry
+            local nativeEmoteId
+            local registryOK, registryError = pcall(function()
+                if not registry then
+                    error("Character object or DataRegistry missing")
+                end
+                nativeEmoteId = registry:Get("Emote")
+            end)
+
+            local rawIdKey = tostring(nativeEmoteId)
+            local enabledKey = tostring(enabled)
+            local readOKKey = tostring(objectOK) .. "/" .. tostring(registryOK)
+
+            if rawIdKey ~= __DDLastNativeEmoteId
+                or readOKKey ~= __DDLastNativeEmoteReadOK
+                or enabledKey ~= __DDLastSwapEnabled
+            then
+                local slotDescription = "no matching configured original slot"
+                local numericId = tonumber(nativeEmoteId)
+
+                if numericId then
+                    for slotIndex = 1, SLOT_COUNT do
+                        local slot = slots[slotIndex]
+                        if slot
+                            and tonumber(slot.originalId) == numericId
+                            and slot.replaceId
+                        then
+                            slotDescription = "slot=" .. tostring(slotIndex)
+                                .. " original=" .. tostring(slot.originalId)
+                                .. " replacement=" .. tostring(slot.replaceId)
+                            break
+                        end
+                    end
+                end
+
+                __DDLog("EMOTE NATIVE STATE: enabled=" .. enabledKey
+                    .. ", nativeEmoteId=" .. rawIdKey
+                    .. ", matchingSlot={" .. slotDescription .. "}"
+                    .. ", characterObject=" .. tostring(characterObject)
+                    .. ", DataRegistry=" .. tostring(registry)
+                    .. ", objectReadOK=" .. tostring(objectOK)
+                    .. ", registryReadOK=" .. tostring(registryOK)
+                    .. (objectOK and "" or ", objectError=" .. tostring(objectError))
+                    .. (registryOK and "" or ", registryError=" .. tostring(registryError)))
+
+                __DDLastNativeEmoteId = rawIdKey
+                __DDLastNativeEmoteReadOK = readOKKey
+                __DDLastSwapEnabled = enabledKey
+            end
+        end
+    end
+
+    local ok, result = xpcall(function()
+        return __DDPack(__DDWrappedCheckState(__DDUnpack(args, 1, args.n)))
+    end, __DDTraceback)
+
+    if not ok then
+        __DDLog("EMOTE CHECKSTATE TRACKER FAILED:\n" .. tostring(result))
+        error(result, 0)
+    end
+
+    if __DDState.active then
+        local currentOriginalId
+        local readOK, readError = pcall(function()
+            currentOriginalId = EmoteRuntime.getCurrentOriginalId()
+        end)
+
+        local currentKey = readOK and tostring(currentOriginalId) or "<read failed>"
+        if currentKey ~= __DDLastRuntimeOriginalId then
+            __DDLog("EMOTE RUNTIME SWAP STATE: currentOriginalId=" .. currentKey
+                .. ", enabled=" .. tostring(enabled)
+                .. (readOK and "" or ", readError=" .. tostring(readError)))
+            __DDLastRuntimeOriginalId = currentKey
+        end
+    end
+
+    return __DDUnpack(result, 1, result.n)
+end
+
 __DDWrapTable(EmoteRuntime, "stopCustomEmote", "EMOTE.stopCustomEmote")
 __DDWrapTable(EmoteRuntime, "stopForCleanup", "EMOTE.stopForCleanup")
 __DDWrapTable(EmoteRuntime, "reset", "EMOTE.reset")
@@ -27143,8 +27245,86 @@ __DDWrapTable(UnusualFns, "closeUnusualPicker", "UNUSUAL.closePicker")
 __DDWrapTable(UnusualFns, "rebuildUnusualPicker", "UNUSUAL.rebuildPicker")
 __DDWrapTable(__UI.__L, "applyUnusualFX", "UNUSUAL.applyUnusualFX")
 
--- Avatar actions: log their results and any exceptions with their original traceback.
+-- Avatar actions: log their results and verify applied fields on every Humanoid.
 __DDWrapTable(others, "applyDescription", "AVATAR.applyDescription")
+
+local __DDAvatarVerifyProperties = {
+    "Head", "Torso", "LeftArm", "RightArm", "LeftLeg", "RightLeg",
+    "Face", "Shirt", "Pants", "GraphicTShirt",
+    "BodyTypeScale", "HeightScale", "WidthScale", "DepthScale",
+    "HeadScale", "ProportionScale",
+    "HatAccessory", "HairAccessory", "FaceAccessory", "NeckAccessory",
+    "ShouldersAccessory", "FrontAccessory", "BackAccessory", "WaistAccessory"
+}
+
+local __DDApplyDescriptionLogged = others.applyDescription
+others.applyDescription = function(description)
+    local expected = {}
+    for _, property in ipairs(__DDAvatarVerifyProperties) do
+        pcall(function()
+            expected[property] = description[property]
+        end)
+    end
+
+    local result = __DDPack(__DDApplyDescriptionLogged(description))
+
+    if __DDState.active then
+        local humanoids = {}
+        local listOK, listError = pcall(function()
+            humanoids = others.getHumanoids()
+        end)
+
+        __DDLog("AVATAR READBACK BEGIN: applyResult=" .. __DDArgs(result)
+            .. ", humanoidListOK=" .. tostring(listOK)
+            .. ", humanoidCount=" .. tostring(#humanoids)
+            .. (listOK and "" or ", error=" .. tostring(listError)))
+
+        for index, humanoid in ipairs(humanoids) do
+            local descriptionOK, appliedDescription = pcall(function()
+                return humanoid:GetAppliedDescription()
+            end)
+
+            if not descriptionOK or not appliedDescription then
+                __DDLog("AVATAR READBACK FAILED: humanoid#" .. tostring(index)
+                    .. ", humanoid=" .. tostring(humanoid)
+                    .. ", error=" .. tostring(appliedDescription))
+            else
+                local checked = 0
+                local mismatches = {}
+
+                for _, property in ipairs(__DDAvatarVerifyProperties) do
+                    local desired = expected[property]
+                    if desired ~= nil then
+                        checked += 1
+                        local actualOK, actual = pcall(function()
+                            return appliedDescription[property]
+                        end)
+
+                        if not actualOK or tostring(actual) ~= tostring(desired) then
+                            mismatches[#mismatches + 1] = property
+                                .. ": requested=" .. tostring(desired)
+                                .. ", actual=" .. (actualOK and tostring(actual) or "<read failed>")
+                        end
+                    end
+                end
+
+                if #mismatches == 0 then
+                    __DDLog("AVATAR READBACK MATCH: humanoid#" .. tostring(index)
+                        .. ", path=" .. tostring(humanoid)
+                        .. ", checkedProperties=" .. tostring(checked))
+                else
+                    __DDLog("AVATAR READBACK MISMATCH: humanoid#" .. tostring(index)
+                        .. ", path=" .. tostring(humanoid)
+                        .. ", checkedProperties=" .. tostring(checked)
+                        .. ", mismatches=" .. table.concat(mismatches, " | "))
+                end
+            end
+        end
+    end
+
+    return __DDUnpack(result, 1, result.n)
+end
+
 __DDWrapTable(others, "applyField", "AVATAR.applyField")
 __DDWrapTable(others, "applyBodyPart", "AVATAR.applyBodyPart")
 __DDWrapTable(others, "scan", "AVATAR.scan")
