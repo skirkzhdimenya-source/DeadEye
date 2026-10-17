@@ -25066,16 +25066,6 @@ __UI.__L.cleanup = function()
     end)
 
     pcall(function()
-        mainJump.restoreFOVBodyVisibility()
-
-        if genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP
-            == mainJump.fovBodyVisibilityCleanup
-        then
-            genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP = nil
-        end
-    end)
-
-    pcall(function()
         if mainJump.lookActive
             or mainJump.lookRestoring
         then
@@ -25114,6 +25104,16 @@ __UI.__L.cleanup = function()
     pcall(function()
         if genv.UNUSUAL_SWAPPER_CLEANUP then
             genv.UNUSUAL_SWAPPER_CLEANUP()
+        end
+    end)
+
+    pcall(function()
+        mainJump.restoreFOVBodyVisibility()
+
+        if genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP
+            == mainJump.fovBodyVisibilityCleanup
+        then
+            genv.DEADEYE_FOV_BODY_VISIBILITY_CLEANUP = nil
         end
     end)
 
