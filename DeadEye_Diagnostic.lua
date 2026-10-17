@@ -442,11 +442,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.263
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.264
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
---// Например: 1.262 -> 1.263. Основная версия остаётся 1.
+--// Например: 1.263 -> 1.264. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -473,7 +473,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.263"
+local SCRIPT_VERSION = "1.264"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -12503,11 +12503,15 @@ function others.endAvatarMutation(token, operation)
     genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = false
 
     if state and state.wasActive then
-        local sameRule = tonumber(unusualSlot.originalId) == state.slotOriginalId
-            and tonumber(unusualSlot.replaceId) == state.slotReplacementId
+        if not state.safe then
+            __DDCore.Log("AVATAR UNUSUAL RESUME SKIPPED|reason=suspend failed; no avatar mutation should have run")
+            __DDCore.Log("AVATAR MUTATION END|operation=" .. tostring(operation)
+                .. "|safe=false")
+            return false
+        end
+
         local shouldRemainActive = state.wasEnabled
             and unusualEnabled
-            and sameRule
             and genv.DEADEYE_UNUSUAL_POV_RUNNING ~= false
 
         -- Re-activate once so the swap captures a fresh original-effect snapshot
@@ -13086,26 +13090,31 @@ function others.applyDescription(
         local ok, err = pcall(function()
             humanoid:ApplyDescriptionResetAsync(description)
         end)
+        local resetAsyncError = not ok and tostring(err) or nil
         if not ok then
-            table.insert(failures, modelPath .. "|ResetAsync=" .. tostring(err))
             ok, err = pcall(function()
                 humanoid:ApplyDescriptionReset(description)
             end)
-        end
-        if not ok then
-            table.insert(failures, modelPath .. "|Reset=" .. tostring(err))
         end
 
         if ok then
             applied += 1
             others.appliedHumanoids[humanoid] = true
+            if resetAsyncError then
+                __DDCore.Log("AVATAR APPLY FALLBACK USED|path=" .. modelPath
+                    .. "|method=ApplyDescriptionReset|firstError=" .. resetAsyncError)
+            end
         else
+            table.insert(failures, modelPath
+                .. "|ResetAsync=" .. tostring(resetAsyncError)
+                .. "|Reset=" .. tostring(err))
             __DDCore.Log("AVATAR APPLY TARGET FAILED|path=" .. modelPath
                 .. "|error=" .. tostring(err))
         end
     end
 
     if applied == 0 then
+        table.clear(failures)
         for _, humanoid in ipairs(targetHumanoids) do
             local ok, err = pcall(function()
                 humanoid:ApplyDescriptionAsync(description)
@@ -13203,6 +13212,7 @@ function others.applyDescriptionToNewHumanoid(humanoid)
     if not humanoid
         or not humanoid:IsA("Humanoid")
         or not humanoid.Parent
+        or humanoid.RigType ~= Enum.HumanoidRigType.R6
         or others.appliedHumanoids[humanoid]
         or others.pendingHumanoids[humanoid]
         or not others.avatarSyncEnabled
@@ -13273,8 +13283,16 @@ function others.applyDescriptionToNewHumanoid(humanoid)
 
             if succeeded then
                 others.appliedHumanoids[humanoid] = true
+                local verifyOK, mismatchText, checked = others.verifyAvatarDescription(
+                    humanoid,
+                    others.lastAppliedDescription,
+                    "AUTO"
+                )
                 __DDCore.Log("AVATAR AUTO-APPLIED|model=" .. tostring(model)
-                    .. "|humanoid=" .. tostring(humanoid))
+                    .. "|humanoid=" .. tostring(humanoid)
+                    .. "|verified=" .. tostring(verifyOK)
+                    .. "|checked=" .. tostring(checked)
+                    .. (verifyOK and "" or "|mismatches=" .. tostring(mismatchText)))
             else
                 __DDCore.Log("AVATAR AUTO-APPLY FAILED|model=" .. tostring(model)
                     .. "|humanoid=" .. tostring(humanoid)
@@ -13627,6 +13645,7 @@ function others.resetToInitialAvatar()
     end
 
     local applied = 0
+    local verified = 0
     local failures = {}
     local modelNames = {}
 
@@ -13649,8 +13668,25 @@ function others.resetToInitialAvatar()
         if ok and result then
             applied += 1
             others.appliedHumanoids[humanoid] = true
+            local verifyOK, mismatchText, checked = others.verifyAvatarDescription(
+                humanoid,
+                others.originalDescription,
+                "RESET"
+            )
+            if verifyOK then
+                verified += 1
+                __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
+                    .. "|methodApplied=true|verified=true|checked=" .. tostring(checked))
+            else
+                table.insert(failures, modelName .. ":VERIFY:" .. tostring(mismatchText))
+                __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
+                    .. "|methodApplied=true|verified=false|checked=" .. tostring(checked)
+                    .. "|mismatches=" .. tostring(mismatchText))
+            end
         else
             table.insert(failures, modelName .. ":" .. tostring(result))
+            __DDCore.Log("AVATAR RESET TARGET|path=" .. modelName
+                .. "|methodApplied=false|error=" .. tostring(result))
         end
     end
 
@@ -13671,6 +13707,7 @@ function others.resetToInitialAvatar()
         .. "|targets=" .. tostring(#targets)
         .. "|r6Targets=" .. tostring(#r6Targets)
         .. "|applied=" .. tostring(applied)
+        .. "|verified=" .. tostring(verified)
         .. "|failed=" .. tostring(#failures)
         .. "|nonR6Skipped=" .. tostring(nonR6)
         .. "|models=" .. table.concat(modelNames, ";")
@@ -13679,16 +13716,16 @@ function others.resetToInitialAvatar()
     )
 
     if others.status then
-        if #failures == 0 and applied == #r6Targets then
-            others.status.Text = "Initial avatar restored • " .. tostring(applied)
+        if #failures == 0 and verified == #r6Targets then
+            others.status.Text = "Initial avatar restored • " .. tostring(verified)
         elseif applied > 0 then
-            others.status.Text = "Partial reset • " .. tostring(applied) .. "/" .. tostring(#r6Targets)
+            others.status.Text = "Partial reset • " .. tostring(verified) .. "/" .. tostring(#r6Targets)
         else
             others.status.Text = "Reset failed • see log"
         end
     end
 
-    return applied > 0 and #failures == 0
+    return applied > 0 and verified == #r6Targets and #failures == 0
 end
 
 --// FIRST-PERSON HEAD/CAMERA VISIBILITY
@@ -26384,6 +26421,60 @@ __DDCore.AvatarVerifyProperties = {
     "MoodAnimation", "RunAnimation", "SwimAnimation", "WalkAnimation"
 }
 
+-- Read back the complete set of HumanoidDescription properties the avatar editor
+-- can affect. A successful pcall alone is not evidence that the appearance took.
+function others.verifyAvatarDescription(humanoid, expectedDescription, context)
+    local path = tostring(humanoid)
+    pcall(function()
+        path = humanoid:GetFullName()
+    end)
+
+    if not humanoid or not humanoid.Parent or not expectedDescription then
+        local reason = "humanoid or expected description missing"
+        __DDCore.Log("AVATAR FIELD VERIFY FAILED|context=" .. tostring(context)
+            .. "|path=" .. path .. "|reason=" .. reason)
+        return false, reason, 0
+    end
+
+    local readOK, actualDescription = pcall(function()
+        return humanoid:GetAppliedDescription()
+    end)
+    if not readOK or not actualDescription then
+        local reason = tostring(actualDescription)
+        __DDCore.Log("AVATAR FIELD VERIFY FAILED|context=" .. tostring(context)
+            .. "|path=" .. path .. "|readbackError=" .. reason)
+        return false, reason, 0
+    end
+
+    local checked = 0
+    local mismatches = {}
+    for _, property in ipairs(__DDCore.AvatarVerifyProperties) do
+        local expectedOK, expectedValue = pcall(function()
+            return expectedDescription[property]
+        end)
+        local actualOK, actualValue = pcall(function()
+            return actualDescription[property]
+        end)
+
+        if expectedOK and actualOK then
+            checked += 1
+            if tostring(expectedValue) ~= tostring(actualValue) then
+                table.insert(mismatches, property
+                    .. ":expected=" .. tostring(expectedValue)
+                    .. ",actual=" .. tostring(actualValue))
+            end
+        end
+    end
+
+    local matches = #mismatches == 0
+    __DDCore.Log("AVATAR FIELD VERIFY|" .. tostring(context)
+        .. "|path=" .. path
+        .. "|matched=" .. tostring(matches)
+        .. "|checked=" .. tostring(checked)
+        .. (#mismatches > 0 and "|mismatches=" .. table.concat(mismatches, " ; ") or ""))
+    return matches, table.concat(mismatches, " ; "), checked
+end
+
 __DDCore.ApplyDescriptionLogged = others.applyDescription
 others.applyDescription = function(description)
     local expected = {}
@@ -26398,7 +26489,16 @@ others.applyDescription = function(description)
     if __DDCore.State.active then
         local humanoids = {}
         local listOK, listError = pcall(function()
-            humanoids = others.getAllAvatarHumanoids()
+            local candidates = others.getAllAvatarHumanoids()
+            for _, humanoid in ipairs(candidates) do
+                local isR6 = false
+                pcall(function()
+                    isR6 = humanoid.RigType == Enum.HumanoidRigType.R6
+                end)
+                if isR6 then
+                    table.insert(humanoids, humanoid)
+                end
+            end
         end)
 
         __DDCore.Log("AVATAR READBACK BEGIN: applyResult=" .. __DDCore.Args(result)
