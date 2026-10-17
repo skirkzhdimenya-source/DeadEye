@@ -435,7 +435,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.239"
+local SCRIPT_VERSION = "1.240"
 __DDCore.Log("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -2491,18 +2491,90 @@ function cosmetic.getName(id)
     return name
 end
 
+--// Loadout compatibility resolver for the current UserData hierarchy.
+--// Prefer the game's ModuleScript API; fall back to captured Loadout sync/patch data.
+__DDCore.LoadoutCache = __DDCore.LoadoutCache or {}
+__DDCore.LoadoutResolver = function(slotName)
+    if not __DDCore.LoadoutSearchDone then
+        __DDCore.LoadoutSearchDone = true
+
+        local module = nil
+        local candidatePaths = {}
+        local userDataChildren = {}
+
+        pcall(function()
+            local shared = ReplicatedStorage:FindFirstChild("Shared")
+            local userData = shared and shared:FindFirstChild("UserData")
+            local hooks = userData and userData:FindFirstChild("ClientHooks")
+            module = hooks and hooks:FindFirstChild("useLoadout")
+
+            if userData then
+                for _, child in ipairs(userData:GetChildren()) do
+                    userDataChildren[#userDataChildren + 1] =
+                        child.Name .. "[" .. child.ClassName .. "]"
+                end
+            end
+
+            if module then
+                candidatePaths[#candidatePaths + 1] = module:GetFullName()
+            else
+                for _, candidate in ipairs(ReplicatedStorage:GetDescendants()) do
+                    if candidate:IsA("ModuleScript")
+                        and string.lower(candidate.Name) == "useloadout"
+                    then
+                        if #candidatePaths < 20 then
+                            candidatePaths[#candidatePaths + 1] = candidate:GetFullName()
+                        end
+                        if not module then
+                            module = candidate
+                        end
+                    end
+                end
+            end
+        end)
+
+        __DDCore.LoadoutModule = module
+        __DDCore.Log("LOADOUT RESOLVER DISCOVERY: module="
+            .. tostring(module)
+            .. ", candidates=" .. (#candidatePaths > 0 and table.concat(candidatePaths, ";") or "<none>")
+            .. ", UserData children=" .. (#userDataChildren > 0 and table.concat(userDataChildren, ";") or "<none>"))
+    end
+
+    local cached = tonumber(__DDCore.LoadoutCache[slotName])
+    local module = __DDCore.LoadoutModule
+
+    if module then
+        local ok, value = pcall(function()
+            local api = require(module)
+            if type(api) ~= "table" or type(api.GetEquippedFromSlot) ~= "function" then
+                error("useLoadout module has no GetEquippedFromSlot function")
+            end
+            return api.GetEquippedFromSlot(slotName)
+        end)
+
+        if ok and tonumber(value) ~= nil then
+            local numeric = tonumber(value)
+            if numeric ~= 0 or cached == nil or cached == 0 then
+                return numeric
+            end
+            return cached
+        end
+
+        if not __DDCore.LoadoutCallFailureLogged then
+            __DDCore.LoadoutCallFailureLogged = true
+            __DDCore.Log("LOADOUT RESOLVER MODULE FAILED: path=" .. tostring(module)
+                .. ", error=" .. tostring(value))
+        end
+    end
+
+    if cached ~= nil then
+        return cached
+    end
+    return 0
+end
+
 function cosmetic.getEquippedId(slot)
-    local value = 0
-    pcall(function()
-        value =
-            require(
-                ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild("useLoadout")
-            ).GetEquippedFromSlot(
-                "CosmeticSlot_"
-                    .. tostring(slot)
-            )
-    end)
-    return tonumber(value) or 0
+    return __DDCore.LoadoutResolver("CosmeticSlot_" .. tostring(slot))
 end
 
 function cosmetic.updateRow(slotIndex)
@@ -3091,12 +3163,11 @@ function cosmetic.refreshRig()
                 )
             end
 
-            local useLoadout =
-                require(
-                    ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild(
-                        "useLoadout"
-                    )
-                )
+            local useLoadout = {
+                GetEquippedFromSlot = function(slotName)
+                    return __DDCore.LoadoutResolver(slotName)
+                end
+            }
 
             local equipped = {}
 
@@ -5143,16 +5214,7 @@ end
 --// CURRENT EQUIPPED UNUSUAL
 --// =========================================================
 function UnusualFns.getEquippedUnusualId()
-    local value = 0
-    pcall(function()
-        value =
-            require(
-                ReplicatedStorage.Shared.UserData.ClientHooks:WaitForChild("useLoadout")
-            ).GetEquippedFromSlot(
-                "UnusualSlot"
-            )
-    end)
-    return tonumber(value) or 0
+    return __DDCore.LoadoutResolver("UnusualSlot")
 end
 --// First run: original = actual equipped Unusual.
 do
@@ -23648,6 +23710,18 @@ pcall(function()
     UnusualFns.addUnusualConnection(
         loadoutChannel.OnClientEvent:Connect(
             function(kind, data)
+                if (kind == "sync" or kind == "patch")
+                    and type(data) == "table"
+                then
+                    for slotName, slotValue in pairs(data) do
+                        __DDCore.LoadoutCache[slotName] = slotValue
+                    end
+                    __DDCore.Log("LOADOUT EVENT: kind=" .. tostring(kind)
+                        .. ", UnusualSlot=" .. tostring(data.UnusualSlot)
+                        .. ", CosmeticSlot_1=" .. tostring(data.CosmeticSlot_1)
+                        .. ", CosmeticSlot_2=" .. tostring(data.CosmeticSlot_2))
+                end
+
                 if kind == "sync"
                     and type(data) == "table"
                 then
