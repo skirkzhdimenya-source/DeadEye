@@ -64,6 +64,7 @@ function __DDCore.Log(message)
         or string.find(messageText, "THROW ", 1, true) ~= nil
         or string.find(messageText, "UNUSUAL FAIL:", 1, true) ~= nil
         or string.find(messageText, "UNUSUAL ACTIVATE OK:", 1, true) ~= nil
+        or string.find(messageText, "AVATAR RESET", 1, true) ~= nil
 
     if not keep then
         return
@@ -443,7 +444,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.257
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.258
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -475,7 +476,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.257"
+local SCRIPT_VERSION = "1.258"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -14683,6 +14684,112 @@ genv.DEADEYE_AVATAR_CLEANUP = function(reason)
     return restored == true
 end
 
+--// Reset button must apply the initial baseline to CURRENT Humanoids.
+--// Snapshot entries can refer to old rigs left alive in RigService's cache;
+--// restoring only those object references can report success without changing
+--// the visible character after a round/menu rig transition.
+function others.resetToInitialAvatar()
+    if not others.originalDescription then
+        __DDCore.Log("AVATAR RESET FAILED|initial baseline is missing")
+        return false
+    end
+
+    if not others.isR6() then
+        __DDCore.Log("AVATAR RESET FAILED|active Humanoid is not R6")
+        if others.status then
+            others.status.Text = "R6 only"
+        end
+        return false
+    end
+
+    local targets = {}
+    local listOK, listError = pcall(function()
+        targets = others.getHumanoids()
+    end)
+
+    if not listOK or #targets == 0 then
+        __DDCore.Log("AVATAR RESET FAILED|no current Humanoids|error="
+            .. tostring(listError))
+        if others.status then
+            others.status.Text = "Reset failed • no rig"
+        end
+        return false
+    end
+
+    -- Capture each newly encountered Humanoid's native state BEFORE applying
+    -- the reset. Never overwrite snapshots already captured before Avatar edits.
+    for _, humanoid in ipairs(targets) do
+        pcall(function()
+            others.captureOriginalDescriptionForHumanoid(humanoid)
+        end)
+    end
+
+    local applied = 0
+    local failures = {}
+
+    for _, humanoid in ipairs(targets) do
+        if humanoid
+            and humanoid:IsA("Humanoid")
+            and humanoid.Parent
+        then
+            local ok, result = pcall(function()
+                return others.applyDescriptionDirect(
+                    humanoid,
+                    others.originalDescription
+                )
+            end)
+
+            if ok and result then
+                applied += 1
+                others.appliedHumanoids[humanoid] = true
+            else
+                table.insert(
+                    failures,
+                    tostring(humanoid:GetFullName())
+                        .. ":" .. tostring(result)
+                )
+            end
+        end
+    end
+
+    if applied > 0 then
+        pcall(function()
+            others.lastAppliedDescription =
+                others.originalDescription:Clone()
+        end)
+        others.avatarSyncEnabled =
+            others.lastAppliedDescription ~= nil
+
+        __DDCore.Log(
+            "AVATAR RESET|baseline=initial"
+            .. "|targets=" .. tostring(#targets)
+            .. "|applied=" .. tostring(applied)
+            .. "|failed=" .. tostring(#failures)
+            .. "|sync=" .. tostring(others.avatarSyncEnabled)
+        )
+
+        if others.status then
+            others.status.Text =
+                "Initial avatar restored • " .. tostring(applied)
+        end
+
+        return true
+    end
+
+    __DDCore.Log(
+        "AVATAR RESET FAILED|baseline=initial"
+        .. "|targets=" .. tostring(#targets)
+        .. "|applied=0"
+        .. "|errors=" .. table.concat(failures, " ; ")
+    )
+
+    if others.status then
+        others.status.Text = "Reset failed • see log"
+    end
+
+    return false
+end
+
 --// FIRST-PERSON HEAD/CAMERA VISIBILITY
 --// =========================================================
 --// Do NOT run a custom head/accessory transparency loop here.
@@ -24054,9 +24161,33 @@ UnusualFns.addUnusualConnection(
 UnusualFns.addUnusualConnection(
     others.resetButton.MouseButton1Click:Connect(
         function()
-            others.ensureSnapshot()
-            if others.restore(true) then
-                others.scan()
+            local ok = false
+            local callOK, result = pcall(function()
+                return others.resetToInitialAvatar()
+            end)
+
+            ok = callOK and result == true
+
+            if ok then
+                pcall(function()
+                    others.scan()
+                end)
+                if others.resetButton and others.resetButton.Parent then
+                    others.resetButton.Text = "INITIAL AVATAR RESTORED"
+                    task.delay(1.1, function()
+                        pcall(function()
+                            if others.resetButton and others.resetButton.Parent then
+                                others.resetButton.Text = "RESET TO INITIAL AVATAR"
+                            end
+                        end)
+                    end)
+                end
+            else
+                __DDCore.Log("AVATAR RESET FAILED|buttonCallOK="
+                    .. tostring(callOK) .. "|result=" .. tostring(result))
+                if others.status then
+                    others.status.Text = "Reset failed • see log"
+                end
             end
         end
     )
@@ -29393,6 +29524,7 @@ __DDCore.WrapTable(others, "applyBodyPart", "AVATAR.applyBodyPart")
 __DDCore.WrapTable(others, "scan", "AVATAR.scan")
 __DDCore.WrapTable(others, "clearAccessories", "AVATAR.clearAccessories")
 __DDCore.WrapTable(others, "restore", "AVATAR.restore")
+__DDCore.WrapTable(others, "resetToInitialAvatar", "AVATAR.resetToInitialAvatar")
 __DDCore.WrapTable(others, "applyAvatarDump", "AVATAR.applyAvatarDump")
 __DDCore.WrapTable(others, "applyAll", "AVATAR.applyAll")
 
