@@ -430,7 +430,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.243
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.244
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -462,7 +462,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.243"
+local SCRIPT_VERSION = "1.244"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -2337,6 +2337,7 @@ local unusualDestroyed = false
 local unusualReapplyBusy = false
 local unusualRuntime = {
     appliedRig = nil,
+    appliedCharacter = nil,
     originalId = nil,
     replacementId = nil,
     --// Rule state:
@@ -3471,6 +3472,8 @@ function cosmetic.refreshRig()
                         unusualActive = true
                         unusualRuntime.appliedRig =
                             UnusualFns.getUnusualVisualRig()
+                        unusualRuntime.appliedCharacter =
+                            UnusualFns.getUnusualPlayerCharacter()
                     end
                 end)
             elseif restoreNativeUnusualId then
@@ -5437,6 +5440,52 @@ function UnusualFns.getUnusualVisualRig()
 
     return nil
 end
+--// Resolve both live client-side representations of the local rig.
+--// Most visuals live under Workspace.Rigs; the character/physics model can
+--// live separately under Workspace.Players. Apply changes independently to
+--// every distinct model that is currently available.
+function UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+    local targets = {}
+    local seen = {}
+
+    local function add(model, role)
+        if model and model:IsA("Model") and not seen[model] then
+            seen[model] = true
+            table.insert(targets, {
+                model = model,
+                role = role
+            })
+        end
+    end
+
+    add(visualRig, "visual")
+    add(playerCharacter, "character")
+
+    local rigsFolder = workspace:FindFirstChild("Rigs")
+    add(rigsFolder and rigsFolder:FindFirstChild(LocalPlayer.Name), "rigs")
+
+    local playersFolder = workspace:FindFirstChild("Players")
+    add(playersFolder and playersFolder:FindFirstChild(LocalPlayer.Name), "players")
+
+    return targets
+end
+
+function UnusualFns.resolveUnusualTargetModel(role, visualRig, playerCharacter)
+    if role == "visual" then
+        return visualRig
+    elseif role == "character" then
+        return playerCharacter
+    elseif role == "rigs" then
+        local folder = workspace:FindFirstChild("Rigs")
+        return folder and folder:FindFirstChild(LocalPlayer.Name)
+    elseif role == "players" then
+        local folder = workspace:FindFirstChild("Players")
+        return folder and folder:FindFirstChild(LocalPlayer.Name)
+    end
+
+    return nil
+end
+
 --// =========================================================
 --// GET COSMETIC RIG
 --// =========================================================
@@ -8207,18 +8256,40 @@ __UI.__L.applyUnusualFX = function(
         return false
     end
 
+    local targets = UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+    if #targets == 0 then
+        UnusualFns.traceSwap(
+            "APPLY_ABORT_NO_TARGET_MODELS",
+            "id=" .. tostring(id),
+            visualRig,
+            playerCharacter
+        )
+        return false
+    end
+
+    local targetSummary = {}
+    for _, target in ipairs(targets) do
+        local path = tostring(target.model)
+        pcall(function()
+            path = target.model:GetFullName()
+        end)
+        table.insert(targetSummary, tostring(target.role) .. ":" .. path)
+    end
+
     UnusualFns.traceSwap(
         "APPLY_COSMETIC_MODEL",
-        "id=" .. tostring(id) .. "|model=" .. cosmeticRig:GetFullName()
+        "id=" .. tostring(id)
+            .. "|model=" .. cosmeticRig:GetFullName()
             .. "|children=" .. tostring(#cosmeticRig:GetChildren())
-            .. "|descendants=" .. tostring(#cosmeticRig:GetDescendants()),
+            .. "|descendants=" .. tostring(#cosmeticRig:GetDescendants())
+            .. "|targets=" .. table.concat(targetSummary, ";"),
         visualRig,
         playerCharacter
     )
 
-    --// Build the hidden animation source first. This cleanup
-    --// routine destroys previous runtime/animated visuals,
-    --// so the visible animated mini-rig must be installed after it.
+    --// Build one hidden animation source, then bind visible copies to each
+    --// target model. This avoids resetting the shared animation source for
+    --// every target while allowing both models to receive the same effect.
     local animatedSource =
         unusualRuntime.createAnimationSource(
             cosmeticRig,
@@ -8226,101 +8297,71 @@ __UI.__L.applyUnusualFX = function(
             playerCharacter
         )
 
-    local animatedNestedInstalled =
-        unusualRuntime.installAnimatedNestedModels(
-            cosmeticRig,
-            id,
-            visualRig,
-            playerCharacter
-        )
+    local animatedNestedInstalled = 0
+    for _, target in ipairs(targets) do
+        local ok, count = pcall(function()
+            return unusualRuntime.installAnimatedNestedModels(
+                cosmeticRig,
+                id,
+                target.model,
+                playerCharacter
+            )
+        end)
 
-    local installed =
-        0
-
-    if animatedNestedInstalled > 0 then
-        installed += animatedNestedInstalled
-        print(
-            "[UnusualSwapper] Animated nested models:",
-            animatedNestedInstalled,
-            "ID:",
-            id
-        )
-    end
-
-    for _, sourcePart in ipairs(
-        cosmeticRig:GetChildren()
-    ) do
-
-        if sourcePart:IsA(
-            "BasePart"
-        ) then
-
-            local targetPart
-
-            if sourcePart.Name
-                == "HumanoidRootPart"
-            then
-
-                if playerCharacter then
-
-                    targetPart =
-                        playerCharacter:FindFirstChild(
-                            "HumanoidRootPart"
-                        )
-
-                end
-
-                if not targetPart then
-
-                    targetPart =
-                        visualRig:FindFirstChild(
-                            "HumanoidRootPart"
-                        )
-
-                end
-
-            else
-
-                targetPart =
-                    visualRig:FindFirstChild(
-                        sourcePart.Name
-                    )
-
-            end
-
-            if targetPart
-                and targetPart:IsA(
-                    "BasePart"
-                )
-            then
-
-                __UI.__L.installUnusualPartFX(
-                    sourcePart,
-                    targetPart,
-                    id,
-                    animatedSource
-                )
-
-                installed += 1
-
-            end
-
+        if ok and type(count) == "number" then
+            animatedNestedInstalled += count
+        elseif not ok then
+            __DDCore.Log("UNUSUAL APPLY NESTED ERROR: role="
+                .. tostring(target.role) .. ", error=" .. tostring(count))
         end
-
     end
 
-    local applyResult = installed > 0
+    local installedParts = 0
+    for _, sourcePart in ipairs(cosmeticRig:GetChildren()) do
+        if sourcePart:IsA("BasePart") then
+            for _, target in ipairs(targets) do
+                local targetPart =
+                    target.model:FindFirstChild(sourcePart.Name)
+
+                if targetPart and targetPart:IsA("BasePart") then
+                    local ok, err = pcall(function()
+                        __UI.__L.installUnusualPartFX(
+                            sourcePart,
+                            targetPart,
+                            id,
+                            animatedSource
+                        )
+                    end)
+
+                    if ok then
+                        installedParts += 1
+                    else
+                        __DDCore.Log("UNUSUAL APPLY PART ERROR: role="
+                            .. tostring(target.role)
+                            .. "|part=" .. tostring(sourcePart.Name)
+                            .. "|error=" .. tostring(err))
+                    end
+                end
+            end
+        end
+    end
+
+    local applyResult =
+        installedParts > 0
+        or animatedNestedInstalled > 0
+
     UnusualFns.traceSwap(
         "APPLY_END",
         "id=" .. tostring(id)
-            .. "|installedParts=" .. tostring(installed)
+            .. "|installedTargetParts=" .. tostring(installedParts)
+            .. "|animatedNestedModels=" .. tostring(animatedNestedInstalled)
+            .. "|targetModels=" .. tostring(#targets)
             .. "|result=" .. tostring(applyResult),
         visualRig,
         playerCharacter
     )
 
     return applyResult
-
 end
 
 --// =========================================================
@@ -9010,158 +9051,83 @@ function UnusualFns.removeOriginalUnusualFX(
         return
     end
 
-    for partName, objects in pairs(
-        signature
-    ) do
+    local targets = UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
 
-        local targetPart
+    --// Hide the native original on every distinct target model, not just
+    --// Rigs plus the special-case HumanoidRootPart under Players.
+    for partName, objects in pairs(signature) do
+        for _, target in ipairs(targets) do
+            local targetPart = target.model:FindFirstChild(partName)
 
-        if partName
-            == "HumanoidRootPart"
-        then
+            if targetPart and targetPart:IsA("BasePart") then
+                for _, existing in ipairs(targetPart:GetDescendants()) do
+                    for _, info in ipairs(objects) do
+                        local match = false
 
-            if playerCharacter then
-                targetPart =
-                    playerCharacter:FindFirstChild(
-                        "HumanoidRootPart"
-                    )
-            end
-
-        else
-
-            targetPart =
-                visualRig:FindFirstChild(
-                    partName
-                )
-
-        end
-
-        if targetPart
-            and targetPart:IsA("BasePart")
-        then
-
-            for _, existing in ipairs(
-                targetPart:GetDescendants()
-            ) do
-
-                for _, info in ipairs(
-                    objects
-                ) do
-
-                    local match = false
-
-                    if existing.ClassName ==
-                        info.Class
-                    then
-
-                        if existing:IsA("MeshPart")
-                            and info.MeshId
-                        then
-
-                            match =
-                                existing.Name ==
-                                info.Name
-                                and tostring(existing.MeshId)
-                                    == info.MeshId
-                                and tostring(existing.TextureID)
-                                    == info.TextureId
-
-                        else
-
-                            match =
-                                existing.Name ==
-                                info.Name
-
+                        if existing.ClassName == info.Class then
+                            if existing:IsA("MeshPart") and info.MeshId then
+                                match =
+                                    existing.Name == info.Name
+                                    and tostring(existing.MeshId) == info.MeshId
+                                    and tostring(existing.TextureID) == info.TextureId
+                            else
+                                match = existing.Name == info.Name
+                            end
                         end
 
-                    end
-
-                    if match then
-
-                        --// Never destroy native Unusual instances to hide them.
-                        --// The game may cache these exact Weld/Part references;
-                        --// deleting a MeshPart alone can leave Part0/Part1 dangling.
-                        UnusualFns.hideNativeWeldedTree(existing)
-
-                        break
-
-                    end
-
-                end
-
-            end
-
-            --// Remove matching original joints such as
-            --// CatRadiance Head.Ears / Head.Bigotes.
-            for _, joint in ipairs(
-                targetPart:GetDescendants()
-            ) do
-
-                if joint:IsA("Weld")
-                    or joint:IsA("WeldConstraint")
-                    or joint:IsA("Motor6D")
-                    or joint:IsA("Motor")
-                then
-
-                    for _, info in ipairs(
-                        objects
-                    ) do
-
-                        if joint.Name == info.Name
-                            and not info.WholeTree
-                        then
-
-                            --// Keep native joints intact; restore their visual
-                            --// state instead of severing cached links.
-                            UnusualFns.hideNativeWeldedTree(joint)
-
+                        if match then
+                            --// Keep native instances and joints alive: the game can
+                            --// cache those exact references while rebuilding a rig.
+                            UnusualFns.hideNativeWeldedTree(existing)
                             break
-
                         end
-
                     end
-
                 end
 
+                for _, joint in ipairs(targetPart:GetDescendants()) do
+                    if joint:IsA("Weld")
+                        or joint:IsA("WeldConstraint")
+                        or joint:IsA("Motor6D")
+                        or joint:IsA("Motor")
+                    then
+                        for _, info in ipairs(objects) do
+                            if joint.Name == info.Name and not info.WholeTree then
+                                UnusualFns.hideNativeWeldedTree(joint)
+                                break
+                            end
+                        end
+                    end
+                end
             end
-
         end
-
     end
 
-    --// Non-body-root original effect objects.
-    for _, child in ipairs(
-        visualRig:GetChildren()
-    ) do
+    --// Clean up only DeadEye-owned objects outside named body parts.
+    for _, target in ipairs(targets) do
+        for _, child in ipairs(target.model:GetChildren()) do
+            local isBodyPart = false
 
-        local matched =
-            false
-
-        for partName in pairs(signature) do
-            if child.Name ==
-                partName
-            then
-                matched = true
-                break
+            for partName in pairs(signature) do
+                if child.Name == partName then
+                    isBodyPart = true
+                    break
+                end
             end
-        end
 
-        if not matched then
-            --// Do not touch the player's actual body parts.
-            if child:GetAttribute(
-                "DeadEyeUnusualFXID"
-            ) then
-
+            if not isBodyPart then
+                local owned = false
                 pcall(function()
-                    child:Destroy()
+                    owned = child:GetAttribute("DeadEyeUnusualFXID") ~= nil
                 end)
 
+                if owned then
+                    pcall(function()
+                        child:Destroy()
+                    end)
+                end
             end
-
         end
-
     end
-
 end
 
 --// =========================================================
@@ -9189,6 +9155,7 @@ function UnusualFns.captureNativeUnusualSnapshot(
         signaturePartCount += 1
         signatureObjectCount += #objects
     end
+
     UnusualFns.traceSwap(
         "SNAPSHOT_SIGNATURE",
         "id=" .. tostring(id)
@@ -9201,123 +9168,94 @@ function UnusualFns.captureNativeUnusualSnapshot(
     local snapshot = {
         parts = {}
     }
-
-    local function getTargetPart(partName)
-        if partName == "HumanoidRootPart" then
-            return playerCharacter
-                and playerCharacter:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-        end
-
-        return visualRig
-            and visualRig:FindFirstChild(
-                partName
-            )
-    end
+    local targets = UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
 
     local function matchesObject(object, info)
-        if object.ClassName ~= info.Class
-            or object.Name ~= info.Name
-        then
+        if object.ClassName ~= info.Class or object.Name ~= info.Name then
             return false
         end
 
-        if object:IsA("MeshPart")
-            and info.MeshId
-        then
+        if object:IsA("MeshPart") and info.MeshId then
             return tostring(object.MeshId) == info.MeshId
-                and tostring(object.TextureID)
-                    == info.TextureId
+                and tostring(object.TextureID) == info.TextureId
         end
 
         return true
     end
 
+    --// Capture each root independently so cleanup can restore the native
+    --// effect on whichever model originally contained it.
     for partName, objects in pairs(signature) do
-        local targetPart =
-            getTargetPart(partName)
+        for _, target in ipairs(targets) do
+            local targetPart = target.model:FindFirstChild(partName)
 
-        if targetPart
-            and targetPart:IsA("BasePart")
-        then
-            local partSnapshot = {
-                partName = partName,
-                objects = {},
-                joints = {}
-            }
+            if targetPart and targetPart:IsA("BasePart") then
+                local partSnapshot = {
+                    partName = partName,
+                    targetRole = target.role,
+                    objects = {},
+                    joints = {}
+                }
 
-            for _, existing in ipairs(targetPart:GetChildren()) do
-                local matchedInfo = nil
+                for _, existing in ipairs(targetPart:GetChildren()) do
+                    local matchedInfo = nil
 
-                for _, info in ipairs(objects) do
-                    if matchesObject(existing, info) then
-                        matchedInfo = info
-                        break
-                    end
-                end
-
-                if matchedInfo then
-                    local clone
-                    pcall(function()
-                        clone = existing:Clone()
-                    end)
-
-                    if clone then
-                        if matchedInfo.WholeTree then
-                            local cloneMap = {}
-                            __UI.__L.mapUnusualCloneTree(existing, clone, cloneMap)
-                            __UI.__L.rebindUnusualCloneTree(
-                                existing,
-                                clone,
-                                cloneMap,
-                                nil,
-                                targetPart
-                            )
-                        end
-
-                        table.insert(partSnapshot.objects, clone)
-                    end
-                end
-            end
-
-            for _, joint in ipairs(
-                targetPart:GetChildren()
-            ) do
-                if joint:IsA("Weld")
-                    or joint:IsA("WeldConstraint")
-                    or joint:IsA("Motor6D")
-                    or joint:IsA("Motor")
-                then
                     for _, info in ipairs(objects) do
-                        if joint.Name == info.Name
-                            and not info.WholeTree
-                        then
-                            local clone
-                            pcall(function()
-                                clone = joint:Clone()
-                            end)
-
-                            if clone then
-                                table.insert(
-                                    partSnapshot.joints,
-                                    clone
-                                )
-                            end
-
+                        if matchesObject(existing, info) then
+                            matchedInfo = info
                             break
                         end
                     end
-                end
-            end
 
-            if #partSnapshot.objects > 0
-                or #partSnapshot.joints > 0
-            then
-                table.insert(
-                    snapshot.parts,
-                    partSnapshot
-                )
+                    if matchedInfo then
+                        local clone
+                        pcall(function()
+                            clone = existing:Clone()
+                        end)
+
+                        if clone then
+                            if matchedInfo.WholeTree then
+                                local cloneMap = {}
+                                __UI.__L.mapUnusualCloneTree(existing, clone, cloneMap)
+                                __UI.__L.rebindUnusualCloneTree(
+                                    existing,
+                                    clone,
+                                    cloneMap,
+                                    nil,
+                                    targetPart
+                                )
+                            end
+
+                            table.insert(partSnapshot.objects, clone)
+                        end
+                    end
+                end
+
+                for _, joint in ipairs(targetPart:GetChildren()) do
+                    if joint:IsA("Weld")
+                        or joint:IsA("WeldConstraint")
+                        or joint:IsA("Motor6D")
+                        or joint:IsA("Motor")
+                    then
+                        for _, info in ipairs(objects) do
+                            if joint.Name == info.Name and not info.WholeTree then
+                                local clone
+                                pcall(function()
+                                    clone = joint:Clone()
+                                end)
+
+                                if clone then
+                                    table.insert(partSnapshot.joints, clone)
+                                end
+                                break
+                            end
+                        end
+                    end
+                end
+
+                if #partSnapshot.objects > 0 or #partSnapshot.joints > 0 then
+                    table.insert(snapshot.parts, partSnapshot)
+                end
             end
         end
     end
@@ -9328,6 +9266,7 @@ function UnusualFns.captureNativeUnusualSnapshot(
             "id=" .. tostring(id)
                 .. "|signatureParts=" .. tostring(signaturePartCount)
                 .. "|signatureObjects=" .. tostring(signatureObjectCount)
+                .. "|targetModels=" .. tostring(#targets)
                 .. "|reason=no exact objects matched direct target children",
             visualRig,
             playerCharacter
@@ -9341,15 +9280,18 @@ function UnusualFns.captureNativeUnusualSnapshot(
         capturedObjects += #partSnapshot.objects
         capturedJoints += #partSnapshot.joints
     end
+
     UnusualFns.traceSwap(
         "SNAPSHOT_CAPTURED",
         "id=" .. tostring(id)
             .. "|parts=" .. tostring(#snapshot.parts)
             .. "|objects=" .. tostring(capturedObjects)
-            .. "|joints=" .. tostring(capturedJoints),
+            .. "|joints=" .. tostring(capturedJoints)
+            .. "|targetModels=" .. tostring(#targets),
         visualRig,
         playerCharacter
     )
+
     return snapshot
 end
 
@@ -9365,39 +9307,33 @@ function UnusualFns.restoreNativeUnusualSnapshot(
     local restored = false
 
     for _, partSnapshot in ipairs(snapshot.parts) do
-        local targetPart
-
-        if partSnapshot.partName
-            == "HumanoidRootPart"
-        then
-            targetPart =
+        local targetModel =
+            UnusualFns.resolveUnusualTargetModel(
+                partSnapshot.targetRole,
+                visualRig,
                 playerCharacter
-                and playerCharacter:FindFirstChild(
-                    "HumanoidRootPart"
-                )
-        else
-            targetPart =
-                visualRig
-                and visualRig:FindFirstChild(
-                    partSnapshot.partName
-                )
+            )
+
+        --// Compatibility with snapshots produced before targetRole existed.
+        if not targetModel then
+            if partSnapshot.partName == "HumanoidRootPart" then
+                targetModel = playerCharacter
+            else
+                targetModel = visualRig
+            end
         end
 
-        if targetPart
-            and targetPart:IsA("BasePart")
-        then
-            for _, savedObject in ipairs(
-                partSnapshot.objects
-            ) do
+        local targetPart =
+            targetModel
+            and targetModel:FindFirstChild(partSnapshot.partName)
+
+        if targetPart and targetPart:IsA("BasePart") then
+            for _, savedObject in ipairs(partSnapshot.objects) do
                 local exists = false
 
-                for _, current in ipairs(
-                    targetPart:GetChildren()
-                ) do
-                    if current.Name
-                        == savedObject.Name
-                        and current.ClassName
-                            == savedObject.ClassName
+                for _, current in ipairs(targetPart:GetChildren()) do
+                    if current.Name == savedObject.Name
+                        and current.ClassName == savedObject.ClassName
                     then
                         exists = true
                         break
@@ -9406,21 +9342,17 @@ function UnusualFns.restoreNativeUnusualSnapshot(
 
                 if not exists then
                     local clone
-
                     pcall(function()
-                        clone =
-                            savedObject:Clone()
+                        clone = savedObject:Clone()
                     end)
 
                     if clone then
                         local cloneMap = {}
-
                         __UI.__L.mapUnusualCloneTree(
                             savedObject,
                             clone,
                             cloneMap
                         )
-
                         __UI.__L.rebindUnusualCloneTree(
                             savedObject,
                             clone,
@@ -9428,9 +9360,7 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                             nil,
                             targetPart
                         )
-
-                        clone.Parent =
-                            targetPart
+                        clone.Parent = targetPart
                         restored = true
                     end
                 else
@@ -9438,18 +9368,12 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                 end
             end
 
-            for _, savedJoint in ipairs(
-                partSnapshot.joints
-            ) do
+            for _, savedJoint in ipairs(partSnapshot.joints) do
                 local exists = false
 
-                for _, current in ipairs(
-                    targetPart:GetChildren()
-                ) do
-                    if current.Name
-                        == savedJoint.Name
-                        and current.ClassName
-                            == savedJoint.ClassName
+                for _, current in ipairs(targetPart:GetChildren()) do
+                    if current.Name == savedJoint.Name
+                        and current.ClassName == savedJoint.ClassName
                     then
                         exists = true
                         break
@@ -9458,15 +9382,12 @@ function UnusualFns.restoreNativeUnusualSnapshot(
 
                 if not exists then
                     local clone
-
                     pcall(function()
-                        clone =
-                            savedJoint:Clone()
+                        clone = savedJoint:Clone()
                     end)
 
                     if clone then
-                        clone.Parent =
-                            targetPart
+                        clone.Parent = targetPart
                         restored = true
                     end
                 else
@@ -9476,8 +9397,12 @@ function UnusualFns.restoreNativeUnusualSnapshot(
         end
     end
 
-    if visualRig then
-        UnusualFns.repairNativeJointLinks(visualRig)
+    for _, target in ipairs(
+        UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+    ) do
+        pcall(function()
+            UnusualFns.repairNativeJointLinks(target.model)
+        end)
     end
 
     return restored
@@ -9545,6 +9470,8 @@ function UnusualFns.restoreUnusual()
             false
         unusualRuntime.appliedRig =
             visualRig
+        unusualRuntime.appliedCharacter =
+            playerCharacter
         unusualRuntime.originalId =
             nil
         unusualRuntime.replacementId =
@@ -9620,6 +9547,8 @@ function UnusualFns.restoreUnusual()
         false
     unusualRuntime.appliedRig =
         nil
+    unusualRuntime.appliedCharacter =
+        nil
     unusualRuntime.originalId =
         nil
     unusualRuntime.currentEquippedId =
@@ -9684,6 +9613,7 @@ function UnusualFns.activateUnusual()
             unusualRuntime.originalId
         ) ~= tonumber(equippedId)
         or unusualRuntime.appliedRig ~= visualRig
+        or unusualRuntime.appliedCharacter ~= playerCharacter
     then
         UnusualFns.traceSwap("SNAPSHOT_CAPTURE_BEGIN", "id=" .. tostring(equippedId), visualRig, playerCharacter)
         unusualRuntime.nativeSnapshot =
@@ -9756,6 +9686,8 @@ function UnusualFns.activateUnusual()
         true
     unusualRuntime.appliedRig =
         visualRig
+    unusualRuntime.appliedCharacter =
+        playerCharacter
     unusualRuntime.originalId =
         equippedId
     unusualRuntime.currentEquippedId =
@@ -9873,6 +9805,7 @@ function UnusualFns.reapplyUnusual()
                     unusualActive = false
                     unusualEnabled = false
                     unusualRuntime.appliedRig = visualRig
+                    unusualRuntime.appliedCharacter = playerCharacter
                     unusualRuntime.originalId = nil
                     unusualRuntime.replacementId = nil
                     unusualRuntime.nativeSnapshot = nil
@@ -9909,6 +9842,8 @@ function UnusualFns.reapplyUnusual()
                     if expected then
                         unusualRuntime.appliedRig =
                             visualRig
+                        unusualRuntime.appliedCharacter =
+                            playerCharacter
                         break
                     end
 
@@ -23466,6 +23401,7 @@ __UI.__L.cleanupUnusual = function()
             == tonumber(runtimeOriginalId)
     then
         if unusualRuntime.appliedRig == currentVisualRig
+            and unusualRuntime.appliedCharacter == currentPlayerCharacter
             and unusualRuntime.nativeSnapshot
         then
             runtimeSnapshot =
@@ -23474,6 +23410,7 @@ __UI.__L.cleanupUnusual = function()
                 currentVisualRig
         elseif runtimeSnapshotRig
             ~= currentVisualRig
+            or unusualRuntime.appliedCharacter ~= currentPlayerCharacter
         then
             local freshSnapshot =
                 UnusualFns.captureNativeUnusualSnapshot(
@@ -23578,6 +23515,7 @@ __UI.__L.cleanupUnusual = function()
         false
     unusualRuntime.reapplyGeneration += 1
     unusualRuntime.appliedRig = nil
+    unusualRuntime.appliedCharacter = nil
     genv.UNUSUAL_SWAPPER_ENABLED =
         false
     UnusualFns.disconnectUnusualConnections()
