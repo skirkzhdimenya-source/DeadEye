@@ -1359,6 +1359,9 @@ SOURCE #5
 PATH:
 Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local v_u_1 = require((game:GetService("ReplicatedStorage"):WaitForChild("Services"):WaitForChild("Client"):WaitForChild("CameraService")))
@@ -1876,6 +1879,9 @@ SOURCE #6
 PATH:
 Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local VRService = game:GetService("VRService")
@@ -2094,6 +2100,9 @@ SOURCE #7
 ==================================================
 PATH:
 ReplicatedStorage.Services.Client.CameraService
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -2521,6 +2530,9 @@ SOURCE #9
 PATH:
 game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelCreator
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local t = {}
@@ -2597,6 +2609,9 @@ SOURCE #10
 ==================================================
 PATH:
 game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -2698,6 +2713,9 @@ SOURCE #11
 PATH:
 game:GetService("ReplicatedStorage").Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelCreator.Clothing
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 return function(p1, p2)
@@ -2797,6 +2815,9 @@ SOURCE #12
 PATH:
 game:GetService("ReplicatedStorage").Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 return {
@@ -2841,6 +2862,9 @@ SOURCE #13
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.Position
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 return function(p1, _, _2, p2)
@@ -2876,6 +2900,9 @@ SOURCE #14
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.Offset
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 function lerp(p1, p2, p3)
@@ -2910,6 +2937,9 @@ SOURCE #15
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.Sway
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 return function(p1, _, _2, p2)
@@ -2930,6 +2960,9 @@ SOURCE #16
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.Camera
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -3060,6 +3093,9 @@ SOURCE #17
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.ADS
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 function lerp(p1, p2, p3)
@@ -3125,6 +3161,9 @@ SOURCE #18
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.Viewbob
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -3239,6 +3278,9 @@ SOURCE #19
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.Grounded
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 return function(p1, _, _2, p2, _3)
@@ -3282,6 +3324,9 @@ SOURCE #20
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList.Functions.Slide
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 return function(p1, _, _2, p2, _3)
@@ -3323,6 +3368,9 @@ SOURCE #21
 ==================================================
 PATH:
 game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.Spring
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -3467,6 +3515,9 @@ SOURCE #22
 PATH:
 game.ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 return {
@@ -3516,6 +3567,9 @@ SOURCE #23
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Animation
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -3592,6 +3646,9 @@ SOURCE #24
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Particles
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local t = {}
@@ -3648,6 +3705,9 @@ SOURCE #25
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Sound
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local t = {}
@@ -3697,6 +3757,9 @@ SOURCE #26
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Tracer
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -3779,6 +3842,9 @@ SOURCE #27
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.LightsVisible
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -3883,6 +3949,9 @@ SOURCE #28
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.MovementAnimations
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -4014,6 +4083,9 @@ SOURCE #29
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.ToolMovementAnimations
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -4152,6 +4224,9 @@ SOURCE #30
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Radar
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local t = {}
@@ -4250,6 +4325,9 @@ SOURCE #31
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Compass
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local t = {}
@@ -4315,6 +4393,9 @@ SOURCE #32
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Timer
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local t = {}
@@ -4363,6 +4444,9 @@ SOURCE #33
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Grapple
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -4519,6 +4603,9 @@ SOURCE #34
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Portal
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -4782,6 +4869,9 @@ SOURCE #35
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Portal.Reflect
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local function reflectCFrame(p1, p2)
@@ -4806,6 +4896,9 @@ SOURCE #36
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Portal.Portal
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -4885,6 +4978,9 @@ SOURCE #37
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.ProjectedBeam
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -5000,6 +5096,9 @@ SOURCE #38
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.ProjectedBeam.Trajectory
 
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+
 SOURCE CONTENT:
 
 local t = {}
@@ -5050,6 +5149,9 @@ SOURCE #39
 ==================================================
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.Types.Radio
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 
 SOURCE CONTENT:
 
@@ -5132,6 +5234,9 @@ return t
 SOURCE #40
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.ViewmodelOffset1
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 return function(p1, _, _2, _3, p2)
@@ -5146,6 +5251,9 @@ end
 SOURCE #41
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.CameraOffset1
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 return function(p1, _, p2, _2, p3)
@@ -5161,6 +5269,9 @@ end
 SOURCE #42
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.ViewmodelOffset2
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 local LocalPlayer = game.Players.LocalPlayer
@@ -5189,6 +5300,9 @@ end
 SOURCE #43
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.SprintCamOffset
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
@@ -5257,6 +5371,9 @@ end
 SOURCE #44
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.ADS
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 function lerp(p1, p2, p3)
@@ -5295,6 +5412,9 @@ end
 SOURCE #45
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.CameraBob
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 function lerp(p1, p2, p3)
@@ -5423,6 +5543,9 @@ end
 SOURCE #46
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.Grounded
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 return function(p1, _, _2, p2, _3)
@@ -5463,6 +5586,9 @@ end
 SOURCE #47
 PATH:
 ReplicatedStorage.Objects.Game.ToolProfile.ViewmodelVisuals.ViewmodelDeviation.SpringList_Legacy.Functions.Slide
+
+STATUS:
+ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
 ==================================================
 
 return function(p1, _, _2, p2, _3)
@@ -7214,13 +7340,13 @@ local Folder = Instance.new("Folder")
 Folder.Parent = ReplicatedStorage
 Folder.Name = "RigCache"
 function AreTablesEqual(p3, p4)
-	for _, v5 in p3 do
-		if p4[v5] == nil then
+	for v5, v6 in next, p3 do
+		if p4[v5] ~= v6 then
 			return false
 		end
 	end
-	for v6 in p4 do
-		if p3[v6] == nil then
+	for v7, v8 in next, p4 do
+		if p3[v7] ~= v8 then
 			return false
 		end
 	end
@@ -9764,7 +9890,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character
 
 STATUS:
-ПРОВЕРЕНО: предоставлено пользователем 2026-10-17 из текущей версии игры.
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
 
 PURPOSE:
 Создаётся CharacterService для модели из Workspace.Players. Инициализирует Rig, Joints, Animations и ActionVisuals; только для локального персонажа создаёт Camera, Visibility, Movement и Actions. GetLocalCharacter() возвращает этот объект из CharacterService; объект хранит Model, Local, Rig и другие компоненты.
@@ -10013,7 +10139,7 @@ PATH:
 ReplicatedStorage.Client.UI.Menu.Scene.Viewmodel
 
 STATUS:
-ПРОВЕРЕНО: предоставлено пользователем 2026-10-17 из текущей версии игры.
+ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
 
 PURPOSE:
 Создаёт и отображает временную модель Viewmodel с именем VisualModel. Использует Items.Build / Character.Build, ShowItem, ShowCharacter, ShowListing, ShowModel и Attach/Detach. Подписывается на изменение PreviewTryOn, PreviewBody, PreviewHidden, экипировки и RigType; при обновлении может уничтожать старую VisualModel и строить новую. Это отдельная система предпросмотра меню, не модель персонажа из Workspace.Rigs.
