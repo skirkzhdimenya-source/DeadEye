@@ -13336,64 +13336,70 @@ end
 --// Bypass only the native "FOV > 90 => None" check.
 --// No hotkeys, render loops, or transparency writes.
 --// =========================================================
---// Native Visibility walks the rig's limb list, which can omit cosmetic
---// accessories. Apply the same first-person visibility state to those items.
-mainJump.fovBodyAccessoryOriginals = mainJump.fovBodyAccessoryOriginals or setmetatable({}, { __mode = "k" })
-
+----// Native Visibility's GetLimbs() can omit Accessories. Feed their
+--// descendants to the original SetVisibility() using Head as the root,
+--// so the game's own Types/CachedData logic controls cosmetics too.
 function mainJump.applyFOVBodyAccessoryVisibility(visibility)
-    if not visibility or not visibility.Parent or not visibility.Parent.Rig then return end
-    local rigModel
-    pcall(function() rigModel = visibility.Parent.Rig:GetRigModel() end)
-    if not rigModel then return end
+    if not visibility or not visibility.Parent or not visibility.Parent.Rig then
+        return
+    end
 
-    local hideAccessories = visibility.Type ~= "All"
-    local originals = mainJump.fovBodyAccessoryOriginals
-    for _, accessory in ipairs(rigModel:GetDescendants()) do
-        if accessory:IsA("Accessory") then
-            for _, obj in ipairs(accessory:GetDescendants()) do
-                if obj:IsA("BasePart") or obj:IsA("Decal") or obj:IsA("Texture") then
-                    if originals[obj] == nil then
-                        local original = {}
-                        if obj:IsA("BasePart") then
-                            original.LocalTransparencyModifier = obj.LocalTransparencyModifier
-                            original.CastShadow = obj.CastShadow
-                        else
-                            original.Transparency = obj.Transparency
-                        end
-                        originals[obj] = original
-                    end
-                    local original = originals[obj]
-                    if hideAccessories then
-                        if obj:IsA("BasePart") then
-                            obj.LocalTransparencyModifier = 1
-                            obj.CastShadow = false
-                        else
-                            obj.Transparency = 1
-                        end
-                    elseif obj:IsA("BasePart") then
-                        obj.LocalTransparencyModifier = original.LocalTransparencyModifier
-                        obj.CastShadow = original.CastShadow
-                    else
-                        obj.Transparency = original.Transparency
-                    end
-                end
+    local rig = visibility.Parent.Rig
+    local rigModel = rig:GetRigModel()
+    if not rigModel then
+        return
+    end
+
+    local head = rigModel:FindFirstChild("Head")
+    if not head or not head:IsA("BasePart") then
+        return
+    end
+
+    local typesModule = mainJump.fovBodyVisibilityTypes
+    if not typesModule then
+        local ok, result = pcall(function()
+            return require(
+                ReplicatedStorage
+                    :WaitForChild("Objects")
+                    :WaitForChild("Game")
+                    :WaitForChild("Character")
+                    :WaitForChild("Client")
+                    :WaitForChild("Visibility")
+                    :WaitForChild("Types")
+            )
+        end)
+        if not ok or type(result) ~= "table" then
+            return
+        end
+        typesModule = result
+        mainJump.fovBodyVisibilityTypes = result
+    end
+
+    local visibilityNames = typesModule:GetType(
+        visibility.Type,
+        rig.R15 and "R15" or "Classic"
+    )
+    if not visibilityNames then
+        return
+    end
+
+    local accessoryDescendants = {}
+    for _, object in ipairs(rigModel:GetDescendants()) do
+        if object:IsA("Accessory") then
+            for _, descendant in ipairs(object:GetDescendants()) do
+                table.insert(accessoryDescendants, descendant)
             end
         end
     end
-end
 
-function mainJump.restoreFOVBodyAccessoryVisibility()
-    for obj, original in pairs(mainJump.fovBodyAccessoryOriginals or {}) do
-        pcall(function()
-            if not obj.Parent then return end
-            if obj:IsA("BasePart") then
-                obj.LocalTransparencyModifier = original.LocalTransparencyModifier
-                obj.CastShadow = original.CastShadow
-            elseif obj:IsA("Decal") or obj:IsA("Texture") then
-                obj.Transparency = original.Transparency
-            end
-        end)
-        mainJump.fovBodyAccessoryOriginals[obj] = nil
+    if #accessoryDescendants > 0 then
+        --// This is the game's actual implementation: SetVisibility() uses
+        --// the Head entry in the native Types list and Rig.CachedData.
+        visibility:SetVisibility(
+            visibilityNames,
+            head,
+            accessoryDescendants
+        )
     end
 end
 
@@ -13414,8 +13420,6 @@ function mainJump.restoreFOVBodyVisibility()
     end
 
     mainJump.fovBodyVisibilityEnabled = false
-    mainJump.restoreFOVBodyAccessoryVisibility()
-
     -- Restore the live visual rig to the game's native visibility owner.
     -- Restoring GetType alone is insufficient: Visibility.Type and the
     -- parts' LocalTransparencyModifier may still contain the hooked result.
