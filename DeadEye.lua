@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.269
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.270
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.269"
+local SCRIPT_VERSION = "1.270"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -718,52 +718,234 @@ __UI.__L.refreshNativeVisibilityAfterUnusualRestore = function()
         return false
     end
 
-    --// CharacterObject.Rig is the outer Character.Rig component.
-    --// The actual RigService rig that owns Limbs/Model is:
-    --// CharacterObject.Rig.Rig
     local rigComponent = characterObject.Rig
-
-    local nativeRig = rigComponent
-        and rigComponent.Rig
-
+    local nativeRig = rigComponent and rigComponent.Rig
     local visibility = characterObject.Visibility
 
-    if not rigComponent
-        or not nativeRig
-        or not visibility
-    then
+    if not nativeRig or not visibility then
         return false
     end
 
     local rigModel = nativeRig.Model
 
-    if not rigModel
-        or not rigModel.Parent
-    then
+    if not rigModel or not rigModel.Parent then
         return false
     end
 
-    --// Visibility:GetLimbs() returns this exact table:
-    --// CharacterObject.Rig.Rig.Limbs
-    --//
-    --// AddCosmetics() can create the final Unusual after those
-    --// descendant arrays were built. Refresh every limb's
-    --// descendant cache so native SetVisibility() sees the
-    --// restored ParticleEmitter/Trail/Beam objects.
-    local limbs = nativeRig.Limbs
+    -- Humanoid:ApplyDescriptionResetAsync() can replace accessory Handles
+    -- and visual descendants while the game's Rig.Limbs cache still points
+    -- at the old instances. Rebuild the cached lists from the live rig.
+    --
+    -- RigService originally puts each limb's descendants AND accessory
+    -- Handles attached to that limb into Rig.Limbs. Replacing the list with
+    -- root:GetDescendants() alone would silently drop those Handles, so
+    -- rebuild both parts of the list.
+    local accessoriesByHost = {}
 
-    if type(limbs) == "table" then
-        for _, limb in pairs(limbs) do
-            if type(limb) == "table" then
-                local root = limb[1]
+    local function appendUnique(list, seen, object)
+        if object
+            and not object:IsA("Attachment")
+            and not seen[object]
+        then
+            seen[object] = true
+            table.insert(list, object)
+        end
+    end
 
-                if typeof(root) == "Instance"
-                    and root.Parent
+    local function getAccessoryHandle(accessory)
+        local handle = accessory:FindFirstChild("Handle")
+
+        if handle and handle:IsA("BasePart") then
+            return handle
+        end
+
+        return accessory:FindFirstChildWhichIsA("BasePart", true)
+    end
+
+    local function getAccessoryHost(accessory, handle)
+        for _, object in ipairs(accessory:GetDescendants()) do
+            if object:IsA("Weld")
+                or object:IsA("Motor6D")
+                or object:IsA("WeldConstraint")
+            then
+                local part0
+                local part1
+
+                pcall(function()
+                    part0 = object.Part0
+                    part1 = object.Part1
+                end)
+
+                if part0
+                    and part0:IsA("BasePart")
+                    and part0.Parent == rigModel
+                    and part1
+                    and part1:IsDescendantOf(accessory)
                 then
-                    limb[2] = root:GetDescendants()
+                    return part0
+                end
+
+                if part1
+                    and part1:IsA("BasePart")
+                    and part1.Parent == rigModel
+                    and part0
+                    and part0:IsDescendantOf(accessory)
+                then
+                    return part1
+                end
+            elseif object:IsA("RigidConstraint") then
+                local attachment0
+                local attachment1
+
+                pcall(function()
+                    attachment0 = object.Attachment0
+                    attachment1 = object.Attachment1
+                end)
+
+                local part0 = attachment0 and attachment0.Parent
+                local part1 = attachment1 and attachment1.Parent
+
+                if part0
+                    and part0:IsA("BasePart")
+                    and part0.Parent == rigModel
+                    and part1
+                    and part1:IsDescendantOf(accessory)
+                then
+                    return part0
+                end
+
+                if part1
+                    and part1:IsA("BasePart")
+                    and part1.Parent == rigModel
+                    and part0
+                    and part0:IsDescendantOf(accessory)
+                then
+                    return part1
                 end
             end
         end
+
+        -- Attachment-based accessories do not always expose a Weld.
+        for _, object in ipairs(handle:GetDescendants()) do
+            if object:IsA("Attachment") then
+                local nativeAttachment = rigModel:FindFirstChild(
+                    object.Name,
+                    true
+                )
+
+                if nativeAttachment
+                    and nativeAttachment:IsA("Attachment")
+                    and not nativeAttachment:IsDescendantOf(accessory)
+                    and nativeAttachment.Parent
+                    and nativeAttachment.Parent:IsA("BasePart")
+                    and nativeAttachment.Parent.Parent == rigModel
+                then
+                    return nativeAttachment.Parent
+                end
+            end
+        end
+
+        return rigModel:FindFirstChild("Head")
+    end
+
+    for _, object in ipairs(rigModel:GetDescendants()) do
+        if object:IsA("Accessory") or object:IsA("Hat") then
+            local handle = getAccessoryHandle(object)
+
+            if handle then
+                local host = getAccessoryHost(object, handle)
+
+                if host and host:IsA("BasePart") and host.Parent == rigModel then
+                    local list = accessoriesByHost[host]
+
+                    if not list then
+                        list = {}
+                        accessoriesByHost[host] = list
+                    end
+
+                    local seen = {}
+                    for _, item in ipairs(list) do
+                        seen[item] = true
+                    end
+
+                    appendUnique(list, seen, handle)
+
+                    for _, descendant in ipairs(handle:GetDescendants()) do
+                        appendUnique(list, seen, descendant)
+                    end
+                end
+            end
+        end
+    end
+
+    local function buildLimbDescendants(root)
+        local descendants = {}
+        local seen = {}
+
+        for _, object in ipairs(root:GetDescendants()) do
+            appendUnique(descendants, seen, object)
+        end
+
+        for _, object in ipairs(accessoriesByHost[root] or {}) do
+            appendUnique(descendants, seen, object)
+        end
+
+        return descendants
+    end
+
+    local limbs = nativeRig.Limbs
+
+    if type(limbs) ~= "table" then
+        limbs = {}
+        nativeRig.Limbs = limbs
+    end
+
+    local rebuiltLimbs = {}
+    local seenRoots = {}
+
+    -- Recreate the same root set RigService builds: direct BasePart children
+    -- of the visual model, excluding HumanoidRootPart (removed by RigService).
+    for _, root in ipairs(rigModel:GetChildren()) do
+        if root:IsA("BasePart") and root.Name ~= "HumanoidRootPart" then
+            table.insert(
+                rebuiltLimbs,
+                {
+                    root,
+                    buildLimbDescendants(root)
+                }
+            )
+            seenRoots[root] = true
+        end
+    end
+
+    -- Preserve any still-valid non-direct roots that the game may have
+    -- appended to the native list; never retain destroyed root instances.
+    -- (The normal RigService limb roots are direct children and are above.)
+    for _, limb in ipairs(limbs) do
+        local oldRoot = type(limb) == "table" and limb[1]
+
+        if oldRoot
+            and oldRoot:IsA("BasePart")
+            and oldRoot.Parent
+            and not seenRoots[oldRoot]
+            and oldRoot:IsDescendantOf(rigModel)
+        then
+            table.insert(
+                rebuiltLimbs,
+                {
+                    oldRoot,
+                    buildLimbDescendants(oldRoot)
+                }
+            )
+            seenRoots[oldRoot] = true
+        end
+    end
+
+    -- Mutate the existing table so any game component holding its reference
+    -- continues to see the refreshed entries.
+    table.clear(limbs)
+    for _, limb in ipairs(rebuiltLimbs) do
+        table.insert(limbs, limb)
     end
 
     local currentType
@@ -12922,6 +13104,13 @@ function others.restore(
     table.clear(others.pendingHumanoids)
     others.originalDescription = nil
     others.targetHumanoid = nil
+
+    -- ApplyDescriptionResetAsync replaces appearance instances. Refresh the
+    -- game's cached limb/accessory list now that the original avatar is back;
+    -- future native P1/P3 transitions must target the new live instances.
+    pcall(function()
+        __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
+    end)
 
     __DDCore.Log(
         "F6: AVATAR RESTORE|snapshots=" .. tostring(snapshotCount)
