@@ -464,7 +464,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.254"
+local SCRIPT_VERSION = "1.255"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -8726,12 +8726,48 @@ function UnusualFns.removeOurUnusualFX()
 
     local removed = 0
     local roots = {}
+    local rootSet = {}
+
+    local function addCleanupRoot(root)
+        if root
+            and root.Parent
+            and not rootSet[root]
+        then
+            rootSet[root] = true
+            table.insert(roots, root)
+        end
+    end
+
+    -- Current operations only target the RigService-bound rig. Cleanup also
+    -- scans old same-name cache models, but destroys explicitly tagged
+    -- DeadEye-owned FX only; native game-owned Unusuals have no such marker.
     for _, target in ipairs(UnusualFns.getUnusualTargetModels(
         UnusualFns.getUnusualVisualRig(),
         UnusualFns.getUnusualPlayerCharacter()
     )) do
-        table.insert(roots, target.model)
+        addCleanupRoot(target.model)
     end
+
+    for _, folderName in ipairs({ "Rigs", "Players" }) do
+        local folder = workspace:FindFirstChild(folderName)
+        if folder then
+            for _, model in ipairs(folder:GetChildren()) do
+                if model:IsA("Model")
+                    and model.Name == LocalPlayer.Name
+                then
+                    addCleanupRoot(model)
+                end
+            end
+        end
+    end
+
+    local menuView = workspace:FindFirstChild("MenuView")
+    if menuView then
+        addCleanupRoot(menuView:FindFirstChild("VisualModel"))
+    end
+
+    addCleanupRoot(LocalPlayer.Character)
+
     local seen = {}
     for _, root in ipairs(
         roots
