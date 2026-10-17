@@ -25001,7 +25001,7 @@ __UI.__L.addConnection(
 --// TEMPORARY VISIBILITY DIAGNOSTIC: logs snapshots to the executor console.
 --// It is intentionally attached to the existing script; no extra files are created.
 local function deadEyeVisibilityDiagnostic(stage)
-    pcall(function()
+    local ok, diagnosticError = pcall(function()
         local characterObject = getCharacterObject()
         local visibility = characterObject and characterObject.Visibility
         local module = mainJump.fovBodyVisibilityModule
@@ -25094,6 +25094,9 @@ local function deadEyeVisibilityDiagnostic(stage)
             .. " | models=" .. table.concat(modelSummaries, " || ")
         )
     end)
+    if not ok then
+        warn("[DeadEye VISDIAG] " .. stage .. " | DIAGNOSTIC_ERROR=" .. tostring(diagnosticError))
+    end
 end
 
 --// CLEANUP
