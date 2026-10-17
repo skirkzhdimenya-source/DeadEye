@@ -10056,18 +10056,65 @@ function UnusualFns.reapplyUnusual()
                     and result == true
                 then
 
-                    local expected =
-                        (
-                            #unusualRuntime.animatedNestedVisuals > 0
-                        )
-                        or UnusualFns.hasOurUnusualFX(
-                            visualRig,
-                            unusualSlot.replaceId
-                        )
-                        or UnusualFns.hasOurUnusualFX(
-                            playerCharacter,
-                            unusualSlot.replaceId
-                        )
+                    local expected = true
+                    local checkedRigTargets = 0
+                    local hasGlobalMirror = false
+
+                    for _, mirror in ipairs(unusualRuntime.visualMirrors) do
+                        if tonumber(mirror.id) == tonumber(unusualSlot.replaceId)
+                            and mirror.model
+                            and mirror.model.Parent
+                        then
+                            hasGlobalMirror = true
+                            break
+                        end
+                    end
+
+                    for _, target in ipairs(
+                        UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+                    ) do
+                        if string.match(target.role or "", "^Rigs#") then
+                            checkedRigTargets += 1
+
+                            local hasReplacement =
+                                UnusualFns.hasOurUnusualFX(
+                                    target.model,
+                                    unusualSlot.replaceId
+                                )
+
+                            local hasAnimatedNested = false
+                            for _, animated in ipairs(unusualRuntime.animatedNestedVisuals) do
+                                if animated.targetRig == target.model
+                                    and tonumber(animated.id) == tonumber(unusualSlot.replaceId)
+                                    and animated.model
+                                    and animated.model.Parent
+                                then
+                                    hasAnimatedNested = true
+                                    break
+                                end
+                            end
+
+                            if not hasReplacement
+                                and not hasAnimatedNested
+                                and not hasGlobalMirror
+                            then
+                                expected = false
+                            end
+                        end
+                    end
+
+                    if checkedRigTargets == 0 then
+                        expected =
+                            hasGlobalMirror
+                            or UnusualFns.hasOurUnusualFX(
+                                visualRig,
+                                unusualSlot.replaceId
+                            )
+                            or UnusualFns.hasOurUnusualFX(
+                                playerCharacter,
+                                unusualSlot.replaceId
+                            )
+                    end
 
                     if expected then
                         unusualRuntime.appliedRig =
