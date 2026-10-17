@@ -419,7 +419,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.241
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.242
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -451,7 +451,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.241"
+local SCRIPT_VERSION = "1.242"
 __DDCore.Log("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -9621,6 +9621,12 @@ function UnusualFns.reapplyUnusual()
                 and visualRig:FindFirstChild(
                     "HumanoidRootPart"
                 )
+
+            --// v1.242: Workspace.Rigs may be a visual-only model without
+            --// HumanoidRootPart. Fall back to the live character model.
+            if not root and playerCharacter then
+                root = playerCharacter:FindFirstChild("HumanoidRootPart")
+            end
 
             local humanoid =
                 visualRig
