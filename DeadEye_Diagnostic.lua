@@ -55,20 +55,31 @@ function __DDCore.Log(message)
         return
     end
 
+    local messageText = tostring(message)
+    local keep =
+        string.find(messageText, "SWAPTRACE|", 1, true) ~= nil
+        or string.find(messageText, "F6:", 1, true) ~= nil
+        or string.find(messageText, "THROW ", 1, true) ~= nil
+        or string.find(messageText, "UNUSUAL FAIL:", 1, true) ~= nil
+        or string.find(messageText, "UNUSUAL ACTIVATE OK:", 1, true) ~= nil
+
+    if not keep then
+        return
+    end
+
     local elapsed = 0
     pcall(function()
         elapsed = os.clock() - __DDCore.State.startedAt
     end)
 
     local line = string.format(
-        "[DeadEyeDiag +%.3fs] %s",
+        "[DeadEyeDiag %s +%.3fs] %s",
+        SCRIPT_VERSION or "swap-trace",
         elapsed,
-        tostring(message)
+        messageText
     )
 
     table.insert(__DDCore.State.log, line)
-
-    -- Keep all entries from launch until F6 copies the complete session log.
 
     pcall(function()
         print(line)
@@ -419,7 +430,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.242
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.243
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -451,8 +462,8 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.242"
-__DDCore.Log("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
+local SCRIPT_VERSION = "1.243"
+__DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -5464,6 +5475,107 @@ function UnusualFns.getUnusualCosmeticRig(
         "CharacterClassic"
     )
 end
+
+--// Compact Unusual-only trace. It records the actual model path selected
+--// by the swapper, plus whether MenuView/Rigs/Players roots are present.
+local function unusualTraceRootSummary(root)
+    if not root then
+        return "<nil>"
+    end
+
+    local counts = {
+        bp = 0, att = 0, pe = 0, beam = 0, trail = 0,
+        weld = 0, motor = 0
+    }
+    local ok, descendants = pcall(function()
+        return root:GetDescendants()
+    end)
+    if not ok then
+        return pathOf and tostring(root) or "<unreadable>"
+    end
+
+    for _, object in ipairs(descendants) do
+        if object:IsA("BasePart") then counts.bp += 1 end
+        if object:IsA("Attachment") then counts.att += 1 end
+        if object:IsA("ParticleEmitter") then counts.pe += 1 end
+        if object:IsA("Beam") then counts.beam += 1 end
+        if object:IsA("Trail") then counts.trail += 1 end
+        if object:IsA("Weld") or object:IsA("WeldConstraint") then counts.weld += 1 end
+        if object:IsA("Motor6D") then counts.motor += 1 end
+    end
+
+    local objectPath = tostring(root)
+    pcall(function() objectPath = root:GetFullName() end)
+
+    return objectPath
+        .. "{d=" .. tostring(#descendants)
+        .. ",bp=" .. tostring(counts.bp)
+        .. ",att=" .. tostring(counts.att)
+        .. ",pe=" .. tostring(counts.pe)
+        .. ",beam=" .. tostring(counts.beam)
+        .. ",trail=" .. tostring(counts.trail)
+        .. ",weld=" .. tostring(counts.weld)
+        .. ",motor=" .. tostring(counts.motor) .. "}"
+end
+
+function UnusualFns.traceSwap(event, extra, suppliedVisualRig, suppliedPlayerCharacter)
+    local visualRig = suppliedVisualRig
+    if not visualRig then
+        pcall(function()
+            visualRig = UnusualFns.getUnusualVisualRig()
+        end)
+    end
+
+    local playerCharacter = suppliedPlayerCharacter
+    if not playerCharacter then
+        pcall(function()
+            playerCharacter = UnusualFns.getUnusualPlayerCharacter()
+        end)
+    end
+
+    local menuView = workspace:FindFirstChild("MenuView")
+    local rigsFolder = workspace:FindFirstChild("Rigs")
+    local playersFolder = workspace:FindFirstChild("Players")
+    local rigsLocal = rigsFolder and rigsFolder:FindFirstChild(LocalPlayer.Name)
+    local playersLocal = playersFolder and playersFolder:FindFirstChild(LocalPlayer.Name)
+
+    local context = "NO_MODEL"
+    if visualRig then
+        if menuView and (visualRig == menuView or visualRig:IsDescendantOf(menuView)) then
+            context = "MENU_VIEW"
+        elseif rigsFolder and (visualRig == rigsFolder or visualRig:IsDescendantOf(rigsFolder)) then
+            context = "WORKSPACE_RIGS"
+        elseif playersFolder and (visualRig == playersFolder or visualRig:IsDescendantOf(playersFolder)) then
+            context = "WORKSPACE_PLAYERS"
+        elseif LocalPlayer.Character == visualRig then
+            context = "LOCAL_CHARACTER"
+        else
+            context = "OTHER_MODEL"
+        end
+    end
+
+    local equippedId = "<unreadable>"
+    pcall(function()
+        equippedId = tostring(UnusualFns.getEquippedUnusualId())
+    end)
+
+    __DDCore.Log(
+        "SWAPTRACE|event=" .. tostring(event)
+        .. "|context=" .. context
+        .. "|original=" .. tostring(unusualSlot.originalId)
+        .. "|replacement=" .. tostring(unusualSlot.replaceId)
+        .. "|equipped=" .. equippedId
+        .. "|enabled=" .. tostring(unusualEnabled)
+        .. "|active=" .. tostring(unusualActive)
+        .. "|MenuView=" .. tostring(menuView ~= nil)
+        .. "|RigsLocal=" .. tostring(rigsLocal ~= nil)
+        .. "|PlayersLocal=" .. tostring(playersLocal ~= nil)
+        .. "|visual=" .. unusualTraceRootSummary(visualRig)
+        .. "|character=" .. unusualTraceRootSummary(playerCharacter)
+        .. "|extra=" .. tostring(extra or "-")
+    )
+end
+
 --// =========================================================
 --// FX CLASSES
 --// =========================================================
@@ -8076,6 +8188,7 @@ __UI.__L.applyUnusualFX = function(
     visualRig,
     playerCharacter
 )
+    UnusualFns.traceSwap("APPLY_ENTER", "id=" .. tostring(id), visualRig, playerCharacter)
 
     local cosmeticRig =
         UnusualFns.getUnusualCosmeticRig(
@@ -8084,14 +8197,24 @@ __UI.__L.applyUnusualFX = function(
         )
 
     if not cosmeticRig then
-
-        warn(            "[UnusualSwapper] Cosmetic rig not found:",
-            id
+        UnusualFns.traceSwap(
+            "APPLY_ABORT_NO_COSMETIC_MODEL",
+            "id=" .. tostring(id) .. "|module/model resolution failed",
+            visualRig,
+            playerCharacter
         )
-
+        warn("[UnusualSwapper] Cosmetic rig not found:", id)
         return false
-
     end
+
+    UnusualFns.traceSwap(
+        "APPLY_COSMETIC_MODEL",
+        "id=" .. tostring(id) .. "|model=" .. cosmeticRig:GetFullName()
+            .. "|children=" .. tostring(#cosmeticRig:GetChildren())
+            .. "|descendants=" .. tostring(#cosmeticRig:GetDescendants()),
+        visualRig,
+        playerCharacter
+    )
 
     --// Build the hidden animation source first. This cleanup
     --// routine destroys previous runtime/animated visuals,
@@ -8186,13 +8309,17 @@ __UI.__L.applyUnusualFX = function(
 
     end
 
-    print(
-        "[UnusualSwapper] Installed FX on",
-        installed,
-        "parts"
+    local applyResult = installed > 0
+    UnusualFns.traceSwap(
+        "APPLY_END",
+        "id=" .. tostring(id)
+            .. "|installedParts=" .. tostring(installed)
+            .. "|result=" .. tostring(applyResult),
+        visualRig,
+        playerCharacter
     )
 
-    return installed > 0
+    return applyResult
 
 end
 
@@ -9052,8 +9179,24 @@ function UnusualFns.captureNativeUnusualSnapshot(
         )
 
     if not signature then
+        UnusualFns.traceSwap("SNAPSHOT_SIGNATURE_NIL", "id=" .. tostring(id), visualRig, playerCharacter)
         return nil
     end
+
+    local signaturePartCount = 0
+    local signatureObjectCount = 0
+    for _, objects in pairs(signature) do
+        signaturePartCount += 1
+        signatureObjectCount += #objects
+    end
+    UnusualFns.traceSwap(
+        "SNAPSHOT_SIGNATURE",
+        "id=" .. tostring(id)
+            .. "|parts=" .. tostring(signaturePartCount)
+            .. "|objects=" .. tostring(signatureObjectCount),
+        visualRig,
+        playerCharacter
+    )
 
     local snapshot = {
         parts = {}
@@ -9180,9 +9323,33 @@ function UnusualFns.captureNativeUnusualSnapshot(
     end
 
     if #snapshot.parts == 0 then
+        UnusualFns.traceSwap(
+            "SNAPSHOT_NO_TARGET_MATCHES",
+            "id=" .. tostring(id)
+                .. "|signatureParts=" .. tostring(signaturePartCount)
+                .. "|signatureObjects=" .. tostring(signatureObjectCount)
+                .. "|reason=no exact objects matched direct target children",
+            visualRig,
+            playerCharacter
+        )
         return nil
     end
 
+    local capturedObjects = 0
+    local capturedJoints = 0
+    for _, partSnapshot in ipairs(snapshot.parts) do
+        capturedObjects += #partSnapshot.objects
+        capturedJoints += #partSnapshot.joints
+    end
+    UnusualFns.traceSwap(
+        "SNAPSHOT_CAPTURED",
+        "id=" .. tostring(id)
+            .. "|parts=" .. tostring(#snapshot.parts)
+            .. "|objects=" .. tostring(capturedObjects)
+            .. "|joints=" .. tostring(capturedJoints),
+        visualRig,
+        playerCharacter
+    )
     return snapshot
 end
 
@@ -9466,6 +9633,7 @@ end
 --// ACTIVATE UNUSUAL
 -- =========================================================
 function UnusualFns.activateUnusual()
+    UnusualFns.traceSwap("ACTIVATE_ENTER", "button/reapply path")
     if not unusualSlot.originalId
         or not unusualSlot.replaceId
     then
@@ -9498,6 +9666,12 @@ function UnusualFns.activateUnusual()
         UnusualFns.getUnusualVisualRig()
     local playerCharacter =
         UnusualFns.getUnusualPlayerCharacter()
+    UnusualFns.traceSwap(
+        "ACTIVATE_TARGET",
+        "target resolved",
+        visualRig,
+        playerCharacter
+    )
     if not visualRig then
         __DDCore.Log("UNUSUAL FAIL: visual rig nil; playerCharacter=" .. tostring(playerCharacter)
             .. ", workspace.Rigs=" .. tostring(workspace:FindFirstChild("Rigs"))
@@ -9511,12 +9685,28 @@ function UnusualFns.activateUnusual()
         ) ~= tonumber(equippedId)
         or unusualRuntime.appliedRig ~= visualRig
     then
+        UnusualFns.traceSwap("SNAPSHOT_CAPTURE_BEGIN", "id=" .. tostring(equippedId), visualRig, playerCharacter)
         unusualRuntime.nativeSnapshot =
             UnusualFns.captureNativeUnusualSnapshot(
                 equippedId,
                 visualRig,
                 playerCharacter
             )
+        local snap = unusualRuntime.nativeSnapshot
+        local snapObjects = 0
+        if snap then
+            for _, partSnapshot in ipairs(snap.parts or {}) do
+                snapObjects += #(partSnapshot.objects or {})
+                snapObjects += #(partSnapshot.joints or {})
+            end
+        end
+        UnusualFns.traceSwap(
+            snap and "SNAPSHOT_CAPTURE_OK" or "SNAPSHOT_CAPTURE_NIL",
+            "parts=" .. tostring(snap and #snap.parts or 0)
+                .. "|objectsAndJoints=" .. tostring(snapObjects),
+            visualRig,
+            playerCharacter
+        )
     end
 
     if not unusualRuntime.nativeSnapshot then
@@ -9532,12 +9722,15 @@ function UnusualFns.activateUnusual()
 
     UnusualFns.removeOurUnusualFX()
     task.wait()
+    UnusualFns.traceSwap("REMOVE_ORIGINAL_BEGIN", "id=" .. tostring(unusualSlot.originalId), visualRig, playerCharacter)
     UnusualFns.removeOriginalUnusualFX(
         unusualSlot.originalId,
         visualRig,
         playerCharacter
     )
+    UnusualFns.traceSwap("REMOVE_ORIGINAL_END", "id=" .. tostring(unusualSlot.originalId), visualRig, playerCharacter)
     task.wait()
+    UnusualFns.traceSwap("APPLY_REPLACEMENT_BEGIN", "id=" .. tostring(unusualSlot.replaceId), visualRig, playerCharacter)
     if not __UI.__L.applyUnusualFX(
         unusualSlot.replaceId,
         visualRig,
@@ -9593,6 +9786,7 @@ function UnusualFns.reapplyUnusual()
         return
     end
 
+    UnusualFns.traceSwap("REAPPLY_BEGIN", "picker change or rig refresh")
     unusualReapplyBusy = true
     unusualRuntime.reapplyGeneration += 1
 
@@ -11810,6 +12004,11 @@ function UnusualFns.rebuildUnusualPicker()
                             unusualReplaceButton.Text =
                                 data.name
                         end
+                        UnusualFns.traceSwap(
+                            "PICKER_SELECT",
+                            "side=" .. tostring(unusualPickerSide)
+                                .. "|pickedID=" .. tostring(data.id)
+                        )
                         savedConfig.unusual = {
                             originalId =
                                 unusualSlot.originalId,
@@ -25723,12 +25922,17 @@ __UI.__L.addConnection(
             end
 
             if currentCategory == "Unusual" then
+                UnusualFns.traceSwap(
+                    "TOGGLE_CLICK",
+                    "category=Unusual|requested=" .. (unusualEnabled and "disable" or "enable")
+                )
                 if unusualEnabled then
                     unusualEnabled =
                         false
                     genv.UNUSUAL_SWAPPER_ENABLED =
                         false
                     UnusualFns.restoreUnusual()
+                    UnusualFns.traceSwap("TOGGLE_DISABLED", "restore returned")
                 else
                     if not unusualSlot.originalId
                         or not unusualSlot.replaceId
@@ -25744,6 +25948,9 @@ __UI.__L.addConnection(
                             UnusualFns.getUnusualVisualRig()
                         genv.UNUSUAL_SWAPPER_ENABLED =
                             true
+                        UnusualFns.traceSwap("TOGGLE_ENABLED", "activate returned true")
+                    else
+                        UnusualFns.traceSwap("TOGGLE_ENABLE_FAILED", "activate returned false")
                     end
                 end
                 updateUnusualToggle()
