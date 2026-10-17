@@ -1,4 +1,4 @@
---// DEADEYE UNUSUAL SNAPSHOT FORENSICS v1.00
+--// DEADEYE UNUSUAL SNAPSHOT FORENSICS v1.01
 --// READ-ONLY diagnostic for the post-update Unusual swap failure.
 --// Does not equip/unequip items, destroy FX, or change visual properties.
 --//
@@ -58,7 +58,7 @@ local function log(message)
         return
     end
     local line = string.format(
-        "[UnusualSnapshotForensics v1.00 +%.3fs] %s",
+        "[UnusualSnapshotForensics v1.01 +%.3fs] %s",
         os.clock() - State.startedAt,
         tostring(message)
     )
@@ -189,9 +189,12 @@ end
 local function getItemModule(id)
     id = tonumber(id)
     if not id then
-        return nil, "no numeric item ID"
+        return nil, "no numeric item ID", false, "no numeric item ID"
     end
 
+    --// This is the exact resolver used by DeadEye_Diagnostic.lua.
+    --// Keep its result separate from the Registry fallback so a fallback
+    --// cannot hide a broken production resolver.
     local clientModule = childPath(ReplicatedStorage, {
         "Services", "Items", "ClientItemService"
     })
@@ -201,9 +204,14 @@ local function getItemModule(id)
             return clientApi:GetItemFromID(id)
         end)
         if ok and result then
-            return result, "ClientItemService:GetItemFromID"
+            return result, "ClientItemService:GetItemFromID", true,
+                "ClientItemService returned " .. safePath(result)
         end
-        clientErr = "GetItemFromID failed: " .. tostring(result)
+        if ok then
+            clientErr = "ClientItemService:GetItemFromID returned nil for ID " .. tostring(id)
+        else
+            clientErr = "ClientItemService:GetItemFromID threw: " .. tostring(result)
+        end
     end
 
     local registryModule = childPath(ReplicatedStorage, { "Items", "Registry" })
@@ -212,19 +220,17 @@ local function getItemModule(id)
         local getter = registry.TryGetById or registry.GetById
         if type(getter) == "function" then
             local ok, entry = pcall(getter, id)
-            if ok and type(entry) == "table" then
-                local item = entry.Module
-                if item then
-                    return item, "Items.Registry fallback"
-                end
+            if ok and type(entry) == "table" and entry.Module then
+                return entry.Module, "Items.Registry fallback", false,
+                    tostring(clientErr or "ClientItemService did not resolve ID")
             end
             registryErr = "Registry lookup failed: " .. tostring(entry)
         end
     end
 
-    return nil, tostring(clientErr or "") .. " | " .. tostring(registryErr or "")
+    local reason = tostring(clientErr or "") .. " | " .. tostring(registryErr or "")
+    return nil, reason, false, reason
 end
-
 local FX_CLASSES = {
     ParticleEmitter = true,
     Trail = true,
@@ -413,7 +419,7 @@ local function snapshot(reason)
         return
     end
 
-    local module, moduleSource = getItemModule(sourceId)
+    local module, moduleSource, mainResolverOK, mainResolverStatus = getItemModule(sourceId)
     if not module then
         log("ITEM MODULE MISSING id=" .. tostring(sourceId) .. " reason=" .. tostring(moduleSource))
         log("PREDICTION: getUnusualCosmeticRig/buildOriginalUnusualSignature would return nil.")
@@ -422,8 +428,13 @@ local function snapshot(reason)
     end
     log("ITEM MODULE id=" .. tostring(sourceId) .. " name=" .. tostring(module.Name)
         .. " path=" .. safePath(module) .. " resolver=" .. tostring(moduleSource)
+        .. " mainResolverOK=" .. tostring(mainResolverOK)
         .. " Character=" .. tostring(module:FindFirstChild("Character") ~= nil)
         .. " CharacterClassic=" .. tostring(module:FindFirstChild("CharacterClassic") ~= nil))
+    log("MAIN getItemModule() result: " .. tostring(mainResolverStatus))
+    if not mainResolverOK then
+        log("CRITICAL MAIN-PATH MISMATCH: DeadEye_Diagnostic.lua uses ClientItemService:GetItemFromID only; this analyzer needed Registry fallback. The main script would get no item module here, so getUnusualCosmeticRig/buildOriginalUnusualSignature would return nil before comparing live rig children.")
+    end
 
     local config
     local okConfig, configResult = pcall(require, module)
@@ -588,7 +599,9 @@ local function snapshot(reason)
         log("MISS " .. detail)
     end
 
-    if candidateCount == 0 then
+    if not mainResolverOK then
+        log("PREDICTION: main failure is already explained by ClientItemService:GetItemFromID returning nil/throwing; Registry fallback matches do not help the unmodified main resolver.")
+    elseif candidateCount == 0 then
         log("PREDICTION: source signature contains no candidate children; check the chosen item model/rig variant.")
     elseif matchedCount == 0 then
         log("PREDICTION: EXACT FAILURE MATCHES s — no source signature object matches a direct child of its live body part.")
@@ -596,7 +609,7 @@ local function snapshot(reason)
     elseif matchedCount > 0 then
         log("PREDICTION: this sampled rig has " .. tostring(matchedCount)
             .. " direct-child signature matches; capture may pass the empty-snapshot gate in this phase.")
-        log("If main log still reports snapshot=nil, compare the phase/rigger object identity and re-run immediately after the failed click.")
+        log("If main log still reports snapshot=nil, compare the phase/rig object identity and re-run immediately after the failed click.")
     end
 
     local cache = ReplicatedStorage:FindFirstChild("RigCache")
@@ -783,7 +796,7 @@ local function stop(reason)
         end
     end
     if copied then
-        table.insert(State.log, "[UnusualSnapshotForensics v1.00] Clipboard copy succeeded via " .. tostring(chosen))
+        table.insert(State.log, "[UnusualSnapshotForensics v1.01] Clipboard copy succeeded via " .. tostring(chosen))
         local callback = ENV[chosen]
         if type(callback) ~= "function" then
             callback = _G[chosen]
@@ -791,10 +804,10 @@ local function stop(reason)
         if type(callback) == "function" then
             pcall(callback, table.concat(State.log, "\n"))
         end
-        pcall(print, "[UnusualSnapshotForensics v1.00] F10 copied full log")
+        pcall(print, "[UnusualSnapshotForensics v1.01] F10 copied full log")
     else
-        table.insert(State.log, "[UnusualSnapshotForensics v1.00] Clipboard API unavailable; log remains in getgenv().DEADEYE_UNUSUAL_SNAPSHOT_FORENSICS_LOG")
-        pcall(print, "[UnusualSnapshotForensics v1.00] Clipboard API unavailable; log remains in getgenv().DEADEYE_UNUSUAL_SNAPSHOT_FORENSICS_LOG")
+        table.insert(State.log, "[UnusualSnapshotForensics v1.01] Clipboard API unavailable; log remains in getgenv().DEADEYE_UNUSUAL_SNAPSHOT_FORENSICS_LOG")
+        pcall(print, "[UnusualSnapshotForensics v1.01] Clipboard API unavailable; log remains in getgenv().DEADEYE_UNUSUAL_SNAPSHOT_FORENSICS_LOG")
     end
     State.stopping = false
 end
