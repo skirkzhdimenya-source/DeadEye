@@ -460,8 +460,11 @@ local function startReplacement(
             replacementRunning = false
             return
         end
+        local liveSlot = getSlotByOriginalId(originalId)
         if tonumber(getCurrentEmoteId(object)) ~= tonumber(originalId)
-            or getCharacterObject() ~= object then
+            or getCharacterObject() ~= object
+            or not liveSlot
+            or tonumber(liveSlot.replaceId) ~= tonumber(replaceId) then
             replacementRunning = false
             return
         end
@@ -505,10 +508,13 @@ local function startReplacement(
             replacementRunning = false
             return
         end
+        local liveSlot = getSlotByOriginalId(originalId)
         if myGeneration ~= replacementGeneration
             or not isEnabled()
             or tonumber(getCurrentEmoteId(object)) ~= tonumber(originalId)
-            or getCharacterObject() ~= object then
+            or getCharacterObject() ~= object
+            or not liveSlot
+            or tonumber(liveSlot.replaceId) ~= tonumber(replaceId) then
             stopEmoteObject(replacement)
             restoreNativeEmote(object, originalId)
             replacementRunning = false
@@ -589,10 +595,8 @@ local function checkState()
         if currentCustomEmote then
             stopCustomEmote(true)
         end
-        if failedOriginalId and failedOriginalId ~= emoteId then
-            failedOriginalId = nil
-            failedReplaceId = nil
-        end
+        failedOriginalId = nil
+        failedReplaceId = nil
         lastRegistryEmote = emoteId
         return
     end
