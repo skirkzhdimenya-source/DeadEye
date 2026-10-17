@@ -3162,9 +3162,7 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
 end
 
 function cosmetic.getLiveRigModels()
-    -- Only refresh the model RigService has bound to the local character.
-    -- Other same-name children are cached/old rigs; rebuilding them without
-    -- the native Unusual snapshot was removing their FX and polluting the cache.
+    -- Prefer the model bound to the actual gameplay character.
     local boundModel = getBoundVisualRigModel()
     if boundModel
         and boundModel:IsA("Model")
@@ -3174,20 +3172,106 @@ function cosmetic.getLiveRigModels()
         return { boundModel }
     end
 
-    -- Menu / before CharacterService binds a live rig: use the same single
-    -- FindFirstChild fallback as the stable pre-diagnostic implementation.
+    -- When CharacterService has no local character, resolve the menu preview
+    -- through the current MenuScene.VisualModel rather than by player name.
+    -- RigService caches menu and gameplay models under the same visible name.
     local rigs = workspace:FindFirstChild("Rigs")
-    local rig = rigs and rigs:FindFirstChild(LocalPlayer.Name)
-    if rig
-        and rig:IsA("Model")
-        and rig.Parent
+    local menuScene = workspace:FindFirstChild("MenuScene")
+    local visualModel = menuScene
+        and menuScene:FindFirstChild("VisualModel")
+
+    if not rigs
+        or not visualModel
+        or not visualModel:IsA("Model")
+        or not visualModel.Parent
     then
-        return { rig }
+        return {}
     end
+
+    local visualRoot = visualModel:FindFirstChild("HumanoidRootPart")
+    if not visualRoot or not visualRoot:IsA("BasePart") then
+        return {}
+    end
+
+    -- Require the root joint to point to this exact preview root. This also
+    -- rejects stale same-name rigs and old VisualModel instances.
+    local function isBoundToCurrentPreview(model)
+        if not model
+            or not model:IsA("Model")
+            or model.Name ~= LocalPlayer.Name
+            or model.Parent ~= rigs
+        then
+            return false
+        end
+
+        local joints = model:FindFirstChild("Joints")
+        local torsoRot = joints
+            and joints:FindFirstChild("TorsoRot", true)
+
+        if not torsoRot then
+            torsoRot = model:FindFirstChild("TorsoRot", true)
+        end
+
+        if not torsoRot then
+            return false
+        end
+
+        if torsoRot:IsA("JointInstance") then
+            return torsoRot.Part0 == visualRoot
+        end
+
+        if torsoRot:IsA("AnimationConstraint") then
+            local attachment = torsoRot.Attachment0
+            return attachment ~= nil
+                and attachment.Parent == visualRoot
+        end
+
+        return false
+    end
+
+    -- Use RigService's actual cache binding first; it distinguishes the
+    -- preview rig from the gameplay rig even though their Model.Name matches.
+    local rigService
+    local serviceLoaded = pcall(function()
+        rigService = require(
+            ReplicatedStorage.Services.Asset.RigService
+        )
+    end)
+
+    if serviceLoaded
+        and rigService
+        and type(rigService.GetRigFromCharacter) == "function"
+    then
+        local lookupOK, previewRig = pcall(function()
+            return rigService:GetRigFromCharacter(visualModel)
+        end)
+
+        if lookupOK and isBoundToCurrentPreview(previewRig) then
+            __DDCore.Log("COSMETIC.getLiveRigModels: resolved menu preview via RigService")
+            return { previewRig }
+        end
+    end
+
+    -- Fallback only accepts a uniquely matching root binding. Never fall back
+    -- to FindFirstChild(playerName), which is ambiguous in the current game.
+    local matches = {}
+    for _, candidate in ipairs(rigs:GetChildren()) do
+        if isBoundToCurrentPreview(candidate) then
+            table.insert(matches, candidate)
+        end
+    end
+
+    if #matches == 1 then
+        __DDCore.Log("COSMETIC.getLiveRigModels: resolved menu preview via TorsoRot binding")
+        return matches
+    end
+
+    __DDCore.Log("COSMETIC.getLiveRigModels: no unique bound rig"
+        .. "|matches=" .. tostring(#matches)
+        .. "|visualModel=" .. tostring(visualModel:GetFullName()))
 
     return {}
 end
-
 function cosmetic.refreshRig()
     if cosmetic.refreshBusy then
         __DDCore.Log("COSMETIC.refreshRig SKIP: refreshBusy was already true")
