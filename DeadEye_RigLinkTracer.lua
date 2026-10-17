@@ -95,13 +95,12 @@ local function appendLine(line, force)
         if not LOG_LIMIT_REACHED then
             LOG_LIMIT_REACHED = true
             table.insert(LOG, "[RigTrace " .. SCRIPT_VERSION .. "] LOG_LIMIT_REACHED|max=" .. tostring(MAX_LOG_LINES))
-            Env.DEADEYE_RIG_LINK_TRACE_LOG = table.concat(LOG, "\n")
         end
         return
     end
 
     table.insert(LOG, line)
-    Env.DEADEYE_RIG_LINK_TRACE_LOG = table.concat(LOG, "\n")
+    -- Avoid rebuilding the full growing log on every event; publish it on stop only.
 end
 
 local function cleanLogDetail(value)
