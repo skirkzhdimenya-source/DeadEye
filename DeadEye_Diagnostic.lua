@@ -463,7 +463,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.248"
+local SCRIPT_VERSION = "1.249"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -3159,10 +3159,31 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
     elseif equippedUnusualId
         and equippedUnusualId ~= 0
     then
-        --// AddCosmetics(live, equipped) below rebuilds the native effect
-        --// itself. Never snapshot/copy it back over the top while SWAP is OFF.
+        --// Keep the v1.235 recovery sequence: capture the native effect
+        --// BEFORE AddCosmetics rebuilds this rig. The game may remove the
+        --// effect while rebuilding and fail to recreate its particles.
         restoreNativeUnusualId =
             tonumber(equippedUnusualId)
+
+        local snapshotOK, capturedSnapshot = pcall(function()
+            return UnusualFns.captureNativeUnusualSnapshot(
+                restoreNativeUnusualId,
+                UnusualFns.getUnusualVisualRig(),
+                UnusualFns.getUnusualPlayerCharacter()
+            )
+        end)
+
+        if snapshotOK then
+            cosmeticUnusualSnapshot = capturedSnapshot
+        else
+            UnusualFns.traceSwap(
+                "NATIVE_SNAPSHOT_CAPTURE_ERROR",
+                "id=" .. tostring(restoreNativeUnusualId)
+                    .. "|error=" .. tostring(capturedSnapshot),
+                UnusualFns.getUnusualVisualRig(),
+                UnusualFns.getUnusualPlayerCharacter()
+            )
+        end
     end
 
     if restoreUnusualSwap then
@@ -3475,22 +3496,81 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
                     end
                 end)
             elseif restoreNativeUnusualId then
-                --// AddCosmetics has just rebuilt the real currently equipped
-                --// Unusual on this live model. Do not clone a second copy:
-                --// repeated fallback copies made effects pile up and disappear
-                --// when the game's rig/visibility code refreshed.
+                --// Restore the captured native baseline AFTER AddCosmetics.
+                --// If the pre-refresh snapshot was unavailable or cannot be
+                --// restored, first check whether AddCosmetics really rebuilt
+                --// the native FX. Only then create a marked fallback, so this
+                --// cannot stack a second effect on top of a native one.
+                local currentVisualRig =
+                    UnusualFns.getUnusualVisualRig()
+                local currentPlayerCharacter =
+                    UnusualFns.getUnusualPlayerCharacter()
+                local fallbackRemoved = 0
+                local snapshotRestored = false
+                local nativeFoundAfterAdd = false
+                local fallbackApplied = false
+
+                pcall(function()
+                    fallbackRemoved = UnusualFns.removeNativeFallbackFX()
+                end)
+
+                if cosmeticUnusualSnapshot then
+                    local restoreOK, restoreResult = pcall(function()
+                        return UnusualFns.restoreNativeUnusualSnapshot(
+                            cosmeticUnusualSnapshot,
+                            currentVisualRig,
+                            currentPlayerCharacter
+                        )
+                    end)
+                    snapshotRestored = restoreOK and restoreResult == true
+                end
+
+                if not snapshotRestored then
+                    --// AddCosmetics may have rebuilt the effect despite there
+                    --// being no earlier snapshot. Probe the live rig before
+                    --// falling back to a cloned visual.
+                    local probeOK, postAddSnapshot = pcall(function()
+                        return UnusualFns.captureNativeUnusualSnapshot(
+                            restoreNativeUnusualId,
+                            currentVisualRig,
+                            currentPlayerCharacter
+                        )
+                    end)
+                    nativeFoundAfterAdd = probeOK and postAddSnapshot ~= nil
+
+                    if not nativeFoundAfterAdd then
+                        pcall(function()
+                            UnusualFns.removeNativeFallbackFX()
+                        end)
+                        fallbackApplied =
+                            UnusualFns.applyNativeUnusualFallback(
+                                restoreNativeUnusualId,
+                                currentVisualRig,
+                                currentPlayerCharacter,
+                                cosmeticUnusualSnapshot
+                                    and "snapshot restore failed after AddCosmetics"
+                                    or "no usable pre-refresh snapshot; AddCosmetics did not rebuild native FX"
+                            )
+                    end
+                end
+
                 local visibilityRefreshed = false
                 pcall(function()
-                    UnusualFns.removeNativeFallbackFX()
                     visibilityRefreshed =
                         __UI.__L.refreshNativeVisibilityAfterUnusualRestore() == true
                 end)
+
                 UnusualFns.traceSwap(
-                    "NATIVE_UNUSUAL_KEEP_ADDCOSMETICS",
+                    "NATIVE_UNUSUAL_RECOVER_AFTER_ADDCOSMETICS",
                     "id=" .. tostring(restoreNativeUnusualId)
+                        .. "|snapshotAvailable=" .. tostring(cosmeticUnusualSnapshot ~= nil)
+                        .. "|snapshotRestored=" .. tostring(snapshotRestored)
+                        .. "|nativeFoundAfterAdd=" .. tostring(nativeFoundAfterAdd)
+                        .. "|fallbackApplied=" .. tostring(fallbackApplied)
+                        .. "|oldFallbacksRemoved=" .. tostring(fallbackRemoved)
                         .. "|visibilityRefreshed=" .. tostring(visibilityRefreshed),
-                    UnusualFns.getUnusualVisualRig(),
-                    UnusualFns.getUnusualPlayerCharacter()
+                    currentVisualRig,
+                    currentPlayerCharacter
                 )
             end
         end)
@@ -9523,7 +9603,9 @@ function UnusualFns.captureNativeUnusualSnapshot(
     local function isDeadEyeOwned(object)
         local owned = false
         pcall(function()
-            owned = object:GetAttribute("DeadEyeUnusualFX") == true
+            owned =
+                object:GetAttribute("DeadEyeUnusualFX") == true
+                or object:GetAttribute("DeadEyeNativeFallback") == true
         end)
         return owned
     end
