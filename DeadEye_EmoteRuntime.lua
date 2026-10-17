@@ -13,6 +13,8 @@ return function(ctx)
     local replacementRunning = false
     local replacementGeneration = 0
     local lastRegistryEmote = 0
+    local failedOriginalId = nil
+    local failedReplaceId = nil
 
 --// CURRENT EMOTE
 --// =========================================================
@@ -29,6 +31,22 @@ local function getCurrentEmoteId(object)
     end)
     return value or 0
 end
+
+-- The game owns its active emote on Character.Animations, not on the
+-- top-level Character object. Keep all replacement lifecycle operations there.
+local function getAnimationsController(object)
+    if not object then
+        return nil
+    end
+    local success, controller = pcall(function()
+        return object.Animations
+    end)
+    if success and type(controller) == "table" then
+        return controller
+    end
+    return nil
+end
+
 --// =========================================================
 --// GET RIG MODEL
 --// =========================================================
@@ -45,6 +63,64 @@ local function getRigModel(object)
     end
     return nil
 end
+--// =========================================================
+--// MATCH NATIVE SELECTION LOOKUP
+--// =========================================================
+local function getEmoteInitController(object, replaceModule, controller)
+    -- Custom EmoteModule implementations may rely on the full controller API;
+    -- pass those the native controller unchanged.
+    local hasCustomEmoteModule = replaceModule:FindFirstChild("EmoteModule") ~= nil
+    local selection = not hasCustomEmoteModule and replaceModule:FindFirstChild("Selection")
+    if not selection then
+        return controller
+    end
+
+    local selectionCount = #selection:GetChildren()
+    local dataRegistry = object and object.DataRegistry
+    if not dataRegistry or selectionCount < 1 then
+        return controller
+    end
+
+    -- Native Emote.GetSelection indexes Selection:GetChildren() by EmoteNum.
+    -- The replacement can have fewer variants than the original wheel entry.
+    -- Keep a valid index unchanged; when it is out of range, use the first
+    -- replacement variant rather than letting GetAnimations/SetModel index nil.
+    local registryProxy = {}
+    setmetatable(registryProxy, {
+        __index = function(_, key)
+            if key == "Get" then
+                return function(_, term)
+                    local value = dataRegistry:Get(term)
+                    if term == "EmoteNum" then
+                        local index = tonumber(value)
+                        if index and index ~= 0
+                            and (index < 1 or index > selectionCount or index % 1 ~= 0) then
+                            return 1
+                        end
+                    end
+                    return value
+                end
+            end
+
+            local value = dataRegistry[key]
+            if type(value) == "function" then
+                return function(_, ...)
+                    return value(dataRegistry, ...)
+                end
+            end
+            return value
+        end
+    })
+
+    -- The stock Emote.Init only needs p4.DataRegistry. The proxy delegates
+    -- every other registry read/method to the real registry.
+    return setmetatable({
+        DataRegistry = registryProxy
+    }, {
+        __index = controller
+    })
+end
+
 --// =========================================================
 --// GET CONTROLLERS
 -- =========================================================
@@ -244,37 +320,59 @@ local function stopEmoteObject(emote)
         emote:Deactivate()
     end)
 end
+
+local function restoreNativeEmote(object, expectedOriginalId)
+    if not object or not expectedOriginalId
+        or tonumber(getCurrentEmoteId(object)) ~= tonumber(expectedOriginalId) then
+        return
+    end
+
+    local controller = getAnimationsController(object)
+    -- Do not overwrite a different emote already installed by the game.
+    if not controller or controller.Emote ~= nil then
+        return
+    end
+
+    -- Re-enter the same native path that handles DataRegistry.Emote updates.
+    pcall(function()
+        object:RegistryTermUpdated("Emote")
+    end)
+end
+
 --// =========================================================
 --// STOP CUSTOM
 -- =========================================================
-local function stopCustomEmote()
-    replacementGeneration =
-        replacementGeneration + 1
+local function stopCustomEmote(restoreNative)
+    replacementGeneration = replacementGeneration + 1
     replacementRunning = false
 
-    local object =
-        getCharacterObject()
+    local object = getCharacterObject()
+    local controller = getAnimationsController(object)
+    local emoteToStop = currentCustomEmote
+    local originalId = currentOriginalId
 
-    if currentCustomEmote then
-        if object
-            and object.Emote
-            == currentCustomEmote
-        then
-            object.Emote = nil
-        end
-
-        stopEmoteObject(
-            currentCustomEmote
-        )
-
-        currentCustomEmote =
-            nil
+    if controller and emoteToStop and controller.Emote == emoteToStop then
+        controller.Emote = nil
     end
 
+    if emoteToStop then
+        stopEmoteObject(emoteToStop)
+    end
+
+    currentCustomEmote = nil
     currentOriginalId = nil
     currentReplaceId = nil
+
+    failedOriginalId = nil
+    failedReplaceId = nil
+
+    -- When the same original emote is still selected (toggle OFF, mapping
+    -- removed, or cleanup), rebuild it through the native Character path.
+    -- Do not do this when the registry already moved to a different emote.
+    if restoreNative ~= false then
+        restoreNativeEmote(object, originalId)
+    end
 end
---// =========================================================
 --// CREATE REPLACEMENT
 --// =========================================================
 local function createReplacement(
@@ -292,21 +390,24 @@ local function createReplacement(
         )
         return nil
     end
-    local character =
-        object.Model
-    local rigModel =
-        getRigModel(object)
-    if not character
-        or not rigModel then
+    local character = object.Model
+    local rigModel = getRigModel(object)
+    local animationsController = getAnimationsController(object)
+    if not character or not rigModel or not animationsController then
         return nil
     end
+    local emoteInitController = getEmoteInitController(
+        object,
+        replaceModule,
+        animationsController
+    )
     local success, result =
         pcall(function()
             return EmoteService:SetEmote(
                 character,
                 replaceModule,
                 false,
-                object,
+                emoteInitController,
                 nil,
                 rigModel
             )
@@ -359,20 +460,25 @@ local function startReplacement(
             replacementRunning = false
             return
         end
-        if getCurrentEmoteId(object)
-            ~= originalId then
+        if tonumber(getCurrentEmoteId(object)) ~= tonumber(originalId)
+            or getCharacterObject() ~= object then
             replacementRunning = false
             return
         end
+
+        local animationsController = getAnimationsController(object)
+        if not animationsController then
+            replacementRunning = false
+            return
+        end
+
         --// =================================================
-        --// ГАСИМ ОРИГИНАЛ
+        --// STOP THE NATIVE CONTROLLER'S CURRENT EMOTE
         --// =================================================
-        if object.Emote
-            and object.Emote ~= currentCustomEmote then
-            stopEmoteObject(
-                object.Emote
-            )
-            object.Emote = nil
+        local nativeEmote = animationsController.Emote
+        if nativeEmote and nativeEmote ~= currentCustomEmote then
+            stopEmoteObject(nativeEmote)
+            animationsController.Emote = nil
         end
         --// =================================================
         --// ГАСИМ ОРИГИНАЛЬНЫЕ TRACKS
@@ -393,26 +499,36 @@ local function startReplacement(
                 replaceId
             )
         if not replacement then
+            failedOriginalId = originalId
+            failedReplaceId = replaceId
+            restoreNativeEmote(object, originalId)
             replacementRunning = false
             return
         end
-        if myGeneration ~=
-            replacementGeneration
-            or not isEnabled() then
-            stopEmoteObject(
-                replacement
-            )
+        if myGeneration ~= replacementGeneration
+            or not isEnabled()
+            or tonumber(getCurrentEmoteId(object)) ~= tonumber(originalId)
+            or getCharacterObject() ~= object then
+            stopEmoteObject(replacement)
+            restoreNativeEmote(object, originalId)
             replacementRunning = false
             return
         end
-        currentCustomEmote =
-            replacement
-        currentOriginalId =
-            originalId
-        currentReplaceId =
-            replaceId
-        object.Emote =
-            replacement
+
+        -- A native RegistryTermUpdated("Emote") may have run while SetEmote
+        -- was creating the replacement. Deactivate that instance before
+        -- installing ours, otherwise its sound/tracks can remain alive.
+        local currentControllerEmote = animationsController.Emote
+        if currentControllerEmote and currentControllerEmote ~= replacement then
+            stopEmoteObject(currentControllerEmote)
+        end
+
+        currentCustomEmote = replacement
+        currentOriginalId = originalId
+        currentReplaceId = replaceId
+        failedOriginalId = nil
+        failedReplaceId = nil
+        animationsController.Emote = replacement
         stopOriginalSounds(
             object
         )
@@ -432,120 +548,113 @@ local function checkState()
     if not genv.EMOTE_SWAPPER_RUNNING then
         return
     end
-    local object =
-        getCharacterObject()
+
+    local object = getCharacterObject()
     if not object then
+        if currentCustomEmote then
+            stopCustomEmote(false)
+        end
         return
     end
-    local emoteId =
-        getCurrentEmoteId(object)
-    --// =====================================================
-    --// NO EMOTE
-    --// =====================================================
-    if not emoteId
-        or emoteId == 0 then
+
+    local emoteId = tonumber(getCurrentEmoteId(object)) or 0
+    if emoteId == 0 then
         if currentCustomEmote then
-                    end
-        stopCustomEmote()
+            stopCustomEmote(false)
+        end
+        failedOriginalId = nil
+        failedReplaceId = nil
         lastRegistryEmote = 0
         return
     end
-    --// =====================================================
-    --// FIND SLOT
-    --// =====================================================
-    local slot =
-        getSlotByOriginalId(
-            emoteId
-        )
-    --// =====================================================
-    --// NO SLOT
-    --// =====================================================
+
+    -- A stopped swap must leave the native emote alone and must not restart
+    -- a replacement merely because the original ID remains in DataRegistry.
+    if not isEnabled() then
+        if currentCustomEmote then
+            stopCustomEmote(true)
+        end
+        return
+    end
+
+    -- A new registry ID means the previous custom emote belongs to an old
+    -- selection. Stop it without rebuilding that old ID over the new one.
+    if currentCustomEmote
+        and tonumber(currentOriginalId) ~= emoteId then
+        stopCustomEmote(false)
+    end
+
+    local slot = getSlotByOriginalId(emoteId)
     if not slot then
         if currentCustomEmote then
-            stopCustomEmote()
+            stopCustomEmote(true)
         end
-        lastRegistryEmote =
-            emoteId
+        if failedOriginalId and failedOriginalId ~= emoteId then
+            failedOriginalId = nil
+            failedReplaceId = nil
+        end
+        lastRegistryEmote = emoteId
         return
     end
-    --// =====================================================
-    --// IMPORTANT FIX:
-    --// ЕСЛИ ORIGINAL АКТИВНА, НО REPLACEMENT ПОЧЕМУ-ТО
-    --// ПРОПАЛ - ЗАПУСКАЕМ ЕГО СНОВА.
-    --// =====================================================
-    if not currentCustomEmote
-        and not replacementRunning then
-        startReplacement(
-            object,
-            slot
-        )
-        lastRegistryEmote =
-            emoteId
+
+    if failedOriginalId
+        and (failedOriginalId ~= emoteId or failedReplaceId ~= slot.replaceId) then
+        failedOriginalId = nil
+        failedReplaceId = nil
+    end
+
+    if failedOriginalId == emoteId and failedReplaceId == slot.replaceId then
+        local controller = getAnimationsController(object)
+        if controller and controller.Emote == nil then
+            restoreNativeEmote(object, emoteId)
+        end
+        lastRegistryEmote = emoteId
         return
     end
-    --// =====================================================
-    --// WHILE ACTIVE:
-    --// CONTINUOUSLY SUPPRESS ORIGINAL
-    --// =====================================================
+
+    -- If the configured replacement failed to resolve/create, leave the
+    -- native emote playing until the ID/mapping changes or the user resets.
+    if not currentCustomEmote and not replacementRunning then
+        startReplacement(object, slot)
+        lastRegistryEmote = emoteId
+        return
+    end
+
     if currentCustomEmote then
-        stopOriginalTracks(
-            object,
-            emoteId
-        )
-        stopOriginalSounds(
-            object
-        )
-        --// Если штатная система снова создала
-        --// оригинальный Emote object.
-        if object.Emote
-            and object.Emote ~= currentCustomEmote then
-            stopEmoteObject(
-                object.Emote
-            )
-            object.Emote =
-                currentCustomEmote
+        local controller = getAnimationsController(object)
+        if controller then
+            local activeEmote = controller.Emote
+            if activeEmote ~= currentCustomEmote then
+                if activeEmote then
+                    stopEmoteObject(activeEmote)
+                end
+
+                if currentCustomEmote.Active == false then
+                    stopCustomEmote(false)
+                    startReplacement(object, slot)
+                    lastRegistryEmote = emoteId
+                    return
+                end
+
+                controller.Emote = currentCustomEmote
+            end
         end
+
+        -- Suppress any original tracks/sound reintroduced by a native refresh,
+        -- while leaving the replacement object's own tracks and sound intact.
+        stopOriginalTracks(object, emoteId)
+        stopOriginalSounds(object)
     end
-    lastRegistryEmote =
-        emoteId
+
+    lastRegistryEmote = emoteId
 end
---// =========================================================
 
     return {
         checkState = checkState,
         stopCustomEmote = stopCustomEmote,
         stopForCleanup = function()
-            replacementGeneration =
-                replacementGeneration + 1
-            replacementRunning = false
-
-            local activeObject =
-                getCharacterObject()
-
-            if activeObject
-                and currentCustomEmote
-                and activeObject.Emote
-                    == currentCustomEmote
-            then
-                pcall(function()
-                    activeObject.Emote = nil
-                end)
-            end
-
-            local emoteToStop =
-                currentCustomEmote
-
-            currentCustomEmote = nil
-            currentOriginalId = nil
-            currentReplaceId = nil
-
-            if emoteToStop then
-                task.spawn(function()
-                    stopEmoteObject(
-                        emoteToStop
-                    )
-                end)
-            end
+            stopCustomEmote(true)
+            lastRegistryEmote = 0
         end,
         getCurrentOriginalId = function()
             return currentOriginalId
