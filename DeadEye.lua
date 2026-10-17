@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.273"
+local SCRIPT_VERSION = "1.274"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -985,7 +985,7 @@ end
 __DDCore.Log("INIT: loading external EmoteRuntime module")
 local EmoteRuntime = loadstring(
         game:HttpGet(
-            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/49be36f4c063f6b6e26d36a3625f15a5344e08e8/DeadEye_EmoteRuntime.lua"
+            "https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/3b621710c0f2f4a31409585388fcd582557a3fc1/DeadEye_EmoteRuntime.lua"
         )
     )()
 
