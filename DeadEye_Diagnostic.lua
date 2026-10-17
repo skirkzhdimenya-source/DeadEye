@@ -430,7 +430,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.245
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.246
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -462,7 +462,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.245"
+local SCRIPT_VERSION = "1.246"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -10005,11 +10005,21 @@ function UnusualFns.reapplyUnusual()
                 local equippedId =
                     UnusualFns.getEquippedUnusualId()
 
-                if equippedId == 0
-                    or tonumber(equippedId)
-                        ~= tonumber(
-                            unusualSlot.originalId
-                        )
+                if equippedId == 0 then
+                    --// LoadoutResolver can briefly return 0 during menu-to-round
+                    --// rig replacement. Do not treat that transient as unequipping.
+                    UnusualFns.traceSwap(
+                        "REAPPLY_WAIT_LOADOUT",
+                        "equipped=0|attempt=" .. tostring(attempt)
+                    )
+                    task.wait(0.25)
+                    continue
+                end
+
+                if tonumber(equippedId)
+                    ~= tonumber(
+                        unusualSlot.originalId
+                    )
                 then
                     --// The player changed the actually equipped Unusual.
                     --// Do NOT restore unusualRuntime.originalId here:
@@ -12650,7 +12660,10 @@ others.targetHumanoid = nil
 others.lastAppliedDescription = nil
 others.appliedHumanoids = setmetatable({}, { __mode = "k" })
 others.pendingHumanoids = setmetatable({}, { __mode = "k" })
+others.originalDescriptionsByHumanoid = setmetatable({}, { __mode = "k" })
+others.avatarSyncEnabled = false
 others.avatarSyncConnections = {}
+others.avatarSyncConnection = nil
 others.fieldBoxes = {}
 function others.getHumanoids()
     local result = {}
@@ -12680,6 +12693,72 @@ function others.getHumanoids()
 end
 function others.getHumanoid()
     return others.getHumanoids()[1]
+end
+
+function others.captureOriginalDescriptionForHumanoid(humanoid)
+    if not humanoid
+        or not humanoid:IsA("Humanoid")
+        or others.originalDescriptionsByHumanoid[humanoid]
+    then
+        return others.originalDescriptionsByHumanoid
+            and others.originalDescriptionsByHumanoid[humanoid] ~= nil
+    end
+
+    local sourceDescription
+    if humanoid == others.targetHumanoid and others.originalDescription then
+        sourceDescription = others.originalDescription
+    else
+        local ok, description = pcall(function()
+            return humanoid:GetAppliedDescription()
+        end)
+        if ok then
+            sourceDescription = description
+        end
+    end
+
+    if not sourceDescription then
+        return false
+    end
+
+    local clone
+    local ok = pcall(function()
+        clone = sourceDescription:Clone()
+    end)
+    if not ok or not clone then
+        return false
+    end
+
+    others.originalDescriptionsByHumanoid[humanoid] = clone
+    return true
+end
+
+function others.applyDescriptionDirect(humanoid, description)
+    if not humanoid or not humanoid.Parent or not description then
+        return false
+    end
+
+    local clone
+    pcall(function()
+        clone = description:Clone()
+    end)
+    if not clone then
+        return false
+    end
+
+    local ok = pcall(function()
+        humanoid:ApplyDescriptionResetAsync(clone)
+    end)
+    if not ok then
+        ok = pcall(function()
+            humanoid:ApplyDescriptionReset(clone)
+        end)
+    end
+    if not ok then
+        ok = pcall(function()
+            humanoid:ApplyDescriptionAsync(clone)
+        end)
+    end
+    return ok
 end
 
 --// =========================================================
@@ -13103,10 +13182,13 @@ function others.applyDescription(
     end
     local applied = 0
     local lastError
+    local targetHumanoids = others.getHumanoids()
 
-    for _, humanoid in ipairs(
-        others.getHumanoids()
-    ) do
+    for _, humanoid in ipairs(targetHumanoids) do
+        others.captureOriginalDescriptionForHumanoid(humanoid)
+    end
+
+    for _, humanoid in ipairs(targetHumanoids) do
         local ok, err =
             pcall(function()
                 humanoid:ApplyDescriptionResetAsync(
@@ -13135,9 +13217,7 @@ function others.applyDescription(
     end
     if applied == 0 then
         --// Last compatibility fallback.
-        for _, humanoid in ipairs(
-            others.getHumanoids()
-        ) do
+        for _, humanoid in ipairs(targetHumanoids) do
             local ok =
                 pcall(function()
                     humanoid:ApplyDescriptionAsync(
@@ -13168,6 +13248,7 @@ function others.applyDescription(
     end)
     if savedDescription then
         others.lastAppliedDescription = savedDescription
+        others.avatarSyncEnabled = true
     end
 
     __DDCore.Log("AVATAR APPLY COMPLETE|humanoids=" .. tostring(#others.getHumanoids())
@@ -13204,6 +13285,7 @@ function others.applyDescriptionToNewHumanoid(humanoid)
         or not humanoid.Parent
         or others.appliedHumanoids[humanoid]
         or others.pendingHumanoids[humanoid]
+        or not others.avatarSyncEnabled
         or not others.lastAppliedDescription
     then
         return
@@ -13217,10 +13299,16 @@ function others.applyDescriptionToNewHumanoid(humanoid)
     others.pendingHumanoids[humanoid] = true
     task.spawn(function()
         task.wait(0.15)
-        if not humanoid.Parent or not model.Parent or not others.lastAppliedDescription then
+        if not others.avatarSyncEnabled
+            or not humanoid.Parent
+            or not model.Parent
+            or not others.lastAppliedDescription
+        then
             others.pendingHumanoids[humanoid] = nil
             return
         end
+
+        others.captureOriginalDescriptionForHumanoid(humanoid)
 
         local description
         pcall(function()
@@ -13277,6 +13365,7 @@ local avatarRigAddedConnection = workspace.DescendantAdded:Connect(function(obje
     end
 end)
 table.insert(others.avatarSyncConnections, avatarRigAddedConnection)
+others.avatarSyncConnection = avatarRigAddedConnection
 UnusualFns.addUnusualConnection(avatarRigAddedConnection)
 
 function others.applyField(
@@ -13383,20 +13472,74 @@ end
 function others.restore(
     keepSnapshot
 )
-    if not others.originalDescription then
+    if not others.originalDescription
+        and next(others.originalDescriptionsByHumanoid) == nil
+    then
         return false
     end
-    local result =
-        others.applyDescription(
-            others.originalDescription
-        )
+
+    local restored = 0
+
     if not keepSnapshot then
-        others.originalDescription =
-            nil
-        others.targetHumanoid =
-            nil
+        --// Stop auto-apply before restoring. Pending tasks check this flag.
+        others.avatarSyncEnabled = false
+        others.lastAppliedDescription = nil
+
+        for _, connection in ipairs(others.avatarSyncConnections) do
+            pcall(function()
+                connection:Disconnect()
+            end)
+        end
+        table.clear(others.avatarSyncConnections)
+        others.avatarSyncConnection = nil
     end
-    return result
+
+    if keepSnapshot then
+        for humanoid, description in pairs(others.originalDescriptionsByHumanoid) do
+            if others.applyDescriptionDirect(humanoid, description) then
+                restored += 1
+            end
+        end
+
+        if restored == 0 and others.originalDescription then
+            if others.applyDescription(others.originalDescription) then
+                restored = 1
+            end
+        end
+
+        if others.originalDescription then
+            pcall(function()
+                others.lastAppliedDescription = others.originalDescription:Clone()
+            end)
+            others.avatarSyncEnabled = others.lastAppliedDescription ~= nil
+        end
+        return restored > 0
+    end
+
+    --// Shutdown: restore each model to its own recorded native description.
+    for humanoid, description in pairs(others.originalDescriptionsByHumanoid) do
+        if others.applyDescriptionDirect(humanoid, description) then
+            restored += 1
+        end
+    end
+
+    --// Legacy fallback if the per-Humanoid map has not been populated.
+    if restored == 0 and others.originalDescription then
+        for _, humanoid in ipairs(others.getHumanoids()) do
+            if others.applyDescriptionDirect(humanoid, others.originalDescription) then
+                restored += 1
+            end
+        end
+    end
+
+    table.clear(others.originalDescriptionsByHumanoid)
+    table.clear(others.appliedHumanoids)
+    table.clear(others.pendingHumanoids)
+    others.originalDescription = nil
+    others.targetHumanoid = nil
+
+    __DDCore.Log("AVATAR RESTORE|restoredHumanoids=" .. tostring(restored))
+    return restored > 0
 end
 
 --// =========================================================
