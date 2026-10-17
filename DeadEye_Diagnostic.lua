@@ -64,6 +64,7 @@ function __DDCore.Log(message)
         or string.find(messageText, "UNUSUAL FAIL:", 1, true) ~= nil
         or string.find(messageText, "UNUSUAL ACTIVATE OK:", 1, true) ~= nil
         or string.find(messageText, "AVATAR RESET", 1, true) ~= nil
+        or string.find(messageText, "AVATAR AUTO-", 1, true) ~= nil
 
     if not keep then
         return
@@ -442,11 +443,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.261
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.262
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
---// Например: 1.260 -> 1.261. Основная версия остаётся 1.
+--// Например: 1.261 -> 1.262. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -473,7 +474,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.261"
+local SCRIPT_VERSION = "1.262"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -12389,6 +12390,15 @@ function others.getAllAvatarHumanoids()
         addModel(preview)
     end
 
+    -- The displayed menu model can exist even when the native preview resolver
+    -- returns nil (for example, after returning from a round). Reset it directly
+    -- whenever it is present instead of relying on the current menu selection.
+    local menuScene = workspace:FindFirstChild("MenuScene")
+    local menuVisualModel = menuScene and menuScene:FindFirstChild("VisualModel")
+    if menuVisualModel and menuVisualModel:IsA("Model") then
+        addModel(menuVisualModel)
+    end
+
     -- Retain the existing resolver's fallback targets without making the
     -- current UI state decide which of the two representations gets reset.
     local currentOK, currentTargets = pcall(function()
@@ -12957,6 +12967,17 @@ function others.findLocalRigModel(instance)
         then
             return current
         end
+
+        -- Menu preview is a separate avatar representation, not a player-named rig.
+        if current:IsA("Model")
+            and current.Name == "VisualModel"
+            and current.Parent
+            and current.Parent.Name == "MenuScene"
+            and current.Parent.Parent == workspace
+        then
+            return current
+        end
+
         current = current.Parent
     end
     return nil
@@ -12999,21 +13020,29 @@ function others.applyDescriptionToNewHumanoid(humanoid)
         end)
 
         local succeeded = false
+        local applyErrors = {}
         if description then
-            local ok = pcall(function()
+            local ok, err = pcall(function()
                 humanoid:ApplyDescriptionResetAsync(description)
             end)
             if not ok then
-                ok = pcall(function()
+                table.insert(applyErrors, "ApplyDescriptionResetAsync=" .. tostring(err))
+                ok, err = pcall(function()
                     humanoid:ApplyDescriptionReset(description)
                 end)
             end
             if not ok then
-                ok = pcall(function()
+                table.insert(applyErrors, "ApplyDescriptionReset=" .. tostring(err))
+                ok, err = pcall(function()
                     humanoid:ApplyDescriptionAsync(description)
                 end)
             end
+            if not ok then
+                table.insert(applyErrors, "ApplyDescriptionAsync=" .. tostring(err))
+            end
             succeeded = ok
+        else
+            table.insert(applyErrors, "description clone failed")
         end
 
         if succeeded then
@@ -13021,7 +13050,9 @@ function others.applyDescriptionToNewHumanoid(humanoid)
             __DDCore.Log("AVATAR AUTO-APPLIED|model=" .. tostring(model)
                 .. "|humanoid=" .. tostring(humanoid))
         else
-            __DDCore.Log("AVATAR AUTO-APPLY FAILED|model=" .. tostring(model))
+            __DDCore.Log("AVATAR AUTO-APPLY FAILED|model=" .. tostring(model)
+                .. "|humanoid=" .. tostring(humanoid)
+                .. "|errors=" .. table.concat(applyErrors, " ; "))
         end
 
         others.pendingHumanoids[humanoid] = nil
@@ -13032,9 +13063,18 @@ local avatarRigAddedConnection = workspace.DescendantAdded:Connect(function(obje
     if object:IsA("Humanoid") then
         others.applyDescriptionToNewHumanoid(object)
     elseif object:IsA("Model")
-        and object.Name == LocalPlayer.Name
         and object.Parent
-        and (object.Parent.Name == "Rigs" or object.Parent.Name == "Players")
+        and (
+            (
+                object.Name == LocalPlayer.Name
+                and (object.Parent.Name == "Rigs" or object.Parent.Name == "Players")
+            )
+            or (
+                object.Name == "VisualModel"
+                and object.Parent.Name == "MenuScene"
+                and object.Parent.Parent == workspace
+            )
+        )
     then
         task.defer(function()
             if not object.Parent then
