@@ -442,11 +442,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.260
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.261
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
---// Например: 1.259 -> 1.260. Основная версия остаётся 1.
+--// Например: 1.260 -> 1.261. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -473,7 +473,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.260"
+local SCRIPT_VERSION = "1.261"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -2004,162 +2004,6 @@ __UI.__L.collectCurrentUnusualIcons = function(playerGui)
     end
 end
 
-__UI.__L.findNativeUnusualScroll = function(playerGui)
-    local menu = playerGui
-        and playerGui:FindFirstChild(
-            "Menu"
-        )
-
-    local views = menu
-        and menu:FindFirstChild(
-            "Views"
-        )
-
-    local inventory = views
-        and views:FindFirstChild(
-            "Inventory"
-        )
-
-    local selectView = inventory
-        and inventory:FindFirstChild(
-            "Select"
-        )
-
-    local center = selectView
-        and selectView:FindFirstChild(
-            "Center"
-        )
-
-    local frame = center
-        and center:FindFirstChild(
-            "Frame"
-        )
-
-    local list = frame
-        and frame:FindFirstChild(
-            "List"
-        )
-
-    local scroll = list
-        and list:FindFirstChild(
-            "ScrollingFrame"
-        )
-
-    if scroll
-        and scroll:IsA("ScrollingFrame")
-    then
-        return scroll
-    end
-
-    return nil
-end
-
-__UI.__L.preloadNativeUnusualIcons = function()
-    local playerGui = LocalPlayer:FindFirstChild(
-            "PlayerGui"
-        )
-
-    if not playerGui then
-        return
-    end
-
-    __UI.__L.collectCurrentUnusualIcons(
-        playerGui
-    )
-
-    local scroll = __UI.__L.findNativeUnusualScroll(
-            playerGui
-        )
-
-    if not scroll then
-        return
-    end
-
-    local restoreStates = {}
-    local node = scroll
-
-    -- The inventory selector may be completely hidden when the
-    -- player's normal menu is closed. Temporarily reveal only
-    -- the existing UI hierarchy so its virtualized slots can load.
-    while node
-        and node ~= playerGui
-    do
-        if node:IsA("GuiObject") then
-            table.insert(
-                restoreStates,
-                {
-                    object = node,
-                    kind = "Visible",
-                    value = node.Visible
-                }
-            )
-            node.Visible = true
-        elseif node:IsA("LayerCollector") then
-            table.insert(
-                restoreStates,
-                {
-                    object = node,
-                    kind = "Enabled",
-                    value = node.Enabled
-                }
-            )
-            node.Enabled = true
-        end
-
-        node = node.Parent
-    end
-
-    task.wait(0.10)
-
-    local oldPosition = scroll.CanvasPosition
-
-    local steps = 48
-
-    -- The native list is virtualized/recycled.
-    -- Walk through the whole canvas so every batch of slots
-    -- gets instantiated and its IconIMG enters our cache.
-    for i = 0, steps do
-        local maxY = math.max(
-                0,
-                scroll.AbsoluteCanvasSize.Y
-                    - scroll.AbsoluteWindowSize.Y
-            )
-
-        pcall(function()
-            scroll.CanvasPosition = Vector2.new(
-                    oldPosition.X,
-                    maxY * (i / steps)
-                )
-        end)
-
-        RunService.Heartbeat:Wait()
-        RunService.Heartbeat:Wait()
-
-        __UI.__L.collectCurrentUnusualIcons(
-            playerGui
-        )
-    end
-
-    pcall(function()
-        scroll.CanvasPosition = oldPosition
-    end)
-
-    for i = #restoreStates, 1, -1 do
-        local state = restoreStates[i]
-
-        pcall(function()
-            if state.kind == "Visible" then
-                state.object.Visible = state.value
-            elseif state.kind == "Enabled" then
-                state.object.Enabled = state.value
-            end
-        end)
-    end
-
-    __UI.__L.collectCurrentUnusualIcons(
-        playerGui
-    )
-end
 local unusualPage
 local unusualStatus
 local categoryBar
@@ -2785,39 +2629,6 @@ function cosmetic.replaceArray(cosmetics)
     end
 
     return result or cosmetics
-end
-
-function cosmetic.getLiveRig()
-    local characterObject
-    local model
-
-    pcall(function()
-        characterObject = __UI.CharacterService:GetLocalCharacter()
-    end)
-
-    if not characterObject
-        or not characterObject.Rig
-    then
-        return nil
-    end
-
-    model = characterObject.Model
-
-    if not model
-        or not model.Parent
-    then
-        return nil
-    end
-
-    local rigs = workspace:FindFirstChild("Rigs")
-
-    if rigs
-        and not model:IsDescendantOf(rigs)
-    then
-        return nil
-    end
-
-    return characterObject.Rig
 end
 
 function cosmetic.refreshRigSingle(live, isAdditionalTarget)
@@ -5219,53 +5030,6 @@ function UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
     return targets
 end
 
-function UnusualFns.resolveUnusualTargetModel(role, visualRig, playerCharacter)
-    if type(role) == "string" then
-        local folderName, requestedIndex = string.match(role, "^(Rigs)#(%d+)$")
-        if folderName and requestedIndex then
-            local folder = workspace:FindFirstChild(folderName)
-            local index = 0
-            if folder then
-                for _, model in ipairs(folder:GetChildren()) do
-                    if model:IsA("Model") and model.Name == LocalPlayer.Name then
-                        index += 1
-                        if index == tonumber(requestedIndex) then
-                            return model
-                        end
-                    end
-                end
-            end
-        end
-
-        folderName, requestedIndex = string.match(role, "^(Players)#(%d+)$")
-        if folderName and requestedIndex then
-            local folder = workspace:FindFirstChild(folderName)
-            local index = 0
-            if folder then
-                for _, model in ipairs(folder:GetChildren()) do
-                    if model:IsA("Model") and model.Name == LocalPlayer.Name then
-                        index += 1
-                        if index == tonumber(requestedIndex) then
-                            return model
-                        end
-                    end
-                end
-            end
-        end
-    end
-
-    if role == "visual" then
-        return visualRig
-    elseif role == "character" then
-        return playerCharacter
-    elseif role == "local-character" then
-        local character = LocalPlayer.Character
-        return character and character.Parent and character or nil
-    end
-
-    return nil
-end
-
 function UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
     local result = {}
     for _, target in ipairs(
@@ -5862,39 +5626,6 @@ end
 --// =========================================================
 --// HAS UNUSUAL CONTENT
 --// =========================================================
-
-__UI.__L.unusualBasePartHasContent = function(
-    sourcePart
-)
-
-    for _, object in ipairs(
-        sourcePart:GetDescendants()
-    ) do
-
-        if __UI.__L.unusualObjectBelongsToPart(
-            object,
-            sourcePart
-        ) then
-
-            if UnusualFns.isUnusualFX(object) then
-                return true
-            end
-
-            if object:IsA("Attachment")
-                and UnusualFns.unusualAttachmentHasFX(
-                    object
-                )
-            then
-                return true
-            end
-
-        end
-
-    end
-
-    return false
-
-end
 
 --// =========================================================
 --// UNUSUAL ANIMATION SOURCE
@@ -14083,13 +13814,6 @@ local LOOK_MAX_AFTER_JUMP = 0.30
 mainJump.lookRenderBound = false
 mainJump.lookRestoreDeadline = 0
 mainJump.lookMinActiveDeadline = 0
-
-__UI.__L.mainLookAngleDelta = function(target, current)
-    return math.atan2(
-        math.sin(target - current),
-        math.cos(target - current)
-    )
-end
 
 function mainJump.findLookMovementState()
     if type(mainJump.lookMovementState) == "table" then
