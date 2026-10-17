@@ -2569,7 +2569,10 @@ __DDCore.LoadoutResolver = function(slotName)
         end
 
         local api = __DDCore.LoadoutAPI
-        if api and type(api.Observe) == "function" then
+        if api
+            and __DDCore.LoadoutModuleKind == "Inventory.Loadout"
+            and type(api.Observe) == "function"
+        then
             for _, observedSlot in ipairs({
                 "UnusualSlot",
                 "CosmeticSlot_1",
