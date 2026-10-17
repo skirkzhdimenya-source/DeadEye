@@ -8546,10 +8546,13 @@ function UnusualFns.removeOurUnusualFX()
     unusualRuntime.destroyAnimationSource()
 
     local removed = 0
-    local roots = {
+    local roots = {}
+    for _, target in ipairs(UnusualFns.getUnusualTargetModels(
         UnusualFns.getUnusualVisualRig(),
         UnusualFns.getUnusualPlayerCharacter()
-    }
+    )) do
+        table.insert(roots, target.model)
+    end
     local seen = {}
     for _, root in ipairs(
         roots
@@ -9311,7 +9314,8 @@ end
 function UnusualFns.captureNativeUnusualSnapshot(
     id,
     visualRig,
-    playerCharacter
+    playerCharacter,
+    existingSnapshot
 )
     local signature =
         UnusualFns.buildOriginalUnusualSignature(
@@ -9340,9 +9344,15 @@ function UnusualFns.captureNativeUnusualSnapshot(
         playerCharacter
     )
 
-    local snapshot = {
+    local snapshot = existingSnapshot or {
         parts = {}
     }
+    local alreadyCaptured = {}
+    for _, savedPart in ipairs(snapshot.parts or {}) do
+        if savedPart.targetModel then
+            alreadyCaptured[savedPart.targetModel] = true
+        end
+    end
     local targets = UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
 
     local function matchesObject(object, info)
@@ -9364,7 +9374,10 @@ function UnusualFns.captureNativeUnusualSnapshot(
         for _, target in ipairs(targets) do
             local targetPart = target.model:FindFirstChild(partName)
 
-            if targetPart and targetPart:IsA("BasePart") then
+            if not alreadyCaptured[target.model]
+                and targetPart
+                and targetPart:IsA("BasePart")
+            then
                 local partSnapshot = {
                     partName = partName,
                     targetRole = target.role,
@@ -9651,6 +9664,8 @@ function UnusualFns.restoreUnusual()
             visualRig
         unusualRuntime.appliedCharacter =
             playerCharacter
+        unusualRuntime.appliedTargets =
+            UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
         unusualRuntime.originalId =
             nil
         unusualRuntime.replacementId =
@@ -9789,20 +9804,42 @@ function UnusualFns.activateUnusual()
         return false
     end
 
+    local currentTargetSet =
+        UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
+
+    local sameOriginal =
+        tonumber(unusualRuntime.originalId) == tonumber(equippedId)
+
+    local snapshotForMerge =
+        sameOriginal
+        and unusualRuntime.nativeSnapshot
+        and unusualRuntime.appliedTargets
+        and unusualRuntime.nativeSnapshot
+        or nil
+
     if not unusualRuntime.nativeSnapshot
-        or tonumber(
-            unusualRuntime.originalId
-        ) ~= tonumber(equippedId)
+        or not sameOriginal
         or unusualRuntime.appliedRig ~= visualRig
         or unusualRuntime.appliedCharacter ~= playerCharacter
+        or not UnusualFns.sameUnusualTargetModelSet(
+            currentTargetSet,
+            unusualRuntime.appliedTargets
+        )
     then
         UnusualFns.traceSwap("SNAPSHOT_CAPTURE_BEGIN", "id=" .. tostring(equippedId), visualRig, playerCharacter)
-        unusualRuntime.nativeSnapshot =
+        local capturedSnapshot =
             UnusualFns.captureNativeUnusualSnapshot(
                 equippedId,
                 visualRig,
-                playerCharacter
+                playerCharacter,
+                snapshotForMerge
             )
+
+        if capturedSnapshot then
+            unusualRuntime.nativeSnapshot = capturedSnapshot
+        elseif not snapshotForMerge then
+            unusualRuntime.nativeSnapshot = nil
+        end
         local snap = unusualRuntime.nativeSnapshot
         local snapObjects = 0
         if snap then
@@ -9869,6 +9906,8 @@ function UnusualFns.activateUnusual()
         visualRig
     unusualRuntime.appliedCharacter =
         playerCharacter
+    unusualRuntime.appliedTargets =
+        UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
     unusualRuntime.originalId =
         equippedId
     unusualRuntime.currentEquippedId =
@@ -9987,6 +10026,8 @@ function UnusualFns.reapplyUnusual()
                     unusualEnabled = false
                     unusualRuntime.appliedRig = visualRig
                     unusualRuntime.appliedCharacter = playerCharacter
+                    unusualRuntime.appliedTargets =
+                        UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
                     unusualRuntime.originalId = nil
                     unusualRuntime.replacementId = nil
                     unusualRuntime.nativeSnapshot = nil
@@ -10025,6 +10066,8 @@ function UnusualFns.reapplyUnusual()
                             visualRig
                         unusualRuntime.appliedCharacter =
                             playerCharacter
+                        unusualRuntime.appliedTargets =
+                            UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
                         break
                     end
 
@@ -10280,16 +10323,15 @@ end
 __UI.__L.forEachDeadEyeUnusualVisualObject = function(
     callback
 )
-    local roots = {
+    local roots = {}
+    for _, target in ipairs(UnusualFns.getUnusualTargetModels(
         UnusualFns.getUnusualVisualRig(),
-        UnusualFns.getUnusualPlayerCharacter(),
-        workspace:FindFirstChild(
-            "DeadEyeUnusualAnimatedVisuals"
-        ),
-        workspace:FindFirstChild(
-            "DeadEyeUnusualVisuals"
-        )
-    }
+        UnusualFns.getUnusualPlayerCharacter()
+    )) do
+        table.insert(roots, target.model)
+    end
+    table.insert(roots, workspace:FindFirstChild("DeadEyeUnusualAnimatedVisuals"))
+    table.insert(roots, workspace:FindFirstChild("DeadEyeUnusualVisuals"))
 
     local seenRoots = {}
 
@@ -23679,7 +23721,10 @@ __UI.__L.cleanupUnusual = function()
     local currentPlayerCharacter =
         UnusualFns.getUnusualPlayerCharacter()
 
-    --// Snapshot is only valid for the rig it was captured from.
+    local currentTargetSet =
+        UnusualFns.getUnusualTargetModelSet(currentVisualRig, currentPlayerCharacter)
+
+    --// Snapshot is only valid for the model set it was captured from.
     --// Prefer the snapshot from a completed reapply on this rig.
     --// Otherwise capture the native effect if the new rig still has it.
     if currentVisualRig
@@ -23692,6 +23737,10 @@ __UI.__L.cleanupUnusual = function()
     then
         if unusualRuntime.appliedRig == currentVisualRig
             and unusualRuntime.appliedCharacter == currentPlayerCharacter
+            and UnusualFns.sameUnusualTargetModelSet(
+                currentTargetSet,
+                unusualRuntime.appliedTargets
+            )
             and unusualRuntime.nativeSnapshot
         then
             runtimeSnapshot =
@@ -23701,12 +23750,17 @@ __UI.__L.cleanupUnusual = function()
         elseif runtimeSnapshotRig
             ~= currentVisualRig
             or unusualRuntime.appliedCharacter ~= currentPlayerCharacter
+            or not UnusualFns.sameUnusualTargetModelSet(
+                currentTargetSet,
+                unusualRuntime.appliedTargets
+            )
         then
             local freshSnapshot =
                 UnusualFns.captureNativeUnusualSnapshot(
                     runtimeOriginalId,
                     currentVisualRig,
-                    currentPlayerCharacter
+                    currentPlayerCharacter,
+                    unusualRuntime.nativeSnapshot
                 )
 
             if freshSnapshot then
