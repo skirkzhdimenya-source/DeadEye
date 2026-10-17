@@ -444,12 +444,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.258
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.259
 --//
 --// ВАЖНО:
---// После каждого полностью завершённого изменения скрипта
---// обязательно повышать версию на 0.01.
---// Пример: v1.80 -> v1.81 -> v1.82 -> v1.83 -> v1.84 -> v1.85 -> v1.86 -> v1.87 -> v1.88 -> v1.89 -> v1.90 -> v1.91 -> v1.92 -> v1.93 -> v1.94 -> v1.95 -> v1.96 -> v1.97 -> v1.98 -> v1.99 -> v1.100 -> v1.101 -> v1.102 -> v1.103 -> v1.104 -> v1.105. -> v1.106 -> v1.107. -> v1.108. -> v1.109. -> v1.110. -> v1.111. -> v1.112 -> v1.113 -> v1.114 -> v1.115 -> v1.116 -> v1.117 -> v1.118.
+--// После каждого завершённого изменения повышай только число после точки.
+--// Например: 1.258 -> 1.259. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -476,7 +475,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.258"
+local SCRIPT_VERSION = "1.259"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -790,7 +789,6 @@ function saveSavedConfig()
     return true
 end
 loadSavedConfig()
---// =========================================================
 --// =========================================================
 --// LOCAL PORTRAIT OVERRIDE MODULE
 --// =========================================================
@@ -1258,7 +1256,6 @@ function getSlotByOriginalId(id)
     end
     return nil
 end
---// =========================================================
 --// =========================================================
 --// EMOTE RUNTIME MODULE
 --// =========================================================
@@ -2559,7 +2556,6 @@ function UnusualFns.buildUnusualList()
 UnusualFns.buildUnusualList()
 --// =========================================================
 --// GET UNUSUAL NAME
---// =========================================================
 --// =========================================================
 --// COSMETIC HELPERS
 --// =========================================================
@@ -9299,7 +9295,6 @@ function UnusualFns.buildOriginalUnusualSignature(
 end
 
 --// =========================================================
---// =========================================================
 --// PRESERVE NATIVE WELDED COSMETIC TREES
 --// =========================================================
 
@@ -11224,7 +11219,6 @@ function UnusualFns.reapplyUnusual()
 
     end)
 end
---// =========================================================
 --// =========================================================
 --// FIRST PERSON / VIEWMODEL SYNC
 --//
@@ -13768,6 +13762,88 @@ function others.getHumanoids()
 
     return result
 end
+
+--// Collect all currently live avatar representations, independent of whether
+--// the UI is currently showing the menu preview or a round character.
+--// Resolve each VisualRig by its explicit RigService binding; never sweep all
+--// same-name cached rigs in Workspace.Rigs.
+function others.getAllAvatarHumanoids()
+    local result = {}
+    local seenHumanoids = {}
+    local seenModels = {}
+
+    local function addModel(model)
+        if not model
+            or not model:IsA("Model")
+            or not model.Parent
+            or seenModels[model]
+        then
+            return
+        end
+
+        seenModels[model] = true
+        local humanoid = model:FindFirstChildOfClass("Humanoid")
+        if humanoid and humanoid.Parent and not seenHumanoids[humanoid] then
+            seenHumanoids[humanoid] = true
+            table.insert(result, humanoid)
+        end
+    end
+
+    local function addBoundRig(character)
+        if not character then
+            return
+        end
+
+        local rig
+        pcall(function()
+            rig = getVisualRigBoundToCharacter(character)
+        end)
+        addModel(rig)
+    end
+
+    -- Current resolver target; depending on state this is the menu or round rig.
+    addModel(UnusualFns.getUnusualVisualRig())
+
+    -- Live round character and the visual rig explicitly bound to it.
+    local playersFolder = workspace:FindFirstChild("Players")
+    if playersFolder then
+        for _, character in ipairs(playersFolder:GetChildren()) do
+            if character:IsA("Model")
+                and character.Name == LocalPlayer.Name
+                and character.Parent
+                and character:GetAttribute("PreviewRig") ~= true
+            then
+                addBoundRig(character)
+                addModel(character)
+                break
+            end
+        end
+    end
+
+    -- Menu preview and the visual rig explicitly bound to that preview.
+    local preview = UnusualFns.getUnusualMenuPreviewCharacter()
+    if preview then
+        addBoundRig(preview)
+        addModel(preview)
+    end
+
+    -- Retain the existing resolver's fallback targets without making the
+    -- current UI state decide which of the two representations gets reset.
+    local currentOK, currentTargets = pcall(function()
+        return UnusualFns.getUnusualTargetModels(
+            UnusualFns.getUnusualVisualRig(),
+            UnusualFns.getUnusualPlayerCharacter()
+        )
+    end)
+    if currentOK then
+        for _, target in ipairs(currentTargets) do
+            addModel(target.model)
+        end
+    end
+
+    return result
+end
+
 function others.getHumanoid()
     return others.getHumanoids()[1]
 end
@@ -14658,7 +14734,6 @@ function others.restore(
 end
 
 --// =========================================================
---// =========================================================
 --// Dedicated Avatar shutdown hook. Called by both GUI close and F6,
 --// independent of whether the main GUI cleanup callback still exists.
 local avatarCleanupCompleted = false
@@ -14694,21 +14769,13 @@ function others.resetToInitialAvatar()
         return false
     end
 
-    if not others.isR6() then
-        __DDCore.Log("AVATAR RESET FAILED|active Humanoid is not R6")
-        if others.status then
-            others.status.Text = "R6 only"
-        end
-        return false
-    end
-
     local targets = {}
     local listOK, listError = pcall(function()
-        targets = others.getHumanoids()
+        targets = others.getAllAvatarHumanoids()
     end)
 
     if not listOK or #targets == 0 then
-        __DDCore.Log("AVATAR RESET FAILED|no current Humanoids|error="
+        __DDCore.Log("AVATAR RESET FAILED|no avatar Humanoids found|error="
             .. tostring(listError))
         if others.status then
             others.status.Text = "Reset failed • no rig"
@@ -14716,9 +14783,31 @@ function others.resetToInitialAvatar()
         return false
     end
 
-    -- Capture each newly encountered Humanoid's native state BEFORE applying
-    -- the reset. Never overwrite snapshots already captured before Avatar edits.
+    local r6Targets = {}
+    local nonR6 = 0
     for _, humanoid in ipairs(targets) do
+        local rigTypeOK, rigType = pcall(function()
+            return humanoid.RigType
+        end)
+        if rigTypeOK and rigType == Enum.HumanoidRigType.R6 then
+            table.insert(r6Targets, humanoid)
+        else
+            nonR6 += 1
+        end
+    end
+
+    if #r6Targets == 0 then
+        __DDCore.Log("AVATAR RESET FAILED|no R6 Humanoids|targets="
+            .. tostring(#targets) .. "|nonR6=" .. tostring(nonR6))
+        if others.status then
+            others.status.Text = "R6 only"
+        end
+        return false
+    end
+
+    -- Capture newly found rigs before applying the baseline. Existing snapshots
+    -- are intentionally preserved so script shutdown can restore each one.
+    for _, humanoid in ipairs(r6Targets) do
         pcall(function()
             others.captureOriginalDescriptionForHumanoid(humanoid)
         end)
@@ -14726,68 +14815,63 @@ function others.resetToInitialAvatar()
 
     local applied = 0
     local failures = {}
+    local modelNames = {}
 
-    for _, humanoid in ipairs(targets) do
-        if humanoid
-            and humanoid:IsA("Humanoid")
-            and humanoid.Parent
-        then
-            local ok, result = pcall(function()
-                return others.applyDescriptionDirect(
-                    humanoid,
-                    others.originalDescription
-                )
-            end)
-
-            if ok and result then
-                applied += 1
-                others.appliedHumanoids[humanoid] = true
-            else
-                table.insert(
-                    failures,
-                    tostring(humanoid:GetFullName())
-                        .. ":" .. tostring(result)
-                )
+    for _, humanoid in ipairs(r6Targets) do
+        local modelName = tostring(humanoid.Parent)
+        pcall(function()
+            if humanoid.Parent then
+                modelName = humanoid.Parent:GetFullName()
             end
+        end)
+        table.insert(modelNames, modelName)
+
+        local ok, result = pcall(function()
+            return others.applyDescriptionDirect(
+                humanoid,
+                others.originalDescription
+            )
+        end)
+
+        if ok and result then
+            applied += 1
+            others.appliedHumanoids[humanoid] = true
+        else
+            table.insert(failures, modelName .. ":" .. tostring(result))
         end
     end
 
     if applied > 0 then
         pcall(function()
-            others.lastAppliedDescription =
-                others.originalDescription:Clone()
+            others.lastAppliedDescription = others.originalDescription:Clone()
         end)
-        others.avatarSyncEnabled =
-            others.lastAppliedDescription ~= nil
-
-        __DDCore.Log(
-            "AVATAR RESET|baseline=initial"
-            .. "|targets=" .. tostring(#targets)
-            .. "|applied=" .. tostring(applied)
-            .. "|failed=" .. tostring(#failures)
-            .. "|sync=" .. tostring(others.avatarSyncEnabled)
-        )
-
-        if others.status then
-            others.status.Text =
-                "Initial avatar restored • " .. tostring(applied)
-        end
-
-        return true
+        others.avatarSyncEnabled = others.lastAppliedDescription ~= nil
     end
 
     __DDCore.Log(
-        "AVATAR RESET FAILED|baseline=initial"
+        (applied > 0 and "AVATAR RESET|" or "AVATAR RESET FAILED|")
+        .. "baseline=initial"
         .. "|targets=" .. tostring(#targets)
-        .. "|applied=0"
-        .. "|errors=" .. table.concat(failures, " ; ")
+        .. "|r6Targets=" .. tostring(#r6Targets)
+        .. "|applied=" .. tostring(applied)
+        .. "|failed=" .. tostring(#failures)
+        .. "|nonR6Skipped=" .. tostring(nonR6)
+        .. "|models=" .. table.concat(modelNames, ";")
+        .. "|sync=" .. tostring(others.avatarSyncEnabled)
+        .. (#failures > 0 and "|errors=" .. table.concat(failures, " ; ") or "")
     )
 
     if others.status then
-        others.status.Text = "Reset failed • see log"
+        if #failures == 0 and applied == #r6Targets then
+            others.status.Text = "Initial avatar restored • " .. tostring(applied)
+        elseif applied > 0 then
+            others.status.Text = "Partial reset • " .. tostring(applied) .. "/" .. tostring(#r6Targets)
+        else
+            others.status.Text = "Reset failed • see log"
+        end
     end
 
-    return false
+    return applied > 0 and #failures == 0
 end
 
 --// FIRST-PERSON HEAD/CAMERA VISIBILITY
@@ -16113,7 +16197,6 @@ function mainJump.setAirTurnSpeed(value, persist)
     end
 end
 
---// =========================================================
 --// =========================================================
 --// RAGE LOOK
 --//
@@ -17680,31 +17763,6 @@ function mainJump.setDelay(value)
             mainJump.jumpDelay
         )
     mainJump.saveConfig()
-end
-
-function mainJump.getCrouchMovement()
-    local object =
-        getCharacterObject()
-
-    if not object then
-        return nil
-    end
-
-    local movement
-
-    pcall(function()
-        movement = object.Movement
-    end)
-
-    if type(movement) ~= "table" then
-        return nil
-    end
-
-    if type(movement.KeyUsed) ~= "function" then
-        return nil
-    end
-
-    return movement
 end
 
 function mainJump.getCrouchMovement()
@@ -22950,7 +23008,6 @@ end
 --// APPLY ALL OTHERS
 --// Applies every current field in one HumanoidDescription call.
 --// =========================================================
---// =========================================================
 --// AVATAR DUMP IMPORT
 --// Accepts the JSON copied from the DeadEye avatar dumper.
 --// Applies items, body colors, body scales and accessory
@@ -25451,7 +25508,6 @@ genv.UNUSUAL_SWAPPER_CLEANUP =
 --// =========================================================
 --// REPLACE EXISTING TOGGLE BEHAVIOUR
 --// =========================================================
---// =========================================================
 --// TOGGLE
 --// =========================================================
 Toggle =
@@ -27331,15 +27387,6 @@ __UI.__L.rebuildPicker = function()
     emotePickerPreloaded = true
 end
 --// =========================================================
---// =========================================================
---// =========================================================
---// =========================================================
---// =========================================================
---// =========================================================
---// =========================================================
---// =========================================================
---// =========================================================
---// =========================================================
 --// PICKER APPEARANCE
 --// 2.2-second fade + size-in from the center.
 --// Uses the popup Size instead of UIScale, so Roblox does not
@@ -28693,7 +28740,6 @@ __UI.__L.addConnection(
     )
 )
 --// =========================================================
---// =========================================================
 --// GLASS SURFACE FINISH
 --// =========================================================
 for _, object in ipairs(
@@ -28738,8 +28784,6 @@ for _, object in ipairs(
     end
 end
 
---// =========================================================
---// =========================================================
 --// =========================================================
 --// AUTO JUMP MODE PICKER - EXACT BASE VISUAL
 --//
