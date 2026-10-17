@@ -464,7 +464,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.253"
+local SCRIPT_VERSION = "1.254"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -9832,6 +9832,62 @@ function UnusualFns.captureNativeUnusualSnapshot(
                         end
 
                         break
+                    end
+                end
+            end
+        end
+
+        -- Trails/Beams can point to a plain Attachment which has no FX child
+        -- of its own. Such an Attachment is not part of the signature, but it
+        -- is still required for the effect to render after a rig rebuild.
+        local neededAttachments = {}
+        pcall(function()
+            neededAttachments =
+                __UI.__L.getNeededUnusualAttachments(sourcePart)
+        end)
+
+        for attachment in pairs(neededAttachments) do
+            if not sharedMap[attachment] then
+                local sourceRoot = attachment
+                while sourceRoot.Parent
+                    and sourceRoot.Parent ~= sourcePart
+                do
+                    sourceRoot = sourceRoot.Parent
+                end
+
+                if sourceRoot.Parent == sourcePart then
+                    local savedRoot = findSavedRoot(
+                        partSnapshot.objects,
+                        sourceRoot,
+                        usedSavedObjects
+                    )
+
+                    if not savedRoot then
+                        savedRoot = cloneForTarget(sourceRoot, targetPart)
+                        if savedRoot then
+                            table.insert(partSnapshot.objects, savedRoot)
+                            templateAddedRoots += 1
+                        else
+                            templateCloneFailures += 1
+                        end
+                    end
+
+                    if savedRoot then
+                        usedSavedObjects[savedRoot] = true
+                        local complete, added = mergeTemplateTree(
+                            sourceRoot,
+                            savedRoot,
+                            targetPart,
+                            sharedMap
+                        )
+                        templateAddedDescendants += added
+                        if not complete then
+                            templateCloneFailures += 1
+                        end
+                        table.insert(templatePairs, {
+                            source = sourceRoot,
+                            saved = savedRoot
+                        })
                     end
                 end
             end
