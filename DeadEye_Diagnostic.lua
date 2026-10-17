@@ -9489,6 +9489,7 @@ function UnusualFns.captureNativeUnusualSnapshot(
             pcall(function()
                 object:SetAttribute("DeadEyeUnusualFX", nil)
                 object:SetAttribute("DeadEyeUnusualFXID", nil)
+                object:SetAttribute("DeadEyeNativeFallback", nil)
             end)
         end
     end
