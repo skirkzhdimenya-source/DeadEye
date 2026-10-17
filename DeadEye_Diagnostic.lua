@@ -442,11 +442,11 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.265
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.266
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
---// Например: 1.264 -> 1.265. Основная версия остаётся 1.
+--// Например: 1.265 -> 1.266. Основная версия остаётся 1.
 --// =========================================================
 --// EMOTE SWAPPER - 12 SLOTS + SEARCH
 --//
@@ -473,7 +473,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.265"
+local SCRIPT_VERSION = "1.266"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -9769,11 +9769,18 @@ end
 --// =========================================================
 --// ACTIVATE UNUSUAL
 -- =========================================================
+local avatarMutationActivationPermit = false
 function UnusualFns.activateUnusual()
     UnusualFns.traceSwap("ACTIVATE_ENTER", "button/reapply path")
     if genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS then
-        __DDCore.Log("UNUSUAL ACTIVATE DEFERRED|avatar mutation in progress")
-        return false
+        if avatarMutationActivationPermit then
+            -- Consume the one-shot permit before any yielding operation so other
+            -- UI activations remain blocked until the avatar transaction finishes.
+            avatarMutationActivationPermit = false
+        else
+            __DDCore.Log("UNUSUAL ACTIVATE DEFERRED|avatar mutation in progress")
+            return false
+        end
     end
     if not unusualSlot.originalId
         or not unusualSlot.replaceId
@@ -12501,11 +12508,16 @@ function others.endAvatarMutation(token, operation)
     end
 
     local state = others.avatarMutationState
-    others.avatarMutationState = nil
-    genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = false
+    -- Keep the mutation lock held while reactivating/restoring the native effect.
+    -- That operation yields; releasing the lock first would let a second Reset race it.
+    others.avatarMutationDepth = 1
+    genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = true
 
     if state and state.wasActive then
         if not state.safe then
+            others.avatarMutationDepth = 0
+            others.avatarMutationState = nil
+            genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = false
             __DDCore.Log("AVATAR UNUSUAL RESUME SKIPPED|reason=suspend failed; no avatar mutation should have run")
             __DDCore.Log("AVATAR MUTATION END|operation=" .. tostring(operation)
                 .. "|safe=false")
@@ -12519,9 +12531,11 @@ function others.endAvatarMutation(token, operation)
         -- Re-activate once so the swap captures a fresh original-effect snapshot
         -- after the avatar rig was rebuilt. If the user turned the swap off while
         -- the mutation was running, immediately restore that freshly captured tree.
+        avatarMutationActivationPermit = true
         local activateOK, activateResult = pcall(function()
             return UnusualFns.activateUnusual()
         end)
+        avatarMutationActivationPermit = false
         __DDCore.Log("AVATAR UNUSUAL RESUME|operation=" .. tostring(operation)
             .. "|activateCallOK=" .. tostring(activateOK)
             .. "|activateResult=" .. tostring(activateResult)
@@ -12563,6 +12577,10 @@ function others.endAvatarMutation(token, operation)
             end
         end)
     end
+
+    others.avatarMutationDepth = 0
+    others.avatarMutationState = nil
+    genv.DEADEYE_AVATAR_MUTATION_IN_PROGRESS = false
 
     __DDCore.Log("AVATAR MUTATION END|operation=" .. tostring(operation)
         .. "|safe=" .. tostring(state and state.safe))
