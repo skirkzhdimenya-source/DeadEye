@@ -1,25 +1,26 @@
 --// DEADEYE DIAGNOSTIC BOOTSTRAP (starts before DeadEye initialization)
-__DDEnv = _G
+local __DDCore = {}
+__DDCore.Env = _G
 pcall(function()
     if type(getgenv) == "function" then
-        __DDEnv = getgenv()
+        __DDCore.Env = getgenv()
     end
 end)
 
-__DDPreviousState = __DDEnv.DEADEYE_DIAG_STATE
+__DDCore.PreviousState = __DDCore.Env.DEADEYE_DIAG_STATE
 pcall(function()
-    if type(__DDPreviousState) == "table" then
-        if __DDPreviousState.messageConnection then
-            __DDPreviousState.messageConnection:Disconnect()
+    if type(__DDCore.PreviousState) == "table" then
+        if __DDCore.PreviousState.messageConnection then
+            __DDCore.PreviousState.messageConnection:Disconnect()
         end
-        if __DDPreviousState.inputConnection then
-            __DDPreviousState.inputConnection:Disconnect()
+        if __DDCore.PreviousState.inputConnection then
+            __DDCore.PreviousState.inputConnection:Disconnect()
         end
-        if __DDPreviousState.guiConnection then
-            __DDPreviousState.guiConnection:Disconnect()
+        if __DDCore.PreviousState.guiConnection then
+            __DDCore.PreviousState.guiConnection:Disconnect()
         end
-        if type(__DDPreviousState.buttonConnections) == "table" then
-            for _, connection in pairs(__DDPreviousState.buttonConnections) do
+        if type(__DDCore.PreviousState.buttonConnections) == "table" then
+            for _, connection in pairs(__DDCore.PreviousState.buttonConnections) do
                 pcall(function()
                     connection:Disconnect()
                 end)
@@ -28,7 +29,7 @@ pcall(function()
     end
 end)
 
-__DDState = {
+__DDCore.State = {
     active = true,
     stopRequested = false,
     log = {},
@@ -40,17 +41,17 @@ __DDState = {
     repeatCount = 0
 }
 
-__DDEnv.DEADEYE_DIAG_STATE = __DDState
-__DDEnv.DEADEYE_DIAG_LOG = __DDState.log
+__DDCore.Env.DEADEYE_DIAG_STATE = __DDCore.State
+__DDCore.Env.DEADEYE_DIAG_LOG = __DDCore.State.log
 
-function __DDLog(message)
-    if not __DDState.active then
+function __DDCore.Log(message)
+    if not __DDCore.State.active then
         return
     end
 
     local elapsed = 0
     pcall(function()
-        elapsed = os.clock() - __DDState.startedAt
+        elapsed = os.clock() - __DDCore.State.startedAt
     end)
 
     local line = string.format(
@@ -59,7 +60,7 @@ function __DDLog(message)
         tostring(message)
     )
 
-    table.insert(__DDState.log, line)
+    table.insert(__DDCore.State.log, line)
 
     -- Keep all entries from launch until F6 copies the complete session log.
 
@@ -68,44 +69,44 @@ function __DDLog(message)
     end)
 end
 
-function __DDCallCleanup(label, callback)
-    __DDLog("BOOT CLEANUP BEGIN: " .. tostring(label))
+function __DDCore.CallCleanup(label, callback)
+    __DDCore.Log("BOOT CLEANUP BEGIN: " .. tostring(label))
     local ok, err = pcall(function()
         callback()
     end)
 
     if ok then
-        __DDLog("BOOT CLEANUP OK: " .. tostring(label))
+        __DDCore.Log("BOOT CLEANUP OK: " .. tostring(label))
     else
-        __DDLog("BOOT CLEANUP FAILED: " .. tostring(label) .. "\n" .. tostring(err))
+        __DDCore.Log("BOOT CLEANUP FAILED: " .. tostring(label) .. "\n" .. tostring(err))
     end
 
     return ok, err
 end
 
-__DDStopAndCopy = nil
-__DDStopAndCopy = function()
-    if __DDState.stopRequested then
+__DDCore.StopAndCopy = nil
+__DDCore.StopAndCopy = function()
+    if __DDCore.State.stopRequested then
         return
     end
 
-    __DDState.stopRequested = true
-    __DDLog("F6: FULL STOP requested; beginning DeadEye cleanup")
+    __DDCore.State.stopRequested = true
+    __DDCore.Log("F6: FULL STOP requested; beginning DeadEye cleanup")
 
     pcall(function()
-        __DDEnv.DEADEYE_MAIN_RUNNING = false
-        __DDEnv.EMOTE_SWAPPER_RUNNING = false
-        __DDEnv.DEADEYE_PORTRAIT_RUNNING = false
-        __DDEnv.DEADEYE_UNUSUAL_POV_RUNNING = false
+        __DDCore.Env.DEADEYE_MAIN_RUNNING = false
+        __DDCore.Env.EMOTE_SWAPPER_RUNNING = false
+        __DDCore.Env.DEADEYE_PORTRAIT_RUNNING = false
+        __DDCore.Env.DEADEYE_UNUSUAL_POV_RUNNING = false
     end)
 
-    local mainCleanup = __DDEnv.EMOTE_SWAPPER_CLEANUP
+    local mainCleanup = __DDCore.Env.EMOTE_SWAPPER_CLEANUP
     local mainCleanupOK = false
 
     if type(mainCleanup) == "function" then
-        mainCleanupOK = __DDCallCleanup("EMOTE_SWAPPER_CLEANUP (main)", mainCleanup)
+        mainCleanupOK = __DDCore.CallCleanup("EMOTE_SWAPPER_CLEANUP (main)", mainCleanup)
     else
-        __DDLog("F6: main cleanup callback not installed yet")
+        __DDCore.Log("F6: main cleanup callback not installed yet")
     end
 
     -- If the regular cleanup failed or the script stopped before assigning
@@ -123,21 +124,21 @@ __DDStopAndCopy = function()
             "DEADEYE_REVERSE_LOOK_CLEANUP",
             "DEADEYE_RAGE_LOOK_CLEANUP"
         }) do
-            local callback = __DDEnv[key]
+            local callback = __DDCore.Env[key]
             if callback then
-                __DDCallCleanup(key, callback)
+                __DDCore.CallCleanup(key, callback)
             end
         end
     end
 
     pcall(function()
-        __DDEnv.DEADEYE_MAIN_RUNNING = false
-        __DDEnv.EMOTE_SWAPPER_RUNNING = false
-        __DDEnv.DEADEYE_PORTRAIT_RUNNING = false
-        __DDEnv.DEADEYE_UNUSUAL_POV_RUNNING = false
+        __DDCore.Env.DEADEYE_MAIN_RUNNING = false
+        __DDCore.Env.EMOTE_SWAPPER_RUNNING = false
+        __DDCore.Env.DEADEYE_PORTRAIT_RUNNING = false
+        __DDCore.Env.DEADEYE_UNUSUAL_POV_RUNNING = false
     end)
 
-    __DDLog("F6: cleanup stage finished; preparing clipboard log")
+    __DDCore.Log("F6: cleanup stage finished; preparing clipboard log")
 
     local copied = false
     local chosenClipboard = nil
@@ -148,13 +149,13 @@ __DDStopAndCopy = function()
     }
 
     for _, name in ipairs(clipboardNames) do
-        local callback = __DDEnv[name]
+        local callback = __DDCore.Env[name]
         if type(callback) ~= "function" then
             callback = _G[name]
         end
 
         if type(callback) == "function" then
-            local ok = pcall(callback, table.concat(__DDState.log, "\n"))
+            local ok = pcall(callback, table.concat(__DDCore.State.log, "\n"))
             if ok then
                 copied = true
                 chosenClipboard = name
@@ -164,32 +165,32 @@ __DDStopAndCopy = function()
     end
 
     if copied then
-        __DDLog("F6: clipboard API succeeded (" .. tostring(chosenClipboard) .. ")")
+        __DDCore.Log("F6: clipboard API succeeded (" .. tostring(chosenClipboard) .. ")")
         -- Copy a second time so the clipboard also contains the final status line.
-        local callback = __DDEnv[chosenClipboard]
+        local callback = __DDCore.Env[chosenClipboard]
         if type(callback) ~= "function" then
             callback = _G[chosenClipboard]
         end
         if type(callback) == "function" then
-            pcall(callback, table.concat(__DDState.log, "\n"))
+            pcall(callback, table.concat(__DDCore.State.log, "\n"))
         end
     else
-        __DDLog("F6: clipboard API unavailable/failed; log remains in getgenv().DEADEYE_DIAG_LOG")
+        __DDCore.Log("F6: clipboard API unavailable/failed; log remains in getgenv().DEADEYE_DIAG_LOG")
     end
 
-    __DDState.active = false
+    __DDCore.State.active = false
 
     pcall(function()
-        if __DDState.messageConnection then
-            __DDState.messageConnection:Disconnect()
+        if __DDCore.State.messageConnection then
+            __DDCore.State.messageConnection:Disconnect()
         end
-        if __DDState.inputConnection then
-            __DDState.inputConnection:Disconnect()
+        if __DDCore.State.inputConnection then
+            __DDCore.State.inputConnection:Disconnect()
         end
-        if __DDState.guiConnection then
-            __DDState.guiConnection:Disconnect()
+        if __DDCore.State.guiConnection then
+            __DDCore.State.guiConnection:Disconnect()
         end
-        for _, connection in pairs(__DDState.buttonConnections) do
+        for _, connection in pairs(__DDCore.State.buttonConnections) do
             pcall(function()
                 connection:Disconnect()
             end)
@@ -197,15 +198,15 @@ __DDStopAndCopy = function()
     end)
 end
 
-__DDEnv.DEADEYE_DIAG_STOP = __DDStopAndCopy
-__DDLog("BOOT: first executable statement reached; diagnostic capture is active")
+__DDCore.Env.DEADEYE_DIAG_STOP = __DDCore.StopAndCopy
+__DDCore.Log("BOOT: first executable statement reached; diagnostic capture is active")
 
 -- Capture engine/runtime errors and warnings from the very beginning.
-__DDLogListenerInstalled = false
-__DDLogListenerOK, __DDLogListenerError = pcall(function()
+__DDCore.LogListenerInstalled = false
+__DDCore.LogListenerOK, __DDCore.LogListenerError = pcall(function()
     local logService = game:GetService("LogService")
-    __DDState.messageConnection = logService.MessageOut:Connect(function(message, messageType)
-        if not __DDState.active then
+    __DDCore.State.messageConnection = logService.MessageOut:Connect(function(message, messageType)
+        if not __DDCore.State.active then
             return
         end
 
@@ -217,51 +218,51 @@ __DDLogListenerOK, __DDLogListenerError = pcall(function()
         end
 
         local text = tostring(message)
-        if text == __DDState.repeatMessage then
-            __DDState.repeatCount = __DDState.repeatCount + 1
-            if __DDState.repeatCount == 1
-                or __DDState.repeatCount == 10
-                or __DDState.repeatCount % 100 == 0
+        if text == __DDCore.State.repeatMessage then
+            __DDCore.State.repeatCount = __DDCore.State.repeatCount + 1
+            if __DDCore.State.repeatCount == 1
+                or __DDCore.State.repeatCount == 10
+                or __DDCore.State.repeatCount % 100 == 0
             then
-                __DDLog("ENGINE " .. typeName .. " (repeated x"
-                    .. tostring(__DDState.repeatCount + 1) .. "): " .. text)
+                __DDCore.Log("ENGINE " .. typeName .. " (repeated x"
+                    .. tostring(__DDCore.State.repeatCount + 1) .. "): " .. text)
             end
             return
         end
 
-        if __DDState.repeatCount > 0 then
-            __DDLog("ENGINE previous message repeated x"
-                .. tostring(__DDState.repeatCount + 1))
+        if __DDCore.State.repeatCount > 0 then
+            __DDCore.Log("ENGINE previous message repeated x"
+                .. tostring(__DDCore.State.repeatCount + 1))
         end
-        __DDState.repeatMessage = text
-        __DDState.repeatCount = 0
-        __DDLog("ENGINE " .. typeName .. ": " .. text)
+        __DDCore.State.repeatMessage = text
+        __DDCore.State.repeatCount = 0
+        __DDCore.Log("ENGINE " .. typeName .. ": " .. text)
     end)
-    __DDLogListenerInstalled = true
+    __DDCore.LogListenerInstalled = true
 end)
-if not __DDLogListenerOK then
-    __DDLog("BOOT ERROR: failed to install LogService listener: " .. tostring(__DDLogListenerError))
+if not __DDCore.LogListenerOK then
+    __DDCore.Log("BOOT ERROR: failed to install LogService listener: " .. tostring(__DDCore.LogListenerError))
 end
 
 -- F6 is reserved for diagnostic stop + copy-log in this build.
-__DDF6ListenerInstalled = false
-__DDF6ListenerOK, __DDF6ListenerError = pcall(function()
+__DDCore.F6ListenerInstalled = false
+__DDCore.F6ListenerOK, __DDCore.F6ListenerError = pcall(function()
     local inputService = game:GetService("UserInputService")
-    __DDState.inputConnection = inputService.InputBegan:Connect(function(input)
+    __DDCore.State.inputConnection = inputService.InputBegan:Connect(function(input)
         if tostring(input.KeyCode) == "Enum.KeyCode.F6" then
-            __DDStopAndCopy()
+            __DDCore.StopAndCopy()
         end
     end)
-    __DDF6ListenerInstalled = true
+    __DDCore.F6ListenerInstalled = true
 end)
-if not __DDF6ListenerOK then
-    __DDLog("BOOT ERROR: failed to install F6 listener: " .. tostring(__DDF6ListenerError))
+if not __DDCore.F6ListenerOK then
+    __DDCore.Log("BOOT ERROR: failed to install F6 listener: " .. tostring(__DDCore.F6ListenerError))
 end
 
-__DDLog("BOOT listeners: LogService=" .. tostring(__DDLogListenerInstalled)
-    .. ", F6=" .. tostring(__DDF6ListenerInstalled))
+__DDCore.Log("BOOT listeners: LogService=" .. tostring(__DDCore.LogListenerInstalled)
+    .. ", F6=" .. tostring(__DDCore.F6ListenerInstalled))
 
-function __DDTraceback(err)
+function __DDCore.Traceback(err)
     local message = tostring(err)
     pcall(function()
         if debug and type(debug.traceback) == "function" then
@@ -271,12 +272,12 @@ function __DDTraceback(err)
     return message
 end
 
-__DDPack = table.pack or function(...)
+__DDCore.Pack = table.pack or function(...)
     return { n = select("#", ...), ... }
 end
-__DDUnpack = table.unpack or unpack
+__DDCore.Unpack = table.unpack or unpack
 
-function __DDValue(value)
+function __DDCore.Value(value)
     if value == nil then
         return "nil"
     end
@@ -320,11 +321,11 @@ function __DDValue(value)
     return result
 end
 
-function __DDArgs(args)
+function __DDCore.Args(args)
     local values = {}
     local limit = math.min(args.n or #args, 6)
     for i = 1, limit do
-        values[#values + 1] = __DDValue(args[i])
+        values[#values + 1] = __DDCore.Value(args[i])
     end
     if (args.n or #args) > limit then
         values[#values + 1] = "..."
@@ -332,43 +333,43 @@ function __DDArgs(args)
     return table.concat(values, ", ")
 end
 
-function __DDWrapFunction(original, label, mode)
+function __DDCore.WrapFunction(original, label, mode)
     if type(original) ~= "function" then
-        __DDLog("WRAP SKIPPED: " .. tostring(label) .. " is " .. type(original))
+        __DDCore.Log("WRAP SKIPPED: " .. tostring(label) .. " is " .. type(original))
         return original
     end
 
     local calls = 0
     local function wrapped(...)
-        if not __DDState.active then
+        if not __DDCore.State.active then
             return original(...)
         end
 
         calls = calls + 1
-        local args = __DDPack(...)
+        local args = __DDCore.Pack(...)
 
         if mode == "sample" then
             if calls == 1 or calls % 300 == 0 then
-                __DDLog("CALL " .. label .. " count=" .. tostring(calls)
-                    .. " args=" .. __DDArgs(args))
+                __DDCore.Log("CALL " .. label .. " count=" .. tostring(calls)
+                    .. " args=" .. __DDCore.Args(args))
             end
         elseif mode == "result" then
             if calls == 1 then
-                __DDLog("CALL " .. label .. " (first call) args=" .. __DDArgs(args))
+                __DDCore.Log("CALL " .. label .. " (first call) args=" .. __DDCore.Args(args))
             end
         else
-            __DDLog("CALL " .. label .. " args=" .. __DDArgs(args))
+            __DDCore.Log("CALL " .. label .. " args=" .. __DDCore.Args(args))
         end
 
         local ok, packedOrError = xpcall(function()
-            return __DDPack(original(__DDUnpack(args, 1, args.n)))
-        end, __DDTraceback)
+            return __DDCore.Pack(original(__DDCore.Unpack(args, 1, args.n)))
+        end, __DDCore.Traceback)
 
         if not ok then
-            local count = (__DDState.errorCounts[label] or 0) + 1
-            __DDState.errorCounts[label] = count
+            local count = (__DDCore.State.errorCounts[label] or 0) + 1
+            __DDCore.State.errorCounts[label] = count
             if count <= 5 or count % 100 == 0 then
-                __DDLog("THROW " .. label .. " count=" .. tostring(count)
+                __DDCore.Log("THROW " .. label .. " count=" .. tostring(count)
                     .. "\n" .. tostring(packedOrError))
             end
             error(packedOrError, 0)
@@ -377,26 +378,26 @@ function __DDWrapFunction(original, label, mode)
         local results = packedOrError
         if mode == "result" then
             if results.n == 0 or results[1] == false or results[1] == nil then
-                __DDLog("RESULT " .. label .. " => " .. __DDArgs(results))
+                __DDCore.Log("RESULT " .. label .. " => " .. __DDCore.Args(results))
             elseif calls == 1 then
-                __DDLog("RESULT " .. label .. " => " .. __DDArgs(results))
+                __DDCore.Log("RESULT " .. label .. " => " .. __DDCore.Args(results))
             end
         elseif mode ~= "sample" then
-            __DDLog("RETURN " .. label .. " => " .. __DDArgs(results))
+            __DDCore.Log("RETURN " .. label .. " => " .. __DDCore.Args(results))
         end
 
-        return __DDUnpack(results, 1, results.n)
+        return __DDCore.Unpack(results, 1, results.n)
     end
 
     return wrapped
 end
 
-function __DDWrapTable(target, key, label, mode)
+function __DDCore.WrapTable(target, key, label, mode)
     if type(target) ~= "table" then
-        __DDLog("WRAP SKIPPED: " .. tostring(label) .. " owner is " .. type(target))
+        __DDCore.Log("WRAP SKIPPED: " .. tostring(label) .. " owner is " .. type(target))
         return
     end
-    target[key] = __DDWrapFunction(target[key], label, mode)
+    target[key] = __DDCore.WrapFunction(target[key], label, mode)
 end
 
 
@@ -435,7 +436,7 @@ end
 --//   close button
 --// =========================================================
 local SCRIPT_VERSION = "1.239"
-__DDLog("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
+__DDCore.Log("BOOT: SCRIPT_VERSION=" .. SCRIPT_VERSION)
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
 --// These reminders must stay near script start.
@@ -447,17 +448,17 @@ local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local genv = getgenv and getgenv() or _G
-__DDLog("BOOT checkpoint: LocalPlayer=" .. tostring(LocalPlayer) .. ", core services acquired")
+__DDCore.Log("BOOT checkpoint: LocalPlayer=" .. tostring(LocalPlayer) .. ", core services acquired")
 
 -- Stop stale runtime components and log each cleanup attempt.
-__DDLog("BOOT: checking previous-instance cleanup hooks")
-__DDPreviousFOVFix = genv.DeadEyeFOVBodyVisibilityFix
-if type(__DDPreviousFOVFix) == "table"
-    and type(__DDPreviousFOVFix.Stop) == "function"
+__DDCore.Log("BOOT: checking previous-instance cleanup hooks")
+__DDCore.PreviousFOVFix = genv.DeadEyeFOVBodyVisibilityFix
+if type(__DDCore.PreviousFOVFix) == "table"
+    and type(__DDCore.PreviousFOVFix.Stop) == "function"
 then
-    __DDCallCleanup("DeadEyeFOVBodyVisibilityFix.Stop", __DDPreviousFOVFix.Stop)
+    __DDCore.CallCleanup("DeadEyeFOVBodyVisibilityFix.Stop", __DDCore.PreviousFOVFix.Stop)
 else
-    __DDLog("BOOT CLEANUP SKIPPED: standalone FOV fix not present")
+    __DDCore.Log("BOOT CLEANUP SKIPPED: standalone FOV fix not present")
 end
 
 --// =========================================================
@@ -497,11 +498,11 @@ __UI.__L.purgeStaleMainJumpSensors = function()
     end
 end
 
-__DDLog("BOOT: purging stale jump sensors")
+__DDCore.Log("BOOT: purging stale jump sensors")
 __UI.__L.purgeStaleMainJumpSensors()
-__DDLog("BOOT: stale jump sensor purge returned")
+__DDCore.Log("BOOT: stale jump sensor purge returned")
 
-__DDCleanupHooks = {
+__DDCore.CleanupHooks = {
     "DEADEYE_MAIN_SENSORS_CLEANUP",
     "DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP",
     "DEADEYE_FOV_BODY_VISIBILITY_CLEANUP",
@@ -515,16 +516,16 @@ __DDCleanupHooks = {
     "EMOTE_SWAPPER_CLEANUP"
 }
 
-for _, cleanupName in ipairs(__DDCleanupHooks) do
+for _, cleanupName in ipairs(__DDCore.CleanupHooks) do
     local cleanupCallback = genv[cleanupName]
     if cleanupCallback then
-        __DDCallCleanup(cleanupName, cleanupCallback)
+        __DDCore.CallCleanup(cleanupName, cleanupCallback)
     else
-        __DDLog("BOOT CLEANUP SKIPPED: " .. cleanupName .. " not present")
+        __DDCore.Log("BOOT CLEANUP SKIPPED: " .. cleanupName .. " not present")
     end
 end
 
-__DDLog("BOOT: previous-instance cleanup sequence complete")
+__DDCore.Log("BOOT: previous-instance cleanup sequence complete")
 genv.DEADEYE_MAIN_RUNNING = true
 genv.EMOTE_SWAPPER_RUNNING = true
 genv.DEADEYE_PORTRAIT_RUNNING = true
@@ -544,7 +545,7 @@ local Registry = require(
     ReplicatedStorage.Items.Registry
 )
 local HttpService = game:GetService("HttpService")
-__DDLog("INIT checkpoint: CharacterService/ClientItemService/EmoteService/Registry requires completed; types="
+__DDCore.Log("INIT checkpoint: CharacterService/ClientItemService/EmoteService/Registry requires completed; types="
     .. type(__UI.CharacterService) .. "/" .. type(__UI.ClientItemService) .. "/" .. type(__UI.EmoteService) .. "/" .. type(Registry))
 --// =========================================================
 --// SETTINGS
@@ -988,9 +989,9 @@ function prepareReplaceModule(id)
         module
     return module
 end
-prepareOriginalModule = __DDWrapFunction(prepareOriginalModule, "EMOTE.prepareOriginalModule")
-prepareReplaceModule = __DDWrapFunction(prepareReplaceModule, "EMOTE.prepareReplaceModule")
-__DDLog("INIT: wrapped emote resolver functions before module construction")
+prepareOriginalModule = __DDCore.WrapFunction(prepareOriginalModule, "EMOTE.prepareOriginalModule")
+prepareReplaceModule = __DDCore.WrapFunction(prepareReplaceModule, "EMOTE.prepareReplaceModule")
+__DDCore.Log("INIT: wrapped emote resolver functions before module construction")
 --// =========================================================
 --// FIND EMOTE NAME
 --// =========================================================
@@ -1175,7 +1176,7 @@ end
 --// =========================================================
 --// EMOTE RUNTIME MODULE
 --// =========================================================
-__DDLog("INIT: loading external EmoteRuntime module")
+__DDCore.Log("INIT: loading external EmoteRuntime module")
 local EmoteRuntime =
     loadstring(
         game:HttpGet(
@@ -1201,7 +1202,7 @@ if type(EmoteRuntime) ~= "table" then
         "[DeadEye] EmoteRuntime module did not return an API table"
     )
 end
-__DDLog("INIT checkpoint: EmoteRuntime API loaded; checkState=" .. type(EmoteRuntime.checkState)
+__DDCore.Log("INIT checkpoint: EmoteRuntime API loaded; checkState=" .. type(EmoteRuntime.checkState)
     .. ", stopCustomEmote=" .. type(EmoteRuntime.stopCustomEmote))
 --// GUI PARENT
 --// =========================================================
@@ -1222,7 +1223,7 @@ local RESIZE_EDGE = 8
 --// =========================================================
 --// SCREEN GUI
 --// =========================================================
-__DDLog("INIT: constructing ScreenGui")
+__DDCore.Log("INIT: constructing ScreenGui")
 ScreenGui =
     Instance.new("ScreenGui")
 ScreenGui.Name =
@@ -1233,7 +1234,7 @@ ScreenGui.ZIndexBehavior =
     Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent =
     guiParent
-__DDLog("INIT checkpoint: ScreenGui parented; continuing UI construction")
+__DDCore.Log("INIT checkpoint: ScreenGui parented; continuing UI construction")
 
 emotePreviewCacheHolder =
     Instance.new("Frame")
@@ -2850,13 +2851,13 @@ function cosmetic.getLiveRig()
 end
 
 function cosmetic.refreshRig()
-    __DDLog("COSMETIC.refreshRig START: enabled=" .. tostring(cosmetic.enabled)
+    __DDCore.Log("COSMETIC.refreshRig START: enabled=" .. tostring(cosmetic.enabled)
         .. ", refreshBusy=" .. tostring(cosmetic.refreshBusy)
         .. ", skinDescription=" .. tostring(cosmetic.skinDescription ~= nil)
         .. ", directAction1=" .. tostring(cosmetic.directAction[1])
         .. ", directAction2=" .. tostring(cosmetic.directAction[2]))
     if cosmetic.refreshBusy then
-        __DDLog("COSMETIC.refreshRig FAIL: refreshBusy was already true")
+        __DDCore.Log("COSMETIC.refreshRig FAIL: refreshBusy was already true")
         return false
     end
 
@@ -2869,7 +2870,7 @@ function cosmetic.refreshRig()
     if not live
         or not live:IsA("Model")
     then
-        __DDLog("COSMETIC.refreshRig FAIL: live rig missing/not Model; live="
+        __DDCore.Log("COSMETIC.refreshRig FAIL: live rig missing/not Model; live="
             .. tostring(live) .. ", RigsFolder=" .. tostring(workspace:FindFirstChild("Rigs"))
             .. ", playerName=" .. tostring(LocalPlayer.Name))
         return false
@@ -2881,7 +2882,7 @@ function cosmetic.refreshRig()
         )
 
     if not humanoid then
-        __DDLog("COSMETIC.refreshRig FAIL: Humanoid missing from live rig "
+        __DDCore.Log("COSMETIC.refreshRig FAIL: Humanoid missing from live rig "
             .. tostring(live:GetFullName()))
         return false
     end
@@ -2906,7 +2907,7 @@ function cosmetic.refreshRig()
         if not descriptionOK
             or not description
         then
-            __DDLog("COSMETIC.refreshRig FAIL: GetAppliedDescription failed; ok="
+            __DDCore.Log("COSMETIC.refreshRig FAIL: GetAppliedDescription failed; ok="
                 .. tostring(descriptionOK) .. ", description=" .. tostring(description))
             return false
         end
@@ -2922,7 +2923,7 @@ function cosmetic.refreshRig()
         if not cloneOK
             or not clone
         then
-            __DDLog("COSMETIC.refreshRig FAIL: HumanoidDescription:Clone failed; ok="
+            __DDCore.Log("COSMETIC.refreshRig FAIL: HumanoidDescription:Clone failed; ok="
                 .. tostring(cloneOK) .. ", clone=" .. tostring(clone))
             return false
         end
@@ -2957,7 +2958,7 @@ function cosmetic.refreshRig()
         )
 
     if not base then
-        __DDLog("COSMETIC.refreshRig FAIL: base rig missing; baseName="
+        __DDCore.Log("COSMETIC.refreshRig FAIL: base rig missing; baseName="
             .. tostring(baseName) .. ", PlayerCache=" .. tostring(cache)
             .. ", playerCache=" .. tostring(playerCache)
             .. ", RigType=" .. tostring(humanoid.RigType))
@@ -3330,9 +3331,9 @@ function cosmetic.refreshRig()
         end)
 
     if success then
-        __DDLog("COSMETIC.refreshRig INTERNAL REBUILD OK")
+        __DDCore.Log("COSMETIC.refreshRig INTERNAL REBUILD OK")
     else
-        __DDLog("COSMETIC.refreshRig INTERNAL REBUILD FAILED: " .. tostring(refreshError))
+        __DDCore.Log("COSMETIC.refreshRig INTERNAL REBUILD FAILED: " .. tostring(refreshError))
     end
 
     cosmetic.skinCharacter =
@@ -9324,14 +9325,14 @@ function UnusualFns.activateUnusual()
     if not unusualSlot.originalId
         or not unusualSlot.replaceId
     then
-        __DDLog("UNUSUAL FAIL: IDs missing; original="
+        __DDCore.Log("UNUSUAL FAIL: IDs missing; original="
             .. tostring(unusualSlot.originalId) .. ", replacement=" .. tostring(unusualSlot.replaceId))
         return false
     end
     if unusualSlot.originalId
         == unusualSlot.replaceId
     then
-        __DDLog("UNUSUAL FAIL: original and replacement IDs are identical: "
+        __DDCore.Log("UNUSUAL FAIL: original and replacement IDs are identical: "
             .. tostring(unusualSlot.originalId))
         return false
     end
@@ -9343,7 +9344,7 @@ function UnusualFns.activateUnusual()
         or tonumber(equippedId)
             ~= tonumber(unusualSlot.originalId)
     then
-        __DDLog("UNUSUAL FAIL: equipped ID does not match selected original; equipped="
+        __DDCore.Log("UNUSUAL FAIL: equipped ID does not match selected original; equipped="
             .. tostring(equippedId) .. ", selectedOriginal=" .. tostring(unusualSlot.originalId)
             .. ", replacement=" .. tostring(unusualSlot.replaceId))
         return false
@@ -9354,7 +9355,7 @@ function UnusualFns.activateUnusual()
     local playerCharacter =
         UnusualFns.getUnusualPlayerCharacter()
     if not visualRig then
-        __DDLog("UNUSUAL FAIL: visual rig nil; playerCharacter=" .. tostring(playerCharacter)
+        __DDCore.Log("UNUSUAL FAIL: visual rig nil; playerCharacter=" .. tostring(playerCharacter)
             .. ", workspace.Rigs=" .. tostring(workspace:FindFirstChild("Rigs"))
             .. ", workspace.Players=" .. tostring(workspace:FindFirstChild("Players")))
         return false
@@ -9375,7 +9376,7 @@ function UnusualFns.activateUnusual()
     end
 
     if not unusualRuntime.nativeSnapshot then
-        __DDLog("UNUSUAL FAIL: native snapshot nil; equipped=" .. tostring(equippedId)
+        __DDCore.Log("UNUSUAL FAIL: native snapshot nil; equipped=" .. tostring(equippedId)
             .. ", visualRig=" .. tostring(visualRig) .. ", playerCharacter=" .. tostring(playerCharacter))
         return false
     end
@@ -9398,7 +9399,7 @@ function UnusualFns.activateUnusual()
         visualRig,
         playerCharacter
     ) then
-        __DDLog("UNUSUAL FAIL: applyUnusualFX returned false for replacement="
+        __DDCore.Log("UNUSUAL FAIL: applyUnusualFX returned false for replacement="
             .. tostring(unusualSlot.replaceId) .. ", original=" .. tostring(unusualSlot.originalId))
         --// Native Weld trees were kept in place; restore their exact states and any direct FX.
         UnusualFns.removeOurUnusualFX()
@@ -9425,7 +9426,7 @@ function UnusualFns.activateUnusual()
     unusualRuntime.replacementId =
         tonumber(unusualSlot.replaceId)
 
-    __DDLog("UNUSUAL ACTIVATE OK: equipped=" .. tostring(equippedId)
+    __DDCore.Log("UNUSUAL ACTIVATE OK: equipped=" .. tostring(equippedId)
         .. ", replacement=" .. tostring(unusualSlot.replaceId)
         .. ", visualRig=" .. tostring(visualRig))
 
@@ -20775,13 +20776,13 @@ function others.applyBodyPart(
     property,
     assetId
 )
-    __DDLog("AVATAR BODY PART START: property=" .. tostring(property)
+    __DDCore.Log("AVATAR BODY PART START: property=" .. tostring(property)
         .. ", requestedAssetId=" .. tostring(assetId)
         .. ", isR6=" .. tostring(others.isR6()))
     local description =
         others.getDescription()
     if not description then
-        __DDLog("AVATAR BODY PART FAIL: getDescription returned nil")
+        __DDCore.Log("AVATAR BODY PART FAIL: getDescription returned nil")
         return false
     end
     local assignmentOK, assignmentError = pcall(function()
@@ -20792,12 +20793,12 @@ function others.applyBodyPart(
     pcall(function()
         requestedValue = description[property]
     end)
-    __DDLog("AVATAR BODY PART ASSIGN: ok=" .. tostring(assignmentOK)
+    __DDCore.Log("AVATAR BODY PART ASSIGN: ok=" .. tostring(assignmentOK)
         .. ", error=" .. tostring(assignmentError)
         .. ", description[" .. tostring(property) .. "]=" .. tostring(requestedValue))
 
     local applied = others.applyDescription(description)
-    __DDLog("AVATAR BODY PART APPLY returned=" .. tostring(applied))
+    __DDCore.Log("AVATAR BODY PART APPLY returned=" .. tostring(applied))
 
     for index, humanoid in ipairs(others.getHumanoids()) do
         local readOK, appliedDescription = pcall(function()
@@ -20808,13 +20809,13 @@ function others.applyBodyPart(
             pcall(function()
                 actualValue = appliedDescription[property]
             end)
-            __DDLog("AVATAR BODY PART READBACK: humanoid#" .. tostring(index)
+            __DDCore.Log("AVATAR BODY PART READBACK: humanoid#" .. tostring(index)
                 .. " name=" .. tostring(humanoid:GetFullName())
                 .. ", property=" .. tostring(property)
                 .. ", actual=" .. tostring(actualValue)
                 .. ", requested=" .. tostring(assetId))
         else
-            __DDLog("AVATAR BODY PART READBACK FAILED: humanoid#" .. tostring(index)
+            __DDCore.Log("AVATAR BODY PART READBACK FAILED: humanoid#" .. tostring(index)
                 .. ", error=" .. tostring(appliedDescription))
         end
     end
@@ -24643,7 +24644,7 @@ getgenv().DEADEYE_NATIVE_WHEEL_CONTEXT = {
     end
 }
 
-__DDLog("INIT: loading external NativeWheel module")
+__DDCore.Log("INIT: loading external NativeWheel module")
 local NativeWheel =
     loadstring(
         game:HttpGet(
@@ -24665,7 +24666,7 @@ if type(NativeWheel) ~= "table" then
         "[DeadEye] NativeWheel module did not return an API table"
     )
 end
-__DDLog("INIT checkpoint: NativeWheel API loaded; sync=" .. type(NativeWheel.sync)
+__DDCore.Log("INIT checkpoint: NativeWheel API loaded; sync=" .. type(NativeWheel.sync)
     .. ", restore=" .. type(NativeWheel.restore))
 --// =========================================================
 --// REBUILD PICKER
@@ -27108,28 +27109,28 @@ __UI.__L.addConnection(
 
 --// DIAGNOSTIC WRAPPERS
 --// Installed before initial preview build and before the user can press controls.
-__DDLog("INIT checkpoint: UI created; installing targeted diagnostics")
+__DDCore.Log("INIT checkpoint: UI created; installing targeted diagnostics")
 
 -- Emote swap: log real native Emote ID transitions and replacement start/result.
-__DDWrapTable(__UI.EmoteService, "SetEmote", "EMOTE.EmoteService.SetEmote", "result")
-__DDWrapTable(EmoteRuntime, "checkState", "EMOTE.checkState", "sample")
+__DDCore.WrapTable(__UI.EmoteService, "SetEmote", "EMOTE.EmoteService.SetEmote", "result")
+__DDCore.WrapTable(EmoteRuntime, "checkState", "EMOTE.checkState", "sample")
 
-__DDNativeEmoteCounter = 0
-__DDLastNativeEmoteId = "__DD_UNSET"
-__DDLastNativeEmoteReadOK = "__DD_UNSET"
-__DDLastSwapEnabled = "__DD_UNSET"
-__DDLastRuntimeOriginalId = "__DD_UNSET"
-__DDWrappedCheckState = EmoteRuntime.checkState
+__DDCore.NativeEmoteCounter = 0
+__DDCore.LastNativeEmoteId = "__DD_UNSET"
+__DDCore.LastNativeEmoteReadOK = "__DD_UNSET"
+__DDCore.LastSwapEnabled = "__DD_UNSET"
+__DDCore.LastRuntimeOriginalId = "__DD_UNSET"
+__DDCore.WrappedCheckState = EmoteRuntime.checkState
 
 EmoteRuntime.checkState = function(...)
-    local args = __DDPack(...)
+    local args = __DDCore.Pack(...)
 
-    if __DDState.active then
-        __DDNativeEmoteCounter += 1
+    if __DDCore.State.active then
+        __DDCore.NativeEmoteCounter += 1
 
         -- The runtime already polls every frame; sample native state periodically.
-        if __DDNativeEmoteCounter == 1
-            or __DDNativeEmoteCounter % 6 == 0
+        if __DDCore.NativeEmoteCounter == 1
+            or __DDCore.NativeEmoteCounter % 6 == 0
         then
             local characterObject
             local objectOK, objectError = pcall(function()
@@ -27149,9 +27150,9 @@ EmoteRuntime.checkState = function(...)
             local enabledKey = tostring(enabled)
             local readOKKey = tostring(objectOK) .. "/" .. tostring(registryOK)
 
-            if rawIdKey ~= __DDLastNativeEmoteId
-                or readOKKey ~= __DDLastNativeEmoteReadOK
-                or enabledKey ~= __DDLastSwapEnabled
+            if rawIdKey ~= __DDCore.LastNativeEmoteId
+                or readOKKey ~= __DDCore.LastNativeEmoteReadOK
+                or enabledKey ~= __DDCore.LastSwapEnabled
             then
                 local slotDescription = "no matching configured original slot"
                 local numericId = tonumber(nativeEmoteId)
@@ -27171,7 +27172,7 @@ EmoteRuntime.checkState = function(...)
                     end
                 end
 
-                __DDLog("EMOTE NATIVE STATE: enabled=" .. enabledKey
+                __DDCore.Log("EMOTE NATIVE STATE: enabled=" .. enabledKey
                     .. ", nativeEmoteId=" .. rawIdKey
                     .. ", matchingSlot={" .. slotDescription .. "}"
                     .. ", characterObject=" .. tostring(characterObject)
@@ -27181,74 +27182,74 @@ EmoteRuntime.checkState = function(...)
                     .. (objectOK and "" or ", objectError=" .. tostring(objectError))
                     .. (registryOK and "" or ", registryError=" .. tostring(registryError)))
 
-                __DDLastNativeEmoteId = rawIdKey
-                __DDLastNativeEmoteReadOK = readOKKey
-                __DDLastSwapEnabled = enabledKey
+                __DDCore.LastNativeEmoteId = rawIdKey
+                __DDCore.LastNativeEmoteReadOK = readOKKey
+                __DDCore.LastSwapEnabled = enabledKey
             end
         end
     end
 
     local ok, result = xpcall(function()
-        return __DDPack(__DDWrappedCheckState(__DDUnpack(args, 1, args.n)))
-    end, __DDTraceback)
+        return __DDCore.Pack(__DDCore.WrappedCheckState(__DDCore.Unpack(args, 1, args.n)))
+    end, __DDCore.Traceback)
 
     if not ok then
-        __DDLog("EMOTE CHECKSTATE TRACKER FAILED:\n" .. tostring(result))
+        __DDCore.Log("EMOTE CHECKSTATE TRACKER FAILED:\n" .. tostring(result))
         error(result, 0)
     end
 
-    if __DDState.active then
+    if __DDCore.State.active then
         local currentOriginalId
         local readOK, readError = pcall(function()
             currentOriginalId = EmoteRuntime.getCurrentOriginalId()
         end)
 
         local currentKey = readOK and tostring(currentOriginalId) or "<read failed>"
-        if currentKey ~= __DDLastRuntimeOriginalId then
-            __DDLog("EMOTE RUNTIME SWAP STATE: currentOriginalId=" .. currentKey
+        if currentKey ~= __DDCore.LastRuntimeOriginalId then
+            __DDCore.Log("EMOTE RUNTIME SWAP STATE: currentOriginalId=" .. currentKey
                 .. ", enabled=" .. tostring(enabled)
                 .. (readOK and "" or ", readError=" .. tostring(readError)))
-            __DDLastRuntimeOriginalId = currentKey
+            __DDCore.LastRuntimeOriginalId = currentKey
         end
     end
 
-    return __DDUnpack(result, 1, result.n)
+    return __DDCore.Unpack(result, 1, result.n)
 end
 
-__DDWrapTable(EmoteRuntime, "stopCustomEmote", "EMOTE.stopCustomEmote")
-__DDWrapTable(EmoteRuntime, "stopForCleanup", "EMOTE.stopForCleanup")
-__DDWrapTable(EmoteRuntime, "reset", "EMOTE.reset")
-__DDWrapTable(NativeWheel, "sync", "EMOTE.NativeWheel.sync", "sample")
-__DDWrapTable(NativeWheel, "restore", "EMOTE.NativeWheel.restore")
-__DDWrapTable(NativeWheel, "reset", "EMOTE.NativeWheel.reset")
-__DDWrapTable(__UI.__L, "rebuildPicker", "EMOTE.rebuildPicker")
-__DDWrapTable(__UI.__L, "setCategory", "GUI.setCategory")
+__DDCore.WrapTable(EmoteRuntime, "stopCustomEmote", "EMOTE.stopCustomEmote")
+__DDCore.WrapTable(EmoteRuntime, "stopForCleanup", "EMOTE.stopForCleanup")
+__DDCore.WrapTable(EmoteRuntime, "reset", "EMOTE.reset")
+__DDCore.WrapTable(NativeWheel, "sync", "EMOTE.NativeWheel.sync", "sample")
+__DDCore.WrapTable(NativeWheel, "restore", "EMOTE.NativeWheel.restore")
+__DDCore.WrapTable(NativeWheel, "reset", "EMOTE.NativeWheel.reset")
+__DDCore.WrapTable(__UI.__L, "rebuildPicker", "EMOTE.rebuildPicker")
+__DDCore.WrapTable(__UI.__L, "setCategory", "GUI.setCategory")
 
 -- Cosmetic swap: capture the live rig rebuild and slot-selection path.
-__DDWrapTable(cosmetic, "select", "COSMETIC.select")
-__DDWrapTable(cosmetic, "updateToggle", "COSMETIC.updateToggle")
-__DDWrapTable(cosmetic, "installHook", "COSMETIC.installHook")
-__DDWrapTable(cosmetic, "refreshRig", "COSMETIC.refreshRig")
-__DDWrapTable(cosmetic, "rebuildPicker", "COSMETIC.rebuildPicker")
-__DDWrapTable(cosmetic, "createPreview", "COSMETIC.createPreview", "result")
+__DDCore.WrapTable(cosmetic, "select", "COSMETIC.select")
+__DDCore.WrapTable(cosmetic, "updateToggle", "COSMETIC.updateToggle")
+__DDCore.WrapTable(cosmetic, "installHook", "COSMETIC.installHook")
+__DDCore.WrapTable(cosmetic, "refreshRig", "COSMETIC.refreshRig")
+__DDCore.WrapTable(cosmetic, "rebuildPicker", "COSMETIC.rebuildPicker")
+__DDCore.WrapTable(cosmetic, "createPreview", "COSMETIC.createPreview", "result")
 
 -- Unusual effects: trace the source data that controls activation.
-__DDWrapTable(UnusualFns, "getEquippedUnusualId", "UNUSUAL.getEquippedUnusualId")
-__DDWrapTable(UnusualFns, "getUnusualVisualRig", "UNUSUAL.getUnusualVisualRig")
-__DDWrapTable(UnusualFns, "getUnusualPlayerCharacter", "UNUSUAL.getUnusualPlayerCharacter")
-__DDWrapTable(UnusualFns, "captureNativeUnusualSnapshot", "UNUSUAL.captureNativeUnusualSnapshot")
-__DDWrapTable(UnusualFns, "activateUnusual", "UNUSUAL.activateUnusual")
-__DDWrapTable(UnusualFns, "restoreUnusual", "UNUSUAL.restoreUnusual")
-__DDWrapTable(UnusualFns, "reapplyUnusual", "UNUSUAL.reapplyUnusual")
-__DDWrapTable(UnusualFns, "openUnusualPicker", "UNUSUAL.openPicker")
-__DDWrapTable(UnusualFns, "closeUnusualPicker", "UNUSUAL.closePicker")
-__DDWrapTable(UnusualFns, "rebuildUnusualPicker", "UNUSUAL.rebuildPicker")
-__DDWrapTable(__UI.__L, "applyUnusualFX", "UNUSUAL.applyUnusualFX")
+__DDCore.WrapTable(UnusualFns, "getEquippedUnusualId", "UNUSUAL.getEquippedUnusualId")
+__DDCore.WrapTable(UnusualFns, "getUnusualVisualRig", "UNUSUAL.getUnusualVisualRig")
+__DDCore.WrapTable(UnusualFns, "getUnusualPlayerCharacter", "UNUSUAL.getUnusualPlayerCharacter")
+__DDCore.WrapTable(UnusualFns, "captureNativeUnusualSnapshot", "UNUSUAL.captureNativeUnusualSnapshot")
+__DDCore.WrapTable(UnusualFns, "activateUnusual", "UNUSUAL.activateUnusual")
+__DDCore.WrapTable(UnusualFns, "restoreUnusual", "UNUSUAL.restoreUnusual")
+__DDCore.WrapTable(UnusualFns, "reapplyUnusual", "UNUSUAL.reapplyUnusual")
+__DDCore.WrapTable(UnusualFns, "openUnusualPicker", "UNUSUAL.openPicker")
+__DDCore.WrapTable(UnusualFns, "closeUnusualPicker", "UNUSUAL.closePicker")
+__DDCore.WrapTable(UnusualFns, "rebuildUnusualPicker", "UNUSUAL.rebuildPicker")
+__DDCore.WrapTable(__UI.__L, "applyUnusualFX", "UNUSUAL.applyUnusualFX")
 
 -- Avatar actions: log their results and verify applied fields on every Humanoid.
-__DDWrapTable(others, "applyDescription", "AVATAR.applyDescription")
+__DDCore.WrapTable(others, "applyDescription", "AVATAR.applyDescription")
 
-__DDAvatarVerifyProperties = {
+__DDCore.AvatarVerifyProperties = {
     "Head", "Torso", "LeftArm", "RightArm", "LeftLeg", "RightLeg",
     "Face", "Shirt", "Pants", "GraphicTShirt",
     "BodyTypeScale", "HeightScale", "WidthScale", "DepthScale",
@@ -27257,24 +27258,24 @@ __DDAvatarVerifyProperties = {
     "ShouldersAccessory", "FrontAccessory", "BackAccessory", "WaistAccessory"
 }
 
-__DDApplyDescriptionLogged = others.applyDescription
+__DDCore.ApplyDescriptionLogged = others.applyDescription
 others.applyDescription = function(description)
     local expected = {}
-    for _, property in ipairs(__DDAvatarVerifyProperties) do
+    for _, property in ipairs(__DDCore.AvatarVerifyProperties) do
         pcall(function()
             expected[property] = description[property]
         end)
     end
 
-    local result = __DDPack(__DDApplyDescriptionLogged(description))
+    local result = __DDCore.Pack(__DDCore.ApplyDescriptionLogged(description))
 
-    if __DDState.active then
+    if __DDCore.State.active then
         local humanoids = {}
         local listOK, listError = pcall(function()
             humanoids = others.getHumanoids()
         end)
 
-        __DDLog("AVATAR READBACK BEGIN: applyResult=" .. __DDArgs(result)
+        __DDCore.Log("AVATAR READBACK BEGIN: applyResult=" .. __DDCore.Args(result)
             .. ", humanoidListOK=" .. tostring(listOK)
             .. ", humanoidCount=" .. tostring(#humanoids)
             .. (listOK and "" or ", error=" .. tostring(listError)))
@@ -27285,14 +27286,14 @@ others.applyDescription = function(description)
             end)
 
             if not descriptionOK or not appliedDescription then
-                __DDLog("AVATAR READBACK FAILED: humanoid#" .. tostring(index)
+                __DDCore.Log("AVATAR READBACK FAILED: humanoid#" .. tostring(index)
                     .. ", humanoid=" .. tostring(humanoid)
                     .. ", error=" .. tostring(appliedDescription))
             else
                 local checked = 0
                 local mismatches = {}
 
-                for _, property in ipairs(__DDAvatarVerifyProperties) do
+                for _, property in ipairs(__DDCore.AvatarVerifyProperties) do
                     local desired = expected[property]
                     if desired ~= nil then
                         checked += 1
@@ -27309,11 +27310,11 @@ others.applyDescription = function(description)
                 end
 
                 if #mismatches == 0 then
-                    __DDLog("AVATAR READBACK MATCH: humanoid#" .. tostring(index)
+                    __DDCore.Log("AVATAR READBACK MATCH: humanoid#" .. tostring(index)
                         .. ", path=" .. tostring(humanoid)
                         .. ", checkedProperties=" .. tostring(checked))
                 else
-                    __DDLog("AVATAR READBACK MISMATCH: humanoid#" .. tostring(index)
+                    __DDCore.Log("AVATAR READBACK MISMATCH: humanoid#" .. tostring(index)
                         .. ", path=" .. tostring(humanoid)
                         .. ", checkedProperties=" .. tostring(checked)
                         .. ", mismatches=" .. table.concat(mismatches, " | "))
@@ -27322,31 +27323,31 @@ others.applyDescription = function(description)
         end
     end
 
-    return __DDUnpack(result, 1, result.n)
+    return __DDCore.Unpack(result, 1, result.n)
 end
 
-__DDWrapTable(others, "applyField", "AVATAR.applyField")
-__DDWrapTable(others, "applyBodyPart", "AVATAR.applyBodyPart")
-__DDWrapTable(others, "scan", "AVATAR.scan")
-__DDWrapTable(others, "clearAccessories", "AVATAR.clearAccessories")
-__DDWrapTable(others, "restore", "AVATAR.restore")
-__DDWrapTable(others, "applyAvatarDump", "AVATAR.applyAvatarDump")
-__DDWrapTable(others, "applyAll", "AVATAR.applyAll")
+__DDCore.WrapTable(others, "applyField", "AVATAR.applyField")
+__DDCore.WrapTable(others, "applyBodyPart", "AVATAR.applyBodyPart")
+__DDCore.WrapTable(others, "scan", "AVATAR.scan")
+__DDCore.WrapTable(others, "clearAccessories", "AVATAR.clearAccessories")
+__DDCore.WrapTable(others, "restore", "AVATAR.restore")
+__DDCore.WrapTable(others, "applyAvatarDump", "AVATAR.applyAvatarDump")
+__DDCore.WrapTable(others, "applyAll", "AVATAR.applyAll")
 
 -- Track actual button activations, including dynamically-created picker cards.
-function __DDWatchButton(object)
+function __DDCore.WatchButton(object)
     local ok, isButton = pcall(function()
         return object:IsA("GuiButton")
     end)
-    if not ok or not isButton or __DDState.watchedButtons[object] then
+    if not ok or not isButton or __DDCore.State.watchedButtons[object] then
         return
     end
 
-    __DDState.watchedButtons[object] = true
+    __DDCore.State.watchedButtons[object] = true
 
     pcall(function()
         local connection = object.Activated:Connect(function()
-            if not __DDState.active then
+            if not __DDCore.State.active then
                 return
             end
 
@@ -27362,24 +27363,24 @@ function __DDWatchButton(object)
                 end
             end)
 
-            __DDLog("UI_CLICK path=" .. path .. " text=" .. string.sub(textValue, 1, 100))
+            __DDCore.Log("UI_CLICK path=" .. path .. " text=" .. string.sub(textValue, 1, 100))
         end)
-        table.insert(__DDState.buttonConnections, connection)
+        table.insert(__DDCore.State.buttonConnections, connection)
     end)
 end
 
 for _, object in ipairs(ScreenGui:GetDescendants()) do
-    __DDWatchButton(object)
+    __DDCore.WatchButton(object)
 end
-__DDState.guiConnection = ScreenGui.DescendantAdded:Connect(function(object)
-    __DDWatchButton(object)
+__DDCore.State.guiConnection = ScreenGui.DescendantAdded:Connect(function(object)
+    __DDCore.WatchButton(object)
 end)
 
-__DDLog("INIT checkpoint: diagnostic wrappers and GUI click watcher installed")
+__DDCore.Log("INIT checkpoint: diagnostic wrappers and GUI click watcher installed")
 
 --// INIT
 --// =========================================================
-__DDLog("INIT: beginning final config save and picker preload")
+__DDCore.Log("INIT: beginning final config save and picker preload")
 pcall(function()
     __UI.__L.clampWindowPosition()
 end)
@@ -27414,12 +27415,12 @@ pcall(function()
     cosmetic.rebuildPicker()
 end)
 
-__DDLog("INIT checkpoint: picker preload calls completed; applying initial GUI state")
+__DDCore.Log("INIT checkpoint: picker preload calls completed; applying initial GUI state")
 setMainMinimized(false)
 updateGUI()
 pcall(function()
     __UI.__L.setCategory("Emotes")
 end)
-__DDLog("INIT: loading external Portrait component")
+__DDCore.Log("INIT: loading external Portrait component")
 loadstring(game:HttpGet("https://raw.githubusercontent.com/skirkzhdimenya-source/DeadEye/main/DeadEye_Portrait.lua"))()
-__DDLog("INIT COMPLETE: core GUI and Portrait loader returned")
+__DDCore.Log("INIT COMPLETE: core GUI and Portrait loader returned")
