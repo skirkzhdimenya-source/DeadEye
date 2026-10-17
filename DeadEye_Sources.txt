@@ -1880,7 +1880,7 @@ PATH:
 Players.<LocalPlayer>.PlayerScripts.PlayerModule.CameraModule.TransparencyController
 
 STATUS:
-ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+ОБНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена актуальная декомпиляция; считать эту версию текущей для анализа.
 
 SOURCE CONTENT:
 
@@ -2102,7 +2102,7 @@ PATH:
 ReplicatedStorage.Services.Client.CameraService
 
 STATUS:
-ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+ОБНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена актуальная декомпиляция; считать эту версию текущей для анализа.
 
 SOURCE CONTENT:
 
@@ -2120,8 +2120,8 @@ end
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Services = ReplicatedStorage:WaitForChild("Services")
 local v_u_9 = require((Services:WaitForChild("Client"):WaitForChild("EffectsService")))
-local Shared = ReplicatedStorage:WaitForChild("Shared")
-local v_u_10 = require((Shared:WaitForChild("UserData"):WaitForChild("ClientHooks"):WaitForChild("useSettings")))
+local Client = ReplicatedStorage:WaitForChild("Client")
+local v_u_10 = require((Client:WaitForChild("Services"):WaitForChild("UserData"):WaitForChild("Settings")))
 t.Settings = require(script.BaseSettings)
 t.FOVAdjusters = {}
 t.FOVAdjusting = {}
@@ -5632,7 +5632,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Visibility
 
 STATUS:
-ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+ОБНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена актуальная декомпиляция; считать эту версию текущей для анализа.
 
 PURPOSE:
 Клиентский обработчик видимости частей персонажа/косметики.
@@ -5868,7 +5868,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Visibility.Types
 
 STATUS:
-ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+ОБНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена актуальная декомпиляция; считать эту версию текущей для анализа.
 
 PURPOSE:
 Набор имён частей персонажа, которые разрешено оставлять видимыми
@@ -5951,15 +5951,14 @@ t.R15 = {
 		"RightUpperArm",
 		"RightLowerArm",
 		"RightHand",
+		"UpperTorso",
+		"LowerTorso",
 		"LeftUpperLeg",
 		"LeftLowerLeg",
 		"LeftFoot",
 		"RightUpperLeg",
 		"RightLowerLeg",
 		"RightFoot",
-		"RightUpperArm",
-		"RightLowerArm",
-		"RightHand",
 		"Tool"
 	},
 	NoArms = {
@@ -9890,7 +9889,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character
 
 STATUS:
-ПРОВЕРЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена текущая декомпиляция; использовать как актуальный источник для текущего анализа.
+ОБНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена актуальная декомпиляция; считать эту версию текущей для анализа.
 
 PURPOSE:
 Создаётся CharacterService для модели из Workspace.Players. Инициализирует Rig, Joints, Animations и ActionVisuals; только для локального персонажа создаёт Camera, Visibility, Movement и Actions. GetLocalCharacter() возвращает этот объект из CharacterService; объект хранит Model, Local, Rig и другие компоненты.
