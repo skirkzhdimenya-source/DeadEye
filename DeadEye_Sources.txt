@@ -9143,3 +9143,412 @@ function t.Ids(p44)
 	return t4
 end
 return t
+
+==================================================
+SOURCE #60
+==================================================
+PATH:
+ReplicatedStorage.Client.Services.UserData.Inventory.Loadout
+
+PURPOSE:
+Текущий клиентский API инвентаря и экипировки. GetEquipped(slotKey) читает Equipped через Store:Get("Equipped") и codec Equipped; GetAll() возвращает слоты по ключам, IsEquipped(id) ищет предмет. Equip/Unequip отправляют запрос через Shared.UserData.Remotes.Equip. Это новый путь вместо старого Shared.UserData.ClientHooks.useLoadout; для Unusual используется ключ UnusualSlot.
+
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local Players = game:GetService("Players")
+local Shared = game:GetService("ReplicatedStorage").Shared
+local Equip = Shared.UserData.Remotes.Equip
+local Equipped = require(Shared.UserData.Codecs.Equipped)
+local v_u_1 = require("../../../../Config/Player/Loadout")
+local UserOwnsPackage = require(Shared.Marketplace.UserOwnsPackage)
+local v_u_2 = require("./Store")
+return table.freeze({
+	GetSlots = function()
+		--[[ line: 30 | upvalues: (copy) v_u_1]]
+		return v_u_1.Slots
+	end,
+	GetSlotType = function(p3: string)
+		--[[ line: 34 | upvalues: (copy) v_u_1]]
+		return v_u_1.Slots[p3]
+	end,
+	IsSlotAvailable = function(p4: string)
+		--[[ line: 39 | upvalues: (copy) v_u_1, (copy) UserOwnsPackage, (copy) Players]]
+		if v_u_1.Slots[p4] == nil then
+			return false
+		end
+		return v_u_1.Locks[p4] == nil and true or UserOwnsPackage.IsSlotUnlocked(Players.LocalPlayer, p4)
+	end,
+	GetEquipped = function(p5: string)
+		--[[ line: 53 | upvalues: (copy) v_u_1, (copy) Equipped, (copy) v_u_2]]
+		local v6 = v_u_1.Ids[p5]
+		if v6 ~= nil then
+			return Equipped.Get(v_u_2:Get("Equipped"), v6)
+		end
+		warn((("[Inventory] SlotKey \"%*\" does not exist"):format(p5)))
+		return nil
+	end,
+	GetAll = function()
+		--[[ line: 62 | upvalues: (copy) Equipped, (copy) v_u_2, (copy) v_u_1]]
+		local t = {}
+		for v7, v8 in Equipped.Decode((v_u_2:Get("Equipped"))) do
+			local v9 = v_u_1.Keys[v7]
+			if v9 ~= nil then
+				t[v9] = v8
+			end
+		end
+		return t
+	end,
+	IsEquipped = function(p10: number)
+		--[[ line: 74 | upvalues: (copy) Equipped, (copy) v_u_2, (copy) v_u_1]]
+		local v11 = Equipped.Find(v_u_2:Get("Equipped"), p10)
+		local v12 = v11 ~= nil
+		if v11 == nil then
+			return v12, nil
+		end
+		return v12, v_u_1.Keys[v11]
+	end,
+	Equip = function(p13: string, p14: number)
+		--[[ line: 83 | upvalues: (copy) v_u_1, (copy) Equip]]
+		if v_u_1.Ids[p13] == nil then
+			return warn((("[Inventory] Cannot equip to unknown slot key: %*"):format(p13)))
+		end
+		Equip:FireServer(p13, p14)
+	end,
+	Unequip = function(p15: string)
+		--[[ line: 90 | upvalues: (copy) v_u_1, (copy) Equip]]
+		if v_u_1.Ids[p15] == nil then
+			return warn((("[Inventory] Cannot unequip to unknown slot key: %*"):format(p15)))
+		end
+		Equip:FireServer(p15, nil)
+	end,
+	Observe = function(p16: string, p17: (...any) -> ...any)
+		--[[ line: 102 | upvalues: (copy) v_u_1, (copy) Equipped, (copy) v_u_2]]
+		local v18 = v_u_1.Ids[p16]
+		if v18 == nil then
+			warn((("[Inventory] Cannot observe unknown slot key: %*"):format(p16)))
+			return function()
+				--[[ line: 106 | upvalues: none]]
+			end
+		end
+		p17(Equipped.Get(v_u_2:Get("Equipped"), v18))
+		return v_u_2:OnKeyChange("Equipped", v18, p17)
+	end,
+	ObserveAll = function(p19: (...any) -> ...any)
+		--[[ line: 113 | upvalues: (copy) v_u_2]]
+		p19()
+		return v_u_2:OnChange("Equipped", p19)
+	end
+})
+
+
+==================================================
+SOURCE #61
+==================================================
+PATH:
+ReplicatedStorage.Shared.UserData.Sync.Inventory
+
+PURPOSE:
+Схема синхронизации данных инвентаря. Поле Equipped имеет Id=3 и использует Codec Equipped для Diff/Apply; остальные поля — OwnedBits, Consumables и Attributes. Подтверждает, что новое состояние экипировки приходит как часть Inventory sync, а не через старый useLoadout канал.
+
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local v1 = require("../../FieldSync")
+local v2 = require("../Codecs/OwnedBitset")
+local v3 = require("../Codecs/CountBuffer")
+local v4 = require("../Codecs/Equipped")
+local v5 = require("../Codecs/ItemAttributes")
+return v1.Schema.new("Inventory", {
+	OwnedBits = { Id = 1, Diff = v2.Diff, Apply = v2.Apply },
+	Consumables = { Id = 2, Diff = v3.Diff, Apply = v3.Apply },
+	Equipped = { Id = 3, Diff = v4.Diff, Apply = v4.Apply },
+	Attributes = {
+		Id = 4,
+		Decode = v5.Decode,
+		Diff = v5.Diff,
+		Apply = v5.ApplyPatch
+	}
+})
+
+
+==================================================
+SOURCE #62
+==================================================
+PATH:
+ReplicatedStorage.Shared.UserData.Codecs.Equipped
+
+PURPOSE:
+Бинарный codec текущего набора экипировки. Каждый полный record занимает 3 байта: ID слота (u8) и ID предмета (u16). Экспортирует Get, Find, Decode, With, Diff и Apply. Get читает предмет по numeric slot ID; Decode преобразует buffer в таблицу slotId -> itemId; With создаёт изменённый buffer без отправки запросов.
+
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local t = {}
+local function findRecord(p1: buffer, p2: number)
+	--[[ line: 44 | upvalues: none]]
+	local v3 = buffer.len(p1)
+	if v3 % 3 ~= 0 then
+		error("CorruptBuffer")
+	end
+	local v4: number = v3 // 3
+	for v5 = 0, v4 - 1 do
+		local v6 = v5 * 3
+		local v7: number = buffer.readu8(p1, v6)
+		if v7 == p2 then
+			return v6, true
+		end
+		if p2 < v7 then
+			return v6, false
+		end
+	end
+	return v4 * 3, false
+end
+function t.Get(p8: buffer?, p9: number)
+	--[[ line: 63 | upvalues: (copy) findRecord]]
+	if type(p9) ~= "number" or (p9 % 1 ~= 0 or (p9 < 0 or p9 > 255)) then
+		error("InvalidSlot")
+	end
+	if p8 == nil then
+		return nil
+	end
+	local v10, v11 = findRecord(p8, p9)
+	if not v11 then
+		return nil
+	end
+	local v12 = v10 + 1
+	return buffer.readu16(p8, v12)
+end
+function t.Find(p13: buffer?, p14: number)
+	--[[ line: 72 | upvalues: none]]
+	if p13 == nil then
+		return nil
+	end
+	local v15 = 0
+	local v16 = buffer.len(p13)
+	if v16 % 3 ~= 0 then
+		error("CorruptBuffer")
+	end
+	for v17 = v15, v16 // 3 - 1 do
+		local v18 = v17 * 3 + 1
+		if buffer.readu16(p13, v18) == p14 then
+			local v19 = v17 * 3
+			return buffer.readu8(p13, v19)
+		end
+	end
+	return nil
+end
+function t.Decode(p20: buffer?)
+	local t2: {[any]: any} = {}
+	if p20 == nil then
+		return t2
+	end
+	local v21 = 0
+	local v22 = buffer.len(p20)
+	if v22 % 3 ~= 0 then
+		error("CorruptBuffer")
+	end
+	for v23 = v21, v22 // 3 - 1 do
+		local v24 = v23 * 3
+		local v25 = buffer.readu8(p20, v24)
+		local v26 = v23 * 3 + 1
+		t2[v25] = buffer.readu16(p20, v26)
+	end
+	return t2
+end
+function t.With(p27: buffer?, p28: number, p29: number?)
+	--[[ line: 100 | upvalues: (copy) findRecord]]
+	if type(p28) ~= "number" or (p28 % 1 ~= 0 or (p28 < 0 or p28 > 255)) then
+		error("InvalidSlot")
+	end
+	if p29 ~= nil and (type(p29) ~= "number" or (p29 % 1 ~= 0 or (p29 <= 0 or p29 > 65535))) then
+		error("InvalidItem")
+	end
+	if p27 == nil then
+		if p29 == nil then
+			return nil
+		end
+		local v30 = buffer.create(3)
+		buffer.writeu8(v30, 0, p28)
+		buffer.writeu16(v30, 1, p29)
+		return v30
+	end
+	local v31 = buffer.len(p27)
+	local v32, v33 = findRecord(p27, p28)
+	if v33 then
+		if p29 == nil then
+			if v31 == 3 then
+				return nil
+			end
+			local v34 = buffer.create(v31 - 3)
+			buffer.copy(v34, 0, p27, 0, v32)
+			buffer.copy(v34, v32, p27, v32 + 3, v31 - v32 - 3)
+			return v34
+		end
+		if buffer.readu16(p27, v32 + 1) == p29 then
+			return p27
+		end
+		local v36 = buffer.create(v31)
+		buffer.copy(v36, 0, p27, 0, v31)
+		buffer.writeu16(v36, v32 + 1, p29)
+		return v36
+	end
+	if p29 == nil then
+		return p27
+	end
+	local v38 = buffer.create(v31 + 3)
+	buffer.copy(v38, 0, p27, 0, v32)
+	buffer.writeu8(v38, v32, p28)
+	buffer.writeu16(v38, v32 + 1, p29)
+	buffer.copy(v38, v32 + 3, p27, v32, v31 - v32)
+	return v38
+end
+local v_u_40 = buffer.create(0)
+function t.Diff(p41: buffer, p42: buffer)
+	local v43 = buffer.len(p41)
+	if v43 % 3 ~= 0 then
+		error("CorruptBuffer")
+	end
+	local v44: number = v43 // 3
+	local v45 = buffer.len(p42)
+	if v45 % 3 ~= 0 then
+		error("CorruptBuffer")
+	end
+	local v46 = v45 // 3
+	local v47 = 0
+	local t3 = {}
+	local v48 = 0
+	local t4 = {}
+	while v47 < v44 or v48 < v46 do
+		local v49
+		if v47 < v44 then
+			v49 = buffer.readu8(p41, v47 * 3)
+		else
+			v49 = 1 / 0
+		end
+		local v51
+		if v48 < v46 then
+			v51 = buffer.readu8(p42, v48 * 3)
+		else
+			v51 = 1 / 0
+		end
+		if v49 == v51 then
+			local v54 = buffer.readu16(p42, v48 * 3 + 1)
+			if buffer.readu16(p41, v47 * 3 + 1) ~= v54 then
+				table.insert(t4, v51)
+				table.insert(t3, v54)
+			end
+			v47 = v47 + 1
+			v48 = v48 + 1
+		elseif v51 < v49 then
+			table.insert(t4, v51)
+			table.insert(t3, buffer.readu16(p42, v48 * 3 + 1))
+			v48 = v48 + 1
+		else
+			table.insert(t4, v49)
+			table.insert(t3, 0)
+			v47 = v47 + 1
+		end
+	end
+	local v58: number = #t4
+	if v58 == 0 then
+		return nil
+	end
+	local v59 = buffer.create(v58 * 3 + 1)
+	buffer.writeu8(v59, 0, v58)
+	for v60, v61 in t4 do
+		local v62: number = (v60 - 1) * 3 + 1
+		buffer.writeu8(v59, v62, v61)
+		buffer.writeu16(v59, v62 + 1, t3[v60])
+	end
+	return v59
+end
+function t.Apply(p65: buffer, p66: buffer)
+	local t5 = {}
+	for v67 = 0, buffer.readu8(p66, 0) - 1 do
+		local v68 = v67 * 3 + 1
+		local v69 = buffer.readu8(p66, v68)
+		local v71 = buffer.readu16(p66, v68 + 1)
+		p65 = t.With(p65, v69, v71 == 0 and nil or v71)
+		t5[v69] = true
+	end
+	return p65 or v_u_40, t5
+end
+return table.freeze(t)
+
+
+==================================================
+SOURCE #63
+==================================================
+PATH:
+ReplicatedStorage.Config.Player.Loadout
+
+PURPOSE:
+Конфигурация слотов экипировки: сопоставляет slotKey со строковым типом, slotKey с числовым ID и ID обратно с ключом. Подтверждает UnusualSlot = ID 4, CosmeticSlot_1 = 1, CosmeticSlot_2 = 2, CharacterSlot = 3; диапазон EmoteSlot_1..12 получает ID 13..24, ConsumableSlot_1..4 — ID 25..28. Используется Inventory.Loadout и codec Equipped.
+
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local t = {
+	CosmeticSlot_1 = "Cosmetic",
+	CosmeticSlot_2 = "Cosmetic",
+	CharacterSlot = "Character",
+	UnusualSlot = "Unusual",
+	NametagSlot = "Nametag",
+	BoomboxSlot = "Boombox",
+	CarryAnimationSlot = "CarryAnimation",
+	PerkSlot_1 = "Perk",
+	PerkSlot_2 = "Perk",
+	LightSlot = "Light",
+	UtilitySlot = "Utility",
+	PowerSlot = "Power"
+}
+local t2 = {
+	CosmeticSlot_1 = 1,
+	CosmeticSlot_2 = 2,
+	CharacterSlot = 3,
+	UnusualSlot = 4,
+	NametagSlot = 5,
+	BoomboxSlot = 6,
+	CarryAnimationSlot = 7,
+	PerkSlot_1 = 8,
+	PerkSlot_2 = 9,
+	LightSlot = 10,
+	UtilitySlot = 11,
+	PowerSlot = 12
+}
+local t3 = {}
+for v1 = 1, 12 do
+	t[("EmoteSlot_%*"):format(v1)] = "Emote"
+	t2[("EmoteSlot_%*"):format(v1)] = v1 + 12
+	if v1 >= 7 then
+		t3[("EmoteSlot_%*"):format(v1)] = "MoreEmotes"
+	end
+end
+for v2 = 1, 4 do
+	t[("ConsumableSlot_%*"):format(v2)] = "Consumable"
+	t2[("ConsumableSlot_%*"):format(v2)] = v2 + 24
+end
+local t4 = {}
+for v3, v4 in t2 do
+	local v5 = t4[v4] == nil
+	local v6 = ("[LoadoutConfig] \"%*\" and \"%*\" share id %*"):format(v3, t4[v4], v4)
+	assert(v5, v6)
+	t4[v4] = v3
+end
+return table.freeze({
+	Slots = table.freeze(t),
+	Ids = table.freeze(t2),
+	Keys = table.freeze(t4),
+	Locks = table.freeze(t3)
+})
+
+
