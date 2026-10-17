@@ -157,6 +157,17 @@ __DDCore.StopAndCopy = function()
         __DDCore.Env.DEADEYE_UNUSUAL_POV_RUNNING = false
     end)
 
+    --// Always request Avatar restore separately: EMOTE_SWAPPER_CLEANUP can
+    --// already be nil after closing the X button or a partial cleanup.
+    local avatarCleanup = __DDCore.Env.DEADEYE_AVATAR_CLEANUP
+    if type(avatarCleanup) == "function" then
+        __DDCore.CallCleanup("DEADEYE_AVATAR_CLEANUP", function()
+            avatarCleanup("F6")
+        end)
+    else
+        __DDCore.Log("F6: AVATAR cleanup hook unavailable")
+    end
+
     if type(__DDCore.State.loadoutObserverCancels) == "table" then
         for slotName, cancel in pairs(__DDCore.State.loadoutObserverCancels) do
             local ok, err = pcall(cancel)
@@ -432,7 +443,7 @@ end
 
 --// =========================================================
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.256
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.257
 --//
 --// ВАЖНО:
 --// После каждого полностью завершённого изменения скрипта
@@ -464,7 +475,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.256"
+local SCRIPT_VERSION = "1.257"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -13724,7 +13735,8 @@ others.targetHumanoid = nil
 others.lastAppliedDescription = nil
 others.appliedHumanoids = setmetatable({}, { __mode = "k" })
 others.pendingHumanoids = setmetatable({}, { __mode = "k" })
-others.originalDescriptionsByHumanoid = setmetatable({}, { __mode = "k" })
+-- Keep avatar snapshots alive until shutdown restoration completes.
+others.originalDescriptionsByHumanoid = {}
 others.avatarSyncEnabled = false
 others.avatarSyncConnections = {}
 others.avatarSyncConnection = nil
@@ -14536,12 +14548,6 @@ end
 function others.restore(
     keepSnapshot
 )
-    if not others.originalDescription
-        and next(others.originalDescriptionsByHumanoid) == nil
-    then
-        return false
-    end
-
     local restored = 0
 
     if not keepSnapshot then
@@ -14556,9 +14562,23 @@ function others.restore(
         end
         table.clear(others.avatarSyncConnections)
         others.avatarSyncConnection = nil
+
+        --// This bridge is only needed while the Avatar editor is active.
+        pcall(function()
+            RunService:UnbindFromRenderStep("DeadEyeOthersNativeVisibility")
+        end)
+        pcall(function()
+            RunService:UnbindFromRenderStep("DeadEyeOthersFirstPersonVisibility")
+        end)
     end
 
     if keepSnapshot then
+        if not others.originalDescription
+            and next(others.originalDescriptionsByHumanoid) == nil
+        then
+            return false
+        end
+
         for humanoid, description in pairs(others.originalDescriptionsByHumanoid) do
             if others.applyDescriptionDirect(humanoid, description) then
                 restored += 1
@@ -14580,18 +14600,41 @@ function others.restore(
         return restored > 0
     end
 
-    --// Shutdown: restore each model to its own recorded native description.
+    --// Shutdown: restore every Humanoid with its own captured appearance.
+    local restoredHumanoids = {}
+    local snapshotCount = 0
+
     for humanoid, description in pairs(others.originalDescriptionsByHumanoid) do
+        snapshotCount += 1
+
         if others.applyDescriptionDirect(humanoid, description) then
             restored += 1
+            restoredHumanoids[humanoid] = true
         end
     end
 
-    --// Legacy fallback if the per-Humanoid map has not been populated.
-    if restored == 0 and others.originalDescription then
-        for _, humanoid in ipairs(others.getHumanoids()) do
-            if others.applyDescriptionDirect(humanoid, others.originalDescription) then
-                restored += 1
+    --// Rigs can be replaced while the editor is open. A new current Humanoid
+    --// may not be present in the snapshot map, or an old target may have been
+    --// destroyed. Restore any still-current target not successfully handled
+    --// above from its per-Humanoid snapshot, falling back to the initial avatar.
+    local currentHumanoids = {}
+    local listOK, listError = pcall(function()
+        currentHumanoids = others.getHumanoids()
+    end)
+
+    if listOK then
+        for _, humanoid in ipairs(currentHumanoids) do
+            if not restoredHumanoids[humanoid] then
+                local description =
+                    others.originalDescriptionsByHumanoid[humanoid]
+                    or others.originalDescription
+
+                if description
+                    and others.applyDescriptionDirect(humanoid, description)
+                then
+                    restored += 1
+                    restoredHumanoids[humanoid] = true
+                end
             end
         end
     end
@@ -14602,12 +14645,44 @@ function others.restore(
     others.originalDescription = nil
     others.targetHumanoid = nil
 
-    __DDCore.Log("AVATAR RESTORE|restoredHumanoids=" .. tostring(restored))
+    __DDCore.Log(
+        "F6: AVATAR RESTORE|snapshots=" .. tostring(snapshotCount)
+        .. "|restoredHumanoids=" .. tostring(restored)
+        .. "|currentHumanoids=" .. tostring(#currentHumanoids)
+        .. "|currentListOK=" .. tostring(listOK)
+        .. (listOK and "" or "|error=" .. tostring(listError))
+    )
+
     return restored > 0
 end
 
 --// =========================================================
 --// =========================================================
+--// Dedicated Avatar shutdown hook. Called by both GUI close and F6,
+--// independent of whether the main GUI cleanup callback still exists.
+local avatarCleanupCompleted = false
+genv.DEADEYE_AVATAR_CLEANUP = function(reason)
+    if avatarCleanupCompleted then
+        __DDCore.Log("F6: AVATAR cleanup already completed|reason=" .. tostring(reason))
+        return true
+    end
+
+    __DDCore.Log("F6: AVATAR cleanup begin|reason=" .. tostring(reason))
+
+    local ok, restored = pcall(function()
+        return others.restore(false)
+    end)
+
+    if not ok then
+        __DDCore.Log("F6: AVATAR cleanup FAILED|error=" .. tostring(restored))
+        return false
+    end
+
+    avatarCleanupCompleted = true
+    __DDCore.Log("F6: AVATAR cleanup end|restored=" .. tostring(restored))
+    return restored == true
+end
+
 --// FIRST-PERSON HEAD/CAMERA VISIBILITY
 --// =========================================================
 --// Do NOT run a custom head/accessory transparency loop here.
@@ -25154,12 +25229,31 @@ __UI.__L.cleanupUnusual = function()
     unusualActive =
         false
 
+    --// Stop editor auto-apply before rebuilding or clearing cosmetic rigs.
     pcall(function()
-        others.restore(false)
+        others.avatarSyncEnabled = false
+        others.lastAppliedDescription = nil
+        for _, connection in ipairs(others.avatarSyncConnections) do
+            pcall(function()
+                connection:Disconnect()
+            end)
+        end
+        table.clear(others.avatarSyncConnections)
+        others.avatarSyncConnection = nil
     end)
 
     pcall(function()
         cosmetic.cleanup()
+    end)
+
+    --// Restore avatar descriptions only after cosmetic/rigger cleanup so no
+    --// later teardown step can overwrite the restored appearance.
+    pcall(function()
+        if type(genv.DEADEYE_AVATAR_CLEANUP) == "function" then
+            genv.DEADEYE_AVATAR_CLEANUP("UNUSUAL_SWAPPER_CLEANUP")
+        else
+            others.restore(false)
+        end
     end)
 
     --// Do not rebuild the native Unusual here.
