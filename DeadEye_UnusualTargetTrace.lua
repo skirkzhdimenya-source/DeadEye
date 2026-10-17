@@ -2,13 +2,14 @@
 --// Read-only diagnostic. Does not change, remove, or equip any game effects.
 --//
 --// F7 = mark test phase (MENU <-> ROUND) and capture a snapshot.
---// F6 = stop this diagnostic, disconnect its listeners, and copy the full log.
+--// F8 = stop this diagnostic, disconnect its listeners, and copy the full log.
+--// F6 is reserved by DeadEye_Diagnostic.lua while both scripts are running.
 --// Suggested test:
 --//   1. Start in the menu. Click SWAP ON once, wait 2 seconds, click OFF.
 --//   2. Enter a round and press F7 once (phase becomes ROUND).
 --//   3. Repeat SWAP ON -> wait 2 seconds -> OFF.
 --//   4. Return to the menu, press F7 (phase becomes MENU), repeat once.
---//   5. Press F6 and send the copied log.
+--//   5. Press F8 and send the copied log.
 --//
 --// Version reminder: after a completed change, increment only the number after
 --// the dot (v1.00 -> v1.01); keep the major version at v1.
@@ -595,7 +596,7 @@ local function stop(reason)
         return
     end
     State.stopping = true
-    log("F6: stopping diagnostic; reason=" .. tostring(reason or "hotkey"))
+    log("F8: stopping diagnostic; reason=" .. tostring(reason or "hotkey"))
     for _, connection in ipairs(State.connections) do
         pcall(function() connection:Disconnect() end)
     end
@@ -605,7 +606,7 @@ local function stop(reason)
         pcall(function() connections.removing:Disconnect() end)
         State.watchedModels[model] = nil
     end
-    log("F6: all diagnostic listeners disconnected; DeadEye itself was not changed")
+    log("F8: all diagnostic listeners disconnected; DeadEye itself was not changed")
     State.active = false
 
     local clipboardNames = { "setclipboard", "toclipboard", "writeclipboard" }
@@ -622,13 +623,13 @@ local function stop(reason)
         end
     end
     if copied then
-        table.insert(State.log, "[UnusualTargetTrace v1.00] F6 clipboard copy succeeded via " .. tostring(chosen))
+        table.insert(State.log, "[UnusualTargetTrace v1.00] F8 clipboard copy succeeded via " .. tostring(chosen))
         local callback = ENV[chosen]
         if type(callback) ~= "function" then callback = _G[chosen] end
         if type(callback) == "function" then
             pcall(callback, table.concat(State.log, "\n"))
         end
-        pcall(print, "[UnusualTargetTrace v1.00] F6 clipboard copy succeeded via " .. tostring(chosen))
+        pcall(print, "[UnusualTargetTrace v1.00] F8 clipboard copy succeeded via " .. tostring(chosen))
     else
         table.insert(State.log, "[UnusualTargetTrace v1.00] Clipboard API unavailable; log remains in getgenv().DEADEYE_UNUSUAL_TARGET_TRACE_LOG")
         pcall(print, "[UnusualTargetTrace v1.00] Clipboard API unavailable; log remains in getgenv().DEADEYE_UNUSUAL_TARGET_TRACE_LOG")
@@ -640,7 +641,7 @@ State.Stop = stop
 ENV.DEADEYE_UNUSUAL_TARGET_TRACE_STOP = stop
 
 log("START: version=v1.00, player=" .. tostring(LocalPlayer)
-    .. ", F7=phase marker MENU/ROUND, F6=stop+copy log")
+    .. ", F7=phase marker MENU/ROUND, F8=stop+copy log")
 log("SAFETY: read-only; no effect instances/properties/loadout are modified")
 log("TEST: click SWAP ON once, wait 2 seconds, click OFF; press F7 at each MENU/ROUND boundary")
 log("START LOCATIONS: Workspace.Rigs/" .. tostring(LocalPlayer and LocalPlayer.Name)
@@ -650,8 +651,8 @@ captureBurst("startup")
 discoverGui()
 
 connect(UserInputService.InputBegan, function(input, processed)
-    if tostring(input.KeyCode) == "Enum.KeyCode.F6" then
-        stop("F6 full stop + copy")
+    if tostring(input.KeyCode) == "Enum.KeyCode.F8" then
+        stop("F8 full stop + copy")
     elseif tostring(input.KeyCode) == "Enum.KeyCode.F7" then
         if not State.active then
             return
