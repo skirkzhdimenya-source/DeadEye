@@ -464,7 +464,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.252"
+local SCRIPT_VERSION = "1.253"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -9507,6 +9507,11 @@ function UnusualFns.captureNativeUnusualSnapshot(
     playerCharacter,
     existingSnapshot
 )
+    -- Resolve the canonical item model as well as the live signature.
+    -- The live effect may already have lost nested descendants before capture.
+    local cosmeticRig =
+        UnusualFns.getUnusualCosmeticRig(id, visualRig)
+
     local signature =
         UnusualFns.buildOriginalUnusualSignature(
             id,
@@ -9633,6 +9638,218 @@ function UnusualFns.captureNativeUnusualSnapshot(
         return true
     end
 
+    local templateAddedRoots = 0
+    local templateAddedDescendants = 0
+    local templateCloneFailures = 0
+
+    local function sameTemplateNode(current, template)
+        if not current
+            or not template
+            or current.ClassName ~= template.ClassName
+            or current.Name ~= template.Name
+        then
+            return false
+        end
+
+        if template:IsA("MeshPart") then
+            local same = false
+            pcall(function()
+                same =
+                    tostring(current.MeshId) == tostring(template.MeshId)
+                    and tostring(current.TextureID) == tostring(template.TextureID)
+            end)
+            return same
+        end
+
+        return true
+    end
+
+    local function findSavedRoot(list, templateRoot, used)
+        for _, current in ipairs(list) do
+            if (not used or not used[current])
+                and sameTemplateNode(current, templateRoot)
+            then
+                return current
+            end
+        end
+        return nil
+    end
+
+    local function findTemplateRoot(sourcePart, info)
+        if not sourcePart then
+            return nil
+        end
+        for _, child in ipairs(sourcePart:GetChildren()) do
+            if matchesObject(child, info) then
+                return child
+            end
+        end
+        return nil
+    end
+
+    -- Fill missing descendants from the canonical source asset but preserve
+    -- properties of nodes that were actually captured from the live effect.
+    -- One map spans sibling roots, so Trail/Beam attachments can be rebound too.
+    local function mergeTemplateTree(templateRoot, savedRoot, targetPart, sharedMap)
+        local complete = true
+        local added = 0
+        sharedMap[templateRoot] = savedRoot
+
+        local used = {}
+        for _, templateChild in ipairs(templateRoot:GetChildren()) do
+            local savedChild = findSavedRoot(
+                savedRoot:GetChildren(),
+                templateChild,
+                used
+            )
+
+            if savedChild then
+                used[savedChild] = true
+                local childComplete, childAdded = mergeTemplateTree(
+                    templateChild,
+                    savedChild,
+                    targetPart,
+                    sharedMap
+                )
+                if not childComplete then
+                    complete = false
+                end
+                added += childAdded
+            else
+                local clone = cloneForTarget(templateChild, targetPart)
+                if clone then
+                    clone.Parent = savedRoot
+                    local cloneMap = {}
+                    pcall(function()
+                        __UI.__L.mapUnusualCloneTree(
+                            templateChild,
+                            clone,
+                            cloneMap
+                        )
+                    end)
+                    for sourceObject, cloneObject in pairs(cloneMap) do
+                        sharedMap[sourceObject] = cloneObject
+                    end
+                    added += 1
+                else
+                    templateCloneFailures += 1
+                    complete = false
+                end
+            end
+        end
+
+        return complete, added
+    end
+
+    local function seedCanonicalTrees(partSnapshot, sourcePart, objects, targetPart)
+        if not sourcePart then
+            return
+        end
+
+        local sharedMap = {}
+        local templatePairs = {}
+        local usedSavedObjects = {}
+        local usedSavedJoints = {}
+
+        for _, info in ipairs(objects) do
+            local templateRoot = findTemplateRoot(sourcePart, info)
+            if templateRoot then
+                local savedRoot = findSavedRoot(
+                    partSnapshot.objects,
+                    templateRoot,
+                    usedSavedObjects
+                )
+
+                if not savedRoot then
+                    savedRoot = cloneForTarget(templateRoot, targetPart)
+                    if savedRoot then
+                        table.insert(partSnapshot.objects, savedRoot)
+                        templateAddedRoots += 1
+                    else
+                        templateCloneFailures += 1
+                    end
+                end
+
+                if savedRoot then
+                    usedSavedObjects[savedRoot] = true
+                    local complete, added = mergeTemplateTree(
+                        templateRoot,
+                        savedRoot,
+                        targetPart,
+                        sharedMap
+                    )
+                    templateAddedDescendants += added
+                    if not complete then
+                        templateCloneFailures += 1
+                    end
+                    table.insert(templatePairs, {
+                        source = templateRoot,
+                        saved = savedRoot
+                    })
+                end
+            end
+        end
+
+        -- Preserve source joints associated with non-whole-tree effect geometry.
+        for _, info in ipairs(objects) do
+            if not info.WholeTree then
+                for _, sourceJoint in ipairs(sourcePart:GetChildren()) do
+                    if __UI.__L.isUnusualJointObject(sourceJoint)
+                        and sourceJoint.Name == info.Name
+                    then
+                        local savedJoint = findSavedRoot(
+                            partSnapshot.joints,
+                            sourceJoint,
+                            usedSavedJoints
+                        )
+
+                        if not savedJoint then
+                            savedJoint = cloneForTarget(sourceJoint, targetPart)
+                            if savedJoint then
+                                table.insert(partSnapshot.joints, savedJoint)
+                                templateAddedRoots += 1
+                            else
+                                templateCloneFailures += 1
+                            end
+                        end
+
+                        if savedJoint then
+                            usedSavedJoints[savedJoint] = true
+                            local complete, added = mergeTemplateTree(
+                                sourceJoint,
+                                savedJoint,
+                                targetPart,
+                                sharedMap
+                            )
+                            templateAddedDescendants += added
+                            if not complete then
+                                templateCloneFailures += 1
+                            end
+                            table.insert(templatePairs, {
+                                source = sourceJoint,
+                                saved = savedJoint
+                            })
+                        end
+
+                        break
+                    end
+                end
+            end
+        end
+
+        for _, pair in ipairs(templatePairs) do
+            pcall(function()
+                __UI.__L.rebindUnusualCloneTree(
+                    pair.source,
+                    pair.saved,
+                    sharedMap,
+                    nil,
+                    targetPart
+                )
+            end)
+        end
+    end
+
     -- Capture the original effect only once per exact model/limb. When a new
     -- duplicate rig appears, seed its snapshot from the previously saved clean
     -- baseline instead of cloning already-hidden/replacement objects from it.
@@ -9656,6 +9873,9 @@ function UnusualFns.captureNativeUnusualSnapshot(
                     objects = {},
                     joints = {}
                 }
+
+                local sourcePart =
+                    cosmeticRig and cosmeticRig:FindFirstChild(partName)
 
                 local baseline =
                     existingSnapshot
@@ -9717,6 +9937,16 @@ function UnusualFns.captureNativeUnusualSnapshot(
                     end
                 end
 
+                -- The live snapshot can contain empty same-named Attachments.
+                -- Seed missing roots and descendants from the registry template
+                -- before deciding this limb has been captured successfully.
+                seedCanonicalTrees(
+                    partSnapshot,
+                    sourcePart,
+                    objects,
+                    targetPart
+                )
+
                 if #partSnapshot.objects > 0 or #partSnapshot.joints > 0 then
                     table.insert(snapshot.parts, partSnapshot)
                     alreadyCaptured[target.model] =
@@ -9754,7 +9984,11 @@ function UnusualFns.captureNativeUnusualSnapshot(
             .. "|parts=" .. tostring(#snapshot.parts)
             .. "|objects=" .. tostring(capturedObjects)
             .. "|joints=" .. tostring(capturedJoints)
-            .. "|targetModels=" .. tostring(#targets),
+            .. "|targetModels=" .. tostring(#targets)
+            .. "|sourceModelAvailable=" .. tostring(cosmeticRig ~= nil)
+            .. "|templateAddedRoots=" .. tostring(templateAddedRoots)
+            .. "|templateAddedDescendants=" .. tostring(templateAddedDescendants)
+            .. "|templateCloneFailures=" .. tostring(templateCloneFailures),
         visualRig,
         playerCharacter
     )
