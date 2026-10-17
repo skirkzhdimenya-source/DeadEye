@@ -13105,6 +13105,8 @@ local mainJump = {
     fovBodyVisibilityModule = nil,
     fovBodyVisibilityOriginalGetType = nil,
     fovBodyVisibilityHook = nil,
+    fovBodyVisibilityOriginalUpdateVisibility = nil,
+    fovBodyVisibilityUpdateHook = nil,
     fovBodyVisibilityToggle = nil,
     fovBodyVisibilityCleanup = nil,
     smartAirTurnEnabled = false,
@@ -13334,22 +13336,85 @@ end
 --// Bypass only the native "FOV > 90 => None" check.
 --// No hotkeys, render loops, or transparency writes.
 --// =========================================================
+--// Native Visibility walks the rig's limb list, which can omit cosmetic
+--// accessories. Apply the same first-person visibility state to those items.
+mainJump.fovBodyAccessoryOriginals = mainJump.fovBodyAccessoryOriginals or setmetatable({}, { __mode = "k" })
+
+function mainJump.applyFOVBodyAccessoryVisibility(visibility)
+    if not visibility or not visibility.Parent or not visibility.Parent.Rig then return end
+    local rigModel
+    pcall(function() rigModel = visibility.Parent.Rig:GetRigModel() end)
+    if not rigModel then return end
+
+    local hideAccessories = visibility.Type ~= "All"
+    local originals = mainJump.fovBodyAccessoryOriginals
+    for _, accessory in ipairs(rigModel:GetDescendants()) do
+        if accessory:IsA("Accessory") then
+            for _, obj in ipairs(accessory:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Decal") or obj:IsA("Texture") then
+                    if originals[obj] == nil then
+                        local original = {}
+                        if obj:IsA("BasePart") then
+                            original.LocalTransparencyModifier = obj.LocalTransparencyModifier
+                            original.CastShadow = obj.CastShadow
+                        else
+                            original.Transparency = obj.Transparency
+                        end
+                        originals[obj] = original
+                    end
+                    local original = originals[obj]
+                    if hideAccessories then
+                        if obj:IsA("BasePart") then
+                            obj.LocalTransparencyModifier = 1
+                            obj.CastShadow = false
+                        else
+                            obj.Transparency = 1
+                        end
+                    elseif obj:IsA("BasePart") then
+                        obj.LocalTransparencyModifier = original.LocalTransparencyModifier
+                        obj.CastShadow = original.CastShadow
+                    else
+                        obj.Transparency = original.Transparency
+                    end
+                end
+            end
+        end
+    end
+end
+
+function mainJump.restoreFOVBodyAccessoryVisibility()
+    for obj, original in pairs(mainJump.fovBodyAccessoryOriginals or {}) do
+        pcall(function()
+            if not obj.Parent then return end
+            if obj:IsA("BasePart") then
+                obj.LocalTransparencyModifier = original.LocalTransparencyModifier
+                obj.CastShadow = original.CastShadow
+            elseif obj:IsA("Decal") or obj:IsA("Texture") then
+                obj.Transparency = original.Transparency
+            end
+        end)
+        mainJump.fovBodyAccessoryOriginals[obj] = nil
+    end
+end
+
 function mainJump.restoreFOVBodyVisibility()
     local module = mainJump.fovBodyVisibilityModule
 
     local hook = mainJump.fovBodyVisibilityHook
 
     local original = mainJump.fovBodyVisibilityOriginalGetType
+    local updateHook = mainJump.fovBodyVisibilityUpdateHook
+    local originalUpdate = mainJump.fovBodyVisibilityOriginalUpdateVisibility
 
-    if module
-        and hook
-        and original
-        and module.GetType == hook
-    then
+    if module and hook and original and module.GetType == hook then
         module.GetType = original
+    end
+    if module and updateHook and originalUpdate and module.UpdateVisibility == updateHook then
+        module.UpdateVisibility = originalUpdate
     end
 
     mainJump.fovBodyVisibilityEnabled = false
+    mainJump.restoreFOVBodyAccessoryVisibility()
 
     -- Restore the live visual rig to the game's native visibility owner.
     -- Restoring GetType alone is insufficient: Visibility.Type and the
@@ -13427,6 +13492,15 @@ function mainJump.setFOVBodyVisibilityEnabled(state, persist)
                 else
                     mainJump.fovBodyVisibilityOriginalGetType = original
 
+                    if type(module.UpdateVisibility) == "function" then
+                        mainJump.fovBodyVisibilityOriginalUpdateVisibility = module.UpdateVisibility
+                        mainJump.fovBodyVisibilityUpdateHook = function(self, ...)
+                            local result = mainJump.fovBodyVisibilityOriginalUpdateVisibility(self, ...)
+                            pcall(mainJump.applyFOVBodyAccessoryVisibility, self)
+                            return result
+                        end
+                    end
+
                     mainJump.fovBodyVisibilityHook = function(self)
                             if self.DataRegistry:Get("Scoped")
                                 or self.DataRegistry:Get("Hidden")
@@ -13481,6 +13555,9 @@ function mainJump.setFOVBodyVisibilityEnabled(state, persist)
 
             if state then
                 module.GetType = mainJump.fovBodyVisibilityHook
+                if mainJump.fovBodyVisibilityUpdateHook then
+                    module.UpdateVisibility = mainJump.fovBodyVisibilityUpdateHook
+                end
 
                 mainJump.fovBodyVisibilityEnabled = true
             end
