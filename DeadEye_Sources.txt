@@ -9890,7 +9890,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character
 
 STATUS:
-ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+ПРОВЕРЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена текущая декомпиляция; использовать как актуальный источник для текущего анализа.
 
 PURPOSE:
 Создаётся CharacterService для модели из Workspace.Players. Инициализирует Rig, Joints, Animations и ActionVisuals; только для локального персонажа создаёт Camera, Visibility, Movement и Actions. GetLocalCharacter() возвращает этот объект из CharacterService; объект хранит Model, Local, Rig и другие компоненты.
@@ -10139,7 +10139,7 @@ PATH:
 ReplicatedStorage.Client.UI.Menu.Scene.Viewmodel
 
 STATUS:
-ПРОВЕРЕНО: повторно подтверждён пользователем в недавнем наборе декомпиляций; считать актуальным для текущего анализа.
+ПРОВЕРЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена текущая декомпиляция; использовать как актуальный источник для текущего анализа.
 
 PURPOSE:
 Создаёт и отображает временную модель Viewmodel с именем VisualModel. Использует Items.Build / Character.Build, ShowItem, ShowCharacter, ShowListing, ShowModel и Attach/Detach. Подписывается на изменение PreviewTryOn, PreviewBody, PreviewHidden, экипировки и RigType; при обновлении может уничтожать старую VisualModel и строить новую. Это отдельная система предпросмотра меню, не модель персонажа из Workspace.Rigs.
