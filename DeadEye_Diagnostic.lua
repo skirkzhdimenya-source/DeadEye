@@ -1,3 +1,4 @@
+--// VERSION RULE: increment only digits after the dot; keep major version v1.
 --// DEADEYE DIAGNOSTIC BOOTSTRAP (starts before DeadEye initialization)
 local __DDCore = {}
 __DDCore.Env = _G
@@ -462,7 +463,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.246"
+local SCRIPT_VERSION = "1.247"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -2360,6 +2361,7 @@ local unusualRuntime = {
     nativeParticleConnections = {},
     nativeParticleLastFirstPerson = nil,
     reapplyGeneration = 0,
+    suppressOwnedTags = false,
     animationSource = nil,
     animationLinks = {},
     visualMirrors = {},
@@ -3488,10 +3490,11 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
                     end)
                 else
                     pcall(function()
-                        __UI.__L.applyUnusualFX(
+                        UnusualFns.applyNativeUnusualFallback(
                             restoreNativeUnusualId,
                             UnusualFns.getUnusualVisualRig(),
-                            UnusualFns.getUnusualPlayerCharacter()
+                            UnusualFns.getUnusualPlayerCharacter(),
+                            "cosmetic refresh had no reusable native snapshot"
                         )
                     end)
                 end
@@ -5829,30 +5832,63 @@ function UnusualFns.tagUnusualFX(
     object,
     id
 )
-    pcall(function()
-        object:SetAttribute(
-            "DeadEyeUnusualFX",
-            true
-        )
-        object:SetAttribute(
-            "DeadEyeUnusualFXID",
-            id
-        )
-    end)
-    for _, descendant in ipairs(
-        object:GetDescendants()
-    ) do
+    local suppressOwnership = unusualRuntime.suppressOwnedTags == true
+
+    local function applyTag(target)
         pcall(function()
-            descendant:SetAttribute(
-                "DeadEyeUnusualFX",
-                true
-            )
-            descendant:SetAttribute(
-                "DeadEyeUnusualFXID",
-                id
-            )
+            if suppressOwnership then
+                target:SetAttribute("DeadEyeUnusualFX", nil)
+                target:SetAttribute("DeadEyeUnusualFXID", nil)
+            else
+                target:SetAttribute("DeadEyeUnusualFX", true)
+                target:SetAttribute("DeadEyeUnusualFXID", id)
+            end
         end)
     end
+
+    applyTag(object)
+    for _, descendant in ipairs(object:GetDescendants()) do
+        applyTag(descendant)
+    end
+end
+
+-- Used only when the game has already removed the native original and there
+-- is no usable snapshot. Recreate a visible fallback without marking it as a
+-- DeadEye replacement, so removeOurUnusualFX() cannot delete it later.
+function UnusualFns.applyNativeUnusualFallback(
+    id,
+    visualRig,
+    playerCharacter,
+    reason
+)
+    if not id or tonumber(id) == 0 then
+        return false
+    end
+
+    local previousSuppress = unusualRuntime.suppressOwnedTags
+    unusualRuntime.suppressOwnedTags = true
+
+    local ok, result = pcall(function()
+        return __UI.__L.applyUnusualFX(
+            id,
+            visualRig,
+            playerCharacter
+        )
+    end)
+
+    unusualRuntime.suppressOwnedTags = previousSuppress
+
+    UnusualFns.traceSwap(
+        ok and result and "NATIVE_FALLBACK_APPLIED" or "NATIVE_FALLBACK_FAILED",
+        "id=" .. tostring(id)
+            .. "|reason=" .. tostring(reason)
+            .. "|pcall=" .. tostring(ok)
+            .. "|result=" .. tostring(result),
+        visualRig,
+        playerCharacter
+    )
+
+    return ok and result == true
 end
 --// =========================================================
 --// MAP ATTACHMENTS
@@ -9348,19 +9384,90 @@ function UnusualFns.captureNativeUnusualSnapshot(
         playerCharacter
     )
 
-    local snapshot = existingSnapshot or {
-        parts = {}
-    }
+    local snapshot = existingSnapshot or { parts = {} }
     local alreadyCaptured = {}
+    local baselineByPart = {}
+
+    -- Keep a per-limb record. A single saved limb must not mark the entire
+    -- model as captured, otherwise later limbs/new models are silently skipped.
     for _, savedPart in ipairs(snapshot.parts or {}) do
         if savedPart.targetModel then
-            alreadyCaptured[savedPart.targetModel] = true
+            alreadyCaptured[savedPart.targetModel] =
+                alreadyCaptured[savedPart.targetModel] or {}
+            alreadyCaptured[savedPart.targetModel][savedPart.partName] = true
+        end
+
+        if savedPart.partName
+            and (
+                #(savedPart.objects or {}) > 0
+                or #(savedPart.joints or {}) > 0
+            )
+            and not baselineByPart[savedPart.partName]
+        then
+            baselineByPart[savedPart.partName] = savedPart
         end
     end
-    local targets = UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+
+    local targets =
+        UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
+
+    local function clearOwnershipTags(root)
+        if not root then
+            return
+        end
+        local list = { root }
+        pcall(function()
+            for _, descendant in ipairs(root:GetDescendants()) do
+                table.insert(list, descendant)
+            end
+        end)
+        for _, object in ipairs(list) do
+            pcall(function()
+                object:SetAttribute("DeadEyeUnusualFX", nil)
+                object:SetAttribute("DeadEyeUnusualFXID", nil)
+            end)
+        end
+    end
+
+    local function cloneForTarget(source, targetPart)
+        local clone
+        pcall(function()
+            clone = source:Clone()
+        end)
+        if not clone then
+            return nil
+        end
+
+        -- Snapshot entries are baselines, never DeadEye-owned replacement FX.
+        clearOwnershipTags(clone)
+
+        pcall(function()
+            local cloneMap = {}
+            __UI.__L.mapUnusualCloneTree(source, clone, cloneMap)
+            __UI.__L.rebindUnusualCloneTree(
+                source,
+                clone,
+                cloneMap,
+                nil,
+                targetPart
+            )
+        end)
+        return clone
+    end
+
+    local function isDeadEyeOwned(object)
+        local owned = false
+        pcall(function()
+            owned = object:GetAttribute("DeadEyeUnusualFX") == true
+        end)
+        return owned
+    end
 
     local function matchesObject(object, info)
-        if object.ClassName ~= info.Class or object.Name ~= info.Name then
+        if isDeadEyeOwned(object)
+            or object.ClassName ~= info.Class
+            or object.Name ~= info.Name
+        then
             return false
         end
 
@@ -9372,15 +9479,17 @@ function UnusualFns.captureNativeUnusualSnapshot(
         return true
     end
 
-    --// Capture each root independently so cleanup can restore the native
-    --// effect on whichever model originally contained it.
+    -- Capture the original effect only once per exact model/limb. When a new
+    -- duplicate rig appears, seed its snapshot from the previously saved clean
+    -- baseline instead of cloning already-hidden/replacement objects from it.
     for partName, objects in pairs(signature) do
         for _, target in ipairs(targets) do
             local targetPart = target.model:FindFirstChild(partName)
+            local capturedForModel = alreadyCaptured[target.model]
 
-            if not alreadyCaptured[target.model]
-                and targetPart
+            if targetPart
                 and targetPart:IsA("BasePart")
+                and not (capturedForModel and capturedForModel[partName])
             then
                 local partSnapshot = {
                     partName = partName,
@@ -9390,57 +9499,61 @@ function UnusualFns.captureNativeUnusualSnapshot(
                     joints = {}
                 }
 
-                for _, existing in ipairs(targetPart:GetChildren()) do
-                    local matchedInfo = nil
+                local baseline =
+                    existingSnapshot
+                    and baselineByPart[partName]
+                    or nil
 
-                    for _, info in ipairs(objects) do
-                        if matchesObject(existing, info) then
-                            matchedInfo = info
-                            break
-                        end
-                    end
-
-                    if matchedInfo then
-                        local clone
-                        pcall(function()
-                            clone = existing:Clone()
-                        end)
-
+                if baseline then
+                    for _, savedObject in ipairs(baseline.objects or {}) do
+                        local clone = cloneForTarget(savedObject, targetPart)
                         if clone then
-                            if matchedInfo.WholeTree then
-                                local cloneMap = {}
-                                __UI.__L.mapUnusualCloneTree(existing, clone, cloneMap)
-                                __UI.__L.rebindUnusualCloneTree(
-                                    existing,
-                                    clone,
-                                    cloneMap,
-                                    nil,
-                                    targetPart
-                                )
-                            end
-
                             table.insert(partSnapshot.objects, clone)
                         end
                     end
-                end
 
-                for _, joint in ipairs(targetPart:GetChildren()) do
-                    if joint:IsA("Weld")
-                        or joint:IsA("WeldConstraint")
-                        or joint:IsA("Motor6D")
-                        or joint:IsA("Motor")
-                    then
+                    for _, savedJoint in ipairs(baseline.joints or {}) do
+                        local clone = cloneForTarget(savedJoint, targetPart)
+                        if clone then
+                            table.insert(partSnapshot.joints, clone)
+                        end
+                    end
+                else
+                    for _, existing in ipairs(targetPart:GetChildren()) do
+                        local matchedInfo = nil
+
                         for _, info in ipairs(objects) do
-                            if joint.Name == info.Name and not info.WholeTree then
-                                local clone
-                                pcall(function()
-                                    clone = joint:Clone()
-                                end)
-
-                                if clone then
-                                    table.insert(partSnapshot.joints, clone)
-                                end
+                            if matchesObject(existing, info) then
+                                matchedInfo = info
                                 break
+                            end
+                        end
+
+                        if matchedInfo then
+                            local clone = cloneForTarget(existing, targetPart)
+                            if clone then
+                                table.insert(partSnapshot.objects, clone)
+                            end
+                        end
+                    end
+
+                    for _, joint in ipairs(targetPart:GetChildren()) do
+                        if not isDeadEyeOwned(joint)
+                            and (
+                                joint:IsA("Weld")
+                                or joint:IsA("WeldConstraint")
+                                or joint:IsA("Motor6D")
+                                or joint:IsA("Motor")
+                            )
+                        then
+                            for _, info in ipairs(objects) do
+                                if joint.Name == info.Name and not info.WholeTree then
+                                    local clone = cloneForTarget(joint, targetPart)
+                                    if clone then
+                                        table.insert(partSnapshot.joints, clone)
+                                    end
+                                    break
+                                end
                             end
                         end
                     end
@@ -9448,6 +9561,9 @@ function UnusualFns.captureNativeUnusualSnapshot(
 
                 if #partSnapshot.objects > 0 or #partSnapshot.joints > 0 then
                     table.insert(snapshot.parts, partSnapshot)
+                    alreadyCaptured[target.model] =
+                        alreadyCaptured[target.model] or {}
+                    alreadyCaptured[target.model][partName] = true
                 end
             end
         end
@@ -9470,8 +9586,8 @@ function UnusualFns.captureNativeUnusualSnapshot(
     local capturedObjects = 0
     local capturedJoints = 0
     for _, partSnapshot in ipairs(snapshot.parts) do
-        capturedObjects += #partSnapshot.objects
-        capturedJoints += #partSnapshot.joints
+        capturedObjects += #(partSnapshot.objects or {})
+        capturedJoints += #(partSnapshot.joints or {})
     end
 
     UnusualFns.traceSwap(
@@ -9498,15 +9614,146 @@ function UnusualFns.restoreNativeUnusualSnapshot(
     end
 
     local restored = false
+    local matchedObjects = 0
+    local clonedObjects = 0
+    local matchedJoints = 0
+    local clonedJoints = 0
+    local restoredTargets = {}
+
+    local function clearOwnershipTags(root)
+        if not root then
+            return
+        end
+        local list = { root }
+        pcall(function()
+            for _, descendant in ipairs(root:GetDescendants()) do
+                table.insert(list, descendant)
+            end
+        end)
+        for _, object in ipairs(list) do
+            pcall(function()
+                object:SetAttribute("DeadEyeUnusualFX", nil)
+                object:SetAttribute("DeadEyeUnusualFXID", nil)
+            end)
+        end
+    end
+
+    local function copyVisualProperties(saved, current)
+        if saved:IsA("BasePart") and current:IsA("BasePart") then
+            pcall(function()
+                current.Transparency = saved.Transparency
+                current.LocalTransparencyModifier = saved.LocalTransparencyModifier
+                current.CastShadow = saved.CastShadow
+            end)
+        end
+
+        if (saved:IsA("Decal") or saved:IsA("Texture"))
+            and (current:IsA("Decal") or current:IsA("Texture"))
+        then
+            pcall(function()
+                current.Transparency = saved.Transparency
+            end)
+        end
+
+        local enabledClass =
+            saved:IsA("ParticleEmitter")
+            or saved:IsA("Trail")
+            or saved:IsA("Beam")
+            or saved:IsA("Fire")
+            or saved:IsA("Smoke")
+            or saved:IsA("Sparkles")
+            or saved:IsA("Highlight")
+            or saved:IsA("BillboardGui")
+            or saved:IsA("SurfaceGui")
+            or saved:IsA("PointLight")
+            or saved:IsA("SpotLight")
+            or saved:IsA("SurfaceLight")
+
+        if enabledClass then
+            pcall(function()
+                current.Enabled = saved.Enabled
+            end)
+        end
+
+        if saved:IsA("ParticleEmitter") and current:IsA("ParticleEmitter") then
+            pcall(function()
+                current.LocalTransparencyModifier = saved.LocalTransparencyModifier
+            end)
+        end
+    end
+
+    local function findMatchingChild(parent, saved)
+        if not parent then
+            return nil
+        end
+        for _, current in ipairs(parent:GetChildren()) do
+            if current.Name == saved.Name
+                and current.ClassName == saved.ClassName
+            then
+                if saved:IsA("MeshPart") then
+                    local match = false
+                    pcall(function()
+                        match =
+                            tostring(current.MeshId) == tostring(saved.MeshId)
+                            and tostring(current.TextureID) == tostring(saved.TextureID)
+                    end)
+                    if match then
+                        return current
+                    end
+                else
+                    return current
+                end
+            end
+        end
+        return nil
+    end
+
+    local function restoreMatchedTree(savedRoot, currentRoot)
+        copyVisualProperties(savedRoot, currentRoot)
+        clearOwnershipTags(currentRoot)
+
+        local used = {}
+        for _, savedChild in ipairs(savedRoot:GetChildren()) do
+            local currentChild = findMatchingChild(currentRoot, savedChild)
+            if currentChild and not used[currentChild] then
+                used[currentChild] = true
+                restoreMatchedTree(savedChild, currentChild)
+            end
+        end
+    end
+
+    local function cloneIntoTarget(saved, targetPart)
+        local clone
+        local ok = pcall(function()
+            clone = saved:Clone()
+        end)
+        if not ok or not clone then
+            return false
+        end
+
+        local cloneMap = {}
+        pcall(function()
+            __UI.__L.mapUnusualCloneTree(saved, clone, cloneMap)
+            __UI.__L.rebindUnusualCloneTree(
+                saved,
+                clone,
+                cloneMap,
+                nil,
+                targetPart
+            )
+        end)
+        clearOwnershipTags(clone)
+        clone.Parent = targetPart
+        return true
+    end
 
     for _, partSnapshot in ipairs(snapshot.parts) do
         local targetModel = partSnapshot.targetModel
-        if targetModel then
-            if not targetModel.Parent then
-                targetModel = nil
-            end
-        else
-            --// Legacy snapshots did not store the exact Instance.
+        if targetModel and not targetModel.Parent then
+            targetModel = nil
+        end
+
+        if not targetModel then
             targetModel =
                 UnusualFns.resolveUnusualTargetModel(
                     partSnapshot.targetRole,
@@ -9515,7 +9762,6 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                 )
         end
 
-        --// Compatibility with snapshots produced before targetRole existed.
         if not targetModel then
             if partSnapshot.partName == "HumanoidRootPart" then
                 targetModel = playerCharacter
@@ -9529,69 +9775,42 @@ function UnusualFns.restoreNativeUnusualSnapshot(
             and targetModel:FindFirstChild(partSnapshot.partName)
 
         if targetPart and targetPart:IsA("BasePart") then
-            for _, savedObject in ipairs(partSnapshot.objects) do
-                local exists = false
+            local targetKey = tostring(targetModel) .. "|" .. tostring(partSnapshot.partName)
+            restoredTargets[targetKey] = true
 
-                for _, current in ipairs(targetPart:GetChildren()) do
-                    if current.Name == savedObject.Name
-                        and current.ClassName == savedObject.ClassName
-                    then
-                        exists = true
-                        break
-                    end
-                end
+            for _, savedObject in ipairs(partSnapshot.objects or {}) do
+                local current = findMatchingChild(targetPart, savedObject)
 
-                if not exists then
-                    local clone
-                    pcall(function()
-                        clone = savedObject:Clone()
-                    end)
-
-                    if clone then
-                        local cloneMap = {}
-                        __UI.__L.mapUnusualCloneTree(
-                            savedObject,
-                            clone,
-                            cloneMap
-                        )
-                        __UI.__L.rebindUnusualCloneTree(
-                            savedObject,
-                            clone,
-                            cloneMap,
-                            nil,
-                            targetPart
-                        )
-                        clone.Parent = targetPart
-                        restored = true
-                    end
-                else
+                if current then
+                    restoreMatchedTree(savedObject, current)
+                    matchedObjects += 1
+                    restored = true
+                elseif cloneIntoTarget(savedObject, targetPart) then
+                    clonedObjects += 1
                     restored = true
                 end
             end
 
-            for _, savedJoint in ipairs(partSnapshot.joints) do
-                local exists = false
+            for _, savedJoint in ipairs(partSnapshot.joints or {}) do
+                local current = findMatchingChild(targetPart, savedJoint)
 
-                for _, current in ipairs(targetPart:GetChildren()) do
-                    if current.Name == savedJoint.Name
-                        and current.ClassName == savedJoint.ClassName
-                    then
-                        exists = true
-                        break
-                    end
-                end
-
-                if not exists then
-                    local clone
+                if current then
+                    local map = {}
                     pcall(function()
-                        clone = savedJoint:Clone()
+                        __UI.__L.mapUnusualCloneTree(savedJoint, current, map)
+                        __UI.__L.rebindUnusualCloneTree(
+                            savedJoint,
+                            current,
+                            map,
+                            nil,
+                            targetPart
+                        )
                     end)
-
-                    if clone then
-                        clone.Parent = targetPart
-                        restored = true
-                    end
-                else
+                    clearOwnershipTags(current)
+                    matchedJoints += 1
+                    restored = true
+                elseif cloneIntoTarget(savedJoint, targetPart) then
+                    clonedJoints += 1
                     restored = true
                 end
             end
@@ -9605,6 +9824,24 @@ function UnusualFns.restoreNativeUnusualSnapshot(
             UnusualFns.repairNativeJointLinks(target.model)
         end)
     end
+
+    UnusualFns.traceSwap(
+        "SNAPSHOT_RESTORE_RESULT",
+        "restored=" .. tostring(restored)
+            .. "|matchedObjects=" .. tostring(matchedObjects)
+            .. "|clonedObjects=" .. tostring(clonedObjects)
+            .. "|matchedJoints=" .. tostring(matchedJoints)
+            .. "|clonedJoints=" .. tostring(clonedJoints)
+            .. "|targetParts=" .. tostring((function()
+                local count = 0
+                for _ in pairs(restoredTargets) do
+                    count += 1
+                end
+                return count
+            end)()),
+        visualRig,
+        playerCharacter
+    )
 
     return restored
 end
@@ -9728,10 +9965,11 @@ function UnusualFns.restoreUnusual()
             )
             task.wait()
 
-            __UI.__L.applyUnusualFX(
+            UnusualFns.applyNativeUnusualFallback(
                 originalId,
                 visualRig,
-                playerCharacter
+                playerCharacter,
+                "snapshot restore missed"
             )
         end
 
@@ -24074,10 +24312,11 @@ __UI.__L.cleanupUnusual = function()
                     )
                     task.wait()
 
-                    __UI.__L.applyUnusualFX(
+                    UnusualFns.applyNativeUnusualFallback(
                         runtimeRestoreId,
                         visualRig,
-                        playerCharacter
+                        playerCharacter,
+                        "cleanup had no current native snapshot"
                     )
                 end
             end
