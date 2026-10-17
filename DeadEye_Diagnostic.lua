@@ -6767,7 +6767,8 @@ unusualRuntime.installAnimatedNestedModels = function(
                     {
                         model = clone,
                         root = root,
-                        targetRig = targetRig
+                        targetRig = targetRig,
+                        id = id
                     }
                 )
 
@@ -11123,6 +11124,7 @@ UnusualFns.addUnusualConnection(
                             local hasAnimatedNested = false
                             for _, animated in ipairs(unusualRuntime.animatedNestedVisuals) do
                                 if animated.targetRig == target.model
+                                    and tonumber(animated.id) == tonumber(unusualSlot.replaceId)
                                     and animated.model
                                     and animated.model.Parent
                                 then
@@ -11131,7 +11133,23 @@ UnusualFns.addUnusualConnection(
                                 end
                             end
 
-                            if not hasReplacement and not hasAnimatedNested then
+                            --// Some Unusuals are a single world-space visual mirror,
+                            --// not child FX on the rig model itself.
+                            local hasGlobalMirror = false
+                            for _, mirror in ipairs(unusualRuntime.visualMirrors) do
+                                if tonumber(mirror.id) == tonumber(unusualSlot.replaceId)
+                                    and mirror.model
+                                    and mirror.model.Parent
+                                then
+                                    hasGlobalMirror = true
+                                    break
+                                end
+                            end
+
+                            if not hasReplacement
+                                and not hasAnimatedNested
+                                and not hasGlobalMirror
+                            then
                                 expected = false
                             end
                         end
