@@ -464,7 +464,7 @@ end
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.251"
+local SCRIPT_VERSION = "1.252"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -9841,7 +9841,11 @@ function UnusualFns.restoreNativeUnusualSnapshot(
         end
     end
 
-    local function findMatchingChild(parent, saved)
+    local nestedClonedObjects = 0
+    local nestedCloneFailures = 0
+    local restoreTreeComplete = true
+
+    local function findMatchingChild(parent, saved, used)
         if not parent then
             return nil
         end
@@ -9853,7 +9857,8 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                 fallbackOwned = current:GetAttribute("DeadEyeNativeFallback") == true
             end)
 
-            if not deadEyeOwned
+            if (not used or not used[current])
+                and not deadEyeOwned
                 and not fallbackOwned
                 and current.Name == saved.Name
                 and current.ClassName == saved.ClassName
@@ -9876,27 +9881,15 @@ function UnusualFns.restoreNativeUnusualSnapshot(
         return nil
     end
 
-    local function restoreMatchedTree(savedRoot, currentRoot)
-        copyVisualProperties(savedRoot, currentRoot)
-        clearOwnershipTags(currentRoot)
-
-        local used = {}
-        for _, savedChild in ipairs(savedRoot:GetChildren()) do
-            local currentChild = findMatchingChild(currentRoot, savedChild)
-            if currentChild and not used[currentChild] then
-                used[currentChild] = true
-                restoreMatchedTree(savedChild, currentChild)
-            end
-        end
-    end
-
-    local function cloneIntoTarget(saved, targetPart)
+    -- Clone a missing node into its existing parent, while rebinding joints
+    -- and recording every descendant in the per-target source->live map.
+    local function cloneIntoParent(saved, parent, targetPart, targetMap)
         local clone
         local ok = pcall(function()
             clone = saved:Clone()
         end)
         if not ok or not clone then
-            return false
+            return nil
         end
 
         local cloneMap = {}
@@ -9910,9 +9903,121 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                 targetPart
             )
         end)
+
         clearOwnershipTags(clone)
-        clone.Parent = targetPart
-        return true
+        clone.Parent = parent
+
+        if targetMap then
+            for sourceObject, cloneObject in pairs(cloneMap) do
+                targetMap[sourceObject] = cloneObject
+            end
+        end
+
+        return clone
+    end
+
+    -- Merge the saved tree into a partially rebuilt live tree. The previous
+    -- implementation only restored properties for matching nodes and silently
+    -- skipped missing descendants (including Trail/Beam and their Attachments).
+    local function restoreMatchedTree(savedRoot, currentRoot, targetPart, targetMap)
+        targetMap[savedRoot] = currentRoot
+        copyVisualProperties(savedRoot, currentRoot)
+        clearOwnershipTags(currentRoot)
+
+        local used = {}
+        local complete = true
+        for _, savedChild in ipairs(savedRoot:GetChildren()) do
+            local currentChild = findMatchingChild(currentRoot, savedChild, used)
+            if currentChild then
+                used[currentChild] = true
+                if not restoreMatchedTree(
+                    savedChild,
+                    currentChild,
+                    targetPart,
+                    targetMap
+                ) then
+                    complete = false
+                end
+            else
+                local clone = cloneIntoParent(
+                    savedChild,
+                    currentRoot,
+                    targetPart,
+                    targetMap
+                )
+                if clone then
+                    nestedClonedObjects += 1
+                else
+                    nestedCloneFailures += 1
+                    complete = false
+                end
+            end
+        end
+
+        return complete
+    end
+
+    local function cloneIntoTarget(saved, targetPart, targetMap)
+        return cloneIntoParent(
+            saved,
+            targetPart,
+            targetPart,
+            targetMap
+        ) ~= nil
+    end
+
+    -- A native Trail/Beam may still reference an Attachment from the old rig
+    -- even after its replacement tree was cloned. Rebind stale refs by name to
+    -- Attachments in the live body part first, then in its active visual model.
+    local function rebindLiveTrailAttachments(targetPart)
+        local ownerModel = targetPart and targetPart:FindFirstAncestorOfClass("Model")
+        local roots = { targetPart }
+        if ownerModel and ownerModel ~= targetPart then
+            table.insert(roots, ownerModel)
+        end
+
+        local function findAttachment(name)
+            for _, root in ipairs(roots) do
+                if root then
+                    for _, candidate in ipairs(root:GetDescendants()) do
+                        if candidate:IsA("Attachment")
+                            and candidate.Name == name
+                        then
+                            return candidate
+                        end
+                    end
+                end
+            end
+            return nil
+        end
+
+        for _, object in ipairs(targetPart:GetDescendants()) do
+            if object:IsA("Trail") or object:IsA("Beam") then
+                for _, property in ipairs({ "Attachment0", "Attachment1" }) do
+                    local oldAttachment
+                    pcall(function()
+                        oldAttachment = object[property]
+                    end)
+
+                    if oldAttachment then
+                        local isLive = false
+                        pcall(function()
+                            isLive = ownerModel
+                                and oldAttachment:IsDescendantOf(ownerModel)
+                        end)
+
+                        if not isLive then
+                            local replacement = findAttachment(oldAttachment.Name)
+                            if replacement then
+                                pcall(function()
+                                    object[property] = replacement
+                                end)
+                            end
+                        end
+                    end
+                end
+            end
+        end
     end
 
     -- Build a clean baseline per body-part name. Snapshot targetModel references
@@ -9948,16 +10053,47 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                 restoredTargets[targetModel] = restoredTargets[targetModel] or {}
                 restoredTargets[targetModel][partName] = true
 
+                local targetRestoreMap = {}
+                local restoredRoots = {}
+
                 for _, savedObject in ipairs(partSnapshot.objects or {}) do
                     local current = findMatchingChild(targetPart, savedObject)
 
                     if current then
-                        restoreMatchedTree(savedObject, current)
+                        local treeComplete = restoreMatchedTree(
+                            savedObject,
+                            current,
+                            targetPart,
+                            targetRestoreMap
+                        )
+                        table.insert(restoredRoots, {
+                            saved = savedObject,
+                            live = current
+                        })
+                        if not treeComplete then
+                            restoreTreeComplete = false
+                        end
                         matchedObjects += 1
                         restored = true
-                    elseif cloneIntoTarget(savedObject, targetPart) then
-                        clonedObjects += 1
-                        restored = true
+                    else
+                        local beforeNested = nestedClonedObjects
+                        if cloneIntoTarget(
+                            savedObject,
+                            targetPart,
+                            targetRestoreMap
+                        ) then
+                            local liveRoot = findMatchingChild(targetPart, savedObject)
+                            if liveRoot then
+                                table.insert(restoredRoots, {
+                                    saved = savedObject,
+                                    live = liveRoot
+                                })
+                            end
+                            clonedObjects += 1
+                            restored = true
+                        else
+                            restoreTreeComplete = false
+                        end
                     end
                 end
 
@@ -9965,25 +10101,67 @@ function UnusualFns.restoreNativeUnusualSnapshot(
                     local current = findMatchingChild(targetPart, savedJoint)
 
                     if current then
-                        local map = {}
+                        local treeComplete = restoreMatchedTree(
+                            savedJoint,
+                            current,
+                            targetPart,
+                            targetRestoreMap
+                        )
+                        table.insert(restoredRoots, {
+                            saved = savedJoint,
+                            live = current
+                        })
                         pcall(function()
-                            __UI.__L.mapUnusualCloneTree(savedJoint, current, map)
                             __UI.__L.rebindUnusualCloneTree(
                                 savedJoint,
                                 current,
-                                map,
+                                targetRestoreMap,
                                 nil,
                                 targetPart
                             )
                         end)
-                        clearOwnershipTags(current)
+                        if not treeComplete then
+                            restoreTreeComplete = false
+                        end
                         matchedJoints += 1
                         restored = true
-                    elseif cloneIntoTarget(savedJoint, targetPart) then
-                        clonedJoints += 1
-                        restored = true
+                    else
+                        if cloneIntoTarget(
+                            savedJoint,
+                            targetPart,
+                            targetRestoreMap
+                        ) then
+                            local liveRoot = findMatchingChild(targetPart, savedJoint)
+                            if liveRoot then
+                                table.insert(restoredRoots, {
+                                    saved = savedJoint,
+                                    live = liveRoot
+                                })
+                            end
+                            clonedJoints += 1
+                            restored = true
+                        else
+                            restoreTreeComplete = false
+                        end
                     end
                 end
+
+                -- Second pass: once all sibling Attachments exist, rebind every
+                -- saved Trail/Beam to the matched/cloned descendants. This also
+                -- repairs references held by a snapshot Trail to a pre-refresh
+                -- Attachment that has since been destroyed or detached.
+                for _, pair in ipairs(restoredRoots) do
+                    pcall(function()
+                        __UI.__L.rebindUnusualCloneTree(
+                            pair.saved,
+                            pair.live,
+                            targetRestoreMap,
+                            nil,
+                            targetPart
+                        )
+                    end)
+                end
+                rebindLiveTrailAttachments(targetPart)
             end
         end
     end
@@ -10003,6 +10181,9 @@ function UnusualFns.restoreNativeUnusualSnapshot(
             .. "|clonedObjects=" .. tostring(clonedObjects)
             .. "|matchedJoints=" .. tostring(matchedJoints)
             .. "|clonedJoints=" .. tostring(clonedJoints)
+            .. "|nestedClonedObjects=" .. tostring(nestedClonedObjects)
+            .. "|nestedCloneFailures=" .. tostring(nestedCloneFailures)
+            .. "|restoreTreeComplete=" .. tostring(restoreTreeComplete)
             .. "|targetParts=" .. tostring((function()
                 local count = 0
                 for _, parts in pairs(restoredTargets) do
