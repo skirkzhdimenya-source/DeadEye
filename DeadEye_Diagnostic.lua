@@ -6943,6 +6943,18 @@ unusualRuntime.createVisualMirror = function(
         return false
     end
 
+    --// Two target models can request the same source mini-rig. This mirror
+    --// follows the source in world space, so only one visible copy is needed.
+    for _, mirror in ipairs(unusualRuntime.visualMirrors) do
+        if mirror.source == sourceModel
+            and tostring(mirror.id) == tostring(id)
+            and mirror.model
+            and mirror.model.Parent
+        then
+            return true
+        end
+    end
+
     local sourceParts = {}
 
     for _, object in ipairs(
@@ -7105,7 +7117,9 @@ unusualRuntime.createVisualMirror = function(
         unusualRuntime.visualMirrors,
         {
             model = clone,
-            links = links
+            links = links,
+            source = sourceModel,
+            id = id
         }
     )
 
