@@ -9687,6 +9687,11 @@ function UnusualFns.reapplyUnusual()
                 end
             end
 
+            -- Cleanup/toggle-off can happen while this spawned task is waiting.
+            if not unusualEnabled then
+                return
+            end
+
             -- Stay armed in menus or during the game's short rig/loadout transition.
             local characterObject = getCharacterObject()
             if not characterObject or not characterObject.Animations
