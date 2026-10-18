@@ -9620,6 +9620,12 @@ function UnusualFns.activateUnusual()
         equippedId = equippedId,
         replacementId = replacementId
     }
+    warn("[DeadEye Unusual] APPLY begin"
+        .. "|equipped=" .. tostring(equippedId)
+        .. "|replacement=" .. tostring(replacementId)
+        .. "|cosmetics=" .. tostring(#originalCosmetics)
+        .. "|matchedSlots=" .. tostring(replaced)
+        .. "|model=" .. tostring(characterObject.Model))
     unusualRuntime.rigSwap = state
     genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
 
@@ -9642,6 +9648,21 @@ function UnusualFns.activateUnusual()
         unusualRuntime.nativeSnapshot = nil
         unusualActive = true
 
+        warn("[DeadEye Unusual] BuildRig completed"
+            .. "|rig=" .. tostring(builtRig:GetFullName())
+            .. "|primaryPart=" .. tostring(primaryPart:GetFullName())
+            .. "|rootAdditions=" .. tostring(#state.targetRootAdditions))
+        for index, object in ipairs(state.targetRootAdditions) do
+            if index > 40 then
+                warn("[DeadEye Unusual] Root addition listing truncated at 40 objects.")
+                break
+            end
+            local ok, fullName = pcall(function()
+                return object:GetFullName()
+            end)
+            warn("[DeadEye Unusual] Root addition[" .. tostring(index) .. "]="
+                .. tostring(ok and fullName or object))
+        end
 
         if #state.targetRootAdditions == 0 then
             warn("[DeadEye Unusual] BuildRig returned, but no new descendants were found under PrimaryPart.")
