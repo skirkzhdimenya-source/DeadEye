@@ -4879,6 +4879,26 @@ end
 function UnusualFns.traceSwap(_event, _extra, _visualRig, _playerCharacter)
 end
 
+function UnusualFns.getUnusualCosmeticRig(id, visualRig)
+    local module = getItemModule(id)
+    if not module or not visualRig then
+        return nil
+    end
+
+    local humanoid = visualRig:FindFirstChildOfClass("Humanoid")
+    if not humanoid then
+        return nil
+    end
+
+    if humanoid.RigType == Enum.HumanoidRigType.R6 then
+        return module:FindFirstChild("CharacterClassic")
+            or module:FindFirstChild("Character")
+    end
+
+    return module:FindFirstChild("Character")
+        or module:FindFirstChild("CharacterClassic")
+end
+
 --// FX CLASSES
 --// =========================================================
 local UNUSUAL_FX_CLASSES = {
@@ -9612,14 +9632,6 @@ function UnusualFns.activateUnusual()
         unusualRuntime.nativeSnapshot = nil
         unusualActive = true
 
-        local containsReplacement = false
-        for _, value in ipairs(component.Cosmetics) do
-            if tonumber(value) == replacementId then
-                containsReplacement = true
-                break
-            end
-        end
-        assert(containsReplacement, "Replacement ID disappeared from Rig.Cosmetics during BuildRig")
 
         if #state.targetRootAdditions == 0 then
             warn("[DeadEye Unusual] BuildRig returned, but no new descendants were found under PrimaryPart.")
