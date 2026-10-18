@@ -10033,36 +10033,52 @@ end
 local function nativeRootSnapshot(root)
     local result = {}
     if root then
-        for _, object in ipairs(root:GetChildren()) do
+        for _, object in ipairs(root:GetDescendants()) do
             result[object] = true
         end
     end
     return result
 end
 
-local function nativeRootChildIsProtected(object)
-    if not object then
+local function nativeRootObjectIsProtected(object, root)
+    if not object or object == root then
         return true
     end
-    -- These are normal character sound/position anchors, not cosmetic leaks.
+    -- Preserve the game's existing sound/position anchors and their contents.
     if object.Name == "HeadPos" or object.Name == "SoundPos" then
         return true
     end
     if object:IsA("Sound") and object.Name == "FootstepSound" then
         return true
     end
+
+    local ancestor = object.Parent
+    while ancestor and ancestor ~= root do
+        if ancestor.Name == "HeadPos" or ancestor.Name == "SoundPos" then
+            return true
+        end
+        ancestor = ancestor.Parent
+    end
     return false
 end
 
 local function trackNativeRootObject(state, object)
     local root = state and state.primaryPart
-    if not root or not object or object.Parent ~= root then
+    if not root or not object then
+        return
+    end
+
+    local underRoot = false
+    pcall(function()
+        underRoot = object:IsDescendantOf(root)
+    end)
+    if not underRoot then
         return
     end
     if state.baselineRoot and state.baselineRoot[object] then
         return
     end
-    if nativeRootChildIsProtected(object) then
+    if nativeRootObjectIsProtected(object, root) then
         return
     end
 
@@ -10081,7 +10097,7 @@ local function captureNativeRootDelta(state)
     if not root or type(baseline) ~= "table" then
         return
     end
-    for _, object in ipairs(root:GetChildren()) do
+    for _, object in ipairs(root:GetDescendants()) do
         if not baseline[object] then
             trackNativeRootObject(state, object)
         end
@@ -10105,17 +10121,58 @@ local function cleanupNativeRootAdditions(state)
     stopNativeRootTracking(state)
 
     local root = state.primaryPart
+    if not root then
+        state.rootAdditions = {}
+        state.rootAddedSet = {}
+        return
+    end
+
+    local tracked = {}
     for _, object in ipairs(state.rootAdditions or {}) do
-        -- Only destroy the exact direct HRP children observed after Apply.
-        -- Nested gameplay sounds under protected anchors are never traversed.
-        if root and object.Parent == root
+        tracked[object] = true
+    end
+
+    local cleanupRoots = {}
+    for _, object in ipairs(state.rootAdditions or {}) do
+        local underRoot = false
+        pcall(function()
+            underRoot = object:IsDescendantOf(root)
+        end)
+
+        if underRoot
             and not (state.baselineRoot and state.baselineRoot[object])
+            and not nativeRootObjectIsProtected(object, root)
         then
+            local ancestor = object.Parent
+            local hasTrackedAncestor = false
+            while ancestor and ancestor ~= root do
+                if tracked[ancestor] then
+                    hasTrackedAncestor = true
+                    break
+                end
+                ancestor = ancestor.Parent
+            end
+
+            if not hasTrackedAncestor then
+                table.insert(cleanupRoots, object)
+            end
+        end
+    end
+
+    -- Delete only highest added branches. A new object inside a pre-existing
+    -- Attachment has no tracked ancestor and is cleaned individually.
+    for _, object in ipairs(cleanupRoots) do
+        local underRoot = false
+        pcall(function()
+            underRoot = object:IsDescendantOf(root)
+        end)
+        if underRoot then
             pcall(function()
                 object:Destroy()
             end)
         end
     end
+
     state.rootAdditions = {}
     state.rootAddedSet = {}
 end
@@ -10352,7 +10409,7 @@ function UnusualFns.activateNativeUnusual(characterObject)
         rootAddedConnection = nil
     }
 
-    state.rootAddedConnection = root.ChildAdded:Connect(function(object)
+    state.rootAddedConnection = root.DescendantAdded:Connect(function(object)
         trackNativeRootObject(state, object)
     end)
     unusualRuntime.nativeRebuildState = state
@@ -10383,7 +10440,7 @@ function UnusualFns.activateNativeUnusual(characterObject)
             state.baselineRoot = rollbackBaseline
             state.rootAdditions = {}
             state.rootAddedSet = {}
-            state.rootAddedConnection = root.ChildAdded:Connect(function(object)
+            state.rootAddedConnection = root.DescendantAdded:Connect(function(object)
                 trackNativeRootObject(state, object)
             end)
             captureNativeRootDelta(state)
@@ -10471,7 +10528,7 @@ function UnusualFns.restoreNativeUnusual()
         state.rootAddedSet = {}
         captureNativeRootDelta(state)
         if root and root.Parent then
-            state.rootAddedConnection = root.ChildAdded:Connect(function(object)
+            state.rootAddedConnection = root.DescendantAdded:Connect(function(object)
                 trackNativeRootObject(state, object)
             end)
         end
