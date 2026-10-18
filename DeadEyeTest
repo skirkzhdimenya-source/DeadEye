@@ -9464,6 +9464,9 @@ function UnusualFns.restoreUnusual()
     if not model or not model.Parent or primaryPart ~= state.primaryPart or not component then
         state.active = false
         unusualRuntime.rigSwap = nil
+        if genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY == state then
+            genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = nil
+        end
         unusualActive = false
         unusualRuntime.originalId = nil
         unusualRuntime.replacementId = nil
@@ -9514,12 +9517,18 @@ function UnusualFns.restoreUnusual()
     end)
 
     if not ok then
+        state.restoreRetryRequired = true
+        genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
         warn("[DeadEye Unusual] RESTORE failed; retaining recovery state: " .. tostring(err))
         return false
     end
 
     state.active = false
+    state.restoreRetryRequired = nil
     unusualRuntime.rigSwap = nil
+    if genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY == state then
+        genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = nil
+    end
     unusualActive = false
     unusualRuntime.originalId = nil
     unusualRuntime.currentEquippedId = currentEquippedId
@@ -9612,6 +9621,7 @@ function UnusualFns.activateUnusual()
         replacementId = replacementId
     }
     unusualRuntime.rigSwap = state
+    genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
 
     local ok, err = pcall(function()
         component.Cosmetics = replacementCosmetics
@@ -9643,10 +9653,14 @@ function UnusualFns.activateUnusual()
             state.targetRootAdditions = getNewUnusualRootObjects(primaryPart, state.baselineRoot)
         end)
         warn("[DeadEye Unusual] APPLY failed; attempting rollback: " .. tostring(err))
-        pcall(function()
-            UnusualFns.restoreUnusual()
-        end)
-        unusualActive = false
+        local restoreOK, restoreResult = pcall(UnusualFns.restoreUnusual)
+        if not restoreOK or restoreResult ~= true then
+            state.restoreRetryRequired = true
+            genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
+            unusualEnabled = true
+            genv.UNUSUAL_SWAPPER_ENABLED = true
+        end
+        unusualActive = state.active == true
         return false
     end
 
@@ -9702,6 +9716,18 @@ function UnusualFns.reapplyUnusual()
 
         unusualReapplyBusy = false
         pcall(updateUnusualToggle)
+    end)
+end
+
+local previousRigSwapRecovery = genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY
+if type(previousRigSwapRecovery) == "table" and previousRigSwapRecovery.active then
+    unusualRuntime.rigSwap = previousRigSwapRecovery
+    unusualActive = true
+    task.defer(function()
+        if UnusualFns.restoreUnusual() then
+            unusualRuntime.rigSwap = nil
+            genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = nil
+        end
     end)
 end
 
@@ -9934,8 +9960,15 @@ UnusualFns.addUnusualConnection(
         local current = getCharacterObject()
         local state = unusualRuntime.rigSwap
         if current then
+            local configuredOriginal = tonumber(unusualSlot.originalId)
+            local configuredReplacement = tonumber(unusualSlot.replaceId)
+            local equippedNow = tonumber(UnusualFns.getEquippedUnusualId())
             if type(state) ~= "table" or not state.active
                 or state.characterObject ~= current
+                or state.restoreRetryRequired == true
+                or configuredOriginal ~= tonumber(state.equippedId)
+                or configuredReplacement ~= tonumber(state.replacementId)
+                or (equippedNow and equippedNow ~= 0 and equippedNow ~= tonumber(state.equippedId))
             then
                 task.defer(function()
                     UnusualFns.reapplyUnusual()
@@ -10512,7 +10545,16 @@ function UnusualFns.rebuildUnusualPicker()
                     if unusualEnabled then
                         unusualEnabled = false
                         genv.UNUSUAL_SWAPPER_ENABLED = false
-                        UnusualFns.restoreUnusual()
+                        local restoreOK, restored = pcall(UnusualFns.restoreUnusual)
+                        if not restoreOK or restored ~= true then
+                            unusualEnabled = true
+                            genv.UNUSUAL_SWAPPER_ENABLED = true
+                            if type(unusualRuntime.rigSwap) == "table" then
+                                unusualRuntime.rigSwap.restoreRetryRequired = true
+                                genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = unusualRuntime.rigSwap
+                            end
+                            warn("[DeadEye Unusual] Picker change delayed because RESTORE failed.")
+                        end
                         updateUnusualToggle()
                     end
 
@@ -21333,9 +21375,21 @@ __UI.__L.cleanupUnusual = function()
         task.wait()
     end
 
-    pcall(function()
-        UnusualFns.restoreUnusual()
-    end)
+    local swapRestoreSucceeded = false
+    for attempt = 1, 8 do
+        local ok, result = pcall(UnusualFns.restoreUnusual)
+        if ok and result == true then
+            swapRestoreSucceeded = true
+            break
+        end
+        task.wait(0.1)
+    end
+    if not swapRestoreSucceeded then
+        if type(unusualRuntime.rigSwap) == "table" then
+            genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = unusualRuntime.rigSwap
+        end
+        warn("[DeadEye Unusual] Restore remains pending; state saved for the next script run.")
+    end
     unusualActive = false
 
     pcall(function()
@@ -21383,7 +21437,10 @@ __UI.__L.cleanupUnusual = function()
         warn("[DeadEye Avatar] Restore is incomplete; saved HumanoidDescription snapshots were retained for recovery.")
     end
 
-    unusualRuntime.rigSwap = nil
+    if swapRestoreSucceeded then
+        unusualRuntime.rigSwap = nil
+        genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = nil
+    end
     unusualRuntime.originalId = nil
     unusualRuntime.currentEquippedId = tonumber(UnusualFns.getEquippedUnusualId())
     unusualRuntime.replacementId = nil
@@ -23309,7 +23366,16 @@ __UI.__L.addConnection(
                 if unusualEnabled then
                     unusualEnabled = false
                     genv.UNUSUAL_SWAPPER_ENABLED = false
-                    UnusualFns.restoreUnusual()
+                    local restoreOK, restored = pcall(UnusualFns.restoreUnusual)
+                    if not restoreOK or restored ~= true then
+                        unusualEnabled = true
+                        genv.UNUSUAL_SWAPPER_ENABLED = true
+                        if type(unusualRuntime.rigSwap) == "table" then
+                            unusualRuntime.rigSwap.restoreRetryRequired = true
+                            genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = unusualRuntime.rigSwap
+                        end
+                        warn("[DeadEye Unusual] Toggle-off cancelled because RESTORE failed.")
+                    end
                     UnusualFns.traceSwap("TOGGLE_DISABLED", "restore returned")
                 else
                     if not unusualSlot.originalId
