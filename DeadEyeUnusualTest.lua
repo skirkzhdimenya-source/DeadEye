@@ -10184,7 +10184,6 @@ local function getNativeRestoreCosmetics(state, currentEquippedId)
     -- cosmetic changes intact.
     if currentEquippedId == tonumber(state.originalId)
         and not hasReplacementAtSavedIndex
-        and hasOriginalAtSavedIndex
     then
         return current
     end
@@ -23226,6 +23225,7 @@ __UI.__L.cleanupUnusual = function()
             task.wait(0.15)
         end
         if not restored then
+            stopNativeRootTracking(unusualRuntime.nativeRebuildState)
             warn("[UnusualSwapper] Cleanup could not finish native Restore; saved state retained")
         end
     else
