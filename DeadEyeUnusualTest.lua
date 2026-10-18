@@ -10135,16 +10135,75 @@ local function cleanupNativeRootAdditions(state)
         tracked[object] = true
     end
 
+    local function isUnderRoot(object)
+        local ok, result = pcall(function()
+            return object and object:IsDescendantOf(root)
+        end)
+        return ok and result == true
+    end
+
+    local function hasProtectedDescendant(object)
+        if nativeRootObjectIsProtected(object, state) then
+            return true
+        end
+        for _, descendant in ipairs(object:GetDescendants()) do
+            if nativeRootObjectIsProtected(descendant, state) then
+                return true
+            end
+        end
+        return false
+    end
+
+    local function hasTrackedDescendant(object)
+        if tracked[object] then
+            return true
+        end
+        for _, descendant in ipairs(object:GetDescendants()) do
+            if tracked[descendant] then
+                return true
+            end
+        end
+        return false
+    end
+
+    local function cleanupAddedBranch(object)
+        if not isUnderRoot(object)
+            or (state.baselineRoot and state.baselineRoot[object])
+            or nativeRootObjectIsProtected(object, state)
+        then
+            return
+        end
+
+        -- Destroy whole added branches when they contain no protected game
+        -- object. If one does, descend and remove only the safe tracked pieces.
+        if not hasProtectedDescendant(object) then
+            pcall(function()
+                object:Destroy()
+            end)
+            return
+        end
+
+        for _, child in ipairs(object:GetChildren()) do
+            if tracked[child] or hasTrackedDescendant(child) then
+                cleanupAddedBranch(child)
+            end
+        end
+
+        -- The containing attachment may be new but needed by a protected
+        -- sound; remove it only when the protected descendant is gone.
+        if isUnderRoot(object) and tracked[object]
+            and not hasProtectedDescendant(object)
+        then
+            pcall(function()
+                object:Destroy()
+            end)
+        end
+    end
+
     local cleanupRoots = {}
     for _, object in ipairs(state.rootAdditions or {}) do
-        local underRoot = false
-        pcall(function()
-            underRoot = object:IsDescendantOf(root)
-        end)
-
-        if underRoot
+        if isUnderRoot(object)
             and not (state.baselineRoot and state.baselineRoot[object])
-            and not nativeRootObjectIsProtected(object, state)
         then
             local ancestor = object.Parent
             local hasTrackedAncestor = false
@@ -10155,25 +10214,14 @@ local function cleanupNativeRootAdditions(state)
                 end
                 ancestor = ancestor.Parent
             end
-
             if not hasTrackedAncestor then
                 table.insert(cleanupRoots, object)
             end
         end
     end
 
-    -- Delete only highest added branches. A new object inside a pre-existing
-    -- Attachment has no tracked ancestor and is cleaned individually.
     for _, object in ipairs(cleanupRoots) do
-        local underRoot = false
-        pcall(function()
-            underRoot = object:IsDescendantOf(root)
-        end)
-        if underRoot then
-            pcall(function()
-                object:Destroy()
-            end)
-        end
+        cleanupAddedBranch(object)
     end
 
     state.rootAdditions = {}
