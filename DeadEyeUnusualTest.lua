@@ -10040,21 +10040,24 @@ local function nativeRootSnapshot(root)
     return result
 end
 
-local function nativeRootObjectIsProtected(object, root)
-    if not object or object == root then
+local function nativeRootObjectIsProtected(object, state)
+    local root = state and state.primaryPart
+    local baseline = state and state.baselineRoot
+    if not object or not root or object == root then
         return true
     end
-    -- Preserve the game's existing sound/position anchors and their contents.
-    if object.Name == "HeadPos" or object.Name == "SoundPos" then
-        return true
-    end
+
+    -- Preserve HeadPos/SoundPos only when they were present before Apply.
+    -- A newly added node is still tracked by identity, never by effect ID.
     if object:IsA("Sound") and object.Name == "FootstepSound" then
         return true
     end
 
-    local ancestor = object.Parent
+    local ancestor = object
     while ancestor and ancestor ~= root do
-        if ancestor.Name == "HeadPos" or ancestor.Name == "SoundPos" then
+        if (ancestor.Name == "HeadPos" or ancestor.Name == "SoundPos")
+            and baseline and baseline[ancestor]
+        then
             return true
         end
         ancestor = ancestor.Parent
@@ -10078,7 +10081,7 @@ local function trackNativeRootObject(state, object)
     if state.baselineRoot and state.baselineRoot[object] then
         return
     end
-    if nativeRootObjectIsProtected(object, root) then
+    if nativeRootObjectIsProtected(object, state) then
         return
     end
 
@@ -10141,7 +10144,7 @@ local function cleanupNativeRootAdditions(state)
 
         if underRoot
             and not (state.baselineRoot and state.baselineRoot[object])
-            and not nativeRootObjectIsProtected(object, root)
+            and not nativeRootObjectIsProtected(object, state)
         then
             local ancestor = object.Parent
             local hasTrackedAncestor = false
@@ -10543,6 +10546,30 @@ function UnusualFns.restoreNativeUnusual()
     return true
 end
 
+
+local function discardLegacyMenuSwap()
+    -- This state belongs to MenuScene.VisualModel, not the live Character.
+    -- Never feed its old snapshot into a new gameplay rig.
+    pcall(function()
+        UnusualFns.clearNativeParticlePOV(true)
+    end)
+    pcall(function()
+        UnusualFns.removeOurUnusualFX()
+    end)
+    pcall(function()
+        UnusualFns.restoreNativeWeldedTreeStates()
+    end)
+
+    unusualActive = false
+    unusualRuntime.appliedRig = nil
+    unusualRuntime.appliedCharacter = nil
+    unusualRuntime.appliedTargets = nil
+    unusualRuntime.originalId = nil
+    unusualRuntime.replacementId = nil
+    unusualRuntime.nativeSnapshot = nil
+    unusualRuntime.swapMode = nil
+end
+
 function UnusualFns.activateUnusual()
     local characterObject = getCharacterObject()
     local state = unusualRuntime.nativeRebuildState
@@ -10565,13 +10592,7 @@ function UnusualFns.activateUnusual()
     characterObject = getCharacterObject()
     if characterObject then
         if unusualRuntime.swapMode == "legacy" then
-            pcall(function()
-                UnusualFns.restoreUnusualLegacy()
-            end)
-            pcall(function()
-                UnusualFns.removeOurUnusualFX()
-            end)
-            unusualRuntime.swapMode = nil
+            discardLegacyMenuSwap()
         end
 
         local ok, result = pcall(function()
@@ -10616,6 +10637,11 @@ function UnusualFns.restoreUnusual()
             task.wait(0.15)
         end
         return false
+    end
+
+    if unusualRuntime.swapMode == "legacy" and getCharacterObject() then
+        discardLegacyMenuSwap()
+        return true
     end
 
     if unusualRuntime.swapMode == "legacy"
@@ -10714,13 +10740,7 @@ function UnusualFns.reapplyUnusual()
                     continue
                 end
             elseif unusualRuntime.swapMode == "legacy" then
-                pcall(function()
-                    UnusualFns.restoreUnusualLegacy()
-                end)
-                pcall(function()
-                    UnusualFns.removeOurUnusualFX()
-                end)
-                unusualRuntime.swapMode = nil
+                discardLegacyMenuSwap()
             end
 
             local ok, activated = pcall(function()
@@ -23169,8 +23189,17 @@ __UI.__L.cleanupUnusual = function()
 
     unusualRuntime.currentEquippedId = runtimeCurrentEquippedId
 
+    local staleMenuPreviewSwap = unusualRuntime.swapMode == "legacy"
+        and getCharacterObject() ~= nil
+    if staleMenuPreviewSwap then
+        pcall(function()
+            discardLegacyMenuSwap()
+        end)
+    end
+
     local nativeRebuildWasActive = unusualRuntime.nativeRebuildState ~= nil
         or unusualRuntime.swapMode == "rebuild"
+        or staleMenuPreviewSwap
 
     local runtimeOriginalId = tonumber(
             unusualRuntime.originalId
