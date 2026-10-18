@@ -9943,7 +9943,11 @@ RunService:BindToRenderStep(
     end
 )
 
---// The old Unusual POV FX controller is intentionally disabled.
+--// Restore any prior Unusual POV state before disabling the retired controller.
+local previousUnusualPovCleanup = genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP
+if type(previousUnusualPovCleanup) == "function" then
+    pcall(previousUnusualPovCleanup)
+end
 genv.DEADEYE_UNUSUAL_POV_RUNNING = false
 genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = nil
 pcall(function()
