@@ -11899,7 +11899,12 @@ UnusualFns.addUnusualConnection(
                 if needsReapply then
                     UnusualFns.reapplyUnusual()
                 end
-            elseif unusualRuntime.swapMode ~= "rebuild" and not unusualRuntime.swapMode then
+            elseif unusualRuntime.swapMode == "rebuild"
+                or not unusualRuntime.swapMode
+            then
+                -- On round-to-menu transitions, let the reapply loop wait
+                -- for CharacterService to become available again, then switch
+                -- to the isolated legacy preview path if needed.
                 UnusualFns.reapplyUnusual()
             end
         end
