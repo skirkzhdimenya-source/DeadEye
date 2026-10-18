@@ -10120,7 +10120,12 @@ local function cleanupNativeRootAdditions(state)
     if not state then
         return
     end
-    captureNativeRootDelta(state)
+    -- The watcher is connected only during a BuildRig attempt. If it was
+    -- disconnected after a successful Apply, do not rescan the whole gameplay
+    -- interval here or mistake later movement sounds for swap leaks.
+    if state.rootAddedConnection then
+        captureNativeRootDelta(state)
+    end
     stopNativeRootTracking(state)
 
     local root = state.primaryPart
@@ -10476,6 +10481,7 @@ function UnusualFns.activateNativeUnusual(characterObject)
     local built, newModel, buildError =
         rebuildNativeRigWithCosmetics(characterObject, replacementCosmetics)
     captureNativeRootDelta(state)
+    stopNativeRootTracking(state)
 
     if not built or not newModel then
         cleanupNativeRootAdditions(state)
