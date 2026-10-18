@@ -1806,6 +1806,7 @@ local unusualConnections = {}
 local unusualDestroyed = false
 local unusualReapplyBusy = false
 local unusualRuntime = {
+    rigSwap = nil,
     appliedRig = nil,
     appliedCharacter = nil,
     appliedTargets = nil,
@@ -4959,6 +4960,10 @@ end
 --// =========================================================
 
 genv.DEADEYE_UNUSUAL_POV_RUNNING = false
+genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = nil
+pcall(function()
+    RunService:UnbindFromRenderStep("DeadEyeUnusualPOVTransparency")
+end)
 
 local function cloneUnusualCosmetics(source)
     assert(type(source) == "table", "Rig.Cosmetics is not a table")
@@ -16820,6 +16825,7 @@ __UI.__L.cleanupUnusual = function()
     unusualActive = false
     genv.UNUSUAL_SWAPPER_ENABLED = false
     genv.DEADEYE_UNUSUAL_POV_RUNNING = false
+    genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = nil
     unusualRuntime.reapplyGeneration += 1
 
     pcall(function()
