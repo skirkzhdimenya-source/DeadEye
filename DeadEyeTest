@@ -2558,7 +2558,7 @@ function cosmetic.refreshRigSingle(live, isAdditionalTarget)
 
     if restoreUnusualSwap then
         pcall(function()
-            UnusualFns.removeOurUnusualFX()
+            UnusualFns.restoreUnusual()
         end)
         unusualActive = false
     end
@@ -9485,508 +9485,320 @@ function UnusualFns.restoreNativeUnusualSnapshot(
     return restored
 end
 
-function UnusualFns.restoreUnusual()
-    if not unusualActive
-        and not unusualRuntime.originalId
-    then
+--// =========================================================
+--// UNUSUAL RIG-COSMETICS SWAP
+--// Uses Rig.Cosmetics + BuildRig; no cloned/re-tagged FX replacement.
+--// =========================================================
+
+local function cloneUnusualCosmetics(source)
+    assert(type(source) == "table", "Rig.Cosmetics is not a table")
+    local result = {}
+    for index, value in ipairs(source) do
+        result[index] = value
+    end
+    return result
+end
+
+local function snapshotUnusualRoot(root)
+    local result = {}
+    for _, object in ipairs(root:GetDescendants()) do
+        result[object] = true
+    end
+    return result
+end
+
+local function getNewUnusualRootObjects(root, baseline)
+    local result = {}
+    for _, object in ipairs(root:GetDescendants()) do
+        if not baseline[object] then
+            table.insert(result, object)
+        end
+    end
+    return result
+end
+
+local function isUnderUnusualRoot(object, root)
+    local ok, result = pcall(function()
+        return object:IsDescendantOf(root)
+    end)
+    return ok and result
+end
+
+local function refreshUnusualAnimations(characterObject, animationModule)
+    local component = characterObject.Rig
+    local controller = characterObject.Animations
+    local rig = component and component.Rig
+
+    assert(rig and rig.Model, "New rig model missing")
+    assert(rig.Model:FindFirstChildOfClass("Humanoid"), "New rig Humanoid missing")
+
+    animationModule = animationModule or controller.AnimationModule
+    assert(animationModule, "AnimationModule missing")
+
+    controller:SetRig(rig)
+    controller:SetModule(animationModule)
+
+    local stateName = "Inert"
+    local registry = controller.DataRegistry
+    if registry then
+        local ok, value = pcall(function()
+            return registry:Get("State")
+        end)
+        if ok and value then
+            stateName = value
+        end
+    end
+
+    if controller.Emote then
+        stateName = "Inert"
+    end
+
+    controller:SetState(stateName)
+    local currentAnimation = controller.CurrentStateAnimation
+    assert(currentAnimation ~= nil, "CurrentStateAnimation missing")
+
+    controller.State = nil
+    controller.Speed = nil
+    controller.MoveDirection = nil
+    controller:SetCurrentAnimation(currentAnimation)
+    controller:UpdateAnimations(currentAnimation)
+end
+
+local function removeTrackedUnusualRootAdditions(state)
+    local primaryPart = state.primaryPart
+    if not primaryPart or not primaryPart.Parent then
         return
     end
 
-    local visualRig = UnusualFns.getUnusualVisualRig()
-    local playerCharacter = UnusualFns.getUnusualPlayerCharacter()
+    local tracked = {}
+    for _, object in ipairs(state.targetRootAdditions or {}) do
+        tracked[object] = true
+    end
 
-    --// Always inspect the real current loadout before restoring.
-    --// unusualRuntime.originalId is the configured swap source only.
-    local currentEquippedId = tonumber(
-            UnusualFns.getEquippedUnusualId()
-        )
-
-    local originalId = tonumber(
-            unusualRuntime.originalId
-        )
-
-    unusualRuntime.currentEquippedId = currentEquippedId
-
-    --// If the player manually equipped another Unusual while the
-    --// swap was active (for example 1 -> 2, then equip 3), never
-    --// restore the old snapshot of 1. Remove only DeadEye's own FX
-    --// and leave the game's native effect 3 untouched.
-    local manuallyChanged = currentEquippedId
-        and currentEquippedId ~= 0
-        and originalId
-        and currentEquippedId ~= originalId
-
-    if manuallyChanged then
-        --// The equipped Unusual changed. Do not restore the old
-        --// replacement's particle state onto the new native effect.
-        UnusualFns.clearNativeParticlePOV(
-            false
-        )
-
-        if visualRig then
-            UnusualFns.removeOurUnusualFX()
-            UnusualFns.restoreNativeWeldedTreeStates()
-            UnusualFns.repairNativeJointLinks(visualRig)
-
-            --// The game owns the currently equipped effect.
-            --// Do not delete native geometry by matching old effect names.
-            UnusualFns.bindNativeParticlePOV(
-                visualRig
-            )
-        else
-            UnusualFns.restoreNativeWeldedTreeStates()
+    -- Destroy only highest tracked descendants; child FX go with their tracked parent.
+    local cleanupRoots = {}
+    for _, object in ipairs(state.targetRootAdditions or {}) do
+        if object and isUnderUnusualRoot(object, primaryPart) then
+            local ancestor = object.Parent
+            local hasTrackedAncestor = false
+            while ancestor and ancestor ~= primaryPart do
+                if tracked[ancestor] then
+                    hasTrackedAncestor = true
+                    break
+                end
+                ancestor = ancestor.Parent
+            end
+            if not hasTrackedAncestor then
+                table.insert(cleanupRoots, object)
+            end
         end
+    end
 
+    for _, object in ipairs(cleanupRoots) do
+        if isUnderUnusualRoot(object, primaryPart) then
+            pcall(function()
+                object:Destroy()
+            end)
+        end
+    end
+end
+
+-- Existing UI call sites can keep their trace calls; verbose production logging stays disabled.
+function UnusualFns.traceSwap(_event, _extra, _visualRig, _playerCharacter)
+end
+
+function UnusualFns.restoreUnusual()
+    local state = unusualRuntime.rigSwap
+    if type(state) ~= "table" or not state.active then
         unusualActive = false
-        unusualRuntime.appliedRig = visualRig
-        unusualRuntime.appliedCharacter = playerCharacter
-        unusualRuntime.appliedTargets = UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
         unusualRuntime.originalId = nil
         unusualRuntime.replacementId = nil
         unusualRuntime.nativeSnapshot = nil
-        return
+        return true
     end
 
-    --// Normal case: the player still has the configured original
-    --// equipped, so restoring the saved native snapshot is correct.
-    if (
-        not currentEquippedId
-        or currentEquippedId == 0
-    )
-    then
-        currentEquippedId = originalId
+    local characterObject = getCharacterObject()
+    if characterObject ~= state.characterObject then
+        warn("[DeadEye Unusual] Character changed; saved rig state is stale.")
+        state.active = false
+        unusualRuntime.rigSwap = nil
+        unusualActive = false
+        unusualRuntime.originalId = nil
+        unusualRuntime.replacementId = nil
+        unusualRuntime.nativeSnapshot = nil
+        return true
     end
 
-    if visualRig
-        and currentEquippedId
-        and currentEquippedId ~= 0
-    then
-        --// Put the LIVE visual rig back to its exact 3P particle
-        --// states before removing the replacement and restoring
-        --// the native Unusual snapshot.
-        UnusualFns.clearNativeParticlePOV(
-            true
-        )
-
-        UnusualFns.removeOurUnusualFX()
-        task.wait()
-
-        local restored = UnusualFns.restoreNativeUnusualSnapshot(
-                unusualRuntime.nativeSnapshot,
-                visualRig,
-                playerCharacter
-            )
-
-        if not restored
-            and originalId
-            and tonumber(currentEquippedId)
-                == tonumber(originalId)
-        then
-            UnusualFns.removeOriginalUnusualFX(
-                originalId,
-                visualRig,
-                playerCharacter
-            )
-            task.wait()
-
-            UnusualFns.applyNativeUnusualFallback(
-                originalId,
-                visualRig,
-                playerCharacter,
-                "snapshot restore missed"
-            )
-        end
-
-        --// Restore exact visibility/emission states of the untouched native Weld trees.
-        UnusualFns.restoreNativeWeldedTreeStates()
-        UnusualFns.repairNativeJointLinks(visualRig)
-
-        --// The original effect is now the live effect again.
-        --// Keep the same instant P1/P3 behavior on it.
-        pcall(function()
-            local refreshed = __UI.__L.refreshNativeVisibilityAfterUnusualRestore() == true
-            UnusualFns.traceSwap(
-                "NATIVE_VISIBILITY_REFRESH",
-                "result=" .. tostring(refreshed),
-                visualRig,
-                playerCharacter
-            )
-        end)
-        UnusualFns.bindNativeParticlePOV(
-            visualRig
-        )
+    local model = characterObject and characterObject.Model
+    local primaryPart = model and model.PrimaryPart
+    if primaryPart ~= state.primaryPart then
+        warn("[DeadEye Unusual] PrimaryPart changed; refusing unsafe cleanup.")
+        return false
     end
 
+    local component = state.component
+    if not component then
+        warn("[DeadEye Unusual] Saved Rig component is missing.")
+        return false
+    end
+
+    removeTrackedUnusualRootAdditions(state)
+
+    component.Cosmetics = cloneUnusualCosmetics(state.originalCosmetics)
+    component.Built = false
+    component:BuildRig()
+    refreshUnusualAnimations(characterObject, state.animationModule)
+
+    state.active = false
+    unusualRuntime.rigSwap = nil
     unusualActive = false
+    unusualRuntime.originalId = nil
+    unusualRuntime.currentEquippedId = tonumber(UnusualFns.getEquippedUnusualId())
+    unusualRuntime.replacementId = nil
+    unusualRuntime.nativeSnapshot = nil
     unusualRuntime.appliedRig = nil
     unusualRuntime.appliedCharacter = nil
     unusualRuntime.appliedTargets = nil
-    unusualRuntime.originalId = nil
-    unusualRuntime.currentEquippedId = currentEquippedId
-    unusualRuntime.replacementId = nil
-    unusualRuntime.nativeSnapshot = nil
-end
---// =========================================================
---// ACTIVATE UNUSUAL
--- =========================================================
-function UnusualFns.activateUnusual()
-    UnusualFns.traceSwap("ACTIVATE_ENTER", "button/reapply path")
-    if not unusualSlot.originalId
-        or not unusualSlot.replaceId
-    then
-        __DDCore.Log("UNUSUAL FAIL: IDs missing; original="
-            .. tostring(unusualSlot.originalId) .. ", replacement=" .. tostring(unusualSlot.replaceId))
-        return false
-    end
-    if unusualSlot.originalId
-        == unusualSlot.replaceId
-    then
-        __DDCore.Log("UNUSUAL FAIL: original and replacement IDs are identical: "
-            .. tostring(unusualSlot.originalId))
-        return false
-    end
-
-    local equippedId = UnusualFns.getEquippedUnusualId()
-
-    if equippedId == 0
-        or tonumber(equippedId)
-            ~= tonumber(unusualSlot.originalId)
-    then
-        __DDCore.Log("UNUSUAL FAIL: equipped ID does not match selected original; equipped="
-            .. tostring(equippedId) .. ", selectedOriginal=" .. tostring(unusualSlot.originalId)
-            .. ", replacement=" .. tostring(unusualSlot.replaceId))
-        return false
-    end
-
-    local visualRig = UnusualFns.getUnusualVisualRig()
-    local playerCharacter = UnusualFns.getUnusualPlayerCharacter()
-    UnusualFns.traceSwap(
-        "ACTIVATE_TARGET",
-        "target resolved",
-        visualRig,
-        playerCharacter
-    )
-    if not visualRig then
-        __DDCore.Log("UNUSUAL FAIL: visual rig nil; playerCharacter=" .. tostring(playerCharacter)
-            .. ", workspace.Rigs=" .. tostring(workspace:FindFirstChild("Rigs"))
-            .. ", workspace.Players=" .. tostring(workspace:FindFirstChild("Players")))
-        return false
-    end
-
-    local currentTargetSet = UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
-
-    local sameOriginal = tonumber(unusualRuntime.originalId) == tonumber(equippedId)
-
-    local snapshotForMerge = sameOriginal
-        and unusualRuntime.nativeSnapshot
-        and unusualRuntime.appliedTargets
-        and unusualRuntime.nativeSnapshot
-        or nil
-
-    if not unusualRuntime.nativeSnapshot
-        or not sameOriginal
-        or unusualRuntime.appliedRig ~= visualRig
-        or unusualRuntime.appliedCharacter ~= playerCharacter
-        or not UnusualFns.sameUnusualTargetModelSet(
-            currentTargetSet,
-            unusualRuntime.appliedTargets
-        )
-    then
-        UnusualFns.traceSwap("SNAPSHOT_CAPTURE_BEGIN", "id=" .. tostring(equippedId), visualRig, playerCharacter)
-        local capturedSnapshot = UnusualFns.captureNativeUnusualSnapshot(
-                equippedId,
-                visualRig,
-                playerCharacter,
-                snapshotForMerge
-            )
-
-        if capturedSnapshot then
-            unusualRuntime.nativeSnapshot = capturedSnapshot
-        elseif not snapshotForMerge then
-            unusualRuntime.nativeSnapshot = nil
-        end
-        local snap = unusualRuntime.nativeSnapshot
-        local snapObjects = 0
-        if snap then
-            for _, partSnapshot in ipairs(snap.parts or {}) do
-                snapObjects += #(partSnapshot.objects or {})
-                snapObjects += #(partSnapshot.joints or {})
-            end
-        end
-        UnusualFns.traceSwap(
-            snap and "SNAPSHOT_CAPTURE_OK" or "SNAPSHOT_CAPTURE_NIL",
-            "parts=" .. tostring(snap and #snap.parts or 0)
-                .. "|objectsAndJoints=" .. tostring(snapObjects),
-            visualRig,
-            playerCharacter
-        )
-    end
-
-    if not unusualRuntime.nativeSnapshot then
-        __DDCore.Log("UNUSUAL FAIL: native snapshot nil; equipped=" .. tostring(equippedId)
-            .. ", visualRig=" .. tostring(visualRig) .. ", playerCharacter=" .. tostring(playerCharacter))
-        return false
-    end
-
-    --// Reset the previous replacement's POV state.
-    UnusualFns.clearNativeParticlePOV(
-        true
-    )
-
-    UnusualFns.removeOurUnusualFX()
-    task.wait()
-    UnusualFns.traceSwap("REMOVE_ORIGINAL_BEGIN", "id=" .. tostring(unusualSlot.originalId), visualRig, playerCharacter)
-    UnusualFns.removeOriginalUnusualFX(
-        unusualSlot.originalId,
-        visualRig,
-        playerCharacter
-    )
-    UnusualFns.traceSwap("REMOVE_ORIGINAL_END", "id=" .. tostring(unusualSlot.originalId), visualRig, playerCharacter)
-    task.wait()
-    UnusualFns.traceSwap("APPLY_REPLACEMENT_BEGIN", "id=" .. tostring(unusualSlot.replaceId), visualRig, playerCharacter)
-    if not __UI.__L.applyUnusualFX(
-        unusualSlot.replaceId,
-        visualRig,
-        playerCharacter
-    ) then
-        __DDCore.Log("UNUSUAL FAIL: applyUnusualFX returned false for replacement="
-            .. tostring(unusualSlot.replaceId) .. ", original=" .. tostring(unusualSlot.originalId))
-        --// Native Weld trees were kept in place; restore their exact states and any direct FX.
-        UnusualFns.removeOurUnusualFX()
-        task.wait()
-        UnusualFns.restoreNativeUnusualSnapshot(
-            unusualRuntime.nativeSnapshot,
-            visualRig,
-            playerCharacter
-        )
-        UnusualFns.restoreNativeWeldedTreeStates()
-        pcall(function()
-            __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
-        end)
-        UnusualFns.bindNativeParticlePOV(
-            visualRig
-        )
-        return false
-    end
-    unusualActive = true
-    unusualRuntime.appliedRig = visualRig
-    unusualRuntime.appliedCharacter = playerCharacter
-    unusualRuntime.appliedTargets = UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
-    unusualRuntime.originalId = equippedId
-    unusualRuntime.currentEquippedId = equippedId
-    unusualRuntime.replacementId = tonumber(unusualSlot.replaceId)
-
-    __DDCore.Log("UNUSUAL ACTIVATE OK: equipped=" .. tostring(equippedId)
-        .. ", replacement=" .. tostring(unusualSlot.replaceId)
-        .. ", visualRig=" .. tostring(visualRig))
-
-    --// Repair stale native links left by a preceding rig rebuild.
-    UnusualFns.repairNativeJointLinks(visualRig)
-
-    --// The replacement is now live in Rigs.<player>.
-    --// Track all of its current ParticleEmitters and any that
-    --// its client driver creates later.
-    UnusualFns.bindNativeParticlePOV(
-        visualRig
-    )
-
     return true
 end
-function UnusualFns.reapplyUnusual()
-    if not unusualEnabled
-        or unusualReapplyBusy
+
+function UnusualFns.activateUnusual()
+    if type(unusualRuntime.rigSwap) == "table" and unusualRuntime.rigSwap.active then
+        return false
+    end
+
+    if not unusualSlot.originalId or not unusualSlot.replaceId then
+        warn("[DeadEye Unusual] Select both Original and Replacement first.")
+        return false
+    end
+
+    local equippedId = tonumber(UnusualFns.getEquippedUnusualId())
+    local replacementId = tonumber(unusualSlot.replaceId)
+    if not equippedId or equippedId == 0 then
+        warn("[DeadEye Unusual] Could not resolve equipped Unusual ID.")
+        return false
+    end
+    if equippedId ~= tonumber(unusualSlot.originalId) then
+        warn("[DeadEye Unusual] Equipped ID does not match the selected Original.")
+        return false
+    end
+    if not replacementId or replacementId == 0 or replacementId == equippedId then
+        warn("[DeadEye Unusual] Invalid replacement ID.")
+        return false
+    end
+
+    local characterObject = getCharacterObject()
+    if not characterObject or not characterObject.Model
+        or not characterObject.Rig or not characterObject.Animations
     then
+        warn("[DeadEye Unusual] Character/Rig/Animations are not ready.")
+        return false
+    end
+
+    local primaryPart = characterObject.Model.PrimaryPart
+    local component = characterObject.Rig
+    local controller = characterObject.Animations
+    if not primaryPart then
+        warn("[DeadEye Unusual] Character Model.PrimaryPart is missing.")
+        return false
+    end
+    if type(component.Cosmetics) ~= "table" then
+        warn("[DeadEye Unusual] Rig.Cosmetics is missing.")
+        return false
+    end
+    if not controller.AnimationModule then
+        warn("[DeadEye Unusual] AnimationModule is not loaded yet.")
+        return false
+    end
+
+    local originalCosmetics = cloneUnusualCosmetics(component.Cosmetics)
+    local replacementCosmetics = cloneUnusualCosmetics(originalCosmetics)
+    local replaced = 0
+    for index, value in ipairs(replacementCosmetics) do
+        if tonumber(value) == equippedId then
+            replacementCosmetics[index] = replacementId
+            replaced += 1
+        end
+    end
+
+    if replaced == 0 then
+        warn("[DeadEye Unusual] Equipped ID was not found in Rig.Cosmetics; no changes made.")
+        return false
+    end
+
+    local state = {
+        active = true,
+        characterObject = characterObject,
+        component = component,
+        originalCosmetics = originalCosmetics,
+        animationModule = controller.AnimationModule,
+        primaryPart = primaryPart,
+        baselineRoot = snapshotUnusualRoot(primaryPart),
+        targetRootAdditions = {},
+        equippedId = equippedId,
+        replacementId = replacementId
+    }
+    unusualRuntime.rigSwap = state
+
+    local ok, err = pcall(function()
+        component.Cosmetics = replacementCosmetics
+        component.Built = false
+        component:BuildRig()
+        refreshUnusualAnimations(characterObject, state.animationModule)
+
+        state.targetRootAdditions = getNewUnusualRootObjects(primaryPart, state.baselineRoot)
+        unusualRuntime.appliedRig = getBoundVisualRigModel()
+        unusualRuntime.appliedCharacter = characterObject.Model
+        unusualRuntime.appliedTargets = UnusualFns.getUnusualTargetModelSet(
+            UnusualFns.getUnusualVisualRig(),
+            UnusualFns.getUnusualPlayerCharacter()
+        )
+        unusualRuntime.originalId = equippedId
+        unusualRuntime.currentEquippedId = equippedId
+        unusualRuntime.replacementId = replacementId
+        unusualRuntime.nativeSnapshot = nil
+        unusualActive = true
+    end)
+
+    if not ok then
+        warn("[DeadEye Unusual] APPLY failed; attempting rollback: " .. tostring(err))
+        pcall(function()
+            UnusualFns.restoreUnusual()
+        end)
+        unusualActive = false
+        return false
+    end
+    return true
+end
+
+function UnusualFns.reapplyUnusual()
+    if not unusualEnabled or unusualReapplyBusy then
         return
     end
 
-    UnusualFns.traceSwap("REAPPLY_BEGIN", "picker change or rig refresh")
     unusualReapplyBusy = true
-    unusualRuntime.reapplyGeneration += 1
-
-    local generation = unusualRuntime.reapplyGeneration
-
     task.spawn(function()
-
-        for attempt = 1, 20 do
-
-            if not unusualEnabled
-                or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
-                or generation ~= unusualRuntime.reapplyGeneration
-            then
-                break
-            end
-
-            local visualRig = UnusualFns.getUnusualVisualRig()
-
-            local playerCharacter = UnusualFns.getUnusualPlayerCharacter()
-
-            local humanoid = visualRig
-                and visualRig:FindFirstChildOfClass("Humanoid")
-
-            if not humanoid then
-                for _, target in ipairs(
-                    UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
-                ) do
-                    humanoid = target.model:FindFirstChildOfClass("Humanoid")
-                    if humanoid then
-                        break
-                    end
-                end
-            end
-
-            --// Static Unusual FX can be applied to a visual-only rig even
-            --// when it has no HumanoidRootPart. The root is only needed by
-            --// optional animated sources, not by the whole swap operation.
-            if visualRig
-                and humanoid
-            then
-
-                task.wait(0.2)
-
-                if not unusualEnabled
-                    or genv.DEADEYE_UNUSUAL_POV_RUNNING == false
-                    or generation ~= unusualRuntime.reapplyGeneration
-                then
-                    break
-                end
-
-                local equippedId = UnusualFns.getEquippedUnusualId()
-
-                if equippedId == 0 then
-                    --// LoadoutResolver can briefly return 0 during menu-to-round
-                    --// rig replacement. Do not treat that transient as unequipping.
-                    UnusualFns.traceSwap(
-                        "REAPPLY_WAIT_LOADOUT",
-                        "equipped=0|attempt=" .. tostring(attempt)
-                    )
-                    task.wait(0.25)
-                    continue
-                end
-
-                if tonumber(equippedId)
-                    ~= tonumber(
-                        unusualSlot.originalId
-                    )
-                then
-                    --// The player changed the actually equipped Unusual.
-                    --// Do NOT restore unusualRuntime.originalId here:
-                    --// that is only the configured swap rule (for example 1 -> 2).
-                    --// The new equipped effect is now the real current state.
-                    unusualRuntime.currentEquippedId = tonumber(equippedId)
-
-                    --// The game already handles the newly equipped
-                    --// Unusual. DeadEye must only remove its own
-                    --// replacement FX and any leftover old original FX.
-                    --// Do NOT call applyUnusualFX here: that would mark
-                    --// the user's real effect as DeadEye-owned and cleanup
-                    --// would delete it.
-                    UnusualFns.removeOurUnusualFX()
-                    task.wait()
-
-                    UnusualFns.restoreNativeWeldedTreeStates()
-                    UnusualFns.repairNativeJointLinks(visualRig)
-
-                    unusualActive = false
+        local ok, err = pcall(function()
+            local restored = UnusualFns.restoreUnusual()
+            if restored and unusualEnabled then
+                if not UnusualFns.activateUnusual() then
                     unusualEnabled = false
-                    unusualRuntime.appliedRig = visualRig
-                    unusualRuntime.appliedCharacter = playerCharacter
-                    unusualRuntime.appliedTargets = UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
-                    unusualRuntime.originalId = nil
-                    unusualRuntime.replacementId = nil
-                    unusualRuntime.nativeSnapshot = nil
                     genv.UNUSUAL_SWAPPER_ENABLED = false
-                    break
                 end
-
-                unusualActive = false
-                UnusualFns.removeOurUnusualFX()
-
-                local ok, result = pcall(function()
-                        return UnusualFns.activateUnusual()
-                    end)
-
-                if ok
-                    and result == true
-                then
-
-                    local expected = true
-                    local checkedRigTargets = 0
-                    local hasGlobalMirror = false
-
-                    for _, mirror in ipairs(unusualRuntime.visualMirrors) do
-                        if tonumber(mirror.id) == tonumber(unusualSlot.replaceId)
-                            and mirror.model
-                            and mirror.model.Parent
-                        then
-                            hasGlobalMirror = true
-                            break
-                        end
-                    end
-
-                    for _, target in ipairs(
-                        UnusualFns.getUnusualTargetModels(visualRig, playerCharacter)
-                    ) do
-                        if string.match(target.role or "", "^Rigs#") then
-                            checkedRigTargets += 1
-
-                            local hasReplacement = UnusualFns.hasOurUnusualFX(
-                                    target.model,
-                                    unusualSlot.replaceId
-                                )
-
-                            local hasAnimatedNested = false
-                            for _, animated in ipairs(unusualRuntime.animatedNestedVisuals) do
-                                if animated.targetRig == target.model
-                                    and tonumber(animated.id) == tonumber(unusualSlot.replaceId)
-                                    and animated.model
-                                    and animated.model.Parent
-                                then
-                                    hasAnimatedNested = true
-                                    break
-                                end
-                            end
-
-                            if not hasReplacement
-                                and not hasAnimatedNested
-                                and not hasGlobalMirror
-                            then
-                                expected = false
-                            end
-                        end
-                    end
-
-                    if checkedRigTargets == 0 then
-                        expected = hasGlobalMirror
-                            or UnusualFns.hasOurUnusualFX(
-                                visualRig,
-                                unusualSlot.replaceId
-                            )
-                            or UnusualFns.hasOurUnusualFX(
-                                playerCharacter,
-                                unusualSlot.replaceId
-                            )
-                    end
-
-                    if expected then
-                        unusualRuntime.appliedRig = visualRig
-                        unusualRuntime.appliedCharacter = playerCharacter
-                        unusualRuntime.appliedTargets = UnusualFns.getUnusualTargetModelSet(visualRig, playerCharacter)
-                        break
-                    end
-
-                end
-
             end
+        end)
 
-            task.wait(0.25)
-
+        if not ok then
+            warn("[DeadEye Unusual] REAPPLY failed: " .. tostring(err))
+            unusualEnabled = false
+            genv.UNUSUAL_SWAPPER_ENABLED = false
         end
 
         unusualReapplyBusy = false
-
+        pcall(updateUnusualToggle)
     end)
 end
---// =========================================================
+
 --// FIRST PERSON / VIEWMODEL SYNC
 --//
 --// 3P uses workspace.Rigs.<name>.
@@ -10834,7 +10646,7 @@ function UnusualFns.updateUnusualPOV()
     lastUnusualPOVState = UnusualFns.isUnusualFirstPerson()
 end
 
-genv.DEADEYE_UNUSUAL_POV_RUNNING = true
+genv.DEADEYE_UNUSUAL_POV_RUNNING = false
 
 genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
     pcall(function()
@@ -10936,13 +10748,8 @@ RunService:BindToRenderStep(
 --// but only after CharacterService reports a real gameplay character.
 --// MenuView.VisualModel / menu Rigs must never be put under the
 --// gameplay POV controller.
-pcall(function()
-    if UnusualFns.isUnusualPOVRuntimeActive() then
-        UnusualFns.bindNativeParticlePOV(
-            UnusualFns.getUnusualVisualRig()
-        )
-    end
-end)
+-- Legacy Unusual POV FX binding is intentionally disabled.
+genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = nil
 
 UnusualFns.addUnusualConnection(
     RunService.Heartbeat:Connect(
@@ -22386,164 +22193,16 @@ __UI.__L.cleanupUnusual = function()
     end
     unusualDestroyed = true
 
-    --// originalId is the configured swap source, not necessarily
-    --// the effect the player currently has equipped.
-    local runtimeCurrentEquippedId = tonumber(
-            UnusualFns.getEquippedUnusualId()
-        )
-
-    unusualRuntime.currentEquippedId = runtimeCurrentEquippedId
-
-    local runtimeOriginalId = tonumber(
-            unusualRuntime.originalId
-        )
-
-    --// Prefer the real current loadout. This is what must remain
-    --// after DeadEye closes, even if the player changed Unusuals
-    --// after enabling the swap.
-    local runtimeRestoreId = runtimeCurrentEquippedId
-
-    if not runtimeRestoreId
-        or runtimeRestoreId == 0
-    then
-        runtimeRestoreId = runtimeOriginalId
-    end
-
-    local restoreNativeUnusual = unusualActive
-        or runtimeOriginalId
-
-    local runtimeSnapshot = unusualRuntime.nativeSnapshot
-
-    --// A snapshot captured for the old mapped Unusual cannot be
-    --// used after the player has manually equipped another one.
-    if runtimeRestoreId
-        and runtimeOriginalId
-        and tonumber(runtimeRestoreId)
-            ~= tonumber(runtimeOriginalId)
-    then
-        runtimeSnapshot = nil
-    end
-
-    local runtimeSnapshotRig = unusualRuntime.appliedRig
-
-    --// Invalidate reapply work BEFORE restoring the live effect.
     unusualEnabled = false
+    unusualActive = false
     genv.UNUSUAL_SWAPPER_ENABLED = false
+    genv.DEADEYE_UNUSUAL_POV_RUNNING = false
     unusualRuntime.reapplyGeneration += 1
 
-    --// Wait for a reapply already inside activation so it cannot write
-    --// the replacement after cleanup has restored the native effect.
-    local reapplyDeadline = tick() + 1
+    pcall(function()
+        UnusualFns.restoreUnusual()
+    end)
 
-    while unusualReapplyBusy
-        and tick() < reapplyDeadline
-    do
-        task.wait()
-    end
-
-    local currentVisualRig = UnusualFns.getUnusualVisualRig()
-
-    local currentPlayerCharacter = UnusualFns.getUnusualPlayerCharacter()
-
-    local currentTargetSet = UnusualFns.getUnusualTargetModelSet(currentVisualRig, currentPlayerCharacter)
-
-    --// Snapshot is only valid for the model set it was captured from.
-    --// Prefer the snapshot from a completed reapply on this rig.
-    --// Otherwise capture the native effect if the new rig still has it.
-    if currentVisualRig
-        and runtimeOriginalId
-        and runtimeOriginalId ~= 0
-        and runtimeCurrentEquippedId
-        and runtimeCurrentEquippedId ~= 0
-        and tonumber(runtimeCurrentEquippedId)
-            == tonumber(runtimeOriginalId)
-    then
-        if unusualRuntime.appliedRig == currentVisualRig
-            and unusualRuntime.appliedCharacter == currentPlayerCharacter
-            and UnusualFns.sameUnusualTargetModelSet(
-                currentTargetSet,
-                unusualRuntime.appliedTargets
-            )
-            and unusualRuntime.nativeSnapshot
-        then
-            runtimeSnapshot = unusualRuntime.nativeSnapshot
-            runtimeSnapshotRig = currentVisualRig
-        elseif runtimeSnapshotRig
-            ~= currentVisualRig
-            or unusualRuntime.appliedCharacter ~= currentPlayerCharacter
-            or not UnusualFns.sameUnusualTargetModelSet(
-                currentTargetSet,
-                unusualRuntime.appliedTargets
-            )
-        then
-            local freshSnapshot = UnusualFns.captureNativeUnusualSnapshot(
-                    runtimeOriginalId,
-                    currentVisualRig,
-                    currentPlayerCharacter,
-                    unusualRuntime.nativeSnapshot
-                )
-
-            if freshSnapshot then
-                runtimeSnapshot = freshSnapshot
-                runtimeSnapshotRig = currentVisualRig
-            end
-        end
-    end
-
-    if restoreNativeUnusual
-        and runtimeRestoreId
-        and runtimeRestoreId ~= 0
-    then
-        pcall(function()
-            local visualRig = UnusualFns.getUnusualVisualRig()
-            local playerCharacter = UnusualFns.getUnusualPlayerCharacter()
-
-            if visualRig then
-                UnusualFns.removeOurUnusualFX()
-                task.wait()
-
-                if runtimeCurrentEquippedId
-                    and runtimeOriginalId
-                    and tonumber(runtimeCurrentEquippedId)
-                        ~= tonumber(runtimeOriginalId)
-                then
-                    --// Player changed the equipped Unusual.
-                    --// Keep the game's current native effect; remove only
-                    --// the FX owned by DeadEye.
-                    UnusualFns.removeOurUnusualFX()
-                    UnusualFns.restoreNativeWeldedTreeStates()
-                elseif runtimeSnapshot
-                    and runtimeSnapshotRig == visualRig
-                then
-                    UnusualFns.restoreNativeUnusualSnapshot(
-                        runtimeSnapshot,
-                        visualRig,
-                        playerCharacter
-                    )
-                else
-                    UnusualFns.removeOriginalUnusualFX(
-                        runtimeRestoreId,
-                        visualRig,
-                        playerCharacter
-                    )
-                    task.wait()
-
-                    UnusualFns.applyNativeUnusualFallback(
-                        runtimeRestoreId,
-                        visualRig,
-                        playerCharacter,
-                        "cleanup had no current native snapshot"
-                    )
-                end
-            end
-        end)
-    end
-
-    UnusualFns.restoreNativeWeldedTreeStates()
-
-    unusualActive = false
-
-    --// Stop editor auto-apply before rebuilding or clearing cosmetic rigs.
     pcall(function()
         others.avatarSyncEnabled = false
         others.lastAppliedDescription = nil
@@ -22560,8 +22219,6 @@ __UI.__L.cleanupUnusual = function()
         cosmetic.cleanup()
     end)
 
-    --// Restore avatar descriptions only after cosmetic/rigger cleanup so no
-    --// later teardown step can overwrite the restored appearance.
     pcall(function()
         if type(genv.DEADEYE_AVATAR_CLEANUP) == "function" then
             genv.DEADEYE_AVATAR_CLEANUP("UNUSUAL_SWAPPER_CLEANUP")
@@ -22570,33 +22227,21 @@ __UI.__L.cleanupUnusual = function()
         end
     end)
 
-    --// Do not rebuild the native Unusual here.
-    --// The game's AddCosmetics(CharacterClassic) path can receive a
-    --// cosmetic rig that does not contain the expected HumanoidRootPart
-    --// limb and produces repeated shutdown errors.
-    --// The active/native snapshot is already handled above. Cleanup
-    --// must not call AddCosmetics again.
-
+    unusualRuntime.rigSwap = nil
     unusualRuntime.originalId = nil
-    unusualRuntime.currentEquippedId = runtimeRestoreId
     unusualRuntime.replacementId = nil
     unusualRuntime.nativeSnapshot = nil
-
-    genv.DEADEYE_COSMETIC_CLEANUP = nil
-    unusualEnabled = false
-    unusualActive = false
-    unusualRuntime.reapplyGeneration += 1
     unusualRuntime.appliedRig = nil
     unusualRuntime.appliedCharacter = nil
     unusualRuntime.appliedTargets = nil
-    genv.UNUSUAL_SWAPPER_ENABLED = false
+    genv.DEADEYE_COSMETIC_CLEANUP = nil
+
     UnusualFns.disconnectUnusualConnections()
-    if not preserveFinalRestoredUnusualFX then
-        pcall(function()
-            UnusualFns.removeOurUnusualFX()
-        end)
-    end
-    genv.DEADEYE_MAIN_RUNNING = false
+
+    pcall(function()
+        RunService:UnbindFromRenderStep("DeadEyeUnusualPOVTransparency")
+    end)
+
     pcall(function()
         if mainPage then
             mainPage.Visible = false
@@ -22618,8 +22263,9 @@ __UI.__L.cleanupUnusual = function()
             categoryBar:Destroy()
         end
     end)
+
     genv.UNUSUAL_SWAPPER_CLEANUP = nil
-    end
+end
 genv.UNUSUAL_SWAPPER_CLEANUP = __UI.__L.cleanupUnusual
 --// =========================================================
 --// REPLACE EXISTING TOGGLE BEHAVIOUR
