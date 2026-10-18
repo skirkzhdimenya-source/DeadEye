@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.273
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.275
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.274"
+local SCRIPT_VERSION = "1.275"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -1816,6 +1816,8 @@ local unusualRuntime = {
     --// currentEquippedId describes what the player actually has equipped.
     currentEquippedId = nil,
     nativeSnapshot = nil,
+    nativeRebuildState = nil,
+    swapMode = nil,
     --// Local-only visibility states for native welded cosmetic trees.
     --// Keep original Weld trees intact; recreate neither their joints nor their meshes.
     nativeWeldedStates = {},
@@ -9485,7 +9487,7 @@ function UnusualFns.restoreNativeUnusualSnapshot(
     return restored
 end
 
-function UnusualFns.restoreUnusual()
+function UnusualFns.restoreUnusualLegacy()
     if not unusualActive
         and not unusualRuntime.originalId
     then
@@ -9629,7 +9631,7 @@ end
 --// =========================================================
 --// ACTIVATE UNUSUAL
 -- =========================================================
-function UnusualFns.activateUnusual()
+function UnusualFns.activateUnusualLegacy()
     UnusualFns.traceSwap("ACTIVATE_ENTER", "button/reapply path")
     if not unusualSlot.originalId
         or not unusualSlot.replaceId
@@ -9792,7 +9794,7 @@ function UnusualFns.activateUnusual()
 
     return true
 end
-function UnusualFns.reapplyUnusual()
+function UnusualFns.reapplyUnusualLegacy()
     if not unusualEnabled
         or unusualReapplyBusy
     then
@@ -9902,7 +9904,7 @@ function UnusualFns.reapplyUnusual()
                 UnusualFns.removeOurUnusualFX()
 
                 local ok, result = pcall(function()
-                        return UnusualFns.activateUnusual()
+                        return UnusualFns.activateUnusualLegacy()
                     end)
 
                 if ok
@@ -9997,6 +9999,548 @@ end
 --// observed on a completely clean server.
 --// =========================================================
 local lastUnusualPOVState = nil
+
+
+--// =========================================================
+--// LIVE UNUSUAL SWAP: native Character.Rig rebuild
+--// Only the selected Unusual entry in the live component's Cosmetics
+--// array is changed. DataRegistry/loadout and unrelated systems are untouched.
+--// =========================================================
+
+local function copyNativeCosmetics(source)
+    if type(source) ~= "table" then
+        return nil
+    end
+
+    local result = {}
+    for index, value in ipairs(source) do
+        result[index] = value
+    end
+    return result
+end
+
+local function nativeCosmeticsContains(values, id)
+    id = tonumber(id)
+    if not id or type(values) ~= "table" then
+        return false
+    end
+
+    for _, value in ipairs(values) do
+        if tonumber(value) == id then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function getNativeCharacterRoot(component)
+    local root = component and component.PrimaryPart
+    if root and root:IsA("BasePart") and root.Parent then
+        return root
+    end
+
+    local character = component and component.Character
+    root = character and character:FindFirstChild("HumanoidRootPart")
+    if root and root:IsA("BasePart") and root.Parent then
+        return root
+    end
+
+    return nil
+end
+
+local function nativeRootChildIsExcluded(object)
+    if not object then
+        return true
+    end
+
+    return object.Name == "HeadPos"
+        or object.Name == "SoundPos"
+        or object.Name == "FootstepSound"
+end
+
+local function stopNativeRootTracking(state)
+    if state and state.rootAddedConnection then
+        pcall(function()
+            state.rootAddedConnection:Disconnect()
+        end)
+        state.rootAddedConnection = nil
+    end
+end
+
+local function trackNativeRootChild(state, object)
+    local root = state and state.primaryPart
+    if not root or not object or object.Parent ~= root then
+        return
+    end
+    if nativeRootChildIsExcluded(object) then
+        return
+    end
+    if state.baselineRoot[object] or state.rootAddedSet[object] then
+        return
+    end
+
+    state.rootAddedSet[object] = true
+    table.insert(state.rootAdditions, object)
+end
+
+local function captureNativeRootDelta(state)
+    local root = state and state.primaryPart
+    if not root then
+        return
+    end
+
+    -- Compare direct children only. Descendants inside a newly added
+    -- Attachment are cleaned up by destroying that Attachment once.
+    for _, object in ipairs(root:GetChildren()) do
+        trackNativeRootChild(state, object)
+    end
+end
+
+local function cleanupNativeRootAdditions(state)
+    if not state then
+        return
+    end
+
+    if state.rootCleanupDone then
+        stopNativeRootTracking(state)
+        return
+    end
+
+    stopNativeRootTracking(state)
+    captureNativeRootDelta(state)
+
+    local root = state.primaryPart
+    if root then
+        for _, object in ipairs(state.rootAdditions) do
+            if object.Parent == root and not nativeRootChildIsExcluded(object) then
+                pcall(function()
+                    object:Destroy()
+                end)
+            end
+        end
+    end
+
+    state.rootCleanupDone = true
+    table.clear(state.rootAdditions)
+    table.clear(state.rootAddedSet)
+end
+
+local function getNativeRestoreCosmetics(state, currentEquippedId)
+    currentEquippedId = tonumber(currentEquippedId) or 0
+
+    -- If the player still has the original Unusual equipped, restore the
+    -- exact Cosmetics array captured before the temporary visual swap.
+    if currentEquippedId == tonumber(state.originalId) then
+        return copyNativeCosmetics(state.originalCosmetics)
+    end
+
+    -- The game's DataRegistry is the authoritative source if the player
+    -- changed their actual loadout while the visual swap was active.
+    local registry = state.component and state.component.DataRegistry
+    if registry then
+        local ok, values = pcall(function()
+            return registry:Get("Cosmetics")
+        end)
+
+        if ok and type(values) == "table" then
+            local authoritative = copyNativeCosmetics(values)
+            local containsOld = nativeCosmeticsContains(authoritative, state.originalId)
+                or nativeCosmeticsContains(authoritative, state.replacementId)
+
+            if currentEquippedId ~= 0
+                and nativeCosmeticsContains(authoritative, currentEquippedId)
+            then
+                return authoritative
+            end
+
+            if currentEquippedId == 0 and not containsOld then
+                return authoritative
+            end
+        end
+    end
+
+    -- Last-resort fallback for a short registry update window: replace the
+    -- temporary ID with the currently equipped ID, or remove it if none is equipped.
+    local source = copyNativeCosmetics(state.component and state.component.Cosmetics)
+        or copyNativeCosmetics(state.originalCosmetics)
+        or {}
+    local result = {}
+    local replaced = false
+
+    for _, value in ipairs(source) do
+        local numeric = tonumber(value)
+        if numeric == tonumber(state.replacementId)
+            or numeric == tonumber(state.originalId)
+        then
+            if currentEquippedId ~= 0 and not replaced then
+                table.insert(result, currentEquippedId)
+                replaced = true
+            end
+        else
+            table.insert(result, value)
+        end
+    end
+
+    if currentEquippedId ~= 0 and not replaced then
+        local original = copyNativeCosmetics(state.originalCosmetics) or {}
+        for index, value in ipairs(original) do
+            if tonumber(value) == tonumber(state.originalId) then
+                original[index] = currentEquippedId
+                return original
+            end
+        end
+    end
+
+    return result
+end
+
+local function buildNativeRigWithCosmetics(component, cosmetics)
+    if not component or type(component.BuildRig) ~= "function" then
+        return false, nil
+    end
+
+    local ok = pcall(function()
+        component.Cosmetics = copyNativeCosmetics(cosmetics)
+        component.Built = false
+        component:BuildRig()
+    end)
+
+    local rig = component.Rig
+    local model = rig and rig.Model
+    if not ok or component.Built ~= true or not model or not model.Parent then
+        return false, nil
+    end
+
+    return true, model
+end
+
+local function clearNativeRebuildRuntime(currentEquippedId)
+    local state = unusualRuntime.nativeRebuildState
+    stopNativeRootTracking(state)
+
+    unusualRuntime.nativeRebuildState = nil
+    unusualRuntime.swapMode = nil
+    unusualRuntime.appliedRig = nil
+    unusualRuntime.appliedCharacter = nil
+    unusualRuntime.appliedTargets = nil
+    unusualRuntime.originalId = nil
+    unusualRuntime.replacementId = nil
+    unusualRuntime.nativeSnapshot = nil
+    unusualRuntime.currentEquippedId = tonumber(currentEquippedId) or 0
+    unusualActive = false
+end
+
+function UnusualFns.activateNativeUnusual(characterObject)
+    if not unusualSlot.originalId
+        or not unusualSlot.replaceId
+        or tonumber(unusualSlot.originalId) == tonumber(unusualSlot.replaceId)
+    then
+        return false
+    end
+
+    characterObject = characterObject or getCharacterObject()
+    if not characterObject or not characterObject.Model or not characterObject.Rig then
+        return false
+    end
+
+    local component = characterObject.Rig
+    if component.Character ~= characterObject.Model then
+        return false
+    end
+
+    local originalId = tonumber(unusualSlot.originalId)
+    local replacementId = tonumber(unusualSlot.replaceId)
+    local equippedId = tonumber(UnusualFns.getEquippedUnusualId()) or 0
+
+    if equippedId == 0 or equippedId ~= originalId then
+        return false
+    end
+
+    local root = getNativeCharacterRoot(component)
+    local originalCosmetics = copyNativeCosmetics(component.Cosmetics)
+    if not root or not originalCosmetics then
+        return false
+    end
+
+    local replacementCosmetics = copyNativeCosmetics(originalCosmetics)
+    local replacedCount = 0
+    for index, value in ipairs(replacementCosmetics) do
+        if tonumber(value) == equippedId then
+            replacementCosmetics[index] = replacementId
+            replacedCount += 1
+        end
+    end
+
+    if replacedCount == 0 then
+        return false
+    end
+
+    local state = {
+        characterObject = characterObject,
+        characterModel = characterObject.Model,
+        component = component,
+        primaryPart = root,
+        originalId = originalId,
+        replacementId = replacementId,
+        originalCosmetics = originalCosmetics,
+        baselineRoot = {},
+        rootAdditions = {},
+        rootAddedSet = {},
+        rootAddedConnection = nil,
+        rootCleanupDone = false,
+        nextPollAt = os.clock() + 0.25,
+    }
+
+    for _, child in ipairs(root:GetChildren()) do
+        state.baselineRoot[child] = true
+    end
+
+    state.rootAddedConnection = root.DescendantAdded:Connect(function(object)
+        trackNativeRootChild(state, object)
+    end)
+
+    unusualRuntime.nativeRebuildState = state
+    unusualRuntime.swapMode = "rebuild"
+    unusualRuntime.nativeSnapshot = nil
+
+    local built, model = buildNativeRigWithCosmetics(component, replacementCosmetics)
+    captureNativeRootDelta(state)
+
+    if not built then
+        cleanupNativeRootAdditions(state)
+
+        local restored = false
+        for _ = 1, 3 do
+            local rollbackBuilt = buildNativeRigWithCosmetics(component, originalCosmetics)
+            if rollbackBuilt then
+                restored = true
+                break
+            end
+            task.wait(0.1)
+        end
+
+        if restored then
+            clearNativeRebuildRuntime(equippedId)
+        else
+            unusualRuntime.originalId = originalId
+            unusualRuntime.currentEquippedId = equippedId
+            unusualRuntime.replacementId = replacementId
+            unusualRuntime.appliedRig = component.Rig and component.Rig.Model
+            unusualActive = true
+        end
+
+        return false
+    end
+
+    state.appliedRig = model
+    state.appliedCharacter = characterObject.Model
+    unusualRuntime.appliedRig = model
+    unusualRuntime.appliedCharacter = characterObject.Model
+    unusualRuntime.appliedTargets = UnusualFns.getUnusualTargetModelSet(
+        model,
+        characterObject.Model
+    )
+    unusualRuntime.originalId = originalId
+    unusualRuntime.currentEquippedId = equippedId
+    unusualRuntime.replacementId = replacementId
+    unusualActive = true
+
+    return true
+end
+
+function UnusualFns.restoreNativeUnusual()
+    local state = unusualRuntime.nativeRebuildState
+    if not state then
+        return false
+    end
+
+    local currentEquippedId = tonumber(UnusualFns.getEquippedUnusualId()) or 0
+
+    -- Stop the watcher and remove only new direct children of the character
+    -- root before asking the game to rebuild the original/native rig.
+    cleanupNativeRootAdditions(state)
+
+    local currentCharacterObject = getCharacterObject()
+    if not state.characterModel
+        or not state.characterModel.Parent
+        or state.component.Character ~= state.characterModel
+        or (currentCharacterObject and currentCharacterObject.Model ~= state.characterModel)
+    then
+        clearNativeRebuildRuntime(currentEquippedId)
+        return true
+    end
+
+    local restoreCosmetics = getNativeRestoreCosmetics(state, currentEquippedId)
+    if type(restoreCosmetics) ~= "table" then
+        return false
+    end
+
+    for _ = 1, 3 do
+        local rebuilt, restoredModel = buildNativeRigWithCosmetics(
+            state.component,
+            restoreCosmetics
+        )
+
+        if rebuilt and restoredModel then
+            clearNativeRebuildRuntime(currentEquippedId)
+            return true
+        end
+
+        task.wait(0.1)
+    end
+
+    -- Keep state alive so a later cleanup/retry can restore it; do not discard
+    -- the original Cosmetics snapshot after a failed BuildRig.
+    return false
+end
+
+function UnusualFns.activateUnusual()
+    if unusualRuntime.nativeRebuildState then
+        if not UnusualFns.restoreNativeUnusual() then
+            return false
+        end
+    end
+
+    local characterObject = getCharacterObject()
+    if characterObject then
+        if unusualRuntime.swapMode == "legacy" then
+            pcall(function()
+                UnusualFns.restoreUnusualLegacy()
+            end)
+            unusualRuntime.swapMode = nil
+        end
+
+        local ok, result = pcall(function()
+            return UnusualFns.activateNativeUnusual(characterObject)
+        end)
+        return ok and result == true
+    end
+
+    local ok, result = pcall(function()
+        return UnusualFns.activateUnusualLegacy()
+    end)
+    if ok and result == true then
+        unusualRuntime.swapMode = "legacy"
+        return true
+    end
+
+    return false
+end
+
+function UnusualFns.restoreUnusual()
+    if unusualRuntime.nativeRebuildState then
+        return UnusualFns.restoreNativeUnusual()
+    end
+
+    if unusualRuntime.swapMode == "rebuild" then
+        return false
+    end
+
+    if unusualRuntime.swapMode == "legacy"
+        or unusualActive
+        or unusualRuntime.originalId
+    then
+        local ok = pcall(function()
+            UnusualFns.restoreUnusualLegacy()
+        end)
+
+        if ok then
+            unusualRuntime.swapMode = nil
+            return true
+        end
+
+        return false
+    end
+
+    return true
+end
+
+function UnusualFns.reapplyUnusual()
+    if not unusualEnabled or unusualReapplyBusy then
+        return
+    end
+
+    local state = unusualRuntime.nativeRebuildState
+    if state then
+        local equippedId = tonumber(UnusualFns.getEquippedUnusualId()) or 0
+
+        -- LoadoutResolver may briefly return 0 during character transitions.
+        if equippedId == 0 then
+            return
+        end
+
+        if equippedId ~= tonumber(state.originalId) then
+            unusualEnabled = false
+            genv.UNUSUAL_SWAPPER_ENABLED = false
+            UnusualFns.restoreNativeUnusual()
+            if type(updateUnusualToggle) == "function" then
+                pcall(updateUnusualToggle)
+            end
+            return
+        end
+
+        local ruleChanged = tonumber(unusualSlot.originalId) ~= tonumber(state.originalId)
+            or tonumber(unusualSlot.replaceId) ~= tonumber(state.replacementId)
+
+        if ruleChanged then
+            if UnusualFns.restoreNativeUnusual() then
+                if tonumber(UnusualFns.getEquippedUnusualId()) == tonumber(unusualSlot.originalId) then
+                    UnusualFns.activateUnusual()
+                else
+                    unusualEnabled = false
+                    genv.UNUSUAL_SWAPPER_ENABLED = false
+                    if type(updateUnusualToggle) == "function" then
+                        pcall(updateUnusualToggle)
+                    end
+                end
+            end
+            return
+        end
+
+        local characterObject = getCharacterObject()
+        if not characterObject then
+            if UnusualFns.restoreNativeUnusual() then
+                local ok, result = pcall(function()
+                    return UnusualFns.activateUnusualLegacy()
+                end)
+                if ok and result == true then
+                    unusualRuntime.swapMode = "legacy"
+                else
+                    UnusualFns.reapplyUnusualLegacy()
+                end
+            end
+            return
+        end
+
+        if characterObject ~= state.characterObject then
+            cleanupNativeRootAdditions(state)
+            clearNativeRebuildRuntime(equippedId)
+            pcall(function()
+                UnusualFns.activateNativeUnusual(characterObject)
+            end)
+        end
+
+        return
+    end
+
+    local characterObject = getCharacterObject()
+    if characterObject then
+        if unusualRuntime.swapMode == "legacy" then
+            pcall(function()
+                UnusualFns.restoreUnusualLegacy()
+            end)
+            unusualRuntime.swapMode = nil
+        end
+
+        pcall(function()
+            UnusualFns.activateNativeUnusual(characterObject)
+        end)
+        return
+    end
+
+    UnusualFns.reapplyUnusualLegacy()
+end
 
 function UnusualFns.getUnusualViewmodel()
     local camera = workspace.CurrentCamera
@@ -10739,6 +11283,10 @@ function UnusualFns.setUnusualFXForPOV(
         firstPerson
     )
 
+    if unusualRuntime.swapMode == "rebuild" then
+        return
+    end
+
     --// Native clean-server observation:
     --// ParticleEmitters are disabled in 1P.
     --
@@ -10958,6 +11506,43 @@ UnusualFns.addUnusualConnection(
             if unusualEnabled
                 and not unusualReapplyBusy
             then
+
+                if unusualRuntime.swapMode == "rebuild"
+                    and unusualRuntime.nativeRebuildState
+                then
+                    local state = unusualRuntime.nativeRebuildState
+                    local characterObject = getCharacterObject()
+                    local needsReapply = characterObject ~= state.characterObject
+                        or tonumber(unusualSlot.originalId) ~= tonumber(state.originalId)
+                        or tonumber(unusualSlot.replaceId) ~= tonumber(state.replacementId)
+
+                    if os.clock() >= (state.nextPollAt or 0) then
+                        state.nextPollAt = os.clock() + 0.25
+                        local equippedId = tonumber(UnusualFns.getEquippedUnusualId()) or 0
+                        if equippedId ~= 0 and equippedId ~= tonumber(state.originalId) then
+                            needsReapply = true
+                        end
+                    end
+
+                    if needsReapply then
+                        UnusualFns.reapplyUnusual()
+                    else
+                        local rig = UnusualFns.getUnusualVisualRig()
+                        local playerCharacter = UnusualFns.getUnusualPlayerCharacter()
+                        if rig then
+                            state.appliedRig = rig
+                            state.appliedCharacter = characterObject and characterObject.Model
+                            unusualRuntime.appliedRig = rig
+                            unusualRuntime.appliedCharacter = characterObject and characterObject.Model
+                            unusualRuntime.appliedTargets = UnusualFns.getUnusualTargetModelSet(
+                                rig,
+                                playerCharacter
+                            )
+                        end
+                    end
+
+                    return
+                end
 
                 local rig = UnusualFns.getUnusualVisualRig()
 
