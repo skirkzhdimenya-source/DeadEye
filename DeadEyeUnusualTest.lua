@@ -10416,6 +10416,8 @@ function UnusualFns.restoreNativeUnusual()
     end
 
     local currentCharacterObject = getCharacterObject()
+    UnusualFns.clearNativeParticlePOV(true)
+    UnusualFns.restoreNativeWeldedTreeStates()
     cleanupNativeRootAdditions(state)
 
     -- Do not rebuild a stale character after respawn.
@@ -10439,6 +10441,14 @@ function UnusualFns.restoreNativeUnusual()
         or not component
         or component.Character ~= savedCharacterModel
     then
+        pcall(function()
+            local liveCharacter = getCharacterObject()
+            local liveRig = liveCharacter
+                and getCurrentBoundUnusualRigModel(liveCharacter.Rig)
+            if liveRig then
+                UnusualFns.bindNativeParticlePOV(liveRig)
+            end
+        end)
         clearNativeRebuildRuntime(UnusualFns.getEquippedUnusualId())
         return true
     end
@@ -10541,7 +10551,10 @@ end
 function UnusualFns.restoreUnusual()
     if unusualRuntime.nativeRebuildState or unusualRuntime.swapMode == "rebuild" then
         for attempt = 1, 3 do
-            if UnusualFns.restoreNativeUnusual() then
+            local ok, restored = pcall(function()
+                return UnusualFns.restoreNativeUnusual()
+            end)
+            if ok and restored == true then
                 return true
             end
             task.wait(0.15)
@@ -23159,7 +23172,8 @@ __UI.__L.cleanupUnusual = function()
     --// Snapshot is only valid for the model set it was captured from.
     --// Prefer the snapshot from a completed reapply on this rig.
     --// Otherwise capture the native effect if the new rig still has it.
-    if currentVisualRig
+    if not nativeRebuildWasActive
+        and currentVisualRig
         and runtimeOriginalId
         and runtimeOriginalId ~= 0
         and runtimeCurrentEquippedId
