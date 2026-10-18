@@ -10238,12 +10238,15 @@ local function nativeStateHasReplacement(state)
     if type(current) ~= "table" then
         return false
     end
+    if #state.replacedIndices == 0 then
+        return false
+    end
     for _, index in ipairs(state.replacedIndices) do
-        if tonumber(current[index]) == tonumber(state.replacementId) then
-            return true
+        if tonumber(current[index]) ~= tonumber(state.replacementId) then
+            return false
         end
     end
-    return false
+    return true
 end
 
 local function getNativeRestoreCosmetics(state, currentEquippedId)
@@ -11780,13 +11783,15 @@ UnusualFns.addUnusualConnection(
                 and not unusualReapplyBusy
             then
 
-                if unusualRuntime.swapMode == "rebuild" then
+                local characterObject = getCharacterObject()
+                if characterObject then
                     local state = unusualRuntime.nativeRebuildState
-                    local characterObject = getCharacterObject()
 
-                    if characterObject and not state then
+                    if not state or unusualRuntime.swapMode ~= "rebuild" then
+                        -- A menu-preview swap may survive the menu-to-round transition.
+                        -- Always enter the native path once CharacterService has a live character.
                         UnusualFns.reapplyUnusual()
-                    elseif characterObject and state then
+                    elseif state then
                         local currentRig = getCurrentBoundUnusualRigModel(characterObject.Rig)
                         local currentEquippedId = tonumber(UnusualFns.getEquippedUnusualId()) or 0
                         local expected = state.characterObject == characterObject
@@ -11799,8 +11804,7 @@ UnusualFns.addUnusualConnection(
                             UnusualFns.reapplyUnusual()
                         end
                     end
-                else
-
+                elseif unusualRuntime.swapMode ~= "rebuild" then
 
                 local rig = UnusualFns.getUnusualVisualRig()
 
