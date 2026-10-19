@@ -13314,13 +13314,16 @@ SOURCE #67, ReplicatedStorage.Objects.Game.Character.Animations, SetRig():
 и рассинхрон крыльев ещё надо подтвердить, а не считать окончательным диагнозом.
 
 СЛЕДУЮЩИЕ НЕДОСТАЮЩИЕ ДАННЫЕ:
-- декомпиляция ReplicatedStorage.Objects.Game.Character.Joints
-  (особенно SetJoints(), EnableJoints(), Update());
 - clipboard-отчёт ANGEL316, созданный тестом после CAPTURE_SECONDS:
   строки SOURCE/NATIVE NODE, [CHANGE], ANIMATION PLAYED/STOPPED.
   Текущий тест не отслеживает CFrame/Transform суставов, поэтому если отчёт
   не объясняет рассинхрон, следующим probe нужно наблюдать Transform/CFrame,
   Attachment.CFrame и прозрачность/Enabled объектов, не меняя DeadEyeTest.lua.
+
+ДЕКОМПИЛЯЦИЯ JOINTS ПОЛУЧЕНА ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19 И ДОБАВЛЕНА НИЖЕ:
+- SOURCE #79: ReplicatedStorage.Objects.Game.Character.Joints
+- SOURCE #80: ReplicatedStorage.Objects.Game.Character.Joints.C0Types
+- SOURCE #81: ReplicatedStorage.Objects.Game.Character.Joints.InterpolateLimbs.
 
 НЕ ДЕЛАТЬ ВЫВОД, ЧТО ПРОБЛЕМА В AURAS:
 ClientItemService.GetItemType() распознаёт Unusual через CosmeticInfo.Unusual,
@@ -13329,4 +13332,649 @@ RelicsXYZ.Shared.Auras не установлен как причина пове�
 
 ==================================================
 END ANGELIC REDEMPTION 316 INVESTIGATION NOTE
+==================================================
+
+
+==================================================
+SOURCE #79
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Joints
+
+STATUS:
+ПОЛУЧЕНО ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19: декомпиляция Opiumware.
+Добавлен полный исходник Joints для анализа штатного обновления суставов
+и возможной причины исчезновения/рассинхрона крыльев в тесте Angelic Redemption 316.
+
+PURPOSE:
+Управляет JointInformation и JointInterpolations, собирает Motor6D/AnimationConstraint
+из визуального рига или ToolModel, рассчитывает изменения C1 по интерполяциям поз
+анимации, обновляет Root/TorsoRot по текущему состоянию и Look/Gyro, включает
+и отключает управление суставами в зависимости от состояния персонажа.
+В BuildRig штатная игра вызывает SetJoints(), EnableJoints() и затем Animations:SetRig().
+Изолированный вызов RigService:SetRig() сам по себе не запускает этот полный lifecycle.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local t = {}
+t.__index = t
+local v_u_1 = require((script:WaitForChild("InterpolateLimbs")))
+local v_u_2 = require((script:WaitForChild("C0Types")))
+local Shared = script.Parent:WaitForChild("Shared")
+local v_u_3 = require((Shared:WaitForChild("StateInfo")))
+local AnimationConstraintJoint = require(ReplicatedStorage.Client.Services.Assets.AnimationConstraintJoint)
+local t2 = { DestroyOnRemoved = false, RestoreOnDestroy = true }
+function t.new(p4)
+	--[[ line: 35 | upvalues: (copy) t]]
+	local t3 = {
+		Parent = p4,
+		Character = p4.Model,
+		DataRegistry = p4.DataRegistry,
+		JointInformation = {},
+		JointInterpolations = {},
+		Tweens = {}
+	}
+	local v5 = t
+	local v6 = setmetatable(t3, v5)
+	local v7 = t
+	return setmetatable(v6, v7)
+end
+function t.Init(_)
+	--[[ line: 49 | upvalues: none]]
+end
+function t.SetJoints(p8, p9)
+	--[[ line: 53 | upvalues: (copy) AnimationConstraintJoint, (copy) t2]]
+	local v10 = p8.Parent.Rig:GetRigModel()
+	if p9 == true then
+		local ToolModel = p8.Parent.ToolProfile.CharacterVisuals.ToolModel
+		if not ToolModel then
+			return
+		end
+		for _2, v11 in ToolModel:GetDescendants() do
+			if v11:IsA("Motor6D") or v11:IsA("AnimationConstraint") then
+				local v12 = false
+				for _3, v13 in p8.JointInformation do
+					if v13[1] == v11 then
+						v12 = true
+						break
+					end
+				end
+				if v12 == false then
+					local JointInformation = p8.JointInformation
+					local t4 = {}
+					local C1 = v11.C1
+					local Name = v11.Name
+					local Part1 = v11.Part1
+					local Name2 = v11.Part1.Name
+					local v14
+					if v11 and v11:IsA("AnimationConstraint") then
+						v14 = AnimationConstraintJoint.get(v11) or AnimationConstraintJoint.new(v11, t2)
+					else
+						v14 = nil
+					end
+					t4[1], t4[2], t4[3], t4[4], t4[5], t4[6] = v11, C1, Name, Part1, Name2, v14
+					table.insert(JointInformation, t4)
+				end
+			end
+		end
+	else
+		for _4, v15 in v10.Joints:GetChildren() do
+			if v15:IsA("Motor6D") or v15:IsA("AnimationConstraint") then
+				local v16 = false
+				for _5, v17 in pairs(p8.JointInformation) do
+					if v17[1] == v15 then
+						v16 = true
+						break
+					end
+				end
+				if v16 == false then
+					local JointInformation2 = p8.JointInformation
+					local t5 = {}
+					local C12 = v15.C1
+					local Name3 = v15.Name
+					local Part12 = v15.Part1
+					local Name4 = v15.Part1.Name
+					local v18
+					if v15 and v15:IsA("AnimationConstraint") then
+						v18 = AnimationConstraintJoint.get(v15) or AnimationConstraintJoint.new(v15, t2)
+					else
+						v18 = nil
+					end
+					t5[1], t5[2], t5[3], t5[4], t5[5], t5[6] = v15, C12, Name3, Part12, Name4, v18
+					table.insert(JointInformation2, t5)
+				end
+			end
+		end
+	end
+	for v19, v20 in p8.JointInformation do
+		if v20[1] == nil or v20[1].Parent == nil then
+			table.remove(p8.JointInformation, v19)
+		end
+	end
+	for _6, v21 in p8.Parent.Rig:GetJoints() do
+		if v21.Name == "TorsoRot" then
+			p8.TorsoRot = v21
+		elseif v21.Name == "Root" then
+			p8.Root = v21
+		end
+	end
+end
+function t.Destroy(p22)
+	--[[ line: 109 | upvalues: none]]
+	for _7, v23 in p22.JointInformation do
+		if v23[6] then
+			v23[6]:Destroy()
+		end
+	end
+end
+function t.AddInterpolation(p24, p25, p26)
+	--[[ line: 117 | upvalues: (copy) v_u_1]]
+	for _8, v27 in p24.JointInterpolations do
+		if v27.ID == p25.AnimationId then
+			return
+		end
+	end
+	local v28 = v_u_1.new(p24.Character, p25.AnimationId, p24.Motor6Ds)
+	v28:setUpMids()
+	if p26 == true then
+		v28.Horizontal = true
+	end
+	v28.JointInformation = p24.JointInformation
+	local JointInterpolations = p24.JointInterpolations
+	table.insert(JointInterpolations, v28)
+end
+function t.ReadNewC1s(p29, p30, p31)
+	--[[ line: 132 | upvalues: none]]
+	local t6 = {}
+	for _9, v32 in pairs(p29.JointInterpolations) do
+		local v33
+		if v32.Horizontal == true then
+			v33 = p31
+		else
+			v33 = p30
+		end
+		local v34 = v32:returnkeyChanges(v33)
+		for _10, v35 in ipairs(v34) do
+			if t6[v35[1]] == nil then
+				t6[v35[1]] = v35[2]
+			else
+				local v36 = v35[1]
+				t6[v36] = t6[v36] * v35[2]
+			end
+		end
+	end
+	return t6
+end
+function t.SetC1s(p37, p38, p39)
+	--[[ line: 147 | upvalues: (copy) AnimationConstraintJoint, (copy) t2, (copy) TweenService]]
+	if not p37.VR then
+		for _11, v40 in p37.JointInformation do
+			local v41 = v40[1]
+			local v42 = v40[2]
+			local v43 = v40[3]
+			local v44 = v40[5]
+			local v45 = v40[6]
+			if v45 and v45.Destroyed then
+				if v41 and v41:IsA("AnimationConstraint") then
+					v45 = AnimationConstraintJoint.get(v41) or AnimationConstraintJoint.new(v41, t2)
+				else
+					v45 = nil
+				end
+				v40[6] = v45
+			end
+			if v43 ~= "Root" and v43 ~= "TorsoRot" then
+				local v46 = nil
+				for v47, v48 in pairs(p38) do
+					if v47 == v44 then
+						v46 = v48
+					end
+				end
+				if v46 then
+					v42 = v42 * v46
+				end
+				if p39 == -1 then
+					if v45 then
+						v45.C1 = v42
+					else
+						v41.C1 = v42
+					end
+				elseif p39 == 0 then
+					if v45 then
+						local v49 = p37.FramerateDelta * 20
+						v45:LerpC1(v42, (math.min(v49, 1)))
+					else
+						local C13 = v41.C1
+						local v50 = p37.FramerateDelta * 20
+						v41.C1 = C13:lerp(v42, (math.min(v50, 1)))
+					end
+				elseif v45 then
+					v45:TweenC1(v42, TweenInfo.new(p39, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0))
+				else
+					local v51 = TweenService:Create(v41, TweenInfo.new(p39, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0), { C1 = v42 })
+					v51:Play()
+					p37.Tweens[v41] = v51
+				end
+			end
+		end
+	end
+end
+function t.DisableJoints(p52)
+	--[[ line: 211 | upvalues: (copy) AnimationConstraintJoint, (copy) t2]]
+	if p52.Enabled ~= false then
+		p52:SetC1s({}, 0.016)
+	end
+	if p52.Root then
+		local Root = p52.Root
+		local v53
+		if Root and Root:IsA("AnimationConstraint") then
+			v53 = AnimationConstraintJoint.get(Root) or AnimationConstraintJoint.new(Root, t2)
+		else
+			v53 = nil
+		end
+		local v54 = v53 or p52.Root
+		if p52.OldRootC0 == nil then
+			p52.OldRootC0 = v54.C0
+		end
+		v54.C0 = p52.OldRootC0
+	elseif p52.TorsoRot then
+		local TorsoRot = p52.TorsoRot
+		local v55
+		if TorsoRot and TorsoRot:IsA("AnimationConstraint") then
+			v55 = AnimationConstraintJoint.get(TorsoRot) or AnimationConstraintJoint.new(TorsoRot, t2)
+		else
+			v55 = nil
+		end
+		local v56 = v55 or p52.TorsoRot
+		if p52.OldRootC0 == nil then
+			p52.OldRootC0 = v56.C0
+		end
+		v56.C0 = p52.OldRootC0
+	end
+	p52.Enabled = false
+end
+function t.EnableJoints(p57)
+	--[[ line: 233 | upvalues: none]]
+	if p57.Enabled ~= true and p57.LastRootTween ~= nil then
+		p57.LastRootTween:Cancel()
+	end
+	p57.Enabled = true
+end
+function t.RegistryTermUpdated(p58, p59)
+	--[[ line: 242 | upvalues: (copy) v_u_3]]
+	if p59 == "State" then
+		local State = p58.DataRegistry:Get("State")
+		if p58.State == State then
+			return
+		else
+			p58.State = State
+			p58.StateInfo = v_u_3:GetState(State or "Inert")
+			if p58.StateInfo.JointsEnabled == false then
+				p58:DisableJoints()
+			else
+				p58:EnableJoints()
+			end
+		end
+	elseif p59 == "LookY" or p59 == "Gyro" then
+		local v60 = p58.DataRegistry:Get(p59)
+		if p59 == "LookY" then
+			p58.LookY = v60
+		else
+			p58.Gyro = v60
+		end
+	else
+		if p59 == "Size" then
+			local v61 = p58.DataRegistry:Get("Size") or 1
+			for _12, v62 in p58.JointInformation or {} do
+				if not v62[7] then
+					v62[7] = v62[2]
+				end
+				v62[2] = CFrame.new(v62[7].Position * v61) * v62[7].Rotation
+				if v62[6] then
+					v62[6].C1 = v62[2]
+				else
+					v62[1].C1 = v62[2]
+				end
+			end
+		end
+		return
+	end
+end
+function t.Update(p63, p64)
+	--[[ line: 278 | upvalues: none]]
+	if p63.AnimationsEnabled then
+		if not p63.Parent.Local then
+			local v65 = tick()
+			if v65 - (p63.LastTested or 0) < 0.2 then
+				return
+			end
+			p63.LastTested = v65
+			p64 = 0.2
+		end
+		p63.FramerateDelta = p64
+		p63:UpdateRoot(p64)
+		if p63.LastLookY ~= p63.LookY or (p63.LastGyro ~= p63.Gyro or p63.Parent.Local) then
+			p63.LastLookY = p63.LookY
+			p63.LastGyro = p63.Gyro
+			local v66
+			if p63.Parent.Local then
+				p63.FramerateDelta = p64
+				v66 = 0
+			else
+				v66 = p63.DataRegistry:Get("Visible") == false and -1 or p64
+			end
+			if p63.Enabled then
+				p63:SetC1s(p63:ReadNewC1s(p63.LookY, p63.Gyro), v66)
+			end
+		end
+	end
+end
+function t.UpdateRoot(p67, p68)
+	--[[ line: 312 | upvalues: (copy) v_u_2, (copy) AnimationConstraintJoint, (copy) t2, (copy) TweenService]]
+	if p67.IgnoreRoot or not (p67.TorsoRot or p67.Root) then
+		return
+	end
+	local StateInfo = p67.StateInfo
+	local v69
+	if p67.Enabled then
+		local v70
+		if StateInfo then
+			v70 = v_u_2[StateInfo.C0Type or "Default"]
+		else
+			v70 = v_u_2.Default
+		end
+		if p67.Character:GetAttribute("VR") then
+			if p67.Character:GetAttribute("R15") then
+				v69 = v70.R15VRC0 or v70.VRC0
+			else
+				v69 = v70.VRC0
+			end
+		elseif p67.Parent.Camera and (p67.Parent.Camera.FirstPerson and not StateInfo.ThirdPersonJoint) then
+			if p67.Root then
+				v69 = v70.R15FirstPersonC0 or v70.FirstPersonC0
+			else
+				v69 = v70.FirstPersonC0
+			end
+		elseif p67.Root then
+			v69 = v70.R15C0 or v70.C0
+		else
+			v69 = v70.C0
+		end
+	else
+		v69 = CFrame.new()
+	end
+	if not v69 then
+		return
+	end
+	local v71
+	if p67.Instant then
+		v71 = 0.1
+	else
+		p67.Instant = true
+		v71 = 0
+	end
+	local RelativeMoveDirection = p67.DataRegistry:Get("RelativeMoveDirection")
+	local v72 = typeof(RelativeMoveDirection) ~= "Vector3" and Vector3.new(0, 0, 0) or RelativeMoveDirection
+	if p67.Root then
+		local Root2 = p67.Root
+		local v73
+		if Root2 and Root2:IsA("AnimationConstraint") then
+			v73 = AnimationConstraintJoint.get(Root2) or AnimationConstraintJoint.new(Root2, t2)
+		else
+			v73 = nil
+		end
+		local v74 = v73 ~= nil
+		local v75 = v73 or p67.Root
+		if p67.OldRootC0 == nil then
+			p67.OldRootC0 = v75.C0
+		end
+		if v69 == "Look" then
+			local v76 = CFrame.Angles(0, 0, -v72.X * 1.5707963267948966) * CFrame.Angles(v72.Z * 1.5707963267948966, 0, 0)
+			local v77 = p68 * 8
+			local v78 = math.min(v77, 1)
+			if v74 then
+				v75:LerpC0(p67.OldRootC0 * v76, v78)
+			else
+				v75.C0 = v75.C0:lerp(p67.OldRootC0 * v76, v78)
+			end
+			p67.LastC0 = nil
+			return
+		elseif v71 <= tick() - (p67.LastChanged or 0) and (p67.LastC0 ~= v69 or v75.C0 ~= p67.OldRootC0 * v69) then
+			p67.LastC0 = v69
+			p67.LastChanged = tick()
+			if p67.LastRootTween then
+				p67.LastRootTween:Cancel()
+			end
+			if v74 then
+				p67.LastRootTween = v75:TweenC0(p67.OldRootC0 * v69, TweenInfo.new(v71, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0))
+			else
+				p67.LastRootTween = TweenService:Create(v75, TweenInfo.new(v71, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0), { C0 = p67.OldRootC0 * v69 })
+				p67.LastRootTween:Play()
+			end
+		else
+			return
+		end
+	end
+	local TorsoRot2 = p67.TorsoRot
+	local v79
+	if TorsoRot2 and TorsoRot2:IsA("AnimationConstraint") then
+		v79 = AnimationConstraintJoint.get(TorsoRot2) or AnimationConstraintJoint.new(TorsoRot2, t2)
+	else
+		v79 = nil
+	end
+	local v80 = v79 ~= nil
+	local v81 = v79 or p67.TorsoRot
+	if p67.OldRootC0 == nil then
+		p67.OldRootC0 = v81.C0
+	end
+	if v69 == "Look" then
+		local v82 = CFrame.Angles(0, 0, -v72.X * 1.5707963267948966) * CFrame.Angles(v72.Z * 1.5707963267948966, 0, 0)
+		local v83 = p68 * 8
+		local v84 = math.min(v83, 1)
+		if v80 then
+			v81:LerpC0(p67.OldRootC0 * v82, v84)
+		else
+			local C0 = v81.C0
+			local v85 = p67.OldRootC0 * v82
+			local v86 = v84 * 8
+			v81.C0 = C0:lerp(v85, (math.min(v86, 1)))
+		end
+		p67.LastC0 = nil
+		return
+	end
+	if v71 <= tick() - (p67.LastChanged or 0) and (p67.LastC0 ~= v69 or v81.C0 ~= p67.OldRootC0 * v69) then
+		p67.LastC0 = v69
+		p67.LastChanged = tick()
+		if p67.LastRootTween then
+			p67.LastRootTween:Cancel()
+		end
+		if v80 then
+			p67.LastRootTween = v81:TweenC0(p67.OldRootC0 * v69, TweenInfo.new(v71, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0))
+			return
+		end
+		p67.LastRootTween = TweenService:Create(v81, TweenInfo.new(v71, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0), { C0 = p67.OldRootC0 * v69 })
+		p67.LastRootTween:Play()
+	end
+end
+return t
+
+
+==================================================
+SOURCE #80
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Joints.C0Types
+
+STATUS:
+ПОЛУЧЕНО ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19: декомпиляция Opiumware.
+
+PURPOSE:
+Таблица исходных C0 offsets для суставов по режимам Default, Climbing и Swimming,
+включая разные смещения для R15, first person и VR. Swimming может использовать
+C0Type "Look" вместо фиксированного CFrame.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+return {
+	Default = {
+		C0 = CFrame.new(0, 0.25, 0),
+		R15C0 = CFrame.new(0, 0, 0),
+		FirstPersonC0 = CFrame.new(0, 0.25, 0.95),
+		R15FirstPersonC0 = CFrame.new(0, 0.25, 1.5),
+		VRC0 = CFrame.new(0, 0.25, 1.35),
+		R15VRC0 = CFrame.new(0, 0, 1.9)
+	},
+	Climbing = {
+		C0 = CFrame.new(0, 0, 0),
+		FirstPersonC0 = CFrame.new(0, 0, 0),
+		VRC0 = CFrame.new(0, 0.25, 1.35),
+		R15VRC0 = CFrame.new(0, 0, 1.9)
+	},
+	Swimming = {
+		C0 = "Look",
+		FirstPersonC0 = CFrame.new(0, 0.25, 0.95),
+		R15FirstPersonC0 = CFrame.new(0, 0.25, 1.5),
+		VRC0 = CFrame.new(0, 0.25, 1.35),
+		R15VRC0 = CFrame.new(0, 0, 1.9)
+	}
+}
+
+
+==================================================
+SOURCE #81
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Joints.InterpolateLimbs
+
+STATUS:
+ПОЛУЧЕНО ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19: декомпиляция Opiumware.
+
+PURPOSE:
+Загружает анимационный asset через CacheService:LoadAsset(ID, "Animation"), извлекает Pose из Keyframe,
+интерполирует позы между ключами и рассчитывает изменения суставов относительно средней позы.
+Joint name LowerTorso и HumanoidRootPart явно исключаются из результатов keyChanges.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local v_u_1 = require((ReplicatedStorage:WaitForChild("Services"):WaitForChild("Asset"):WaitForChild("CacheService")))
+local v_u_2 = table.freeze({ LowerTorso = true, HumanoidRootPart = true })
+local t = {}
+t.__index = t
+function t.new(p3: userdata, p4: string, p5)
+	--[[ line: 51 | upvalues: (copy) t]]
+	local v6 = setmetatable({
+		Horizontal = nil,
+		_middle = 0.5,
+		_isLoading = false,
+		_nextTry = 0,
+		Character = p3,
+		ID = p4,
+		JointInformation = p5,
+		MiddleCFrames = {},
+		_keys = {}
+	}, t)
+	v6:_load()
+	return v6
+end
+local function poseOf(p7: userdata)
+	--[[ line: 71 | upvalues: none]]
+	local t2 = {}
+	for _, v8 in p7:GetDescendants() do
+		if v8:IsA("Pose") and v8.Weight ~= 0 then
+			t2[v8.Name] = v8.CFrame
+		end
+	end
+	return t2
+end
+function t._poseAt(p9: userdata, p10: number)
+	--[[ line: 86 | upvalues: none]]
+	local _keys = p9._keys
+	local v11 = #_keys
+	if v11 == 0 then
+		return nil
+	end
+	if p10 <= _keys[1].Time then
+		return _keys[1].Posture
+	end
+	if _keys[v11].Time <= p10 then
+		return _keys[v11].Posture
+	end
+	for v12 = 1, v11 - 1 do
+		local v13 = _keys[v12]
+		local v14 = _keys[v12 + 1]
+		if p10 <= v14.Time then
+			local v15 = v14.Time - v13.Time
+			local v16 = v15 <= 0 and 0 or (p10 - v13.Time) / v15
+			local t3 = {}
+			for v17, v18 in v13.Posture do
+				t3[v17] = v18:Lerp(v14.Posture[v17] or v18, v16)
+			end
+			return t3
+		end
+	end
+	return _keys[v11].Posture
+end
+function t._bake(p19: userdata, p20: userdata)
+	local t4 = {}
+	for _, v21 in p20:GetChildren() do
+		if v21:IsA("Keyframe") then
+			local t5 = { Time = v21.Time, Posture = poseOf(v21) }
+			table.insert(t4, t5)
+		end
+	end
+	table.sort(t4, function(p22: {[any]: any}, p23: {[any]: any})
+		return p22.Time < p23.Time
+	end)
+	p19._keys = t4
+	p19.MiddleCFrames = p19:_poseAt(p19._middle) or {}
+end
+function t._load(p_u_24: userdata)
+	if not p_u_24._isLoading and #p_u_24._keys <= 0 then
+		p_u_24._isLoading = true
+		task.spawn(function()
+			local v25 = v_u_1:LoadAsset(p_u_24.ID, "Animation")
+			p_u_24._isLoading = false
+			if v25 then
+				p_u_24:_bake(v25)
+			else
+				p_u_24._nextTry = os.clock() + 5
+			end
+		end)
+	end
+end
+function t.setUpMids(p26: userdata, p27: number?)
+	p26._middle = p27 or 0.5
+	p26.MiddleCFrames = p26:_poseAt(p26._middle) or {}
+end
+function t.returnkeyChanges(p28: userdata, p29: number?)
+	local v30 = p28:_poseAt(((p29 or 0) + 1.5707963267948966) / 3.141592653589793)
+	if v30 == nil then
+		if not p28._isLoading and os.clock() >= p28._nextTry then
+			p28:_load()
+		end
+		return {}
+	end
+	local t6 = {}
+	for v31, v32 in v30 do
+		local v33 = p28.MiddleCFrames[v31]
+		if v33 and not v_u_2[v31] then
+			local t7 = { v31, ((v33:Inverse() * v32):Inverse()) }
+			table.insert(t6, t7)
+		end
+	end
+	return t6
+end
+return table.freeze(t)
+
+
+==================================================
+END JOINTS SOURCES
 ==================================================
