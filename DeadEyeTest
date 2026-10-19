@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.273
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.274
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -1452,6 +1452,7 @@ local cosmetic = {
     skinDescription = nil,
     skinCharacter = nil,
     refreshBusy = false,
+    suppressHookRefresh = false,
     directAction = {
         [1] = nil,
         [2] = nil
@@ -3124,7 +3125,12 @@ function cosmetic.installHook()
                                 boombox
                             )
 
-                        if cosmetic.skinDescription
+                        -- Internal Cosmetic rebuilds and native Unusual swaps already
+                        -- perform their own rig update. Scheduling another refresh from
+                        -- those SetRig calls forms a refresh -> SetRig -> refresh loop.
+                        local queueAvatarRefresh = not cosmetic.refreshBusy
+                            and not cosmetic.suppressHookRefresh
+                            and cosmetic.skinDescription ~= nil
                             and type(result) == "table"
                             and result.Model
                             and result.Model:IsA("Model")
@@ -3132,14 +3138,14 @@ function cosmetic.installHook()
                                 == workspace:FindFirstChild("Rigs")
                             and result.Model.Name
                                 == LocalPlayer.Name
-                        then
+
+                        if queueAvatarRefresh then
                             task.defer(function()
                                 if genv.DEADEYE_MAIN_RUNNING
                                     and not cosmetic.refreshBusy
+                                    and not cosmetic.suppressHookRefresh
                                 then
-                                    pcall(
-                                        cosmetic.refreshRig
-                                    )
+                                    pcall(cosmetic.refreshRig)
                                 end
                             end)
                         end
@@ -9351,8 +9357,16 @@ local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics)
         and type(registry.SetTerm) == "function",
         "Character DataRegistry:Get/SetTerm unavailable")
 
-    component.Built = false
-    registry:SetTerm("Cosmetics", cloneUnusualCosmetics(cosmetics))
+    local previousSuppression = cosmetic.suppressHookRefresh
+    cosmetic.suppressHookRefresh = true
+    local updateOK, updateError = pcall(function()
+        component.Built = false
+        registry:SetTerm("Cosmetics", cloneUnusualCosmetics(cosmetics))
+    end)
+    cosmetic.suppressHookRefresh = previousSuppression
+    if not updateOK then
+        error(updateError)
+    end
 
     assert(type(component.Cosmetics) == "table",
         "Rig.Cosmetics missing after DataRegistry update")
