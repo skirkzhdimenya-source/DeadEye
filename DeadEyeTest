@@ -9332,12 +9332,34 @@ end
 --// =========================================================
 
 local function cloneUnusualCosmetics(source)
-    assert(type(source) == "table", "Rig.Cosmetics is not a table")
+    assert(type(source) == "table", "Cosmetics is not a table")
     local result = {}
     for index, value in ipairs(source) do
         result[index] = value
     end
     return result
+end
+
+-- Use the game's own DataRegistry -> Character.RegistryTermUpdated ->
+-- Rig.RegistryTermUpdated -> BuildRig path. SetTerm is local-only here;
+-- unlike Set(), it does not enqueue the term for server transmission.
+local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics)
+    local component = characterObject and characterObject.Rig
+    local registry = characterObject and characterObject.DataRegistry
+    assert(component, "Character Rig component missing")
+    assert(registry and type(registry.Get) == "function"
+        and type(registry.SetTerm) == "function",
+        "Character DataRegistry:Get/SetTerm unavailable")
+
+    component.Built = false
+    registry:SetTerm("Cosmetics", cloneUnusualCosmetics(cosmetics))
+
+    assert(type(component.Cosmetics) == "table",
+        "Rig.Cosmetics missing after DataRegistry update")
+    local builtRig = component.Rig
+    assert(builtRig and builtRig.Model and builtRig.Model.Parent,
+        "Native DataRegistry update did not produce a live visual rig")
+    return builtRig.Model
 end
 
 local function snapshotUnusualRoot(root)
@@ -9509,11 +9531,7 @@ function UnusualFns.restoreUnusual()
     end
 
     local ok, err = pcall(function()
-        removeTrackedUnusualRootAdditions(state)
-        component.Cosmetics = restoreCosmetics
-        component.Built = false
-        component:BuildRig()
-        refreshUnusualAnimations(characterObject, state.animationModule)
+        setUnusualCosmeticsThroughRegistry(characterObject, restoreCosmetics)
     end)
 
     if not ok then
@@ -9541,7 +9559,18 @@ function UnusualFns.restoreUnusual()
 end
 
 function UnusualFns.activateUnusual()
-    if type(unusualRuntime.rigSwap) == "table" and unusualRuntime.rigSwap.active then
+    local existingState = unusualRuntime.rigSwap
+    if type(existingState) == "table" and existingState.active then
+        local current = getCharacterObject()
+        if current
+            and (existingState.characterModel
+                or (existingState.characterObject and existingState.characterObject.Model)) == current.Model
+            and existingState.component == current.Rig
+            and tonumber(existingState.equippedId) == tonumber(unusualSlot.originalId)
+            and tonumber(existingState.replacementId) == tonumber(unusualSlot.replaceId)
+        then
+            return true
+        end
         return false
     end
 
@@ -9589,12 +9618,28 @@ function UnusualFns.activateUnusual()
         warn("[DeadEye Unusual] Rig.Cosmetics is not a table.")
         return false
     end
+    local dataRegistry = characterObject.DataRegistry
+    if not dataRegistry or type(dataRegistry.Get) ~= "function"
+        or type(dataRegistry.SetTerm) ~= "function"
+    then
+        warn("[DeadEye Unusual] Character DataRegistry:Get/SetTerm is unavailable.")
+        return false
+    end
+    local registryCosmetics
+    local registryReadOK, registryReadResult = pcall(function()
+        registryCosmetics = dataRegistry:Get("Cosmetics")
+    end)
+    if not registryReadOK or type(registryCosmetics) ~= "table" then
+        warn("[DeadEye Unusual] Could not read DataRegistry Cosmetics: "
+            .. tostring(registryReadResult))
+        return false
+    end
     if not controller.AnimationModule then
         warn("[DeadEye Unusual] AnimationModule is not loaded yet.")
         return false
     end
 
-    local originalCosmetics = cloneUnusualCosmetics(component.Cosmetics)
+    local originalCosmetics = cloneUnusualCosmetics(registryCosmetics)
     local replacementCosmetics = cloneUnusualCosmetics(originalCosmetics)
     local replaced = 0
     for index, value in ipairs(replacementCosmetics) do
@@ -9608,13 +9653,16 @@ function UnusualFns.activateUnusual()
         return false
     end
 
+    local previousVisualRig = component.Rig and component.Rig.Model
     local state = {
         active = true,
         characterObject = characterObject,
+        characterModel = characterObject.Model,
         component = component,
         originalCosmetics = originalCosmetics,
         animationModule = controller.AnimationModule,
         primaryPart = primaryPart,
+        previousVisualRig = previousVisualRig,
         baselineRoot = snapshotUnusualRoot(primaryPart),
         targetRootAdditions = {},
         equippedId = equippedId,
@@ -9625,21 +9673,17 @@ function UnusualFns.activateUnusual()
         .. "|replacement=" .. tostring(replacementId)
         .. "|cosmetics=" .. tostring(#originalCosmetics)
         .. "|matchedSlots=" .. tostring(replaced)
-        .. "|model=" .. tostring(characterObject.Model))
+        .. "|path=DataRegistry.SetTerm"
+        .. "|model=" .. tostring(characterObject.Model)
+        .. "|previousRig=" .. tostring(previousVisualRig))
     unusualRuntime.rigSwap = state
     genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
 
     local ok, err = pcall(function()
-        component.Cosmetics = replacementCosmetics
-        component.Built = false
-        component:BuildRig()
-        refreshUnusualAnimations(characterObject, state.animationModule)
-
-        local builtRig = component.Rig and component.Rig.Model
+        local builtRig = setUnusualCosmeticsThroughRegistry(characterObject, replacementCosmetics)
         assert(builtRig and builtRig:IsA("Model") and builtRig.Parent,
-            "BuildRig completed without a live rig model")
+            "DataRegistry update completed without a live visual rig")
 
-        state.targetRootAdditions = getNewUnusualRootObjects(primaryPart, state.baselineRoot)
         unusualRuntime.appliedRig = builtRig
         unusualRuntime.appliedCharacter = characterObject.Model
         unusualRuntime.originalId = equippedId
@@ -9648,24 +9692,14 @@ function UnusualFns.activateUnusual()
         unusualRuntime.nativeSnapshot = nil
         unusualActive = true
 
-        warn("[DeadEye Unusual] BuildRig completed"
+        warn("[DeadEye Unusual] Native cosmetics update completed"
+            .. "|previousRig=" .. tostring(state.previousVisualRig)
             .. "|rig=" .. tostring(builtRig:GetFullName())
             .. "|primaryPart=" .. tostring(primaryPart:GetFullName())
-            .. "|rootAdditions=" .. tostring(#state.targetRootAdditions))
-        for index, object in ipairs(state.targetRootAdditions) do
-            if index > 40 then
-                warn("[DeadEye Unusual] Root addition listing truncated at 40 objects.")
-                break
-            end
-            local ok, fullName = pcall(function()
-                return object:GetFullName()
-            end)
-            warn("[DeadEye Unusual] Root addition[" .. tostring(index) .. "]="
-                .. tostring(ok and fullName or object))
-        end
-
-        if #state.targetRootAdditions == 0 then
-            warn("[DeadEye Unusual] BuildRig returned, but no new descendants were found under PrimaryPart.")
+            .. "|registryCosmetics=" .. tostring(#(dataRegistry:Get("Cosmetics") or {}))
+            .. "|componentBuilt=" .. tostring(component.Built))
+        if state.previousVisualRig == builtRig then
+            warn("[DeadEye Unusual] RigService returned the same visual model instance.")
         end
     end)
 
@@ -9980,7 +10014,8 @@ pcall(function()
     RunService:UnbindFromRenderStep("DeadEyeUnusualPOVTransparency")
 end)
 
---// Arm the rule while in menu; apply only once CharacterService exposes gameplay.
+--// Arm the rule while in menu; reapply only when the actual model,
+--// rig component, selected IDs or equipped item have changed.
 UnusualFns.addUnusualConnection(
     RunService.Heartbeat:Connect(function()
         if not unusualEnabled or unusualReapplyBusy then
@@ -9989,25 +10024,62 @@ UnusualFns.addUnusualConnection(
 
         local current = getCharacterObject()
         local state = unusualRuntime.rigSwap
+        local reasons = {}
+
         if current then
             local configuredOriginal = tonumber(unusualSlot.originalId)
             local configuredReplacement = tonumber(unusualSlot.replaceId)
             local equippedNow = tonumber(UnusualFns.getEquippedUnusualId())
-            if type(state) ~= "table" or not state.active
-                or state.characterObject ~= current
-                or state.restoreRetryRequired == true
-                or configuredOriginal ~= tonumber(state.equippedId)
-                or configuredReplacement ~= tonumber(state.replacementId)
-                or (equippedNow and equippedNow ~= 0 and equippedNow ~= tonumber(state.equippedId))
-            then
+
+            if type(state) ~= "table" or not state.active then
+                table.insert(reasons, "missing-or-inactive-swap-state")
+            else
+                local savedModel = state.characterModel
+                    or (state.characterObject and state.characterObject.Model)
+                if savedModel ~= current.Model then
+                    table.insert(reasons, "character-model-changed")
+                end
+                if state.component ~= current.Rig then
+                    table.insert(reasons, "rig-component-changed")
+                end
+                if state.restoreRetryRequired == true then
+                    table.insert(reasons, "restore-retry-required")
+                end
+                if configuredOriginal ~= tonumber(state.equippedId) then
+                    table.insert(reasons, "original-selection-changed")
+                end
+                if configuredReplacement ~= tonumber(state.replacementId) then
+                    table.insert(reasons, "replacement-selection-changed")
+                end
+                if equippedNow and equippedNow ~= 0
+                    and equippedNow ~= tonumber(state.equippedId)
+                then
+                    table.insert(reasons, "equipped-unusual-changed")
+                end
+            end
+
+            if #reasons > 0 then
+                local reason = table.concat(reasons, ",")
+                if unusualRuntime.lastHeartbeatReapplyReason ~= reason then
+                    warn("[DeadEye Unusual] Heartbeat reapply reason=" .. reason)
+                    unusualRuntime.lastHeartbeatReapplyReason = reason
+                end
                 task.defer(function()
                     UnusualFns.reapplyUnusual()
                 end)
+            else
+                unusualRuntime.lastHeartbeatReapplyReason = nil
             end
         elseif type(state) == "table" and state.active then
+            if unusualRuntime.lastHeartbeatReapplyReason ~= "character-unavailable" then
+                warn("[DeadEye Unusual] Heartbeat reapply reason=character-unavailable")
+                unusualRuntime.lastHeartbeatReapplyReason = "character-unavailable"
+            end
             task.defer(function()
                 UnusualFns.reapplyUnusual()
             end)
+        else
+            unusualRuntime.lastHeartbeatReapplyReason = nil
         end
     end)
 )
