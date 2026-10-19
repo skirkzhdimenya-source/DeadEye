@@ -1,6 +1,6 @@
 ==================================================
 DeadEye — Recovered Game Sources
-Updated: 2026-10-17
+Updated: 2026-10-19
 ==================================================
 
 Этот файл хранит исходники/декомпиляции игровых модулей, которые были
@@ -13066,3 +13066,222 @@ end
 t:SetIDs()
 return t
 
+
+
+==================================================
+ADDITIONAL SOURCES — EFFECTS / COSMETIC ATTACHMENT / RELICS AURA UPDATE
+Added: 2026-10-19
+==================================================
+
+Важно для текущего анализа Unusual:
+- SOURCE #74–#75 показывают только общий диспетчер эффектов и Tween-обёртку;
+  сами по себе они не реализуют выбор или замену Unusual.
+- SOURCE #77 показывает, что клиентский Script вызывает
+  RelicsXYZ.Auras.Update(true, deltaTime) на каждом RenderStepped.
+  Реализация Auras.Update в приложенной выгрузке отсутствует — её нужно искать отдельно.
+- SOURCE #76 нужен как зависимость RigService для понимания штатного крепления аксессуаров.
+- RigService, RigService.AddCosmetics и Character.Client.Visibility уже представлены
+  выше в SOURCE #53, #54, #48–#49. Не заменять их версиями из этой выгрузки:
+  в частности, текущий SOURCE #54 содержит более полную логику и сбор ParticleEmitter,
+  чем одноимённый вариант в приложенной выгрузке.
+
+
+==================================================
+SOURCE #74
+==================================================
+PATH:
+ReplicatedStorage.Services.Client.EffectsService
+
+STATUS:
+ДОПОЛНЕНО 2026-10-19: отсутствовал в каталоге. Общая точка входа EffectsService.
+
+PURPOSE:
+Тонкий dispatcher: GetMisc(name) загружает модуль из Misc, а PlayEffect(name, ...)
+вызывает Effects[name](...). Здесь нет самостоятельной логики Unusual.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local t = {}
+local Misc = script.Misc
+local Effects = require(script.Effects)
+function t.GetMisc(_, p1)
+	--[[ line: 11 | upvalues: (copy) Misc]]
+	return require((Misc:FindFirstChild(p1)))
+end
+function t.PlayEffect(_2, p2, ...)
+	--[[ line: 15 | upvalues: (copy) Effects]]
+	return Effects[p2](...)
+end
+return t
+
+
+==================================================
+SOURCE #75
+==================================================
+PATH:
+ReplicatedStorage.Services.Client.EffectsService.Effects
+
+STATUS:
+ДОПОЛНЕНО 2026-10-19: отсутствовал в каталоге.
+
+PURPOSE:
+В выгруженной версии таблица Effects содержит только Tween. Эффект строится через
+TweenInfo.new(duration, easingStyle, easingDirection, 0, reverse, 0), затем
+TweenService:Create(...):Play(); возвращается объект Tween.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+return { Tween = function(p1, p2, p3, p4, p5, p6)
+		--[[ line: 2 | upvalues: none]]
+		if p6 == nil then
+			p6 = false
+		end
+		local v7 = TweenInfo.new(p3, p4, p5, 0, p6, 0)
+		local v8 = game:GetService("TweenService"):Create(p1, v7, p2)
+		v8:Play()
+		return v8
+	end }
+
+
+==================================================
+SOURCE #76
+==================================================
+PATH:
+ReplicatedStorage.Services.Asset.RigService.WeldHat
+
+STATUS:
+ДОПОЛНЕНО 2026-10-19: вспомогательный модуль использует SOURCE #53, но отдельно ещё не был сохранён.
+
+PURPOSE:
+Штатное присоединение аксессуара к ригу. Сначала удаляет имеющиеся Weld внутри
+аксессуара, затем пытается соединить совпадающие Attachment. Если соответствующее
+Attachment на риге не найдено, создаёт HeadWeld между Head и Handle с учётом
+Accessory.AttachmentPoint. Это относится к креплению аксессуаров, не к самому
+циклу воспроизведения Unusual.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+function weldAttachments(p1, p2)
+	--[[ line: 1 | upvalues: none]]
+	local Weld = Instance.new("Weld")
+	Weld.Part0 = p1.Parent
+	Weld.Part1 = p2.Parent
+	Weld.C0 = p1.CFrame
+	Weld.C1 = p2.CFrame
+	Weld.Parent = p1.Parent
+	return Weld
+end
+local v_u_3
+v_u_3 = function(p4, p5)
+	--[[ line: 22 | upvalues: (copy) v_u_3]]
+	for _, v6 in pairs((p4:GetChildren())) do
+		if v6:IsA("Attachment") and v6.Name == p5 then
+			return v6
+		end
+		if not (v6:IsA("Accoutrement") or v6:IsA("Tool")) then
+			local v7 = v_u_3(v6, p5)
+			if v7 then
+				return v7
+			end
+		end
+	end
+end
+return function(p8, p9)
+	--[[ line: 35 | upvalues: (copy) v_u_3]]
+	local Handle = p9:FindFirstChild("Handle")
+	p9.Parent = p8
+	for _2, v10 in ipairs((p9:GetDescendants())) do
+		if v10:IsA("Weld") then
+			v10:Destroy()
+		end
+	end
+	if Handle then
+		local Attachment = Handle:FindFirstChildOfClass("Attachment")
+		if Attachment then
+			local v11 = v_u_3(p8, Attachment.Name)
+			if v11 then
+				weldAttachments(v11, Attachment)
+			end
+		end
+		local Head = p8:FindFirstChild("Head")
+		if Head then
+			local v12 = CFrame.new(0, 0.5, 0)
+			local AttachmentPoint = p9.AttachmentPoint
+			local Weld2 = Instance.new("Weld")
+			Weld2.Name = "HeadWeld"
+			Weld2.Part0 = Head
+			Weld2.Part1 = Handle
+			Weld2.C0 = v12
+			Weld2.C1 = AttachmentPoint
+			Weld2.Parent = Head
+		end
+	end
+end
+
+
+==================================================
+SOURCE #77
+==================================================
+PATH:
+ReplicatedStorage.Shared.Partnerships.Relics.Content.Script
+
+STATUS:
+ДОПОЛНЕНО 2026-10-19: исходник скрипта найден в новой выгрузке. В выгрузке также был
+пустой одноимённый Script без bytecode; ниже сохранён именно скрипт с декомпилированным телом.
+
+PURPOSE:
+На клиенте вызывает Auras.Update(true, deltaTime) на каждом RenderStepped.
+Это полезная точка входа для дальнейшего поиска жизненного цикла Relics-аур.
+Сама функция Update и правила включения/очистки в этом источнике не раскрыты.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local RelicsXYZ = require(script.Parent.RelicsXYZ)
+game:GetService("RunService").RenderStepped:Connect(function(p1)
+	--[[ line: 5 | upvalues: (copy) RelicsXYZ]]
+	RelicsXYZ.Auras.Update(true, p1)
+end)
+
+
+==================================================
+SOURCE #78
+==================================================
+PATH:
+ReplicatedStorage.Shared.Partnerships.Relics.Content.RelicsXYZ
+
+STATUS:
+ДОПОЛНЕНО 2026-10-19: отсутствовал в каталоге.
+
+PURPOSE:
+Агрегатор модулей RELICSxyz; подтверждает, что Auras загружается из Shared.Auras,
+а RelicsPlayer — отдельный модуль UI. Для анализа эффектов это помогает найти следующий
+нужный источник (Shared.Auras), но не раскрывает его реализацию.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local Shared = script.Shared
+return table.freeze({
+	Auras = require(Shared.Auras),
+	Emotes = require(Shared.Emotes),
+	Boombox = require(Shared.Boombox),
+	Settings = require(Shared.Settings),
+	Favorites = require(Shared.Favorites),
+	MusicData = require(Shared.MusicData),
+	GamePasses = require(Shared.GamePasses),
+	RelicsPlayer = require(script.RelicsPlayer)
+})
+
+
+==================================================
+END ADDITIONAL EFFECTS / RELICS SOURCES
+==================================================
