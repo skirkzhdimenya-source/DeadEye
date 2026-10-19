@@ -1,8308 +1,4791 @@
-DEADEYE EMOTE MODULE DUMP
-Collected modules: 20
-
-========================================================================
-MODULE 1: ReplicatedStorage.Items.ItemPacks.Events.2022.Xmas2022.Emotes.Marching
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	Reintroduced = true,
-	AppearanceInfo = { Name = "3-Piece March", Desc = "Includes 3 randomized emotes.", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Winter Holidays", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "Event",
-		Currency = "Tickets",
-		Price = 1000000000,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.25, Sound = 1846746381 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 2: ReplicatedStorage.Items.ItemPacks.Events.2024.Halloween2024.Emotes.ZombieStride
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Zombie Stride", Desc = "Brainsssss...", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Halloween", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "Event",
-		Currency = "Tickets",
-		Price = 2000000000,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.2, Sound = 1131937949 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 3: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Emotes.ToyTrainRide
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	Reintroduced = true,
-	AppearanceInfo = { Name = "Toy Train Ride", Desc = "CONDUCTOR WE HAVE A PROBLEM!!", Creator = "WizardMaster29 & abrahamabugri" },
-	UIInfo = { Header = "Winter Holidays", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "Event",
-		Currency = "Tickets",
-		Price = 2000000000,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.8, Sound = 74121765957356 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 4: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Emotes.MariachiBand
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Mariachi Band", Desc = "Play as a trio. Includes 3 randomized emotes.", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Halloween", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "Event",
-		Currency = "Tickets",
-		Price = 1000000000,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0, Sound = 134959415719456 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 5: ReplicatedStorage.Items.ItemPacks.Events.2026.HLWN2026.Emotes.GargoyleStand
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Gargoyle Stand", Desc = "", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Halloween", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "Event",
-		Currency = "Tickets",
-		Price = 999999999,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0, Sound = 127648968320882, BetterEmoteSystem = true },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 6: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Emotes.ClamClamor
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Clam Clamor", Desc = "", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Summer", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "Event",
-		Currency = "Tickets",
-		Price = 999999999,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0, Sound = 123516194124949, BetterEmoteSystem = true },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 7: ReplicatedStorage.Items.ItemPacks.Events.2026.StPatricks2026.Emotes.AuspiciousWell
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Auspicious Well", Desc = "Oh wishing well, please grant me good fortune!", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Event", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "None",
-		Currency = "Tokens",
-		Price = 0,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0, Sound = 1840385645, Length = 14 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 8: ReplicatedStorage.Items.ItemPacks.Events.2026.StPatricks2026.Emotes.AuspiciousWell.Selection.1.Animations.Activate
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return function(p1, _)
-	--[[ line: 1 | upvalues: none]]
-	local v2 = nil
-	for _2, v3 in pairs((p1:GetChildren())) do
-		if v3.Name == "Particles" and v3:IsA("BasePart") then
-			v2 = v3
-			break
-		end
-	end
-	v2.smallflare_GOOD.Enabled = true
-	for _3, v4 in pairs((v2.GOOD:GetChildren())) do
-		v4.Enabled = true
-	end
-end
-
-========================================================================
-MODULE 9: ReplicatedStorage.Items.ItemPacks.Events.2026.StPatricks2026.Emotes.AuspiciousWell.Selection.2.Animations.Activate
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return function(p1, _)
-	--[[ line: 1 | upvalues: none]]
-	local v2 = nil
-	for _2, v3 in pairs((p1:GetChildren())) do
-		if v3.Name == "Particles" and v3:IsA("BasePart") then
-			v2 = v3
-			break
-		end
-	end
-	v2.smallflare_BAD.Enabled = true
-	for _3, v4 in pairs((v2.BAD:GetChildren())) do
-		v4.Enabled = true
-	end
-end
-
-========================================================================
-MODULE 10: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.ClassicDance
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Classic Dance", Desc = "This emote contains 3 classic Roblox emote dances!", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Normal", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "DailyShop",
-		Currency = "Points",
-		Price = 40,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.3, Sound = 1847444965 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 11: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.FastFoodDelight
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Fast Food Delight", Desc = "Includes both a pizza and burger!", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Normal", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "DailyShop",
-		Currency = "Points",
-		Price = 35,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0, Sound = 96073718689833 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 12: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.PotionMash
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Potion Mash", Desc = "This emote contains 2 classic Roblox potion animations!", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Normal", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "DailyShop",
-		Currency = "Points",
-		Price = 40,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.3, Sound = 35930009 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 13: ReplicatedStorage.Items.ItemPacks.Gamepass.2026.PoseidonSet.Emotes.ShellHermit
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Shell Hermit", Desc = "", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Summer", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "Event",
-		Currency = "Tickets",
-		Price = 999999999,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.2, Sound = 1839267262, BetterEmoteSystem = true },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 14: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarBike
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Solar Bike", Desc = "A mysterious vehicle that pulses with light under the solar eclipse.", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Gamepasses", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "None",
-		Currency = "Points",
-		Price = 9999999,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.9, Sound = 97100369595333 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 15: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarConqueror
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Solar Conqueror", Desc = "All will bend the knee to the king.", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Gamepasses", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "None",
-		Currency = "Points",
-		Price = 9999999,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0, Sound = 1840488369 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 16: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarSlayer
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-return {
-	AppearanceInfo = { Name = "Solar Slayer", Desc = "Conqueror of the Sun, and ruler of all mankind.", Creator = "WizardMaster29" },
-	UIInfo = { Header = "Gamepasses", Overview = "Emote", Rarity = nil },
-	PurchaseInfo = {
-		LevelRequirement = 0,
-		AppearsIn = "None",
-		Currency = "Points",
-		Price = 9999999,
-		OwnershipType = "Single"
-	},
-	EmoteInfo = { SpeedMult = 0.25, Sound = 1839849378 },
-	EquipInfo = { SlotType = "Emote" }
-}
-
-========================================================================
-MODULE 17: ReplicatedStorage.Objects.Game.Character.ActionVisuals
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-local t = {}
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-t.__index = t
-local t2 = {}
-for _, v1 in pairs((script.Actions:GetChildren())) do
-	t2[v1.Name] = require(v1)
-end
-function t.new(p2)
-	--[[ line: 15 | upvalues: (copy) t]]
-	local t3 = {
-		Parent = p2,
-		Local = p2.Local,
-		Character = p2.Model,
-		DataRegistry = p2.DataRegistry
-	}
-	local v3 = t
-	local v4 = setmetatable(t3, v3)
-	local v5 = t
-	return setmetatable(v4, v5)
-end
-function t.Init(_2)
-	--[[ line: 28 | upvalues: none]]
-end
-function t.Destroy(_3)
-	--[[ line: 32 | upvalues: none]]
-end
-function t.Create(_4)
-	--[[ line: 36 | upvalues: none]]
-end
-function t.Action(p6, p7, ...)
-	--[[ line: 40 | upvalues: (copy) ReplicatedStorage, (copy) t2]]
-	for _5, v8 in ipairs((ReplicatedStorage.Objects.Game.Actions.ActionTypes:GetChildren())) do
-		if v8:GetAttribute("ID") == p7 then
-			p7 = v8.Name
-			break
-		end
-	end
-	if t2[p7] then
-		t2[p7]:Activate(p6.Character, p6.DataRegistry, ...)
-	end
-end
-return t
-
-========================================================================
-MODULE 18: ReplicatedStorage.Objects.Game.Character.Animations
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-local Types = script:WaitForChild("Types")
-local Shared = script.Parent:WaitForChild("Shared")
-local v_u_1 = require((Shared:WaitForChild("StateInfo")))
-local Services = game:GetService("ReplicatedStorage"):WaitForChild("Services")
-local v_u_2 = require((Services:WaitForChild("Items"):WaitForChild("EmoteService")))
-local v_u_3 = require((Services:WaitForChild("Items"):WaitForChild("CarryService")))
-local v_u_4 = require((Services:WaitForChild("Items"):WaitForChild("ClientItemService")))
-local v_u_5 = require((Services:WaitForChild("UI"):WaitForChild("GameUIService")))
-local VehicleService = require(Services.Asset.VehicleService)
-local t = {}
-t.__index = t
-function t.new(p6)
-	--[[ line: 25 | upvalues: (copy) t]]
-	local t2 = {
-		Speed = 0,
-		GlobalFootstepsEnabled = true,
-		Parent = p6,
-		Character = p6.Model,
-		DataRegistry = p6.DataRegistry,
-		Weights = {},
-		MoveDirection = Vector3.new()
-	}
-	local v7 = t
-	local v8 = setmetatable(t2, v7)
-	local v9 = t
-	return setmetatable(v8, v9)
-end
-function t.Init(p_u_10)
-	--[[ line: 40 | upvalues: none]]
-	p_u_10.Animations = {}
-	p_u_10.Transitions = {}
-	p_u_10.Footsteps = require((script:WaitForChild("Footsteps"))).new(p_u_10)
-	p_u_10.Footsteps:Init()
-	if p_u_10.Parent.ModuleInfo then
-		p_u_10.GlobalFootstepsEnabled = p_u_10.Parent.ModuleInfo.Footsteps
-	end
-	if p_u_10.Parent.Module and p_u_10.Parent.Module:FindFirstChild("AnimationModule") then
-		task.spawn(function()
-			--[[ line: 49 | upvalues: (copy) p_u_10]]
-			repeat
-				task.wait()
-			until p_u_10.Humanoid or (p_u_10.Character == nil or p_u_10.Character.Parent == nil)
-			p_u_10:SetModule(p_u_10.Parent.Module.AnimationModule)
-		end)
-	end
-end
-function t.SetRig(p11, p12)
-	--[[ line: 56 | upvalues: none]]
-	p11.Humanoid = p12.Model:FindFirstChildOfClass("Humanoid")
-end
-function t.RegistryTermUpdated(p_u_13: {[any]: any}, p14: string)
-	--[[ line: 60 | upvalues: (copy) v_u_2, (copy) v_u_4, (copy) v_u_5, (copy) v_u_3, (copy) VehicleService]]
-	if p14 == "AnimationType" and not (p_u_13.Parent.Module and p_u_13.Parent.Module:FindFirstChild("AnimationModule")) then
-		p_u_13:SetAnimationType((p_u_13.DataRegistry:Get(p14)))
-		return
-	end
-	if p14 == "Emote" then
-		if p_u_13.Emote then
-			p_u_13.Emote:Deactivate()
-			p_u_13.Emote = nil
-		end
-		local v15 = p_u_13.DataRegistry:Get(p14)
-		if v15 == 0 then
-			return
-		elseif v15 and v15 ~= 0 then
-			p_u_13.Emote = v_u_2:SetEmote(p_u_13.Character, v_u_4:GetItemFromID(v15), false, p_u_13, nil, (p_u_13.Parent.Rig:GetRigModel()))
-			if p_u_13.Parent and p_u_13.Parent.Local then
-				p_u_13.Parent.ToolProfile:Equip((p_u_13.Parent.ToolProfile:EquipKeyToIndex("Weaponless")))
-			end
-		else
-			return
-		end
-	end
-	if p14 == "State" then
-		local v16 = p_u_13.DataRegistry:Get("State") or "Inert"
-		p_u_13:SetState(p_u_13.Emote and "Inert" or v16)
-		return
-	end
-	if p14 == "Carrying" then
-		if p_u_13.Carry then
-			p_u_13.Carry:Deactivate()
-			p_u_13.Carry = nil
-		end
-		local Carrying = p_u_13.DataRegistry:Get("Carrying")
-		if Carrying == 0 then
-			if p_u_13.Parent.Local then
-				v_u_5:SetType("Interact", "Carrying", false)
-			end
-			return
-		else
-			if p_u_13.Parent.Local then
-				v_u_5:SetType("Interact", "Carrying", true)
-			end
-			local CarryItem = p_u_13.DataRegistry:Get("CarryItem")
-			if CarryItem and CarryItem ~= 0 then
-				p_u_13.Carry = v_u_3:SetCarry(p_u_13.Character, v_u_4:GetItemFromID(CarryItem), false, p_u_13, Carrying, (p_u_13.Parent.Rig:GetRigModel()))
-			else
-				p_u_13.Carry = v_u_3:SetCarry(p_u_13.Character, script.DefaultCarry, false, p_u_13, Carrying, (p_u_13.Parent.Rig:GetRigModel()))
-			end
-			if p_u_13.Parent and p_u_13.Parent.Local then
-				p_u_13.Parent.ToolProfile:Equip((p_u_13.Parent.ToolProfile:EquipKeyToIndex("Weaponless")))
-			end
-		end
-	end
-	if p14 == "Carried" then
-		if p_u_13.Carry then
-			p_u_13.Carry:Deactivate()
-			local CarryCharacterPrimaryPart = p_u_13.Carry.CarryCharacterPrimaryPart
-			p_u_13.Carry = nil
-			for _, v17 in workspace.Players:GetChildren() do
-				local CarryWeld = v17:FindFirstChild("CarryWeld")
-				if CarryWeld and CarryWeld.Part1 == p_u_13.Character.PrimaryPart then
-					CarryWeld.Enabled = false
-				end
-			end
-			task.spawn(function()
-				--[[ line: 124 | upvalues: (copy) CarryCharacterPrimaryPart, (copy) p_u_13]]
-				if CarryCharacterPrimaryPart and p_u_13.Parent.Local then
-					local CFrame2 = CarryCharacterPrimaryPart.CFrame
-					local v18 = 0
-					repeat
-						p_u_13.Character.PrimaryPart.CFrame = CFrame.new(CFrame2.X, p_u_13.Character.PrimaryPart.CFrame.Y, CFrame2.Z) * (CFrame2 - CFrame2.p)
-						task.wait()
-						v18 = v18 + 1
-					until not p_u_13.Character.PrimaryPart or (v18 >= 6 or p_u_13.Carry)
-				end
-			end)
-		end
-		local Carried = p_u_13.DataRegistry:Get("Carried")
-		if Carried == 0 then
-			return
-		else
-			local v19 = string.split(Carried, ":")[2]
-			local v20 = tonumber(v19)
-			if v20 and v20 ~= 0 then
-				p_u_13.Carry = v_u_3:SetCarry(p_u_13.Character, v_u_4:GetItemFromID(v20), false, p_u_13, nil, (p_u_13.Parent.Rig:GetRigModel()))
-			else
-				p_u_13.Carry = v_u_3:SetCarry(p_u_13.Character, script.DefaultCarry, false, p_u_13, nil, (p_u_13.Parent.Rig:GetRigModel()))
-			end
-			if p_u_13.Carry then
-				local v21 = string.split(Carried, ":")[1]
-				local v22 = tonumber(v21)
-				for _2, v23 in workspace.Players:GetChildren() do
-					if v23:GetAttribute("Tag") == v22 then
-						p_u_13.Carry.CarryCharacterPrimaryPart = v23.PrimaryPart
-					end
-				end
-			end
-		end
-	end
-	if p14 == "Seated" then
-		if p_u_13.Vehicle then
-			p_u_13.Vehicle:Exit(p_u_13.Character)
-			p_u_13.Vehicle = nil
-		end
-		local Seated = p_u_13.DataRegistry:Get("Seated")
-		if Seated and Seated ~= 0 then
-			local v24 = string.split(Seated, ":")
-			local v25 = VehicleService
-			local v26 = v24[1]
-			p_u_13.Vehicle = v25:Get((tonumber(v26)))
-			p_u_13.Vehicle:Enter(p_u_13.Character, p_u_13.Parent.Rig:GetRigModel(), v24[2], p_u_13.DataRegistry)
-			if p_u_13.Parent.Local then
-				v_u_5:SetType("Interact", "Vehicle", true)
-			end
-		end
-		if p_u_13.Parent.Local then
-			v_u_5:SetType("Interact", "Vehicle", nil)
-		end
-	end
-end
-function t.KeyUsed(p27, p28)
-	--[[ line: 183 | upvalues: none]]
-	if p27.Vehicle then
-		p27.Vehicle:KeyUsed(p28)
-	end
-end
-function t.SetAnimationType(p_u_29, p_u_30)
-	--[[ line: 189 | upvalues: (copy) Types]]
-	task.spawn(function()
-		--[[ line: 190 | upvalues: (copy) p_u_29, (ref) Types, (ref) p_u_30]]
-		repeat
-			task.wait()
-		until p_u_29.Humanoid or (p_u_29.Character == nil or p_u_29.Character.Parent == nil)
-		local v31 = p_u_29.Humanoid and p_u_29.Humanoid.RigType == Enum.HumanoidRigType.R15 and "R15" or "Classic"
-		if not Types:FindFirstChild(v31):FindFirstChild(p_u_30) then
-			p_u_30 = "Default"
-		end
-		p_u_29:SetModule((Types:FindFirstChild(v31):FindFirstChild(p_u_30)))
-	end)
-end
-function t.SetModule(p32, p33)
-	--[[ line: 204 | upvalues: none]]
-	if p32.Humanoid then
-		for _3, v34 in p32.Humanoid:GetPlayingAnimationTracks() do
-			v34:Stop(0)
-		end
-		p32.AnimationModule = p33
-		p32.AnimationInfo = require(p32.AnimationModule)
-		p32.Animations = {}
-		for _4, v35 in ipairs((p32.AnimationModule.Animations:GetChildren())) do
-			local t3 = {}
-			for _5, v36 in ipairs((v35:GetChildren())) do
-				local t4 = { Animation = p32.Humanoid:LoadAnimation(v36), AnimationInstance = v36, Name = v36.Name }
-				table.insert(t3, t4)
-			end
-			p32.Animations[v35.Name] = t3
-		end
-		p32.Transitions = {}
-		for _6, v37 in ipairs((p32.AnimationModule.Transitions:GetChildren())) do
-			local t5 = {}
-			for _7, v38 in ipairs((v37:GetChildren())) do
-				local t6 = {
-					Animation = p32.Humanoid:LoadAnimation(v38),
-					AnimationInstance = v38,
-					Name = v38.Name,
-					ParentName = v38.Parent.Name
-				}
-				table.insert(t5, t6)
-			end
-			p32.Transitions[v37.Name] = t5
-		end
-		p32.Parent.Joints.AnimationsEnabled = true
-	end
-end
-function t.Destroy(p39)
-	--[[ line: 242 | upvalues: none]]
-	if p39.Humanoid then
-		for _8, v40 in p39.Humanoid:GetPlayingAnimationTracks() do
-			v40:Stop(0)
-		end
-	end
-	if p39.Emote then
-		p39.Emote:Deactivate()
-		p39.Emote = nil
-	end
-	if p39.Carry then
-		p39.Carry:Deactivate()
-		p39.Carry = nil
-	end
-	if p39.Vehicle then
-		p39.Vehicle:Exit(p39.Character)
-		p39.Vehicle = nil
-	end
-end
-function t.Create(_9)
-	--[[ line: 262 | upvalues: none]]
-end
-function t.SetState(p41, p42)
-	--[[ line: 266 | upvalues: (copy) v_u_1]]
-	p41.CurrentStateInfo = v_u_1:GetState(p42)
-	p41.CurrentStateAnimation = p41.CurrentStateInfo.Animation
-end
-function t.Update(p43, p44)
-	--[[ line: 271 | upvalues: none]]
-	if p43.Carry and p43.Carry.CarryCharacterPrimaryPart then
-		p43.Character.PrimaryPart.CFrame = p43.Carry.CarryCharacterPrimaryPart.CFrame
-	end
-	if p43.Emote then
-		p43.Emote:Update(p44)
-	end
-	if p43.AnimationModule then
-		local CurrentStateAnimation = p43.CurrentStateAnimation
-		p43:SetCurrentAnimation(CurrentStateAnimation)
-		p43:UpdateAnimations(CurrentStateAnimation)
-		local Footsteps = p43.Footsteps
-		local FootstepsEnabled = p43.FootstepsEnabled
-		if FootstepsEnabled then
-			FootstepsEnabled = p43.GlobalFootstepsEnabled
-		end
-		Footsteps:Update(p44, FootstepsEnabled, p43.AnimationSpeed, p43.State)
-	end
-end
-function t.SetCurrentAnimation(p45, p46)
-	--[[ line: 287 | upvalues: none]]
-	if p45.State == p46 then
-		return
-	end
-	local v47 = nil
-	for v48, v49 in pairs(p45.Transitions) do
-		if v48 == p45.State then
-			v47 = v49
-			break
-		end
-	end
-	if p45.State and v47 then
-		for _10, v50 in pairs(v47) do
-			if v50.Name == "End" then
-				p45:PlayTransitionAnimation(v50, p46)
-			end
-		end
-	end
-	if p45:GetInfo(p45.State).PlayWander == true then
-		p45.Footsteps:Wander()
-	end
-	if p45:GetInfo(p45.State).PlayLanded then
-		for _11, v51 in pairs(p45:GetInfo(p45.State).PlayLanded) do
-			if p46 == v51 then
-				p45.Footsteps:Land()
-			end
-		end
-	end
-	p45.State = p46
-	local v52 = nil
-	for v53, v54 in pairs(p45.Transitions) do
-		if v53 == p45.State then
-			v52 = v54
-			break
-		end
-	end
-	if p45.State and v52 then
-		for _12, v55 in pairs(v52) do
-			if v55.Name == "Start" then
-				p45:PlayTransitionAnimation(v55, p45.State)
-			elseif v55.Name == "End" then
-				v55.Animation:Stop(0.25)
-			end
-		end
-	end
-	local State = p45:GetInfo(p45.State)
-	p45.FootstepsEnabled = State.FootstepsEnabled or false
-	for v56, v57 in pairs(p45.Animations) do
-		if v56 == p46 then
-			for _13, v58 in pairs(v57) do
-				v58.Animation:Play(State.PlayTransitionTime)
-			end
-		else
-			local v59 = p45:GetInfo(v56)
-			for _14, v60 in pairs(v57) do
-				v60.Animation:Stop(v59.StopTransitionTime)
-			end
-		end
-	end
-end
-function t.GetInfo(p61, p62)
-	--[[ line: 349 | upvalues: none]]
-	for _15, v63 in pairs(p61.AnimationInfo) do
-		for _16, v64 in pairs(v63.Names) do
-			if v64 == p62 then
-				return v63
-			end
-		end
-	end
-	for _17, v65 in pairs(p61.AnimationInfo) do
-		for _18, v66 in pairs(v65.Names) do
-			if v66 == "Default" then
-				return v65
-			end
-		end
-	end
-end
-function t.PlayTransitionAnimation(p67, p_u_68, p69)
-	--[[ line: 366 | upvalues: none]]
-	local Animation = p_u_68.Animation
-	local ParentName = p_u_68.ParentName
-	local AnimationInstance = p_u_68.AnimationInstance
-	local v70 = p67:GetInfo(p69)
-	if p_u_68.Name == "End" then
-		if v70.Transitions == nil or v70.Transitions[ParentName] == nil then
-			return
-		else
-			local v71 = false
-			for _19, v72 in pairs(v70.Transitions[ParentName]) do
-				if v72 == "End" then
-					v71 = true
-				end
-			end
-			if v71 ~= false then
-				task.spawn(function()
-					--[[ line: 385 | upvalues: (copy) Animation, (copy) AnimationInstance, (copy) p_u_68]]
-					Animation:Play(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
-					Animation:AdjustSpeed(AnimationInstance:GetAttribute("Speed") or 1)
-					if AnimationInstance:GetAttribute("PlayWeightLength") == 0 then
-						task.wait()
-					else
-						task.wait(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
-					end
-					if p_u_68 then
-						Animation:Stop(AnimationInstance:GetAttribute("StopWeightLength") or 0.2)
-					end
-				end)
-			end
-		end
-	else
-		task.spawn(function()
-			--[[ line: 385 | upvalues: (copy) Animation, (copy) AnimationInstance, (copy) p_u_68]]
-			Animation:Play(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
-			Animation:AdjustSpeed(AnimationInstance:GetAttribute("Speed") or 1)
-			if AnimationInstance:GetAttribute("PlayWeightLength") == 0 then
-				task.wait()
-			else
-				task.wait(AnimationInstance:GetAttribute("PlayWeightLength") or 0.2)
-			end
-			if p_u_68 then
-				Animation:Stop(AnimationInstance:GetAttribute("StopWeightLength") or 0.2)
-			end
-		end)
-		return
-	end
-end
-function t.UpdateAnimations(p73, p74)
-	--[[ line: 399 | upvalues: none]]
-	local v75 = nil
-	for v76, v77 in pairs(p73.Animations) do
-		if v76 == p74 then
-			v75 = v77
-			break
-		end
-	end
-	if v75 == nil then
-		return
-	else
-		local v78 = p73:GetInfo(p74)
-		local Speed = p73.DataRegistry:Get("Speed")
-		local RelativeMoveDirection = p73.DataRegistry:Get("RelativeMoveDirection")
-		if v78 == nil or v78.IgnoreSpeedCheck ~= true and (p73.Speed == Speed and p73.MoveDirection == RelativeMoveDirection) then
-			return
-		elseif RelativeMoveDirection then
-			p73.Speed = Speed
-			local Z = RelativeMoveDirection.Z
-			if math.abs(Z) < 0.1 then
-				local X = RelativeMoveDirection.X
-				local Y = RelativeMoveDirection.Y
-				RelativeMoveDirection = Vector3.new(X, Y, -0.01)
-			end
-			if RelativeMoveDirection ~= p73.MoveDirection then
-				p73:SetDirectionWeights(RelativeMoveDirection)
-			end
-			p73.MoveDirection = RelativeMoveDirection
-			for _20, v79 in pairs(v78.PlaybackInfo) do
-				for _21, v80 in pairs(v75) do
-					local v81 = false
-					for _22, v82 in pairs(v79.Animations) do
-						if v82 == v80.Name then
-							v81 = true
-						end
-					end
-					if v81 == true then
-						local SpeedInfo = v79.SpeedInfo
-						local WeightInfo = v79.WeightInfo
-						local v83
-						if v79.Directions == nil then
-							v83 = nil
-						else
-							v83 = v79.Directions[v80.Name]
-						end
-						p73:SetValues(v80, SpeedInfo, WeightInfo, v83)
-					end
-				end
-				if v79.CopyTimePosition ~= nil then
-					local v84 = nil
-					for _23, v85 in pairs(v75) do
-						if v85.Name == v79.CopyTimePosition then
-							v84 = v85
-						end
-					end
-					if v84 ~= nil then
-						for _24, v86 in pairs(v75) do
-							local Animation2 = v86.Animation
-							if v86 ~= v84 then
-								for _25, v87 in pairs(v79.Animations) do
-									if v87 == v86.Name then
-										if Animation2.Speed < 0 then
-											if Animation2.Length then
-												Animation2.TimePosition = Animation2.Length - v84.Animation.TimePosition
-											end
-										else
-											Animation2.TimePosition = v84.Animation.TimePosition
-										end
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end
-function t.SetDirectionWeights(p88, p89)
-	--[[ line: 477 | upvalues: none]]
-	p88.Weights = {}
-	for _26, v90 in pairs({
-		"Forward",
-		"Backward",
-		"Left",
-		"Right",
-		"ForwardLeft",
-		"ForwardRight",
-		"ForwardForward"
-	}) do
-		local v91 = nil
-		if v90 == "Forward" then
-			local Z2 = p89.Z
-			local v92 = math.clamp(Z2, -1, 0)
-			v91 = math.abs(v92) ^ 2
-		elseif v90 == "Backward" then
-			local Z3 = p89.Z
-			local v93 = math.clamp(Z3, 0, 1)
-			v91 = math.abs(v93) ^ 2
-		elseif v90 == "Left" then
-			local X2 = p89.X
-			local v94 = math.clamp(X2, -1, -0)
-			v91 = math.abs(v94) ^ 2
-		elseif v90 == "Right" then
-			local X3 = p89.X
-			local v95 = math.clamp(X3, 0, 1)
-			v91 = math.abs(v95) ^ 2
-		elseif v90 == "ForwardLeft" then
-			local X4 = p89.X
-			local v96 = math.clamp(X4, -1, 0)
-			v91 = math.abs(v96) / 0.7071067811865476
-		elseif v90 == "ForwardRight" then
-			local X5 = p89.X
-			local v97 = math.clamp(X5, 0, 1)
-			v91 = math.abs(v97) / 0.7071067811865476
-		elseif v90 == "ForwardForward" then
-			local Z4 = p89.Z
-			local v98 = math.clamp(Z4, -1, -0.7071067811865476) + 0.7071067811865476
-			local v99 = math.abs(v98) / 0.2928932188134524
-			v91 = math.max(v99, 0)
-		end
-		p88.Weights[v90] = v91
-	end
-end
-function t.SetValues(p100, p101, p102, p103, p104)
-	--[[ line: 502 | upvalues: none]]
-	local v105 = 1
-	if p102 ~= nil then
-		if p102.YVelocitySpeed == true then
-			local v106
-			if p100.Character:GetAttribute("LadderUp") == true then
-				v106 = 15
-			else
-				v106 = p100.Character:GetAttribute("LadderUp") == false and -15 or (p100.DataRegistry:Get("ActualVelocity") or Vector3.new()).Y
-			end
-			local v107 = (math.abs(v106) <= 0.4 and 0 or v106) / 6
-			v105 = math.clamp(v107, -2.5, 2.5)
-			p100.AnimationSpeed = math.abs(v105)
-		elseif p102.UseMovementSpeed == true then
-			if p100.Speed then
-				if p102.SpeedDivisionPastSpeed == nil or p100.Speed < p102.SpeedDivisionPastSpeed[1] then
-					v105 = p100.Speed / (p102.SpeedDivision or 1)
-				else
-					p101.Animation:AdjustSpeed(p100.Speed / (p102.SpeedDivisionPastSpeed[2] or 1))
-					v105 = p100.Speed / (p102.SpeedDivisionPastSpeed[2] or 1)
-				end
-			end
-		else
-			p101.Animation:AdjustSpeed(1 / (p102.SpeedDivision or 1))
-			v105 = v105 / (p102.SpeedDivision or 1)
-		end
-	end
-	local v108 = 1
-	if p103 and p100.Speed then
-		if (p103.ZeroBeforeSpeed == nil or p100.Speed >= p103.ZeroBeforeSpeed) and (p103.ZeroAfterSpeed == nil or p100.Speed < p103.ZeroAfterSpeed) then
-			if p103.SpeedChanges ~= nil then
-				local v109 = (p100.Speed - (p103.SpeedChanges.Subtract or 0)) / p103.SpeedChanges.Division
-				local v110 = math.clamp(v109, 0, 1)
-				if p103.SpeedChanges.Reversed == true then
-					v110 = 1 - v110
-				end
-				v108 = v108 * v110
-			end
-		else
-			v108 = 0
-		end
-	end
-	if p104 ~= nil then
-		local v111 = false
-		if p103.ReverseLeftRightIfBackwards == true and p100.MoveDirection.Z > 0 then
-			if p104 == "Left" then
-				p104 = "Right"
-				v111 = true
-			elseif p104 == "Right" then
-				p104 = "Left"
-				v111 = true
-			end
-		end
-		local v112 = p100.Weights[p104]
-		if v112 ~= nil then
-			v108 = v108 * v112
-		end
-		if v111 == true then
-			v105 = v105 * -1
-		end
-	end
-	if p102 ~= nil and (p102.Return == true and p102.YVelocitySpeed ~= true) then
-		p100.AnimationSpeed = math.abs(v105)
-	end
-	p101.Animation:AdjustSpeed(v105)
-	local Animation3 = p101.Animation
-	local v113 = v108 < 0.01 and 0.01 or v108
-	local v114
-	if p103 == nil then
-		v114 = nil
-	else
-		v114 = p103.TransitionTime
-	end
-	Animation3:AdjustWeight(v113, v114)
-end
-return t
-
-========================================================================
-MODULE 19: ReplicatedStorage.Objects.Items.Emote
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-ReplicatedStorage:WaitForChild("Services")
-ReplicatedStorage:WaitForChild("Shared")
-local v_u_1 = require((ReplicatedStorage.Client:WaitForChild("Services"):WaitForChild("UserData"):WaitForChild("Settings")))
-local function getRootOffset(p2: userdata)
-	--[[ line: 18 | upvalues: none]]
-	local HumanoidRootPart = p2:FindFirstChild("HumanoidRootPart")
-	if not (HumanoidRootPart and HumanoidRootPart:IsA("BasePart")) then
-		return 0
-	end
-	local v3 = 1 / 0
-	for _, v4 in {
-		"LeftFoot",
-		"RightFoot",
-		"Left Leg",
-		"Right Leg"
-	} do
-		local v5 = p2:FindFirstChild(v4)
-		if v5 and v5:IsA("BasePart") then
-			local CFrame2 = v5.CFrame
-			local v6 = v5.Size / 2
-			for _2, v7 in { -1, 1 } do
-				for _3, v8 in { -1, 1 } do
-					for _4, v9 in { -1, 1 } do
-						local v10 = v7 * v6.X
-						local v11 = v8 * v6.Y
-						local v12 = v9 * v6.Z
-						local Y = (CFrame2 * Vector3.new(v10, v11, v12)).Y
-						v3 = math.min(v3, Y)
-					end
-				end
-			end
-		end
-	end
-	return v3 == 1 / 0 and 0 or HumanoidRootPart.Position.Y - v3 - 2.75
-end
-local t = {}
-t.__index = t
-function t.new(p13, p14, p15)
-	--[[ line: 49 | upvalues: (copy) t]]
-	local v16 = require(p14)
-	return setmetatable({
-		Active = true,
-		Character = p13,
-		Rig = p15,
-		EmoteModule = p14,
-		Info = v16,
-		EmoteInfo = v16.EmoteInfo,
-		Animations = {}
-	}, t)
-end
-function t.Init(p17, p18)
-	--[[ line: 64 | upvalues: none]]
-	p17.DataRegistry = p18.DataRegistry
-end
-function t._speed(p19)
-	--[[ line: 70 | upvalues: none]]
-	local DataRegistry = p19.DataRegistry
-	return DataRegistry == nil and 0 or (DataRegistry:Get("Speed") or 0)
-end
-function t.IsR15(p20)
-	--[[ line: 75 | upvalues: none]]
-	local v21
-	if p20.Rig then
-		v21 = p20.Rig:FindFirstChildOfClass("Humanoid")
-	else
-		v21 = nil
-	end
-	return v21 and v21.RigType == Enum.HumanoidRigType.R15 and true or (p20.Character:FindFirstChild("R15Visual") and true or false)
-end
-function t.GetHumanoid(p22)
-	--[[ line: 85 | upvalues: none]]
-	if p22.Rig then
-		return p22.Rig:FindFirstChildOfClass("Humanoid") or p22.Rig:FindFirstChildOfClass("AnimationController")
-	end
-	if not p22:IsR15() then
-		return p22.Character:FindFirstChildOfClass("Humanoid") or p22.Character:FindFirstChildOfClass("AnimationController")
-	end
-	local v23 = p22.Character.R15Visual:FindFirstChildOfClass("Humanoid") or p22.Character.R15Visual:FindFirstChildOfClass("AnimationController")
-	if not v23 then
-		v23 = p22.Character:FindFirstChildOfClass("Humanoid") or p22.Character:FindFirstChildOfClass("AnimationController")
-	end
-	return v23
-end
-function t.SetSound(p24)
-	--[[ line: 112 | upvalues: (copy) v_u_1]]
-	local v25 = script.EmoteSound:Clone()
-	v25.Looped = (not p24.EmoteInfo or (not p24.EmoteInfo.Length or p24.EmoteInfo.Length > 0)) and true or false
-	if p24.EmoteInfo.SoundLoops == false then
-		v25.Looped = false
-	end
-	local Sound = p24.EmoteInfo.Sound
-	local v26
-	if typeof(Sound) == "table" then
-		v26 = "rbxassetid://" .. p24.EmoteInfo.Sound[math.random(1, #p24.EmoteInfo.Sound)]
-	else
-		v26 = "rbxassetid://" .. p24.EmoteInfo.Sound
-	end
-	v25.SoundId = v26
-	v25.Parent = p24.Character.PrimaryPart:WaitForChild("SoundPos")
-	v25:Play()
-	v25.Volume = v25.Volume * (v_u_1.Get("EmoteVolume") / 100)
-	p24.EmoteSound = v25
-end
-function t.GetSelection(p27)
-	--[[ line: 125 | upvalues: none]]
-	if not p27.DataRegistry then
-		return p27.EmoteModule.Selection:GetChildren()[1]
-	end
-	local v28 = tick()
-	repeat
-		task.wait()
-	until (p27.DataRegistry:Get("EmoteNum") or 0) ~= 0 or tick() - v28 >= 3
-	if tick() - v28 >= 3 then
-		return p27.EmoteModule.Selection:GetChildren()[1]
-	end
-	local EmoteNum = p27.DataRegistry:Get("EmoteNum")
-	return p27.EmoteModule.Selection:GetChildren()[EmoteNum]
-end
-function t.GetAnimations(p29)
-	--[[ line: 139 | upvalues: none]]
-	local v30 = nil
-	local v31 = nil
-	local v32 = nil
-	local v33 = nil
-	local v34 = nil
-	local v35 = nil
-	local v36 = nil
-	if not (p29.EmoteModule:FindFirstChild("Animations") or p29.EmoteModule:FindFirstChild("Selection")) then
-		if p29:IsR15() then
-			if p29.EmoteModule:FindFirstChild("Animation") then
-				return p29.EmoteModule.Animation, v31, v32, v33, v34, v35, v36
-			end
-			return v30, v31, v32, v33, v34, v35, v36
-		end
-		if p29.EmoteModule:FindFirstChild("AnimationClassic") then
-			v30 = p29.EmoteModule.AnimationClassic
-		end
-		return v30, v31, v32, v33, v34, v35, v36
-	end
-	local v37
-	if p29.EmoteModule:FindFirstChild("Selection") then
-		v37 = p29:GetSelection().Animations
-	else
-		v37 = p29.EmoteModule.Animations
-	end
-	local v38
-	if p29:IsR15() then
-		v38 = v37.R15
-	else
-		v38 = v37.R6
-	end
-	if v38:FindFirstChild("Intro") and v38.Intro.AnimationId ~= "" then
-		v31 = v38.Intro
-	end
-	if v38:FindFirstChild("Animation") and v38.Animation.AnimationId ~= "" then
-		v30 = v38.Animation
-	end
-	if v38:FindFirstChild("Outro") and v38.Outro.AnimationId ~= "" then
-		v32 = v38.Outro
-	end
-	if v38:FindFirstChild("Walk") and v38.Walk.AnimationId ~= "" then
-		v33 = v38.Walk
-	end
-	if v38:FindFirstChild("Idle") and v38.Idle.AnimationId ~= "" then
-		v34 = v38.Idle
-	end
-	if v38:FindFirstChild("Activate") then
-		v35 = v38.Activate
-	elseif v38.Parent:FindFirstChild("Activate") then
-		v35 = v38.Parent.Activate
-	end
-	if v38:FindFirstChild("Update") then
-		return v30, v31, v32, v33, v34, v35, v38.Update
-	end
-	if v38.Parent:FindFirstChild("Update") then
-		return v30, v31, v32, v33, v34, v35, v38.Parent.Update
-	end
-	return v30, v31, v32, v33, v34, v35, v36
-end
-function t._getAnimator(p39)
-	--[[ line: 192 | upvalues: none]]
-	local v40 = p39:GetHumanoid()
-	if v40 == nil or v40.Parent == nil then
-		return nil
-	end
-	local Animator = v40:FindFirstChildOfClass("Animator")
-	if Animator then
-		return Animator
-	end
-	local Animator2 = Instance.new("Animator")
-	Animator2.Parent = v40
-	return Animator2
-end
-function t._loadTrack(p41: {[any]: any}, p42: userdata, p43)
-	--[[ line: 206 | upvalues: none]]
-	local v44 = p41:_getAnimator()
-	if v44 == nil then
-		return nil
-	end
-	local v45 = v44:LoadAnimation(p42)
-	v45.Priority = p43
-	return v45
-end
-function t._awaitDataModel(p46)
-	--[[ line: 217 | upvalues: none]]
-	local v47 = p46:GetHumanoid()
-	if v47 == nil then
-		return false
-	end
-	while p46.Active and not v47:IsDescendantOf(game) do
-		v47.AncestryChanged:Wait()
-		if v47.Parent == nil then
-			return false
-		end
-	end
-	return p46.Active
-end
-function t.Activate(p_u_48: {[any]: any}, p49: boolean?, p50: boolean?)
-	--[[ line: 231 | upvalues: none]]
-	local v51, v52, _5, v53, v54, v_u_55, v56 = p_u_48:GetAnimations()
-	if p_u_48.Active then
-		if p49 then
-			p_u_48.Character.Destroying:Once(function()
-				--[[ line: 238 | upvalues: (copy) p_u_48]]
-				p_u_48:Deactivate()
-			end)
-		end
-		local v57, v58, v59, v60, v61, v62, v63, v64
-		if p49 or p50 == false then
-			p_u_48:SetModel()
-			if v_u_55 then
-				v57, v58 = pcall(function()
-					--[[ line: 259 | upvalues: (copy) v_u_55, (copy) p_u_48]]
-					require(v_u_55)(p_u_48.EmoteModel, p_u_48)
-				end)
-				if not v57 then
-					warn((("[Emote] Activate module %* failed: %*"):format(v_u_55:GetFullName(), v58)))
-				end
-			end
-			if v56 then
-				p_u_48.UpdateModule = require(v56)
-			end
-			if v52 and not p49 then
-				v59 = p_u_48:_loadTrack(v52, Enum.AnimationPriority.Action4)
-				if v59 then
-					p_u_48.Animations.Start = v59
-					v59:Play(0)
-					v60 = os.clock() + 5
-					while v59.Length <= 0 and (p_u_48.Active and os.clock() < v60) do
-						task.wait()
-					end
-					if p_u_48.Active and v59.Length > 0 then
-						task.wait(v59.Length)
-					end
-					v59:Stop(0)
-				end
-			end
-			if p_u_48.Active and v51 ~= nil then
-				if p49 and not p_u_48:_awaitDataModel() then
-					return
-				else
-					v61 = p_u_48:_loadTrack(v51, Enum.AnimationPriority.Action3)
-					if v61 == nil then
-						return
-					else
-						p_u_48.Animations.Animation = v61
-						v62 = p_u_48.EmoteInfo and p_u_48.EmoteInfo.Length
-						if v62 then
-							v62 = p_u_48.EmoteInfo.Length > 0
-						end
-						v61.Looped = not v62
-						if p49 then
-							v61:Play(0)
-							v61:AdjustSpeed(0)
-							v63 = os.clock() + 5
-							while v61.Length <= 0 and (p_u_48.Active and os.clock() < v63) do
-								task.wait()
-							end
-							v64 = v61.Length
-							v61.TimePosition = math.min(0.5, v64)
-						else
-							if v53 then
-								p_u_48.Animations.Move = p_u_48:_loadTrack(v53, Enum.AnimationPriority.Action3)
-								if p_u_48:_speed() > 0.5 and not p_u_48.Moving then
-									v61 = p_u_48.Animations.Move
-									p_u_48.Moving = true
-								end
-							end
-							if v54 then
-								p_u_48.Animations.Idle = p_u_48:_loadTrack(v54, Enum.AnimationPriority.Action3)
-								if p_u_48:_speed() <= 0.5 and not p_u_48.Idle then
-									v61 = p_u_48.Animations.Idle
-									p_u_48.Idle = true
-								end
-							end
-							v61:Play(0)
-						end
-					end
-				end
-			else
-				return
-			end
-		else
-			if p_u_48.Rig then
-				if p_u_48.Rig:FindFirstChild("EmoteModel") then
-					p_u_48.Rig.EmoteModel:Destroy()
-				end
-				if p_u_48.Rig.PrimaryPart and (p_u_48.Rig.PrimaryPart:FindFirstChild("SoundPos") and p_u_48.Rig.PrimaryPart.SoundPos:FindFirstChild("EmoteSound")) then
-					p_u_48.Rig.PrimaryPart.SoundPos.EmoteSound:Destroy()
-				end
-			end
-			p_u_48:SetSound()
-			if p_u_48.Active then
-				p_u_48:SetModel()
-				if v_u_55 then
-					v57, v58 = pcall(function()
-						--[[ line: 259 | upvalues: (copy) v_u_55, (copy) p_u_48]]
-						require(v_u_55)(p_u_48.EmoteModel, p_u_48)
-					end)
-					if not v57 then
-						warn((("[Emote] Activate module %* failed: %*"):format(v_u_55:GetFullName(), v58)))
-					end
-				end
-				if v56 then
-					p_u_48.UpdateModule = require(v56)
-				end
-				if v52 and not p49 then
-					v59 = p_u_48:_loadTrack(v52, Enum.AnimationPriority.Action4)
-					if v59 then
-						p_u_48.Animations.Start = v59
-						v59:Play(0)
-						v60 = os.clock() + 5
-						while v59.Length <= 0 and (p_u_48.Active and os.clock() < v60) do
-							task.wait()
-						end
-						if p_u_48.Active and v59.Length > 0 then
-							task.wait(v59.Length)
-						end
-						v59:Stop(0)
-					end
-				end
-				if p_u_48.Active and v51 ~= nil then
-					if p49 and not p_u_48:_awaitDataModel() then
-						return
-					else
-						v61 = p_u_48:_loadTrack(v51, Enum.AnimationPriority.Action3)
-						if v61 == nil then
-							return
-						else
-							p_u_48.Animations.Animation = v61
-							v62 = p_u_48.EmoteInfo and p_u_48.EmoteInfo.Length
-							if v62 then
-								v62 = p_u_48.EmoteInfo.Length > 0
-							end
-							v61.Looped = not v62
-							if p49 then
-								v61:Play(0)
-								v61:AdjustSpeed(0)
-								v63 = os.clock() + 5
-								while v61.Length <= 0 and (p_u_48.Active and os.clock() < v63) do
-									task.wait()
-								end
-								v64 = v61.Length
-								v61.TimePosition = math.min(0.5, v64)
-							else
-								if v53 then
-									p_u_48.Animations.Move = p_u_48:_loadTrack(v53, Enum.AnimationPriority.Action3)
-									if p_u_48:_speed() > 0.5 and not p_u_48.Moving then
-										v61 = p_u_48.Animations.Move
-										p_u_48.Moving = true
-									end
-								end
-								if v54 then
-									p_u_48.Animations.Idle = p_u_48:_loadTrack(v54, Enum.AnimationPriority.Action3)
-									if p_u_48:_speed() <= 0.5 and not p_u_48.Idle then
-										v61 = p_u_48.Animations.Idle
-										p_u_48.Idle = true
-									end
-								end
-								v61:Play(0)
-							end
-						end
-					end
-				else
-					return
-				end
-			else
-				p_u_48:Deactivate()
-				return
-			end
-		end
-	else
-		return
-	end
-end
-function t.UpdateIdle(p65)
-	--[[ line: 329 | upvalues: none]]
-	if p65:_speed() <= 0.5 and not p65.Idle then
-		p65.Idle = true
-		p65.Animations.Idle:Play(0.5)
-		p65.Animations.Animation:Stop(0.5)
-	elseif p65:_speed() > 0.5 and p65.Idle then
-		p65.Idle = false
-		p65.Animations.Idle:Stop(0.5)
-		p65.Animations.Animation:Play(0.5)
-	end
-end
-function t.Update(p66, _6)
-	--[[ line: 341 | upvalues: none]]
-	if p66.UpdateModule then
-		p66.UpdateModule(p66.EmoteModel, p66)
-	end
-	if p66.Animations.Idle then
-		p66:UpdateIdle()
-		return
-	elseif p66.Animations.Move then
-		if p66:_speed() > 0.5 and not p66.Moving then
-			p66.Moving = true
-			p66.Animations.Move:Play(0.5)
-			p66.Animations.Animation:Stop(0.5)
-		elseif p66:_speed() <= 0.5 and p66.Moving then
-			p66.Moving = false
-			p66.Animations.Move:Stop(0.5)
-			p66.Animations.Animation:Play(0.5)
-		end
-	else
-		return
-	end
-end
-function t.Deactivate(p67, _7)
-	--[[ line: 363 | upvalues: none]]
-	p67.Active = false
-	if p67.EmoteModel then
-		p67.EmoteModel:Destroy()
-		p67.EmoteModel = nil
-	end
-	if p67.EmoteSound then
-		p67.EmoteSound:Destroy()
-		p67.EmoteSound = nil
-	end
-	for _8, v68 in pairs(p67.Animations) do
-		v68:Stop(0)
-	end
-end
-function t.SetModel(p69)
-	--[[ line: 378 | upvalues: (copy) getRootOffset]]
-	local v70
-	if p69.EmoteModule:FindFirstChild("Selection") then
-		v70 = p69:GetSelection()
-	else
-		v70 = p69.EmoteModule
-	end
-	local v71
-	if p69:IsR15() then
-		v71 = v70:FindFirstChild("Character")
-	else
-		v71 = v70:FindFirstChild("CharacterClassic")
-	end
-	if v71 then
-		local PrimaryPart = p69.Character.PrimaryPart
-		local v72
-		if p69.Rig then
-			v72 = p69.Rig
-		elseif p69.Character:FindFirstChild("R15Visual") then
-			v72 = p69.Character.R15Visual
-		else
-			v72 = p69.Character
-		end
-		local EmoteModel = v71:FindFirstChild("EmoteModel")
-		if EmoteModel then
-			if not EmoteModel:GetAttribute("Optimized") then
-				EmoteModel:SetAttribute("Optimized", true)
-				for _9, v73 in EmoteModel:GetDescendants() do
-					if v73:IsA("BasePart") then
-						v73.CanCollide = false
-						v73.CanQuery = false
-						v73.CanTouch = false
-						v73.Massless = true
-						v73.CollisionGroup = "PlayerVis"
-						v73.RootPriority = -1
-					end
-				end
-			end
-			local v74 = CFrame.new(0, getRootOffset(v71), 0)
-			local v75 = EmoteModel:Clone()
-			v75.Parent = v72
-			for _10, v76 in pairs((v75:GetChildren())) do
-				if (v76:IsA("Motor6D") or v76:IsA("Weld")) and v76.Part0.Parent == v71 then
-					if v76.Part0.Name == "HumanoidRootPart" then
-						v76.Part0 = PrimaryPart
-						v76.C0 = v74 * v76.C0
-					else
-						v76.Part0 = v72:FindFirstChild(v76.Part0.Name)
-					end
-				end
-			end
-			p69.EmoteModel = v75
-		end
-	else
-		return
-	end
-end
-return t
-
-========================================================================
-MODULE 20: ReplicatedStorage.Services.Items.EmoteService
-========================================================================
--- Source method: decompile()
--- decompiled with Opiumware
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-ReplicatedStorage:WaitForChild("Items")
-local Emote = ReplicatedStorage:WaitForChild("Objects"):WaitForChild("Items"):WaitForChild("Emote")
-return { SetEmote = function(_, p1, p2, p_u_3, p4, p_u_5, p6)
-		--[[ line: 13 | upvalues: (copy) Emote]]
-		local v7
-		if p2:FindFirstChild("EmoteModule") then
-			v7 = p2.EmoteModule
-		else
-			v7 = Emote
-		end
-		local v_u_8 = require(v7).new(p1, p2, p6)
-		if p4 then
-			v_u_8:Init(p4)
-		end
-		task.spawn(function()
-			--[[ line: 24 | upvalues: (ref) v_u_8, (copy) p_u_3, (copy) p_u_5]]
-			v_u_8:Activate(p_u_3, p_u_5)
-		end)
-		return v_u_8
-	end }
-
-========================================================================
-EMOTE SELECTION VARIANT TREES
-========================================================================
-
-EMOTE ID: 59 | NAME: Marching | PATH: ReplicatedStorage.Items.ItemPacks.Events.2022.Xmas2022.Emotes.Marching.Selection
-Selection [Folder]
-  1 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        HandleMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        Handle [MeshPart]
-          Top [Weld]
-          Bottom [Weld]
-        Bottom [MeshPart]
-        Top [MeshPart]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://14159627158
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://85884966053601
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Handle [Motor6D]
-          DefaultC1 [CFrameValue]
-        Toy Hat Weld [Weld]
-        Handle [MeshPart]
-          Top [Weld]
-          Bottom [Weld]
-        Bottom [MeshPart]
-        Top [MeshPart]
-        Toy Hat [MeshPart]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://14159628335
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://73164288826087
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        LDrumMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        RDrumMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        DrumMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        Drum [MeshPart]
-          black [Decal]
-          black [Decal]
-          black [Decal]
-          black [Decal]
-          Pearl [Decal]
-          Pearl [Decal]
-        LDrum [MeshPart]
-        RDrum [MeshPart]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        LDrumMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        RDrumMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        DrumMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        Toy Hat Weld [Weld]
-        Drum [MeshPart]
-          black [Decal]
-          black [Decal]
-          black [Decal]
-          black [Decal]
-          Pearl [Decal]
-          Pearl [Decal]
-        LDrum [MeshPart]
-        RDrum [MeshPart]
-        Toy Hat [MeshPart]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  3 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://14159629397
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://88446058277226
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        HandleMotor [Motor6D]
-          DefaultC1 [CFrameValue]
-        Hole [MeshPart]
-        Handle [MeshPart]
-          Hole [Weld]
-          MouthPiece [Weld]
-          Grip [Weld]
-          Mouth [Weld]
-        Mouth [MeshPart]
-        MouthPiece [MeshPart]
-        Grip [MeshPart]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Handle [Motor6D]
-          DefaultC1 [CFrameValue]
-        Toy Hat Weld [Weld]
-        Hole [MeshPart]
-        Handle [MeshPart]
-          Hole [Weld]
-          MouthPiece [Weld]
-          Grip [Weld]
-          Mouth [Weld]
-        Mouth [MeshPart]
-        MouthPiece [MeshPart]
-        Grip [MeshPart]
-        Toy Hat [MeshPart]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-
-EMOTE ID: 89 | NAME: ZombieStride | PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Halloween2024.Emotes.ZombieStride.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://15221544236
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://125497596837433
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://15221548816
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://84248734120911
-  3 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://15221552726
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://73383479205643
-
-EMOTE ID: 908 | NAME: ToyTrainRide | PATH: ReplicatedStorage.Items.ItemPacks.Events.2024.Xmas2024.Emotes.ToyTrainRide.Selection
-Selection [Folder]
-  1 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        train 1 [Motor6D]
-        Train [Model]
-          train 1 [MeshPart]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Attachment [Attachment]
-              Smoke [ParticleEmitter]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        train 1 [Motor6D]
-        Train [Model]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          train 1 [MeshPart]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Attachment [Attachment]
-              Smoke [ParticleEmitter]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://114262711617579
-        Intro [Animation] AnimationId=rbxassetid://83369297280765
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://109727218763017
-        Animation [Animation] AnimationId=rbxassetid://105484146283074
-  2 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Train [Model]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          train 1 [MeshPart]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Attachment [Attachment]
-              Smoke [ParticleEmitter]
-        train 1 [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Train [Model]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          train 1 [MeshPart]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Attachment [Attachment]
-              Smoke [ParticleEmitter]
-        train 1 [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://114262711617579
-        Intro [Animation] AnimationId=rbxassetid://83369297280765
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://109727218763017
-        Animation [Animation] AnimationId=rbxassetid://105484146283074
-  3 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Train [Model]
-          Wheel [MeshPart]
-          train 1 [MeshPart]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Attachment [Attachment]
-              Smoke [ParticleEmitter]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-        train 1 [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Train [Model]
-          Wheel [MeshPart]
-          train 1 [MeshPart]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Wheel [Motor6D]
-            Attachment [Attachment]
-              Smoke [ParticleEmitter]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-          Wheel [MeshPart]
-        train 1 [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://114262711617579
-        Intro [Animation] AnimationId=rbxassetid://83369297280765
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://109727218763017
-        Animation [Animation] AnimationId=rbxassetid://105484146283074
-
-EMOTE ID: 1096 | NAME: PotionMash | PATH: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.PotionMash.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://85572976228843
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://121101332210415
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://85572976228843
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://73605307889672
-
-EMOTE ID: 1097 | NAME: ClassicDance | PATH: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.ClassicDance.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://133018544853663
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://81884406535584
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://110504140223190
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://109509966070786
-  3 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://127425810024605
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://82269823118210
-
-EMOTE ID: 1098 | NAME: FastFoodDelight | PATH: ReplicatedStorage.Items.ItemPacks.EventsDailyShop.OldRoblox.Emotes.FastFoodDelight.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://134082467203121
-        Intro [Animation] AnimationId=rbxassetid://114562616576692
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://126884445675614
-        Animation [Animation] AnimationId=rbxassetid://123151304810811
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Cheezburger [Motor6D]
-          DefaultC1 [CFrameValue]
-        Cheezburger [MeshPart]
-          Open [Sound]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Cheezburger [Motor6D]
-          DefaultC1 [CFrameValue]
-        Cheezburger [MeshPart]
-          Open [Sound]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://107482167731890
-        Intro [Animation] AnimationId=rbxassetid://127081728859083
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://116133137574023
-        Animation [Animation] AnimationId=rbxassetid://104028540314777
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Part [Motor6D]
-          DefaultC1 [CFrameValue]
-        Part [Part]
-          Open [Sound]
-          Mesh [SpecialMesh]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Part [Motor6D]
-          DefaultC1 [CFrameValue]
-        Part [Part]
-          Open [Sound]
-          Mesh [SpecialMesh]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-
-EMOTE ID: 1359 | NAME: MariachiBand | PATH: ReplicatedStorage.Items.ItemPacks.Events.2025.Hlwn2025.Emotes.MariachiBand.Selection
-Selection [Folder]
-  1 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        mariiacchhi [Model]
-          sombrero [Model]
-            sombrero [MeshPart]
-            flowers [MeshPart]
-          skull [Model]
-            skull [MeshPart]
-        flowers [Weld]
-        gutar [Motor6D]
-        skull [Weld]
-        sombrero [Weld]
-        flowermarigold.002 [MeshPart]
-        gutar [MeshPart]
-          gutar.001 [Weld]
-          flowermarigold.002 [Weld]
-        gutar.001 [MeshPart]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        mariiacchhi [Model]
-          sombrero [Model]
-            sombrero [MeshPart]
-            flowers [MeshPart]
-          skull [Model]
-            skull [MeshPart]
-        flowers [Weld]
-        gutar [Motor6D]
-        skull [Weld]
-        sombrero [Weld]
-        flowermarigold.002 [MeshPart]
-        gutar [MeshPart]
-          gutar.001 [Weld]
-          flowermarigold.002 [Weld]
-        gutar.001 [MeshPart]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://127128742000107
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://136441435239355
-  2 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        mariiacchhi [Model]
-          sombrero [Model]
-            sombrero [MeshPart]
-            flowers [MeshPart]
-          skull [Model]
-            skull [MeshPart]
-        flowers [Weld]
-        skull [Weld]
-        sombrero [Weld]
-        trumpet [Motor6D]
-        flowermarigold.004 [MeshPart]
-        trumpet [MeshPart]
-          flowermarigold.004 [Weld]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        mariiacchhi [Model]
-          sombrero [Model]
-            sombrero [MeshPart]
-            flowers [MeshPart]
-          skull [Model]
-            skull [MeshPart]
-        flowers [Weld]
-        skull [Weld]
-        sombrero [Weld]
-        trumpet [Motor6D]
-        trumpet [MeshPart]
-          flowermarigold.004 [Weld]
-        flowermarigold.004 [MeshPart]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://92566505229782
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://72618749926339
-  3 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Model [Model]
-          flowermarigold.003 [MeshPart]
-          volinoion [MeshPart]
-            volinoion.002 [Weld]
-            flowermarigold.003 [Weld]
-          volinoion.002 [MeshPart]
-        mariiacchhi [Model]
-          sombrero [Model]
-            sombrero [MeshPart]
-            flowers [MeshPart]
-          skull [Model]
-            skull [MeshPart]
-        flowers [Weld]
-        skull [Weld]
-        sombrero [Weld]
-        volinoion [Motor6D]
-        volinoion.001 [Motor6D]
-        volinoion.001 [MeshPart]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Model [Model]
-          flowermarigold.003 [MeshPart]
-          volinoion [MeshPart]
-            volinoion.002 [Weld]
-            flowermarigold.003 [Weld]
-          volinoion.002 [MeshPart]
-        mariiacchhi [Model]
-          sombrero [Model]
-            sombrero [MeshPart]
-            flowers [MeshPart]
-          skull [Model]
-            skull [MeshPart]
-        flowers [Weld]
-        skull [Weld]
-        sombrero [Weld]
-        volinoion [Motor6D]
-        volinoion.001 [Motor6D]
-        volinoion.001 [MeshPart]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://117066658601352
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://137931887783324
-
-EMOTE ID: 1381 | NAME: SolarBike | PATH: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarBike.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://82848383531002
-        Intro [Animation] AnimationId=rbxassetid://114243812288330
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://109356075339519
-        Animation [Animation] AnimationId=rbxassetid://79914736566137
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Eclipsed Bike [Model]
-          stone 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          stone 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            stone 2 [Weld]
-            neon 2 [Weld]
-            neon 1 and 2 inside [Weld]
-            neon 1 [Weld]
-          neon 1 and 2 inside [MeshPart]
-            Attachment1 [Attachment]
-            Attachment [Attachment]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Specs [ParticleEmitter]
-            ParticleEmitter [ParticleEmitter]
-            middle beam [Attachment]
-              Beam [Beam]
-            middle beam [Attachment]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Trail [Trail]
-            Trail3 [Trail]
-        stone 1 [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Eclipsed Bike [Model]
-          stone 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          stone 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            stone 2 [Weld]
-            neon 2 [Weld]
-            neon 1 and 2 inside [Weld]
-            neon 1 [Weld]
-          neon 1 and 2 inside [MeshPart]
-            Attachment1 [Attachment]
-            Attachment [Attachment]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Specs [ParticleEmitter]
-            ParticleEmitter [ParticleEmitter]
-            middle beam [Attachment]
-              Beam [Beam]
-            middle beam [Attachment]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Trail [Trail]
-            Trail3 [Trail]
-        stone 1 [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://82848383531002
-        Intro [Animation] AnimationId=rbxassetid://114243812288330
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://109356075339519
-        Animation [Animation] AnimationId=rbxassetid://79914736566137
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Eclipsed Bike [Model]
-          stone 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          stone 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            stone 2 [Weld]
-            neon 2 [Weld]
-            neon 1 and 2 inside [Weld]
-            neon 1 [Weld]
-          neon 1 and 2 inside [MeshPart]
-            Attachment1 [Attachment]
-            Attachment [Attachment]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Specs [ParticleEmitter]
-            ParticleEmitter [ParticleEmitter]
-            middle beam [Attachment]
-              Beam [Beam]
-            middle beam [Attachment]
-            Trail3 [Trail]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Trail [Trail]
-        stone 1 [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Eclipsed Bike [Model]
-          stone 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          neon 2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          stone 1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            stone 2 [Weld]
-            neon 2 [Weld]
-            neon 1 and 2 inside [Weld]
-            neon 1 [Weld]
-          neon 1 and 2 inside [MeshPart]
-            Attachment1 [Attachment]
-            Attachment [Attachment]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Specs [ParticleEmitter]
-            ParticleEmitter [ParticleEmitter]
-            middle beam [Attachment]
-              Beam [Beam]
-            middle beam [Attachment]
-            Trail3 [Trail]
-            ray [Attachment]
-              ray [ParticleEmitter]
-            Trail [Trail]
-        stone 1 [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-
-EMOTE ID: 1382 | NAME: SolarSlayer | PATH: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarSlayer.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://125964710294895
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://117293869950361
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        2 [Weld]
-        Neon [MeshPart]
-          2 [Attachment]
-            Beam [Beam]
-          2 [Attachment]
-          Attach1 [Attachment]
-            Trail [Trail]
-          Attach2 [Attachment]
-          Dots2 [ParticleEmitter]
-          Light/Eclipse [Attachment]
-            moon [ParticleEmitter]
-            ray [ParticleEmitter]
-            GroundWave2 [ParticleEmitter]
-        Transparent [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        1 [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        2 [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-          Neon [Weld]
-          Transparent [Weld]
-          1 [Weld]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        SwordBlue [Model]
-          Neon [MeshPart]
-            2 [Attachment]
-              Beam [Beam]
-            2 [Attachment]
-            Attach1 [Attachment]
-              Trail [Trail]
-            Attach2 [Attachment]
-            Dots2 [ParticleEmitter]
-            Light/Eclipse [Attachment]
-              moon [ParticleEmitter]
-              ray [ParticleEmitter]
-              GroundWave2 [ParticleEmitter]
-          Transparent [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Neon [Weld]
-            Transparent [Weld]
-            1 [Weld]
-        2 [Weld]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://85078579653923
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://111930618562488
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        SwordOrange [Model]
-          Neon [MeshPart]
-            2 [Attachment]
-              Beam [Beam]
-            2 [Attachment]
-            Attach1 [Attachment]
-              Trail [Trail]
-            Attach2 [Attachment]
-            Dots2 [ParticleEmitter]
-            Light/Eclipse [Attachment]
-              moon [ParticleEmitter]
-              ray [ParticleEmitter]
-              GroundWave2 [ParticleEmitter]
-          Transparent [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Neon [Weld]
-            Transparent [Weld]
-            1 [Weld]
-        2 [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        SwordOrange [Model]
-          Neon [MeshPart]
-            2 [Attachment]
-              Beam [Beam]
-            2 [Attachment]
-            Attach1 [Attachment]
-              Trail [Trail]
-            Attach2 [Attachment]
-            Dots2 [ParticleEmitter]
-            Light/Eclipse [Attachment]
-              moon [ParticleEmitter]
-              ray [ParticleEmitter]
-              GroundWave2 [ParticleEmitter]
-          Transparent [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Neon [Weld]
-            Transparent [Weld]
-            1 [Weld]
-        2 [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-
-EMOTE ID: 1383 | NAME: SolarConqueror | PATH: ReplicatedStorage.Items.ItemPacks.Gamepass.Unorganized.EclipseSet.Emotes.SolarConqueror.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://84397896569551
-        Intro [Animation] AnimationId=rbxassetid://113312671188400
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://116371552546519
-        Animation [Animation] AnimationId=rbxassetid://73995639880691
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        MoonThrone [Model]
-          BlueRocks [Model]
-            Rock2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-          ThroneBlue [Model]
-            2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Neon [MeshPart]
-              Light/Eclipse [Attachment]
-                moon [ParticleEmitter]
-                ray [ParticleEmitter]
-                PointLight [PointLight]
-                GroundWave2 [ParticleEmitter]
-              Fire [Attachment]
-                GroundWave2 [ParticleEmitter]
-                GroundWave2 [ParticleEmitter]
-            3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Main [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-              Dots [ParticleEmitter]
-              Neon [Weld]
-              Transparent [Weld]
-              3 [Weld]
-              2 [Weld]
-              1 [Weld]
-            Transparent [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-        Main [Motor6D]
-        Rock1 [Motor6D]
-        Rock2 [Motor6D]
-        Rock3 [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        MoonThrone [Model]
-          BlueRocks [Model]
-            Rock2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-          ThroneBlue [Model]
-            2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Neon [MeshPart]
-              Light/Eclipse [Attachment]
-                moon [ParticleEmitter]
-                ray [ParticleEmitter]
-                PointLight [PointLight]
-                GroundWave2 [ParticleEmitter]
-              Fire [Attachment]
-                GroundWave2 [ParticleEmitter]
-                GroundWave2 [ParticleEmitter]
-            3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Main [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-              Dots [ParticleEmitter]
-              Neon [Weld]
-              Transparent [Weld]
-              3 [Weld]
-              2 [Weld]
-              1 [Weld]
-            Transparent [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-        Main [Motor6D]
-        Rock1 [Motor6D]
-        Rock2 [Motor6D]
-        Rock3 [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://129194680827496
-        Intro [Animation] AnimationId=rbxassetid://119942429483367
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://138965481916927
-        Animation [Animation] AnimationId=rbxassetid://127433800721659
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        SunThrone [Model]
-          ThroneOrange [Model]
-            2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Neon [MeshPart]
-              Light/Eclipse [Attachment]
-                moon [ParticleEmitter]
-                ray [ParticleEmitter]
-                PointLight [PointLight]
-                GroundWave2 [ParticleEmitter]
-              Fire [Attachment]
-                GroundWave2 [ParticleEmitter]
-                GroundWave2 [ParticleEmitter]
-            3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Main [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-              Dots [ParticleEmitter]
-              Neon [Weld]
-              Transparent [Weld]
-              3 [Weld]
-              2 [Weld]
-              1 [Weld]
-            Transparent [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-          OrangeRocks [Model]
-            Rock1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-        Main [Motor6D]
-        Rock1 [Motor6D]
-        Rock2 [Motor6D]
-        Rock3 [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        SunThrone [Model]
-          ThroneOrange [Model]
-            2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Neon [MeshPart]
-              Light/Eclipse [Attachment]
-                moon [ParticleEmitter]
-                ray [ParticleEmitter]
-                PointLight [PointLight]
-                GroundWave2 [ParticleEmitter]
-              Fire [Attachment]
-                GroundWave2 [ParticleEmitter]
-                GroundWave2 [ParticleEmitter]
-            3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Main [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-              Dots [ParticleEmitter]
-              Neon [Weld]
-              Transparent [Weld]
-              3 [Weld]
-              2 [Weld]
-              1 [Weld]
-            Transparent [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-          OrangeRocks [Model]
-            Rock1 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock3 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-            Rock2 [MeshPart]
-              SurfaceAppearance [SurfaceAppearance]
-        Main [Motor6D]
-        Rock1 [Motor6D]
-        Rock2 [Motor6D]
-        Rock3 [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-
-EMOTE ID: 1538 | NAME: AuspiciousWell | PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.StPatricks2026.Emotes.AuspiciousWell.Selection
-Selection [Folder]
-  1 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Bucket [Motor6D]
-          DefaultC1 [CFrameValue]
-        Coin [Motor6D]
-          DefaultC1 [CFrameValue]
-        Handle [Motor6D]
-          DefaultC1 [CFrameValue]
-        Particles [Motor6D]
-          DefaultC1 [CFrameValue]
-        Well [Motor6D]
-          DefaultC1 [CFrameValue]
-        4 [Weld]
-        2 [Weld]
-        Model [Model]
-          1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Well [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              ParticleEmitter [ParticleEmitter]
-              6 [ParticleEmitter]
-            Attachment [Attachment]
-              3 [ParticleEmitter]
-              5 [ParticleEmitter]
-            attachment2 [Weld]
-            1 [Weld]
-          attachment2 [Part]
-            Attachment [Attachment]
-        Model2 [Model]
-          4 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Coin [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Handle [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Bucket [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-          BucketAttachement [Weld]
-          BucketAttachement [Part]
-            Attachment [Attachment]
-              Rope [Beam]
-        Particles [Part]
-          GOOD [Attachment]
-            coin [ParticleEmitter]
-            Clover [ParticleEmitter]
-            6 [ParticleEmitter]
-          smallflare_GOOD [ParticleEmitter]
-          smallflare_BAD [ParticleEmitter]
-          BAD [Attachment]
-            Skull [ParticleEmitter]
-            Smoke [ParticleEmitter]
-            6 [ParticleEmitter]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Bucket [Motor6D]
-          DefaultC1 [CFrameValue]
-        Coin [Motor6D]
-          DefaultC1 [CFrameValue]
-        Handle [Motor6D]
-          DefaultC1 [CFrameValue]
-        Particles [Motor6D]
-          DefaultC1 [CFrameValue]
-        Well [Motor6D]
-          DefaultC1 [CFrameValue]
-        Model [Model]
-          1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Well [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              ParticleEmitter [ParticleEmitter]
-              6 [ParticleEmitter]
-            Attachment [Attachment]
-              3 [ParticleEmitter]
-              5 [ParticleEmitter]
-            attachment2 [Weld]
-            1 [Weld]
-          attachment2 [Part]
-            Attachment [Attachment]
-        Model2 [Model]
-          4 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        2 [Weld]
-        4 [Weld]
-        Coin [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Handle [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Bucket [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-          BucketAttachement [Weld]
-          BucketAttachement [Part]
-            Attachment [Attachment]
-              Rope [Beam]
-        Particles [Part]
-          BAD [Attachment]
-            Skull [ParticleEmitter]
-            Smoke [ParticleEmitter]
-            6 [ParticleEmitter]
-          GOOD [Attachment]
-            coin [ParticleEmitter]
-            Clover [ParticleEmitter]
-            6 [ParticleEmitter]
-          smallflare_BAD [ParticleEmitter]
-          smallflare_GOOD [ParticleEmitter]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-    Animations [Folder]
-      Activate [ModuleScript]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://140045201124074
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://138562011720601
-  2 [Folder]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Bucket [Motor6D]
-          DefaultC1 [CFrameValue]
-        Coin [Motor6D]
-          DefaultC1 [CFrameValue]
-        Handle [Motor6D]
-          DefaultC1 [CFrameValue]
-        Particles [Motor6D]
-          DefaultC1 [CFrameValue]
-        Well [Motor6D]
-          DefaultC1 [CFrameValue]
-        4 [Weld]
-        2 [Weld]
-        Model [Model]
-          1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Well [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              ParticleEmitter [ParticleEmitter]
-              6 [ParticleEmitter]
-            Attachment [Attachment]
-              3 [ParticleEmitter]
-              5 [ParticleEmitter]
-            attachment2 [Weld]
-            1 [Weld]
-          attachment2 [Part]
-            Attachment [Attachment]
-        Model2 [Model]
-          4 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Coin [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Handle [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Bucket [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-          BucketAttachement [Weld]
-          BucketAttachement [Part]
-            Attachment [Attachment]
-              Rope [Beam]
-        Particles [Part]
-          GOOD [Attachment]
-            coin [ParticleEmitter]
-            Clover [ParticleEmitter]
-            6 [ParticleEmitter]
-          smallflare_GOOD [ParticleEmitter]
-          smallflare_BAD [ParticleEmitter]
-          BAD [Attachment]
-            Skull [ParticleEmitter]
-            Smoke [ParticleEmitter]
-            6 [ParticleEmitter]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Bucket [Motor6D]
-          DefaultC1 [CFrameValue]
-        Coin [Motor6D]
-          DefaultC1 [CFrameValue]
-        Handle [Motor6D]
-          DefaultC1 [CFrameValue]
-        Particles [Motor6D]
-          DefaultC1 [CFrameValue]
-        Well [Motor6D]
-          DefaultC1 [CFrameValue]
-        Model [Model]
-          1 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Well [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              ParticleEmitter [ParticleEmitter]
-              6 [ParticleEmitter]
-            Attachment [Attachment]
-              3 [ParticleEmitter]
-              5 [ParticleEmitter]
-            attachment2 [Weld]
-            1 [Weld]
-          attachment2 [Part]
-            Attachment [Attachment]
-        Model2 [Model]
-          4 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          2 [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        2 [Weld]
-        4 [Weld]
-        Coin [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Handle [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-        Bucket [MeshPart]
-          SurfaceAppearance [SurfaceAppearance]
-          BucketAttachement [Weld]
-          BucketAttachement [Part]
-            Attachment [Attachment]
-              Rope [Beam]
-        Particles [Part]
-          BAD [Attachment]
-            Skull [ParticleEmitter]
-            Smoke [ParticleEmitter]
-            6 [ParticleEmitter]
-          GOOD [Attachment]
-            coin [ParticleEmitter]
-            Clover [ParticleEmitter]
-            6 [ParticleEmitter]
-          smallflare_BAD [ParticleEmitter]
-          smallflare_GOOD [ParticleEmitter]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-    Animations [Folder]
-      Activate [ModuleScript]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://137400766742031
-        Intro [Animation] AnimationId=
-      R6 [Folder]
-        Intro [Animation] AnimationId=
-        Animation [Animation] AnimationId=rbxassetid://82341767119047
-
-EMOTE ID: 1702 | NAME: ShellHermit | PATH: ReplicatedStorage.Items.ItemPacks.Gamepass.2026.PoseidonSet.Emotes.ShellHermit.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://117092138905476
-        Intro [Animation] AnimationId=rbxassetid://78170892643409
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://138329947990285
-        Animation [Animation] AnimationId=rbxassetid://103982112521390
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Hermit Shell [Model]
-          Shell [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Decor [Weld]
-            Kelps [Weld]
-          Decor [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Kelps [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Shell [Motor6D]
-        Phone [Model]
-          Screen [MeshPart]
-            SurfaceGui [SurfaceGui]
-              Frequency [TextLabel]
-            Weld [Weld]
-          Phone [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Star [ParticleEmitter]
-            Screen [Weld]
-            Dolp [ParticleEmitter]
-            Screen [Weld]
-          Screen [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Phone [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Hermit Shell [Model]
-          Shell [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Decor [Weld]
-            Kelps [Weld]
-          Decor [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Kelps [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Shell [Motor6D]
-        Phone [Model]
-          Screen [MeshPart]
-            SurfaceGui [SurfaceGui]
-              Frequency [TextLabel]
-            Weld [Weld]
-          Phone [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Star [ParticleEmitter]
-            Screen [Weld]
-            Dolp [ParticleEmitter]
-            Screen [Weld]
-          Screen [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Phone [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://115331951599061
-        Intro [Animation] AnimationId=rbxassetid://73446019615377
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://84784496511554
-        Animation [Animation] AnimationId=rbxassetid://93979597093501
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Hermit Shell [Model]
-          Shell [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Decor [Weld]
-            Kelps [Weld]
-          Decor [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Kelps [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Shell [Motor6D]
-        Phone [Model]
-          Screen [MeshPart]
-            SurfaceGui [SurfaceGui]
-              Frequency [TextLabel]
-            Weld [Weld]
-          Phone [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Star [ParticleEmitter]
-            Screen [Weld]
-            Dolp [ParticleEmitter]
-            Screen [Weld]
-          Screen [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Phone [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Hermit Shell [Model]
-          Shell [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Decor [Weld]
-            Kelps [Weld]
-          Decor [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Kelps [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Shell [Motor6D]
-        Phone [Model]
-          Screen [MeshPart]
-            SurfaceGui [SurfaceGui]
-              Frequency [TextLabel]
-            Weld [Weld]
-          Phone [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Star [ParticleEmitter]
-            Screen [Weld]
-            Dolp [ParticleEmitter]
-            Screen [Weld]
-          Screen [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Phone [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-
-EMOTE ID: 1710 | NAME: ClamClamor | PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.SUMMER26.Emotes.ClamClamor.Selection
-Selection [Folder]
-  1 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://117089127642138
-        Intro [Animation] AnimationId=rbxassetid://118656930717028
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://83218914585685
-        Animation [Animation] AnimationId=rbxassetid://95010124241926
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Clam [Model]
-          Top [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Bottom [MeshPart]
-            Top [Motor6D]
-            SurfaceAppearance [SurfaceAppearance]
-        Bottom [Motor6D]
-        Bottom [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Clam [Model]
-          Top [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Bottom [MeshPart]
-            Top [Motor6D]
-            SurfaceAppearance [SurfaceAppearance]
-        Bottom [Motor6D]
-        Bottom [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  2 [Folder]
-    Animations [Folder]
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://95880656814410
-        Intro [Animation] AnimationId=rbxassetid://99625729632101
-      R6 [Folder]
-        Intro [Animation] AnimationId=rbxassetid://113541009614439
-        Animation [Animation] AnimationId=rbxassetid://139018553455852
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Clam [Model]
-          Top [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Bottom [MeshPart]
-            Top [Motor6D]
-            SurfaceAppearance [SurfaceAppearance]
-        Bottom [Motor6D]
-        Bottom [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        Clam [Model]
-          Top [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          Bottom [MeshPart]
-            Top [Motor6D]
-            SurfaceAppearance [SurfaceAppearance]
-        Bottom [Motor6D]
-        Bottom [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-
-EMOTE ID: 1787 | NAME: GargoyleStand | PATH: ReplicatedStorage.Items.ItemPacks.Events.2026.HLWN2026.Emotes.GargoyleStand.Selection
-Selection [Folder]
-  2 [Folder]
-    Animations [Folder]
-      R6 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://85763179973123
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://123241515256893
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        gargoyle [Model]
-          Base [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              RingSigil2 [ParticleEmitter]
-              RingSigil1 [ParticleEmitter]
-              RingSigil3 [ParticleEmitter]
-              GlowOrb [ParticleEmitter]
-          Handle [Part]
-            Unsheath [Sound]
-            SwordLunge [Sound]
-            SwordSlash [Sound]
-            a1 [Attachment]
-            Beam5 [Beam]
-            a0 [Attachment]
-            Beam1 [Beam]
-            Beam2 [Beam]
-            Mesh [SpecialMesh]
-            Beam3 [Beam]
-            Beam4 [Beam]
-          Horn [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          LWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          RWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Base [Motor6D]
-        Handle [Motor6D]
-        Horn [Motor6D]
-        LWing [Motor6D]
-        RWing [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        gargoyle [Model]
-          Base [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              RingSigil2 [ParticleEmitter]
-              RingSigil1 [ParticleEmitter]
-              RingSigil3 [ParticleEmitter]
-              GlowOrb [ParticleEmitter]
-          Handle [Part]
-            Unsheath [Sound]
-            SwordLunge [Sound]
-            SwordSlash [Sound]
-            a1 [Attachment]
-            Beam5 [Beam]
-            a0 [Attachment]
-            Beam1 [Beam]
-            Beam2 [Beam]
-            Mesh [SpecialMesh]
-            Beam3 [Beam]
-            Beam4 [Beam]
-          Horn [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          LWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          RWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Base [Motor6D]
-        Handle [Motor6D]
-        Horn [Motor6D]
-        LWing [Motor6D]
-        RWing [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-  1 [Folder]
-    Animations [Folder]
-      R6 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://129173876719447
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://73695720000610
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        gargoyle [Model]
-          Base [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              RingSigil2 [ParticleEmitter]
-              RingSigil1 [ParticleEmitter]
-              RingSigil3 [ParticleEmitter]
-              GlowOrb [ParticleEmitter]
-          Handle [Part]
-            Unsheath [Sound]
-            SwordLunge [Sound]
-            SwordSlash [Sound]
-            a1 [Attachment]
-            Beam5 [Beam]
-            a0 [Attachment]
-            Beam1 [Beam]
-            Beam2 [Beam]
-            Mesh [SpecialMesh]
-            Beam3 [Beam]
-            Beam4 [Beam]
-          Horn [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          LWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          RWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Base [Motor6D]
-        Handle [Motor6D]
-        Horn [Motor6D]
-        LWing [Motor6D]
-        RWing [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        gargoyle [Model]
-          Base [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              RingSigil2 [ParticleEmitter]
-              RingSigil1 [ParticleEmitter]
-              RingSigil3 [ParticleEmitter]
-              GlowOrb [ParticleEmitter]
-          Handle [Part]
-            Unsheath [Sound]
-            SwordLunge [Sound]
-            SwordSlash [Sound]
-            a1 [Attachment]
-            Beam5 [Beam]
-            a0 [Attachment]
-            Beam1 [Beam]
-            Beam2 [Beam]
-            Mesh [SpecialMesh]
-            Beam3 [Beam]
-            Beam4 [Beam]
-          Horn [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          LWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          RWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Base [Motor6D]
-        Handle [Motor6D]
-        Horn [Motor6D]
-        LWing [Motor6D]
-        RWing [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
-  3 [Folder]
-    Animations [Folder]
-      R6 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://126428073124566
-      R15 [Folder]
-        Animation [Animation] AnimationId=rbxassetid://133070639177592
-    Character [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        gargoyle [Model]
-          Base [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              RingSigil2 [ParticleEmitter]
-              RingSigil1 [ParticleEmitter]
-              RingSigil3 [ParticleEmitter]
-              GlowOrb [ParticleEmitter]
-          Handle [Part]
-            Unsheath [Sound]
-            SwordLunge [Sound]
-            SwordSlash [Sound]
-            a1 [Attachment]
-            Beam5 [Beam]
-            a0 [Attachment]
-            Beam1 [Beam]
-            Beam2 [Beam]
-            Mesh [SpecialMesh]
-            Beam3 [Beam]
-            Beam4 [Beam]
-          Horn [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          LWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          RWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Base [Motor6D]
-        Handle [Motor6D]
-        Horn [Motor6D]
-        LWing [Motor6D]
-        RWing [Motor6D]
-      LeftLowerArm [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftElbow [Motor6D]
-      RightHand [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightWrist [Motor6D]
-      RightUpperArm [MeshPart]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        RightShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftUpperArm [MeshPart]
-        LeftElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulder [Motor6D]
-        OriginalSize [Vector3Value]
-        LeftShoulderAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftFoot [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftAnkle [Motor6D]
-      LeftLowerLeg [MeshPart]
-        LeftAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        LeftKnee [Motor6D]
-      RightFoot [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightAnkle [Motor6D]
-      RightUpperLeg [MeshPart]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightHip [Motor6D]
-      RightLowerLeg [MeshPart]
-        RightAnkleRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightKnee [Motor6D]
-      LeftUpperLeg [MeshPart]
-        LeftKneeRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHip [Motor6D]
-        OriginalSize [Vector3Value]
-      RightLowerArm [MeshPart]
-        RightWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightElbowRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        RightElbow [Motor6D]
-      HumanoidRootPart [Part]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-      Head [Part]
-        Mesh [SpecialMesh]
-          OriginalSize [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        OriginalSize [Vector3Value]
-        Neck [Motor6D]
-        HatAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        HairAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        FaceCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        face [Decal]
-      LowerTorso [MeshPart]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RootRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Root [Motor6D]
-        OriginalSize [Vector3Value]
-        RightHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftHipRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistCenterAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      UpperTorso [MeshPart]
-        RightShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftShoulderRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        WaistRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        Waist [Motor6D]
-        OriginalSize [Vector3Value]
-        BodyBackAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        BodyFrontAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        NeckAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        RightCollarAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-      LeftHand [MeshPart]
-        LeftWristRigAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftGripAttachment [Attachment]
-          OriginalPosition [Vector3Value]
-        LeftWrist [Motor6D]
-        OriginalSize [Vector3Value]
-    CharacterClassic [Model]
-      AnimationController [AnimationController]
-      EmoteModel [Model]
-        gargoyle [Model]
-          Base [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-            Attachment [Attachment]
-              RingSigil2 [ParticleEmitter]
-              RingSigil1 [ParticleEmitter]
-              RingSigil3 [ParticleEmitter]
-              GlowOrb [ParticleEmitter]
-          Handle [Part]
-            Unsheath [Sound]
-            SwordLunge [Sound]
-            SwordSlash [Sound]
-            a1 [Attachment]
-            Beam5 [Beam]
-            a0 [Attachment]
-            Beam1 [Beam]
-            Beam2 [Beam]
-            Mesh [SpecialMesh]
-            Beam3 [Beam]
-            Beam4 [Beam]
-          Horn [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          LWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-          RWing [MeshPart]
-            SurfaceAppearance [SurfaceAppearance]
-        Base [Motor6D]
-        Handle [Motor6D]
-        Horn [Motor6D]
-        LWing [Motor6D]
-        RWing [Motor6D]
-      TorsoRot [Part]
-      ArmRot [Part]
-        ArmRot [Motor6D]
-          DefaultC1 [CFrameValue]
-      HumanoidRootPart [MeshPart]
-        TorsoRot [Motor6D]
-          DefaultC1 [CFrameValue]
-        RootAttachment [Attachment]
-        HeadPos [Attachment]
-      Head [Part]
-        Mesh [SpecialMesh]
-        Head [Motor6D]
-          DefaultC1 [CFrameValue]
-        face [Decal]
-        Neck [Attachment]
-        HatAttachment [Attachment]
-        HairAttachment [Attachment]
-        FaceFrontAttachment [Attachment]
-        FaceCenterAttachment [Attachment]
-      Left Arm [MeshPart]
-        Left Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftShoulderAttachment [Attachment]
-        LeftGripAttachment [Attachment]
-        LeftArmAt [Attachment]
-      Right Arm [MeshPart]
-        Right Arm [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightShoulderAttachment [Attachment]
-        RightGripAttachment [Attachment]
-        RightArmAt [Attachment]
-      Left Leg [MeshPart]
-        Left Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        LeftFootAttachment [Attachment]
-        LeftLegAt [Attachment]
-      Right Leg [MeshPart]
-        Right Leg [Motor6D]
-          DefaultC1 [CFrameValue]
-        RightFootAttachment [Attachment]
-        RightLegAt [Attachment]
-      Torso [MeshPart]
-        Torso [Motor6D]
-          DefaultC1 [CFrameValue]
-        WaistFrontAttachment [Attachment]
-        WaistCenterAttachment [Attachment]
-        WaistBackAttachment [Attachment]
-        RightCollarAttachment [Attachment]
-        NeckAttachment [Attachment]
-        LeftCollarAttachment [Attachment]
-        BodyFrontAttachment [Attachment]
-        BodyBackAttachment [Attachment]
-        RightLegAt [Attachment]
-        RightArmAt [Attachment]
-        Neck [Attachment]
-        LeftLegAt [Attachment]
-        LeftArmAt [Attachment]
+[00000.000][START] EffectBehaviorLogger v2 | Player=DEN919191 | PlaceId=9872472334 | JobId=699a78f7-87af-4598-97b1-bfdf37295883
+[0000.000][INFO] No __newindex/__namecall hooks are installed.
+[0000.000][ROOT] Workspace.Rigs = Workspace.Rigs.DEN919191
+[0000.000][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Head | Transparency=0 | LocalTransparencyModifier=0 | Color=0.180392, 0.164706, 0.156863 | Material=Enum.Material.Plastic | Size=2, 1, 1 | CastShadow=true
+[0000.000][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.Neck | Position=0.0002269744873046875, -0.5044162273406982, -0.00043010711669921875 | Orientation=-0, 0, 0 | Visible=false
+[0000.000][FX-INITIAL] class=Decal path=Workspace.Rigs.DEN919191.Head.face | Texture=rbxasset://textures/face.png | Transparency=0 | Color3=1, 1, 1
+[0000.000][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.000][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.000][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0000.001][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Head.Mesh | MeshId=rbxassetid://88896103805677 | TextureId= | Scale=0.4174165427684784, 0.41583311557769775, 0.41054245829582214 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0000.001][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.FaceCenterAttachment | Value=-0.002957151969894767, 0.0076510170474648476, -0.022143958136439323
+[0000.001][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.HairAttachment | Value=0.0010848636738955975, 0.23554547131061554, -0.022143986076116562
+[0000.001][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.FaceFrontAttachment | Value=-0.006062918808311224, -0.008480777963995934, -0.23858043551445007
+[0000.001][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.NeckRigAttachment | Value=-0.0003204345703125, -0.1947770118713379, -0.004058837890625
+[0000.001][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.HatAttachment | Value=0.0010848636738955975, 0.23554547131061554, -0.022143986076116562
+[0000.001][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.001][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Head.Part | Transparency=1 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=3, 0.014366449788212776, 3 | CastShadow=false
+[0000.001][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.Part.studs | Enabled=true | Texture=rbxassetid://96869918536839 | Rate=5 | Lifetime=1 1.5  | Speed=2 2  | Size=0 0 0 0.206 0.2 0.05 1 0 0  | Transparency=0 1 0 0.179551 0.187817 0 0.541147 0.350254 0 0.766833 0.786802 0 1 1 0  | Color=0 0.733333 0.870588 1 0 1 0.733333 0.870588 1 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=-360 360  | RotSpeed=0 0  | SpreadAngle=45, 45 | TimeScale=1 | LockedToPart=false | Attr.EmitDelay=0 | Attr.EmitCount=3
+[0000.002][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.Part.Attachment2 | Position=0, 1.8843841552734375, -0.00000762939453125 | Orientation=-0, 0, 0 | Visible=false
+[0000.002][FX-INITIAL] class=Trail path=Workspace.Rigs.DEN919191.Head.Part.trail | Enabled=true | Texture=rbxassetid://112629787601025 | Lifetime=0.5 | MinLength=0.10000000149011612 | MaxLength=22 | Color=0 1 1 1 0 1 1 1 1 0  | Transparency=0 0 0 0.785037 0 0 1 1 0  | WidthScale=0 0.16875 0 1 0 0  | LightEmission=1 | FaceCamera=true | TextureLength=1 | TextureMode=Enum.TextureMode.Stretch | Attachment0=<Attachment:Workspace.Rigs.DEN919191.Head.Part.Bottom (trail)> | Attachment1=<Attachment:Workspace.Rigs.DEN919191.Head.Part.Top (trail)>
+[0000.002][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.Part.Top (trail) | Position=-0.573577880859375, 0, -0.81915283203125 | Orientation=-54.999385833740234, -54.99856185913086, 89.9990005493164 | Visible=false
+[0000.002][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.Part.Bottom (trail) | Position=0.573577880859375, -0.00000762939453125, 0.81915283203125 | Orientation=-54.999385833740234, -54.99856185913086, 89.9990005493164 | Visible=false
+[0000.002][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.Part.Attachment0 | Position=0, 0.23400093615055084, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.002][FX-INITIAL] class=PointLight path=Workspace.Rigs.DEN919191.Head.Part.Attachment0.PointLight | Enabled=true | Brightness=0.800000011920929 | Color=0.682353, 0.898039, 1 | Range=5 | Shadows=false
+[0000.002][FX-INITIAL] class=Beam path=Workspace.Rigs.DEN919191.Head.Part.Attachment0.Beam1 | Enabled=true | Texture=rbxassetid://10171855090 | TextureSpeed=1.5 | TextureLength=0.3499999940395355 | Color=0 1 1 1 0 1 1 1 1 0  | Transparency=0 1 0 0.0417548 1 0 0.500529 0.51875 0 0.937632 1 0 1 1 0  | Width0=1 | Width1=3 | FaceCamera=true | Attachment0=<Attachment:Workspace.Rigs.DEN919191.Head.Part.Attachment0> | Attachment1=<Attachment:Workspace.Rigs.DEN919191.Head.Part.Attachment2> | Attr.EmitDelay=0 | Attr.Duration=0 | Attr.Width0=0 | Attr.Width1=0
+[0000.002][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.Part.Attachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.002][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.Part.Attachment.Wind1 | Enabled=true | Texture=rbxassetid://13504989845 | Rate=15 | Lifetime=0.65 0.65  | Speed=2 2  | Size=0 1 0 1 1.4375 0  | Transparency=0 1 0 0.499361 0 0 1 1 0  | Color=0 0.635294 0.784314 0.968627 0 1 0.635294 0.784314 0.968627 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=-360 360  | RotSpeed=-125 125  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0000.002][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.Part.Attachment.spawn | Enabled=true | Texture=rbxassetid://117434633114838 | Rate=0.5 | Lifetime=2.2 2.2  | Speed=0.010285 0.010285  | Size=0 2 0 1 2 0  | Transparency=0 1 0 0.112529 0 0 0.886659 0 0 1 1 0  | Color=0 0.635294 0.784314 0.968627 0 1 0.635294 0.784314 0.968627 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=0 0  | RotSpeed=-45.2 -45.2  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0000.002][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.Part.Attachment.glow | Enabled=true | Texture=rbxassetid://13580351149 | Rate=2 | Lifetime=2 2  | Speed=2 2  | Size=0 2 0 1 2 0  | Transparency=0 1 0 0.59601 0.878173 0 1 1 0  | Color=0 0.635294 0.784314 0.968627 0 1 0.635294 0.784314 0.968627 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=-360 360  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0000.002][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.Part.r's | Enabled=true | Texture=rbxassetid://90254394045486 | Rate=2 | Lifetime=1.5 2  | Speed=12 15  | Size=0 0.1 0.0571 0.622 0.15 0.05 1 0.05 0  | Transparency=0 1 0 0.204489 0.167513 0 0.664589 0.294416 0 1 1 0  | Color=0 0.733333 0.870588 1 0 1 0.733333 0.870588 1 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=-360 360  | RotSpeed=-360 360  | SpreadAngle=50, 50 | TimeScale=0.6700000166893005 | LockedToPart=false | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0000.002][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh)
+[0000.002][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1, 1, 1 | CastShadow=true | Attr.RBXRefinementScale=1, 1, 1
+[0000.002][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.BodyBackAttachment | Position=-0.2753269672393799, 0.16913099586963654, -0.26023733615875244 | Orientation=0, 0, -6.041727066040039 | Visible=false | Attr.RBXOriginalAttachmentRotation=0, 0, 0
+[0000.002][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.BodyBackAttachment.OriginalPosition | Value=-0.2915949821472168, 0.1392214298248291, -0.26023736596107483
+[0000.002][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.SpecialMesh | MeshId=rbxassetid://107934896774736 | TextureId=rbxassetid://129641938616870 | Scale=1, 1, 0.9999999403953552 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0000.003][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.OriginalSize | Value=1, 1, 1
+[0000.003][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.AvatarPartScaleType | Value=Classic
+[0000.003][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Left Arm | Transparency=0 | LocalTransparencyModifier=0 | Color=0, 0, 0 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Arm.LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Arm.LeftArmAt | Position=0.5, 0.4999985694885254, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Arm.LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.005_wHatAccessory
+[0000.003][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.1299999952316284, 1.1299999952316284, 1.1299999952316284 | CastShadow=true | Attr.RBXRefinementScale=1.1299999952316284, 1.1299999952316284, 1.1299999952316284
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.HatAttachment | Position=0.0022587585262954235, -0.45984113216400146, -0.0016811371315270662 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.HatAttachment.OriginalPosition | Value=0.0019989013671875, -0.4069390296936035, -0.00148773193359375
+[0000.003][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.OriginalSize | Value=1, 1, 1
+[0000.003][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.SpecialMesh | MeshId=rbxassetid://13600520082 | TextureId=rbxassetid://13600534140 | Scale=1.1299999952316284, 1.1299999952316284, 1.1299999952316284 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0000.003][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.AvatarPartScaleType | Value=Classic
+[0000.003][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Right Arm | Transparency=0 | LocalTransparencyModifier=0 | Color=0, 0, 0 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Arm.RightArmAt | Position=-0.5, 0.499997615814209, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Arm.RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Arm.RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Left Leg | Transparency=0 | LocalTransparencyModifier=0 | Color=0.972549, 0.972549, 0.972549 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Leg.LeftLegAt | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Leg.LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Right Leg | Transparency=0 | LocalTransparencyModifier=0 | Color=0.972549, 0.972549, 0.972549 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Leg.RightLegAt | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Leg.RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR)
+[0000.003][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.7885284423828125, 1.8515429496765137, 1.677258014678955 | CastShadow=true | Attr.RBXRefinementScale=1, 1, 1
+[0000.003][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.HairAttachment | Position=0, 0.45599985122680664, -0.10999999940395355 | Orientation=-0, 0, 0 | Visible=false
+[0000.003][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.HairAttachment.OriginalPosition | Value=0, 0.45599985122680664, -0.10999999940395355
+[0000.003][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.Mesh | MeshId=rbxassetid://123140167848597 | TextureId=rbxassetid://85415409227010 | Scale=1, 1, 1 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0000.003][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.OriginalSize | Value=1.7885284423828125, 1.8515429496765137, 1.677258014678955
+[0000.003][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.AvatarPartScaleType | Value=Classic
+[0000.003][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (MeshPart)
+[0000.003][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.0317953824996948, 0.5209346413612366, 0.8306623101234436 | CastShadow=true | Attr.RBXRefinementScale=0.8299999833106995, 0.8299999833106995, 0.8299999833106995
+[0000.004][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.SpecialMesh | MeshId=rbxassetid://76315635757153 | TextureId=rbxassetid://90473793629972 | Scale=0.8299999833106995, 0.8299999833106995, 0.8299999833106995 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.FaceCenterAttachment | Position=0.015755005180835724, 0.1593623012304306, 0.1721557378768921 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.FaceCenterAttachment.OriginalPosition | Value=0.01898193359375, 0.1920027732849121, 0.0989828109741211
+[0000.004][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.OriginalSize | Value=1.2431269884109497, 0.6276321411132812, 1.000797986984253
+[0000.004][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.AvatarPartScaleType | Value=Classic
+[0000.004][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (diary lines side)
+[0000.004][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1, 1, 1 | CastShadow=true | Attr.RBXRefinementScale=1, 1, 1
+[0000.004][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.OriginalSize | Value=1, 1, 1
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.WaistCenterAttachment | Position=-1.12060546875, 0.027191132307052612, -0.030071258544921875 | Orientation=-75.0035400390625, 179.99998474121094, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.WaistCenterAttachment.OriginalPosition | Value=-1.12060546875, 0.027191162109375, -0.030071258544921875
+[0000.004][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.SpecialMesh | MeshId=rbxassetid://92009091336466 | TextureId=rbxassetid://93582648708438 | Scale=1.2999999523162842, 1.2999999523162842, 1.399999976158142 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0000.004][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.AvatarPartScaleType | Value=Classic
+[0000.004][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.ArmRot | Transparency=1 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=2, 1, 1 | CastShadow=true
+[0000.004][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.TorsoRot | Transparency=1 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=2, 2, 1 | CastShadow=true
+[0000.004][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Torso | Transparency=0 | LocalTransparencyModifier=0 | Color=0.972549, 0.972549, 0.972549 | Material=Enum.Material.Plastic | Size=2, 2, 1 | CastShadow=true
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Decal path=Workspace.Rigs.DEN919191.Torso.roblox | Texture= | Transparency=0 | Color3=1, 1, 1
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.LeftArmAt | Position=-1, 0.5, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.RightLegAt | Position=0.5, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.RightArmAt | Position=1, 0.5, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.Neck | Position=0, 0.9958374500274658, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.LeftLegAt | Position=-0.5, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.004][ROOT] PlayerGui = Players.DEN919191.PlayerGui
+[0000.006][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.LoadingScreen.Core.Content.Right
+[0000.007][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.LoadingScreen.Core.Content.Right.UIAspectRatioConstraint
+[0000.007][UI-FOUND] class=UIPadding path=Players.DEN919191.PlayerGui.LoadingScreen.Core.Content.Right.UIPadding
+[0000.007][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.LoadingScreen.Core.Content.Right.Tip
+[0000.007][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.LoadingScreen.Core.Content.Right.Tip.UIStroke
+[0000.007][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.LoadingScreen.Core.Content.Right.Tip.UIGradient
+[0000.012][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Centered.Frames.Crosshair.Crosshair.SciFiCrosshair.Right
+[0000.012][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Centered.Frames.Crosshair.Crosshair.SciFiCrosshair.Right.UIStroke
+[0000.013][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Centered.Frames.Crosshair.Crosshair.Default.RightFrame
+[0000.013][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Centered.Frames.Crosshair.Crosshair.Default.RightFrame.UIStroke
+[0000.014][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Centered.Frames.Crosshair.Crosshair.Pistol.RightFrame
+[0000.015][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Centered.Frames.Crosshair.Crosshair.SMG.RightFrame
+[0000.019][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right
+[0000.019][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.UIAspectRatioConstraint
+[0000.019][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer
+[0000.020][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer.Hint
+[0000.020][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer.Hint.UIStroke
+[0000.020][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer.Hint.UISizeConstraint
+[0000.020][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer.Hint.OldHint
+[0000.020][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer.Hint.OldHint.UIStroke
+[0000.020][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer.Hint.OldHint.UIGradient
+[0000.020][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.Screen.Right.HintContainer.Hint.UIGradient
+[0000.023][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right
+[0000.023][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.UIAspectRatioConstraint
+[0000.023][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer
+[0000.023][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer.Hint
+[0000.023][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer.Hint.UIStroke
+[0000.023][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer.Hint.UISizeConstraint
+[0000.024][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer.Hint.OldHint
+[0000.024][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer.Hint.OldHint.UIStroke
+[0000.024][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer.Hint.OldHint.UIGradient
+[0000.024][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap2.ScreenNormal.Right.HintContainer.Hint.UIGradient
+[0000.026][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right
+[0000.026][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.UIAspectRatioConstraint
+[0000.027][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu
+[0000.027][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton
+[0000.027][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.UICorner
+[0000.027][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.UIStroke
+[0000.027][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.Border
+[0000.027][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.Border.UICorner
+[0000.028][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.Border.UIStroke
+[0000.028][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.Players
+[0000.028][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.Players.UIGridLayout
+[0000.028][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.UIGradient
+[0000.028][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.Loading2.Right.ToMenu.ImageButton.TextLabel
+[0000.052][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right
+[0000.052][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.UIAspectRatioConstraint
+[0000.052][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.MapName
+[0000.052][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.MapName.UIStroke
+[0000.052][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.MapName.UIGradient
+[0000.053][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.MapName.UIGradient
+[0000.053][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.Creator
+[0000.053][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.Creator.UIStroke
+[0000.053][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.Creator.UISizeConstraint
+[0000.053][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.Desc
+[0000.053][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.Screen.Right.Desc.UIStroke
+[0000.054][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.ReloadMap.Right
+[0000.054][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.CoverScreen.ReloadMap.Right.UIAspectRatioConstraint
+[0000.054][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right
+[0000.055][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.UIAspectRatioConstraint
+[0000.055][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu
+[0000.055][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton
+[0000.055][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.UICorner
+[0000.055][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.UIStroke
+[0000.055][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.Border
+[0000.055][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.Border.UICorner
+[0000.055][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.Border.UIStroke
+[0000.055][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.Players
+[0000.056][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.Players.UIGridLayout
+[0000.056][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.UIGradient
+[0000.056][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.Loading.Right.ToMenu.ImageButton.TextLabel
+[0000.065][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right
+[0000.065][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.UIAspectRatioConstraint
+[0000.065][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer
+[0000.065][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer.Hint
+[0000.065][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer.Hint.UIStroke
+[0000.065][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer.Hint.UISizeConstraint
+[0000.066][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer.Hint.OldHint
+[0000.066][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer.Hint.OldHint.UIStroke
+[0000.066][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer.Hint.OldHint.UIGradient
+[0000.066][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.Screen.Right.HintContainer.Hint.UIGradient
+[0000.068][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right
+[0000.068][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.UIAspectRatioConstraint
+[0000.068][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer
+[0000.068][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer.Hint
+[0000.068][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer.Hint.UIStroke
+[0000.068][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer.Hint.UISizeConstraint
+[0000.069][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer.Hint.OldHint
+[0000.069][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer.Hint.OldHint.UIStroke
+[0000.069][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer.Hint.OldHint.UIGradient
+[0000.069][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Shared.Popups.LoadingMap.ScreenNormal.Right.HintContainer.Hint.UIGradient
+[0000.070][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Boosters.Right
+[0000.071][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Shared.Boosters.Right.UIAspectRatioConstraint
+[0000.071][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Shared.Boosters.Right.Frame
+[0000.071][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Shared.Boosters.Right.Frame.UIListLayout
+[0000.071][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Shared.Boosters.Right.Frame.UISizeConstraint
+[0000.071][UI-FOUND] class=UIPadding path=Players.DEN919191.PlayerGui.Shared.Boosters.Right.Frame.UIPadding
+[0000.073][UI-FOUND] class=UIFlexItem path=Players.DEN919191.PlayerGui.Chat.Chat.ChatContainer.Chat.chatWindow.UIFlexItem
+[0000.073][UI-FOUND] class=UIFlexItem path=Players.DEN919191.PlayerGui.Chat.Chat.ChatContainer.Chat.chatInputBar.Background.Container.TextContainer.TargetChannelChip.UIFlexItem
+[0000.084][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment
+[0000.084][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options
+[0000.084][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.UIListLayout
+[0000.084][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Survivals
+[0000.084][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Survivals.Button
+[0000.084][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Survivals.Button.TextLabel
+[0000.084][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Survivals.Button.UICorner
+[0000.084][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Survivals.Button.Frame
+[0000.084][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Survivals.Button.Frame.UIStroke
+[0000.084][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Levels
+[0000.084][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Levels.Button
+[0000.084][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Levels.Button.TextLabel
+[0000.085][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Levels.Button.UICorner
+[0000.085][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Levels.Button.Frame
+[0000.085][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Levels.Button.Frame.UIStroke
+[0000.085][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Robux
+[0000.085][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Robux.Button
+[0000.085][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Robux.Button.TextLabel
+[0000.085][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Robux.Button.UICorner
+[0000.085][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Robux.Button.Frame
+[0000.085][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Robux.Button.Frame.UIStroke
+[0000.085][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Streaks
+[0000.085][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Streaks.Button
+[0000.085][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Streaks.Button.TextLabel
+[0000.086][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Streaks.Button.UICorner
+[0000.086][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Streaks.Button.Frame
+[0000.086][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Frame.Equipment.Options.Streaks.Button.Frame.UIStroke
+[0000.115][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Options.Streaks.MadentheAura
+[0000.115][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Options.Streaks.MadentheAura.Username
+[0000.115][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Options.Streaks.MadentheAura.PlayerIcon
+[0000.115][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Options.Streaks.MadentheAura.PlayerIcon.UIAspectRatioConstraint
+[0000.115][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Options.Streaks.MadentheAura.PlayerIcon.UICorner
+[0000.116][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Options.Streaks.MadentheAura.Num
+[0000.116][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Leaderboard.Center.MenuOptions.Options.Streaks.MadentheAura.UICorner
+[0000.124][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right
+[0000.124][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.UICorner
+[0000.124][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.UIGradient
+[0000.125][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.Frame
+[0000.125][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.Frame.UIStroke
+[0000.125][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.Frame.UICorner
+[0000.125][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.TextLabel
+[0000.125][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.TextLabel.UIStroke
+[0000.125][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Gamemodes.Frame.Right.TextLabel.UIGradient
+[0000.129][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right
+[0000.129][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.UIAspectRatioConstraint
+[0000.130][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom
+[0000.130][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect
+[0000.130][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.SoundScript
+[0000.130][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.SoundScript.Hover
+[0000.130][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.SoundScript.Click
+[0000.130][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.UICorner
+[0000.130][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.TextLabel
+[0000.130][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.TextLabel.UIStroke
+[0000.130][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.TextLabel.UIStroke
+[0000.131][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.Frame
+[0000.131][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.Frame.UIStroke
+[0000.131][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Connect.UIGradient
+[0000.131][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right
+[0000.131][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.SoundScript
+[0000.131][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.SoundScript.Hover
+[0000.131][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.SoundScript.Click
+[0000.131][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.UICorner
+[0000.131][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.TextLabel
+[0000.131][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.TextLabel.UIStroke
+[0000.132][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.TextLabel.UIStroke
+[0000.132][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.Frame
+[0000.132][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.Frame.UIStroke
+[0000.132][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.UIGradient
+[0000.132][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Right.UIAspectRatioConstraint
+[0000.132][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left
+[0000.132][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.SoundScript
+[0000.132][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.SoundScript.Hover
+[0000.132][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.SoundScript.Click
+[0000.133][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.UICorner
+[0000.133][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.TextLabel
+[0000.133][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.TextLabel.UIStroke
+[0000.133][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.Frame
+[0000.133][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.Frame.UIStroke
+[0000.133][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.UIGradient
+[0000.133][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Left.UIAspectRatioConstraint
+[0000.133][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh
+[0000.133][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.SoundScript
+[0000.133][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.SoundScript.Hover
+[0000.134][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.SoundScript.Click
+[0000.134][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.UICorner
+[0000.134][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.Frame
+[0000.134][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.Frame.UIStroke
+[0000.134][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.UIGradient
+[0000.134][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.UIAspectRatioConstraint
+[0000.134][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Refresh.ImageLabel
+[0000.134][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Code
+[0000.134][UI-FOUND] class=TextBox path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Code.TextBox
+[0000.134][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Code.TextBox.UIStroke
+[0000.135][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Code.Frame
+[0000.135][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Code.Frame.UICorner
+[0000.135][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Code.Frame.Frame
+[0000.135][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Browser.Frame.Frame.Right.Bottom.Code.Frame.Frame.UIStroke
+[0000.138][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right
+[0000.138][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.UIAspectRatioConstraint
+[0000.138][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom
+[0000.138][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create
+[0000.138][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.SoundScript
+[0000.138][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.SoundScript.Hover
+[0000.139][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.SoundScript.Click
+[0000.139][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.UICorner
+[0000.139][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.TextLabel
+[0000.139][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.TextLabel.UIStroke
+[0000.139][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.TextLabel.UIStroke
+[0000.139][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.Frame
+[0000.139][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.Frame.UIStroke
+[0000.139][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.Bottom.Create.UIGradient
+[0000.139][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel
+[0000.139][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel.UIStroke
+[0000.140][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel
+[0000.140][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel.UIStroke
+[0000.140][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel
+[0000.140][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel.UIStroke
+[0000.140][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel
+[0000.140][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Create.Frame.Frame.Right.TextLabel.UIStroke
+[0000.144][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Frame.ScrollingFrame.Frame.Tutorial.ImageButton.Rewards
+[0000.144][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right
+[0000.144][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right.SoundScript
+[0000.144][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right.SoundScript.Hover
+[0000.144][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right.SoundScript.Click
+[0000.145][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right.UICorner
+[0000.145][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right.TextLabel
+[0000.145][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right.Frame
+[0000.145][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Servers.Extras.Frame.Right.Frame.UIStroke
+[0000.148][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.A.A.A.C.Content.TextLabel
+[0000.149][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.A.A.A.H.Content.TextLabel
+[0000.149][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.A.A.A.D2.Content.TextLabel
+[0000.150][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.A.A.A.D4.Content.TextLabel
+[0000.150][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.A.A.A.D6.Content.TextLabel
+[0000.151][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.A.A.A.I.Content.TextLabel
+[0000.151][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.A.A.A.J.Content.TextLabel
+[0000.152][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.C.A.A.E1.Content.TextLabel
+[0000.153][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.C.A.A.C.Content.TextLabel
+[0000.154][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.C.A.A.F1.Content.TextLabel
+[0000.156][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.D.A.A.C.Content.TextLabel
+[0000.157][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.D.A.A.F1.Content.TextLabel
+[0000.158][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.B.A.A.D.Title.TextLabel
+[0000.159][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.B.A.A.D.Content.TextLabel
+[0000.159][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.B.A.A.C2.Content.TextLabel
+[0000.160][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.B.A.A.D2.Content.TextLabel
+[0000.161][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Changelog.Frame.Credits.Content.Body.ScrollingFrame.B.A.A.H.Content.TextLabel
+[0000.162][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right
+[0000.162][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton
+[0000.162][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton.TextLabel
+[0000.162][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton.TextLabel.UIStroke
+[0000.162][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton.UIGradient
+[0000.162][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton.UICorner
+[0000.163][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton.Frame
+[0000.163][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton.Frame.UIStroke
+[0000.163][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.Buttons.Right.ImageButton.Frame.UICorner
+[0000.164][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right
+[0000.164][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame
+[0000.164][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.Select
+[0000.164][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.Select.UICorner
+[0000.165][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.Select.UIStroke
+[0000.165][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.TextLabel
+[0000.165][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.TextLabel.UIStroke
+[0000.165][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.UICorner
+[0000.165][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.UIGradient
+[0000.165][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.Frame
+[0000.165][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.Frame.UIStroke
+[0000.165][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.Frame.UICorner
+[0000.165][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.TextLabel
+[0000.165][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Spectate.Spectate.ButtonsXbox.Right.Frame.TextLabel.UIStroke
+[0000.166][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory
+[0000.166][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView
+[0000.167][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip
+[0000.167][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.UIAspectRatioConstraint
+[0000.167][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top
+[0000.167][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.UIAspectRatioConstraint
+[0000.167][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options
+[0000.167][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.UIListLayout
+[0000.167][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame | Attr.Name=Character
+[0000.167][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button
+[0000.167][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame
+[0000.167][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UIStroke
+[0000.167][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UICorner
+[0000.168][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel
+[0000.168][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel.UIStroke
+[0000.168][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel
+[0000.168][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel.UIAspectRatioConstraint
+[0000.168][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.UICorner
+[0000.168][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame | Attr.Name=Character
+[0000.168][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button
+[0000.168][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame
+[0000.168][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UIStroke
+[0000.168][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UICorner
+[0000.168][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel
+[0000.168][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel.UIStroke
+[0000.169][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel
+[0000.169][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel.UIAspectRatioConstraint
+[0000.169][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.UICorner
+[0000.169][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame | Attr.Name=Character
+[0000.169][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button
+[0000.169][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame
+[0000.169][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UIStroke
+[0000.169][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UICorner
+[0000.169][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel
+[0000.169][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel.UIStroke
+[0000.170][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel
+[0000.170][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel.UIAspectRatioConstraint
+[0000.170][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.UICorner
+[0000.170][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame | Attr.Name=Character
+[0000.170][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button
+[0000.170][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame
+[0000.170][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UIStroke
+[0000.170][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UICorner
+[0000.170][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel
+[0000.170][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel.UIStroke
+[0000.170][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel
+[0000.170][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel.UIAspectRatioConstraint
+[0000.171][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.UICorner
+[0000.171][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame | Attr.Name=Character
+[0000.171][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button
+[0000.171][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame
+[0000.171][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UIStroke
+[0000.171][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UICorner
+[0000.171][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel
+[0000.171][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel.UIStroke
+[0000.171][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel
+[0000.171][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel.UIAspectRatioConstraint
+[0000.172][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.UICorner
+[0000.172][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame | Attr.Name=Character
+[0000.172][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button
+[0000.172][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame
+[0000.172][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UIStroke
+[0000.172][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.Frame.UICorner
+[0000.172][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel
+[0000.172][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.TextLabel.UIStroke
+[0000.172][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel
+[0000.172][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.ImageLabel.UIAspectRatioConstraint
+[0000.172][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.UICorner
+[0000.173][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.UISizeConstraint
+[0000.173][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom
+[0000.173][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.UIAspectRatioConstraint
+[0000.173][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.UISizeConstraint
+[0000.173][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back
+[0000.173][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.UIListLayout
+[0000.173][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit
+[0000.173][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton
+[0000.173][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.UICorner
+[0000.173][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.Frame
+[0000.174][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.Frame.UIStroke
+[0000.174][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.Frame.UICorner
+[0000.174][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.TextLabel
+[0000.174][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.TextLabel.UIStroke
+[0000.174][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.UIGradient
+[0000.174][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots
+[0000.174][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left
+[0000.174][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.UIAspectRatioConstraint
+[0000.174][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.Three
+[0000.174][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.Three.UIGridLayout
+[0000.175][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.Four
+[0000.175][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.Four.UIGridLayout
+[0000.175][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread
+[0000.175][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.UIGridLayout
+[0000.175][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0000.175][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0000.175][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0000.175][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0000.175][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0000.175][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0000.175][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0000.176][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0000.176][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0000.176][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0000.176][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0000.176][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0000.176][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0000.176][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0000.176][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0000.176][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0000.177][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0000.177][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0000.177][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0000.177][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0000.177][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0000.177][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0000.177][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0000.177][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0000.177][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0000.177][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0000.177][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0000.178][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0000.178][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0000.178][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0000.178][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0000.178][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0000.178][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0000.178][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0000.178][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0000.178][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0000.178][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0000.179][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0000.179][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0000.179][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0000.179][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0000.179][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0000.179][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0000.179][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0000.179][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0000.179][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0000.179][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0000.179][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0000.180][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0000.180][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0000.180][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0000.180][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0000.180][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0000.180][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0000.180][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0000.180][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0000.180][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0000.181][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0000.181][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0000.181][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0000.181][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0000.181][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0000.181][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0000.181][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0000.181][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0000.181][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0000.181][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0000.182][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0000.182][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0000.182][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0000.182][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0000.182][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0000.182][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.UISizeConstraint
+[0000.182][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.Six
+[0000.182][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.Six.UIGridLayout
+[0000.182][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right
+[0000.182][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.UIAspectRatioConstraint
+[0000.182][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Three
+[0000.183][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Three.UIGridLayout
+[0000.183][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four
+[0000.183][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.UIGridLayout
+[0000.183][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot
+[0000.183][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button
+[0000.183][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript
+[0000.183][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Click
+[0000.183][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Hover
+[0000.183][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft
+[0000.183][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft.UIStroke
+[0000.184][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UICorner
+[0000.184][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame
+[0000.184][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UICorner
+[0000.184][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UIStroke
+[0000.184][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName
+[0000.184][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIGradient
+[0000.184][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIStroke
+[0000.184][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index
+[0000.184][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index.UIStroke
+[0000.184][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ViewportFrame
+[0000.184][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG
+[0000.184][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG.UICorner
+[0000.185][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title
+[0000.185][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title.UIStroke
+[0000.185][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add
+[0000.185][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add.UIStroke
+[0000.185][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UIGradient
+[0000.185][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot
+[0000.185][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button
+[0000.185][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript
+[0000.185][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Click
+[0000.185][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Hover
+[0000.186][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft
+[0000.186][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft.UIStroke
+[0000.186][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UICorner
+[0000.186][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame
+[0000.186][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UICorner
+[0000.186][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UIStroke
+[0000.186][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName
+[0000.186][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIGradient
+[0000.186][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIStroke
+[0000.187][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index
+[0000.187][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index.UIStroke
+[0000.187][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ViewportFrame
+[0000.187][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG
+[0000.187][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG.UICorner
+[0000.187][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title
+[0000.187][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title.UIStroke
+[0000.187][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add
+[0000.187][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add.UIStroke
+[0000.187][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UIGradient
+[0000.187][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot
+[0000.187][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button
+[0000.187][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript
+[0000.188][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Click
+[0000.188][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Hover
+[0000.188][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft
+[0000.188][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft.UIStroke
+[0000.188][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UICorner
+[0000.188][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame
+[0000.188][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UICorner
+[0000.188][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UIStroke
+[0000.188][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName
+[0000.188][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIGradient
+[0000.189][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIStroke
+[0000.189][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index
+[0000.189][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index.UIStroke
+[0000.189][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ViewportFrame
+[0000.189][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG
+[0000.189][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG.UICorner
+[0000.189][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title
+[0000.189][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title.UIStroke
+[0000.189][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add
+[0000.189][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add.UIStroke
+[0000.189][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UIGradient
+[0000.190][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot
+[0000.190][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button
+[0000.190][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript
+[0000.190][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Click
+[0000.190][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Hover
+[0000.190][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft
+[0000.190][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft.UIStroke
+[0000.190][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UICorner
+[0000.190][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame
+[0000.190][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UICorner
+[0000.191][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UIStroke
+[0000.191][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName
+[0000.191][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIGradient
+[0000.191][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIStroke
+[0000.191][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index
+[0000.191][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index.UIStroke
+[0000.191][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ViewportFrame
+[0000.191][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG
+[0000.191][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG.UICorner
+[0000.191][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title
+[0000.191][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title.UIStroke
+[0000.192][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add
+[0000.192][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add.UIStroke
+[0000.192][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UIGradient
+[0000.192][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Eight
+[0000.192][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Eight.UIGridLayout
+[0000.192][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Six
+[0000.192][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Six.UIGridLayout
+[0000.192][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.ThreeSpread
+[0000.192][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.ThreeSpread.UIGridLayout
+[0000.192][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.UISizeConstraint
+[0000.192][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc
+[0000.193][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.UICorner
+[0000.193][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Frame
+[0000.193][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Frame.UIStroke
+[0000.193][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Frame.UICorner
+[0000.193][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.ItemName
+[0000.193][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.ItemName.UIStroke
+[0000.193][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.ItemName.UIGradient
+[0000.193][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Amount
+[0000.193][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Amount.UIStroke
+[0000.193][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Amount.UIGradient
+[0000.194][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Desc
+[0000.194][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Desc.UIStroke
+[0000.194][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Desc.UIGradient
+[0000.194][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Creator
+[0000.194][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Creator.UIStroke
+[0000.194][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Creator.UIGradient
+[0000.194][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Lock
+[0000.194][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Lock.txt
+[0000.194][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Lock.txt.UIStroke
+[0000.194][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Lock.TextLabel
+[0000.194][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Lock.TextLabel.UIStroke
+[0000.195][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Lock.ImageLabel
+[0000.195][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.Lock.ImageLabel.UIAspectRatioConstraint
+[0000.195][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.UIAspectRatioConstraint
+[0000.195][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Desc.UISizeConstraint
+[0000.195][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades
+[0000.195][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Upgrades
+[0000.195][UI-FOUND] class=ScrollingFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Upgrades.ScrollingFrame
+[0000.195][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Upgrades.ScrollingFrame.Frame
+[0000.195][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Upgrades.ScrollingFrame.Frame.TreeStart
+[0000.195][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.ImageLabel
+[0000.195][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.ImageLabel.UIGradient
+[0000.196][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level
+[0000.196][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.LocalScript
+[0000.196][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.UICorner
+[0000.196][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.UIStroke
+[0000.196][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Bar
+[0000.196][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Bar.Frame
+[0000.196][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Bar.Frame.UICorner
+[0000.196][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Bar.Frame.UIGradient
+[0000.196][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame
+[0000.196][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.UIListLayout
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame.Frame
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame.Frame
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame.Frame
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Frame.Frame.Frame
+[0000.197][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Level
+[0000.197][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Level.UIStroke
+[0000.197][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Experience
+[0000.197][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Level.Experience.UIStroke
+[0000.197][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom
+[0000.197][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.UIAspectRatioConstraint
+[0000.198][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit
+[0000.198][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit.UICorner
+[0000.198][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit.TextLabel
+[0000.198][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit.TextLabel.UIStroke
+[0000.198][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit.TextLabel.UIStroke
+[0000.198][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit.Frame
+[0000.198][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit.Frame.UIStroke
+[0000.198][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Exit.UIGradient
+[0000.198][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.UISizeConstraint
+[0000.199][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Toggle
+[0000.199][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Toggle.UICorner
+[0000.199][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Toggle.Upgrades
+[0000.199][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Toggle.Upgrades.UIStroke
+[0000.199][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Toggle.Frame
+[0000.199][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Toggle.Frame.UIStroke
+[0000.199][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.Toggle.UIGradient
+[0000.199][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.UpgradeNotice
+[0000.199][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Bottom.UpgradeNotice.UIStroke
+[0000.199][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase
+[0000.199][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.UIGradient
+[0000.200][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame
+[0000.200][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect
+[0000.200][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.UICorner
+[0000.200][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Frame
+[0000.200][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Frame.UIStroke
+[0000.200][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Frame.UICorner
+[0000.200][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit
+[0000.200][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.TextLabel
+[0000.200][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.TextLabel.UIStroke
+[0000.200][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.TextLabel.UIGradient
+[0000.201][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.UICorner
+[0000.201][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.Frame
+[0000.201][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.Frame.UIStroke
+[0000.201][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.Frame.UICorner
+[0000.201][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.HoverOutline
+[0000.201][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.HoverOutline.Inner
+[0000.201][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.HoverOutline.Inner.UIStroke
+[0000.201][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.HoverOutline.Inner.UICorner
+[0000.201][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Exit.UIGradient
+[0000.202][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy
+[0000.202][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.UICorner
+[0000.202][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.Frame
+[0000.202][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.Frame.UIStroke
+[0000.202][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.Frame.UICorner
+[0000.202][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.Cost
+[0000.202][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.Cost.UIStroke
+[0000.202][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.Cost.ImageLabel
+[0000.202][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.Cost.ImageLabel.UIAspectRatioConstraint
+[0000.202][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.HoverOutline
+[0000.202][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.HoverOutline.Inner
+[0000.203][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.HoverOutline.Inner.UIStroke
+[0000.203][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.HoverOutline.Inner.UICorner
+[0000.203][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.TextLabel
+[0000.203][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.TextLabel.UIStroke
+[0000.203][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.TextLabel.UIGradient
+[0000.203][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Buy.UIGradient
+[0000.203][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Desc
+[0000.203][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Desc.UIStroke
+[0000.203][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.TextButton
+[0000.203][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.TextButton.UIStroke
+[0000.204][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.ItemName
+[0000.204][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.ItemName.UIStroke
+[0000.204][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.ItemName.UIGradient
+[0000.204][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies
+[0000.204][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.UIAspectRatioConstraint
+[0000.204][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens
+[0000.204][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Plus
+[0000.204][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Plus.Cash
+[0000.204][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Plus.UICorner
+[0000.204][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Plus.UIAspectRatioConstraint
+[0000.205][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.UICorner
+[0000.205][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.UIListLayout
+[0000.205][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Body
+[0000.205][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Body.Amount
+[0000.205][UI-FOUND] class=UIPadding path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Body.UIPadding
+[0000.205][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Icon
+[0000.205][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Icon.UIAspectRatioConstraint
+[0000.205][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Icon.Blur
+[0000.205][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Icon.UICorner
+[0000.206][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Currencies.Tokens.Icon.Icon
+[0000.206][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Type
+[0000.206][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Type.UIStroke
+[0000.206][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.ShopSelect.Type.UIGradient
+[0000.206][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Upgrades.Purchase.Frame.UIAspectRatioConstraint
+[0000.206][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems
+[0000.206][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left
+[0000.206][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.UIAspectRatioConstraint
+[0000.206][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted
+[0000.206][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame
+[0000.206][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.UICorner
+[0000.207][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.Frame
+[0000.207][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.Frame.UICorner
+[0000.207][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.Frame.UIStroke
+[0000.207][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.Frame.Frame
+[0000.207][UI-FOUND] class=ScrollingFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.Frame.Frame.ScrollingFrame
+[0000.207][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.Frame.Frame.ScrollingFrame.Frame
+[0000.207][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.InsetAccounted.Frame.Frame.Frame.ScrollingFrame.Frame.UIListLayout
+[0000.207][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Left.UISizeConstraint
+[0000.207][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right
+[0000.207][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.UIAspectRatioConstraint
+[0000.208][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted
+[0000.208][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select
+[0000.208][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.UICorner
+[0000.208][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Frame
+[0000.208][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Frame.UICorner
+[0000.208][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Frame.UIStroke
+[0000.208][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Skins
+[0000.208][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Skins.UICorner
+[0000.208][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Skins.Frame
+[0000.208][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Skins.Frame.UIStroke
+[0000.208][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Skins.Frame.UICorner
+[0000.209][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Skins.TextLabel
+[0000.209][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Skins.TextLabel.UIStroke
+[0000.209][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Upgrade
+[0000.209][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Upgrade.UICorner
+[0000.209][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Upgrade.Frame
+[0000.209][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Upgrade.Frame.UIStroke
+[0000.209][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Upgrade.Frame.UICorner
+[0000.209][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Upgrade.TextLabel
+[0000.209][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Upgrade.TextLabel.UIStroke
+[0000.209][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.TextLabel
+[0000.209][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.TextLabel.UIStroke
+[0000.210][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Desc
+[0000.210][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.InsetAccounted.Select.Desc.UIStroke
+[0000.210][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.ModifyItems.Right.UISizeConstraint
+[0000.210][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables
+[0000.210][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left
+[0000.210][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection
+[0000.210][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.UICorner
+[0000.210][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top
+[0000.210][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.UIListLayout
+[0000.210][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopHeader
+[0000.211][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopHeader.Frame
+[0000.211][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopHeader.Frame.UICorner
+[0000.211][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopHeader.Frame.TextLabel
+[0000.211][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopHeader.Frame.TextLabel.UIStroke
+[0000.211][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopHeader.Frame.TextLabel.UIGradient
+[0000.211][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopHeader.Frame.UIGradient
+[0000.211][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit
+[0000.211][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton
+[0000.211][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton.Frame
+[0000.211][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton.Frame.UIStroke
+[0000.212][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton.Frame.UICorner
+[0000.212][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton.TextLabel
+[0000.212][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton.TextLabel.UIStroke
+[0000.212][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton.UICorner
+[0000.212][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Top.TopExit.TextButton.UIGradient
+[0000.212][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info
+[0000.212][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.UICorner
+[0000.212][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Frame
+[0000.212][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Frame.UIStroke
+[0000.213][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Frame.UICorner
+[0000.213][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Overview
+[0000.213][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Overview.UIStroke
+[0000.213][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Overview.UIGradient
+[0000.213][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Amount
+[0000.213][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Amount.UIStroke
+[0000.213][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Amount.UIGradient
+[0000.213][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Desc
+[0000.213][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Desc.UIStroke
+[0000.213][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Desc.UIGradient
+[0000.214][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Lock
+[0000.214][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Lock.txt
+[0000.214][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Lock.txt.UIStroke
+[0000.214][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Lock.TextLabel
+[0000.214][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Lock.TextLabel.UIStroke
+[0000.214][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Lock.ImageLabel
+[0000.214][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Info.Lock.ImageLabel.UIAspectRatioConstraint
+[0000.214][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Frame
+[0000.214][UI-FOUND] class=ScrollingFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Frame.ScrollingFrame
+[0000.214][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Frame.ScrollingFrame.Frame
+[0000.214][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Frame.ScrollingFrame.Frame.UIListLayout
+[0000.215][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Frame.Frame
+[0000.215][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Frame.Frame.UIStroke
+[0000.215][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.Frame.Frame.UICorner
+[0000.215][UI-FOUND] class=UIShadow path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.UIShadow
+[0000.215][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.ImageLabel
+[0000.215][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.ImageLabel.UICorner
+[0000.215][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.UIGradient
+[0000.215][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.ImageLabel
+[0000.215][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.ImageLabel.UICorner
+[0000.216][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.ImageLabel
+[0000.216][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.Selection.ImageLabel.UICorner
+[0000.216][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.UISizeConstraint
+[0000.216][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Left.UIAspectRatioConstraint
+[0000.216][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right
+[0000.216][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.UIAspectRatioConstraint
+[0000.216][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted
+[0000.216][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select
+[0000.216][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.UICorner
+[0000.216][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.Frame
+[0000.216][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.Frame.UICorner
+[0000.217][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.Frame.UIStroke
+[0000.217][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.Title
+[0000.217][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.Title.UIStroke
+[0000.217][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.Desc
+[0000.217][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.InsetAccounted.Select.Desc.UIStroke
+[0000.217][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Right.UISizeConstraint
+[0000.217][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center
+[0000.217][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.UIAspectRatioConstraint
+[0000.217][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.UISizeConstraint
+[0000.217][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back
+[0000.218][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.UIListLayout
+[0000.218][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit
+[0000.218][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton
+[0000.218][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton.UICorner
+[0000.218][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton.Frame
+[0000.218][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton.Frame.UIStroke
+[0000.218][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton.Frame.UICorner
+[0000.218][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton.TextLabel
+[0000.218][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton.TextLabel.UIStroke
+[0000.218][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Collectables.Center.Back.Exit.TextButton.UIGradient
+[0000.219][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack
+[0000.219][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid
+[0000.219][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total
+[0000.219][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame
+[0000.219][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.UICorner
+[0000.219][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.Frame
+[0000.219][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.Frame.UIStroke
+[0000.219][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.Frame.UICorner
+[0000.219][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.List
+[0000.219][UI-FOUND] class=ScrollingFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.List.ScrollingFrame
+[0000.220][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.List.ScrollingFrame.UIListLayout
+[0000.220][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.List.Loading
+[0000.220][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.List.Loading.ImageLabel
+[0000.220][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Frame.List.Loading.ImageLabel.UIAspectRatioConstraint
+[0000.220][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.UIAspectRatioConstraint
+[0000.220][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.UISizeConstraint
+[0000.220][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options
+[0000.220][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.UIListLayout
+[0000.220][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B | Attr.Name=Items
+[0000.221][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton
+[0000.221][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.UICorner
+[0000.221][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.Frame
+[0000.221][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.Frame.UIStroke
+[0000.221][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.Frame.UICorner
+[0000.221][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.ImageLabel
+[0000.221][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.ImageLabel.UIAspectRatioConstraint
+[0000.221][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.TextLabel
+[0000.221][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.B.TextButton.TextLabel.UIStroke
+[0000.222][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C | Attr.Name=Cosmetics
+[0000.222][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton
+[0000.222][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.Frame
+[0000.222][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.Frame.UIStroke
+[0000.222][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.Frame.UICorner
+[0000.222][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.TextLabel
+[0000.222][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.TextLabel.UIStroke
+[0000.222][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.ImageLabel
+[0000.222][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.ImageLabel.UIAspectRatioConstraint
+[0000.222][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.C.TextButton.UICorner
+[0000.223][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E | Attr.Name=Other
+[0000.223][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton
+[0000.223][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.Frame
+[0000.223][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.Frame.UIStroke
+[0000.223][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.Frame.UICorner
+[0000.223][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.TextLabel
+[0000.223][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.TextLabel.UIStroke
+[0000.223][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.ImageLabel
+[0000.223][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.ImageLabel.UIAspectRatioConstraint
+[0000.223][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.E.TextButton.UICorner
+[0000.224][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D | Attr.Name=Collectables
+[0000.224][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton
+[0000.224][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.Frame
+[0000.224][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.Frame.UIStroke
+[0000.224][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.Frame.UICorner
+[0000.224][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.TextLabel
+[0000.224][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.TextLabel.UIStroke
+[0000.224][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.ImageLabel
+[0000.224][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.ImageLabel.UIAspectRatioConstraint
+[0000.224][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Total.Options.D.TextButton.UICorner
+[0000.225][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center
+[0000.225][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.UIAspectRatioConstraint
+[0000.225][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom
+[0000.225][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.UIAspectRatioConstraint
+[0000.225][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.UISizeConstraint
+[0000.225][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back
+[0000.225][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.UIListLayout
+[0000.225][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left
+[0000.225][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.TextButton
+[0000.225][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.TextButton.UICorner
+[0000.226][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.TextButton.Frame
+[0000.226][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.TextButton.Frame.UIStroke
+[0000.226][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.TextButton.Frame.UICorner
+[0000.226][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.TextButton.TextLabel
+[0000.226][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.TextButton.TextLabel.UIStroke
+[0000.226][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Left.UIAspectRatioConstraint
+[0000.226][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit
+[0000.226][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit.TextButton
+[0000.226][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit.TextButton.UICorner
+[0000.227][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit.TextButton.Frame
+[0000.227][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit.TextButton.Frame.UIStroke
+[0000.227][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit.TextButton.Frame.UICorner
+[0000.227][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit.TextButton.TextLabel
+[0000.227][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Exit.TextButton.TextLabel.UIStroke
+[0000.227][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right
+[0000.227][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.TextButton
+[0000.227][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.TextButton.UICorner
+[0000.227][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.TextButton.Frame
+[0000.227][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.TextButton.Frame.UIStroke
+[0000.227][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.TextButton.Frame.UICorner
+[0000.228][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.TextButton.TextLabel
+[0000.228][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.TextButton.TextLabel.UIStroke
+[0000.228][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Center.Bottom.Back.Right.UIAspectRatioConstraint
+[0000.228][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Grid.Frame
+[0000.228][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect
+[0000.228][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center
+[0000.228][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.UIAspectRatioConstraint
+[0000.228][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom
+[0000.228][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.UIAspectRatioConstraint
+[0000.228][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.UISizeConstraint
+[0000.229][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back
+[0000.229][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.UIListLayout
+[0000.229][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit
+[0000.229][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit.TextButton
+[0000.229][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit.TextButton.UICorner
+[0000.229][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit.TextButton.Frame
+[0000.229][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit.TextButton.Frame.UIStroke
+[0000.229][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit.TextButton.Frame.UICorner
+[0000.229][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit.TextButton.TextLabel
+[0000.229][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Center.Bottom.Back.Exit.TextButton.TextLabel.UIStroke
+[0000.230][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left
+[0000.230][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.UIAspectRatioConstraint
+[0000.230][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init
+[0000.230][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Stroke
+[0000.230][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Stroke.UIStroke
+[0000.230][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Stroke.UICorner
+[0000.230][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame
+[0000.230][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.UIStroke
+[0000.230][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.UICorner
+[0000.230][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Title
+[0000.231][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Title.UIStroke
+[0000.231][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Title.UIGradient
+[0000.231][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Amount
+[0000.231][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Amount.UIStroke
+[0000.231][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Amount.UIGradient
+[0000.231][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc
+[0000.231][UI-FOUND] class=ScrollingFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.ScrollingFrame
+[0000.231][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.ScrollingFrame.ShortDesc
+[0000.232][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.ScrollingFrame.ShortDesc.UIStroke
+[0000.232][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.ScrollingFrame.ShortDesc.UIGradient
+[0000.232][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.Frame
+[0000.232][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.Frame.UICorner
+[0000.232][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.Frame.UIStroke
+[0000.232][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.Title
+[0000.232][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.Title.UIStroke
+[0000.233][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Desc.Title.UIGradient
+[0000.233][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame
+[0000.233][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.UIListLayout
+[0000.233][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.B
+[0000.233][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.B.UIStroke
+[0000.233][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.B.UIGradient
+[0000.233][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.A
+[0000.233][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.A.UIStroke
+[0000.234][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.A.UIGradient
+[0000.234][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.C
+[0000.234][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.C.UIStroke
+[0000.234][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Left.Init.Frame.Frame.C.UIGradient
+[0000.234][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Right
+[0000.234][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Right.UIAspectRatioConstraint
+[0000.234][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Right.InsetAccounted
+[0000.234][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Right.UISizeConstraint
+[0000.235][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Frame
+[0000.235][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Backpack.Inspect.Frame.UIGradient
+[0000.235][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select
+[0000.235][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Backdrop
+[0000.235][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom
+[0000.235][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.UIAspectRatioConstraint
+[0000.235][UI-FOUND] class=ImageButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit
+[0000.235][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.UICorner
+[0000.235][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.TextLabel
+[0000.235][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.TextLabel.UIStroke
+[0000.236][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.TextLabel.UIStroke
+[0000.236][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.Frame
+[0000.236][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.Frame.UIStroke
+[0000.236][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.UIGradient
+[0000.236][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.UISizeConstraint
+[0000.236][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center
+[0000.236][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame
+[0000.236][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.UICorner
+[0000.236][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame2
+[0000.237][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame2.UIStroke
+[0000.237][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame2.UICorner
+[0000.237][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List
+[0000.237][UI-FOUND] class=ScrollingFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame
+[0000.237][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.UIListLayout
+[0000.237][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.Loading
+[0000.237][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.Loading.ImageLabel
+[0000.237][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.Loading.ImageLabel.UIAspectRatioConstraint
+[0000.237][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame
+[0000.237][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.UICorner
+[0000.238][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Title
+[0000.238][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Title.UIStroke
+[0000.238][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Title.UIGradient
+[0000.238][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.ImageLabel
+[0000.238][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.ImageLabel.UICorner
+[0000.238][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.ImageLabel.UIGradient
+[0000.238][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search
+[0000.238][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.UICorner
+[0000.238][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.UIGradient
+[0000.239][UI-FOUND] class=TextBox path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.TextBox
+[0000.239][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.TextBox.UIStroke
+[0000.239][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.Frame
+[0000.239][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.Frame.UIStroke
+[0000.239][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.Frame.UICorner
+[0000.239][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.Frame.Search.UIStroke
+[0000.239][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.UIAspectRatioConstraint
+[0000.239][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.UISizeConstraint
+[0000.240][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Background
+[0000.248][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right
+[0000.248][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.HomePage.Root.Right.UIAspectRatioConstraint
+[0000.248][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.HomePage.Root.Right.UISizeConstraint
+[0000.248][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame
+[0000.248][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame
+[0000.248][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.UIListLayout
+[0000.248][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions
+[0000.249][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.UICorner
+[0000.249][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.InnerStroke
+[0000.249][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.InnerStroke.UIGradient
+[0000.249][UI-FOUND] class=UIScale path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.UIScale
+[0000.249][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Body
+[0000.249][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.OuterStroke
+[0000.249][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Content
+[0000.249][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Content.UIListLayout
+[0000.250][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Content.Icon
+[0000.250][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Content.Label
+[0000.250][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Content.Label.UIGradient
+[0000.250][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Content.Label.UIStroke
+[0000.250][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Texture
+[0000.250][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Texture.UICorner
+[0000.250][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.UIStroke
+[0000.250][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.UIStroke.UIGradient
+[0000.250][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification
+[0000.251][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification.UIAspectRatioConstraint
+[0000.251][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification.UICorner
+[0000.251][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification.UIStroke
+[0000.251][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification.Mark
+[0000.251][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification.Mark.UIStroke
+[0000.251][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification.Mark.Shade
+[0000.251][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Missions.Notification.Shade
+[0000.251][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard
+[0000.252][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.UICorner
+[0000.252][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.InnerStroke
+[0000.252][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.InnerStroke.UIGradient
+[0000.252][UI-FOUND] class=UIScale path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.UIScale
+[0000.252][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Body
+[0000.252][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.OuterStroke
+[0000.252][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Content
+[0000.252][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Content.UIListLayout
+[0000.253][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Content.Icon
+[0000.253][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Content.Label
+[0000.253][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Content.Label.UIGradient
+[0000.253][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Content.Label.UIStroke
+[0000.253][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Texture
+[0000.253][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.Texture.UICorner
+[0000.253][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.UIStroke
+[0000.253][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Leaderboard.UIStroke.UIGradient
+[0000.253][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip
+[0000.254][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.UICorner
+[0000.254][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.InnerStroke
+[0000.254][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.InnerStroke.UIGradient
+[0000.254][UI-FOUND] class=UIScale path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.UIScale
+[0000.254][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Body
+[0000.254][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.OuterStroke
+[0000.254][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Content
+[0000.254][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Content.UIListLayout
+[0000.255][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Content.Icon
+[0000.255][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Content.Label
+[0000.255][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Content.Label.UIGradient
+[0000.255][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Content.Label.UIStroke
+[0000.255][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Texture
+[0000.255][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.Texture.UICorner
+[0000.255][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.UIStroke
+[0000.255][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Vip.UIStroke.UIGradient
+[0000.255][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community
+[0000.256][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.UICorner
+[0000.256][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.InnerStroke
+[0000.256][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.InnerStroke.UIGradient
+[0000.256][UI-FOUND] class=UIScale path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.UIScale
+[0000.256][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Body
+[0000.256][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.OuterStroke
+[0000.257][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Content
+[0000.257][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Content.UIListLayout
+[0000.257][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Content.Icon
+[0000.257][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Content.Label
+[0000.257][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Content.Label.UIGradient
+[0000.257][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Content.Label.UIStroke
+[0000.257][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Texture
+[0000.257][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Texture.UICorner
+[0000.257][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.UIStroke
+[0000.257][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.UIStroke.UIGradient
+[0000.258][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification
+[0000.258][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification.UIAspectRatioConstraint
+[0000.258][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification.UICorner
+[0000.258][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification.UIStroke
+[0000.258][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification.Mark
+[0000.258][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification.Mark.UIStroke
+[0000.258][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification.Mark.Shade
+[0000.258][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.HomePage.Root.Right.Frame.Frame.Community.Notification.Shade
+[0000.260][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.Center.Buttons.Frame.C.ImageButton.Label
+[0000.265][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.Center.Buttons.SelectNote
+[0000.268][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Head.HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.268][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Head.HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.268][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Head.FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0000.268][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Head.FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.268][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.269][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.269][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.269][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.269][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.269][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.269][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.269][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0000.270][UI-FOUND] class=Motor6D path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.Right Shoulder
+[0000.270][UI-FOUND] class=Motor6D path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Torso.Right Hip
+[0000.271][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Left Arm.LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.271][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Left Arm.LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.271][UI-FOUND] class=Part path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Arm | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0000.271][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Arm.RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.271][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Arm.RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.271][UI-FOUND] class=Weld path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Arm.Pirate arm
+[0000.272][UI-FOUND] class=MeshPart path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Arm.Pirate arm | MeshId=rbxassetid://140583429479563 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.4266339540481567, 2.080504894256592, 1.4443000555038452 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0000.272][UI-FOUND] class=SurfaceAppearance path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Arm.Pirate arm.SurfaceAppearance
+[0000.272][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Left Leg.LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.272][UI-FOUND] class=Part path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Leg | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0000.272][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Leg.RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.272][UI-FOUND] class=Weld path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Leg.Pirate leg
+[0000.273][UI-FOUND] class=MeshPart path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Leg.Pirate leg | MeshId=rbxassetid://87809656067011 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.1820870637893677, 2.1473770141601562, 1.3061680793762207 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0000.273][UI-FOUND] class=SurfaceAppearance path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.Right Leg.Pirate leg.SurfaceAppearance
+[0000.273][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Behaviour.CaptainJard.HumanoidRootPart.RootAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0000.274][UI-FOUND] class=UIFlexItem path=Players.DEN919191.PlayerGui.MissionsPage.Stage.View.List.UIFlexItem
+[0000.279][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.MissionsPage.RewardPrompt.Panel.Description
+[0000.279][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.MissionsPage.RewardPrompt.NameTab.ItemName
+[0000.279][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.MissionsPage.RewardPrompt.NameTab.ItemName.Shade
+[0000.279][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.MissionsPage.RewardPrompt.NameTab.ItemName.UIStroke
+[0000.281][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.MissionsPage.RewardPrompt.Buy.Content.Icon.Halo
+[0000.281][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.MissionsPage.RewardPrompt.Buy.Content.Icon.Halo.UICorner
+[0000.281][UI-FOUND] class=UIShadow path=Players.DEN919191.PlayerGui.MissionsPage.RewardPrompt.Buy.Content.Icon.Halo.Shadow
+[0000.284][UI-FOUND] class=UIFlexItem path=Players.DEN919191.PlayerGui.CommunityPage.Stage.View.List.UIFlexItem
+[0000.288][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment
+[0000.288][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment
+[0000.288][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.UICorner
+[0000.288][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.OuterStroke
+[0000.288][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.UIGradient
+[0000.289][UI-FOUND] class=UIScale path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.UIScale
+[0000.289][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.InnerStroke
+[0000.289][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.InnerStroke.UIGradient
+[0000.289][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content
+[0000.289][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.UIListLayout
+[0000.289][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.Label
+[0000.289][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.Label.UIStroke
+[0000.289][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.Label.UIGradient
+[0000.289][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.KeyHint
+[0000.289][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.KeyHint.UIAspectRatioConstraint
+[0000.290][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.KeyHint.UICorner
+[0000.290][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.KeyHint.Outline
+[0000.290][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.KeyHint.Key
+[0000.290][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.KeyHint.Symbol
+[0000.290][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.GamepadHint
+[0000.290][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Content.GamepadHint.UIAspectRatioConstraint
+[0000.290][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification
+[0000.290][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification.UIAspectRatioConstraint
+[0000.290][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification.UICorner
+[0000.290][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification.UIStroke
+[0000.291][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification.Mark
+[0000.291][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification.Mark.UIStroke
+[0000.291][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification.Mark.Shade
+[0000.291][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Notification.Shade
+[0000.291][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Art
+[0000.291][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Art.UIAspectRatioConstraint
+[0000.291][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Texture
+[0000.291][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.Texture.UICorner
+[0000.291][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.UIStroke
+[0000.291][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.ShopPage.Header.Tabs.Equipment.Equipment.UIStroke.UIGradient
+[0000.297][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.ShopPage.Dock.PurchasePanel.Panel.Description
+[0000.297][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.ShopPage.Dock.PurchasePanel.NameTab.ItemName
+[0000.297][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.ShopPage.Dock.PurchasePanel.NameTab.ItemName.Shade
+[0000.297][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.ShopPage.Dock.PurchasePanel.NameTab.ItemName.UIStroke
+[0000.299][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.ShopPage.Dock.PurchasePanel.Buy.Content.Icon.Halo
+[0000.299][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.ShopPage.Dock.PurchasePanel.Buy.Content.Icon.Halo.UICorner
+[0000.299][UI-FOUND] class=UIShadow path=Players.DEN919191.PlayerGui.ShopPage.Dock.PurchasePanel.Buy.Content.Icon.Halo.Shadow
+[0000.307][UI-FOUND] class=UIFlexItem path=Players.DEN919191.PlayerGui.EventPage.Missions.List.UIFlexItem
+[0000.312][UI-FOUND] class=ScrollingFrame path=Players.DEN919191.PlayerGui.EventPage.Stage.Bottom.Items
+[0000.313][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.EventPage.RewardPrompt.Panel.Description
+[0000.313][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.EventPage.RewardPrompt.NameTab.ItemName
+[0000.313][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.EventPage.RewardPrompt.NameTab.ItemName.Shade
+[0000.313][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.EventPage.RewardPrompt.NameTab.ItemName.UIStroke
+[0000.315][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.EventPage.RewardPrompt.Buy.Content.Icon.Halo
+[0000.315][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.EventPage.RewardPrompt.Buy.Content.Icon.Halo.UICorner
+[0000.315][UI-FOUND] class=UIShadow path=Players.DEN919191.PlayerGui.EventPage.RewardPrompt.Buy.Content.Icon.Halo.Shadow
+[0000.318][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.EventPage.PurchasePrompt.Panel.Description
+[0000.318][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.EventPage.PurchasePrompt.NameTab.ItemName
+[0000.318][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.EventPage.PurchasePrompt.NameTab.ItemName.Shade
+[0000.318][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.EventPage.PurchasePrompt.NameTab.ItemName.UIStroke
+[0000.320][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.EventPage.PurchasePrompt.Buy.Content.Icon.Halo
+[0000.320][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.EventPage.PurchasePrompt.Buy.Content.Icon.Halo.UICorner
+[0000.320][UI-FOUND] class=UIShadow path=Players.DEN919191.PlayerGui.EventPage.PurchasePrompt.Buy.Content.Icon.Halo.Shadow
+[0000.324][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.EventButtonCorners.Glow | Attr.PinToCorner=BottomLeft
+[0000.324][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.EventButtonCorners.Glow.UIGradient
+[0000.326][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Swipe.Cover.RightEdge
+[0000.326][READY] F5 = checkpoint | F6 = stop, disconnect and copy log
+[0015.516][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline
+[0015.516][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline
+[0015.516][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner
+[0015.516][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner
+[0015.516][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UIStroke
+[0015.516][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UIStroke
+[0015.516][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UICorner
+[0015.516][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UICorner
+[0015.907][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline
+[0015.907][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline
+[0015.907][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner
+[0015.908][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner
+[0015.908][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UIStroke
+[0015.908][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UIStroke
+[0015.908][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UICorner
+[0015.908][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.HoverOutline.Inner.UICorner
+[0016.074][UI-CLICK] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button | Text= | Image=<unavailable> | 
+[0016.077][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.BackgroundColor3 => 0.0980392, 0.0980392, 0.0980392
+[0016.077][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Top.Options.HeaderFrame.Button.BackgroundColor3 => 0.854902, 0.686275, 0.419608
+[0016.077][UI-REMOVING] class=Frame path=Slot
+[0016.077][UI-REMOVING] class=TextButton path=Button
+[0016.077][UI-REMOVING] class=TextLabel path=AmtLeft
+[0016.077][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.077][UI-REMOVING] class=Frame path=Frame
+[0016.077][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.077][UI-REMOVING] class=TextLabel path=ItemName
+[0016.077][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.077][UI-REMOVING] class=TextLabel path=Index
+[0016.077][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.077][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0016.077][UI-REMOVING] class=ImageLabel path=IconIMG
+[0016.077][UI-REMOVING] class=TextLabel path=Title
+[0016.077][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.077][UI-REMOVING] class=TextLabel path=Add
+[0016.077][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.077][UI-REMOVING] class=Frame path=Slot
+[0016.077][UI-REMOVING] class=TextButton path=Button
+[0016.077][UI-REMOVING] class=TextLabel path=AmtLeft
+[0016.077][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Frame
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=ItemName
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Index
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0016.078][UI-REMOVING] class=ImageLabel path=IconIMG
+[0016.078][UI-REMOVING] class=TextLabel path=Title
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Add
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Slot
+[0016.078][UI-REMOVING] class=TextButton path=Button
+[0016.078][UI-REMOVING] class=TextLabel path=AmtLeft
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Frame
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=ItemName
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Index
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0016.078][UI-REMOVING] class=ImageLabel path=IconIMG
+[0016.078][UI-REMOVING] class=TextLabel path=Title
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Add
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Slot
+[0016.078][UI-REMOVING] class=TextButton path=Button
+[0016.078][UI-REMOVING] class=TextLabel path=AmtLeft
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Frame
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=ItemName
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Index
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0016.078][UI-REMOVING] class=ImageLabel path=IconIMG
+[0016.078][UI-REMOVING] class=TextLabel path=Title
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Add
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Slot
+[0016.078][UI-REMOVING] class=TextButton path=Button
+[0016.078][UI-REMOVING] class=TextLabel path=AmtLeft
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Frame
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=ItemName
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Index
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0016.078][UI-REMOVING] class=ImageLabel path=IconIMG
+[0016.078][UI-REMOVING] class=TextLabel path=Title
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Add
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Slot
+[0016.078][UI-REMOVING] class=TextButton path=Button
+[0016.078][UI-REMOVING] class=TextLabel path=AmtLeft
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Frame
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=ItemName
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Index
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0016.078][UI-REMOVING] class=ImageLabel path=IconIMG
+[0016.078][UI-REMOVING] class=TextLabel path=Title
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Add
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Slot
+[0016.078][UI-REMOVING] class=TextButton path=Button
+[0016.078][UI-REMOVING] class=TextLabel path=AmtLeft
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=Frame path=Frame
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=ItemName
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Index
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0016.078][UI-REMOVING] class=ImageLabel path=IconIMG
+[0016.078][UI-REMOVING] class=TextLabel path=Title
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-REMOVING] class=TextLabel path=Add
+[0016.078][UI-REMOVING] class=UIStroke path=UIStroke
+[0016.078][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0016.078][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0016.078][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0016.078][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0016.078][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0016.079][UI-ADDED] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0016.079][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0016.079][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0016.079][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0016.079][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0016.079][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0016.079][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0016.079][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0016.079][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0016.079][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0016.079][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0016.080][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0016.080][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0016.080][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0016.080][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0016.080][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0016.080][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0016.080][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0016.080][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0016.080][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0016.080][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0016.080][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0016.081][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0016.081][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0016.081][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0016.081][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0016.081][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0016.081][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0016.081][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0016.081][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0016.081][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0016.081][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0016.081][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0016.081][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0016.081][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0016.081][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0016.082][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0016.082][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0016.082][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0016.082][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0016.082][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0016.082][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0016.082][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0016.082][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0016.082][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0016.082][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0016.082][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0016.082][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0016.082][UI-ADDED] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0016.083][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0016.083][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0016.083][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0016.083][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0016.083][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0016.083][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0016.083][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0016.083][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0016.083][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0016.083][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0016.084][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0016.084][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0016.084][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0016.084][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0016.084][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0016.084][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0016.084][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0016.084][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0016.084][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0016.084][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0016.084][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0016.084][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0016.085][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0016.085][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0016.085][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0016.085][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0016.085][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0016.085][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0016.085][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0016.085][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0016.085][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0016.085][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0016.085][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0016.085][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0016.085][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0016.085][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0016.085][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0016.086][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0016.086][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0016.086][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0016.086][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0016.086][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0016.086][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0016.086][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot
+[0016.086][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0016.086][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button
+[0016.086][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0016.086][UI-ADDED] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript
+[0016.086][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0016.087][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Click
+[0016.087][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0016.087][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.SoundScript.Hover
+[0016.087][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0016.087][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft
+[0016.087][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0016.087][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.AmtLeft.UIStroke
+[0016.087][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0016.087][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UICorner
+[0016.087][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0016.087][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame
+[0016.087][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0016.088][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UICorner
+[0016.088][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0016.088][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Frame.UIStroke
+[0016.088][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0016.088][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName
+[0016.088][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0016.088][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIGradient
+[0016.088][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0016.088][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ItemName.UIStroke
+[0016.088][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0016.088][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index
+[0016.088][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0016.088][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Index.UIStroke
+[0016.088][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0016.088][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.ViewportFrame
+[0016.088][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0016.089][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG
+[0016.089][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0016.089][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.IconIMG.UICorner
+[0016.089][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0016.089][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title
+[0016.089][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0016.089][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Title.UIStroke
+[0016.089][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0016.089][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add
+[0016.089][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0016.089][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.Add.UIStroke
+[0016.089][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0016.089][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Left.ThreeSpread.Slot.Button.UIGradient
+[0016.089][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot
+[0016.090][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot
+[0016.090][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button
+[0016.090][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button
+[0016.090][UI-FOUND] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript
+[0016.090][UI-ADDED] class=LocalScript path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript
+[0016.090][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Click
+[0016.090][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Click
+[0016.090][UI-FOUND] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Hover
+[0016.090][UI-ADDED] class=Sound path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.SoundScript.Hover
+[0016.090][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft
+[0016.090][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft
+[0016.090][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft.UIStroke
+[0016.090][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.AmtLeft.UIStroke
+[0016.090][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UICorner
+[0016.091][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UICorner
+[0016.091][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame
+[0016.091][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame
+[0016.091][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UICorner
+[0016.091][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UICorner
+[0016.091][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UIStroke
+[0016.091][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Frame.UIStroke
+[0016.091][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName
+[0016.091][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName
+[0016.091][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIGradient
+[0016.091][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIGradient
+[0016.091][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIStroke
+[0016.091][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.UIStroke
+[0016.092][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index
+[0016.092][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index
+[0016.092][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index.UIStroke
+[0016.092][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Index.UIStroke
+[0016.092][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ViewportFrame
+[0016.092][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ViewportFrame
+[0016.092][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG
+[0016.092][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG
+[0016.092][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG.UICorner
+[0016.092][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG.UICorner
+[0016.092][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title
+[0016.092][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title
+[0016.092][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title.UIStroke
+[0016.092][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Title.UIStroke
+[0016.092][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add
+[0016.092][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add
+[0016.092][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add.UIStroke
+[0016.093][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.Add.UIStroke
+[0016.093][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UIGradient
+[0016.093][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.UIGradient
+[0017.582][CHECKPOINT] Manual marker #1
+[0019.283][UI-CLICK] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button | Text= | Image=<unavailable> | 
+[0019.310][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Visible => false
+[0019.310][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Visible => false
+[0019.310][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Visible => true
+[0019.310][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Bottom.Exit.TextLabel.Text => Exit
+[0019.310][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.310][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.310][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.310][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.310][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None
+[0019.310][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None
+[0019.310][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button
+[0019.310][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button
+[0019.310][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.IconIMG
+[0019.311][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.IconIMG
+[0019.311][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.Title
+[0019.311][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.Title
+[0019.311][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.UIStroke
+[0019.311][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.UIStroke
+[0019.311][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.Frame
+[0019.311][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.Frame
+[0019.311][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.UICorner
+[0019.311][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.UICorner
+[0019.311][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.ImageLabel
+[0019.311][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.None.Button.ImageLabel
+[0019.311][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.312][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.312][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.312][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.312][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.312][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.312][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.312][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.312][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.312][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.312][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.312][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.312][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.312][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.312][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.313][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.313][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.313][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.313][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.313][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.313][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.313][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.313][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.313][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.313][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.313][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.313][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.313][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.314][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.314][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.314][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.314][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.314][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.314][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.314][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.315][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.315][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.315][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.315][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.315][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.315][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.315][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.315][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.315][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.315][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.315][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.315][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.315][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.315][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.315][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.315][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.316][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.316][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.316][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.316][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.316][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.317][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.317][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.317][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.317][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.317][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.317][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.317][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.317][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.317][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.317][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.317][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.317][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.317][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.317][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.317][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.317][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.318][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.318][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.318][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.318][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.318][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.318][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.319][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.319][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.319][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.319][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.319][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.319][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.319][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.319][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.319][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.319][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.319][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.320][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.320][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.320][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.320][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.320][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.320][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.320][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.320][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.320][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.320][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.320][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.321][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.321][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.321][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.321][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.321][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.321][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.321][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.321][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.321][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.322][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.322][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.322][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.322][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.322][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.322][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.322][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.322][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.322][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.322][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.322][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.322][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.322][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.322][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.322][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.323][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.323][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.323][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.323][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.324][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.324][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.324][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.324][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.324][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.324][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.324][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.324][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.324][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.324][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.324][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.324][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.324][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.324][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.324][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.324][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.324][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.325][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.325][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.325][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.325][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.325][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.325][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.325][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.326][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.326][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.326][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.326][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.326][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.326][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.326][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.326][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.326][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.326][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.326][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.326][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.326][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.326][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.326][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.327][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.327][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.327][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.327][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.327][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.327][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.327][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.328][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.328][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.328][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.328][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.328][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.328][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.328][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.328][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.328][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.328][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.328][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.329][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.329][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.329][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.329][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.329][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.329][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.329][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.329][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.329][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.329][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.329][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.330][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.330][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.330][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.330][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.330][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.330][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.330][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.330][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.330][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.331][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.331][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.331][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.331][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.331][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.331][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.331][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.331][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.331][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.331][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.331][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.331][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.331][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.331][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.331][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.331][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.332][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.332][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.332][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.332][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.332][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.332][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.332][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.332][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.332][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.332][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.332][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.332][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.332][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.332][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.332][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.333][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.333][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.333][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.333][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.333][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.334][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.334][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.334][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.334][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.334][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.334][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.334][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.334][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.334][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.334][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.334][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.334][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.334][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.334][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.334][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.334][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.334][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.335][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.335][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.335][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.335][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.335][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.335][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.336][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.336][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.336][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.336][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.336][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.336][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.336][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.336][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.336][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.336][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.336][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.336][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.336][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.336][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.336][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.336][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.337][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.337][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.337][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.337][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.337][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.337][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.338][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.338][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.338][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.338][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.338][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.338][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.338][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.338][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.338][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.338][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.338][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.338][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.339][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.339][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.339][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.339][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.339][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.339][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.339][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.339][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.339][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.339][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.340][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.340][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.340][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.340][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.340][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.340][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.340][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.340][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.340][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.340][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.341][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.341][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.341][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.341][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.341][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.341][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.341][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.341][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.341][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.341][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.341][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.341][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.341][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.341][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.342][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.342][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.342][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.342][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.342][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.342][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.342][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.343][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.343][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.343][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.343][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.343][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.343][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.343][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.343][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.343][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.343][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.343][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.343][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.343][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.343][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.343][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.343][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.343][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.344][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.344][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.344][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.344][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.345][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.345][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.345][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.345][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.345][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.345][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.345][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.345][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.345][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.345][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.345][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.345][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.345][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.345][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.345][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.345][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.345][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.346][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.346][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.346][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.346][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.346][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.346][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.346][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.347][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.347][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.347][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.347][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.347][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.347][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.347][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.347][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.347][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.347][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.347][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.347][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.347][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.348][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.348][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.348][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.348][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.348][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.348][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.348][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.348][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.348][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.349][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.349][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.349][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.349][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.349][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.349][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.349][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.349][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.349][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.349][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.349][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.350][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.350][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.350][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.350][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.350][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.350][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.350][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.350][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.350][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.350][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.350][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.351][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.351][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.351][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.351][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.351][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.351][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.351][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.351][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.351][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.351][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.351][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.352][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.352][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.352][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.352][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.352][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.352][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.352][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.352][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.352][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.352][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.352][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.352][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.352][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.353][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.353][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.353][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.353][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.353][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.353][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.353][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.353][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.353][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.354][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.354][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.354][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.354][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.354][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.354][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.354][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.354][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.354][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.354][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.354][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.354][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.354][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.354][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.354][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.355][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.355][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.355][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.355][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.355][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.355][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.355][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.356][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.356][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.356][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.356][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.356][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.356][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.356][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.356][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.356][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.356][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.356][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.356][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.356][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.356][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.356][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.356][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.356][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.357][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.357][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.357][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.357][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.357][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.358][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.358][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.358][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.358][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.358][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.358][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.358][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.358][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.358][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.358][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.358][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.358][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.358][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.358][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.358][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.358][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.358][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.359][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.359][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.359][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.359][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.359][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.359][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.359][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.359][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.359][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.359][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.359][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.359][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.359][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.359][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.359][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.359][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.359][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.360][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.360][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.360][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.360][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.360][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.361][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.361][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.361][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.361][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.361][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.361][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.361][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.361][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.361][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.361][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.361][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.361][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.361][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.361][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.361][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.361][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.361][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.362][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.362][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.362][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.362][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.362][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.362][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.362][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.363][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.363][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.363][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.363][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.363][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.363][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.363][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.363][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.363][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.363][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.363][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.363][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.363][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.363][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.363][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.364][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.364][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.364][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.364][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.364][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.364][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.364][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.364][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.364][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.364][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.364][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.364][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.364][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.364][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.364][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.364][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.364][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.365][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.365][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.365][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.365][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.365][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.365][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.365][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.365][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.366][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.366][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.366][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.366][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.366][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.366][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.366][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.366][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.366][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.366][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.366][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.366][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.366][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.366][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.366][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.367][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.367][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.367][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.367][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.367][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.367][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.367][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.368][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.368][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.368][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.368][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.368][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.368][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.368][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.368][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.368][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.368][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.368][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.368][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.368][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.368][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.369][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.369][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.369][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.369][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.369][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.369][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.369][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.369][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.369][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.369][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.370][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.370][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.370][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.370][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.370][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.370][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.370][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.370][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.370][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.370][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.370][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.370][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.370][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.371][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.371][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.371][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.371][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.371][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.371][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.371][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.371][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.371][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.371][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.371][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.371][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.371][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.371][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.371][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.371][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.371][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.371][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.372][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.372][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.372][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.372][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.372][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.372][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.372][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.372][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.372][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.373][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.373][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.373][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.373][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.373][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.373][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.373][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.373][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.373][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.373][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.373][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.374][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.374][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.374][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.374][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.374][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.374][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.374][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.374][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.374][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.374][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.374][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.374][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.375][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.375][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.375][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.375][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.375][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.375][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.375][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.375][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.375][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.375][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.375][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.376][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.376][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.376][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.376][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.376][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.376][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.376][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.376][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.376][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.376][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.376][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.376][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.377][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.377][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.377][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.377][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.377][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.377][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.377][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.377][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.377][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.377][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.377][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.378][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.378][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.378][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.378][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.378][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.378][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.378][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.378][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.378][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.378][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.378][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.378][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.378][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.378][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.378][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.378][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.378][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.379][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.379][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.379][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.379][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.379][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.379][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.379][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.379][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.379][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.379][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.379][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.379][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.380][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.380][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.380][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.380][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.380][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.380][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.380][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.380][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.380][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.381][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.381][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.381][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.381][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.381][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.381][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.381][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.381][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.381][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.381][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.381][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.381][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.381][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.381][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.381][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.382][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.382][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.382][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.382][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.382][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.382][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.382][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.383][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.383][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.383][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.383][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.383][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.383][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.383][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.383][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.383][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.383][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.383][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.383][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.383][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.383][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.383][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.383][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.383][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.384][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.384][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.384][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.384][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.384][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.384][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.385][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.385][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.385][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.385][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.385][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.385][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.385][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.385][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.385][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.385][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.385][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.385][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.385][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.385][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.385][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.385][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.385][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.385][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.386][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.386][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.386][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.386][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.386][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.387][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.387][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.387][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.387][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.387][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.387][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.387][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.387][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.387][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.387][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.387][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.387][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.387][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.387][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.387][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.387][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.387][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.387][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.388][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.388][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.388][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.388][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.388][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.389][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.389][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.389][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.389][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.389][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.389][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.389][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.389][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.389][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.389][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.389][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.389][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.389][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.389][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.389][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.389][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.389][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.389][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.390][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.390][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.390][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.390][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.390][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.390][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.391][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.391][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.391][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.391][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.391][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.391][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.391][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.391][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.391][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.391][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.391][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.391][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.391][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.391][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.391][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.391][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.391][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.392][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.392][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.392][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.392][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.392][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.392][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.392][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.393][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.393][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.393][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.393][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.393][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.393][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.393][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.393][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.393][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.393][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.393][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.393][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.393][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.393][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.393][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.393][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.393][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.394][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.394][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.394][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.394][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.394][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.394][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.394][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.395][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.395][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.395][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.395][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.395][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.395][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.395][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.395][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.395][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.395][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.395][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.395][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.395][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.395][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.395][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.396][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.396][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.396][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.396][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.396][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.396][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.396][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.397][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.397][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.397][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.397][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.397][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.397][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.397][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.397][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.397][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.397][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.397][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.398][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.398][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.398][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.398][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.398][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.398][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.398][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.398][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.398][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.398][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.398][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.399][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.399][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.399][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.399][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.399][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.399][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.399][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.399][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.399][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.400][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.400][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.400][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.400][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.400][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.400][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.400][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.400][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.400][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.400][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.400][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.400][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.400][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.400][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.400][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.401][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.401][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.401][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.401][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.401][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.401][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.402][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.402][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.402][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.402][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.402][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.402][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.402][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.402][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.402][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.402][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.402][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.402][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.402][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.402][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.402][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.402][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.402][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.403][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.403][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.403][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.403][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.403][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.404][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.404][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.404][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.404][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.404][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.404][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.404][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.404][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.404][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.404][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.404][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.404][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.404][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.404][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.404][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.404][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.404][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.405][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.405][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.405][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.405][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.405][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.405][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.405][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.406][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.406][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.406][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.406][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.406][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.406][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.406][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.406][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.406][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.406][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.406][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.406][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.406][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.406][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.407][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.407][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.407][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.407][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.407][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.407][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.407][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.407][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.408][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.408][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.408][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.408][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.408][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.408][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.408][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.408][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.408][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.408][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.408][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.408][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.408][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.409][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.409][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.409][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.409][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.409][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.409][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.409][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.409][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.409][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.409][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.410][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.410][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.410][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.410][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.410][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.410][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.410][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.410][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.410][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.410][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.410][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.411][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.411][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.411][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.411][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.411][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.411][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.411][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.411][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.411][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.411][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.411][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.411][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.412][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.412][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.412][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.412][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.412][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.412][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.412][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.412][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.412][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.413][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.413][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.413][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.413][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.413][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.413][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.413][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.413][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.413][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.413][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.413][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.413][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.413][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.413][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.413][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.413][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.414][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.414][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.414][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.414][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.414][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.414][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.414][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.414][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.414][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.414][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.414][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.414][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.414][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.414][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.414][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.415][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.415][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.415][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.415][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.415][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.415][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.416][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.416][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.416][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.416][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.416][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.416][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.416][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.416][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.416][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.416][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.416][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.416][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.416][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.416][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.416][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.416][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.416][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.417][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.417][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.417][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.417][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.417][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.418][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.418][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.418][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.418][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.418][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.RootAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.418][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.RootAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.419][UI-FOUND] class=ParticleEmitter path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.2.Glow | Enabled=true | Texture=rbxassetid://867619398 | Rate=3 | Lifetime=1 1  | Speed=0 0  | Size=0 1.5 0 0.477 2 0 1 1.5 0  | Transparency=0 1 0 0.502494 0.888325 0 1 1 0  | Color=0 0.470588 0.72549 1 0 0.50173 0.532872 0.683506 0.947866 0 1 1 0.368627 0.556863 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=0 0  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true
+[0019.419][UI-ADDED] class=ParticleEmitter path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.2.Glow | Enabled=true | Texture=rbxassetid://867619398 | Rate=3 | Lifetime=1 1  | Speed=0 0  | Size=0 1.5 0 0.477 2 0 1 1.5 0  | Transparency=0 1 0 0.502494 0.888325 0 1 1 0  | Color=0 0.470588 0.72549 1 0 0.50173 0.532872 0.683506 0.947866 0 1 1 0.368627 0.556863 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=0 0  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true
+[0019.419][UI-FOUND] class=ParticleEmitter path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.2.Aura1 | Enabled=true | Texture=rbxassetid://13414392494 | Rate=2 | Lifetime=2 2  | Speed=0 0  | Size=0 0.391062 0 1 2.51397 0  | Transparency=0 1 0 0.195761 0.51269 0 0.795511 0.517766 0 1 1 0  | Color=0 0.470588 0.72549 1 0 0.50173 0.532872 0.683506 0.947866 0 1 1 0.368627 0.556863 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=0 180  | RotSpeed=0 0  | SpreadAngle=-1000, 1000 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0019.420][UI-ADDED] class=ParticleEmitter path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.2.Aura1 | Enabled=true | Texture=rbxassetid://13414392494 | Rate=2 | Lifetime=2 2  | Speed=0 0  | Size=0 0.391062 0 1 2.51397 0  | Transparency=0 1 0 0.195761 0.51269 0 0.795511 0.517766 0 1 1 0  | Color=0 0.470588 0.72549 1 0 0.50173 0.532872 0.683506 0.947866 0 1 1 0.368627 0.556863 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=0 180  | RotSpeed=0 0  | SpreadAngle=-1000, 1000 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0019.420][UI-FOUND] class=Trail path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.3.Trail | Enabled=true | Texture=rbxassetid://10272644797 | Lifetime=1 | MinLength=1 | MaxLength=20 | Color=0 0.415686 0.764706 1 0 0.0467128 0.456123 0.735939 0.984259 0 0.401384 0.980392 0.282353 0.384314 0 1 1 0.262745 0.498039 0  | Transparency=0 0 0 0.258105 0.431472 0 0.514963 0.715736 0 0.840399 0.975 0 1 1 0  | WidthScale=0 1 0 0.128429 0.61875 0 0.336658 0.3 0 0.55611 0.11875 0 0.877806 0 0 1 0 0  | LightEmission=1 | FaceCamera=true | TextureLength=4 | TextureMode=Enum.TextureMode.Wrap | Attachment0=<Attachment:Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.3> | Attachment1=<Attachment:Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.4>
+[0019.420][UI-ADDED] class=Trail path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.3.Trail | Enabled=true | Texture=rbxassetid://10272644797 | Lifetime=1 | MinLength=1 | MaxLength=20 | Color=0 0.415686 0.764706 1 0 0.0467128 0.456123 0.735939 0.984259 0 0.401384 0.980392 0.282353 0.384314 0 1 1 0.262745 0.498039 0  | Transparency=0 0 0 0.258105 0.431472 0 0.514963 0.715736 0 0.840399 0.975 0 1 1 0  | WidthScale=0 1 0 0.128429 0.61875 0 0.336658 0.3 0 0.55611 0.11875 0 0.877806 0 0 1 0 0  | LightEmission=1 | FaceCamera=true | TextureLength=4 | TextureMode=Enum.TextureMode.Wrap | Attachment0=<Attachment:Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.3> | Attachment1=<Attachment:Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.HumanoidRootPart.spins.CatJard.Body.4>
+[0019.421][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Head.FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Left Arm.LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Left Arm.LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.421][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Left Arm.LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Left Arm.LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-FOUND] class=MeshPart path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm | MeshId=rbxasset://fonts/rightarm.mesh | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.SmoothPlastic | Size=1, 2, 1 | CastShadow=true
+[0019.422][UI-ADDED] class=MeshPart path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm | MeshId=rbxasset://fonts/rightarm.mesh | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.SmoothPlastic | Size=1, 2, 1 | CastShadow=true
+[0019.422][UI-FOUND] class=Motor6D path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.Right Arm
+[0019.422][UI-ADDED] class=Motor6D path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.Right Arm
+[0019.422][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.RightArmAt | Position=-0.5, 0.499997615814209, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Arm.RightArmAt | Position=-0.5, 0.499997615814209, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.422][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Left Leg.LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Left Leg.LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-FOUND] class=MeshPart path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg | MeshId=rbxasset://fonts/rightleg.mesh | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.117647, 0.117647, 0.117647 | Material=Enum.Material.SmoothPlastic | Size=1, 2, 1 | CastShadow=true
+[0019.423][UI-ADDED] class=MeshPart path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg | MeshId=rbxasset://fonts/rightleg.mesh | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.117647, 0.117647, 0.117647 | Material=Enum.Material.SmoothPlastic | Size=1, 2, 1 | CastShadow=true
+[0019.423][UI-FOUND] class=Motor6D path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg.Right Leg
+[0019.423][UI-ADDED] class=Motor6D path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg.Right Leg
+[0019.423][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg.RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg.RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg.RightLegAt | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Right Leg.RightLegAt | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.423][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.RightLegAt | Position=0.5, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.RightLegAt | Position=0.5, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.424][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.RightArmAt | Position=1, 0.5, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.425][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame.WorldModel.MannequinClassic.Torso.RightArmAt | Position=1, 0.5, 0 | Orientation=-0, 0, 0 | Visible=false
+[0019.425][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.425][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.425][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.425][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.425][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.425][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.425][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.425][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.425][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.426][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.426][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.426][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.426][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.426][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.426][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.426][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.426][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.426][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.426][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.426][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.426][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.426][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.426][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.426][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.426][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.426][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.426][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.427][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.427][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.427][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.427][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.427][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.427][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.427][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.427][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.428][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.428][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.428][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.428][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.428][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.428][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.428][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.428][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.428][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.428][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.428][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.428][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.428][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.428][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.429][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.429][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.429][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.429][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.429][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.429][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.429][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.429][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.429][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.430][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.430][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.430][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.430][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.430][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.430][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.430][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.430][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.430][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.430][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.430][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.431][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.431][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.431][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.431][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.431][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.431][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.431][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.431][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.431][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.431][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.431][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.432][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.432][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.432][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.432][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.432][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.432][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.432][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.432][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.432][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.432][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.432][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.433][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.433][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.433][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.433][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.433][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.433][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.433][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.433][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.433][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.433][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.433][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.433][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.433][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.434][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.434][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.434][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.434][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.434][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.434][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.434][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.434][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.434][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.434][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.434][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.434][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.435][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.435][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.435][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.435][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.435][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.435][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.435][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.435][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.435][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.435][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.435][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.435][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.436][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.436][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.436][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.436][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.436][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.436][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.436][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.436][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.436][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.436][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.436][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.436][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.437][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.437][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.437][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.437][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.437][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.437][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.437][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.437][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.437][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.437][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.437][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.437][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.438][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.438][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.438][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.438][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.438][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.438][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.438][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.438][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.438][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.438][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.438][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.439][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.439][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.439][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.439][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.439][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.439][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.439][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.439][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.439][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.439][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.439][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.439][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.439][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.440][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.440][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.440][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.440][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.440][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.440][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.440][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.440][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.440][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.441][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.441][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.441][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.441][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.441][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.441][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.441][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.441][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.441][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.441][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.441][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.441][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.441][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.441][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.441][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.442][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.442][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.442][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.442][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.442][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.442][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.442][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.442][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.442][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.443][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.443][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.443][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.443][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.443][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.443][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.443][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.443][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.443][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.443][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.443][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.443][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.443][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.443][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.443][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.444][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.444][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.444][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.444][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.444][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.444][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.444][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.444][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.444][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.445][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.445][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.445][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.445][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.445][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.445][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.445][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.445][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.445][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.445][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.445][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.445][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.445][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.445][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.445][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.446][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.446][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.446][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.446][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.446][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.446][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.446][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.446][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.446][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.447][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.447][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.447][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.447][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.447][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.447][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.447][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.447][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.447][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.447][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.447][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.447][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.447][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.447][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.447][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.448][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.448][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.448][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.448][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.448][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.448][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.448][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.449][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.449][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.449][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.449][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.449][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.449][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.449][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.449][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.449][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.449][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.449][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.449][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.449][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.449][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.449][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.449][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.449][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.450][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.450][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.450][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.450][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.450][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.450][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.450][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.450][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.451][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.451][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.451][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.451][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.451][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.451][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.451][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.451][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.451][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.451][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.451][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.451][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.451][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.451][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.451][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.451][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.452][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.452][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.452][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.452][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.452][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.452][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.452][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.453][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.453][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.453][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.453][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.453][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.453][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.453][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.453][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.453][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.453][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.453][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.453][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.453][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.453][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.453][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.453][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.453][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.454][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.454][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.454][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.454][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.454][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.454][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.454][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.455][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.455][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.455][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.455][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.455][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.455][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.455][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.455][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.455][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.455][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.455][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.455][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.455][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.455][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.455][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.455][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.455][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.456][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.456][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.456][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.456][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.456][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.456][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.456][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.457][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.457][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.457][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.457][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.457][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.457][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.457][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.457][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.457][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.457][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.457][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.457][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.457][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.457][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.457][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.457][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.457][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.458][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.458][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.458][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.458][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.458][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.458][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.459][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.459][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.459][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.459][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.459][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.459][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.459][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.459][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.459][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.459][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.459][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.459][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.459][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.459][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.459][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.459][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.459][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.459][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.460][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.460][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.460][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.460][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.461][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.461][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.461][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.461][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.461][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.461][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.461][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.461][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.461][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.461][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.461][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.461][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.461][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.461][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.461][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.461][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.461][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.461][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.461][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.462][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.462][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.462][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.462][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.462][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.463][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.463][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.463][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.463][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.463][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.463][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.463][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.463][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.463][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.463][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.463][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.463][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.463][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.463][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.463][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.463][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.463][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.463][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.464][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.464][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.464][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.464][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.464][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.464][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.465][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.465][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.465][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.465][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.465][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.465][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.465][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.465][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.465][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.465][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header
+[0019.465][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.465][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel
+[0019.465][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.465][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.TextLabel.UIStroke
+[0019.465][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.465][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame
+[0019.465][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.466][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UICorner
+[0019.466][UI-FOUND] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.466][UI-ADDED] class=UIGradient path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Header.Frame.UIGradient
+[0019.466][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.466][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots
+[0019.466][UI-FOUND] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.466][UI-ADDED] class=UIGridLayout path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.UIGridLayout
+[0019.466][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.466][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot
+[0019.466][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.466][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button
+[0019.466][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.466][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.IconIMG
+[0019.466][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.466][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Title
+[0019.466][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.466][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UIStroke
+[0019.466][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.467][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount
+[0019.467][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.467][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Frame
+[0019.467][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.467][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Lock
+[0019.467][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.468][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Price
+[0019.468][UI-FOUND] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.468][UI-ADDED] class=ViewportFrame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ViewportFrame
+[0019.468][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.468][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.UICorner
+[0019.468][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.468][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.ImageLabel
+[0019.469][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 1, 1
+[0019.565][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 0.945098, 0.670588
+[0019.590][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 1, 1
+[0019.882][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 0.945098, 0.670588
+[0019.899][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 1, 1
+[0020.015][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 0.945098, 0.670588
+[0020.032][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 1, 1
+[0020.132][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 0.945098, 0.670588
+[0020.140][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 1, 1
+[0020.232][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 0.945098, 0.670588
+[0020.249][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button.Amount.BackgroundColor3 => 1, 1, 1
+[0020.633][UI-CLICK] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Center.Frame.List.ScrollingFrame.Slots.Slot.Button | Text= | Image=<unavailable> | 
+[0020.647][UI-PROPERTY] Amount.BackgroundColor3 => 1, 0.945098, 0.670588
+[0020.647][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Visible => true
+[0020.647][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Visible => true
+[0020.647][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Select.Visible => false
+[0020.647][UI-REMOVING] class=Frame path=Slots
+[0020.647][UI-REMOVING] class=Frame path=None
+[0020.647][UI-REMOVING] class=TextButton path=Button
+[0020.647][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.647][UI-REMOVING] class=TextLabel path=Title
+[0020.647][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.647][UI-REMOVING] class=Frame path=Frame
+[0020.647][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.647][UI-REMOVING] class=Frame path=Header
+[0020.647][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.647][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.647][UI-REMOVING] class=Frame path=Frame
+[0020.647][UI-REMOVING] class=Frame path=Slots
+[0020.647][UI-REMOVING] class=Frame path=Slot
+[0020.647][UI-REMOVING] class=TextButton path=Button
+[0020.647][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.647][UI-REMOVING] class=TextLabel path=Title
+[0020.647][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.647][UI-REMOVING] class=Frame path=Amount
+[0020.647][UI-REMOVING] class=Frame path=Frame
+[0020.647][UI-REMOVING] class=Frame path=Lock
+[0020.647][UI-REMOVING] class=TextLabel path=Price
+[0020.647][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.647][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.647][UI-REMOVING] class=Frame path=Slot
+[0020.647][UI-REMOVING] class=TextButton path=Button
+[0020.647][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.647][UI-REMOVING] class=TextLabel path=Title
+[0020.647][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.647][UI-REMOVING] class=Frame path=Amount
+[0020.647][UI-REMOVING] class=Frame path=Frame
+[0020.647][UI-REMOVING] class=Frame path=Lock
+[0020.647][UI-REMOVING] class=TextLabel path=Price
+[0020.647][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.647][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.647][UI-REMOVING] class=Frame path=Slot
+[0020.647][UI-REMOVING] class=TextButton path=Button
+[0020.647][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.647][UI-REMOVING] class=TextLabel path=Title
+[0020.647][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.647][UI-REMOVING] class=Frame path=Amount
+[0020.647][UI-REMOVING] class=Frame path=Frame
+[0020.647][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Header
+[0020.648][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Slots
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.648][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.648][UI-REMOVING] class=TextLabel path=Title
+[0020.648][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.648][UI-REMOVING] class=Frame path=Amount
+[0020.648][UI-REMOVING] class=Frame path=Frame
+[0020.648][UI-REMOVING] class=Frame path=Lock
+[0020.648][UI-REMOVING] class=TextLabel path=Price
+[0020.648][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.648][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.648][UI-REMOVING] class=Frame path=Slot
+[0020.648][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.649][UI-REMOVING] class=TextButton path=Button
+[0020.649][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.649][UI-REMOVING] class=TextLabel path=Title
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Amount
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Lock
+[0020.649][UI-REMOVING] class=TextLabel path=Price
+[0020.649][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.649][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.649][UI-REMOVING] class=Frame path=Header
+[0020.649][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.649][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.649][UI-REMOVING] class=Frame path=Frame
+[0020.649][UI-REMOVING] class=Frame path=Slots
+[0020.649][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Header
+[0020.650][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Slots
+[0020.650][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Header
+[0020.650][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Slots
+[0020.650][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Slot
+[0020.650][UI-REMOVING] class=TextButton path=Button
+[0020.650][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.650][UI-REMOVING] class=TextLabel path=Title
+[0020.650][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.650][UI-REMOVING] class=Frame path=Amount
+[0020.650][UI-REMOVING] class=Frame path=Frame
+[0020.650][UI-REMOVING] class=Frame path=Lock
+[0020.650][UI-REMOVING] class=TextLabel path=Price
+[0020.650][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.650][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.650][UI-REMOVING] class=Frame path=Header
+[0020.650][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Slots
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.651][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.651][UI-REMOVING] class=UICorner path=UICorner
+[0020.651][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.651][UI-REMOVING] class=Frame path=Slot
+[0020.651][UI-REMOVING] class=TextButton path=Button
+[0020.651][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.651][UI-REMOVING] class=TextLabel path=Title
+[0020.651][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.651][UI-REMOVING] class=Frame path=Amount
+[0020.651][UI-REMOVING] class=Frame path=Frame
+[0020.651][UI-REMOVING] class=Frame path=Lock
+[0020.651][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Header
+[0020.652][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=UIGradient path=UIGradient
+[0020.652][UI-REMOVING] class=Frame path=Slots
+[0020.652][UI-REMOVING] class=UIGridLayout path=UIGridLayout
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.652][UI-REMOVING] class=TextLabel path=Price
+[0020.652][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.652][UI-REMOVING] class=UICorner path=UICorner
+[0020.652][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.652][UI-REMOVING] class=Frame path=Slot
+[0020.652][UI-REMOVING] class=TextButton path=Button
+[0020.652][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.652][UI-REMOVING] class=TextLabel path=Title
+[0020.652][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.652][UI-REMOVING] class=Frame path=Amount
+[0020.652][UI-REMOVING] class=Frame path=Frame
+[0020.652][UI-REMOVING] class=Frame path=Lock
+[0020.653][UI-REMOVING] class=TextLabel path=Price
+[0020.653][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.653][UI-REMOVING] class=Attachment path=RootAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=ParticleEmitter path=Glow | Enabled=true | Texture=rbxassetid://867619398 | Rate=3 | Lifetime=1 1  | Speed=0 0  | Size=0 1.5 0 0.477 2 0 1 1.5 0  | Transparency=0 1 0 0.502494 0.888325 0 1 1 0  | Color=0 0.470588 0.72549 1 0 0.50173 0.532872 0.683506 0.947866 0 1 1 0.368627 0.556863 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=0 0  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true
+[0020.653][UI-REMOVING] class=ParticleEmitter path=Aura1 | Enabled=true | Texture=rbxassetid://13414392494 | Rate=2 | Lifetime=2 2  | Speed=0 0  | Size=0 0.391062 0 1 2.51397 0  | Transparency=0 1 0 0.195761 0.51269 0 0.795511 0.517766 0 1 1 0  | Color=0 0.470588 0.72549 1 0 0.50173 0.532872 0.683506 0.947866 0 1 1 0.368627 0.556863 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=0 180  | RotSpeed=0 0  | SpreadAngle=-1000, 1000 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0020.653][UI-REMOVING] class=Trail path=Trail | Enabled=true | Texture=rbxassetid://10272644797 | Lifetime=1 | MinLength=1 | MaxLength=20 | Color=0 0.415686 0.764706 1 0 0.0467128 0.456123 0.735939 0.984259 0 0.401384 0.980392 0.282353 0.384314 0 1 1 0.262745 0.498039 0  | Transparency=0 0 0 0.258105 0.431472 0 0.514963 0.715736 0 0.840399 0.975 0 1 1 0  | WidthScale=0 1 0 0.128429 0.61875 0 0.336658 0.3 0 0.55611 0.11875 0 0.877806 0 0 1 0 0  | LightEmission=1 | FaceCamera=true | TextureLength=4 | TextureMode=Enum.TextureMode.Wrap | Attachment0=<Attachment:3> | Attachment1=<Attachment:4>
+[0020.653][UI-REMOVING] class=Attachment path=HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=MeshPart path=Right Arm | MeshId=rbxasset://fonts/rightarm.mesh | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.SmoothPlastic | Size=1, 2, 1 | CastShadow=true
+[0020.653][UI-REMOVING] class=Motor6D path=Right Arm
+[0020.653][UI-REMOVING] class=Attachment path=RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=RightArmAt | Position=-0.5, 0.499997615814209, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=MeshPart path=Right Leg | MeshId=rbxasset://fonts/rightleg.mesh | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.117647, 0.117647, 0.117647 | Material=Enum.Material.SmoothPlastic | Size=1, 2, 1 | CastShadow=true
+[0020.653][UI-REMOVING] class=Motor6D path=Right Leg
+[0020.653][UI-REMOVING] class=Attachment path=RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=RightLegAt | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=RightLegAt | Position=0.5, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=Attachment path=RightArmAt | Position=1, 0.5, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.653][UI-REMOVING] class=UICorner path=UICorner
+[0020.653][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.653][UI-REMOVING] class=Frame path=Header
+[0020.653][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.653][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.653][UI-REMOVING] class=Frame path=Frame
+[0020.653][UI-REMOVING] class=UICorner path=UICorner
+[0020.653][UI-REMOVING] class=UIGradient path=UIGradient
+[0020.653][UI-REMOVING] class=Frame path=Slots
+[0020.653][UI-REMOVING] class=UIGridLayout path=UIGridLayout
+[0020.653][UI-REMOVING] class=Frame path=Slot
+[0020.653][UI-REMOVING] class=TextButton path=Button
+[0020.653][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.653][UI-REMOVING] class=TextLabel path=Title
+[0020.653][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.653][UI-REMOVING] class=Frame path=Amount
+[0020.653][UI-REMOVING] class=Frame path=Frame
+[0020.653][UI-REMOVING] class=Frame path=Lock
+[0020.653][UI-REMOVING] class=TextLabel path=Price
+[0020.653][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.653][UI-REMOVING] class=UICorner path=UICorner
+[0020.653][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.653][UI-REMOVING] class=Frame path=Slot
+[0020.653][UI-REMOVING] class=TextButton path=Button
+[0020.653][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.653][UI-REMOVING] class=TextLabel path=Title
+[0020.653][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.653][UI-REMOVING] class=Frame path=Amount
+[0020.653][UI-REMOVING] class=Frame path=Frame
+[0020.653][UI-REMOVING] class=Frame path=Lock
+[0020.653][UI-REMOVING] class=TextLabel path=Price
+[0020.653][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.653][UI-REMOVING] class=UICorner path=UICorner
+[0020.653][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.653][UI-REMOVING] class=Frame path=Slot
+[0020.653][UI-REMOVING] class=TextButton path=Button
+[0020.653][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.653][UI-REMOVING] class=TextLabel path=Title
+[0020.653][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.653][UI-REMOVING] class=Frame path=Amount
+[0020.653][UI-REMOVING] class=Frame path=Frame
+[0020.653][UI-REMOVING] class=Frame path=Lock
+[0020.653][UI-REMOVING] class=TextLabel path=Price
+[0020.653][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.653][UI-REMOVING] class=UICorner path=UICorner
+[0020.653][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.653][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.654][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.654][UI-REMOVING] class=UICorner path=UICorner
+[0020.654][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.654][UI-REMOVING] class=Frame path=Slot
+[0020.654][UI-REMOVING] class=TextButton path=Button
+[0020.654][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.654][UI-REMOVING] class=TextLabel path=Title
+[0020.654][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.654][UI-REMOVING] class=Frame path=Amount
+[0020.654][UI-REMOVING] class=Frame path=Frame
+[0020.654][UI-REMOVING] class=Frame path=Lock
+[0020.654][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.655][UI-REMOVING] class=Frame path=Header
+[0020.655][UI-REMOVING] class=TextLabel path=TextLabel
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=UIGradient path=UIGradient
+[0020.655][UI-REMOVING] class=Frame path=Slots
+[0020.655][UI-REMOVING] class=UIGridLayout path=UIGridLayout
+[0020.655][UI-REMOVING] class=Frame path=Slot
+[0020.655][UI-REMOVING] class=TextButton path=Button
+[0020.655][UI-REMOVING] class=ImageLabel path=IconIMG
+[0020.655][UI-REMOVING] class=TextLabel path=Title
+[0020.655][UI-REMOVING] class=UIStroke path=UIStroke
+[0020.655][UI-REMOVING] class=Frame path=Amount
+[0020.655][UI-REMOVING] class=Frame path=Frame
+[0020.655][UI-REMOVING] class=Frame path=Lock
+[0020.655][UI-REMOVING] class=TextLabel path=Price
+[0020.655][UI-REMOVING] class=ViewportFrame path=ViewportFrame
+[0020.655][UI-REMOVING] class=UICorner path=UICorner
+[0020.655][UI-REMOVING] class=ImageLabel path=ImageLabel
+[0020.704][FX-REMOVING] class=Model path=DEN919191 | PrimaryPart=nil
+[0020.704][ROOT] LocalPlayerModelAdded = Workspace.Rigs.DEN919191
+[0020.704][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Head | Transparency=0 | LocalTransparencyModifier=0 | Color=0.180392, 0.164706, 0.156863 | Material=Enum.Material.Plastic | Size=2, 1, 1 | CastShadow=true
+[0020.704][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.Neck | Position=0.0002269744873046875, -0.5044162273406982, -0.00043010711669921875 | Orientation=-0, 0, 0 | Visible=false
+[0020.704][FX-INITIAL] class=Decal path=Workspace.Rigs.DEN919191.Head.face | Texture=rbxasset://textures/face.png | Transparency=0 | Color3=1, 1, 1
+[0020.704][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.704][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.704][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0020.704][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Head.Mesh | MeshId=rbxassetid://88896103805677 | TextureId= | Scale=0.4174165427684784, 0.41583311557769775, 0.41054245829582214 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0020.704][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.FaceCenterAttachment | Value=-0.002957151969894767, 0.0076510170474648476, -0.022143958136439323
+[0020.704][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.HairAttachment | Value=0.0010848636738955975, 0.23554547131061554, -0.022143986076116562
+[0020.704][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.FaceFrontAttachment | Value=-0.006062918808311224, -0.008480777963995934, -0.23858043551445007
+[0020.704][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.NeckRigAttachment | Value=-0.0003204345703125, -0.1947770118713379, -0.004058837890625
+[0020.704][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Head.Mesh.HatAttachment | Value=0.0010848636738955975, 0.23554547131061554, -0.022143986076116562
+[0020.704][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.704][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Head.unusual | Position=0.0174713134765625, 0.019992351531982422, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.704][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.unusual.Shine | Enabled=true | Texture=https://assetgame.roblox.com/asset/?id=12363818754&assetName=lines_1 | Rate=5 | Lifetime=2 2  | Speed=0.01 0.01  | Size=0 2.5 0 1 2.5 0  | Transparency=0 1 0 0.497479 0.425641 0 1 1 0  | Color=0 1 0.890196 0.560784 0 1 1 0.890196 0.560784 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Right | Rotation=-360 360  | RotSpeed=-20 20  | SpreadAngle=500, -500 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0020.704][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.unusual.Sphere | Enabled=true | Texture=rbxassetid://14267547915 | Rate=3 | Lifetime=1.25 1.25  | Speed=0 0  | Size=0 2 0 1 2 0  | Transparency=0 1 0 0.097479 1 0 0.497479 0.879781 0 0.897479 1 0 1 1 0  | Color=0 1 0.823529 0.670588 0 1 1 0.823529 0.670588 0  | LightEmission=0 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=-180 180  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0020.705][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.unusual.shockwave | Enabled=true | Texture=rbxassetid://10553903882 | Rate=1 | Lifetime=2 2  | Speed=0.00225 0.00225  | Size=0 1.85792 0 1 2.40437 0  | Transparency=0 0.497268 0 1 1 0  | Color=0 1 0.764706 0.215686 0 1 1 0.764706 0.215686 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Front | Rotation=-360 360  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=1
+[0020.705][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.unusual.dots | Enabled=true | Texture=rbxassetid://18477771089 | Rate=2 | Lifetime=2 2  | Speed=0 0  | Size=0 0.5 0 1 1.59817 0.1  | Transparency=0 1 0 0.496164 0.6375 0 1 1 0  | Color=0 1 0.733333 0.466667 0 0.243945 1 0.509804 0.109804 0 0.50519 1 0.352941 0.0313726 0 0.778547 1 0.509804 0.109804 0 1 1 0.733333 0.466667 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Bottom | Rotation=-360 360  | RotSpeed=-25 25  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0020.705][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.unusual.Cat | Enabled=true | Texture=rbxassetid://140075496840587 | Rate=0.4000000059604645 | Lifetime=1.1 1.1  | Speed=0.00225 0.00225  | Size=0 0.819672 0 1 1.50685 0  | Transparency=0 0.275 0 1 1 0  | Color=0 1 0.678431 0.313726 0 1 1 0.678431 0.313726 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Front | Rotation=0 0  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=1
+[0020.705][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.unusual.Pulse | Enabled=true | Texture=rbxassetid://14183571391 | Rate=2 | Lifetime=1.25 1.25  | Speed=0 0  | Size=0 0 0 0.502558 2.0548 0 1 0 0  | Transparency=0 1 0 0.505115 0.25 0.1625 1 1 0  | Color=0 1 0.807843 0.643137 0 1 1 0.807843 0.643137 0  | LightEmission=0 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Top | Rotation=-180 180  | RotSpeed=0 0  | SpreadAngle=0, 0 | TimeScale=1 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0020.705][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.unusual.wisps | Enabled=true | Texture=rbxassetid://10205180639 | Rate=5 | Lifetime=3 3  | Speed=3.49466 8.38718  | Size=0 0 0 0.5 0.244626 0 1 0 0  | Transparency=0 0 0 0.25042 1 0 0.502521 0 0 0.747899 1 0 0.952941 0 0 1 1 0  | Color=0 1 0.678431 0.223529 0 1 1 0.678431 0.223529 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Back | Rotation=-360 360  | RotSpeed=-222 222  | SpreadAngle=-360, 360 | TimeScale=1 | LockedToPart=false | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0020.705][FX-INITIAL] class=ParticleEmitter path=Workspace.Rigs.DEN919191.Head.Pawn2 | Enabled=true | Texture=rbxassetid://17685168175 | Rate=1.5 | Lifetime=3 3  | Speed=10 10  | Size=0 0.25 0 1 0.25 0  | Transparency=0 1 0 0.20296 1 0 0.21 0 0 0.900106 0 0 0.93 1 0 1 1 0  | Color=0 0.278431 0.215686 0.160784 0 1 0.278431 0.215686 0.160784 0  | LightEmission=1 | LightInfluence=0 | EmissionDirection=Enum.NormalId.Front | Rotation=-6 6  | RotSpeed=-7 7  | SpreadAngle=45, 180 | TimeScale=0.800000011920929 | LockedToPart=true | Attr.EmitDelay=0 | Attr.EmitCount=0
+[0020.705][FX-INITIAL] class=MeshPart path=Workspace.Rigs.DEN919191.Head.Bigotes | MeshId=rbxassetid://76778152018109 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.647059, 0.552941, 0.454902 | Material=Enum.Material.Neon | Size=1.8332858085632324, 0.4731168746948242, 0.06026071310043335 | CastShadow=true
+[0020.705][FX-INITIAL] class=MeshPart path=Workspace.Rigs.DEN919191.Head.Ears | MeshId=rbxassetid://134482718657123 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.647059, 0.552941, 0.454902 | Material=Enum.Material.Neon | Size=2.0398526191711426, 0.5197213292121887, 0.06026054546236992 | CastShadow=true
+[0020.705][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh)
+[0020.705][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1, 1, 1 | CastShadow=true | Attr.RBXRefinementScale=1, 1, 1
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.BodyBackAttachment | Position=-0.2753269672393799, 0.16913099586963654, -0.26023733615875244 | Orientation=0, 0, -6.041727066040039 | Visible=false | Attr.RBXOriginalAttachmentRotation=0, 0, 0
+[0020.705][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.BodyBackAttachment.OriginalPosition | Value=-0.2915949821472168, 0.1392214298248291, -0.26023736596107483
+[0020.705][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.SpecialMesh | MeshId=rbxassetid://107934896774736 | TextureId=rbxassetid://129641938616870 | Scale=1, 1, 0.9999999403953552 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0020.705][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.OriginalSize | Value=1, 1, 1
+[0020.705][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (ugc_mesh).Handle.AvatarPartScaleType | Value=Classic
+[0020.705][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Left Arm | Transparency=0 | LocalTransparencyModifier=0 | Color=0, 0, 0 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Arm.LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Arm.LeftArmAt | Position=0.5, 0.4999985694885254, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Arm.LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.705][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.005_wHatAccessory
+[0020.705][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.1299999952316284, 1.1299999952316284, 1.1299999952316284 | CastShadow=true | Attr.RBXRefinementScale=1.1299999952316284, 1.1299999952316284, 1.1299999952316284
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.HatAttachment | Position=0.0022587585262954235, -0.45984113216400146, -0.0016811371315270662 | Orientation=-0, 0, 0 | Visible=false
+[0020.705][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.HatAttachment.OriginalPosition | Value=0.0019989013671875, -0.4069390296936035, -0.00148773193359375
+[0020.705][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.OriginalSize | Value=1, 1, 1
+[0020.705][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.SpecialMesh | MeshId=rbxassetid://13600520082 | TextureId=rbxassetid://13600534140 | Scale=1.1299999952316284, 1.1299999952316284, 1.1299999952316284 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0020.705][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.005_wHatAccessory.Handle.AvatarPartScaleType | Value=Classic
+[0020.705][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Right Arm | Transparency=0 | LocalTransparencyModifier=0 | Color=0, 0, 0 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Arm.RightArmAt | Position=-0.5, 0.499997615814209, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Arm.RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Arm.RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.705][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Left Leg | Transparency=0 | LocalTransparencyModifier=0 | Color=0.972549, 0.972549, 0.972549 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0020.705][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Leg.LeftLegAt | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Left Leg.LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Right Leg | Transparency=0 | LocalTransparencyModifier=0 | Color=0.972549, 0.972549, 0.972549 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Leg.RightLegAt | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Right Leg.RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR)
+[0020.706][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.7885284423828125, 1.8515429496765137, 1.677258014678955 | CastShadow=true | Attr.RBXRefinementScale=1, 1, 1
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.HairAttachment | Position=0, 0.45599985122680664, -0.10999999940395355 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.HairAttachment.OriginalPosition | Value=0, 0.45599985122680664, -0.10999999940395355
+[0020.706][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.Mesh | MeshId=rbxassetid://123140167848597 | TextureId=rbxassetid://85415409227010 | Scale=1, 1, 1 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0020.706][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.OriginalSize | Value=1.7885284423828125, 1.8515429496765137, 1.677258014678955
+[0020.706][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (ROCKSTAR).Handle.AvatarPartScaleType | Value=Classic
+[0020.706][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (MeshPart)
+[0020.706][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.0317953824996948, 0.5209346413612366, 0.8306623101234436 | CastShadow=true | Attr.RBXRefinementScale=0.8299999833106995, 0.8299999833106995, 0.8299999833106995
+[0020.706][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.SpecialMesh | MeshId=rbxassetid://76315635757153 | TextureId=rbxassetid://90473793629972 | Scale=0.8299999833106995, 0.8299999833106995, 0.8299999833106995 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.FaceCenterAttachment | Position=0.015755005180835724, 0.1593623012304306, 0.1721557378768921 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.FaceCenterAttachment.OriginalPosition | Value=0.01898193359375, 0.1920027732849121, 0.0989828109741211
+[0020.706][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.OriginalSize | Value=1.2431269884109497, 0.6276321411132812, 1.000797986984253
+[0020.706][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (MeshPart).Handle.AvatarPartScaleType | Value=Classic
+[0020.706][FX-INITIAL] class=Accessory path=Workspace.Rigs.DEN919191.Accessory (diary lines side)
+[0020.706][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1, 1, 1 | CastShadow=true | Attr.RBXRefinementScale=1, 1, 1
+[0020.706][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.OriginalSize | Value=1, 1, 1
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.WaistCenterAttachment | Position=-1.12060546875, 0.027191132307052612, -0.030071258544921875 | Orientation=-75.0035400390625, 179.99998474121094, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Vector3Value path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.WaistCenterAttachment.OriginalPosition | Value=-1.12060546875, 0.027191162109375, -0.030071258544921875
+[0020.706][FX-INITIAL] class=SpecialMesh path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.SpecialMesh | MeshId=rbxassetid://92009091336466 | TextureId=rbxassetid://93582648708438 | Scale=1.2999999523162842, 1.2999999523162842, 1.399999976158142 | Offset=0, 0, 0 | VertexColor=1, 1, 1
+[0020.706][FX-INITIAL] class=StringValue path=Workspace.Rigs.DEN919191.Accessory (diary lines side).Handle.AvatarPartScaleType | Value=Classic
+[0020.706][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.ArmRot | Transparency=1 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=2, 1, 1 | CastShadow=true
+[0020.706][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.TorsoRot | Transparency=1 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=2, 2, 1 | CastShadow=true
+[0020.706][FX-INITIAL] class=Part path=Workspace.Rigs.DEN919191.Torso | Transparency=0 | LocalTransparencyModifier=0 | Color=0.972549, 0.972549, 0.972549 | Material=Enum.Material.Plastic | Size=2, 2, 1 | CastShadow=true
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Decal path=Workspace.Rigs.DEN919191.Torso.roblox | Texture= | Transparency=0 | Color3=1, 1, 1
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.LeftArmAt | Position=-1, 0.5, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.RightLegAt | Position=0.5, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.RightArmAt | Position=1, 0.5, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.Neck | Position=0, 0.9958374500274658, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.LeftLegAt | Position=-0.5, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.Attach1 | Position=0.0029082298278808594, 0.74517822265625, 0.2707977294921875 | Orientation=0, 0, 90 | Visible=false
+[0020.706][FX-INITIAL] class=Trail path=Workspace.Rigs.DEN919191.Torso.Attach1.Trail | Enabled=true | Texture=rbxassetid://75606757983313 | Lifetime=0.6000000238418579 | MinLength=0.10000000149011612 | MaxLength=22 | Color=0 1 0.780392 0.631373 0 0.287197 1 0.67451 0.388235 0 1 1 0.466667 0.113725 0  | Transparency=0 0.2875 0 0.365729 0.425 0 0.726933 0.923858 0 0.851621 1 0 1 1 0  | WidthScale=0 0.825 0 0.32419 0.89375 0 0.693267 0.55 0 1 0 0  | LightEmission=0.5 | FaceCamera=false | TextureLength=1.2000000476837158 | TextureMode=Enum.TextureMode.Static | Attachment0=<Attachment:Workspace.Rigs.DEN919191.Torso.Attach1> | Attachment1=<Attachment:Workspace.Rigs.DEN919191.Torso.Attach2>
+[0020.706][FX-INITIAL] class=Attachment path=Workspace.Rigs.DEN919191.Torso.Attach2 | Position=0.0029082298278808594, -0.669464111328125, 0.2707977294921875 | Orientation=0, 0, 90 | Visible=false
+[0020.707][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.ItemName.Text => Cat Radiance
+[0020.707][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Slots.Right.Four.Slot.Button.IconIMG.Image => rbxassetid://113487941303989
+[0021.766][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline
+[0021.766][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline
+[0021.766][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline.Inner
+[0021.766][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline.Inner
+[0021.766][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline.Inner.UIStroke
+[0021.766][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline.Inner.UIStroke
+[0021.766][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline.Inner.UICorner
+[0021.766][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton.HoverOutline.Inner.UICorner
+[0021.966][UI-CLICK] Players.DEN919191.PlayerGui.Menu.Views.Inventory.CharacterView.Equip.Bottom.Back.Exit.TextButton | Text= | Image=<unavailable> | 
+[0022.272][UI-PROPERTY] Players.DEN919191.PlayerGui.Menu.Views.Inventory.Visible => false
+[0022.277][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.277][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.277][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.278][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.278][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0022.278][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0022.278][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.278][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Head.FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.278][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.279][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.280][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.280][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.280][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.280][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.280][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0022.280][UI-FOUND] class=Motor6D path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.Right Shoulder
+[0022.280][UI-ADDED] class=Motor6D path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.Right Shoulder
+[0022.280][UI-FOUND] class=Motor6D path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.Right Hip
+[0022.280][UI-ADDED] class=Motor6D path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Torso.Right Hip
+[0022.282][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Left Arm.LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.282][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Left Arm.LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.282][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Left Arm.LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.282][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Left Arm.LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.283][UI-FOUND] class=Part path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0022.283][UI-ADDED] class=Part path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0022.283][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.283][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.283][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.283][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.283][UI-FOUND] class=Weld path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.Pirate arm
+[0022.283][UI-ADDED] class=Weld path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.Pirate arm
+[0022.283][UI-FOUND] class=MeshPart path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.Pirate arm | MeshId=rbxassetid://140583429479563 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.4266339540481567, 2.080504894256592, 1.4443000555038452 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0022.283][UI-ADDED] class=MeshPart path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.Pirate arm | MeshId=rbxassetid://140583429479563 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.4266339540481567, 2.080504894256592, 1.4443000555038452 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0022.283][UI-FOUND] class=SurfaceAppearance path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.Pirate arm.SurfaceAppearance
+[0022.284][UI-ADDED] class=SurfaceAppearance path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Arm.Pirate arm.SurfaceAppearance
+[0022.284][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Left Leg.LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.284][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Left Leg.LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.284][UI-FOUND] class=Part path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0022.284][UI-ADDED] class=Part path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0022.284][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.285][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.285][UI-FOUND] class=Weld path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.Pirate leg
+[0022.285][UI-ADDED] class=Weld path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.Pirate leg
+[0022.285][UI-FOUND] class=MeshPart path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.Pirate leg | MeshId=rbxassetid://87809656067011 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.1820870637893677, 2.1473770141601562, 1.3061680793762207 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0022.285][UI-ADDED] class=MeshPart path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.Pirate leg | MeshId=rbxassetid://87809656067011 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.1820870637893677, 2.1473770141601562, 1.3061680793762207 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0022.285][UI-FOUND] class=SurfaceAppearance path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.Pirate leg.SurfaceAppearance
+[0022.285][UI-ADDED] class=SurfaceAppearance path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.Right Leg.Pirate leg.SurfaceAppearance
+[0022.285][UI-FOUND] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.HumanoidRootPart.RootAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0022.285][UI-ADDED] class=Attachment path=Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.LeftCorner.Event.HomeButton.Character.WorldModel.CaptainJard.HumanoidRootPart.RootAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0023.341][UI-PROPERTY] Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.Center.Buttons.SelectNote.Text => Join the current game
+[0023.557][UI-CLICK] Players.DEN919191.PlayerGui.HomePage.Root.MainMenu.Center.Buttons.Frame.B.ImageButton | Text=<unavailable> | Image= | 
+[0024.227][ROOT] CharacterAdded = Workspace.DEN919191
+[0024.227][FX-INITIAL] class=MeshPart path=Workspace.DEN919191.HumanoidRootPart | MeshId=rbxassetid://8429608978 | TextureID= | Transparency=1 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=2, 4, 2 | CastShadow=true
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.HeadPos | Position=0, 1.6799999475479126, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.Slide | Position=0, -2.5, 1.2000160217285156 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=ParticleEmitter path=Workspace.DEN919191.HumanoidRootPart.Slide.SlideParticles | Enabled=false | Texture=rbxassetid://4770542473 | Rate=0 | Lifetime=0.4 0.7  | Speed=7 12  | Size=0 1.5 0 1 1.5 0  | Transparency=0 1 0 0.54704 0.76875 0 1 1 0  | Color=0 1 1 1 0 1 1 1 1 0  | LightEmission=0 | LightInfluence=1 | EmissionDirection=Enum.NormalId.Top | Rotation=-180 180  | RotSpeed=0 0  | SpreadAngle=2.5, 7.5 | TimeScale=1 | LockedToPart=false | Attr.ParticleIgnore=true
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.GrenadePos | Position=1.062999963760376, 1.0859999656677246, -0.800000011920929 | Orientation=0, 0, 90 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.VelPos | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.JumpCharmPos | Position=0, -2.85186767578125, -0.04231739044189453 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.LeftFootPos | Position=-0.8999999761581421, -2.825000047683716, 0 | Orientation=90, -90, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.LookAt | Position=0, 0, 0 | Orientation=0, 90, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.SoundPos | Position=0, 0, -2 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.SlidePos | Position=0, -2.5, -1.7999839782714844 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.RightFootPos | Position=0.8999999761581421, -2.825000047683716, 0 | Orientation=90, -90, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.JumpPos | Position=0, -2.85186767578125, -0.04231739044189453 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=ParticleEmitter path=Workspace.DEN919191.HumanoidRootPart.JumpPos.Double | Enabled=false | Texture=rbxassetid://4770542473 | Rate=500 | Lifetime=0.1 0.3  | Speed=0 8  | Size=0 1 0.0617282 1 0.864198 0  | Transparency=0 1 0 0.19926 0.512346 0 1 1 0  | Color=0 1 1 1 0 1 1 1 1 0  | LightEmission=1 | LightInfluence=1 | EmissionDirection=Enum.NormalId.Bottom | Rotation=-180 180  | RotSpeed=0 0  | SpreadAngle=135, 135 | TimeScale=1 | LockedToPart=false | Attr.ParticleIgnore=true
+[0024.227][FX-INITIAL] class=Attachment path=Workspace.DEN919191.HumanoidRootPart.RootRigAttachment | Position=0, -0.3500000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.227][FX-INITIAL] class=Vector3Value path=Workspace.DEN919191.HumanoidRootPart.RootRigAttachment.OriginalPosition | Value=0, -0.3499999940395355, 0
+[0024.227][FX-INITIAL] class=NumberValue path=Workspace.DEN919191.Animate.ScaleDampeningPercent | Value=1
+[0024.227][FX-INITIAL] class=Part path=Workspace.DEN919191.Right Leg | Transparency=1 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0024.231][UI-REMOVING] class=Attachment path=HairAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=HatAttachment | Position=0, 0.6000000238418579, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=FaceFrontAttachment | Position=0, 0, -0.6000000238418579 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=FaceCenterAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=NeckAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=BodyFrontAttachment | Position=0, 0, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=BodyBackAttachment | Position=0, 0, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=LeftCollarAttachment | Position=-1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=RightCollarAttachment | Position=1, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=WaistFrontAttachment | Position=0, -1, -0.5 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=WaistCenterAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=WaistBackAttachment | Position=0, -1, 0.5 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Motor6D path=Right Shoulder
+[0024.231][UI-REMOVING] class=Motor6D path=Right Hip
+[0024.231][UI-REMOVING] class=Attachment path=LeftShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=LeftGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Part path=Right Arm | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0024.231][UI-REMOVING] class=Attachment path=RightShoulderAttachment | Position=0, 1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Attachment path=RightGripAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Weld path=Pirate arm
+[0024.231][UI-REMOVING] class=MeshPart path=Pirate arm | MeshId=rbxassetid://140583429479563 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.4266339540481567, 2.080504894256592, 1.4443000555038452 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0024.231][UI-REMOVING] class=SurfaceAppearance path=SurfaceAppearance
+[0024.231][UI-REMOVING] class=Attachment path=LeftFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Part path=Right Leg | Transparency=1 | LocalTransparencyModifier=0 | Color=0.498039, 0.498039, 0.498039 | Material=Enum.Material.Plastic | Size=1, 2, 1 | CastShadow=true
+[0024.231][UI-REMOVING] class=Attachment path=RightFootAttachment | Position=0, -1, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.231][UI-REMOVING] class=Weld path=Pirate leg
+[0024.231][UI-REMOVING] class=MeshPart path=Pirate leg | MeshId=rbxassetid://87809656067011 | TextureID= | Transparency=0 | LocalTransparencyModifier=0 | Color=0.639216, 0.635294, 0.647059 | Material=Enum.Material.Plastic | Size=1.1820870637893677, 2.1473770141601562, 1.3061680793762207 | CastShadow=true | Attr.EmitDelay=0 | Attr.Transparency=0 | Attr.Roation=0 | Attr.TimeBeforeReset=0 | Attr.CFrame=0 | Attr.Duration=0 | Attr.Size=0
+[0024.231][UI-REMOVING] class=SurfaceAppearance path=SurfaceAppearance
+[0024.231][UI-REMOVING] class=Attachment path=RootAttachment | Position=0, 0, 0 | Orientation=-0, 0, 0 | Visible=false
+[0024.417][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1
+[0024.417][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1
+[0024.417][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.TextLabel
+[0024.417][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.TextLabel
+[0024.417][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.TextLabel.UIStroke
+[0024.417][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.TextLabel.UIStroke
+[0024.417][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Number
+[0024.417][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Number
+[0024.417][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Number.UIStroke
+[0024.417][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Number.UIStroke
+[0024.417][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon
+[0024.417][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon
+[0024.417][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.Button
+[0024.417][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.Button
+[0024.417][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.Button.UICorner
+[0024.417][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.Button.UICorner
+[0024.417][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.TooMany
+[0024.417][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.TooMany
+[0024.417][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.TooMany.UIStroke
+[0024.417][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Icon.TooMany.UIStroke
+[0024.417][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Button
+[0024.418][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Button
+[0024.418][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Button.UICorner
+[0024.418][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item1.Button.UICorner
+[0024.418][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4
+[0024.418][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4
+[0024.418][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.TextLabel
+[0024.418][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.TextLabel
+[0024.418][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.TextLabel.UIStroke
+[0024.418][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.TextLabel.UIStroke
+[0024.418][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Number
+[0024.418][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Number
+[0024.418][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Number.UIStroke
+[0024.418][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Number.UIStroke
+[0024.418][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon
+[0024.418][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon
+[0024.418][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.Button
+[0024.418][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.Button
+[0024.418][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.Button.UICorner
+[0024.418][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.Button.UICorner
+[0024.418][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.TooMany
+[0024.418][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.TooMany
+[0024.418][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.TooMany.UIStroke
+[0024.419][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Icon.TooMany.UIStroke
+[0024.419][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Button
+[0024.419][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Button
+[0024.419][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Button.UICorner
+[0024.419][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item4.Button.UICorner
+[0024.419][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2
+[0024.419][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2
+[0024.419][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.TextLabel
+[0024.419][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.TextLabel
+[0024.419][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.TextLabel.UIStroke
+[0024.419][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.TextLabel.UIStroke
+[0024.419][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Number
+[0024.419][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Number
+[0024.419][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Number.UIStroke
+[0024.419][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Number.UIStroke
+[0024.419][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon
+[0024.419][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon
+[0024.419][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.Button
+[0024.419][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.Button
+[0024.419][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.Button.UICorner
+[0024.419][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.Button.UICorner
+[0024.420][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.TooMany
+[0024.420][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.TooMany
+[0024.420][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.TooMany.UIStroke
+[0024.420][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Icon.TooMany.UIStroke
+[0024.420][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Button
+[0024.420][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Button
+[0024.420][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Button.UICorner
+[0024.420][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item2.Button.UICorner
+[0024.420][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3
+[0024.420][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3
+[0024.420][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.TextLabel
+[0024.420][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.TextLabel
+[0024.420][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.TextLabel.UIStroke
+[0024.420][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.TextLabel.UIStroke
+[0024.420][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Number
+[0024.420][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Number
+[0024.420][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Number.UIStroke
+[0024.420][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Number.UIStroke
+[0024.420][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon
+[0024.420][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon
+[0024.420][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.Button
+[0024.421][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.Button
+[0024.421][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.Button.UICorner
+[0024.421][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.Button.UICorner
+[0024.421][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.TooMany
+[0024.421][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.TooMany
+[0024.421][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.TooMany.UIStroke
+[0024.421][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Icon.TooMany.UIStroke
+[0024.421][UI-FOUND] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Button
+[0024.421][UI-ADDED] class=TextButton path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Button
+[0024.421][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Button.UICorner
+[0024.421][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.Usables.Wheel.Item3.Button.UICorner
+[0024.428][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.MobileBackpack.Frame.TextLabel
+[0024.428][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Interactors.Popups.MobileBackpack.Frame.TextLabel
+[0024.442][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific
+[0024.442][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific
+[0024.442][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass
+[0024.442][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass
+[0024.442][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered
+[0024.442][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered
+[0024.442][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.UIAspectRatioConstraint
+[0024.442][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.UIAspectRatioConstraint
+[0024.443][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining
+[0024.443][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining
+[0024.443][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass
+[0024.443][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass
+[0024.443][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Type
+[0024.443][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Type
+[0024.443][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Type.UIStroke
+[0024.443][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Type.UIStroke
+[0024.443][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.ImageLabel
+[0024.443][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.ImageLabel
+[0024.443][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Locked
+[0024.443][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Locked
+[0024.443][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Locked.Type
+[0024.443][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Locked.Type
+[0024.443][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Locked.Type.UIStroke
+[0024.443][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Centered.Remaining.Compass.Locked.Type.UIStroke
+[0024.443][UI-FOUND] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Open
+[0024.443][UI-ADDED] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Open
+[0024.443][UI-FOUND] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Close
+[0024.443][UI-ADDED] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Compass.Close
+[0024.443][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar
+[0024.444][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar
+[0024.444][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered
+[0024.444][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered
+[0024.444][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.UIAspectRatioConstraint
+[0024.444][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.UIAspectRatioConstraint
+[0024.444][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining
+[0024.444][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining
+[0024.444][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass
+[0024.444][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass
+[0024.444][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.Type
+[0024.444][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.Type
+[0024.444][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.Type.UIStroke
+[0024.444][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.Type.UIStroke
+[0024.444][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.Ring
+[0024.444][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.Ring
+[0024.444][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel
+[0024.444][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel
+[0024.444][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame
+[0024.444][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame
+[0024.444][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UICorner
+[0024.444][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UICorner
+[0024.444][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UIStroke
+[0024.445][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UIStroke
+[0024.445][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame
+[0024.445][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame
+[0024.445][UI-FOUND] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UICorner
+[0024.445][UI-ADDED] class=UICorner path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UICorner
+[0024.445][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UIStroke
+[0024.445][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Centered.Remaining.Compass.ImageLabel.Frame.UIStroke
+[0024.445][UI-FOUND] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Open
+[0024.445][UI-ADDED] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Open
+[0024.445][UI-FOUND] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Close
+[0024.445][UI-ADDED] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Radar.Close
+[0024.445][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer
+[0024.445][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer
+[0024.445][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered
+[0024.445][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered
+[0024.445][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.UIAspectRatioConstraint
+[0024.446][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.UIAspectRatioConstraint
+[0024.446][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining
+[0024.446][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining
+[0024.446][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass
+[0024.446][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass
+[0024.446][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.Type
+[0024.446][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.Type
+[0024.446][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.Type.UIStroke
+[0024.446][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.Type.UIStroke
+[0024.446][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.ImageLabel
+[0024.446][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.ImageLabel
+[0024.446][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.ImageLabel.Type
+[0024.446][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Centered.Remaining.Compass.ImageLabel.Type
+[0024.446][UI-FOUND] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Open
+[0024.446][UI-ADDED] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Open
+[0024.446][UI-FOUND] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Close
+[0024.446][UI-ADDED] class=BindableEvent path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ItemSpecific.Timer.Close
+[0024.450][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.ItemRemoved
+[0024.450][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.ItemRemoved
+[0024.450][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.ItemRemoved.Frame
+[0024.450][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.ItemRemoved.Frame
+[0024.450][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.ItemRemoved.UISizeConstraint
+[0024.450][UI-ADDED] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.ItemRemoved.UISizeConstraint
+[0024.452][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.GlowImage
+[0024.452][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.GlowImage
+[0024.452][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.GlowImage.UIAspectRatioConstraint
+[0024.452][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.GlowImage.UIAspectRatioConstraint
+[0024.452][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.Glow
+[0024.452][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.Glow
+[0024.452][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.Glow.UIAspectRatioConstraint
+[0024.452][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll.Glow.UIAspectRatioConstraint
+[0024.453][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.GlowImage
+[0024.453][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.GlowImage
+[0024.453][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.GlowImage.UIAspectRatioConstraint
+[0024.453][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.GlowImage.UIAspectRatioConstraint
+[0024.453][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.Glow
+[0024.453][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.Glow
+[0024.453][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.Glow.UIAspectRatioConstraint
+[0024.453][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll1.Glow.UIAspectRatioConstraint
+[0024.454][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.GlowImage
+[0024.454][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.GlowImage
+[0024.454][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.GlowImage.UIAspectRatioConstraint
+[0024.454][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.GlowImage.UIAspectRatioConstraint
+[0024.454][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.Glow
+[0024.454][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.Glow
+[0024.454][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.Glow.UIAspectRatioConstraint
+[0024.454][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.RoundOverlay.MachineRoll2.Glow.UIAspectRatioConstraint
+[0024.455][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right
+[0024.455][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right
+[0024.455][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.UIAspectRatioConstraint
+[0024.455][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.UIAspectRatioConstraint
+[0024.455][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned
+[0024.455][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned
+[0024.455][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned.UISizeConstraint
+[0024.455][UI-ADDED] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned.UISizeConstraint
+[0024.455][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned.Small
+[0024.455][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned.Small
+[0024.455][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned.Small.UIListLayout
+[0024.455][UI-ADDED] class=UIListLayout path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ItemsOwned.Small.UIListLayout
+[0024.455][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items
+[0024.455][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items
+[0024.455][UI-FOUND] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.UISizeConstraint
+[0024.456][UI-ADDED] class=UISizeConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.UISizeConstraint
+[0024.456][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Small
+[0024.456][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Small
+[0024.456][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Small.UIListLayout
+[0024.456][UI-ADDED] class=UIListLayout path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Small.UIListLayout
+[0024.456][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Large
+[0024.456][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Large
+[0024.456][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Large.UIAspectRatioConstraint
+[0024.456][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.Items.Large.UIAspectRatioConstraint
+[0024.456][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ElementFrame
+[0024.456][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.ToolInfo.Right.ElementFrame
+[0024.459][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right
+[0024.459][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right
+[0024.459][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.UIAspectRatioConstraint
+[0024.459][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.UIAspectRatioConstraint
+[0024.459][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame
+[0024.459][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame
+[0024.459][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed
+[0024.459][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed
+[0024.459][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template
+[0024.459][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template
+[0024.459][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List
+[0024.459][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List
+[0024.459][UI-FOUND] class=UIListLayout path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.UIListLayout
+[0024.460][UI-ADDED] class=UIListLayout path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.UIListLayout
+[0024.460][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.D
+[0024.460][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.D
+[0024.460][UI-FOUND] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.D.ImageLabel
+[0024.460][UI-ADDED] class=ImageLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.D.ImageLabel
+[0024.460][UI-FOUND] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.D.ImageLabel.UIAspectRatioConstraint
+[0024.460][UI-ADDED] class=UIAspectRatioConstraint path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.D.ImageLabel.UIAspectRatioConstraint
+[0024.460][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.E
+[0024.460][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.E
+[0024.460][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.E.TextLabel
+[0024.460][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.E.TextLabel
+[0024.460][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.E.TextLabel.UIStroke
+[0024.460][UI-ADDED] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.E.TextLabel.UIStroke
+[0024.460][UI-FOUND] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.C
+[0024.460][UI-ADDED] class=Frame path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.C
+[0024.460][UI-FOUND] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.C.TextLabel
+[0024.460][UI-ADDED] class=TextLabel path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.C.TextLabel
+[0024.460][UI-FOUND] class=UIStroke path=Players.DEN919191.PlayerGui.Game.HUD.Overlay.DeathFeed.Right.Frame.Feed.Template.List.C.TextLabel.UIStroke
+[END] records=4790 dropped=12947 elapsed=45.11s
