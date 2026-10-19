@@ -5868,7 +5868,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Visibility.Types
 
 STATUS:
-ОБНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена актуальная декомпиляция; считать эту версию текущей для анализа.
+СТАРАЯ ВЕРСИЯ: 2026-10-17. 2026-10-19 пользователь прислал более свежую декомпиляцию; актуальная копия — SOURCE #82 ниже.
 
 PURPOSE:
 Набор имён частей персонажа, которые разрешено оставлять видимыми
@@ -9889,7 +9889,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character
 
 STATUS:
-ОБНОВЛЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-17: предоставлена актуальная декомпиляция; считать эту версию текущей для анализа.
+СТАРАЯ ВЕРСИЯ: 2026-10-17. 2026-10-19 пользователь прислал более свежую декомпиляцию; актуальная копия — SOURCE #83 ниже.
 
 PURPOSE:
 Создаётся CharacterService для модели из Workspace.Players. Инициализирует Rig, Joints, Animations и ActionVisuals; только для локального персонажа создаёт Camera, Visibility, Movement и Actions. GetLocalCharacter() возвращает этот объект из CharacterService; объект хранит Model, Local, Rig и другие компоненты.
@@ -13093,7 +13093,7 @@ PATH:
 ReplicatedStorage.Services.Client.EffectsService
 
 STATUS:
-ДОПОЛНЕНО 2026-10-19: отсутствовал в каталоге. Общая точка входа EffectsService.
+ПОВТОРНО ПОДТВЕРЖДЕНО ПОЛЬЗОВАТЕЛЕМ 2026-10-19: тело EffectsService совпадает с текущей декомпиляцией; актуально для этой проверки.
 
 PURPOSE:
 Тонкий dispatcher: GetMisc(name) загружает модуль из Misc, а PlayEffect(name, ...)
@@ -13977,4 +13977,302 @@ return table.freeze(t)
 
 ==================================================
 END JOINTS SOURCES
+==================================================
+
+
+==================================================
+CURRENT SOURCE REFRESH — COSMETIC / RIG PIPELINE
+Date: 2026-10-19
+==================================================
+
+The following are newer snapshots supplied directly by the user on 2026-10-19.
+They supersede older SOURCE #49 and SOURCE #64 respectively. SOURCE #74
+(EffectsService) was also re-confirmed by the user on this date and already
+matches their supplied code, so it is not duplicated here.
+
+==================================================
+SOURCE #82
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Visibility.Types
+
+STATUS:
+АКТУАЛЬНАЯ ДЕКОМПИЛЯЦИЯ ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19. Заменяет устаревший SOURCE #49.
+
+PURPOSE:
+Актуальные таблицы имён частей Classic/R15 для режимов Visibility.
+Этот модуль перечисляет видимые части; он сам не управляет временем жизни
+ParticleEmitter и не задаёт интервал эмиссии косметических эффектов.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local t = {}
+t.Classic = {
+	All = { "Left Arm", "Right Arm", "Left Leg", "Right Leg", "Head", "Torso", "Tool", "HumanoidRootPart" },
+	VR = { "Left Arm", "Right Arm", "Left Leg", "Right Leg", "Torso", "Tool" },
+	NoArms = { "Left Leg", "Right Leg", "Torso" },
+	LeftArm = { "Left Leg", "Right Leg", "Torso", "Left Arm" },
+	BothArms = { "Left Leg", "Right Leg", "Torso", "Left Arm", "Right Arm" },
+	None = {}
+}
+t.R15 = {
+	All = {
+		"LeftUpperArm", "LeftLowerArm", "LeftHand",
+		"RightUpperArm", "RightLowerArm", "RightHand",
+		"UpperTorso", "LowerTorso", "Head",
+		"LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+		"RightUpperLeg", "RightLowerLeg", "RightFoot",
+		"HumanoidRootPart", "Tool"
+	},
+	VR = {
+		"LeftUpperArm", "LeftLowerArm", "LeftHand",
+		"RightUpperArm", "RightLowerArm", "RightHand",
+		"UpperTorso", "LowerTorso",
+		"LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+		"RightUpperLeg", "RightLowerLeg", "RightFoot", "Tool"
+	},
+	NoArms = {
+		"LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+		"RightUpperLeg", "RightLowerLeg", "RightFoot",
+		"UpperTorso", "LowerTorso"
+	},
+	LeftArm = {
+		"LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+		"RightUpperLeg", "RightLowerLeg", "RightFoot",
+		"UpperTorso", "LowerTorso", "LeftUpperArm", "LeftLowerArm", "LeftHand"
+	},
+	BothArms = {
+		"LeftUpperLeg", "LeftLowerLeg", "LeftFoot",
+		"RightUpperLeg", "RightLowerLeg", "RightFoot",
+		"UpperTorso", "LowerTorso",
+		"LeftUpperArm", "LeftLowerArm", "LeftHand",
+		"RightUpperArm", "RightLowerArm", "RightHand"
+	},
+	None = {}
+}
+function t.GetType(_, p1, p2)
+	--[[ line: 126 | upvalues: (copy) t]]
+	for v3, v4 in pairs(t[p2 or "Classic"]) do
+		if v3 == p1 then
+			return v4
+		end
+	end
+end
+return t
+
+==================================================
+SOURCE #83
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character
+
+STATUS:
+АКТУАЛЬНАЯ ДЕКОМПИЛЯЦИЯ ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19. Заменяет устаревший SOURCE #64.
+
+PURPOSE:
+Основной Character-класс. Создаёт Rig, Joints, Animations и ActionVisuals;
+для локального персонажа инициализирует Visibility, Movement, Camera и Actions.
+Обновление выполняет Visibility и Rig в общем цикле Character:Update().
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local NPCs = ReplicatedStorage:WaitForChild("NPCs")
+local Services = ReplicatedStorage:WaitForChild("Services")
+local v_u_1 = require((Services:WaitForChild("Asset"):WaitForChild("ToolService")))
+local v_u_2 = require((Services:WaitForChild("Client"):WaitForChild("CameraService")))
+local v_u_3 = require((Services:WaitForChild("UI"):WaitForChild("GameUIService")))
+local v_u_4 = require((Services:WaitForChild("Other"):WaitForChild("DebugService")))
+local GetInteractType = Services.Client:WaitForChild("InputService"):WaitForChild("GetInteractType")
+local Client = script:WaitForChild("Client")
+local Actions = script.Parent:WaitForChild("Actions")
+local t = { "Emote" }
+local t2 = {}
+t2.__index = t2
+
+function t2.new(p5: userdata, p6: boolean, p7: boolean)
+	local t3 = { Model = p5, Local = p6 or false }
+	local v8
+	if p7 then v8 = nil else v8 = game.Players:FindFirstChild(p5.Name) end
+	t3.PlayerReference = v8
+	t3.AI = p7
+	t3.Name = p5.Name
+	local v10 = setmetatable(t3, t2)
+	return setmetatable(v10, t2)
+end
+
+function t2.Init(p_u_12, p13)
+	if RunService:IsClient() then v_u_4.RecordStart(p_u_12.Name .. " Build Time") end
+	if not p_u_12.PlayerReference then
+		p_u_12.Module = NPCs:FindFirstChild(p_u_12.Model.Name)
+		if p_u_12.Module then p_u_12.ModuleInfo = require(p_u_12.Module) end
+	end
+	p_u_12.DataRegistry = require((script:WaitForChild("DataRegistry"))).new(p_u_12)
+	p_u_12.DataRegistry:Init()
+	p_u_12.State = require((script:WaitForChild("State"))).new(p_u_12)
+	p_u_12.State:Init()
+	p_u_12.ToolProfile = v_u_1:CreateProfile(p_u_12.PlayerReference)
+	p_u_12.ToolProfile:Init(p_u_12)
+	p_u_12.Tasks = require((ReplicatedStorage.Objects.Game:WaitForChild("Tasks"))).new(p_u_12.Model)
+	p_u_12.Tasks:Init(p_u_12)
+	p_u_12.Rig = require((script:WaitForChild("Rig"))).new(p_u_12)
+	p_u_12.Rig:Init()
+	p_u_12.Joints = require((script:WaitForChild("Joints"))).new(p_u_12)
+	p_u_12.Joints:Init()
+	p_u_12.Animations = require((script:WaitForChild("Animations"))).new(p_u_12)
+	p_u_12.Animations:Init()
+	p_u_12.ActionVisuals = require((script:WaitForChild("ActionVisuals"))).new(p_u_12)
+	p_u_12.ActionVisuals:Init()
+	if p_u_12.Local then
+		v_u_3:Insert(true)
+		p_u_12.Camera = require((Client:WaitForChild("Camera"))).new(p_u_12)
+		p_u_12.DataRegistry:Set("InteractType", (GetInteractType:Invoke()))
+		p_u_12.Camera:Init()
+		p_u_12.Visibility = require((Client:WaitForChild("Visibility"))).new(p_u_12)
+		p_u_12.Visibility:Init()
+		p_u_12.Movement = require((Client:WaitForChild("Movement"))).new(p_u_12)
+		p_u_12.Movement:Init()
+		p_u_12.Generics = require((Client:WaitForChild("Generics"))).new(p_u_12)
+		p_u_12.Generics:Init()
+		p_u_12.Actions = require(Actions).new()
+		p_u_12.Actions:Init(p_u_12)
+		p_u_12.ToolProfile:Finish()
+	end
+	p_u_12.Tag = p_u_12.Model:GetAttribute("Tag")
+	p_u_12.AI = p_u_12.Model:GetAttribute("AI")
+	p_u_12.DataRegistry:ServerToClient(p13)
+	p_u_12.Humanoid = p_u_12.Model:FindFirstChildOfClass("Humanoid")
+	if p_u_12.Humanoid then
+		p_u_12.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+		p_u_12.PrimaryPart = p_u_12.Model.PrimaryPart
+		p_u_12.Done = true
+		for _, v14 in p_u_12.Offloaded or {} do p_u_12:RegistryTermUpdated(v14) end
+		if RunService:IsClient() then v_u_4.RecordEnd(p_u_12.Name .. " Build Time") end
+		p_u_12.Model.ChildAdded:Connect(function(p15)
+			if p15.Name == "CarryWeld" then p15.Enabled = false end
+		end)
+		task.spawn(function()
+			task.wait(0.1)
+			if p_u_12.Model and p_u_12.Model.Parent then
+				for _, v16 in t do
+					if (p_u_12.DataRegistry:Get(v16) or 0) ~= 0 then p_u_12:RegistryTermUpdated(v16) end
+				end
+			end
+		end)
+	else
+		p_u_12.Model = nil
+	end
+end
+
+function t2.Destroy(p17)
+	p17.Rig:Destroy()
+	p17.Animations:Destroy()
+	if p17.Visibility then p17.Visibility:Destroy() end
+	if p17.Actions then p17.Actions:Destroy() end
+	v_u_1:DestroyProfile(p17.ToolProfile)
+end
+
+function t2.RegistryTermUpdated(p18: {[any]: any}, p19: string)
+	if p18.Done then
+		p18.Rig:RegistryTermUpdated(p19)
+		p18.ToolProfile:RegistryTermUpdated(p19)
+		p18.Animations:RegistryTermUpdated(p19)
+		p18.State:RegistryTermUpdated(p19)
+		p18.Joints:RegistryTermUpdated(p19)
+		if p18.Movement then p18.Movement:RegistryTermUpdated(p19) end
+		if p18.Actions then p18.Actions:RegistryTermUpdated(p19) end
+		if p18.Generics then p18.Generics:RegistryTermUpdated(p19) end
+		if p18.Camera then p18.Camera:RegistryTermUpdated(p19) end
+	else
+		if not p18.Offloaded then p18.Offloaded = {} end
+		if not table.find(p18.Offloaded, p19) then table.insert(p18.Offloaded, p19) end
+	end
+end
+
+function t2.KeyUsed(p20, p21)
+	if p20.Local then
+		p20.ToolProfile:KeyPhraseUsed(p21)
+		p20.Camera:KeyUsed(p21)
+		p20.Movement:KeyUsed(p21)
+		p20.Actions:KeyUsed(p21)
+		p20.Animations:KeyUsed(p21)
+	end
+end
+
+function t2.Update(p22, p23)
+	if p22.Model and (p22.Model.Parent and not p22.Dead) then
+		p22:UpdateDistance()
+		p22.DataRegistry:Set("Health", p22.Humanoid.Health)
+		if p22.Local then
+			p22.DataRegistry:Set("LookCFrame", (v_u_2:GetLookCFrame()))
+			if p22.Model and p22.Model.PrimaryPart then
+				local AssemblyLinearVelocity = p22.Model.PrimaryPart.AssemblyLinearVelocity
+				p22.DataRegistry:Set("ActualVelocity", AssemblyLinearVelocity)
+				p22.DataRegistry:Set("ActualVelocityMagnitude", AssemblyLinearVelocity.magnitude)
+			end
+			v_u_3:SetType("Speedlines", (p22.DataRegistry:Get("Speed")))
+		end
+		if p22.Movement then p22.Movement:UpdateTerms(p23) end
+		p22.State:Update(p23)
+		p22.Tasks:Update(p23)
+		if p22.Movement then p22.Movement:Update(p23) end
+		if p22.Local then
+			p22.Camera:Update(p23)
+			p22.Visibility:Update(p23)
+		end
+		if p22.Actions then p22.Actions:Update(p23) end
+		if p22.Generics then p22.Generics:Update(p23) end
+		p22.Joints:Update(p23)
+		p22.Animations:Update(p23)
+		p22.Rig:Update(p23)
+		p22.DataRegistry:UpdateCycle(p23)
+		p22.ToolProfile:Update(p23)
+	end
+end
+
+function t2.UpdateDistance(p24)
+	if tick() - (p24.LastUpdatedDistance or 0) >= 0.2 then
+		p24.LastUpdatedDistance = tick()
+		if p24.PrimaryPart then
+			local CFrame = p24.PrimaryPart.CFrame
+			local Position = CFrame.Position
+			local Size = p24.PrimaryPart.Size
+			p24.DataRegistry:Set("DistanceFromLocalCamera", (v_u_2:GetCFrame().Position - Position).magnitude)
+			local DataRegistry = p24.DataRegistry
+			local v25 = "Visible"
+			local v26 = Position + CFrame.rightVector * Size.X * 0.6
+			local _, v27 = workspace.CurrentCamera:WorldToScreenPoint(v26)
+			if not v27 then
+				local v28 = Position - CFrame.rightVector * Size.X * 0.6
+				local _, v27 = workspace.CurrentCamera:WorldToScreenPoint(v28)
+			end
+			DataRegistry:Set(v25, v27)
+		end
+	end
+end
+
+function t2.Kill(p29, p30)
+	if p30.Instakill then
+		p29.Dead = true
+		p29.ToolProfile:Destroy()
+		if p29.Camera then p29.Camera:Change("Dead") end
+		if p29.Humanoid then p29.Humanoid.PlatformStand = true end
+		if p29.PrimaryPart then
+			p29.PrimaryPart.Anchored = true
+			p29.PrimaryPart.CanCollide = false
+			p29.PrimaryPart.CanTouch = false
+			p29.PrimaryPart.Size = Vector3.new(0.009999999776482582, 0.009999999776482582, 0.009999999776482582)
+		end
+	end
+	p29.Rig:Kill(p30)
+end
+return t2
+
+==================================================
+END CURRENT SOURCE REFRESH
 ==================================================
