@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.274
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.275
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.274"
+local SCRIPT_VERSION = "1.275"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -7653,7 +7653,9 @@ function UnusualFns.removeOurUnusualFX()
         end
     end
     if removed > 0 then
-            end
+        warn("[DeadEye Unusual] Removed stale DeadEye-owned FX=" .. tostring(removed))
+    end
+    return removed
 end
 --// =========================================================
 --// CHECK OUR INSTALLED FX
@@ -9444,7 +9446,7 @@ end
 local function removeTrackedUnusualRootAdditions(state)
     local primaryPart = state.primaryPart
     if not primaryPart or not primaryPart.Parent then
-        return
+        return 0
     end
 
     local tracked = {}
@@ -9471,13 +9473,18 @@ local function removeTrackedUnusualRootAdditions(state)
         end
     end
 
+    local removed = 0
     for _, object in ipairs(cleanupRoots) do
         if isUnderUnusualRoot(object, primaryPart) then
-            pcall(function()
+            local ok = pcall(function()
                 object:Destroy()
             end)
+            if ok then
+                removed += 1
+            end
         end
     end
+    return removed
 end
 
 function UnusualFns.restoreUnusual()
@@ -9495,9 +9502,14 @@ function UnusualFns.restoreUnusual()
     local primaryPart = model and model.PrimaryPart
     local component = state.component
 
-    -- CharacterService may briefly return nil in the menu. Restore through the
-    -- saved component whenever its exact model/root still exists.
-    if not model or not model.Parent or primaryPart ~= state.primaryPart or not component then
+    -- If the old character has disappeared, clean tracked additions from its
+    -- saved root before discarding state. A changed PrimaryPart alone is not fatal.
+    if not model or not model.Parent or not component then
+        local removed = removeTrackedUnusualRootAdditions(state)
+        if removed > 0 then
+            warn("[DeadEye Unusual] RESTORE stale root additions removed=" .. tostring(removed))
+        end
+        pcall(UnusualFns.removeOurUnusualFX)
         state.active = false
         unusualRuntime.rigSwap = nil
         if genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY == state then
@@ -9511,6 +9523,12 @@ function UnusualFns.restoreUnusual()
         unusualRuntime.appliedCharacter = nil
         unusualRuntime.appliedTargets = nil
         return true
+    end
+    if not primaryPart then
+        state.restoreRetryRequired = true
+        genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
+        warn("[DeadEye Unusual] RESTORE pending: Character PrimaryPart is not ready.")
+        return false
     end
 
     local restoreCosmetics = cloneUnusualCosmetics(state.originalCosmetics)
@@ -9544,8 +9562,15 @@ function UnusualFns.restoreUnusual()
         end
     end
 
+    local removedRootAdditions = removeTrackedUnusualRootAdditions(state)
+    warn("[DeadEye Unusual] RESTORE removed tracked root additions="
+        .. tostring(removedRootAdditions))
+
     local ok, err = pcall(function()
         setUnusualCosmeticsThroughRegistry(characterObject, restoreCosmetics)
+        local removedLegacy = UnusualFns.removeOurUnusualFX()
+        warn("[DeadEye Unusual] RESTORE removed legacy owned FX="
+            .. tostring(removedLegacy))
     end)
 
     if not ok then
@@ -9628,6 +9653,7 @@ function UnusualFns.activateUnusual()
         warn("[DeadEye Unusual] Character Model.PrimaryPart is missing.")
         return false
     end
+    pcall(UnusualFns.removeOurUnusualFX)
     if type(component.Cosmetics) ~= "table" then
         warn("[DeadEye Unusual] Rig.Cosmetics is not a table.")
         return false
@@ -9698,6 +9724,10 @@ function UnusualFns.activateUnusual()
         assert(builtRig and builtRig:IsA("Model") and builtRig.Parent,
             "DataRegistry update completed without a live visual rig")
 
+        -- RigService moves HRPAssetsFolder children onto the real character's
+        -- HumanoidRootPart. Track the difference so toggle-off removes target FX.
+        state.targetRootAdditions = getNewUnusualRootObjects(primaryPart, state.baselineRoot)
+
         unusualRuntime.appliedRig = builtRig
         unusualRuntime.appliedCharacter = characterObject.Model
         unusualRuntime.originalId = equippedId
@@ -9711,7 +9741,8 @@ function UnusualFns.activateUnusual()
             .. "|rig=" .. tostring(builtRig:GetFullName())
             .. "|primaryPart=" .. tostring(primaryPart:GetFullName())
             .. "|registryCosmetics=" .. tostring(#(dataRegistry:Get("Cosmetics") or {}))
-            .. "|componentBuilt=" .. tostring(component.Built))
+            .. "|componentBuilt=" .. tostring(component.Built)
+            .. "|trackedRootAdditions=" .. tostring(#state.targetRootAdditions))
         if state.previousVisualRig == builtRig then
             warn("[DeadEye Unusual] RigService returned the same visual model instance.")
         end
