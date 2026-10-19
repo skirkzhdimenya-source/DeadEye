@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.273
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.275
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
