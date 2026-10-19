@@ -665,6 +665,52 @@ function getBoundVisualRigModel()
         return nil
     end
 
+    local characterModel = characterObject.Model
+    if not characterModel
+        or not characterModel:IsA("Model")
+        or not characterModel.Parent
+    then
+        return nil
+    end
+
+    local rigService
+    local serviceLoaded = pcall(function()
+        rigService = require(
+            ReplicatedStorage.Services.Asset.RigService
+        )
+    end)
+
+    -- GetRigFromCharacter is authoritative. Workspace.Rigs can contain
+    -- detached cached models with the same player-name path.
+    if serviceLoaded
+        and rigService
+        and type(rigService.GetRigFromCharacter) == "function"
+        and type(rigService.GetCharacterFromRig) == "function"
+    then
+        local lookupOK, boundModel = pcall(function()
+            return rigService:GetRigFromCharacter(characterModel)
+        end)
+
+        if lookupOK
+            and boundModel
+            and boundModel:IsA("Model")
+            and boundModel.Parent
+        then
+            local reverseOK, boundCharacter = pcall(function()
+                return rigService:GetCharacterFromRig(boundModel)
+            end)
+
+            if reverseOK and boundCharacter == characterModel then
+                return boundModel
+            end
+        end
+
+        -- Don't trust a possibly stale component.Rig.Model when RigService
+        -- cannot confirm which cached model is bound to this character.
+        return nil
+    end
+
+    -- Compatibility fallback only when RigService cannot be queried.
     local rigComponent = characterObject.Rig
     local nativeRig = rigComponent and rigComponent.Rig
     local model = nativeRig and nativeRig.Model
@@ -673,29 +719,6 @@ function getBoundVisualRigModel()
         and model.Parent
     then
         return model
-    end
-
-    local rigService
-    pcall(function()
-        rigService = require(
-            ReplicatedStorage.Services.Asset.RigService
-        )
-    end)
-
-    if rigService
-        and type(rigService.GetRigFromCharacter) == "function"
-    then
-        local ok, boundModel = pcall(function()
-            return rigService:GetRigFromCharacter(characterObject.Model)
-        end)
-
-        if ok
-            and boundModel
-            and boundModel:IsA("Model")
-            and boundModel.Parent
-        then
-            return boundModel
-        end
     end
 
     return nil
@@ -726,9 +749,12 @@ __UI.__L.refreshNativeVisibilityAfterUnusualRestore = function()
         return false
     end
 
-    local rigModel = nativeRig.Model
+    local rigModel = getBoundVisualRigModel()
 
-    if not rigModel or not rigModel.Parent then
+    if not rigModel
+        or not rigModel.Parent
+        or nativeRig.Model ~= rigModel
+    then
         return false
     end
 
@@ -4775,7 +4801,8 @@ end
 --// GET VISUAL RIG
 --// =========================================================
 function UnusualFns.getUnusualVisualRig()
-    -- In a live round, use CharacterService's actual character-bound rig.
+    -- In a live round, RigService decides which cached model is actually
+    -- bound to CharacterService's current local character.
     local boundRig = getBoundVisualRigModel()
     if boundRig
         and boundRig:IsA("Model")
@@ -4785,14 +4812,20 @@ function UnusualFns.getUnusualVisualRig()
     end
 
     -- In the menu, resolve the rig bound to the exact current VisualModel.
-    -- The visible preview may be destroyed/rebuilt during menu refreshes.
     local preview = UnusualFns.getUnusualMenuPreviewCharacter()
     if preview then
-        return getVisualRigBoundToCharacter(preview)
+        local previewRig = getVisualRigBoundToCharacter(preview)
+        if previewRig
+            and previewRig:IsA("Model")
+            and previewRig.Parent
+        then
+            return previewRig
+        end
     end
 
-    -- If there is no preview, only fall back to an actual spawned gameplay
-    -- character. Do not select an arbitrary cached model from Workspace.Rigs.
+    -- A body under Workspace.Players is not itself the visual rig.
+    -- Resolve its explicit binding; never substitute an arbitrary same-name
+    -- cached rig or the small/placeholder LocalPlayer.Character model.
     local playersFolder = workspace:FindFirstChild("Players")
     local character = playersFolder
         and playersFolder:FindFirstChild(LocalPlayer.Name)
@@ -4802,16 +4835,13 @@ function UnusualFns.getUnusualVisualRig()
         and character.Parent
         and character:GetAttribute("PreviewRig") ~= true
     then
-        return character
-    end
-
-    local localCharacter = LocalPlayer.Character
-    if localCharacter
-        and localCharacter:IsA("Model")
-        and localCharacter.Parent
-        and localCharacter:GetAttribute("PreviewRig") ~= true
-    then
-        return localCharacter
+        local characterBoundRig = getVisualRigBoundToCharacter(character)
+        if characterBoundRig
+            and characterBoundRig:IsA("Model")
+            and characterBoundRig.Parent
+        then
+            return characterBoundRig
+        end
     end
 
     return nil
@@ -9351,13 +9381,28 @@ end
 -- Use the game's own DataRegistry -> Character.RegistryTermUpdated ->
 -- Rig.RegistryTermUpdated -> BuildRig path. SetTerm is local-only here;
 -- unlike Set(), it does not enqueue the term for server transmission.
-local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics)
+local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics, animationModule)
     local component = characterObject and characterObject.Rig
     local registry = characterObject and characterObject.DataRegistry
+    local characterModel = characterObject and characterObject.Model
+    local controller = characterObject and characterObject.Animations
+
     assert(component, "Character Rig component missing")
+    assert(characterModel and characterModel:IsA("Model") and characterModel.Parent,
+        "Character model is not live")
     assert(registry and type(registry.Get) == "function"
         and type(registry.SetTerm) == "function",
         "Character DataRegistry:Get/SetTerm unavailable")
+    assert(controller, "Character animation controller missing")
+
+    animationModule = animationModule or controller.AnimationModule
+    assert(animationModule, "Character AnimationModule unavailable")
+
+    local previousBoundModel = getVisualRigBoundToCharacter(characterModel)
+    assert(previousBoundModel,
+        "RigService has no confirmed visual rig bound to this character")
+    assert(component.Rig and component.Rig.Model == previousBoundModel,
+        "Character.Rig component does not match RigService's bound model before Cosmetics update")
 
     local previousSuppression = cosmetic.suppressHookRefresh
     cosmetic.suppressHookRefresh = true
@@ -9372,10 +9417,29 @@ local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics)
 
     assert(type(component.Cosmetics) == "table",
         "Rig.Cosmetics missing after DataRegistry update")
-    local builtRig = component.Rig
-    assert(builtRig and builtRig.Model and builtRig.Model.Parent,
-        "Native DataRegistry update did not produce a live visual rig")
-    return builtRig.Model
+    assert(component.Built == true,
+        "Native BuildRig did not mark the Cosmetics rig as built")
+
+    -- Resolve the new cache entry through its explicit BoundCharacter
+    -- relationship, then verify the wrapper and RigService agree on identity.
+    local boundModel = getVisualRigBoundToCharacter(characterModel)
+    assert(boundModel and boundModel:IsA("Model") and boundModel.Parent,
+        "RigService has no live visual rig bound after Cosmetics update")
+
+    local rebuiltRig = component.Rig
+    assert(rebuiltRig and rebuiltRig.Model == boundModel,
+        "Character.Rig component and RigService binding disagree after Cosmetics update")
+
+    -- Native BuildRig only calls Animations:SetRig(), which switches the
+    -- Humanoid reference. Rebuild the controller's AnimationTracks as well
+    -- so they are loaded by the new Humanoid/Animator, then restore its state.
+    refreshUnusualAnimations(characterObject, animationModule)
+
+    local boundHumanoid = boundModel:FindFirstChildOfClass("Humanoid")
+    assert(boundHumanoid and controller.Humanoid == boundHumanoid,
+        "Animation controller did not rebind to the RigService-bound Humanoid")
+
+    return boundModel
 end
 
 local function snapshotUnusualRoot(root)
@@ -9567,7 +9631,7 @@ function UnusualFns.restoreUnusual()
         .. tostring(removedRootAdditions))
 
     local ok, err = pcall(function()
-        setUnusualCosmeticsThroughRegistry(characterObject, restoreCosmetics)
+        setUnusualCosmeticsThroughRegistry(characterObject, restoreCosmetics, state.animationModule)
         local removedLegacy = UnusualFns.removeOurUnusualFX()
         warn("[DeadEye Unusual] RESTORE removed legacy owned FX="
             .. tostring(removedLegacy))
@@ -9653,6 +9717,16 @@ function UnusualFns.activateUnusual()
         warn("[DeadEye Unusual] Character Model.PrimaryPart is missing.")
         return false
     end
+
+    local previousVisualRig = getVisualRigBoundToCharacter(characterObject.Model)
+    if not previousVisualRig
+        or not component.Rig
+        or component.Rig.Model ~= previousVisualRig
+    then
+        warn("[DeadEye Unusual] RigService binding is not ready or stale; no changes made.")
+        return false
+    end
+
     pcall(UnusualFns.removeOurUnusualFX)
     if type(component.Cosmetics) ~= "table" then
         warn("[DeadEye Unusual] Rig.Cosmetics is not a table.")
@@ -9693,7 +9767,6 @@ function UnusualFns.activateUnusual()
         return false
     end
 
-    local previousVisualRig = component.Rig and component.Rig.Model
     local state = {
         active = true,
         characterObject = characterObject,
@@ -9720,7 +9793,7 @@ function UnusualFns.activateUnusual()
     genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
 
     local ok, err = pcall(function()
-        local builtRig = setUnusualCosmeticsThroughRegistry(characterObject, replacementCosmetics)
+        local builtRig = setUnusualCosmeticsThroughRegistry(characterObject, replacementCosmetics, controller.AnimationModule)
         assert(builtRig and builtRig:IsA("Model") and builtRig.Parent,
             "DataRegistry update completed without a live visual rig")
 
@@ -20741,64 +20814,68 @@ function otherFeatures.getVisualRig(player)
         return nil
     end
 
-    -- Primary path used by DeadEye for this game's separate visual character.
     local ok, characterObject = pcall(function()
         return __UI.CharacterService:GetCharacterFromPlayer(player)
     end)
 
     if ok and characterObject then
-        local rigComponent
-        local nativeRig
-        local visualModel
+        local characterModel = characterObject.Model
+        local rigComponent = characterObject.Rig
+        local componentRig = rigComponent and rigComponent.Rig
+        local componentModel = componentRig and componentRig.Model
 
+        local rigService
         pcall(function()
-            rigComponent = characterObject.Rig
-            nativeRig = rigComponent and rigComponent.Rig
-            visualModel = nativeRig and nativeRig.Model
+            rigService = require(ReplicatedStorage.Services.Asset.RigService)
         end)
 
-        if typeof(visualModel) == "Instance"
-            and visualModel:IsA("Model")
-            and visualModel.Parent
+        if rigService
+            and characterModel
+            and characterModel:IsA("Model")
+            and characterModel.Parent
+            and type(rigService.GetRigFromCharacter) == "function"
+            and type(rigService.GetCharacterFromRig) == "function"
         then
-            return visualModel
-        end
-
-        -- Match the standalone test's fallback before looking in Workspace.Rigs.
-        if rigComponent then
-            local fallbackOK, fallbackModel = pcall(function()
-                return rigComponent:GetRigModel()
+            local lookupOK, boundModel = pcall(function()
+                return rigService:GetRigFromCharacter(characterModel)
             end)
 
-            if fallbackOK
-                and typeof(fallbackModel) == "Instance"
-                and fallbackModel:IsA("Model")
-                and fallbackModel.Parent
+            if lookupOK
+                and boundModel
+                and boundModel:IsA("Model")
+                and boundModel.Parent
             then
-                return fallbackModel
+                local reverseOK, boundCharacter = pcall(function()
+                    return rigService:GetCharacterFromRig(boundModel)
+                end)
+
+                if reverseOK and boundCharacter == characterModel then
+                    return boundModel
+                end
+            end
+
+            -- A failed binding lookup is not permission to pick the first
+            -- same-name model from Workspace.Rigs.
+            return nil
+        end
+
+        -- Compatibility fallback only while RigService's lookup API is absent.
+        if componentModel and componentModel:IsA("Model") and componentModel.Parent then
+            if rigService and type(rigService.GetCharacterFromRig) == "function" then
+                local reverseOK, boundCharacter = pcall(function()
+                    return rigService:GetCharacterFromRig(componentModel)
+                end)
+                if reverseOK and boundCharacter == characterModel then
+                    return componentModel
+                end
+            elseif not rigService then
+                return componentModel
             end
         end
     end
 
-    -- Explicit fallback to the game's visual rig container.
-    local rigsFolder = Workspace:FindFirstChild("Rigs")
-    if rigsFolder then
-        local rigModel = rigsFolder:FindFirstChild(player.Name)
-        if rigModel and rigModel:IsA("Model") and rigModel.Parent then
-            return rigModel
-        end
-
-        for _, candidate in ipairs(rigsFolder:GetChildren()) do
-            if candidate:IsA("Model")
-                and string.lower(candidate.Name) == string.lower(player.Name)
-                and candidate.Parent
-            then
-                return candidate
-            end
-        end
-    end
-
-    -- Final fallback only; custom game rig above is preferred.
+    -- Last fallback is this Player's own Character, never a cached rig found
+    -- only by matching a name under Workspace.Rigs.
     local character = player.Character
     if character and character:IsA("Model") and character.Parent then
         return character
