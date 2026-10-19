@@ -9381,11 +9381,10 @@ end
 -- Use the game's own DataRegistry -> Character.RegistryTermUpdated ->
 -- Rig.RegistryTermUpdated -> BuildRig path. SetTerm is local-only here;
 -- unlike Set(), it does not enqueue the term for server transmission.
-local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics, animationModule)
+local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics)
     local component = characterObject and characterObject.Rig
     local registry = characterObject and characterObject.DataRegistry
     local characterModel = characterObject and characterObject.Model
-    local controller = characterObject and characterObject.Animations
 
     assert(component, "Character Rig component missing")
     assert(characterModel and characterModel:IsA("Model") and characterModel.Parent,
@@ -9393,10 +9392,6 @@ local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics, an
     assert(registry and type(registry.Get) == "function"
         and type(registry.SetTerm) == "function",
         "Character DataRegistry:Get/SetTerm unavailable")
-    assert(controller, "Character animation controller missing")
-
-    animationModule = animationModule or controller.AnimationModule
-    assert(animationModule, "Character AnimationModule unavailable")
 
     local previousBoundModel = getVisualRigBoundToCharacter(characterModel)
     assert(previousBoundModel,
@@ -9429,15 +9424,6 @@ local function setUnusualCosmeticsThroughRegistry(characterObject, cosmetics, an
     local rebuiltRig = component.Rig
     assert(rebuiltRig and rebuiltRig.Model == boundModel,
         "Character.Rig component and RigService binding disagree after Cosmetics update")
-
-    -- Native BuildRig only calls Animations:SetRig(), which switches the
-    -- Humanoid reference. Rebuild the controller's AnimationTracks as well
-    -- so they are loaded by the new Humanoid/Animator, then restore its state.
-    refreshUnusualAnimations(characterObject, animationModule)
-
-    local boundHumanoid = boundModel:FindFirstChildOfClass("Humanoid")
-    assert(boundHumanoid and controller.Humanoid == boundHumanoid,
-        "Animation controller did not rebind to the RigService-bound Humanoid")
 
     return boundModel
 end
@@ -9631,7 +9617,8 @@ function UnusualFns.restoreUnusual()
         .. tostring(removedRootAdditions))
 
     local ok, err = pcall(function()
-        setUnusualCosmeticsThroughRegistry(characterObject, restoreCosmetics, state.animationModule)
+        setUnusualCosmeticsThroughRegistry(characterObject, restoreCosmetics)
+        refreshUnusualAnimations(characterObject, state.animationModule)
         local removedLegacy = UnusualFns.removeOurUnusualFX()
         warn("[DeadEye Unusual] RESTORE removed legacy owned FX="
             .. tostring(removedLegacy))
@@ -9793,7 +9780,8 @@ function UnusualFns.activateUnusual()
     genv.DEADEYE_UNUSUAL_RIG_SWAP_RECOVERY = state
 
     local ok, err = pcall(function()
-        local builtRig = setUnusualCosmeticsThroughRegistry(characterObject, replacementCosmetics, controller.AnimationModule)
+        local builtRig = setUnusualCosmeticsThroughRegistry(characterObject, replacementCosmetics)
+        refreshUnusualAnimations(characterObject, controller.AnimationModule)
         assert(builtRig and builtRig:IsA("Model") and builtRig.Parent,
             "DataRegistry update completed without a live visual rig")
 
