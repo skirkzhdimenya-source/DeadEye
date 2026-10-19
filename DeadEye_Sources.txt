@@ -6021,48 +6021,42 @@ PATH:
 ReplicatedStorage.Objects.Game.Character.Rig
 
 STATUS:
-УСТАРЕЛ: заменён актуальной декомпиляцией от пользователя 2026-10-19.
-Текущая версия сохранена отдельным файлом:
-CurrentSources/Character_Rig_2026-10-19.lua
-https://github.com/skirkzhdimenya-source/DeadEye/blob/main/CurrentSources/Character_Rig_2026-10-19.lua
+АКТУАЛЬНАЯ ДЕКОМПИЛЯЦИЯ ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19. Заменяет прежнюю версию.
 
 PURPOSE:
-Класс рига персонажа.
-Особенно важен для анализа Visibility, потому что здесь находятся:
-    - GetLimbs()
-    - GetRigModel()
-    - GetRig()
-    - BuildRig()
-    - Clear()
-    - CachedData
-    - RigService:SetRig()
-    
-Visibility.GetLimbs() напрямую получает p.Parent.Rig.Rig.Limbs
-через Character.Rig:GetLimbs(), а Visibility.SetVisibility()
-использует p.Parent.Rig.CachedData.
+Класс рига персонажа. BuildRig() ожидает Cosmetics, Rig, Actions, ToolSkins
+и Boombox, затем вызывает RigService:SetRig() и настраивает joints, camera
+и animations. BuildRig() имеет защиту p28.Built, поэтому повторные вызовы
+после успешной сборки завершаются сразу. RegistryTermUpdated() обновляет
+параметры и вызывает BuildRig(), но сам по себе не пересобирает уже созданный
+риг. Destroy() вызывает RigService:UnsetRig() для не-AI персонажа. Clear()
+удаляет дочерние объекты Character, кроме Humanoid и PrimaryPart, и сбрасывает
+Joints, Parts, Limbs и CachedData.
 
 SOURCE CONTENT:
 
+-- decompiled with Opiumware
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local LocalPlayer = game:GetService("Players").LocalPlayer
-local Setup = require(ReplicatedStorage.Info.Setup)
+local v1 = require("../../../Config/Game/Rig")
 ReplicatedStorage:WaitForChild("NPCs")
 local Services = ReplicatedStorage:WaitForChild("Services")
-local v_u_1 = require((Services:WaitForChild("Items"):WaitForChild("ClientItemService")))
-local Shared = ReplicatedStorage:WaitForChild("Shared")
+local v_u_2 = require((Services:WaitForChild("Items"):WaitForChild("ClientItemService")))
+ReplicatedStorage:WaitForChild("Shared")
 local Services2 = ReplicatedStorage:WaitForChild("Services")
-local v_u_2 = require((Shared:WaitForChild("UserData"):WaitForChild("ClientHooks"):WaitForChild("useSettings")))
+local v_u_3 = require((ReplicatedStorage.Client:WaitForChild("Services"):WaitForChild("UserData"):WaitForChild("Settings")))
 local ActionTypes = ReplicatedStorage.Objects.Game.Actions.ActionTypes
 local RigService = require(Services2.Asset.RigService)
-local _ = Setup.MakeR15RigFake
+local _ = v1.MakeR15RigFake
 local t = {}
 t.__index = t
-function t.new(p3)
+function t.new(p4)
 	--[[ line: 29 | upvalues: (copy) t]]
 	local t2 = {
-		Parent = p3,
-		Character = p3.Model,
-		DataRegistry = p3.DataRegistry,
+		Parent = p4,
+		Character = p4.Model,
+		DataRegistry = p4.DataRegistry,
 		Joints = {},
 		Parts = {},
 		Particles = {},
@@ -6070,367 +6064,366 @@ function t.new(p3)
 		Limbs = {},
 		CachedData = {}
 	}
-	local v4 = t
-	local v5 = setmetatable(t2, v4)
-	local v6 = t
-	return setmetatable(v5, v6)
+	local v5 = t
+	local v6 = setmetatable(t2, v5)
+	local v7 = t
+	return setmetatable(v6, v7)
 end
-function t.Init(p_u_7)
+function t.Init(p_u_8)
 	--[[ line: 45 | upvalues: none]]
-	p_u_7.PrimaryPart = p_u_7.Character:FindFirstChild("HumanoidRootPart")
-	if p_u_7.PrimaryPart then
-		p_u_7.PrimaryPart.Transparency = 1
+	p_u_8.PrimaryPart = p_u_8.Character:FindFirstChild("HumanoidRootPart")
+	if p_u_8.PrimaryPart then
+		p_u_8.PrimaryPart.Transparency = 1
 	end
-	p_u_7.Ragdoll = require(script.Ragdoll).new(p_u_7.Character, p_u_7)
-	p_u_7.Character.ChildAdded:Connect(function(p_u_8)
-		--[[ line: 51 | upvalues: (copy) p_u_7]]
-		if p_u_8.Name == "Prop" then
-			if p_u_8.Value then
-				p_u_7:ChangeModel(p_u_8.Value)
+	p_u_8.Ragdoll = require(script.Ragdoll).new(p_u_8.Character, p_u_8)
+	p_u_8.Character.ChildAdded:Connect(function(p_u_9)
+		--[[ line: 51 | upvalues: (copy) p_u_8]]
+		if p_u_9.Name == "Prop" then
+			if p_u_9.Value then
+				p_u_8:ChangeModel(p_u_9.Value)
 			end
-			p_u_8:GetPropertyChangedSignal("Value"):Connect(function()
-				--[[ line: 56 | upvalues: (copy) p_u_8, (ref) p_u_7]]
-				if p_u_8.Value then
-					p_u_7:ChangeModel(p_u_8.Value)
+			p_u_9:GetPropertyChangedSignal("Value"):Connect(function()
+				--[[ line: 56 | upvalues: (copy) p_u_9, (ref) p_u_8]]
+				if p_u_9.Value then
+					p_u_8:ChangeModel(p_u_9.Value)
 				end
 			end)
 		end
 	end)
 end
-function t.Destroy(p9)
+function t.Destroy(p10)
 	--[[ line: 65 | upvalues: (copy) RigService]]
-	if p9.Parent.AI then
-		local v_u_10 = p9:GetRigModel()
-		if v_u_10 then
+	if p10.Parent.AI then
+		local v_u_11 = p10:GetRigModel()
+		if v_u_11 then
 			task.spawn(function()
-				--[[ line: 69 | upvalues: (copy) v_u_10]]
-				if v_u_10:FindFirstChild("Head") then
+				--[[ line: 69 | upvalues: (copy) v_u_11]]
+				if v_u_11:FindFirstChild("Head") then
 					task.wait(5)
 				end
-				v_u_10:Destroy()
+				v_u_11:Destroy()
 			end)
 		end
 	else
-		RigService:UnsetRig(p9.Character)
-		p9.Ragdoll:Destroy()
+		RigService:UnsetRig(p10.Character)
+		p10.Ragdoll:Destroy()
 	end
 end
-function t.Clear(p11)
+function t.Clear(p12)
 	--[[ line: 82 | upvalues: none]]
-	for _2, v12 in p11.Character:GetChildren() do
-		if not v12:IsA("Humanoid") and v12 ~= p11.PrimaryPart then
-			v12:Destroy()
+	for _2, v13 in p12.Character:GetChildren() do
+		if not v13:IsA("Humanoid") and v13 ~= p12.PrimaryPart then
+			v13:Destroy()
 		end
 	end
-	p11.Joints = {}
-	p11.Parts = {}
-	p11.Limbs = {}
-	p11.CachedData = {}
+	p12.Joints = {}
+	p12.Parts = {}
+	p12.Limbs = {}
+	p12.CachedData = {}
 end
-function t.GetParts(p13)
+function t.GetParts(p14)
 	--[[ line: 94 | upvalues: none]]
-	return p13.Parts
+	return p14.Parts
 end
-function t.GetLimbs(p14)
+function t.GetLimbs(p15)
 	--[[ line: 98 | upvalues: none]]
-	return not p14.Rig and {} or p14.Rig.Limbs
+	return not p15.Rig and {} or p15.Rig.Limbs
 end
-function t.GetJoints(p15)
+function t.GetJoints(p16)
 	--[[ line: 105 | upvalues: none]]
-	return p15.Joints
+	return p16.Joints
 end
-function t.GetCosmetics(p16)
+function t.GetCosmetics(p17)
 	--[[ line: 109 | upvalues: none]]
-	return p16.Cosmetics
+	return p17.Cosmetics
 end
-function t.GetRigModel(p17)
+function t.GetRigModel(p18)
 	--[[ line: 113 | upvalues: none]]
-	if p17.Rig then
-		return p17.Rig.Model
+	if p18.Rig then
+		return p18.Rig.Model
 	end
 end
-function t.GetRig(p18)
+function t.GetRig(p19)
 	--[[ line: 119 | upvalues: none]]
-	return p18.Rig
+	return p19.Rig
 end
-function t.GetGear(p19)
-	--[[ line: 123 | upvalues: (copy) ActionTypes, (copy) v_u_1]]
+function t.GetGear(p20)
+	--[[ line: 123 | upvalues: (copy) ActionTypes, (copy) v_u_2]]
 	local t3 = {}
-	for _3, v20 in p19.Actions do
-		local v21 = nil
-		local v22
-		if v20 == ActionTypes.NightVisionGoggles:GetAttribute("ID") then
-			v22 = "NightVisionGoggles"
+	for _3, v21 in p20.Actions do
+		local v22 = nil
+		local v23
+		if v21 == ActionTypes.NightVisionGoggles:GetAttribute("ID") then
+			v23 = "NightVisionGoggles"
 		else
-			v22 = v20 == ActionTypes.Headlamp:GetAttribute("ID") and "Headlamp" or v21
+			v23 = v21 == ActionTypes.Headlamp:GetAttribute("ID") and "Headlamp" or v22
 		end
-		local v23 = nil
-		if v22 then
-			for _4, v24 in p19.ToolSkins do
-				local v25 = v_u_1:GetItemFromID(v24)
-				if v25 and (v25:FindFirstChild("Original") and v25.Original.Value.Name == v22) then
-					v23 = v25:GetAttribute("ID")
+		local v24 = nil
+		if v23 then
+			for _4, v25 in p20.ToolSkins do
+				local v26 = v_u_2:GetItemFromID(v25)
+				if v26 and (v26:FindFirstChild("Original") and v26.Original.Value.Name == v23) then
+					v24 = v26:GetAttribute("ID")
 				end
 			end
 		end
-		if v23 then
-			table.insert(t3, v23)
-		elseif v22 then
-			local v26 = v_u_1
-			table.insert(t3, (v26:GetItemIDFromName(v22)))
+		if v24 then
+			table.insert(t3, v24)
+		elseif v23 then
+			local v27 = v_u_2
+			table.insert(t3, (v27:GetItemIDFromName(v23)))
 		end
 	end
 	return t3
 end
-function t.BuildRig(p27)
-	--[[ line: 150 | upvalues: (copy) v_u_2, (copy) RigService]]
-	if p27.Built then
+function t.BuildRig(p28)
+	--[[ line: 150 | upvalues: (copy) v_u_3, (copy) RigService]]
+	if p28.Built then
 		return
-	elseif p27.Cosmetics and (p27.RigTerm and (p27.Actions and (p27.ToolSkins and p27.Boombox))) then
-		p27.Built = true
-		if p27.RigTerm == Enum.HumanoidRigType.R15 and v_u_2.Get("R15Enabled") == false then
-			p27.RigTerm = Enum.HumanoidRigType.R6
+	elseif p28.Cosmetics and (p28.RigTerm and (p28.Actions and (p28.ToolSkins and p28.Boombox))) then
+		p28.Built = true
+		if p28.RigTerm == Enum.HumanoidRigType.R15 and v_u_3.Get("R15Enabled") == false then
+			p28.RigTerm = Enum.HumanoidRigType.R6
 		end
-		p27.Rig = RigService:SetRig(p27.Character, p27.RigTerm or Enum.HumanoidRigType.R6, p27.Cosmetics, p27:GetGear(), p27.Boombox)
-		if p27.Rig.Model:GetAttribute("Hidden") then
-			p27.Rig.Model:SetAttribute("Hidden", nil)
-			for _5, v28 in p27.Rig.Model:GetDescendants() do
-				if v28:IsA("BasePart") then
-					v28.LocalTransparencyModifier = 0
-				elseif v28:IsA("Decal") then
-					v28.Transparency = v28:GetAttribute("OldTransparency") or 0
+		p28.Rig = RigService:SetRig(p28.Character, p28.RigTerm or Enum.HumanoidRigType.R6, p28.Cosmetics, p28:GetGear(), p28.Boombox)
+		if p28.Rig.Model:GetAttribute("Hidden") then
+			p28.Rig.Model:SetAttribute("Hidden", nil)
+			for _5, v29 in p28.Rig.Model:GetDescendants() do
+				if v29:IsA("BasePart") then
+					v29.LocalTransparencyModifier = 0
+				elseif v29:IsA("Decal") then
+					v29.Transparency = v29:GetAttribute("OldTransparency") or 0
 				end
 			end
 		end
-		if p27.Rig.Model:FindFirstChild("Head") and (p27.Rig.Model.Head:GetAttribute("DontShowFPCharacter") and (p27.DataRegistry and p27.DataRegistry.Set)) then
-			p27.DataRegistry:Set("DontShowFPCharacter", true)
+		if p28.Rig.Model:FindFirstChild("Head") and (p28.Rig.Model.Head:GetAttribute("DontShowFPCharacter") and (p28.DataRegistry and p28.DataRegistry.Set)) then
+			p28.DataRegistry:Set("DontShowFPCharacter", true)
 		end
-		p27.Joints = {}
-		for _6, v29 in p27.Rig.Model:WaitForChild("Joints"):GetChildren() do
-			local Joints = p27.Joints
-			table.insert(Joints, v29)
+		p28.Joints = {}
+		for _6, v30 in p28.Rig.Model:WaitForChild("Joints"):GetChildren() do
+			local Joints = p28.Joints
+			table.insert(Joints, v30)
 		end
-		p27.Parts = {}
-		for _7, v30 in p27.Rig.Model:GetChildren() do
-			if v30:IsA("BasePart") then
-				local Parts = p27.Parts
-				table.insert(Parts, v30)
+		p28.Parts = {}
+		for _7, v31 in p28.Rig.Model:GetChildren() do
+			if v31:IsA("BasePart") then
+				local Parts = p28.Parts
+				table.insert(Parts, v31)
 			end
 		end
-		if p27.Rig.Humanoid.RigType == Enum.HumanoidRigType.R15 then
-			p27.R15 = true
+		if p28.Rig.Humanoid.RigType == Enum.HumanoidRigType.R15 then
+			p28.R15 = true
 		else
-			p27.R15 = false
+			p28.R15 = false
 		end
-		if p27.Parent then
-			if p27.Parent.Joints then
-				p27.Parent.Joints:SetJoints()
-				p27.Parent.Joints:EnableJoints()
+		if p28.Parent then
+			if p28.Parent.Joints then
+				p28.Parent.Joints:SetJoints()
+				p28.Parent.Joints:EnableJoints()
 			end
-			if p27.Parent.Camera then
-				p27.Parent.Camera:SetJoints()
+			if p28.Parent.Camera then
+				p28.Parent.Camera:SetJoints()
 			end
-			if p27.Parent.Animations then
-				p27.Parent.Animations:SetRig(p27.Rig)
+			if p28.Parent.Animations then
+				p28.Parent.Animations:SetRig(p28.Rig)
 			end
 		end
 	end
 end
-function t.RegistryTermUpdated(p31: {[any]: any}, p32: string)
+function t.RegistryTermUpdated(p32: {[any]: any}, p33: string)
 	--[[ line: 210 | upvalues: (copy) LocalPlayer]]
-	if p32 == "Rig" then
-		p31.RigTerm = p31.DataRegistry:Get(p32)
-		p31:BuildRig()
+	if p33 == "Rig" then
+		p32.RigTerm = p32.DataRegistry:Get(p33)
+		p32:BuildRig()
 		return
 	end
-	if p32 == "Cosmetics" then
-		p31.Cosmetics = p31.DataRegistry:Get("Cosmetics")
-		p31:BuildRig()
+	if p33 == "Cosmetics" then
+		p32.Cosmetics = p32.DataRegistry:Get("Cosmetics")
+		p32:BuildRig()
 		return
 	end
-	if p32 == "Actions" then
-		p31.Actions = p31.DataRegistry:Get("Actions")
-		p31:BuildRig()
+	if p33 == "Actions" then
+		p32.Actions = p32.DataRegistry:Get("Actions")
+		p32:BuildRig()
 		return
 	end
-	if p32 == "ToolSkins" then
-		p31.ToolSkins = p31.DataRegistry:Get("ToolSkins")
-		p31:BuildRig()
+	if p33 == "ToolSkins" then
+		p32.ToolSkins = p32.DataRegistry:Get("ToolSkins")
+		p32:BuildRig()
 		return
 	end
-	if p32 == "Boombox" then
-		p31.Boombox = p31.DataRegistry:Get("Boombox")
-		p31:BuildRig()
+	if p33 == "Boombox" then
+		p32.Boombox = p32.DataRegistry:Get("Boombox")
+		p32:BuildRig()
 		return
 	end
-	if p32 == "Nametag" then
-		if p31.Character then
-			p31.Character:SetAttribute("Nametag", (p31.DataRegistry:Get("Nametag")))
+	if p33 == "Nametag" then
+		if p32.Character then
+			p32.Character:SetAttribute("Nametag", (p32.DataRegistry:Get("Nametag")))
 		end
 	end
-	if p32 == "Size" then
-		p31.DataRegistry:Get("Size")
+	if p33 == "Size" then
+		p32.DataRegistry:Get("Size")
 		return
 	end
-	if p32 == "Highlight" then
-		if not p31.Rig then
+	if p33 == "Highlight" then
+		if not p32.Rig then
 			return
 		end
-		local Highlight = p31.DataRegistry:Get("Highlight")
-		if Highlight == 0 and p31.Highlight then
-			p31.Highlight:Destroy()
-			p31.Highlight = nil
-			p31.HighlightTeam = nil
+		local Highlight = p32.DataRegistry:Get("Highlight")
+		if Highlight == 0 and p32.Highlight then
+			p32.Highlight:Destroy()
+			p32.Highlight = nil
+			p32.HighlightTeam = nil
 			return
 		end
-		if not p31.Highlight then
-			p31.Highlight = Instance.new("Highlight")
-			p31.Highlight.Enabled = false
-			p31.Highlight.FillTransparency = 1
-			p31.Highlight.OutlineTransparency = 0.2
-			p31.Highlight.Adornee = p31.Rig.Model
-			p31.Highlight.Parent = p31.Character
+		if not p32.Highlight then
+			p32.Highlight = Instance.new("Highlight")
+			p32.Highlight.Enabled = false
+			p32.Highlight.FillTransparency = 1
+			p32.Highlight.OutlineTransparency = 0.2
+			p32.Highlight.Adornee = p32.Rig.Model
+			p32.Highlight.Parent = p32.Character
 		end
-		p31.Highlight.OutlineColor = Highlight.Color or Color3.new(255, 185, 114)
+		p32.Highlight.OutlineColor = Highlight.Color or Color3.new(255, 185, 114)
 		if Highlight.VisibleTo then
-			p31.HighlightTeam = Highlight.VisibleTo
+			p32.HighlightTeam = Highlight.VisibleTo
 			if LocalPlayer.Character then
-				p31.LocalPlayerTeam = LocalPlayer.Character:GetAttribute("Team")
+				p32.LocalPlayerTeam = LocalPlayer.Character:GetAttribute("Team")
 			end
 			if LocalPlayer.Character and LocalPlayer.Character:GetAttribute("Team") == Highlight.VisibleTo then
-				p31.Highlight.Enabled = true
+				p32.Highlight.Enabled = true
 			else
-				p31.Highlight.Enabled = false
+				p32.Highlight.Enabled = false
 			end
 		end
-		p31.Highlight.Enabled = true
+		p32.Highlight.Enabled = true
 	end
 end
-function t.Kill(p33, p34)
+function t.Kill(p34, p35)
 	--[[ line: 270 | upvalues: none]]
-	local v35 = p33:GetRig()
+	local v36 = p34:GetRig()
 	local t4 = {}
-	local v36 = script.Death:Clone()
-	v36.Parent = p33.PrimaryPart:FindFirstChild("SoundPos")
-	v36:Play()
-	table.insert(t4, v36)
-	if p34.Heavy then
-		local v37 = script.DeathHeavy:Clone()
-		v37.Parent = p33.PrimaryPart:FindFirstChild("SoundPos")
-		v37:Play()
-		table.insert(t4, v37)
+	local v37 = script.Death:Clone()
+	v37.Parent = p34.PrimaryPart:FindFirstChild("SoundPos")
+	v37:Play()
+	table.insert(t4, v37)
+	if p35.Heavy then
+		local v38 = script.DeathHeavy:Clone()
+		v38.Parent = p34.PrimaryPart:FindFirstChild("SoundPos")
+		v38:Play()
+		table.insert(t4, v38)
 	end
-	if p34.Instakill then
-		if p33.Parent and p33.Parent.Visibility then
-			p33.Parent.Visibility:Destroy()
+	if p35.Instakill then
+		if p34.Parent and p34.Parent.Visibility then
+			p34.Parent.Visibility:Destroy()
 		end
-		p33.Ragdoll:Ragdoll(true, p34, v35)
+		p34.Ragdoll:Ragdoll(true, p35, v36)
 	else
-		p33.Ragdoll:Ragdoll(false, p34, v35)
+		p34.Ragdoll:Ragdoll(false, p35, v36)
 	end
 	task.spawn(function()
 		--[[ line: 296 | upvalues: (copy) t4]]
 		task.wait(1)
-		for _8, v38 in t4 do
-			v38:Destroy()
+		for _8, v39 in t4 do
+			v39:Destroy()
 		end
 	end)
 end
-function t.ChangeModel(p39, p40)
+function t.ChangeModel(p40, p41)
 	--[[ line: 304 | upvalues: none]]
-	local function GetAABB(p41)
+	local function GetAABB(p42)
 		--[[ line: 305 | upvalues: none]]
-		local CFrame2 = p41.CFrame
-		local Size = p41.Size
+		local CFrame2 = p42.CFrame
+		local Size = p42.Size
 		local X = Size.X
 		local Y = Size.Y
 		local Z = Size.Z
-		local _9, _10, _11, v42, v43, v44, v45, v46, v47, v48, v49, v50 = CFrame2:components()
-		local v51 = math.abs(v42) * X + math.abs(v43) * Y + math.abs(v44) * Z
-		local v52 = math.abs(v45) * X + math.abs(v46) * Y + math.abs(v47) * Z
-		local v53 = math.abs(v48) * X + math.abs(v49) * Y + math.abs(v50) * Z
-		return Vector3.new(v51, v52, v53)
+		local _9, _10, _11, v43, v44, v45, v46, v47, v48, v49, v50, v51 = CFrame2:GetComponents()
+		local v52 = math.abs(v43) * X + math.abs(v44) * Y + math.abs(v45) * Z
+		local v53 = math.abs(v46) * X + math.abs(v47) * Y + math.abs(v48) * Z
+		local v54 = math.abs(v49) * X + math.abs(v50) * Y + math.abs(v51) * Z
+		return Vector3.new(v52, v53, v54)
 	end
-	local v54 = p39:GetRigModel()
-	v54:SetAttribute("Hidden", true)
-	for _12, v55 in v54:GetDescendants() do
-		if v55:IsA("BasePart") then
-			v55.LocalTransparencyModifier = 1
-		elseif v55:IsA("Decal") then
-			v55:SetAttribute("OldTransparency", v55.Transparency)
-			v55.Transparency = 1
+	local v55 = p40:GetRigModel()
+	v55:SetAttribute("Hidden", true)
+	for _12, v56 in v55:GetDescendants() do
+		if v56:IsA("BasePart") then
+			v56.LocalTransparencyModifier = 1
+		elseif v56:IsA("Decal") then
+			v56:SetAttribute("OldTransparency", v56.Transparency)
+			v56.Transparency = 1
 		end
 	end
-	p39.DataRegistry:Set("Hidden", true)
-	if p39.Character:FindFirstChild("CustomModel") then
-		p39.Character.CustomModel:Destroy()
+	p40.DataRegistry:Set("Hidden", true)
+	if p40.Character:FindFirstChild("CustomModel") then
+		p40.Character.CustomModel:Destroy()
 	end
-	local v56 = p40:Clone()
-	v56.Parent = p39.Character
-	v56.Name = "CustomModel"
-	local v57
-	if v56:IsA("BasePart") then
-		v57 = Instance.new("Model", p39.Character)
-		v57.Name = "CustomModel"
-		v56.Parent = v57
+	local v57 = p41:Clone()
+	v57.Parent = p40.Character
+	v57.Name = "CustomModel"
+	local v58
+	if v57:IsA("BasePart") then
+		v58 = Instance.new("Model", p40.Character)
+		v58.Name = "CustomModel"
+		v57.Parent = v58
 	else
-		v57 = v56
+		v58 = v57
 	end
-	v57.PrimaryPart = nil
-	local v58, v59 = v57:GetBoundingBox()
-	local v60 = Instance.new("Part", v57)
-	v60.Anchored = true
-	v60.CanCollide = false
-	v60.CanQuery = false
-	v60.CanTouch = false
-	v60.Massless = true
-	v60.CFrame = v58
-	v60.Size = v59
-	v57.PrimaryPart = v60
-	for _13, v61 in pairs((v57:GetDescendants())) do
-		if v61:IsA("BasePart") and v61 ~= v60 then
-			local v62 = Instance.new("Weld", v61)
-			v62.C0 = v60.CFrame:inverse()
-			v62.C1 = v61.CFrame:inverse()
-			v62.Part0 = v60
-			v62.Part1 = v61
-			v61.Anchored = false
-			v61.CanCollide = false
-			v61.CanQuery = false
-			v61.CanTouch = false
-			v61.Massless = true
+	v58.PrimaryPart = nil
+	local v59, v60 = v58:GetBoundingBox()
+	local v61 = Instance.new("Part", v58)
+	v61.Anchored = true
+	v61.CanCollide = false
+	v61.CanQuery = false
+	v61.CanTouch = false
+	v61.Massless = true
+	v61.CFrame = v59
+	v61.Size = v60
+	v58.PrimaryPart = v61
+	for _13, v62 in pairs((v58:GetDescendants())) do
+		if v62:IsA("BasePart") and v62 ~= v61 then
+			local v63 = Instance.new("Weld", v62)
+			v63.C0 = v61.CFrame:inverse()
+			v63.C1 = v62.CFrame:inverse()
+			v63.Part0 = v61
+			v63.Part1 = v62
+			v62.Anchored = false
+			v62.CanCollide = false
+			v62.CanQuery = false
+			v62.CanTouch = false
+			v62.Massless = true
 		end
 	end
-	v60.CFrame = p39.Character.HumanoidRootPart.CFrame * CFrame.new(0, -2.75 + GetAABB(v60).Y / 2, 0) * (v58 - v58.Position)
-	local v63 = Instance.new("Weld", v60)
-	v63.C0 = p39.Character.HumanoidRootPart.CFrame:inverse()
-	v63.C1 = v60.CFrame:inverse()
-	v63.Part0 = p39.Character.HumanoidRootPart
-	v63.Part1 = v60
-	v60.Transparency = 1
-	v60.Anchored = false
+	v61.CFrame = p40.Character.HumanoidRootPart.CFrame * CFrame.new(0, -2.75 + GetAABB(v61).Y / 2, 0) * (v59 - v59.Position)
+	local v64 = Instance.new("Weld", v61)
+	v64.C0 = p40.Character.HumanoidRootPart.CFrame:inverse()
+	v64.C1 = v61.CFrame:inverse()
+	v64.Part0 = p40.Character.HumanoidRootPart
+	v64.Part1 = v61
+	v61.Transparency = 1
+	v61.Anchored = false
 end
-function t.Update(p64, _14)
+function t.Update(p65, _14)
 	--[[ line: 378 | upvalues: (copy) LocalPlayer]]
-	if p64.HighlightTeam and p64.Highlight then
+	if p65.HighlightTeam and p65.Highlight then
 		local Character = LocalPlayer.Character
 		if Character then
 			Character = LocalPlayer.Character:GetAttribute("Team")
 		end
-		if p64.LocalPlayerTeam ~= Character then
-			p64.LocalPlayerTeam = Character
-			if p64.HighlightTeam == p64.LocalPlayerTeam then
-				p64.Highlight.Enabled = true
+		if p65.LocalPlayerTeam ~= Character then
+			p65.LocalPlayerTeam = Character
+			if p65.HighlightTeam == p65.LocalPlayerTeam then
+				p65.Highlight.Enabled = true
 				return
 			end
-			p64.Highlight.Enabled = false
+			p65.Highlight.Enabled = false
 		end
 	end
 end
 return t
 
 END OF FILE
-
 
 ==================================================
 SOURCE #51
@@ -14276,33 +14269,5 @@ function t2.Kill(p29, p30)
 end
 return t2
 
-==================================================
 
-SOURCE #84
-==================================================
-PATH:
-ReplicatedStorage.Objects.Game.Character.Rig
-
-STATUS:
-АКТУАЛЬНАЯ ДЕКОМПИЛЯЦИЯ ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19.
-Полный текст сохранён в отдельном файле CurrentSources/Character_Rig_2026-10-19.lua,
-поскольку отдельный файл позволяет обновлять исходник без повторной перезаписи
-всего большого дампа.
-
-PURPOSE:
-Текущий класс рига персонажа. BuildRig() ожидает Cosmetics, Rig, Actions,
-ToolSkins и Boombox, затем вызывает RigService:SetRig() и настраивает joints,
-camera и animations. Важно: BuildRig() выставляет Built=true и последующие
-вызовы сразу завершаются, поэтому RegistryTermUpdated() сам по себе не приводит
-к повторной сборке после первого успешного BuildRig(). Destroy() вызывает
-RigService:UnsetRig() для не-AI персонажа; Clear() удаляет дочерние объекты
-Character, кроме Humanoid и PrimaryPart, и сбрасывает Joints, Parts, Limbs,
-CachedData.
-
-SOURCE CONTENT:
-См. отдельный файл (полный исходник):
-https://github.com/skirkzhdimenya-source/DeadEye/blob/main/CurrentSources/Character_Rig_2026-10-19.lua
-
-==================================================
-END CURRENT SOURCE REFRESH
-==================================================
+END OF FILE
