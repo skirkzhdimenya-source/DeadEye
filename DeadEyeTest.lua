@@ -1829,6 +1829,9 @@ local unusualRuntime = {
     nativeParticleConnection = nil,
     nativeParticleConnections = {},
     nativeParticleLastFirstPerson = nil,
+    --// Exact per-object state captured only when DeadEye hides replacement visuals in first person.
+    --// Returning to third person restores authored/script-controlled values instead of forcing Enabled=true.
+    replacementPovStates = setmetatable({}, { __mode = "k" }),
     reapplyGeneration = 0,
     suppressOwnedTags = false,
     animationSource = nil,
@@ -5529,6 +5532,14 @@ unusualRuntime.destroyAnimationSource = function()
     for _, item in ipairs(
         unusualRuntime.animatedNestedVisuals
     ) do
+        -- These joints are parented to the live body part to preserve the
+        -- source cosmetic's original sibling-Weld/Motor6D assembly.
+        for _, joint in ipairs(item.joints or {}) do
+            pcall(function()
+                joint:Destroy()
+            end)
+        end
+
         if item.model then
             pcall(function()
                 item.model:Destroy()
@@ -5727,115 +5738,49 @@ unusualRuntime.installAnimatedNestedModels = function(
         return 0
     end
 
-    local foundModels = {}
-    local seen = {}
+    local candidates = {}
 
     for _, object in ipairs(
         cosmeticRig:GetDescendants()
     ) do
+        if object:IsA("Model") then
+            local hasController = object:FindFirstChildWhichIsA(
+                "AnimationController",
+                true
+            ) ~= nil
+            local hasAnimation = object:FindFirstChildWhichIsA(
+                "Animation",
+                true
+            ) ~= nil
+            local hasPart = object:FindFirstChildWhichIsA(
+                "BasePart",
+                true
+            ) ~= nil
 
-        if object:IsA("Model")
-            and not seen[object]
-        then
-
-            local hasController = false
-            local hasAnimation = false
-            local hasPart = false
-
-            for _, child in ipairs(
-                object:GetDescendants()
-            ) do
-
-                if child:IsA(
-                    "AnimationController"
-                ) then
-                    hasController = true
-                elseif child:IsA("Animation") then
-                    hasAnimation = true
-                elseif child:IsA("BasePart") then
-                    hasPart = true
-                end
-
+            if hasController and hasAnimation and hasPart then
+                table.insert(candidates, object)
             end
-
-            if hasController
-                and hasAnimation
-                and hasPart
-            then
-
-                --// Prefer the smallest animated Model.
-                --// If this Model is inside another matching
-                --// Model, the inner one is sufficient.
-                local parent = object.Parent
-
-                local nestedInside = false
-
-                while parent
-                    and parent ~= cosmeticRig
-                do
-
-                    if parent:IsA("Model")
-                        and table.find(
-                            foundModels,
-                            parent
-                        )
-                    then
-                        nestedInside = true
-                        break
-                    end
-
-                    parent = parent.Parent
-
-                end
-
-                if not nestedInside then
-                    table.insert(
-                        foundModels,
-                        object
-                    )
-
-                    seen[object] = true
-                end
-
-            end
-
         end
-
     end
 
-    --// The loop above may encounter outer models before
-    --// inner models. Remove any selected model which contains
-    --// another selected animated model.
+    -- Keep the innermost self-contained animated Models, irrespective of
+    -- GetDescendants() order. The previous one-pass filter could keep an
+    -- outer Model and discard its animated child if the outer Model appeared first.
     local selected = {}
 
-    for _, model in ipairs(
-        foundModels
-    ) do
+    for _, model in ipairs(candidates) do
+        local containsSmallerCandidate = false
 
-        local containsSelected = false
-
-        for _, other in ipairs(
-            foundModels
-        ) do
-
-            if model ~= other
-                and other:IsDescendantOf(
-                    model
-                )
-            then
-                containsSelected = true
+        for _, other in ipairs(candidates) do
+            if model ~= other and other:IsDescendantOf(model) then
+                containsSmallerCandidate = true
                 break
             end
-
         end
 
-        if not containsSelected then
-            table.insert(
-                selected,
-                model
-            )
+        if not containsSmallerCandidate then
+            table.insert(selected, model)
         end
-
     end
 
     local installed = 0
@@ -5852,6 +5797,41 @@ unusualRuntime.installAnimatedNestedModels = function(
         if ok
             and clone
         then
+
+            -- Native cosmetics may ship their own client Script that loads and
+            -- configures an AnimationTrack (Fragmented Singularity randomizes
+            -- TimePosition this way). Keep client Scripts intact; only skip
+            -- our manual Play() path when such a native animation driver exists.
+            local nativeAnimationDrivers = {}
+
+            for _, object in ipairs(clone:GetDescendants()) do
+                if object:IsA("Script") then
+                    local clientScript = false
+                    pcall(function()
+                        clientScript = object.RunContext == Enum.RunContext.Client
+                    end)
+
+                    local scriptAnimation = object:FindFirstChildWhichIsA(
+                        "Animation",
+                        true
+                    )
+                    local controller = object.Parent
+                        and object.Parent:FindFirstChildOfClass("AnimationController")
+
+                    if not controller then
+                        controller = clone:FindFirstChildWhichIsA(
+                            "AnimationController",
+                            true
+                        )
+                    end
+
+                    if clientScript and scriptAnimation and controller then
+                        nativeAnimationDrivers[object] = true
+                    end
+                end
+            end
+
+            local hasNativeAnimationDriver = next(nativeAnimationDrivers) ~= nil
 
             local root
 
@@ -5906,13 +5886,23 @@ unusualRuntime.installAnimatedNestedModels = function(
                             object.LocalTransparencyModifier = 0
                         end)
 
-                    elseif object:IsA("Script")
-                        or object:IsA("LocalScript")
-                    then
+                    elseif object:IsA("LocalScript") then
 
                         pcall(function()
                             object.Disabled = true
                         end)
+
+                    elseif object:IsA("Script") then
+                        local clientScript = false
+                        pcall(function()
+                            clientScript = object.RunContext == Enum.RunContext.Client
+                        end)
+
+                        if not clientScript then
+                            pcall(function()
+                                object.Disabled = true
+                            end)
+                        end
 
                     end
 
@@ -6019,34 +6009,136 @@ unusualRuntime.installAnimatedNestedModels = function(
 
                 clone.Parent = folder
 
-                local weld = Instance.new(
-                        "WeldConstraint"
-                    )
+                -- Recreate the original sibling Weld/Motor6D links that live
+                -- on the source body part, outside this nested Model. Native
+                -- AddCosmetics preserves these relationships; cloning only the
+                -- Model silently drops them and a single WeldConstraint is not equivalent.
+                local cloneMap = {}
+                __UI.__L.mapUnusualCloneTree(
+                    sourceModel,
+                    clone,
+                    cloneMap
+                )
 
-                weld.Name = "DeadEyeAnimatedRootWeld"
+                local clonedExternalJoints = {}
+                local rootHasNativeJoint = false
 
-                weld.Part0 = targetHost
+                if hostPart and hostPart:IsA("BasePart")
+                    and targetHost and targetHost:IsA("BasePart")
+                then
+                    local targetRoots = {}
+                    if targetRig then
+                        table.insert(targetRoots, targetRig)
+                    end
+                    if playerCharacter and playerCharacter ~= targetRig then
+                        table.insert(targetRoots, playerCharacter)
+                    end
 
-                weld.Part1 = root
+                    local function mapEndpoint(sourceEndpoint)
+                        if not sourceEndpoint then
+                            return nil
+                        end
 
-                weld.Parent = root
+                        if sourceEndpoint == hostPart then
+                            return targetHost
+                        end
+
+                        local mapped = cloneMap[sourceEndpoint]
+                        if mapped and mapped:IsA("BasePart") then
+                            return mapped
+                        end
+
+                        if sourceEndpoint:IsA("BasePart") then
+                            for _, targetModel in ipairs(targetRoots) do
+                                local candidate = targetModel:FindFirstChild(
+                                    sourceEndpoint.Name
+                                )
+                                if candidate and candidate:IsA("BasePart") then
+                                    return candidate
+                                end
+                            end
+                        end
+
+                        return nil
+                    end
+
+                    for _, sourceJoint in ipairs(hostPart:GetDescendants()) do
+                        if __UI.__L.isUnusualJointObject(sourceJoint)
+                            and not sourceJoint:IsDescendantOf(sourceModel)
+                        then
+                            local sourcePart0
+                            local sourcePart1
+
+                            pcall(function()
+                                sourcePart0 = sourceJoint.Part0
+                                sourcePart1 = sourceJoint.Part1
+                            end)
+
+                            local part0Inside = sourcePart0
+                                and sourcePart0:IsDescendantOf(sourceModel)
+                            local part1Inside = sourcePart1
+                                and sourcePart1:IsDescendantOf(sourceModel)
+
+                            if part0Inside or part1Inside then
+                                local mappedPart0 = mapEndpoint(sourcePart0)
+                                local mappedPart1 = mapEndpoint(sourcePart1)
+
+                                if mappedPart0 and mappedPart1
+                                    and mappedPart0:IsA("BasePart")
+                                    and mappedPart1:IsA("BasePart")
+                                then
+                                    local jointClone
+                                    local jointOK = pcall(function()
+                                        jointClone = sourceJoint:Clone()
+                                        jointClone.Part0 = mappedPart0
+                                        jointClone.Part1 = mappedPart1
+                                        jointClone.Parent = targetHost
+                                    end)
+
+                                    if jointOK and jointClone then
+                                        table.insert(clonedExternalJoints, jointClone)
+                                        if mappedPart0 == root or mappedPart1 == root then
+                                            rootHasNativeJoint = true
+                                        end
+                                    elseif jointClone then
+                                        pcall(function()
+                                            jointClone:Destroy()
+                                        end)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+
+                -- Use a synthetic root weld only when the source assembly had
+                -- no external joint that attached this root to the native rig.
+                if not rootHasNativeJoint then
+                    local weld = Instance.new("WeldConstraint")
+                    weld.Name = "DeadEyeAnimatedRootWeld"
+                    weld.Part0 = targetHost
+                    weld.Part1 = root
+                    weld.Parent = root
+                end
 
                 UnusualFns.tagUnusualFX(
                     clone,
                     id
                 )
 
-                --// Start the same AnimationController
-                --// animation that the source effect uses.
-                unusualRuntime.startAnimations(
-                    clone
-                )
+                -- A native client animation driver is the source of truth
+                -- for randomized start time, loop behavior, and any track setup.
+                -- Do not race it with a second manually-started track.
+                if not hasNativeAnimationDriver then
+                    unusualRuntime.startAnimations(clone)
+                end
 
                 table.insert(
                     unusualRuntime.animatedNestedVisuals,
                     {
                         model = clone,
                         root = root,
+                        joints = clonedExternalJoints,
                         targetRig = targetRig,
                         id = id
                     }
@@ -10184,6 +10276,8 @@ end
 local unusualPovTransparencyClasses = {
     BasePart = true,
     Decal = true,
+    Texture = true,
+    SurfaceGui = true,
     Beam = true,
     ParticleEmitter = true,
     Trail = true,
@@ -10754,55 +10848,57 @@ function UnusualFns.setUnusualFXForPOV(
     __UI.__L.forEachDeadEyeUnusualVisualObject(
         function(object)
             pcall(function()
+                local enabledObject = object:IsA("ParticleEmitter")
+                    or object:IsA("Trail")
+                    or object:IsA("Beam")
+                    or object:IsA("Fire")
+                    or object:IsA("Smoke")
+                    or object:IsA("Sparkles")
+                    or object:IsA("Highlight")
+                    or object:IsA("BillboardGui")
+                    or object:IsA("SurfaceGui")
+
+                local partObject = object:IsA("BasePart")
+                local transparencyObject = object:IsA("Decal")
+                    or object:IsA("Texture")
+                local states = unusualRuntime.replacementPovStates
+                local state = states[object]
+
                 if firstPerson then
-
-                    if object:IsA("ParticleEmitter")
-                        or object:IsA("Trail")
-                        or object:IsA("Beam")
-                        or object:IsA("Fire")
-                        or object:IsA("Smoke")
-                        or object:IsA("Sparkles")
-                        or object:IsA("Highlight")
-                        or object:IsA("BillboardGui")
-                    then
-                        --// Disable emission/rendering immediately.
-                        object.Enabled = false
-
-                        if object:IsA("ParticleEmitter") then
-                            --// Native ParticleEmitter LTM remains 0.
-                            object.LocalTransparencyModifier = 0
+                    -- Capture the object's actual authored/script-controlled values
+                    -- once per first-person stint. Never assume every emitter was on.
+                    if not state then
+                        state = {}
+                        if enabledObject then
+                            state.enabled = object.Enabled
                         end
+                        if partObject then
+                            state.localTransparencyModifier = object.LocalTransparencyModifier
+                        elseif transparencyObject then
+                            state.transparency = object.Transparency
+                        end
+                        states[object] = state
+                    end
 
-                    elseif object:IsA("BasePart")
-                        or object:IsA("Decal")
-                    then
-                        --// Hide custom geometry-based visuals,
-                        --// including fake/custom trail segments.
+                    if enabledObject then
+                        object.Enabled = false
+                    elseif partObject then
                         object.LocalTransparencyModifier = 1
+                    elseif transparencyObject then
+                        object.Transparency = 1
                     end
-
-                    --// Do NOT disable PointLight/SpotLight/SurfaceLight.
-                    --// Native observation showed PointLight staying enabled.
-
-                else
-
-                    if object:IsA("ParticleEmitter")
-                        or object:IsA("Trail")
-                        or object:IsA("Beam")
-                        or object:IsA("Fire")
-                        or object:IsA("Smoke")
-                        or object:IsA("Sparkles")
-                        or object:IsA("Highlight")
-                        or object:IsA("BillboardGui")
-                    then
-                        object.Enabled = true
-
-                    elseif object:IsA("BasePart")
-                        or object:IsA("Decal")
-                    then
-                        object.LocalTransparencyModifier = 0
+                elseif state then
+                    -- Restore exactly what was present on entry to first person.
+                    if state.enabled ~= nil and enabledObject then
+                        object.Enabled = state.enabled
                     end
-
+                    if state.localTransparencyModifier ~= nil and partObject then
+                        object.LocalTransparencyModifier = state.localTransparencyModifier
+                    end
+                    if state.transparency ~= nil and transparencyObject then
+                        object.Transparency = state.transparency
+                    end
+                    states[object] = nil
                 end
             end)
         end
@@ -10850,36 +10946,28 @@ genv.DEADEYE_UNUSUAL_POV_TRANSPARENCY_CLEANUP = function()
         )
     end)
 
-    --// Return DeadEye's Unusual layer to the native 3P state.
-    pcall(function()
-        __UI.__L.forEachDeadEyeUnusualVisualObject(
-            function(object)
-                --// Never reset stock character parts here. Their
-                --// LocalTransparencyModifier belongs to the game's
-                --// Visibility / TransparencyController systems; forcing
-                --// it to 0 leaves the head visible after DeadEye closes.
-                if __UI.__L.isStockUnusualPOVTransparencyObject(object) then
-                    return
+    --// Restore only values that the POV handler actually changed.
+    --// Never force every copied emitter to Enabled=true on shutdown.
+    for object, state in pairs(unusualRuntime.replacementPovStates) do
+        pcall(function()
+            if object and object.Parent then
+                if state.enabled ~= nil then
+                    object.Enabled = state.enabled
                 end
-
-                if object:IsA("ParticleEmitter")
-                    or object:IsA("Trail")
-                    or object:IsA("Beam")
-                    or object:IsA("Fire")
-                    or object:IsA("Smoke")
-                    or object:IsA("Sparkles")
-                    or object:IsA("Highlight")
-                    or object:IsA("BillboardGui")
+                if state.localTransparencyModifier ~= nil
+                    and object:IsA("BasePart")
                 then
-                    object.Enabled = true
-                elseif object:IsA("BasePart")
-                    or object:IsA("Decal")
+                    object.LocalTransparencyModifier = state.localTransparencyModifier
+                end
+                if state.transparency ~= nil
+                    and (object:IsA("Decal") or object:IsA("Texture"))
                 then
-                    object.LocalTransparencyModifier = 0
+                    object.Transparency = state.transparency
                 end
             end
-        )
-    end)
+        end)
+        unusualRuntime.replacementPovStates[object] = nil
+    end
 
     pcall(function()
         __UI.__L.hideUnusualAnimationSourceVisuals()
