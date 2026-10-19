@@ -13285,3 +13285,48 @@ return table.freeze({
 ==================================================
 END ADDITIONAL EFFECTS / RELICS SOURCES
 ==================================================
+
+
+==================================================
+INVESTIGATION NOTE — ANGELIC REDEMPTION 316
+Date: 2026-10-19
+==================================================
+
+ПРОВЕРЕНО ПО ТЕСТОВОМУ СКРИПТУ:
+Тестовый скрипт создаёт dummy и напрямую вызывает
+RigService:SetRig(dummy, rigType, {316}, {}, nil).
+После появления рига пользователь наблюдал исчезновение крыльев и их
+последующий рассинхрон. Это наблюдение пока не объяснено однозначно.
+
+ВАЖНОЕ РАЗЛИЧИЕ С ПОЛНЫМ CHARACTER PIPELINE:
+SOURCE #50, ReplicatedStorage.Objects.Game.Character.Rig, BuildRig():
+после RigService:SetRig() штатный код вызывает
+    Parent.Joints:SetJoints()
+    Parent.Joints:EnableJoints()
+    Parent.Animations:SetRig(Rig)
+SOURCE #64, ReplicatedStorage.Objects.Game.Character, Update():
+каждый кадр обновляет Joints, Animations и Rig.
+SOURCE #67, ReplicatedStorage.Objects.Game.Character.Animations, SetRig():
+устанавливает Humanoid из созданного Rig.Model, на который затем загружается
+и воспроизводится игровая анимация.
+Изолированный probe с одним RigService:SetRig() этих вызовов не выполняет.
+Это точное различие теста с полным игровым lifecycle; его влияние на исчезновение
+и рассинхрон крыльев ещё надо подтвердить, а не считать окончательным диагнозом.
+
+СЛЕДУЮЩИЕ НЕДОСТАЮЩИЕ ДАННЫЕ:
+- декомпиляция ReplicatedStorage.Objects.Game.Character.Joints
+  (особенно SetJoints(), EnableJoints(), Update());
+- clipboard-отчёт ANGEL316, созданный тестом после CAPTURE_SECONDS:
+  строки SOURCE/NATIVE NODE, [CHANGE], ANIMATION PLAYED/STOPPED.
+  Текущий тест не отслеживает CFrame/Transform суставов, поэтому если отчёт
+  не объясняет рассинхрон, следующим probe нужно наблюдать Transform/CFrame,
+  Attachment.CFrame и прозрачность/Enabled объектов, не меняя DeadEyeTest.lua.
+
+НЕ ДЕЛАТЬ ВЫВОД, ЧТО ПРОБЛЕМА В AURAS:
+ClientItemService.GetItemType() распознаёт Unusual через CosmeticInfo.Unusual,
+а GetVisualModel() клонирует Character/CharacterClassic. В этой проверке
+RelicsXYZ.Shared.Auras не установлен как причина поведения Unusual.
+
+==================================================
+END ANGELIC REDEMPTION 316 INVESTIGATION NOTE
+==================================================
