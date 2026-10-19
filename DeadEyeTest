@@ -9619,6 +9619,18 @@ function UnusualFns.restoreUnusual()
     local ok, err = pcall(function()
         setUnusualCosmeticsThroughRegistry(characterObject, restoreCosmetics)
         refreshUnusualAnimations(characterObject, state.animationModule)
+
+        -- A rebuilt rig can keep the same visibility mode, so the game's
+        -- Visibility.Update() may not refresh the new limb/effect instances.
+        -- Rebuild its cached descendants and apply the current mode explicitly.
+        local visibilityCallOK, visibilityRefreshed = pcall(function()
+            return __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
+        end)
+        if not visibilityCallOK or visibilityRefreshed ~= true then
+            warn("[DeadEye Unusual] RESTORE visibility refresh did not complete: "
+                .. tostring(visibilityCallOK and visibilityRefreshed or visibilityRefreshed))
+        end
+
         local removedLegacy = UnusualFns.removeOurUnusualFX()
         warn("[DeadEye Unusual] RESTORE removed legacy owned FX="
             .. tostring(removedLegacy))
@@ -9782,6 +9794,17 @@ function UnusualFns.activateUnusual()
     local ok, err = pcall(function()
         local builtRig = setUnusualCosmeticsThroughRegistry(characterObject, replacementCosmetics)
         refreshUnusualAnimations(characterObject, controller.AnimationModule)
+
+        -- Apply the current first/third-person visibility state to the new rig
+        -- immediately, even when the visibility mode itself did not change.
+        local visibilityCallOK, visibilityRefreshed = pcall(function()
+            return __UI.__L.refreshNativeVisibilityAfterUnusualRestore()
+        end)
+        if not visibilityCallOK or visibilityRefreshed ~= true then
+            warn("[DeadEye Unusual] APPLY visibility refresh did not complete: "
+                .. tostring(visibilityCallOK and visibilityRefreshed or visibilityRefreshed))
+        end
+
         assert(builtRig and builtRig:IsA("Model") and builtRig.Parent,
             "DataRegistry update completed without a live visual rig")
 
