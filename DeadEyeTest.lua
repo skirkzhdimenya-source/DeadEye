@@ -10296,6 +10296,13 @@ __UI.__L.isStockUnusualPOVTransparencyObject = function(
         return false
     end
 
+    -- BasePart is an abstract superclass; concrete instances report
+    -- "Part", "MeshPart", "UnionOperation", etc. Match it with IsA()
+    -- so the first-person filter actually reaches copied effect geometry.
+    if object:IsA("BasePart") then
+        return true
+    end
+
     return unusualPovTransparencyClasses[
         object.ClassName
     ] == true
