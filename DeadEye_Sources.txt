@@ -6021,7 +6021,10 @@ PATH:
 ReplicatedStorage.Objects.Game.Character.Rig
 
 STATUS:
-ВОЗМОЖНО УСТАРЕЛ: получен до текущего обновления игры; имена API, структура объектов и поведение могли измениться. Перепроверить перед использованием.
+УСТАРЕЛ: заменён актуальной декомпиляцией от пользователя 2026-10-19.
+Текущая версия сохранена отдельным файлом:
+CurrentSources/Character_Rig_2026-10-19.lua
+https://github.com/skirkzhdimenya-source/DeadEye/blob/main/CurrentSources/Character_Rig_2026-10-19.lua
 
 PURPOSE:
 Класс рига персонажа.
@@ -14272,6 +14275,33 @@ function t2.Kill(p29, p30)
 	p29.Rig:Kill(p30)
 end
 return t2
+
+==================================================
+
+SOURCE #84
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Rig
+
+STATUS:
+АКТУАЛЬНАЯ ДЕКОМПИЛЯЦИЯ ОТ ПОЛЬЗОВАТЕЛЯ 2026-10-19.
+Полный текст сохранён в отдельном файле CurrentSources/Character_Rig_2026-10-19.lua,
+поскольку отдельный файл позволяет обновлять исходник без повторной перезаписи
+всего большого дампа.
+
+PURPOSE:
+Текущий класс рига персонажа. BuildRig() ожидает Cosmetics, Rig, Actions,
+ToolSkins и Boombox, затем вызывает RigService:SetRig() и настраивает joints,
+camera и animations. Важно: BuildRig() выставляет Built=true и последующие
+вызовы сразу завершаются, поэтому RegistryTermUpdated() сам по себе не приводит
+к повторной сборке после первого успешного BuildRig(). Destroy() вызывает
+RigService:UnsetRig() для не-AI персонажа; Clear() удаляет дочерние объекты
+Character, кроме Humanoid и PrimaryPart, и сбрасывает Joints, Parts, Limbs,
+CachedData.
+
+SOURCE CONTENT:
+См. отдельный файл (полный исходник):
+https://github.com/skirkzhdimenya-source/DeadEye/blob/main/CurrentSources/Character_Rig_2026-10-19.lua
 
 ==================================================
 END CURRENT SOURCE REFRESH
