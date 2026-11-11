@@ -10294,7 +10294,34 @@ local function buildUnusualViewmodelR6Meshes(description)
     return meshes
 end
 
-local function applyUnusualViewmodelR6Meshes(clothing, meshes)
+local function captureUnusualViewmodelR6Baseline(clothing)
+    local baseline = {
+        Left = {},
+        Right = {}
+    }
+
+    for _, object in ipairs(clothing:GetDescendants()) do
+        if object:IsA("CharacterMesh") then
+            local side
+
+            if object.BodyPart == Enum.BodyPart.LeftArm then
+                side = "Left"
+            elseif object.BodyPart == Enum.BodyPart.RightArm then
+                side = "Right"
+            end
+
+            if side then
+                local clone = object:Clone()
+                clone.Parent = nil
+                table.insert(baseline[side], clone)
+            end
+        end
+    end
+
+    return baseline
+end
+
+local function applyUnusualViewmodelR6Meshes(clothing, meshes, baseline)
     local bodyParts = {
         Left = Enum.BodyPart.LeftArm,
         Right = Enum.BodyPart.RightArm
@@ -10309,7 +10336,12 @@ local function applyUnusualViewmodelR6Meshes(clothing, meshes)
             end
         end
 
-        for _, sourceMesh in ipairs(meshes[side] or {}) do
+        local replacement = meshes[side]
+        if #replacement == 0 then
+            replacement = baseline[side] or {}
+        end
+
+        for _, sourceMesh in ipairs(replacement) do
             sourceMesh:Clone().Parent = clothing
         end
     end
@@ -10389,6 +10421,7 @@ function UnusualFns.syncUnusualViewmodelAppearance()
 
         state = {
             clothing = clothing,
+            baseline = captureUnusualViewmodelR6Baseline(clothing),
             appliedSignature = nil,
             pendingSignature = nil,
             retryAt = 0,
@@ -10444,7 +10477,7 @@ function UnusualFns.syncUnusualViewmodelAppearance()
         end
 
         local applyOK, applyError = pcall(function()
-            applyUnusualViewmodelR6Meshes(clothing, meshesOrError)
+            applyUnusualViewmodelR6Meshes(clothing, meshesOrError, state.baseline)
         end)
 
         destroyUnusualViewmodelR6Meshes(meshesOrError)
