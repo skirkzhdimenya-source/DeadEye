@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.277
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.276
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.277"
+local SCRIPT_VERSION = "1.276"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -10140,9 +10140,7 @@ end
 
 local function buildUnusualViewmodelR6Meshes(description)
     local requestDescription
-    local emptyDescription
     local r6Model
-    local previewWorld
     local meshes = {
         Left = {},
         Right = {}
@@ -10150,41 +10148,20 @@ local function buildUnusualViewmodelR6Meshes(description)
 
     local buildOK, buildError = pcall(function()
         requestDescription = description:Clone()
-        emptyDescription = Instance.new("HumanoidDescription")
 
         r6Model = Players:CreateHumanoidModelFromDescriptionAsync(
-            emptyDescription,
+            requestDescription,
             Enum.HumanoidRigType.R6
         )
 
         if not r6Model or not r6Model:IsA("Model") then
-            error("Could not create the empty R6 template")
+            error("CreateHumanoidModelFromDescriptionAsync returned no R6 model")
         end
 
         local humanoid = r6Model:FindFirstChildOfClass("Humanoid")
-        local root = r6Model:FindFirstChild("HumanoidRootPart")
-
-        if not humanoid or humanoid.RigType ~= Enum.HumanoidRigType.R6 or not root then
-            error("The generated template is not a complete R6 rig")
+        if not humanoid or humanoid.RigType ~= Enum.HumanoidRigType.R6 then
+            error("Generated avatar is not an R6 rig")
         end
-
-        previewWorld = Instance.new("WorldModel")
-        previewWorld.Name = "DeadEyeR6AvatarBuild"
-        previewWorld.Parent = workspace
-
-        r6Model.Parent = previewWorld
-        root.Anchored = true
-        root.CFrame = CFrame.new(0, 150, 0)
-
-        for _, object in ipairs(r6Model:GetDescendants()) do
-            if object:IsA("BasePart") then
-                object.CanCollide = false
-                object.CanTouch = false
-                object.CanQuery = false
-            end
-        end
-
-        humanoid:ApplyDescriptionAsync(requestDescription)
 
         for _, object in ipairs(r6Model:GetDescendants()) do
             if object:IsA("CharacterMesh") then
@@ -10203,10 +10180,6 @@ local function buildUnusualViewmodelR6Meshes(description)
                 end
             end
         end
-
-        if #meshes.Left == 0 and #meshes.Right == 0 then
-            error("ApplyDescriptionAsync produced no R6 arm CharacterMesh instances")
-        end
     end)
 
     if requestDescription then
@@ -10215,21 +10188,9 @@ local function buildUnusualViewmodelR6Meshes(description)
         end)
     end
 
-    if emptyDescription then
-        pcall(function()
-            emptyDescription:Destroy()
-        end)
-    end
-
     if r6Model then
         pcall(function()
             r6Model:Destroy()
-        end)
-    end
-
-    if previewWorld then
-        pcall(function()
-            previewWorld:Destroy()
         end)
     end
 
