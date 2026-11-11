@@ -10464,6 +10464,7 @@ function UnusualFns.syncUnusualViewmodelAppearance()
             appliedSignature = nil,
             pendingSignature = nil,
             retryAt = 0,
+            failureSignature = nil,
             generation = 0
         }
 
@@ -10510,8 +10511,10 @@ function UnusualFns.syncUnusualViewmodelAppearance()
         if not buildOK or type(meshesOrError) ~= "table" then
             state.pendingSignature = nil
             state.retryAt = os.clock() + 4
-            __DDCore.Log("VIEWMODEL R6 ARM BUILD FAILED|signature=" .. signature
-                .. "|error=" .. tostring(buildError or meshesOrError))
+            if state.failureSignature ~= signature then
+                state.failureSignature = signature
+                warn("[DeadEye] POV R6 arm conversion failed: " .. tostring(buildError or meshesOrError))
+            end
             return
         end
 
@@ -10524,14 +10527,17 @@ function UnusualFns.syncUnusualViewmodelAppearance()
         if not applyOK then
             state.pendingSignature = nil
             state.retryAt = os.clock() + 4
-            __DDCore.Log("VIEWMODEL R6 ARM APPLY FAILED|signature=" .. signature
-                .. "|error=" .. tostring(applyError))
+            if state.failureSignature ~= signature then
+                state.failureSignature = signature
+                warn("[DeadEye] POV R6 arm apply failed: " .. tostring(applyError))
+            end
             return
         end
 
         state.appliedSignature = signature
         state.pendingSignature = nil
         state.retryAt = 0
+        state.failureSignature = nil
 
         __DDCore.Log("VIEWMODEL R6 ARM SYNC COMPLETE|leftId=" .. tostring(leftArmId)
             .. "|rightId=" .. tostring(rightArmId))
