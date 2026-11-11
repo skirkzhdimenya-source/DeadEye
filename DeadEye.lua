@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.275
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.276
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.275"
+local SCRIPT_VERSION = "1.276"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -10062,515 +10062,167 @@ function UnusualFns.isUnusualFirstPerson()
     return distance < 2
 end
 
-local unusualViewmodelArmPackageCache = {}
 local unusualViewmodelArmSyncStates = setmetatable({}, { __mode = "k" })
 
-local function getUnusualViewmodelArmPackage(assetId, side)
-    assetId = tonumber(assetId)
-    if not assetId or assetId <= 0 then
-        return nil
-    end
-
-    local cacheKey = tostring(assetId) .. ":" .. side
-    local cached = unusualViewmodelArmPackageCache[cacheKey]
-    if cached ~= nil then
-        return cached ~= false and cached or nil
-    end
-
-    local ok, objects = pcall(function()
-        return game:GetObjects("rbxassetid://" .. tostring(assetId))
-    end)
-
-    if not ok or type(objects) ~= "table" then
-        unusualViewmodelArmPackageCache[cacheKey] = false
-        return nil
-    end
-
-    local upperName = side .. "UpperArm"
-    local lowerName = side .. "LowerArm"
-    local handName = side .. "Hand"
-    local wanted = {
-        [upperName] = true,
-        [lowerName] = true,
-        [handName] = true
-    }
-    local found = {}
-
-    for _, root in ipairs(objects) do
-        if root:IsA("BasePart") and wanted[root.Name] and not found[root.Name] then
-            found[root.Name] = root
-        end
-
-        for _, object in ipairs(root:GetDescendants()) do
-            if object:IsA("BasePart")
-                and wanted[object.Name]
-                and not found[object.Name]
-            then
-                found[object.Name] = object
-            end
-        end
-    end
-
-    local elbowAttachment = side .. "ElbowRigAttachment"
-    local wristAttachment = side .. "WristRigAttachment"
-    local valid = found[upperName] ~= nil
-        and found[lowerName] ~= nil
-        and found[handName] ~= nil
-
-    if valid then
-        valid = found[upperName]:FindFirstChild(elbowAttachment) ~= nil
-            and found[lowerName]:FindFirstChild(elbowAttachment) ~= nil
-            and found[lowerName]:FindFirstChild(wristAttachment) ~= nil
-            and found[handName]:FindFirstChild(wristAttachment) ~= nil
-    end
-
-    local package = nil
-
-    if valid then
-        package = {}
-
-        for _, partName in ipairs({ upperName, lowerName, handName }) do
-            local cloneOK, clone = pcall(function()
-                return found[partName]:Clone()
-            end)
-
-            if not cloneOK or not clone then
-                valid = false
-                break
-            end
-
-            clone.Parent = nil
-            package[partName] = clone
-        end
-    end
-
-    for _, root in ipairs(objects) do
-        pcall(function()
-            root:Destroy()
-        end)
-    end
-
-    if not valid then
-        if package then
-            for _, clone in pairs(package) do
-                pcall(function()
-                    clone:Destroy()
-                end)
-            end
-        end
-
-        unusualViewmodelArmPackageCache[cacheKey] = false
-        return nil
-    end
-
-    unusualViewmodelArmPackageCache[cacheKey] = package
-    return package
-end
-
-local function restoreUnusualViewmodelArm(clothing, side, baseline)
-    if not clothing or not baseline then
+local function destroyUnusualViewmodelR6Meshes(meshes)
+    if type(meshes) ~= "table" then
         return
     end
 
-    local bodyPart = side == "Left"
-        and Enum.BodyPart.LeftArm
-        or Enum.BodyPart.RightArm
-
-    for _, object in ipairs(clothing:GetDescendants()) do
-        if object:GetAttribute("DeadEyeViewmodelCustomArmSide") == side
-            or object:GetAttribute("DeadEyeViewmodelCustomArmJoint") == side
-        then
-            object:Destroy()
-        elseif object:IsA("CharacterMesh") and object.BodyPart == bodyPart then
-            object:Destroy()
-        end
-    end
-
-    for _, originalMesh in ipairs(baseline.meshes or {}) do
-        pcall(function()
-            originalMesh:Clone().Parent = clothing
-        end)
-    end
-
-    local holder = clothing:FindFirstChild(side .. " Arm")
-    if holder then
-        pcall(function()
-            holder.Transparency = baseline.transparency
-            holder.LocalTransparencyModifier = baseline.localTransparencyModifier
-        end)
-    end
-end
-
-local function captureUnusualViewmodelArmBaseline(clothing, side, fallbackR6)
-    local bodyPart = side == "Left"
-        and Enum.BodyPart.LeftArm
-        or Enum.BodyPart.RightArm
-    local meshes = {}
-    local hadCustomArm = false
-
-    for _, object in ipairs(clothing:GetDescendants()) do
-        if object:GetAttribute("DeadEyeViewmodelCustomArmSide") == side
-            or object:GetAttribute("DeadEyeViewmodelCustomArmJoint") == side
-        then
-            hadCustomArm = true
-        end
-
-        if object:IsA("CharacterMesh") and object.BodyPart == bodyPart then
-            local ok, clone = pcall(function()
-                return object:Clone()
+    for _, side in ipairs({ "Left", "Right" }) do
+        for _, mesh in ipairs(meshes[side] or {}) do
+            pcall(function()
+                mesh:Destroy()
             end)
-            if ok and clone then
-                clone.Parent = nil
-                table.insert(meshes, clone)
-            end
         end
     end
-
-    if #meshes == 0 and hadCustomArm and fallbackR6 then
-        for _, object in ipairs(fallbackR6:GetDescendants()) do
-            if object:IsA("CharacterMesh") and object.BodyPart == bodyPart then
-                local ok, clone = pcall(function()
-                    return object:Clone()
-                end)
-                if ok and clone then
-                    clone.Parent = nil
-                    table.insert(meshes, clone)
-                end
-            end
-        end
-    end
-
-    local holder = clothing:FindFirstChild(side .. " Arm")
-    local transparency = holder and holder.Transparency or 0
-    local localTransparencyModifier = holder and holder.LocalTransparencyModifier or 0
-
-    if hadCustomArm then
-        transparency = 0
-        localTransparencyModifier = 0
-    end
-
-    return {
-        meshes = meshes,
-        transparency = transparency,
-        localTransparencyModifier = localTransparencyModifier
-    }
 end
 
-local function destroyUnusualViewmodelArmBuild(built)
-    if type(built) ~= "table" then
+local function restoreLegacyUnusualViewmodelR15Arms(clothing)
+    local foundLegacyArms = false
+
+    for _, object in ipairs(clothing:GetDescendants()) do
+        local customSide = object:GetAttribute("DeadEyeViewmodelCustomArmSide")
+        local customJoint = object:GetAttribute("DeadEyeViewmodelCustomArmJoint")
+
+        if customSide == "Left"
+            or customSide == "Right"
+            or customJoint == "Left"
+            or customJoint == "Right"
+        then
+            foundLegacyArms = true
+            pcall(function()
+                object:Destroy()
+            end)
+        end
+    end
+
+    if not foundLegacyArms then
         return
-    end
-
-    for _, data in pairs(built) do
-        if data.container then
-            pcall(function()
-                data.container:Destroy()
-            end)
-        end
-
-        if data.shoulder and not data.shoulder.Parent then
-            pcall(function()
-                data.shoulder:Destroy()
-            end)
-        end
-    end
-end
-
-local function applyUnusualViewmodelArm(clothing, side, built)
-    local holder = clothing:FindFirstChild(side .. " Arm")
-    if not holder or not holder:IsA("BasePart") then
-        return false
-    end
-
-    local upperName = side .. "UpperArm"
-    local lowerName = side .. "LowerArm"
-    local handName = side .. "Hand"
-    local container = built and built.container
-    local shoulder = built and built.shoulder
-
-    if not container or not shoulder then
-        return false
-    end
-
-    local parts = {}
-    for _, part in ipairs(container:GetChildren()) do
-        if part:IsA("BasePart") then
-            parts[part.Name] = part
-        end
-    end
-
-    local upper = parts[upperName]
-    if not upper or not parts[lowerName] or not parts[handName] then
-        return false
-    end
-
-    for _, partName in ipairs({ upperName, lowerName, handName }) do
-        local existing = clothing:FindFirstChild(partName)
-        if existing and existing:IsA("BasePart") then
-            if existing:GetAttribute("DeadEyeViewmodelCustomArmSide") ~= side then
-                return false
-            end
-            existing:Destroy()
-        end
-    end
-
-    for _, object in ipairs(holder:GetChildren()) do
-        if object:IsA("JointInstance")
-            and object.Part1
-            and object.Part1.Name == upperName
-        then
-            object:Destroy()
-        elseif object:GetAttribute("DeadEyeViewmodelCustomArmJoint") == side then
-            object:Destroy()
-        end
-    end
-
-    local bodyPart = side == "Left"
-        and Enum.BodyPart.LeftArm
-        or Enum.BodyPart.RightArm
-
-    for _, object in ipairs(clothing:GetDescendants()) do
-        if object:IsA("CharacterMesh") and object.BodyPart == bodyPart then
-            object:Destroy()
-        end
-    end
-
-    for _, partName in ipairs({ upperName, lowerName, handName }) do
-        local part = parts[partName]
-        part:SetAttribute("DeadEyeViewmodelCustomArmSide", side)
-        part.Anchored = false
-        part.CanCollide = false
-        part.CanQuery = false
-        part.CanTouch = false
-        part.CastShadow = false
-        part.Parent = clothing
-    end
-
-    shoulder.Part0 = holder
-    shoulder.Part1 = upper
-    shoulder.Name = "ClothingWeld"
-    shoulder:SetAttribute("DeadEyeViewmodelCustomArmJoint", side)
-    shoulder.Parent = holder
-
-    holder.Transparency = 1
-    holder.LocalTransparencyModifier = 0
-
-    pcall(function()
-        container:Destroy()
-    end)
-
-    return true
-end
-
-local function buildUnusualViewmodelArms(leftArmId, rightArmId, visualRig)
-    local customPackages = {}
-    local customIds = {
-        Left = 0,
-        Right = 0
-    }
-
-    local leftPackage = getUnusualViewmodelArmPackage(leftArmId, "Left")
-    if leftPackage then
-        customPackages.Left = leftPackage
-        customIds.Left = tonumber(leftArmId) or 0
-    end
-
-    local rightPackage = getUnusualViewmodelArmPackage(rightArmId, "Right")
-    if rightPackage then
-        customPackages.Right = rightPackage
-        customIds.Right = tonumber(rightArmId) or 0
-    end
-
-    if not next(customPackages) then
-        return {}
-    end
-
-    local objects = ReplicatedStorage:FindFirstChild("Objects")
-    local gameObjects = objects and objects:FindFirstChild("Game")
-    local toolProfile = gameObjects and gameObjects:FindFirstChild("ToolProfile")
-    local viewmodelVisuals = toolProfile and toolProfile:FindFirstChild("ViewmodelVisuals")
-    local creatorModule = viewmodelVisuals and viewmodelVisuals:FindFirstChild("ViewmodelCreator")
-    local cachedViewmodel = creatorModule and creatorModule:FindFirstChild("CachedViewmodel")
-    local clothingModule = creatorModule and creatorModule:FindFirstChild("Clothing")
-
-    if not cachedViewmodel or not clothingModule then
-        return nil, "ViewmodelCreator template or Clothing module missing"
     end
 
     local playerCache = workspace:FindFirstChild("PlayerCache")
     local localCache = playerCache and playerCache:FindFirstChild(LocalPlayer.Name)
-    local baseR15 = localCache and localCache:FindFirstChild("Player")
+    local fallbackR6 = localCache and localCache:FindFirstChild("R6")
 
-    if not baseR15 or not baseR15:IsA("Model") then
-        return nil, "PlayerCache.Player R15 source missing"
+    for _, side in ipairs({ "Left", "Right" }) do
+        local bodyPart = side == "Left"
+            and Enum.BodyPart.LeftArm
+            or Enum.BodyPart.RightArm
+        local hasMesh = false
+
+        for _, object in ipairs(clothing:GetDescendants()) do
+            if object:IsA("CharacterMesh") and object.BodyPart == bodyPart then
+                hasMesh = true
+                break
+            end
+        end
+
+        if not hasMesh and fallbackR6 then
+            for _, object in ipairs(fallbackR6:GetDescendants()) do
+                if object:IsA("CharacterMesh") and object.BodyPart == bodyPart then
+                    pcall(function()
+                        object:Clone().Parent = clothing
+                    end)
+                end
+            end
+        end
+
+        local holder = clothing:FindFirstChild(side .. " Arm")
+        if holder and holder:IsA("BasePart") then
+            pcall(function()
+                holder.Transparency = 0
+                holder.LocalTransparencyModifier = 0
+            end)
+        end
     end
+end
 
-    local baseHumanoid = baseR15:FindFirstChildOfClass("Humanoid")
-    if not baseHumanoid or baseHumanoid.RigType ~= Enum.HumanoidRigType.R15 then
-        return nil, "PlayerCache.Player is not R15"
-    end
-
-    local sourceRig
-    local template
-    local built = {}
+local function buildUnusualViewmodelR6Meshes(description)
+    local requestDescription
+    local r6Model
+    local meshes = {
+        Left = {},
+        Right = {}
+    }
 
     local buildOK, buildError = pcall(function()
-        sourceRig = baseR15:Clone()
-        if not sourceRig then
-            error("Could not clone PlayerCache.Player")
-        end
+        requestDescription = description:Clone()
 
-        local sourceColors = visualRig:FindFirstChildOfClass("BodyColors")
-
-        for _, side in ipairs({ "Left", "Right" }) do
-            local package = customPackages[side]
-            if package then
-                local partNames = {
-                    side .. "UpperArm",
-                    side .. "LowerArm",
-                    side .. "Hand"
-                }
-                local colorProperty = side .. "ArmColor3"
-                local armColor
-
-                if sourceColors then
-                    pcall(function()
-                        armColor = sourceColors[colorProperty]
-                    end)
-                end
-
-                for _, partName in ipairs(partNames) do
-                    local oldPart = sourceRig:FindFirstChild(partName, true)
-                    local packagePart = package[partName]
-
-                    if not oldPart or not oldPart:IsA("BasePart") or not packagePart then
-                        error(side .. " R15 arm package could not be installed")
-                    end
-
-                    local clone = packagePart:Clone()
-                    clone.Name = partName
-                    clone.CFrame = oldPart.CFrame
-                    clone.Anchored = false
-                    clone.CanCollide = false
-                    clone.CanQuery = false
-                    clone.CanTouch = false
-                    clone.CastShadow = false
-
-                    pcall(function()
-                        clone.Massless = true
-                        if armColor then
-                            clone.Color = armColor
-                        end
-                    end)
-
-                    clone.Parent = oldPart.Parent
-                    oldPart:Destroy()
-                end
-            end
-        end
-
-        local requireOK, clothingHandler = pcall(require, clothingModule)
-        if not requireOK or type(clothingHandler) ~= "function" then
-            error("Could not require ViewmodelCreator.Clothing: " .. tostring(clothingHandler))
-        end
-
-        template = cachedViewmodel:Clone()
-        if not template then
-            error("Could not clone CachedViewmodel")
-        end
-
-        local packageData = {
-            Player = sourceRig,
-            LeftArm = customIds.Left,
-            RightArm = customIds.Right
-        }
-
-        clothingHandler(
-            template,
-            packageData,
-            Enum.HumanoidRigType.R15
+        r6Model = Players:CreateHumanoidModelFromDescriptionAsync(
+            requestDescription,
+            Enum.HumanoidRigType.R6
         )
 
-        local templateClothing = template:FindFirstChild("Clothing")
-        if not templateClothing then
-            error("CachedViewmodel.Clothing missing")
+        if not r6Model or not r6Model:IsA("Model") then
+            error("CreateHumanoidModelFromDescriptionAsync returned no R6 model")
         end
 
-        for _, side in ipairs({ "Left", "Right" }) do
-            if customPackages[side] then
-                local upperName = side .. "UpperArm"
-                local lowerName = side .. "LowerArm"
-                local handName = side .. "Hand"
-                local sourceHolder = templateClothing:FindFirstChild(side .. " Arm")
-                local sourceUpper = templateClothing:FindFirstChild(upperName)
-                local sourceLower = templateClothing:FindFirstChild(lowerName)
-                local sourceHand = templateClothing:FindFirstChild(handName)
-                local sourceShoulder
+        local humanoid = r6Model:FindFirstChildOfClass("Humanoid")
+        if not humanoid or humanoid.RigType ~= Enum.HumanoidRigType.R6 then
+            error("Generated avatar is not an R6 rig")
+        end
 
-                if sourceHolder and sourceUpper and sourceLower and sourceHand then
-                    for _, joint in ipairs(sourceHolder:GetDescendants()) do
-                        if joint:IsA("JointInstance") and joint.Part1 == sourceUpper then
-                            sourceShoulder = joint
-                            break
-                        end
-                    end
+        for _, object in ipairs(r6Model:GetDescendants()) do
+            if object:IsA("CharacterMesh") then
+                local side
+
+                if object.BodyPart == Enum.BodyPart.LeftArm then
+                    side = "Left"
+                elseif object.BodyPart == Enum.BodyPart.RightArm then
+                    side = "Right"
                 end
 
-                if not sourceHolder
-                    or not sourceUpper
-                    or not sourceLower
-                    or not sourceHand
-                    or not sourceShoulder
-                then
-                    error(side .. " R15 arm joints were not generated by Clothing")
+                if side then
+                    local clone = object:Clone()
+                    clone.Parent = nil
+                    table.insert(meshes[side], clone)
                 end
-
-                local container = Instance.new("Folder")
-                container.Name = "DeadEye" .. side .. "ArmBuild"
-                container.Parent = templateClothing
-
-                sourceUpper.Parent = container
-                sourceLower.Parent = container
-                sourceHand.Parent = container
-
-                local containerClone = container:Clone()
-                containerClone.Parent = nil
-
-                local shoulderClone = sourceShoulder:Clone()
-                shoulderClone.Parent = nil
-
-                built[side] = {
-                    container = containerClone,
-                    shoulder = shoulderClone
-                }
-
-                container:Destroy()
             end
-        end
-
-        if not next(built) then
-            error("No custom R15 arm packages were generated")
         end
     end)
 
-    if sourceRig then
+    if requestDescription then
         pcall(function()
-            sourceRig:Destroy()
+            requestDescription:Destroy()
         end)
     end
 
-    if template then
+    if r6Model then
         pcall(function()
-            template:Destroy()
+            r6Model:Destroy()
         end)
     end
 
     if not buildOK then
-        destroyUnusualViewmodelArmBuild(built)
+        destroyUnusualViewmodelR6Meshes(meshes)
         return nil, tostring(buildError)
     end
 
-    return built
+    return meshes
+end
+
+local function applyUnusualViewmodelR6Meshes(clothing, meshes)
+    local bodyParts = {
+        Left = Enum.BodyPart.LeftArm,
+        Right = Enum.BodyPart.RightArm
+    }
+
+    for _, side in ipairs({ "Left", "Right" }) do
+        local bodyPart = bodyParts[side]
+
+        for _, object in ipairs(clothing:GetDescendants()) do
+            if object:IsA("CharacterMesh") and object.BodyPart == bodyPart then
+                object:Destroy()
+            end
+        end
+
+        for _, sourceMesh in ipairs(meshes[side] or {}) do
+            sourceMesh:Clone().Parent = clothing
+        end
+    end
+
+    return true
 end
 
 function UnusualFns.syncUnusualViewmodelAppearance()
@@ -10607,16 +10259,14 @@ function UnusualFns.syncUnusualViewmodelAppearance()
     local targetColors = clothing:FindFirstChildOfClass("BodyColors")
 
     if sourceColors and targetColors then
-        local properties = {
+        for _, property in ipairs({
             "HeadColor3",
             "TorsoColor3",
             "LeftArmColor3",
             "RightArmColor3",
             "LeftLegColor3",
             "RightLegColor3"
-        }
-
-        for _, property in ipairs(properties) do
+        }) do
             pcall(function()
                 targetColors[property] = sourceColors[property]
             end)
@@ -10643,31 +10293,15 @@ function UnusualFns.syncUnusualViewmodelAppearance()
     local state = unusualViewmodelArmSyncStates[viewmodel]
 
     if not state or state.clothing ~= clothing then
-        local playerCache = workspace:FindFirstChild("PlayerCache")
-        local localCache = playerCache and playerCache:FindFirstChild(LocalPlayer.Name)
-        local fallbackR6 = localCache and localCache:FindFirstChild("R6")
+        restoreLegacyUnusualViewmodelR15Arms(clothing)
 
         state = {
             clothing = clothing,
-            baseline = {},
             appliedSignature = nil,
             pendingSignature = nil,
             retryAt = 0,
             generation = 0
         }
-
-        for _, side in ipairs({ "Left", "Right" }) do
-            state.baseline[side] = captureUnusualViewmodelArmBaseline(
-                clothing,
-                side,
-                fallbackR6
-            )
-            restoreUnusualViewmodelArm(
-                clothing,
-                side,
-                state.baseline[side]
-            )
-        end
 
         unusualViewmodelArmSyncStates[viewmodel] = state
     end
@@ -10683,74 +10317,63 @@ function UnusualFns.syncUnusualViewmodelAppearance()
     local generation = state.generation
     state.pendingSignature = signature
 
-    restoreUnusualViewmodelArm(clothing, "Left", state.baseline.Left)
-    restoreUnusualViewmodelArm(clothing, "Right", state.baseline.Right)
-
     task.spawn(function()
-        local buildOK, builtOrError, buildError = pcall(function()
-            return buildUnusualViewmodelArms(leftArmId, rightArmId, visualRig)
+        local buildOK, meshesOrError, buildError = pcall(function()
+            return buildUnusualViewmodelR6Meshes(description)
         end)
 
         if not buildOK then
-            buildError = builtOrError
-            builtOrError = nil
+            buildError = meshesOrError
+            meshesOrError = nil
         end
 
         if state.generation ~= generation
             or not viewmodel.Parent
             or viewmodel:FindFirstChild("Clothing") ~= clothing
+            or UnusualFns.getUnusualViewmodel() ~= viewmodel
         then
             if buildOK then
-                destroyUnusualViewmodelArmBuild(builtOrError)
+                destroyUnusualViewmodelR6Meshes(meshesOrError)
             end
+
             if state.generation == generation then
                 state.pendingSignature = nil
             end
+
             return
         end
 
-        if not buildOK or type(builtOrError) ~= "table" then
+        if not buildOK or type(meshesOrError) ~= "table" then
             state.pendingSignature = nil
             state.retryAt = os.clock() + 4
-            __DDCore.Log("VIEWMODEL ARM SYNC FAILED|signature=" .. signature
-                .. "|error=" .. tostring(buildError or builtOrError))
+            __DDCore.Log("VIEWMODEL R6 ARM BUILD FAILED|signature=" .. signature
+                .. "|error=" .. tostring(buildError or meshesOrError))
             return
         end
 
-        local applied = {}
+        local applyOK, applyError = pcall(function()
+            applyUnusualViewmodelR6Meshes(clothing, meshesOrError)
+        end)
 
-        for _, side in ipairs({ "Left", "Right" }) do
-            local built = builtOrError[side]
-            if built then
-                local applyOK, applyResult = pcall(function()
-                    return applyUnusualViewmodelArm(clothing, side, built)
-                end)
+        destroyUnusualViewmodelR6Meshes(meshesOrError)
 
-                if applyOK and applyResult then
-                    applied[side] = true
-                else
-                    __DDCore.Log("VIEWMODEL ARM APPLY FAILED|side=" .. side
-                        .. "|signature=" .. signature
-                        .. "|error=" .. tostring(applyResult))
-                end
-            end
+        if not applyOK then
+            state.pendingSignature = nil
+            state.retryAt = os.clock() + 4
+            __DDCore.Log("VIEWMODEL R6 ARM APPLY FAILED|signature=" .. signature
+                .. "|error=" .. tostring(applyError))
+            return
         end
-
-        destroyUnusualViewmodelArmBuild(builtOrError)
 
         state.appliedSignature = signature
         state.pendingSignature = nil
         state.retryAt = 0
 
-        if applied.Left or applied.Right then
-            __DDCore.Log("VIEWMODEL ARM SYNC COMPLETE|left=" .. tostring(applied.Left == true)
-                .. "|right=" .. tostring(applied.Right == true)
-                .. "|leftId=" .. tostring(leftArmId)
-                .. "|rightId=" .. tostring(rightArmId))
-        end
+        __DDCore.Log("VIEWMODEL R6 ARM SYNC COMPLETE|leftId=" .. tostring(leftArmId)
+            .. "|rightId=" .. tostring(rightArmId))
     end)
 end
---// =========================================================
+
 --// DEAD EYE UNUSUAL POV VISIBILITY
 --//
 --// Native clean-server observation:
