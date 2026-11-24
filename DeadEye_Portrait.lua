@@ -229,6 +229,35 @@ function portrait.cloneRig(source)
 
 end
 
+function portrait.sync(source)
+
+    local state = portrait.state[source]
+
+    if not state or not state.viewport or not state.viewport.Parent or not source.Parent then
+        return
+    end
+
+    local viewport = state.viewport
+
+    viewport.Size = source.Size
+    viewport.Position = source.Position
+    viewport.AnchorPoint = source.AnchorPoint
+    viewport.Rotation = source.Rotation
+    viewport.ZIndex = source.ZIndex + 1
+    viewport.Visible = source.Visible and portrait.visible(source)
+
+    if source.ImageTransparency ~= 1 then
+        source.ImageTransparency = 1
+    end
+
+    if source:IsA("ImageButton") then
+        if source.HoverImage ~= "" then source.HoverImage = "" end
+        if source.PressedImage ~= "" then source.PressedImage = "" end
+        if source.DisabledImage ~= "" then source.DisabledImage = "" end
+    end
+
+end
+
 function portrait.remove(source)
 
     local state = portrait.state[source]
@@ -275,21 +304,7 @@ function portrait.apply(source)
 
     if state and state.viewport and state.viewport.Parent then
         state.visible = source.Visible
-        state.viewport.Visible = state.visible and portrait.visible(source)
-        state.viewport.Size = source.Size
-        state.viewport.Position = source.Position
-        state.viewport.AnchorPoint = source.AnchorPoint
-        state.viewport.Rotation = source.Rotation
-        state.viewport.ZIndex = source.ZIndex + 1
-
-        source.ImageTransparency = 1
-
-        if source:IsA("ImageButton") then
-            source.HoverImage = ""
-            source.PressedImage = ""
-            source.DisabledImage = ""
-        end
-
+        portrait.sync(source)
         return
     end
 
@@ -312,14 +327,7 @@ function portrait.apply(source)
     portrait.state[source] = state
 
     viewport.Parent = source.Parent
-    viewport.Visible = state.visible and portrait.visible(source)
-    source.ImageTransparency = 1
-
-    if source:IsA("ImageButton") then
-        source.HoverImage = ""
-        source.PressedImage = ""
-        source.DisabledImage = ""
-    end
+    portrait.sync(source)
 
 end
 
@@ -354,10 +362,49 @@ function portrait.watch(source)
 
             if state and state.viewport then
                 state.visible = source.Visible
-                state.viewport.Visible = state.visible and portrait.visible(source)
+                portrait.sync(source)
             end
         end)
     )
+
+    for _, property in ipairs({
+        "ImageTransparency",
+        "ZIndex",
+        "Size",
+        "Position",
+        "AnchorPoint",
+        "Rotation"
+    }) do
+        table.insert(
+            portrait.connections,
+            source:GetPropertyChangedSignal(property):Connect(function()
+                if genv.DEADEYE_PORTRAIT_RUNNING then
+                    portrait.sync(source)
+                end
+            end)
+        )
+    end
+
+    if source:IsA("ImageButton") then
+        for _, property in ipairs({"HoverImage", "PressedImage", "DisabledImage"}) do
+            table.insert(
+                portrait.connections,
+                source:GetPropertyChangedSignal(property):Connect(function()
+                    if genv.DEADEYE_PORTRAIT_RUNNING then
+                        portrait.sync(source)
+                    end
+                end)
+            )
+        end
+    end
+
+    source.AncestryChanged:Connect(function(_, parent)
+        local state = portrait.state[source]
+        if state and state.viewport and parent then
+            state.viewport.Parent = parent
+            portrait.sync(source)
+        end
+    end)
 
     portrait.apply(source)
 
