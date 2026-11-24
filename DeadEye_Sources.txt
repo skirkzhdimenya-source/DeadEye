@@ -14725,3 +14725,82 @@ HERMES IMPLEMENTATION NOTES
 ==================================================
 END OF HERMES SHOES RESEARCH
 ==================================================
+
+==================================================
+STILTS — MOVEMENT PERK RESEARCH
+Updated: 2026-11-24
+==================================================
+
+SOURCE #90
+==================================================
+PATH:
+ReplicatedStorage.Items.BaseItems.Perks.Stilts
+
+STATUS:
+ПОЛУЧЕНО 2026-11-24, Stilts Perk Scanner v1.5.
+Полная декомпиляция модуля, 26 строк.
+
+PURPOSE:
+Конфигурация перка Stilts. Увеличивает MoveStats.Speed на 8%.
+Это не изменение RunAccel, RunDeaccel или SprintAcceleration.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+return {
+    AppearanceInfo = {
+        Name = "Stilts",
+        Desc = "Increases maximum speed by 1.08x",
+        Creator = nil
+    },
+    UIInfo = {
+        Header = "Normal",
+        Overview = nil
+    },
+    PurchaseInfo = {
+        LevelRequirement = 20,
+        AppearsIn = "Shop",
+        Currency = "Tokens",
+        Price = 2500,
+        OwnershipType = "Single"
+    },
+    PerkTraits = {
+        Movement = {
+            Speed = { 1.08, "Multiply" }
+        }
+    },
+    EquipInfo = {
+        SlotType = "Perk"
+    }
+}
+
+
+==================================================
+STILTS IMPLEMENTATION NOTES
+==================================================
+
+1. SOURCE #86 proves that MoveStats.Reset() applies PerkTraits.Movement
+   to MoveStats. For Stilts the exact operation is:
+   MoveStats.Speed = MoveStats.Speed * 1.08.
+2. Immediately after applying perks, Reset() stores the resulting Speed
+   in BaseSpeed and calls UpdateAttributes().
+3. The DeadEye Reset wrapper applies Stilts after the original Reset()
+   and only to the local character. It scales both MoveStats.Speed and
+   MoveStats.BaseSpeed by 1.08. BaseSpeed must stay synchronized because
+   SpeedChange() calls UpdateAttributes(), which recalculates Speed from
+   BaseSpeed and the active speed multipliers.
+4. If native Stilts is already equipped, the DeadEye override skips it
+   to prevent double multiplication.
+5. Stilts and Hermes share one MoveStats.Reset() wrapper. Either toggle
+   can be enabled or disabled during an active round without removing
+   the other toggle's hook.
+6. Enabling Stilts mid-round immediately resets the current local
+   MoveStats. Future game-triggered resets also reapply the override.
+7. This changes the client-side movement simulation. These sources
+   confirm how the local movement controller consumes Speed; they do
+   not prove that every server-side movement validation accepts it.
+
+==================================================
+END OF STILTS RESEARCH
+==================================================
