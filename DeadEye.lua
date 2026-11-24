@@ -22034,6 +22034,7 @@ function hermesShoes.setEnabled(state, persist)
     else
         hermesShoes.enabled = false
         hermesShoes.refreshCurrent()
+        hermesShoes.uninstall()
         hermesShoes.patchFailed = false
     end
 
