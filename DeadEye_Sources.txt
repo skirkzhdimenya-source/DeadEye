@@ -14869,3 +14869,39 @@ portraits. It changes the local user's own AvatarHeadShot images only.
 ==================================================
 END PORTRAIT DIAGNOSTIC & FIX
 ==================================================
+
+
+==================================================
+PORTRAIT OVERRIDE — v1.281 REGRESSION & v1.282 FIX
+Updated: 2026-11-24
+==================================================
+
+REGRESSION CAUSE
+==================================================
+
+The v1.281 watcher attempted to connect a property-change signal for
+ImageButton.DisabledImage. The official Roblox ImageButton API exposes
+HoverImage and PressedImage, but does not define DisabledImage. Because
+portrait.start() scans all PlayerGui descendants, the first ImageButton
+could throw while setting up the watcher and abort the scan before the
+player's own AvatarHeadShot ImageLabels were processed. This explains
+why neither the Tab nor killfeed replacement appeared in v1.281.
+
+FIX IN v1.282
+==================================================
+
+1. Restore the proven v1.280 ViewportFrame creation, positioning,
+   visibility, and ZIndex logic without the v1.281 sync helper.
+2. Remove all DisabledImage reads, writes, and property watchers.
+3. Add only a tracked ImageTransparency property listener. If the game
+   resets the original thumbnail transparency while a replacement
+   viewport exists, the listener immediately sets it back to 1.
+4. Keep the existing Image and Visible listeners unchanged.
+
+This preserves the known-working 3D replacement path while independently
+hiding the original thumbnail. The fix has been statically checked; it
+still requires an in-game test of Tab and killfeed.
+
+==================================================
+END PORTRAIT v1.281 REGRESSION & v1.282 FIX
+==================================================
