@@ -14804,3 +14804,64 @@ STILTS IMPLEMENTATION NOTES
 ==================================================
 END OF STILTS RESEARCH
 ==================================================
+
+==================================================
+PORTRAIT OVERRIDE — DIAGNOSTIC & FIX
+Updated: 2026-11-24
+==================================================
+
+DIAGNOSTIC OBSERVATIONS
+==================================================
+
+The user's Portrait Diagnostic v1.0 confirmed:
+
+1. Workspace.Rigs[LocalPlayer.Name] exists, is Archivable, contains
+   Head and Humanoid, and can be cloned successfully.
+2. CharacterService:GetLocalCharacter().Rig:GetRigModel() returns the
+   same cloneable Workspace.Rigs model.
+3. LocalPlayer.Character / CharacterService.Model is a separate,
+   non-Archivable model without a Head; it cannot be used for this
+   viewport portrait.
+4. PlayerGui contains 977 ImageLabel/ImageButton objects, 184 rbxthumb
+   thumbnails, and two thumbnails matching the local user's UserId.
+   At scan time both local-user thumbnail elements had Visible=false.
+5. CoreGui contained no AvatarHeadShot matches.
+
+CONFIRMED BUGS IN THE PREVIOUS PORTRAIT MODULE
+==================================================
+
+1. portrait.apply() set source.Visible=false after creating the viewport.
+   The Visible property listener then called portrait.visible(source),
+   which saw the source itself as invisible and hid the viewport too.
+   Therefore the replacement hid itself immediately after application.
+2. portrait.visible state was captured at initial watch time. A local
+   user's thumbnail initially discovered while hidden could remain
+   permanently hidden after the game made it visible.
+3. cloneRig() used:
+       clone:GetPivot() * CFrame.new(-head.Position)
+   This applies the translation in pivot-local coordinates. The model
+   must be translated in world coordinates:
+       CFrame.new(-head.Position) * clone:GetPivot()
+
+FIX
+==================================================
+
+1. Leave source.Visible under game control. Hide only its image using
+   ImageTransparency=1; preserve original Visible and track later game
+   visibility changes for the replacement viewport.
+2. Prefer CharacterService:GetLocalCharacter().Rig:GetRigModel(),
+   with Workspace.Rigs and LocalPlayer.Character fallbacks. Cache the
+   selected rig so the Heartbeat signature check does not repeatedly
+   enumerate CharacterService.
+3. Reposition clone with a world-space translation so Head is centered.
+4. Aim the viewport camera along the cloned Head's LookVector rather
+   than assuming a fixed world-facing direction.
+5. Emit a startup diagnostic with the number of local-user thumbnails
+   and the selected rig path.
+
+The replacement is still local-only and does not modify other players'
+portraits. It changes the local user's own AvatarHeadShot images only.
+
+==================================================
+END PORTRAIT DIAGNOSTIC & FIX
+==================================================
