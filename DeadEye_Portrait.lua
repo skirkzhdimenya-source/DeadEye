@@ -398,13 +398,16 @@ function portrait.watch(source)
         end
     end
 
-    source.AncestryChanged:Connect(function(_, parent)
-        local state = portrait.state[source]
-        if state and state.viewport and parent then
-            state.viewport.Parent = parent
-            portrait.sync(source)
-        end
-    end)
+    table.insert(
+        portrait.connections,
+        source.AncestryChanged:Connect(function(_, parent)
+            local state = portrait.state[source]
+            if state and state.viewport and parent then
+                state.viewport.Parent = parent
+                portrait.sync(source)
+            end
+        end)
+    )
 
     portrait.apply(source)
 
