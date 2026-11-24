@@ -14271,3 +14271,457 @@ return t2
 
 
 END OF FILE
+
+
+==================================================
+HERMES SHOES — PERK MOVEMENT RESEARCH
+Updated: 2026-11-24
+==================================================
+
+This appendix records the v1.2-v1.4 Opiumware decompilation results.
+These are new snapshots and do not replace the older movement sources above.
+
+Key finding:
+Hermes Shoes does not directly increase the Speed field. Its PerkTraits
+multiply RunAccel, RunDeaccel, and SprintAcceleration by 1.7.
+MoveStats.Reset() reads equipped Perks from DataRegistry, resolves each
+item module, and applies PerkTraits.Movement before the movement loop
+consumes the resulting values.
+
+==================================================
+SOURCE #84
+==================================================
+PATH:
+ReplicatedStorage.Items.BaseItems.Perks.Hermes
+
+STATUS:
+ПОЛУЧЕНО 2026-11-24, Perk Trait Analyzer v1.3. Полная конфигурация Hermes.
+
+PURPOSE:
+Конфигурация перка Hermes Shoes. Визуальные дочерние модели HermesFeather
+и HermesGold существуют отдельно; они не нужны для переноса функционала.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+return {
+    AppearanceInfo = {
+        Name = "Hermes Shoes",
+        Desc = "Running acceleration increases by 70%",
+        Creator = nil
+    },
+    PerkTraits = {
+        Movement = {
+            RunAccel = { 1.7, "Multiply" },
+            RunDeaccel = { 1.7, "Multiply" },
+            SprintAcceleration = { 1.7, "Multiply" }
+        }
+    },
+    EquipInfo = {
+        SlotType = "Perk"
+    }
+}
+
+
+==================================================
+SOURCE #85
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveStats.BaseStats
+
+STATUS:
+ПОЛУЧЕНО 2026-11-24, Perk Movement Analyzer v1.4.
+
+PURPOSE:
+Базовые параметры движения, из которых MoveStats.Reset() каждый раз
+создаёт новую таблицу характеристик.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+return {
+    SprintAcceleration = 1,
+    SprintCap = 2,
+    RunAccel = 1,
+    Friction = 5,
+    RunDeaccel = 700,
+    AirStrafeAcceleration = 182,
+    AirAcceleration = 1,
+    Speed = 1500,
+    JumpHeight = 3,
+    JumpCap = 1,
+    WalkSpeedMultiplier = 1,
+    JumpSpeedMultiplier = 1.45,
+    BhopEnabled = false,
+    GroundedDistCheck = 2.9
+}
+
+
+==================================================
+SOURCE #86
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveStats
+
+STATUS:
+ПОЛУЧЕНО 2026-11-24, Perk Movement Analyzer v1.4. Полная декомпиляция, 193 строки.
+
+PURPOSE:
+Создаёт и пересчитывает MoveStats. Reset() собирает финальные характеристики
+из BaseStats, ModuleInfo, PathfindMovement, Modifiers, Team MovementTraits,
+экипированных Perks и SpecialRound. PerkTraits.Movement применяется здесь.
+
+SOURCE CONTENT:
+
+-- decompiled with Opiumware
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Services = ReplicatedStorage:WaitForChild("Services")
+local v_u_1 = require((Services:WaitForChild("Items"):WaitForChild("ClientItemService")))
+local v_u_2
+if RunService:IsServer() then
+    v_u_2 = require(game.ServerScriptService.Services.Data.ServerStateRegistryService)
+else
+    v_u_2 = require((ReplicatedStorage:WaitForChild("Services"):WaitForChild("Data"):WaitForChild("ServerStateRegistryService")))
+end
+local Info = ReplicatedStorage:WaitForChild("Info")
+local Gamemodes = Info:WaitForChild("Gamemodes")
+Info:WaitForChild("SpecialRounds")
+local t = {}
+t.__index = t
+local BaseStats = require(script.BaseStats)
+local v_u_3 = t
+
+function t.new(p4)
+    return (setmetatable({
+        Parent = p4,
+        DataRegistry = p4.DataRegistry,
+        Character = p4.Character,
+        MoveStats = table.clone(BaseStats),
+        SpeedChanges = {},
+        Perks = {}
+    }, v_u_3))
+end
+
+function t.Init(p5)
+    p5:Reset()
+    local Team = p5.Character:GetAttributeChangedSignal("Team")
+    local t2 = {}
+    local v_u_6 = p5
+    Team:Connect(function()
+        if t2[0] then
+            return
+        end
+        v_u_6.TeamChanged = true
+    end)
+end
+
+local t3 = {}
+function t.Reset(p7)
+    if t3[0] then
+        return
+    end
+    p7.MoveStats = table.clone(BaseStats)
+    if p7.Parent.Parent.ModuleInfo then
+        for v8, v9 in p7.Parent.Parent.ModuleInfo.Movement or {} do
+            p7.MoveStats[v8] = v9
+        end
+        if p7.PathfindMovement then
+            for v10, v11 in p7.Parent.Parent.ModuleInfo.PathfindMovement or {} do
+                p7.MoveStats[v10] = v11
+            end
+        end
+    end
+    if p7.Modifiers then
+        for v12, v13 in p7.Modifiers do
+            p7.MoveStats[v12] = v13
+        end
+    end
+    local Gamemode = v_u_2:Get("Gamemode")
+    local Team2 = p7.Character:GetAttribute("Team")
+    if Team2 and (Gamemode and Gamemodes:FindFirstChild(Gamemode)) then
+        local v14 = require(Gamemodes[Gamemode]).Teams[p7.Character:GetAttribute("Team")]
+        if v14 then
+            for v15, v16 in pairs(v14.CharacterSettings.MovementTraits) do
+                p7.MoveStats[v15] = v16
+            end
+            local MoveStats = p7.MoveStats
+            MoveStats.Speed = MoveStats.Speed * (v14.CharacterSettings.MovementTraits.SpeedMult or 1)
+        end
+    end
+    local Perks = p7.DataRegistry:Get("Perks")
+    local t4 = {}
+    if Perks then
+        for _, v17 in Perks do
+            local v18 = v_u_1:GetItemFromID(v17)
+            table.insert(t4, v18)
+            if v18 then
+                local v19 = require(v18).PerkTraits or {}
+                if v19.Movement then
+                    for v20, v21 in v19.Movement do
+                        if v21[2] == "Multiply" then
+                            local MoveStats2 = p7.MoveStats
+                            MoveStats2[v20] = MoveStats2[v20] * v21[1]
+                        else
+                            local MoveStats3 = p7.MoveStats
+                            MoveStats3[v20] = MoveStats3[v20] + v21[1]
+                        end
+                    end
+                end
+            end
+        end
+    end
+    p7.Perks = t4
+    local SpecialRound = v_u_2:Get("SpecialRound")
+    if SpecialRound then
+        local v22 = require((ReplicatedStorage.Info.SpecialRounds:FindFirstChild(SpecialRound)))
+        if v22.Shared and v22.Shared.Character then
+            local Character = v22.Shared.Character
+            if Character.Teams and Character.Teams[Team2] then
+                local v23 = Character.Teams[Team2]
+                if v23.Movement then
+                    for v24, v25 in v23.Movement do
+                        p7.MoveStats[v24] = v25
+                    end
+                    if v23.Movement.SpeedMultiplier then
+                        local MoveStats4 = p7.MoveStats
+                        MoveStats4.Speed = MoveStats4.Speed * v23.Movement.SpeedMultiplier
+                    end
+                    if v23.Movement.JumpMultiplier then
+                        local MoveStats5 = p7.MoveStats
+                        MoveStats5.JumpHeight = MoveStats5.JumpHeight * v23.Movement.JumpMultiplier
+                    end
+                end
+            end
+        end
+    end
+    p7.MoveStats.BaseSpeed = p7.MoveStats.Speed
+    p7.MoveStats.BaseSprintCap = p7.MoveStats.SprintCap
+    p7.Gamemode = Gamemode
+    p7.Team = Team2
+    p7.SpecialRound = SpecialRound
+    p7:UpdateAttributes()
+end
+
+function t.UpdateAttributes(p26)
+    if p26.DisableSprinting then
+        p26.MoveStats.SprintCap = 1
+    else
+        p26.MoveStats.SprintCap = p26.MoveStats.BaseSprintCap
+    end
+    local BaseSpeed = p26.MoveStats.BaseSpeed
+    for _2, v27 in pairs(p26.SpeedChanges) do
+        BaseSpeed = BaseSpeed * v27
+    end
+    p26.MoveStats.Speed = BaseSpeed
+end
+
+function t.SpeedChange(p28, p29, p30)
+    if p28.SpeedChanges[p29] ~= p30 then
+        p28.SpeedChanges[p29] = p30
+        p28:UpdateAttributes()
+    end
+end
+
+function t.DisableSprint(p31, p32)
+    if p31.DisableSprinting ~= p32 then
+        p31.DisableSprinting = p32
+        p31:UpdateAttributes()
+    end
+end
+
+function t.GetMoveStats(p33)
+    return p33.MoveStats
+end
+
+local t5 = {}
+function t.UpdateMoveStats(p34)
+    if t5[0] then
+        return
+    end
+    if p34.Gamemode ~= v_u_2:Get("Gamemode") then
+        p34:Reset()
+    end
+    if p34.SpecialRound ~= v_u_2:Get("SpecialRound") then
+        p34:Reset()
+    end
+    if p34.TeamChanged then
+        p34.TeamChanged = false
+        if p34.Team ~= p34.Character:GetAttribute("Team") then
+            p34:Reset()
+        end
+    end
+    if p34.PathfindMovement ~= p34.DataRegistry:Get("PathfindMovement") then
+        p34.PathfindMovement = p34.DataRegistry:Get("PathfindMovement")
+        p34:Reset()
+    end
+end
+
+return t
+
+
+==================================================
+SOURCE #87
+==================================================
+PATH:
+ReplicatedStorage.Services.Asset.CharacterService
+
+STATUS:
+ПОЛУЧЕНО 2026-11-24, Perk Movement Analyzer v1.4. Это актуальный клиентский dispatcher excerpt,
+дополняет более раннюю декомпиляцию SOURCE #57. Не заменяет её целиком.
+
+PURPOSE:
+Диспетчер CharacterService для временных Movement изменений и постоянных
+ModifyMovement modifiers. ModifyMovement записывает значение в Modifiers
+и вызывает MoveStats:Reset(); он сам по себе не читает PerkTraits перков.
+
+SOURCE CONTENT:
+
+local t4 = {
+    Kill = 0,
+    Movement = 0,
+    ModifyMovement = 0,
+    Teleport = 0,
+    PortalTeleport = 0,
+    ToolAmmo = 0,
+    Drown = 0,
+
+    Movement = function(p20, p21)
+        if p20.Movement and p21.SpeedChange then
+            p20.Movement.MoveStats:SpeedChange(p21.SpeedChange.Type, p21.SpeedChange.Value)
+            if p21.SpeedChange.Length then
+                task.wait(p21.SpeedChange.Length)
+                p20.Movement.MoveStats:SpeedChange(p21.SpeedChange.Type, nil)
+            end
+        end
+    end,
+
+    ModifyMovement = function(p22, p23)
+        if p22.Movement then
+            if not p22.Movement.MoveStats.Modifiers then
+                p22.Movement.MoveStats.Modifiers = {}
+            end
+            p22.Movement.MoveStats.Modifiers[p23[1]] = p23[2]
+            p22.Movement.MoveStats:Reset()
+        end
+    end
+}
+
+
+==================================================
+SOURCE #88
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement
+
+STATUS:
+ПОЛУЧЕНО 2026-11-24, Perk Movement Analyzer v1.4, фрагмент SetState().
+
+PURPOSE:
+При смене состояния персонажа Movement перебирает загруженные модули перков
+и ищет PerkTraits.StateSpeedMultipliers для текущего состояния. Это отдельная
+механика от Hermes PerkTraits.Movement; Hermes не задаёт StateSpeedMultipliers.
+
+SOURCE CONTENT:
+
+local v52 = nil
+for _7, v53 in p45.MoveStats.Perks do
+    local v54 = require(v53)
+    local v55 = v54.PerkTraits and v54.PerkTraits.StateSpeedMultipliers
+    if v55 and v55[p46] then
+        v52 = (v52 or 1) * v55[p46]
+    end
+end
+p45.MoveStats:SpeedChange("Perk", v52)
+local Movement = v48.Movement
+if Movement then
+    p45.MoveStats:SpeedChange("State", Movement.SpeedMult)
+    p45.MoveStats:DisableSprint(Movement.DisableSprinting == true)
+    p45.JumpButtonVisible = Movement.JumpButtonVisible
+else
+    p45:ResetStateModifiers()
+end
+
+
+==================================================
+SOURCE #89
+==================================================
+PATH:
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions
+ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveFunction.Functions.Helpers
+
+STATUS:
+ПОЛУЧЕНО И ПОДТВЕРЖДЕНО 2026-11-24, Perk Movement Analyzer v1.4. Соответствующие
+полные модули уже представлены выше как SOURCE #3 и SOURCE #4; ниже — ключевые
+строки потребления трех параметров Hermes.
+
+PURPOSE:
+Показывает, где именно MoveStats значения влияют на разгон спринта,
+ускорение при беге и замедление/трение.
+
+SOURCE CONTENT:
+
+-- MoveFunction.Functions.Run
+local v14 = Sprint + 0.5 * p10.SprintAcceleration * p6
+local v15 = p10.SprintCap or 2
+v12 = math.clamp(v14, 1, v15)
+
+local v18 = Helpers:WallImpact(
+    p6,
+    p7,
+    p8,
+    p9,
+    p10,
+    Helpers:Accelerate(
+        v11,
+        GlobalMoveDirection,
+        Magnitude * (p10.Speed * v16),
+        12 * p10.RunAccel,
+        p6,
+        Swimming
+    )
+)
+
+-- MoveFunction.Functions.Helpers.ApplyFriction
+local RunDeaccel = p19.RunDeaccel
+local Friction = p19.Friction
+if magnitude < RunDeaccel then
+    v21 = RunDeaccel or magnitude
+else
+    v21 = magnitude
+end
+local v22 = magnitude - v21 * Friction * p16 * p20
+
+
+==================================================
+HERMES IMPLEMENTATION NOTES
+==================================================
+
+1. MoveStats.Reset() first rebuilds the stats table from BaseStats and game
+   modifiers, then reads DataRegistry:Get("Perks") and applies each item
+   module's PerkTraits.Movement. "Multiply" multiplies; other trait types
+   add the value.
+2. Perks are assigned to MoveStats.Perks after this loop. Movement's
+   RegistryTermUpdated("Perks") calls MoveStats:Reset(), so native perk
+   changes recalculate the values.
+3. MoveStats.UpdateMoveStats() also calls Reset() when Gamemode,
+   SpecialRound, Team, or PathfindMovement changes.
+4. Hermes uses exactly three x1.7 multipliers: RunAccel, RunDeaccel,
+   SprintAcceleration. It does not directly multiply Speed.
+5. The DeadEye implementation wraps the client MoveStats.Reset() method,
+   calls the original first, then multiplies those three values for the
+   local character only. It detects an already-equipped native Hermes module
+   to avoid applying x1.7 twice.
+6. The Others toggle can be changed during an active round: it immediately
+   calls the current local MoveStats:Reset(). The Reset wrapper also handles
+   future character initialization and later game-triggered resets.
+7. This is a client-side movement change. These sources prove how the local
+   movement simulation consumes the fields; they do not prove that every
+   server-side movement validation will accept the modified values.
+
+==================================================
+END OF HERMES SHOES RESEARCH
+==================================================
