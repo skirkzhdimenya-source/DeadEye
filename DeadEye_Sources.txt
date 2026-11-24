@@ -14849,6 +14849,10 @@ FIX
 1. Leave source.Visible under game control. Hide only its image using
    ImageTransparency=1; preserve original Visible and track later game
    visibility changes for the replacement viewport.
+2. Re-enforce ImageTransparency=1 whenever the game changes it, and keep
+   the viewport's ZIndex and geometry synchronized with the source. This
+   prevents UI refreshes or tweens from revealing the original thumbnail
+   behind the 3D replacement.
 2. Prefer CharacterService:GetLocalCharacter().Rig:GetRigModel(),
    with Workspace.Rigs and LocalPlayer.Character fallbacks. Cache the
    selected rig so the Heartbeat signature check does not repeatedly
