@@ -14366,7 +14366,7 @@ PATH:
 ReplicatedStorage.Objects.Game.Character.Client.Movement.MoveStats
 
 STATUS:
-ПОЛУЧЕНО 2026-11-24, Perk Movement Analyzer v1.4. Полная декомпиляция, 193 строки.
+ПОЛУЧЕНО 2026-11-24, Perk Movement Analyzer v1.4. Нормализованная транскрипция полного вывода; декоративные line comments и dummy-поля декомпилятора опущены.
 
 PURPOSE:
 Создаёт и пересчитывает MoveStats. Reset() собирает финальные характеристики
