@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.277
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.279
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.278"
+local SCRIPT_VERSION = "1.279"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -21815,6 +21815,18 @@ local hermesShoes = {
     patchFailed = false
 }
 
+local stilts = {
+    enabled = savedConfig.others
+        and savedConfig.others._StiltsEnabled == true
+        or false,
+    toggleButton = nil,
+    status = nil,
+    lastNativePerk = false,
+    patchFailed = false
+}
+
+local STILTS_SPEED_MULTIPLIER = 1.08
+
 local HERMES_MOVEMENT_MULTIPLIERS = {
     RunAccel = 1.7,
     RunDeaccel = 1.7,
@@ -21835,6 +21847,29 @@ function hermesShoes.hasNativeHermes(moveStats)
                 and type(perkData) == "table"
                 and type(perkData.AppearanceInfo) == "table"
                 and perkData.AppearanceInfo.Name == "Hermes Shoes"
+            then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+function stilts.hasNativeStilts(moveStats)
+    for _, perkModule in pairs(moveStats.Perks or {}) do
+        if typeof(perkModule) == "Instance"
+            and perkModule:IsA("ModuleScript")
+        then
+            if perkModule.Name == "Stilts" then
+                return true
+            end
+
+            local success, perkData = pcall(require, perkModule)
+            if success
+                and type(perkData) == "table"
+                and type(perkData.AppearanceInfo) == "table"
+                and perkData.AppearanceInfo.Name == "Stilts"
             then
                 return true
             end
@@ -21902,16 +21937,30 @@ function hermesShoes.install()
     local wrapper = function(moveStats, ...)
         local results = __DDCore.Pack(originalReset(moveStats, ...))
 
-        if hermesShoes.enabled
-            and hermesShoes.isLocalMoveStats(moveStats)
-            and not hermesShoes.hasNativeHermes(moveStats)
-        then
+        if hermesShoes.isLocalMoveStats(moveStats) then
             local stats = moveStats.MoveStats
+
             if type(stats) == "table" then
-                for statName, multiplier in pairs(HERMES_MOVEMENT_MULTIPLIERS) do
-                    local value = stats[statName]
-                    if type(value) == "number" then
-                        stats[statName] = value * multiplier
+                if hermesShoes.enabled
+                    and not hermesShoes.hasNativeHermes(moveStats)
+                then
+                    for statName, multiplier in pairs(HERMES_MOVEMENT_MULTIPLIERS) do
+                        local value = stats[statName]
+                        if type(value) == "number" then
+                            stats[statName] = value * multiplier
+                        end
+                    end
+                end
+
+                if stilts.enabled
+                    and not stilts.hasNativeStilts(moveStats)
+                then
+                    if type(stats.Speed) == "number" then
+                        stats.Speed = stats.Speed * STILTS_SPEED_MULTIPLIER
+                    end
+
+                    if type(stats.BaseSpeed) == "number" then
+                        stats.BaseSpeed = stats.BaseSpeed * STILTS_SPEED_MULTIPLIER
                     end
                 end
             end
@@ -21936,6 +21985,10 @@ function hermesShoes.install()
 end
 
 function hermesShoes.uninstall()
+    if hermesShoes.enabled or stilts.enabled then
+        return
+    end
+
     local class = hermesShoes.moveStatsClass
 
     if class
@@ -21970,6 +22023,7 @@ function hermesShoes.refreshCurrent()
     if not moveStats then
         hermesShoes.lastCharacterFound = false
         hermesShoes.lastNativePerk = false
+        stilts.lastNativePerk = false
         return false, false
     end
 
@@ -21980,11 +22034,13 @@ function hermesShoes.refreshCurrent()
     if not success then
         hermesShoes.lastCharacterFound = false
         hermesShoes.lastNativePerk = false
+        stilts.lastNativePerk = false
         return false, false
     end
 
     hermesShoes.lastCharacterFound = true
     hermesShoes.lastNativePerk = hermesShoes.hasNativeHermes(moveStats)
+    stilts.lastNativePerk = stilts.hasNativeStilts(moveStats)
     return true, hermesShoes.lastNativePerk
 end
 
@@ -22045,7 +22101,84 @@ function hermesShoes.setEnabled(state, persist)
     end
 
     hermesShoes.updateVisual()
+    stilts.updateVisual()
     return hermesShoes.enabled
+end
+
+function stilts.updateVisual()
+    local button = stilts.toggleButton
+    local status = stilts.status
+    local isOn = stilts.enabled == true
+
+    if button then
+        pcall(function()
+            button.Text = isOn and "STILTS: ON" or "STILTS: OFF"
+            button.BackgroundColor3 = isOn
+                and Color3.fromRGB(68, 74, 84)
+                or Color3.fromRGB(47, 52, 61)
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.AutoButtonColor = false
+        end)
+    end
+
+    if status then
+        if stilts.patchFailed then
+            status.Text = "PATCH UNAVAILABLE"
+        elseif stilts.lastNativePerk then
+            status.Text = "NATIVE PERK EQUIPPED"
+        elseif isOn and hermesShoes.lastCharacterFound then
+            status.Text = "CLIENT OVERRIDE ACTIVE"
+        elseif isOn then
+            status.Text = "WAITING FOR CHARACTER"
+        else
+            status.Text = "OFF"
+        end
+    end
+end
+
+function stilts.setEnabled(state, persist)
+    state = state == true
+
+    if state then
+        stilts.enabled = true
+
+        if not hermesShoes.install() then
+            stilts.enabled = false
+            stilts.patchFailed = true
+        else
+            hermesShoes.refreshCurrent()
+            stilts.patchFailed = false
+        end
+    else
+        stilts.enabled = false
+        hermesShoes.refreshCurrent()
+        hermesShoes.uninstall()
+        stilts.patchFailed = false
+    end
+
+    if persist then
+        savedConfig.others = savedConfig.others or {}
+        savedConfig.others._StiltsEnabled = stilts.enabled == true
+        pcall(saveSavedConfig)
+    end
+
+    hermesShoes.updateVisual()
+    stilts.updateVisual()
+    return stilts.enabled
+end
+
+function stilts.stop(persistOff)
+    stilts.enabled = false
+    hermesShoes.refreshCurrent()
+    hermesShoes.uninstall()
+
+    if persistOff then
+        savedConfig.others = savedConfig.others or {}
+        savedConfig.others._StiltsEnabled = false
+        pcall(saveSavedConfig)
+    end
+
+    stilts.updateVisual()
 end
 
 function hermesShoes.stop(persistOff)
@@ -22073,12 +22206,17 @@ end
 
 hermesShoes.cleanup = function()
     hermesShoes.stop(false)
+    stilts.stop(false)
 end
 
 genv.DEADEYE_HERMES_MOVEMENT_CLEANUP = hermesShoes.cleanup
 
 if hermesShoes.enabled then
     hermesShoes.setEnabled(true, false)
+end
+
+if stilts.enabled then
+    stilts.setEnabled(true, false)
 end
 
 local savedPlayerHighlight = savedConfig.others or {}
@@ -22123,6 +22261,7 @@ function otherFeatures.saveConfig()
     savedConfig.others._PlayerHighlightEnabled = otherFeatures.enabled == true
     savedConfig.others._PlayerHighlightHotkey = otherFeatures.hotkey or "None"
     savedConfig.others._HermesShoesEnabled = hermesShoes.enabled == true
+    savedConfig.others._StiltsEnabled = stilts.enabled == true
 
     local targets = {}
     for userId, selected in pairs(otherFeatures.selectedUserIds) do
@@ -22644,7 +22783,7 @@ hermesHeader.Parent = otherFeatures.page
 
 local hermesControls = Instance.new("Frame")
 hermesControls.Name = "HermesShoesControls"
-hermesControls.Size = UDim2.new(1, -4, 0, 34)
+hermesControls.Size = UDim2.new(1, -4, 0, 68)
 hermesControls.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 hermesControls.BorderSizePixel = 0
 hermesControls.LayoutOrder = 4
@@ -22673,7 +22812,7 @@ hermesToggleCorner.Parent = hermesShoes.toggleButton
 
 hermesShoes.status = Instance.new("TextLabel")
 hermesShoes.status.Name = "HermesShoesStatus"
-hermesShoes.status.Size = UDim2.new(1, -126, 1, 0)
+hermesShoes.status.Size = UDim2.new(1, -126, 0, 27)
 hermesShoes.status.Position = UDim2.new(0, 121, 0, 0)
 hermesShoes.status.BackgroundTransparency = 1
 hermesShoes.status.Text = "OFF"
@@ -22684,11 +22823,48 @@ hermesShoes.status.TextXAlignment = Enum.TextXAlignment.Right
 hermesShoes.status.TextTruncate = Enum.TextTruncate.AtEnd
 hermesShoes.status.Parent = hermesControls
 
+stilts.toggleButton = Instance.new("TextButton")
+stilts.toggleButton.Name = "StiltsToggle"
+stilts.toggleButton.Size = UDim2.new(0, 112, 0, 27)
+stilts.toggleButton.Position = UDim2.new(0, 5, 0, 36)
+stilts.toggleButton.BackgroundColor3 = Color3.fromRGB(47, 52, 61)
+stilts.toggleButton.BorderSizePixel = 0
+stilts.toggleButton.Text = "STILTS: OFF"
+stilts.toggleButton.TextSize = 9
+stilts.toggleButton.Font = Enum.Font.GothamBold
+stilts.toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+stilts.toggleButton.AutoButtonColor = false
+stilts.toggleButton.Parent = hermesControls
+
+local stiltsToggleCorner = Instance.new("UICorner")
+stiltsToggleCorner.CornerRadius = UDim.new(0, 5)
+stiltsToggleCorner.Parent = stilts.toggleButton
+
+stilts.status = Instance.new("TextLabel")
+stilts.status.Name = "StiltsStatus"
+stilts.status.Size = UDim2.new(1, -126, 0, 27)
+stilts.status.Position = UDim2.new(0, 121, 0, 36)
+stilts.status.BackgroundTransparency = 1
+stilts.status.Text = "OFF"
+stilts.status.TextSize = 8
+stilts.status.Font = Enum.Font.Gotham
+stilts.status.TextColor3 = Color3.fromRGB(150, 150, 150)
+stilts.status.TextXAlignment = Enum.TextXAlignment.Right
+stilts.status.TextTruncate = Enum.TextTruncate.AtEnd
+stilts.status.Parent = hermesControls
+
 hermesShoes.updateVisual()
+stilts.updateVisual()
 
 __UI.__L.addConnection(
     hermesShoes.toggleButton.MouseButton1Click:Connect(function()
         hermesShoes.setEnabled(not hermesShoes.enabled, true)
+    end)
+)
+
+__UI.__L.addConnection(
+    stilts.toggleButton.MouseButton1Click:Connect(function()
+        stilts.setEnabled(not stilts.enabled, true)
     end)
 )
 
@@ -25935,6 +26111,7 @@ __UI.__L.cleanup = function()
 
     pcall(function()
         hermesShoes.stop(true)
+        stilts.stop(true)
     end)
 
     --// Stop every active loop before doing any cleanup that may yield.
