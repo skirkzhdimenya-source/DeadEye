@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.277"
+local SCRIPT_VERSION = "1.278"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
@@ -146,7 +146,8 @@ __DDCore.CleanupHooks = {
     "UNUSUAL_SWAPPER_CLEANUP",
     "DEADEYE_PORTRAIT_CLEANUP",
     "DEADEYE_COSMETIC_CLEANUP",
-    "EMOTE_SWAPPER_CLEANUP"
+    "EMOTE_SWAPPER_CLEANUP",
+    "DEADEYE_HERMES_MOVEMENT_CLEANUP"
 }
 
 for _, cleanupName in ipairs(__DDCore.CleanupHooks) do
@@ -21799,6 +21800,286 @@ local otherFeatures = {
     playerLayout = nil
 }
 
+
+local hermesShoes = {
+    enabled = savedConfig.others
+        and savedConfig.others._HermesShoesEnabled == true
+        or false,
+    moveStatsClass = nil,
+    originalReset = nil,
+    resetWrapper = nil,
+    toggleButton = nil,
+    status = nil,
+    lastCharacterFound = false,
+    lastNativePerk = false,
+    patchFailed = false
+}
+
+local HERMES_MOVEMENT_MULTIPLIERS = {
+    RunAccel = 1.7,
+    RunDeaccel = 1.7,
+    SprintAcceleration = 1.7
+}
+
+function hermesShoes.hasNativeHermes(moveStats)
+    for _, perkModule in pairs(moveStats.Perks or {}) do
+        if typeof(perkModule) == "Instance"
+            and perkModule:IsA("ModuleScript")
+        then
+            if perkModule.Name == "Hermes" then
+                return true
+            end
+
+            local success, perkData = pcall(require, perkModule)
+            if success
+                and type(perkData) == "table"
+                and type(perkData.AppearanceInfo) == "table"
+                and perkData.AppearanceInfo.Name == "Hermes Shoes"
+            then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+function hermesShoes.getMoveStatsClass()
+    if hermesShoes.moveStatsClass then
+        return hermesShoes.moveStatsClass
+    end
+
+    local success, result = pcall(function()
+        local movementFolder = ReplicatedStorage
+            :WaitForChild("Objects")
+            :WaitForChild("Game")
+            :WaitForChild("Character")
+            :WaitForChild("Client")
+            :WaitForChild("Movement")
+
+        return require(movementFolder:WaitForChild("MoveStats"))
+    end)
+
+    if success and type(result) == "table" then
+        hermesShoes.moveStatsClass = result
+        return result
+    end
+
+    return nil
+end
+
+function hermesShoes.isLocalMoveStats(moveStats)
+    if not moveStats then
+        return false
+    end
+
+    local movementObject = moveStats.Parent
+    local characterObject = movementObject and movementObject.Parent
+
+    if characterObject and characterObject.Local == true then
+        return true
+    end
+
+    return moveStats.Character ~= nil
+        and moveStats.Character == LocalPlayer.Character
+end
+
+function hermesShoes.install()
+    local class = hermesShoes.getMoveStatsClass()
+    if not class or type(class.Reset) ~= "function" then
+        hermesShoes.patchFailed = true
+        return false
+    end
+
+    if hermesShoes.resetWrapper
+        and class.Reset == hermesShoes.resetWrapper
+    then
+        hermesShoes.patchFailed = false
+        return true
+    end
+
+    local originalReset = class.Reset
+    local wrapper = function(moveStats, ...)
+        local results = __DDCore.Pack(originalReset(moveStats, ...))
+
+        if hermesShoes.enabled
+            and hermesShoes.isLocalMoveStats(moveStats)
+            and not hermesShoes.hasNativeHermes(moveStats)
+        then
+            local stats = moveStats.MoveStats
+            if type(stats) == "table" then
+                for statName, multiplier in pairs(HERMES_MOVEMENT_MULTIPLIERS) do
+                    local value = stats[statName]
+                    if type(value) == "number" then
+                        stats[statName] = value * multiplier
+                    end
+                end
+            end
+        end
+
+        return __DDCore.Unpack(results, 1, results.n)
+    end
+
+    local success = pcall(function()
+        class.Reset = wrapper
+    end)
+
+    if not success or class.Reset ~= wrapper then
+        hermesShoes.patchFailed = true
+        return false
+    end
+
+    hermesShoes.originalReset = originalReset
+    hermesShoes.resetWrapper = wrapper
+    hermesShoes.patchFailed = false
+    return true
+end
+
+function hermesShoes.uninstall()
+    local class = hermesShoes.moveStatsClass
+
+    if class
+        and hermesShoes.resetWrapper
+        and class.Reset == hermesShoes.resetWrapper
+        and type(hermesShoes.originalReset) == "function"
+    then
+        pcall(function()
+            class.Reset = hermesShoes.originalReset
+        end)
+    end
+
+    hermesShoes.originalReset = nil
+    hermesShoes.resetWrapper = nil
+end
+
+function hermesShoes.getLocalMoveStats()
+    local success, characterObject = pcall(function()
+        return __UI.CharacterService:GetLocalCharacter()
+    end)
+
+    if not success or not characterObject then
+        return nil
+    end
+
+    local movementObject = characterObject.Movement
+    return movementObject and movementObject.MoveStats or nil
+end
+
+function hermesShoes.refreshCurrent()
+    local moveStats = hermesShoes.getLocalMoveStats()
+    if not moveStats then
+        hermesShoes.lastCharacterFound = false
+        hermesShoes.lastNativePerk = false
+        return false, false
+    end
+
+    local success = pcall(function()
+        moveStats:Reset()
+    end)
+
+    if not success then
+        hermesShoes.lastCharacterFound = false
+        hermesShoes.lastNativePerk = false
+        return false, false
+    end
+
+    hermesShoes.lastCharacterFound = true
+    hermesShoes.lastNativePerk = hermesShoes.hasNativeHermes(moveStats)
+    return true, hermesShoes.lastNativePerk
+end
+
+function hermesShoes.updateVisual()
+    local button = hermesShoes.toggleButton
+    local status = hermesShoes.status
+    local isOn = hermesShoes.enabled == true
+
+    if button then
+        pcall(function()
+            button.Text = isOn and "HERMES: ON" or "HERMES: OFF"
+            button.BackgroundColor3 = isOn
+                and Color3.fromRGB(68, 74, 84)
+                or Color3.fromRGB(47, 52, 61)
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.AutoButtonColor = false
+        end)
+    end
+
+    if status then
+        if hermesShoes.patchFailed then
+            status.Text = "PATCH UNAVAILABLE"
+        elseif hermesShoes.lastNativePerk then
+            status.Text = "NATIVE PERK EQUIPPED"
+        elseif isOn and hermesShoes.lastCharacterFound then
+            status.Text = "CLIENT OVERRIDE ACTIVE"
+        elseif isOn then
+            status.Text = "WAITING FOR CHARACTER"
+        else
+            status.Text = "OFF"
+        end
+    end
+end
+
+function hermesShoes.setEnabled(state, persist)
+    state = state == true
+
+    if state then
+        hermesShoes.enabled = true
+
+        if not hermesShoes.install() then
+            hermesShoes.enabled = false
+            hermesShoes.patchFailed = true
+        else
+            hermesShoes.refreshCurrent()
+        end
+    else
+        hermesShoes.enabled = false
+        hermesShoes.refreshCurrent()
+        hermesShoes.patchFailed = false
+    end
+
+    if persist then
+        savedConfig.others = savedConfig.others or {}
+        savedConfig.others._HermesShoesEnabled = hermesShoes.enabled == true
+        pcall(saveSavedConfig)
+    end
+
+    hermesShoes.updateVisual()
+    return hermesShoes.enabled
+end
+
+function hermesShoes.stop(persistOff)
+    local wasEnabled = hermesShoes.enabled
+    hermesShoes.enabled = false
+
+    if wasEnabled then
+        hermesShoes.refreshCurrent()
+    end
+
+    hermesShoes.uninstall()
+
+    if persistOff then
+        savedConfig.others = savedConfig.others or {}
+        savedConfig.others._HermesShoesEnabled = false
+        pcall(saveSavedConfig)
+    end
+
+    hermesShoes.updateVisual()
+
+    if genv.DEADEYE_HERMES_MOVEMENT_CLEANUP == hermesShoes.cleanup then
+        genv.DEADEYE_HERMES_MOVEMENT_CLEANUP = nil
+    end
+end
+
+hermesShoes.cleanup = function()
+    hermesShoes.stop(false)
+end
+
+genv.DEADEYE_HERMES_MOVEMENT_CLEANUP = hermesShoes.cleanup
+
+if hermesShoes.enabled then
+    hermesShoes.setEnabled(true, false)
+end
+
 local savedPlayerHighlight = savedConfig.others or {}
 local savedHighlightTargets = savedPlayerHighlight._PlayerHighlightTargets
 
@@ -21840,6 +22121,7 @@ function otherFeatures.saveConfig()
     savedConfig.others = savedConfig.others or {}
     savedConfig.others._PlayerHighlightEnabled = otherFeatures.enabled == true
     savedConfig.others._PlayerHighlightHotkey = otherFeatures.hotkey or "None"
+    savedConfig.others._HermesShoesEnabled = hermesShoes.enabled == true
 
     local targets = {}
     for userId, selected in pairs(otherFeatures.selectedUserIds) do
@@ -22314,7 +22596,7 @@ otherPlayersHeader.TextSize = 9
 otherPlayersHeader.Font = Enum.Font.GothamBold
 otherPlayersHeader.TextColor3 = Color3.fromRGB(150, 150, 150)
 otherPlayersHeader.TextXAlignment = Enum.TextXAlignment.Left
-otherPlayersHeader.LayoutOrder = 3
+otherPlayersHeader.LayoutOrder = 5
 otherPlayersHeader.Parent = otherFeatures.page
 
 otherFeatures.playerScroll = Instance.new("ScrollingFrame")
@@ -22327,7 +22609,7 @@ otherFeatures.playerScroll.ScrollBarThickness = 4
 otherFeatures.playerScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 otherFeatures.playerScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
 otherFeatures.playerScroll.ScrollingDirection = Enum.ScrollingDirection.Y
-otherFeatures.playerScroll.LayoutOrder = 4
+otherFeatures.playerScroll.LayoutOrder = 6
 otherFeatures.playerScroll.Parent = otherFeatures.page
 
 local otherPlayerScrollCorner = Instance.new("UICorner")
@@ -22345,6 +22627,69 @@ otherFeatures.playerLayout = Instance.new("UIListLayout")
 otherFeatures.playerLayout.Padding = UDim.new(0, 3)
 otherFeatures.playerLayout.SortOrder = Enum.SortOrder.LayoutOrder
 otherFeatures.playerLayout.Parent = otherFeatures.playerScroll
+
+
+local hermesHeader = Instance.new("TextLabel")
+hermesHeader.Name = "HermesShoesHeader"
+hermesHeader.Size = UDim2.new(1, -4, 0, 17)
+hermesHeader.BackgroundTransparency = 1
+hermesHeader.Text = "MOVEMENT PERKS"
+hermesHeader.TextSize = 9
+hermesHeader.Font = Enum.Font.GothamBold
+hermesHeader.TextColor3 = Color3.fromRGB(150, 150, 150)
+hermesHeader.TextXAlignment = Enum.TextXAlignment.Left
+hermesHeader.LayoutOrder = 3
+hermesHeader.Parent = otherFeatures.page
+
+local hermesControls = Instance.new("Frame")
+hermesControls.Name = "HermesShoesControls"
+hermesControls.Size = UDim2.new(1, -4, 0, 34)
+hermesControls.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+hermesControls.BorderSizePixel = 0
+hermesControls.LayoutOrder = 4
+hermesControls.Parent = otherFeatures.page
+
+local hermesControlsCorner = Instance.new("UICorner")
+hermesControlsCorner.CornerRadius = UDim.new(0, 6)
+hermesControlsCorner.Parent = hermesControls
+
+hermesShoes.toggleButton = Instance.new("TextButton")
+hermesShoes.toggleButton.Name = "HermesShoesToggle"
+hermesShoes.toggleButton.Size = UDim2.new(0, 112, 0, 27)
+hermesShoes.toggleButton.Position = UDim2.new(0, 5, 0.5, -13)
+hermesShoes.toggleButton.BackgroundColor3 = Color3.fromRGB(47, 52, 61)
+hermesShoes.toggleButton.BorderSizePixel = 0
+hermesShoes.toggleButton.Text = "HERMES: OFF"
+hermesShoes.toggleButton.TextSize = 9
+hermesShoes.toggleButton.Font = Enum.Font.GothamBold
+hermesShoes.toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+hermesShoes.toggleButton.AutoButtonColor = false
+hermesShoes.toggleButton.Parent = hermesControls
+
+local hermesToggleCorner = Instance.new("UICorner")
+hermesToggleCorner.CornerRadius = UDim.new(0, 5)
+hermesToggleCorner.Parent = hermesShoes.toggleButton
+
+hermesShoes.status = Instance.new("TextLabel")
+hermesShoes.status.Name = "HermesShoesStatus"
+hermesShoes.status.Size = UDim2.new(1, -126, 1, 0)
+hermesShoes.status.Position = UDim2.new(0, 121, 0, 0)
+hermesShoes.status.BackgroundTransparency = 1
+hermesShoes.status.Text = "OFF"
+hermesShoes.status.TextSize = 8
+hermesShoes.status.Font = Enum.Font.Gotham
+hermesShoes.status.TextColor3 = Color3.fromRGB(150, 150, 150)
+hermesShoes.status.TextXAlignment = Enum.TextXAlignment.Right
+hermesShoes.status.TextTruncate = Enum.TextTruncate.AtEnd
+hermesShoes.status.Parent = hermesControls
+
+hermesShoes.updateVisual()
+
+__UI.__L.addConnection(
+    hermesShoes.toggleButton.MouseButton1Click:Connect(function()
+        hermesShoes.setEnabled(not hermesShoes.enabled, true)
+    end)
+)
 
 __UI.__L.addConnection(
     otherFeatures.toggleButton.MouseButton1Click:Connect(function()
@@ -25585,6 +25930,10 @@ __UI.__L.cleanup = function()
             mainJump.lookStateConnection:Disconnect()
             mainJump.lookStateConnection = nil
         end
+    end)
+
+    pcall(function()
+        hermesShoes.stop(true)
     end)
 
     --// Stop every active loop before doing any cleanup that may yield.
