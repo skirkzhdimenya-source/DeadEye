@@ -315,7 +315,6 @@ function portrait.apply(source)
     if source:IsA("ImageButton") then
         source.HoverImage = ""
         source.PressedImage = ""
-        source.DisabledImage = ""
     end
 
 end
