@@ -38,7 +38,7 @@ __DDCore.Pack = table.pack or function(...) return { n = select("#", ...), ... }
 __DDCore.Unpack = table.unpack or unpack
 
 --// DEADEYE VERSION
---// ТЕКУЩАЯ ВЕРСИЯ: 1.280
+--// ТЕКУЩАЯ ВЕРСИЯ: 1.281
 --//
 --// ВАЖНО:
 --// После каждого завершённого изменения повышай только число после точки.
@@ -69,7 +69,7 @@ __DDCore.Unpack = table.unpack or unpack
 --//   drag
 --//   close button
 --// =========================================================
-local SCRIPT_VERSION = "1.280"
+local SCRIPT_VERSION = "1.281"
 __DDCore.Log("SWAPTRACE|BOOT|version=" .. SCRIPT_VERSION .. "|focus=picker,toggle,snapshot,apply")
 --// Others settings are persisted on edit/unfocus and again during cleanup.
 --// Reverse Look WITH mode also reinstalls its hook when Crouch Spam is enabled.
