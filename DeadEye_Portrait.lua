@@ -14,27 +14,68 @@ local portrait = {
     connections = {},
     watched = {},
     rigSignature = "",
-    refreshQueued = false
+    refreshQueued = false,
+    cachedRig = nil,
+    cachedCharacter = nil
 }
 
 function portrait.getRig()
 
+    local character = LocalPlayer.Character
     local rigs = workspace:FindFirstChild("Rigs")
+    local namedRig = rigs and rigs:FindFirstChild(LocalPlayer.Name)
 
-    if rigs then
-        local rig = rigs:FindFirstChild(LocalPlayer.Name)
+    if portrait.cachedRig
+        and portrait.cachedCharacter == character
+        and portrait.cachedRig.Parent
+        and (not namedRig or namedRig == portrait.cachedRig)
+    then
+        return portrait.cachedRig
+    end
 
-        if rig and rig:IsA("Model") then
-            return rig
+    local serviceRig
+
+    local serviceOK, characterObject = pcall(function()
+        local characterService = require(
+            game:GetService("ReplicatedStorage")
+                :WaitForChild("Services")
+                :WaitForChild("Asset")
+                :WaitForChild("CharacterService")
+        )
+
+        return characterService:GetLocalCharacter()
+    end)
+
+    if serviceOK and characterObject and characterObject.Rig then
+        local rigOK, result = pcall(function()
+            return characterObject.Rig:GetRigModel()
+        end)
+
+        if rigOK
+            and result
+            and result:IsA("Model")
+        then
+            serviceRig = result
         end
     end
 
-    local character = LocalPlayer.Character
+    local selected = serviceRig or namedRig
 
-    if character and character:IsA("Model") then
-        return character
+    if not selected
+        and character
+        and character:IsA("Model")
+    then
+        selected = character
     end
 
+    if selected and selected:IsA("Model") then
+        portrait.cachedRig = selected
+        portrait.cachedCharacter = character
+        return selected
+    end
+
+    portrait.cachedRig = nil
+    portrait.cachedCharacter = character
     return nil
 
 end
@@ -158,18 +199,30 @@ function portrait.cloneRig(source)
         return nil
     end
 
-    pcall(function()
+    local pivotOK, pivotError = pcall(function()
         clone:PivotTo(
-            clone:GetPivot() *
-            CFrame.new(-head.Position)
+            CFrame.new(-head.Position) * clone:GetPivot()
         )
     end)
 
+    if not pivotOK then
+        warn("[DeadEye Portrait] Rig pivot failed: " .. tostring(pivotError))
+        viewport:Destroy()
+        return nil
+    end
+
+    local headPosition = head.Position
+    local headForward = head.CFrame.LookVector
+    local focus = headPosition + Vector3.new(0, head.Size.Y * 0.08, 0)
     local distance = math.max(3, head.Size.Y * 4)
 
+    viewport.Ambient = Color3.fromRGB(200, 200, 200)
+    viewport.LightColor = Color3.fromRGB(255, 255, 255)
+    viewport.LightDirection = Vector3.new(-1, -1, -1)
+
     camera.CFrame = CFrame.lookAt(
-        Vector3.new(0, 0.15, distance),
-        Vector3.new(0, 0.15, 0)
+        focus + headForward * distance,
+        focus
     )
 
     return viewport
@@ -221,12 +274,22 @@ function portrait.apply(source)
     local state = portrait.state[source]
 
     if state and state.viewport and state.viewport.Parent then
+        state.visible = source.Visible
         state.viewport.Visible = state.visible and portrait.visible(source)
         state.viewport.Size = source.Size
         state.viewport.Position = source.Position
         state.viewport.AnchorPoint = source.AnchorPoint
         state.viewport.Rotation = source.Rotation
         state.viewport.ZIndex = source.ZIndex + 1
+
+        source.ImageTransparency = 1
+
+        if source:IsA("ImageButton") then
+            source.HoverImage = ""
+            source.PressedImage = ""
+            source.DisabledImage = ""
+        end
+
         return
     end
 
@@ -244,11 +307,12 @@ function portrait.apply(source)
         visible = source.Visible
     }
 
+    state.visible = source.Visible
     state.viewport = viewport
     portrait.state[source] = state
 
     viewport.Parent = source.Parent
-    source.Visible = false
+    viewport.Visible = state.visible and portrait.visible(source)
     source.ImageTransparency = 1
 
     if source:IsA("ImageButton") then
@@ -289,6 +353,7 @@ function portrait.watch(source)
             local state = portrait.state[source]
 
             if state and state.viewport then
+                state.visible = source.Visible
                 state.viewport.Visible = state.visible and portrait.visible(source)
             end
         end)
@@ -377,10 +442,31 @@ end
 function portrait.start()
 
     local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+    local matched = 0
+    local visibleMatches = 0
 
     for _, obj in ipairs(playerGui:GetDescendants()) do
+        if (obj:IsA("ImageLabel") or obj:IsA("ImageButton"))
+            and portrait.isOwn(obj.Image)
+        then
+            matched += 1
+            if obj.Visible then
+                visibleMatches += 1
+            end
+        end
+
         portrait.watch(obj)
     end
+
+    local rig = portrait.getRig()
+    print(
+        "[DeadEye Portrait] Started | own thumbnails="
+        .. tostring(matched)
+        .. " | visible="
+        .. tostring(visibleMatches)
+        .. " | rig="
+        .. tostring(rig and rig:GetFullName() or "NOT FOUND")
+    )
 
     table.insert(
         portrait.connections,
@@ -446,6 +532,8 @@ function portrait.cleanup()
 
     portrait.rigSignature = ""
     portrait.refreshQueued = false
+    portrait.cachedRig = nil
+    portrait.cachedCharacter = nil
 
 end
 
